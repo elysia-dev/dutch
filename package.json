@@ -17,12 +17,18 @@
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
-    "react-native-web": "~0.11.7"
+    "react-native-svg": "12.1.0",
+    "react-native-web": "~0.11.7",
+    "storybook": "^5.3.19"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-knobs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
+    "@storybook/addon-notes": "^5.3.19",
+    "@storybook/addon-ondevice-knobs": "^5.3.19",
+    "@storybook/addon-ondevice-notes": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/react-native": "^5.3.19",
     "@storybook/react-native-server": "^5.3.19",
@@ -35,6 +41,7 @@
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-react-hooks": "4.0.0",
     "jest": "^26.2.2",
+    "react-native-svg-transformer": "^0.14.3",
     "typescript": "~3.9.5"
   },
   "private": true
