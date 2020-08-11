@@ -11,7 +11,8 @@ import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 
 export const LockAccount: FunctionComponent<{
-  handler: (event: GestureResponderEvent) => void;
+  // handler: (event: GestureResponderEvent) => void;
+  handler: (stage: number) => void;
 }> = ({ handler }) => {
   return (
     <View>
@@ -28,7 +29,7 @@ export const LockAccount: FunctionComponent<{
         eventHandler={() => {}}
         secure={false}
       />
-      <SubmitButton title="인증하기" handler={handler} />
+      <SubmitButton title="인증하기" handler={handler} nextStage={7} />
     </View>
   );
 };

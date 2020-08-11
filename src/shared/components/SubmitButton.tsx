@@ -3,11 +3,17 @@ import { StyleSheet, View, Button, GestureResponderEvent } from "react-native";
 
 export const SubmitButton: FunctionComponent<{
   title: string;
-  handler: (event: GestureResponderEvent) => void;
-}> = ({ title, handler }) => {
+  // handler: (event: GestureResponderEvent) => void;
+  handler: (stage: number) => void;
+  // handler: any;
+  nextStage: number;
+}> = ({ title, handler, nextStage }) => {
   return (
-    <View style={styles.submitButton}>
-      <Button onPress={handler} title={title} />
+    <View>
+      <Button
+        onPress={() => handler(nextStage)}
+        title={title}
+     />
     </View>
   );
 };

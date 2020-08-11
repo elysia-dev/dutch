@@ -1,6 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from "react-navigation";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -9,6 +14,7 @@ interface props {
   email: string;
   password: string;
   handler: (text: string) => void;
+  stageHandler: (stage: number) => void;
 }
 
 interface state {
@@ -44,7 +50,11 @@ export class Login extends Component<props, state> {
           eventHandler={() => {}}
           secure={false}
         />
-        <SubmitButton title="로그인" handler={this.goToNext} />
+        <SubmitButton
+          title="로그인"
+          handler={this.props.stageHandler}
+          nextStage={2}
+        />
         <Text>비밀번호를 잊으셨나요?</Text>
       </View>
     );

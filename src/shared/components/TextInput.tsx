@@ -21,9 +21,9 @@ export const TextInput: FunctionComponent<props> = (props) => {
     <View>
       <Text>{props.type}</Text>
       <RNTextInput
-        value={props.value}
-        onChangeText={(text) => props.eventHandler(text)}
+        defaultValue={props.value}
         editable={props.edit}
+        onChangeText={(text) => props.eventHandler(text)}
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
       />
