@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import StorybookUIRoot from "./storybook/index";
+import { StyleSheet, View } from "react-native";
+import StorybookUIRoot from './storybook/index';
 
-export default function App() {
+const STORYBOOK_START = true;
+
+const App = () => {
   return (
     <View style={styles.container}>
-      {/* <Text>Open up App.tsx to start working on your app!</Text> */}
       <StatusBar style="auto" />
-      <StorybookUIRoot />
+      { STORYBOOK_START && <StorybookUIRoot />}
     </View>
   );
 }
@@ -22,7 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// export default from './storybook';
-
-// import StorybookUIRoot from "./storybook";
-// export default from './storybook';
+export default App;
