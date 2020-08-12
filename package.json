@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "storybook": "(adb reverse tcp:7007 tcp:7007 || true) && start-storybook"
+    "storybook": "start-storybook"
   },
   "dependencies": {
     "eslint-config-airbnb": "18.2.0",
