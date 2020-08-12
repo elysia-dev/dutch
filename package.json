@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest",
-    "storybook": "(adb reverse tcp:7007 tcp:7007 || true) && start-storybook"
+    "storybook": "start-storybook"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
@@ -37,6 +37,7 @@
     "@storybook/addon-knobs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
     "@storybook/addon-notes": "^5.3.19",
+    "@storybook/addon-ondevice-actions": "^5.3.19",
     "@storybook/addon-ondevice-knobs": "^5.3.19",
     "@storybook/addon-ondevice-notes": "^5.3.19",
     "@storybook/addons": "^5.3.19",
