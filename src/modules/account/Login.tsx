@@ -9,17 +9,18 @@ import {
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface props {
   email: string;
-  password: string;
-  handler: (text: string) => void;
-  stageHandler: (stage: number) => void;
+  // password: string;
+  // handler: (text: string) => void;
+  stageHandler: (stage: string) => void;
+  findPassword: () => void;
+  // error: number;
 }
 
-interface state {
-  error: number;
-}
+interface state {}
 
 export class Login extends Component<props, state> {
   constructor(props: props) {
@@ -40,7 +41,7 @@ export class Login extends Component<props, state> {
           type="비밀번호"
           value={""}
           edit={true}
-          eventHandler={this.props.handler}
+          eventHandler={() => {}}
           secure={true}
         />
         <TextInput
@@ -50,12 +51,10 @@ export class Login extends Component<props, state> {
           eventHandler={() => {}}
           secure={false}
         />
-        <SubmitButton
-          title="로그인"
-          handler={this.props.stageHandler}
-          nextStage={2}
-        />
-        <Text>비밀번호를 잊으셨나요?</Text>
+        <SubmitButton title="로그인" handler={this.props.stageHandler} />
+        <TouchableOpacity onPress={this.props.findPassword}>
+          <Text>비밀번호를 잊으셨나요?</Text>
+        </TouchableOpacity>
       </View>
     );
   }

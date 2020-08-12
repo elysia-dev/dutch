@@ -13,18 +13,17 @@ interface props {
   email: string;
   handler: (text: string) => void;
   // handler: (event: GestureResponderEvent) => void;
-  stageHandler: (stage: number) => void;
+  // stageHandler: (stage: string) => void;
+  stageHandler: () => void;
 }
 
 export class InitializeEmail extends Component<props> {
   constructor(props: props) {
     super(props);
     // this.goToBack = this.goToBack.bind(this);
-    // this.goToNext = this.goToNext.bind(this);
   }
 
   goToBack() {}
-  goToNext() {}
 
   render() {
     return (
@@ -41,7 +40,6 @@ export class InitializeEmail extends Component<props> {
         <SubmitButton
           title="계속"
           handler={this.props.stageHandler}
-          nextStage={1}
           //백이랑 통신해서 회원가입/로그인 나누는 로직 추가해야함 -> 스테이지로?
         />
       </View>

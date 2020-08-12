@@ -12,8 +12,8 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 
 export const LockAccount: FunctionComponent<{
   // handler: (event: GestureResponderEvent) => void;
-  handler: (stage: number) => void;
-}> = ({ handler }) => {
+  stageHandler: (stage: string) => void;
+}> = ({ stageHandler }) => {
   return (
     <View>
       <Image source={require("./images/lockaccount.png")} />
@@ -29,7 +29,7 @@ export const LockAccount: FunctionComponent<{
         eventHandler={() => {}}
         secure={false}
       />
-      <SubmitButton title="인증하기" handler={handler} nextStage={7} />
+      <SubmitButton title="인증하기" handler={stageHandler} />
     </View>
   );
 };
