@@ -1801,6 +1801,16 @@
     prop-types "^15.7.2"
     util-deprecate "^1.0.2"
 
+"@storybook/addon-ondevice-actions@^5.3.19":
+  version "5.3.19"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-ondevice-actions/-/addon-ondevice-actions-5.3.19.tgz#55be1c38c7c4bec78fe9a476cb921bcc813ee130"
+  integrity sha512-wCTRcFV2qjEkne/ChUZFO/xdv5+sbI/axe6bxEhj6VlbztEnZWVeG4VHJRsF7nK9sTHM07gri3wehOtXuuBIeA==
+  dependencies:
+    "@storybook/addons" "5.3.19"
+    "@storybook/core-events" "5.3.19"
+    core-js "^3.0.1"
+    fast-deep-equal "^2.0.1"
+
 "@storybook/addon-ondevice-knobs@^5.3.19":
   version "5.3.19"
   resolved "https://registry.yarnpkg.com/@storybook/addon-ondevice-knobs/-/addon-ondevice-knobs-5.3.19.tgz#94a13f6d9fb80e16735743257b5d349b858eec19"
