@@ -24,18 +24,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-// export default from './storybook';
-
-// import StorybookUIRoot from "./storybook";
-// export default from './storybook';
-
-// const App = createStackNavigator(
-//   {
-//     Account: { screen: Account },
-//     InitializeEmail: { screen: InitializeEmail },
-//     Login: { screen: Login },
-//   },
-//   { initialRouteName: "Account", headerMode: "none" }
-// );
-
-// export default createAppContainer(App);
