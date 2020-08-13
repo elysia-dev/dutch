@@ -60,7 +60,7 @@ export class CertifyEmail extends Component<props, state> {
           secure={false}
         />
         <Text>유효시간 {}</Text>
-        <FlatButton title="재요청" handler={() => this.props.resendHandler} />
+        <FlatButton title="재요청" handler={()=>this.props.resendHandler} />
         <SubmitButton
           title="인증하기"
           handler={() => this.props.stageHandler(this.state.code)}

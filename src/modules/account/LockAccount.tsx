@@ -79,10 +79,7 @@ export class LockAccount extends Component<props, state> {
           secure={false}
         />
         <Text> 혹시 메일이 오지 않으셨나요?</Text>
-        <FlatButton
-          handler={() => this.props.resendHandler}
-          title="다시 전송하기"
-        />
+        <FlatButton handler={this.props.resendHandler} title="다시 전송하기" />
         <SubmitButton
           title="인증하기"
           handler={() => this.props.stageHandler(this.state.code)}

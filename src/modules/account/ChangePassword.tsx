@@ -16,7 +16,6 @@ interface state {
   step: number;
   input1: string;
   input2: string;
-  valid: boolean;
 }
 
 export class ChangePassword extends Component<props, state> {
@@ -26,7 +25,6 @@ export class ChangePassword extends Component<props, state> {
       step: 1,
       input1: "",
       input2: "",
-      valid: this.state.input1 === this.state.input2,
     };
     this.nextStep = this.nextStep.bind(this);
     this.setInput1 = this.setInput1.bind(this);
@@ -93,7 +91,9 @@ export class ChangePassword extends Component<props, state> {
         ) : (
           <SubmitButton
             title="변경하기"
-            handler={() => this.props.stageHandler}
+            handler={() =>
+              this.props.stageHandler(this.state.input1, this.state.input2)
+            }
           />
         )}
       </View>

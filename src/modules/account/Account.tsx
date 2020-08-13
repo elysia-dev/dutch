@@ -154,7 +154,7 @@ export class Account extends Component<props, state> {
       .then((response) => {
         this.state.exist == "new"
           ? this.setState({ stage: "Signup" }) //새로운 유저인 경우 비밀번호 설정으로
-          : this.setState({ stage: "RecoverPassword" }); //기존 유저의 경우 비밀번호 찾기로
+          : this.setState({ stage: "RecoverPassword", error: 0, lock }); //기존 유저의 경우 비밀번호 찾기로
       })
       .catch((e) => {
         // API 호출이 실패한 경우
@@ -170,7 +170,7 @@ export class Account extends Component<props, state> {
     axios
       .post(
         `http://localhost:3000/verifications/?email=${this.state.email}&type=RecoverPassword`,
-        {}
+        { verification_id: this.state.verification_id }
       )
       .then((response) => {
         this.setState({
@@ -184,18 +184,12 @@ export class Account extends Component<props, state> {
       });
   };
 
-  // certifyEmail_recoverPassword = () => {
-  //   this.setState({
-  //     stage: "CertifyEmail",
-  //   });
-  // };
-
   //재발송용 버튼을 눌렀을 때 실행되게
   certifyEmail_recoverAccount = async () => {
     axios
       .post(
         `http://localhost:3000/verifications/?email=${this.state.email}&type=RecoverAccount`,
-        {}
+        { verification_id: this.state.verification_id }
       )
       .then((response) => {
         this.setState({
@@ -219,9 +213,7 @@ export class Account extends Component<props, state> {
         password_confirmation: input2,
       })
       .then((response) => {
-        if (response.status == 200) {
-          this.setState({ stage: "Login" });
-        }
+        this.setState({ stage: "Login" });
       })
       .catch((e) => {
         // API 호출이 실패한 경우

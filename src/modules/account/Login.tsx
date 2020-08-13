@@ -75,7 +75,7 @@ export class Login extends Component<props, state> {
         />
         <FlatButton
           title="비밀번호를 잊으셨나요?"
-          handler={() => this.props.findPassword}
+          handler={this.props.findPassword}
         />
       </LoginWrapper>
     );
