@@ -33,7 +33,6 @@ const H1Text = styled.Text`
 const PText = styled.Text`
   font-size: 12px;
   color: #626368;
-  font-famliy: Roboto;
   text-align: left;
   margin: 5px auto 32px auto;
   width: 90%;

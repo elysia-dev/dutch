@@ -12,7 +12,6 @@ const WhiteBtn = styled.TouchableOpacity`
 const WhiteBtnText = styled.Text`
   color: #000;
   margin: 5px 20px;
-  font-family: Roboto;
   font-size: 12px;
   text-align: center;
   line-height: 15px;

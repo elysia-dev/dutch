@@ -20,7 +20,6 @@ interface props {
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
   margin: 5px 20px;
-  font-family: Roboto;
   font-size: 12px;
   text-align: left;
 `;

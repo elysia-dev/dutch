@@ -6,9 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./src/shared/assets/images/ELYSIA_logo_white.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#2C6190"
+      "image": "./assets/splash.png",
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
