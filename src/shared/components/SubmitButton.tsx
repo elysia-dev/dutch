@@ -12,10 +12,9 @@ const WhiteBtn = styled.TouchableOpacity`
 `;
 const WhiteBtnText = styled.Text`
   color: #fff;
-  font-family: Roboto;
   font-size: 14px;
   text-align: center;
-  line-height: 40px;  
+  line-height: 40px;
 `;
 
 export const SubmitButton: FunctionComponent<{
