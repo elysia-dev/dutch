@@ -12,7 +12,7 @@ interface props {
   // handler: (text: string) => void;
   stageHandler: (stage: string) => void;
   findPassword: () => void;
-  // error: number;
+  error: number;
 }
 
 interface state {}
@@ -52,6 +52,9 @@ export class Login extends Component<props, state> {
           eventHandler={() => {}}
           secure={true}
         />
+        {this.props.error > 0 && (
+          <Text>비밀번호가 틀렸습니다. ({this.props.error}/5)</Text>
+        )}
         <TextInput
           type="이메일"
           value={this.props.email}

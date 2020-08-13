@@ -2,14 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import StorybookUIRoot from "./storybook/index";
+import { Account } from "./src/modules/account/Account";
 
-const STORYBOOK_START = true;
+const STORYBOOK_START = false;
 
-const App = () => {
+export const App = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {STORYBOOK_START && <StorybookUIRoot />}
+      {/* {STORYBOOK_START && <StorybookUIRoot />} */}
+      {STORYBOOK_START ? <StorybookUIRoot /> : <Account />}
     </View>
   );
 };
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
+export default App;
 // export default from './storybook';
 
 // import StorybookUIRoot from "./storybook";

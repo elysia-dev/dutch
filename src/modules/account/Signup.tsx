@@ -8,8 +8,8 @@ import styled from 'styled-components/native';
 
 interface props {
   email: string;
-  // stageHandler: (input1: string, input2: string) => void;
-  stageHandler: () => void;
+  stageHandler: (input1: string, input2: string) => void;
+  // stageHandler: () => void;
 }
 
 const SignupWrapper = styled.View`
@@ -85,7 +85,13 @@ export class Signup extends Component<props, state> {
         {this.state.step == 1 ? (
           <SubmitButton title="계속" handler={this.nextStep} />
         ) : (
-          <SubmitButton title="가입하기" handler={this.props.stageHandler} />
+          <SubmitButton
+            title="가입하기"
+            handler={this.props.stageHandler(
+              this.state.input1,
+              this.state.input2
+            )}
+          />
         )}
       </SignupWrapper>
     );

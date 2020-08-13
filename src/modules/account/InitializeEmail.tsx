@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 interface props {
   email: string;
@@ -19,7 +19,7 @@ const InitializeEmailWrapper = styled.View`
 `;
 const H1Text = styled.Text`
   font-size: 20px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   text-align: left;
   margin: 25px 5%;
   font-weight: bold;

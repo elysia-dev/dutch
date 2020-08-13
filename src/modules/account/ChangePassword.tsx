@@ -7,19 +7,27 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 
 interface props {
   email: string;
-  // stageHandler: (input1: string, input2: string) => void;
-  stageHandler: () => void;
+  stageHandler: (input1: string, input2: string) => void;
+  // stageHandler: () => void;
+  login: boolean;
 }
 
 interface state {
   step: number;
   input1: string;
   input2: string;
+  valid: boolean;
 }
+
 export class ChangePassword extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { step: 1, input1: "", input2: "" };
+    this.state = {
+      step: 1,
+      input1: "",
+      input2: "",
+      valid: this.state.input1 === this.state.input2,
+    };
     this.nextStep = this.nextStep.bind(this);
     this.setInput1 = this.setInput1.bind(this);
     this.setInput2 = this.setInput2.bind(this);
@@ -41,9 +49,21 @@ export class ChangePassword extends Component<props, state> {
     return (
       <View>
         <BackButton handler={goToBack} />
-        <Text>
-          {this.state.step == 1 ? "비밀번호 변경을 진행해주세요" : "다시한번"}
-        </Text>
+        {this.props.login === true && (
+          <View>
+            <Text>비밀번호 변경</Text>
+            <Text>
+              {this.state.step == 1 ? "비밀번호를" : "다시한번"} 입력해주세요.
+            </Text>
+          </View>
+        )}
+        {this.props.login === false && (
+          <Text>
+            {this.state.step == 1
+              ? "비밀번호 변경을 진행해주세요."
+              : "다시한번 입력해주세요."}
+          </Text>
+        )}
         {this.state.step == 2 && (
           <TextInput
             type="비밀번호 확인하기"

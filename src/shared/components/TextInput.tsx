@@ -42,6 +42,8 @@ export const TextInput: FunctionComponent<props> = (props) => {
         onChangeText={(text) => props.eventHandler(text)}
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
+        maxLength={30}
+        // minLength={8}
       />
 
       <Text>Optinal Message 채워넣기</Text>
