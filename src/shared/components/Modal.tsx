@@ -29,13 +29,12 @@ const ModalView = styled.View`
   margin: 20px;
   background-color: #fff;
   border-radius: 20px;
-  padding: 35px;
+  padding: 10px;
   align-items: center;
   box-shadow: 0px 2px 2px #000;
 `;
 const ModalBtnWrapper = styled.View`
   width: 180px;
-  display: table-cell;
 `;
 const ModalButton = styled.TouchableHighlight`
   border-radius: 20px;

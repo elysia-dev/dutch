@@ -43,8 +43,6 @@ export const TextInput: FunctionComponent<props> = (props) => {
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
       />
-
-      <Text>Optinal Message 채워넣기</Text>
     </View>
   );
 };
