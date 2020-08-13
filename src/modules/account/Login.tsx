@@ -4,7 +4,8 @@ import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
-import styled from 'styled-components/native';
+import { Modal } from "../../shared/components/Modal";
+import styled from "styled-components/native";
 
 interface props {
   email: string;
@@ -15,7 +16,9 @@ interface props {
   error: number;
 }
 
-interface state {}
+interface state {
+  password: string;
+}
 
 const LoginWrapper = styled.View`
   width: 375px;
@@ -24,7 +27,7 @@ const LoginWrapper = styled.View`
 `;
 const H1Text = styled.Text`
   font-size: 20px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   text-align: left;
   margin: 25px 5%;
   font-weight: bold;
@@ -33,12 +36,16 @@ const H1Text = styled.Text`
 export class Login extends Component<props, state> {
   constructor(props: props) {
     super(props);
+    this.state = { password: "" };
     this.goToBack = this.goToBack.bind(this);
-    this.goToNext = this.goToNext.bind(this);
+    this.setPassword = this.setPassword.bind(this);
   }
 
   goToBack() {}
-  goToNext() {}
+
+  setPassword(input: string) {
+    this.setState({ password: input });
+  }
 
   render() {
     return (
@@ -49,7 +56,7 @@ export class Login extends Component<props, state> {
           type="비밀번호"
           value={""}
           edit={true}
-          eventHandler={() => {}}
+          eventHandler={this.setPassword}
           secure={true}
         />
         {this.props.error > 0 && (
@@ -62,11 +69,16 @@ export class Login extends Component<props, state> {
           eventHandler={() => {}}
           secure={false}
         />
-        <SubmitButton title="로그인" handler={this.props.stageHandler} />
-        <FlatButton title="비밀번호를 잊으셨나요?" handler={ForgetPasswordPage}/>
+        <SubmitButton
+          title="로그인"
+          handler={() => this.props.stageHandler(this.state.password)}
+        />
+        <FlatButton
+          title="비밀번호를 잊으셨나요?"
+          handler={() => this.props.findPassword}
+        />
       </LoginWrapper>
     );
   }
 }
-const ForgetPasswordPage = () => {};
 const styles = StyleSheet.create({});

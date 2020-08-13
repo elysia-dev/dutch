@@ -18,6 +18,7 @@ interface state {
   stage: string;
   verification_id: string;
   error: number;
+  token: string;
 }
 
 export class Account extends Component<props, state> {
@@ -30,6 +31,7 @@ export class Account extends Component<props, state> {
       verification_id: "",
       email: "",
       error: 0,
+      token: "",
     };
     this.setUserEmail = this.setUserEmail.bind(this);
     this.login = this.login.bind(this);
@@ -53,91 +55,83 @@ export class Account extends Component<props, state> {
 
   initializeEmail = async () => {
     axios
-      .get(`localhost:3000/auth?email=${this.state.email}`)
+      .get(`http://localhost:3000/auth?email=${this.state.email}`)
       .then((response) => {
         console.log(response);
         this.setState({
-          stage: response.status == 200 ? "Login" : "CertifyEmail",
-          verification_id: response.data.verification_id,
-          exist: response.status == 200 ? "exist" : "new",
+          stage: "Login",
+          exist: "exist",
         });
       })
       .catch((e) => {
         // API 호출이 실패한 경우
         console.error(e); // 에러표시
+        if (e.response) {
+          this.setState({
+            stage: "CertifyEmail",
+            exist: "new",
+            verification_id: e.response.data.verification_id,
+          });
+        }
       });
   };
-
-  // initializeEmail = () => {
-  //   console.log("run");
-  //   this.setState({ stage: "Login" });
-  // };
 
   login = async (input: string) => {
     axios
-      .post(`/auth`, {
+      .post(`http://localhost:3000/auth`, {
         email: this.state.email,
         password: input,
-        //password 어떻게 받아올건지 처리해야함
       })
       .then((response) => {
-        if (response.status == 200) {
-          this.setState({ stage: "mainpage", login: true });
-          //mainpage만들어서 stage 연결하기!
-        } else if (response.status == 400) {
-          this.setState({ login: false, error: response.data.counts });
-          if (response.data.status == "locked") {
+        this.setState({
+          stage: "mainpage",
+          login: true,
+          token: response.data.token,
+        });
+      })
+      .catch((e) => {
+        console.error(e); // 에러표시
+        if (e.response) {
+          console.log(e.response.data.counts);
+          this.setState({ login: false, error: e.response.data.counts });
+          if (e.response.data.status == "locked") {
             this.setState({
               stage: "LockAccount",
-              verification_id: response.data.verification_id,
+              verification_id: e.response.data.verification_id,
             });
           }
         }
+      });
+  };
+
+  signup = async (input1: string, input2: string) => {
+    axios
+      .post(`http://localhost:3000/users`, {
+        verification_id: this.state.verification_id,
+        password: input1,
+        password_confirmation: input2,
+      })
+      .then((response) => {
+        this.setState({
+          exist: "exist",
+          stage: "mainpage",
+          token: response.data.token,
+        });
+        //mainpage 설정 해줘야 함
       })
       .catch((e) => {
         // API 호출이 실패한 경우
         console.error(e); // 에러표시
+        if (e.response) {
+          console.log(e.response.data.type);
+        }
       });
   };
-
-  // login = () => {
-  //   this.setState({ stage: "mainpage" });
-  // };
-
-  signup = async (input1: string, input2: string) => {
-    if (input1 == input2) {
-      axios
-        .post(`/auth/users`, {
-          verification_id: this.state.verification_id,
-          password: input1,
-          password_confirmation: input2,
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.setState({ exist: "exist", stage: "mainpage" });
-            //mainpage 설정 해줘야 함
-          } else if (response.data.type == "EXPIRED") {
-            alert("");
-            //오류 처리 어떻게?
-          }
-        })
-        .catch((e) => {
-          // API 호출이 실패한 경우
-          console.error(e); // 에러표시
-        });
-    } else {
-      alert("비밀번호가 일치하지 않습니다"); //나중에 css 수정할 수 있도록
-    }
-  };
-
-  // signup = () => {
-  //   this.setState({ stage: "mainpage" });
-  // };
 
   //회원가입 인증 때 재발송 함수
   certifyEmail_signup = async () => {
     axios
-      .post(`/verifications?email=${this.state.email}`, {
+      .post(`http://localhost:3000/verifications?email=${this.state.email}`, {
         verification_id: this.state.verification_id,
       })
       .then((response) => {
@@ -151,34 +145,33 @@ export class Account extends Component<props, state> {
   //코드가 맞는지 확인하는 함수
   certifyEmail = async (input: string) => {
     axios
-      .put(`/verification/:${this.state.verification_id}`, {
-        code: input, //유저가 입력한 code
-      })
-      .then((response) => {
-        if (response.status == 200) {
-          this.state.exist == "new"
-            ? this.setState({ stage: "Signup" }) //새로운 유저인 경우 비밀번호 설정으로
-            : this.setState({ stage: "RecoverPassword" }); //기존 유저의 경우 비밀번호 찾기로
-        } else {
-          //오류 처리 expired, pending, used 어떻게 할 지?
+      .put(
+        `http://localhost:3000/verifications/${this.state.verification_id}`,
+        {
+          code: input, //유저가 입력한 code
         }
+      )
+      .then((response) => {
+        this.state.exist == "new"
+          ? this.setState({ stage: "Signup" }) //새로운 유저인 경우 비밀번호 설정으로
+          : this.setState({ stage: "RecoverPassword" }); //기존 유저의 경우 비밀번호 찾기로
       })
       .catch((e) => {
         // API 호출이 실패한 경우
         console.error(e); // 에러표시
+        if (e.response) {
+          console.log(e.response.data.status);
+        }
       });
   };
-
-  // certifyEmail = () => {
-  //   this.state.exist == "new"
-  //     ? this.setState({ stage: "Signup" }) //새로운 유저인 경우 비밀번호 설정으로
-  //     : this.setState({ stage: "RecoverPassword" }); //기존 유저의 경우 비밀번호 찾기로
-  // };
 
   //비밀번호 찾기 함수 -> 로그인에 같이 넘겨줘야 함, 이메일로 코드를 보내달라는 요청
   certifyEmail_recoverPassword = async () => {
     axios
-      .post(`/verification/?email=${this.state.email}&type=RecoverPassword`, {})
+      .post(
+        `http://localhost:3000/verifications/?email=${this.state.email}&type=RecoverPassword`,
+        {}
+      )
       .then((response) => {
         this.setState({
           stage: "CertifyEmail",
@@ -200,7 +193,10 @@ export class Account extends Component<props, state> {
   //재발송용 버튼을 눌렀을 때 실행되게
   certifyEmail_recoverAccount = async () => {
     axios
-      .post(`/verification/?email=${this.state.email}&type=RecoverAccount`, {})
+      .post(
+        `http://localhost:3000/verifications/?email=${this.state.email}&type=RecoverAccount`,
+        {}
+      )
       .then((response) => {
         this.setState({
           stage: "LockAccount",
@@ -216,7 +212,7 @@ export class Account extends Component<props, state> {
 
   recoverPassword = async (input1: string, input2: string) => {
     axios
-      .post(`auth/recover`, {
+      .post(`http://localhost:3000/auth/recover`, {
         verification_id: this.state.verification_id,
 
         password: input1,
@@ -239,9 +235,7 @@ export class Account extends Component<props, state> {
 
   resetPassword = async (input1: string, input2: string) => {
     axios
-      .post(`auth/reset`, {
-        verification_id: this.state.verification_id,
-
+      .put(`http://localhost:3000/users`, {
         password: input1,
         password_confirmation: input2,
       })

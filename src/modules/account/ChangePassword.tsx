@@ -34,7 +34,7 @@ export class ChangePassword extends Component<props, state> {
   }
 
   nextStep(number: number) {
-    this.setState({ step: 2 });
+    this.setState({ step: number });
   } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
 
   setInput1(input: string) {
@@ -89,9 +89,12 @@ export class ChangePassword extends Component<props, state> {
           secure={false}
         />
         {this.state.step == 1 ? (
-          <SubmitButton title="계속" handler={this.nextStep} />
+          <SubmitButton title="계속" handler={() => this.nextStep(2)} />
         ) : (
-          <SubmitButton title="변경하기" handler={this.props.stageHandler} />
+          <SubmitButton
+            title="변경하기"
+            handler={() => this.props.stageHandler}
+          />
         )}
       </View>
     );

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 interface props {
   email: string;
@@ -19,7 +19,7 @@ const SignupWrapper = styled.View`
 `;
 const H1Text = styled.Text`
   font-size: 20px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   text-align: left;
   margin: 25px 5%;
   font-weight: bold;
@@ -39,16 +39,19 @@ export class Signup extends Component<props, state> {
     this.setInput2 = this.setInput2.bind(this);
   }
 
-  nextStep(number: number) {
-    this.setState({ step: 2 });
+  nextStep(input: number) {
+    console.log(this.state.step);
+    this.setState({ step: input });
   } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
 
   setInput1(input: string) {
     this.setState({ input1: input });
+    console.log(`input1: ${this.state.input1}`);
   } // 첫 비밀번호 인풋을 저장
 
   setInput2(input: string) {
     this.setState({ input2: input });
+    console.log(`input2: ${this.state.input2}`);
   } // 비밀번호 확인 인풋을 저장
 
   render() {
@@ -83,14 +86,13 @@ export class Signup extends Component<props, state> {
           secure={false}
         />
         {this.state.step == 1 ? (
-          <SubmitButton title="계속" handler={this.nextStep} />
+          <SubmitButton title="계속" handler={() => this.nextStep(2)} />
         ) : (
           <SubmitButton
             title="가입하기"
-            handler={this.props.stageHandler(
-              this.state.input1,
-              this.state.input2
-            )}
+            handler={() =>
+              this.props.stageHandler(this.state.input1, this.state.input2)
+            }
           />
         )}
       </SignupWrapper>

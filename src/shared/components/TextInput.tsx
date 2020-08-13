@@ -7,7 +7,7 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from "react-native";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 interface props {
   type: string;
@@ -18,7 +18,7 @@ interface props {
 }
 
 const InputHeaderText = styled.Text`
-  color: #A7A7A7;
+  color: #a7a7a7;
   margin: 5px 20px;
   font-family: Roboto;
   font-size: 12px;
@@ -29,7 +29,7 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-  border-bottom-color: #A7A7A7;
+  border-bottom-color: #a7a7a7;
 `;
 
 export const TextInput: FunctionComponent<props> = (props) => {
@@ -45,8 +45,6 @@ export const TextInput: FunctionComponent<props> = (props) => {
         maxLength={30}
         // minLength={8}
       />
-
-      <Text>Optinal Message 채워넣기</Text>
     </View>
   );
 };
