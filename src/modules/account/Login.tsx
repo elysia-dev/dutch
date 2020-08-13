@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
+import { FlatButton } from "../../shared/components/FlatButton";
+import styled from 'styled-components/native';
 
 interface props {
   email: string;
@@ -14,6 +16,19 @@ interface props {
 interface state {
   error: number;
 }
+
+const LoginWrapper = styled.View`
+  width: 375px;
+  height: 811px;
+  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요 나중에 제거
+`;
+const H1Text = styled.Text`
+  font-size: 20px;
+  color: #1C1C1C;
+  text-align: left;
+  margin: 25px 5%;
+  font-weight: bold;
+`;
 
 export class Login extends Component<props, state> {
   constructor(props: props) {
@@ -27,9 +42,9 @@ export class Login extends Component<props, state> {
 
   render() {
     return (
-      <View>
+      <LoginWrapper>
         <BackButton handler={this.goToBack} />
-        <Text>비밀번호를 입력해주세요.</Text>
+        <H1Text>비밀번호를 입력해주세요.</H1Text>
         <TextInput
           type="비밀번호"
           value={""}
@@ -45,10 +60,10 @@ export class Login extends Component<props, state> {
           secure={false}
         />
         <SubmitButton title="로그인" handler={this.goToNext} />
-        <Text>비밀번호를 잊으셨나요?</Text>
-      </View>
+        <FlatButton title="비밀번호를 잊으셨나요?" handler={ForgetPasswordPage}/>
+      </LoginWrapper>
     );
   }
 }
-
+const ForgetPasswordPage = () => {};
 const styles = StyleSheet.create({});

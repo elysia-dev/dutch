@@ -1,20 +1,35 @@
 import React, { FunctionComponent } from "react";
-import { StyleSheet, View, Button, GestureResponderEvent } from "react-native";
+import { StyleSheet, View, TouchableOpacity, GestureResponderEvent, Text } from "react-native";
+import styled from 'styled-components/native';
+
+const Container = styled.View`
+  flex: 1;
+  background-color: #fff;
+`;
+const WhiteBtn = styled.TouchableOpacity`
+  background-color: #fff;
+`;
+const WhiteBtnText = styled.Text`
+  color: #000;
+  margin: 5px 20px;
+  font-family: Roboto;
+  font-size: 12px;
+  text-align: center;
+  line-height: 15px;
+`;
 
 export const FlatButton: FunctionComponent<{
   title: string;
   handler: (event: GestureResponderEvent) => void;
 }> = ({ title, handler }) => {
   return (
-    <View style={styles.flatButton}>
-      <Button onPress={handler} title={title} />
-    </View>
+    <Container>
+      <WhiteBtn onPress={handler}>
+        <WhiteBtnText>
+          {title}
+        </WhiteBtnText>
+      </WhiteBtn>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  flatButton: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});

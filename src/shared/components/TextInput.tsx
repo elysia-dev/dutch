@@ -7,6 +7,7 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from "react-native";
+import styled from 'styled-components/native';
 
 interface props {
   type: string;
@@ -16,11 +17,26 @@ interface props {
   secure: boolean;
 }
 
+const InputHeaderText = styled.Text`
+  color: #A7A7A7;
+  margin: 5px 20px;
+  font-family: Roboto;
+  font-size: 12px;
+  text-align: left;
+`;
+const InputTextForm = styled.TextInput`
+  width: 90%;
+  margin: 8px auto;
+  height: 25px;
+  border-bottom-width: 1px;
+  border-bottom-color: #A7A7A7;
+`;
+
 export const TextInput: FunctionComponent<props> = (props) => {
   return (
     <View>
-      <Text>{props.type}</Text>
-      <RNTextInput
+      <InputHeaderText>{props.type}</InputHeaderText>
+      <InputTextForm
         value={props.value}
         onChangeText={(text) => props.eventHandler(text)}
         editable={props.edit}

@@ -5,23 +5,27 @@ import {
   TouchableOpacity,
   GestureResponderEvent,
   Image,
+  Text,
 } from "react-native";
+import styled from 'styled-components/native';
+import BackButtonImg from '../../../src/shared/assets/images/backbutton.png';
 
+const ArrowImg = styled.Image`
+  width: 16px;
+  height: 16px;
+  margin: 12px;
+`;
+const WhiteBtn = styled.TouchableOpacity`
+  background-color: #fff;
+`;
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;
 }> = ({ handler }) => {
   return (
-    <View style={styles.backButton}>
-      <TouchableOpacity onPress={handler}>
-        <Image source={require("../assets/images/backbutton.png")} />
-      </TouchableOpacity>
+    <View>
+      <WhiteBtn onPress={handler}>
+        <ArrowImg source={BackButtonImg} />
+      </WhiteBtn>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  backButton: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
