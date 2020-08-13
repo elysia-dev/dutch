@@ -42,8 +42,9 @@ const LockAccountTextInput = styled.TextInput`
 `;
 
 export const LockAccount: FunctionComponent<{
-  handler: (event: GestureResponderEvent) => void;
-}> = ({ handler }) => {
+  // handler: (event: GestureResponderEvent) => void;
+  stageHandler: (stage: string) => void;
+}> = ({ stageHandler }) => {
   return (
     <LockAccountWrapper>
       <LockAccountImg source={LockAccountPng} />
@@ -59,7 +60,7 @@ export const LockAccount: FunctionComponent<{
         eventHandler={() => {}}
         secure={false}
       />
-      <SubmitButton title="인증하기" handler={handler} />
+      <SubmitButton title="인증하기" handler={stageHandler} />
     </LockAccountWrapper>
   );
 };

@@ -7,6 +7,9 @@ import { FlatButton } from "../../../shared/components/FlatButton";
 
 interface props {
   email: string;
+  // stageHandler: (input: string) => void;
+  stageHandler: () => void;
+  existence: string;
 }
 export const CertifyEmail: FunctionComponent<props> = (props) => {
   return (
@@ -14,7 +17,8 @@ export const CertifyEmail: FunctionComponent<props> = (props) => {
       <BackButton handler={goToBack} />
       <Text>메일을 인증해주세요</Text>
       <Text>
-        회원가입 진행을 위해 해당 메일로 인증코드를 보냈습니다. <br />
+        {props.existence == "new" ? "회원가입 진행을" : "비밀번호 찾기를"}
+        위해 해당 메일로 인증코드를 보냈습니다. <br />
         메일 확인 후, 인증을 진행해주세요.
       </Text>
       <TextInput
@@ -33,7 +37,7 @@ export const CertifyEmail: FunctionComponent<props> = (props) => {
       />
       <Text>유효시간 {}</Text>
       <FlatButton title="재요청" handler={requestAgain} />
-      <SubmitButton title="인증하기" handler={confirm} />
+      <SubmitButton title="인증하기" handler={props.stageHandler} />
     </View>
   );
 };

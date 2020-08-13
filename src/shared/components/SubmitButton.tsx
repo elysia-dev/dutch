@@ -20,7 +20,8 @@ const WhiteBtnText = styled.Text`
 
 export const SubmitButton: FunctionComponent<{
   title: string;
-  handler: (event: GestureResponderEvent) => void;
+  // handler: (event: GestureResponderEvent) => void;
+  handler: any;
 }> = ({ title, handler }) => {
   return (
     <View>

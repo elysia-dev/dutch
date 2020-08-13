@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
@@ -9,13 +8,14 @@ import styled from 'styled-components/native';
 
 interface props {
   email: string;
-  password: string;
-  handler: (text: string) => void;
+  // password: string;
+  // handler: (text: string) => void;
+  stageHandler: (stage: string) => void;
+  findPassword: () => void;
+  // error: number;
 }
 
-interface state {
-  error: number;
-}
+interface state {}
 
 const LoginWrapper = styled.View`
   width: 375px;
@@ -49,7 +49,7 @@ export class Login extends Component<props, state> {
           type="비밀번호"
           value={""}
           edit={true}
-          eventHandler={this.props.handler}
+          eventHandler={() => {}}
           secure={true}
         />
         <TextInput
@@ -59,7 +59,7 @@ export class Login extends Component<props, state> {
           eventHandler={() => {}}
           secure={false}
         />
-        <SubmitButton title="로그인" handler={this.goToNext} />
+        <SubmitButton title="로그인" handler={this.props.stageHandler} />
         <FlatButton title="비밀번호를 잊으셨나요?" handler={ForgetPasswordPage}/>
       </LoginWrapper>
     );
