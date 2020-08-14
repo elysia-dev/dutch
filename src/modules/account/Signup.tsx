@@ -75,15 +75,20 @@ export class Signup extends Component<props, state> {
   } // 첫 비밀번호 인풋을 저장
 
   setInput2(input: string) {
-    this.setState({ input2: input });
-  } // 비밀번호 확인 인풋을 저장
+    if(input != this.state.input1) { // 현재 input과 input1 state를 비교
+      this.setState({ errorState: 3}); // 불일치시 ErrorState = 3
+    } else {
+      this.setState({ errorState: 0});
+      this.setState({ input2: input }); // input2 저장.
+    }
+  } 
 
   render() {
     return (
       <SignupWrapper>
         <BackButton handler={goToBack} />
         <H1Text>
-          {this.state.step == 1 ? "비밀번호를" : "다시한번"} 입력해주세요.
+          {this.state.step == 1 ? "비밀번호를" : "다시 한번"} 입력해주세요.
         </H1Text>
         {this.state.step == 2 && (
           <TextInput
@@ -95,6 +100,12 @@ export class Signup extends Component<props, state> {
             //input1, input2 비교
           />
         )}
+        {this.state.errorState == 3 && (
+          <PText>
+            <WarningIcon source={WarningImg} />
+            비밀번호가 일치하지 않습니다.
+          </PText>
+        )}
         <TextInput
           type="비밀번호"
           edit={this.state.step == 1 ? true : false}
@@ -103,13 +114,13 @@ export class Signup extends Component<props, state> {
           secure={true}
         />
         
-        {this.state.errorState == 1 && (
+        {this.state.errorState == 1 && ( // ErrorState 1 : 비밀번호 자리수가 너무 적음
           <PText>
             <WarningIcon source={WarningImg} />
             비밀번호는 7자 이상이어야 합니다
           </PText>
         )}
-        {this.state.errorState == 2 && (
+        {this.state.errorState == 2 && ( // ErrorState 2 : 영문과 숫자가 모두 포함되어야 함
           <PText>
             <WarningIcon source={WarningImg} />
             비밀번호는 영문, 숫자가 모두 포함되어야 합니다.
@@ -123,9 +134,13 @@ export class Signup extends Component<props, state> {
           value={this.props.email}
           secure={false}
         />
-        {this.state.step == 1 ? (
+        {this.state.step == 1 && (
           <SubmitButton title="계속" handler={this.nextStep} />
-        ) : (
+        )}
+        {this.state.step == 2 && (
+          this.state.errorState == 3 ? // ErrorState 3 : 비밀번호가 일치하지 않으면 아무 이벤트 없는 handler 버튼을 출력, 일치하면 stageHandler button 변환
+          <SubmitButton title="비밀번호를 확인해주세요" handler={() => { }}/>
+          :
           <SubmitButton title="가입하기" handler={this.props.stageHandler} />
         )}
       </SignupWrapper>
