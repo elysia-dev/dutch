@@ -57,7 +57,11 @@ export class Signup extends Component<props, state> {
   render() {
     return (
       <SignupWrapper>
-        <BackButton handler={goToBack} />
+        <BackButton
+          handler={() => {
+            this.state.step == 2 && this.nextStep(1);
+          }}
+        />
         <H1Text>
           {this.state.step == 1 ? "비밀번호를" : "다시한번"} 입력해주세요.
         </H1Text>

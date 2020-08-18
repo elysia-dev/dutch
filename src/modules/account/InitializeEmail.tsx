@@ -5,6 +5,12 @@ import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
 
+// import i18n from "i18next";
+import { withTranslation } from "react-i18next";
+// import { t } from "../../i18n/i18n";
+
+const { t } = useTranslation();
+
 interface props {
   email: string;
   handler: (text: string) => void;
@@ -37,7 +43,7 @@ export class InitializeEmail extends Component<props> {
     return (
       <InitializeEmailWrapper>
         <BackButton handler={this.goToBack} />
-        <H1Text>이메일을 입력해주세요.</H1Text>
+        <H1Text>{t("checking_account.insert_account_email")}</H1Text>
         <TextInput
           type="이메일"
           value={this.props.email}

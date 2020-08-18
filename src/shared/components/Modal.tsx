@@ -1,16 +1,7 @@
 import React, { Component } from "react";
-import { Alert, Modal as RNModal } from "react-native";
+import { Modal as RNModal } from "react-native";
 import styled from "styled-components/native";
 import QuitButtonImg from "../../../src/shared/assets/images/quitbutton.png";
-
-interface props {
-  visible: boolean;
-  child: any;
-}
-
-interface state {
-  modalVisible: boolean;
-}
 
 const CenteredView = styled.View`
   flex: 1;
@@ -53,40 +44,42 @@ const QuitBtn = styled.Image`
   height: 13px;
 `;
 
+interface props {
+  visible: boolean;
+  child: any;
+  modalHandler: () => void;
+}
+
+interface state {
+  modalVisible: boolean;
+}
+
 export class Modal extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { modalVisible: this.props.visible };
+    // this.state = { modalVisible: false };
+    // this.setModalVisible = this.setModalVisible.bind(this);
   }
 
-  setModalVisible = (visible: boolean) => {
-    this.setState({ modalVisible: visible });
-  };
+  // setModalVisible = (visible: boolean) => {
+  //   this.setState({ modalVisible: visible });
+  //   console.log(this.state.modalVisible);
+  // };
 
   render() {
-    const { modalVisible } = this.state;
     return (
       <CenteredView>
         <RNModal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
+          visible={this.props.visible}
         >
           <CenteredView>
             <ModalView>
               <ModalBtnWrapper>
-                <ModalButton
-                  onPress={() => {
-                    this.setModalVisible(!modalVisible);
-                  }}
-                >
+                <ModalButton onPress={() => this.props.modalHandler()}>
                   <QuitBtn source={QuitButtonImg} />
                 </ModalButton>
-                {/* <H1Text>비밀번호가 틀렸습니다</H1Text>
-                <PText>5회 실패시 계정이 잠금되는데{"\n"}왜 그러셨어요</PText> */}
                 {this.props.child}
               </ModalBtnWrapper>
             </ModalView>

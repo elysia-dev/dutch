@@ -4,6 +4,22 @@ import { TextInput } from "../../../shared/components/TextInput";
 import { BackButton } from "../../../shared/components/BackButton";
 import { SubmitButton } from "../../../shared/components/SubmitButton";
 import { FlatButton } from "../../../shared/components/FlatButton";
+import styled from "styled-components/native";
+
+const H1Text = styled.Text`
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  margin-top: 60px;
+`;
+const PText = styled.Text`
+  color: #626368;
+  margin-bottom: 12px;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 20px;
+`;
 
 interface props {
   email: string;
@@ -11,6 +27,7 @@ interface props {
   // stageHandler: () => void;
   resendHandler: () => void;
   existence: string;
+  certified: string;
 }
 
 interface state {
@@ -33,15 +50,15 @@ export class CertifyEmail extends Component<props, state> {
     return (
       <View>
         <BackButton handler={goToBack} />
-        <Text>
+        <H1Text>
           {this.props.existence == "new"
             ? "메일을 인증해주세요."
             : "인증코드를 입력해주세요."}
-        </Text>
+        </H1Text>
         <Text>
           {this.props.existence == "new"
-            ? "회원가입 진행을"
-            : "비밀번호 찾기를"}
+            ? "회원가입 진행을 "
+            : "비밀번호 찾기를 "}
           위해 해당 메일로 인증코드를 보냈습니다. <br />
           메일 확인 후, 인증을 진행해주세요.
         </Text>
@@ -59,12 +76,16 @@ export class CertifyEmail extends Component<props, state> {
           eventHandler={this.setCode}
           secure={false}
         />
+        {this.props.certified === "pending" && (
+          <Text>인증코드가 틀렸습니다</Text>
+        )}
         <Text>유효시간 {}</Text>
-        <FlatButton title="재요청" handler={()=>this.props.resendHandler} />
+        <FlatButton title="재요청" handler={() => this.props.resendHandler} />
         <SubmitButton
           title="인증하기"
           handler={() => this.props.stageHandler(this.state.code)}
         />
+       
       </View>
     );
   }

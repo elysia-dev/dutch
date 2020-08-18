@@ -1,0 +1,37 @@
+{
+  "checking_account": {
+    "insert_account_email": "이메일을 입력해주세요."
+  },
+  "register": {
+    "authentication_mail": "메일을 인증해주세요",
+    "authentication_mail_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
+    "expiration_time": "유효시간"
+  },
+  "account_check": {
+    "insert_password": "비밀번호를 입력해주세요.",
+    "forget_password_link": "비밀번호를 잊으셨나요?",
+    "password_confirm": "다시 한 번 입력해주세요."
+  },
+  "lock_account": {
+    "lockdown": "엘리시아 계정이 잠겼습니다!",
+    "lockdown_text": "고객님의 계정은 로그인 시도 5회 실패로 인해 보호조치 되었어요.\n고객님의 계정 이메일 주소로 전송된 인증코드를 입력 해주세요.",
+    "resending_code_mail_label": "혹시 메일이 오지 않으셨나요?",
+    "resending_code_mail_link": "다시 전송하기"
+  },
+  "errors": {
+    "messages:": {
+      "wrong_email": "잘못된 이메일 형식이에요.",
+      "password_do_not_match": "비밀번호가 일치하지 않아요.",
+      "authentication_code_do_not_match": "인증번호가 일치하지 않아요.",
+      "password_too_short": "비밀번호는 최소 '%{password_minimum_length}'자리여야 해요.",
+      "simple_password": "비밀번호는 영문, 숫자가 모두 포함되어야 해요.",
+      "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다"
+    }
+  },
+  "label": {
+    "account_email": "이메일",
+    "account_password": "비밀번호",
+    "account_password_confirm": "비밀번호 확인하기",
+    "authentication_code": "인증코드"
+  }
+}
