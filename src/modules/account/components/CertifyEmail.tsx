@@ -5,6 +5,7 @@ import { BackButton } from "../../../shared/components/BackButton";
 import { SubmitButton } from "../../../shared/components/SubmitButton";
 import { FlatButton } from "../../../shared/components/FlatButton";
 import styled from "styled-components/native";
+import i18n from "../../../i18n/i18n";
 
 const H1Text = styled.Text`
   color: #000;
@@ -52,40 +53,44 @@ export class CertifyEmail extends Component<props, state> {
         <BackButton handler={goToBack} />
         <H1Text>
           {this.props.existence == "new"
-            ? "메일을 인증해주세요."
-            : "인증코드를 입력해주세요."}
+            ? i18n.t("register.authentication_signup")
+            : i18n.t("register.authentication_recover")}
         </H1Text>
         <Text>
           {this.props.existence == "new"
-            ? "회원가입 진행을 "
-            : "비밀번호 찾기를 "}
-          위해 해당 메일로 인증코드를 보냈습니다. <br />
-          메일 확인 후, 인증을 진행해주세요.
+            ? i18n.t("register.authentication_signup_label")
+            : i18n.t("register.authentication_recover_label")}
         </Text>
         <TextInput
-          type="이메일"
+          type={i18n.t("label.account_email")}
           edit={false}
           value={this.props.email}
           eventHandler={() => {}}
           secure={false}
         />
         <TextInput
-          type="인증코드"
+          type={i18n.t("label.authentication_code")}
           edit={true}
           value={""}
           eventHandler={this.setCode}
           secure={false}
         />
         {this.props.certified === "pending" && (
-          <Text>인증코드가 틀렸습니다</Text>
+          <Text>
+            {i18n.t("errors.messages.authentication_code_do_not_match")}
+          </Text>
         )}
-        <Text>유효시간 {}</Text>
-        <FlatButton title="재요청" handler={() => this.props.resendHandler} />
+        <Text>
+          {i18n.t("register.expiration_time")} {}
+        </Text>
+        <FlatButton
+          title={i18n.t("label.resend")}
+          handler={() => this.props.resendHandler}
+        />
         <SubmitButton
-          title="인증하기"
+          title={i18n.t("label.certify")}
           handler={() => this.props.stageHandler(this.state.code)}
         />
-       
       </View>
     );
   }

@@ -13,9 +13,10 @@ import { Login } from "./src/modules/account/Login";
 import { Signup } from "./src/modules/account/Signup";
 import { CertifyEmail } from "./src/modules/account/components/CertifyEmail";
 
+// import I18n from "./src/i18n/I18n";
 import "./src/i18n/i18n";
 
-const STORYBOOK_START = false;
+const STORYBOOK_START = true;
 
 export const App = () => {
   return (
@@ -29,8 +30,6 @@ export const App = () => {
     </NavigationContainer>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {

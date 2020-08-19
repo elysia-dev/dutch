@@ -12,6 +12,7 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import LockAccountPng from "./images/lockaccount.png";
+import i18n from "../../i18n/i18n";
 
 const LockAccountImg = styled.Image`
   width: 209px;
@@ -66,22 +67,22 @@ export class LockAccount extends Component<props, state> {
     return (
       <LockAccountWrapper>
         <LockAccountImg source={LockAccountPng} />
-        <H1Text>엘리시아 계정이 잠겼습니다!</H1Text>
-        <PText>
-          고객님의 계정이 로그인 시도 5회 실패로 인해 보호조치 되었습니다.{"\n"}
-          고객님의 계정 이메일 주소로 전송된 인증코드를 입력바랍니다.
-        </PText>
+        <H1Text>{i18n.t("lock_account.lockdown")}</H1Text>
+        <PText>{i18n.t("lock_account.lockdown_text")}</PText>
         <TextInput
-          type="인증코드"
+          type={i18n.t("label.authentication_code")}
           value=""
           edit={true}
           eventHandler={this.setCode}
           secure={false}
         />
-        <Text> 혹시 메일이 오지 않으셨나요?</Text>
-        <FlatButton handler={this.props.resendHandler} title="다시 전송하기" />
+        <Text>{i18n.t("lock_account.resending_code_mail_label")}</Text>
+        <FlatButton
+          handler={this.props.resendHandler}
+          title={i18n.t("label.resend_2")}
+        />
         <SubmitButton
-          title="인증하기"
+          title={i18n.t("label.certify")}
           handler={() => this.props.stageHandler(this.state.code)}
         />
       </LockAccountWrapper>

@@ -5,6 +5,7 @@ import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
+import i18n from "../../i18n/i18n";
 
 interface props {
   email: string;
@@ -63,11 +64,13 @@ export class Signup extends Component<props, state> {
           }}
         />
         <H1Text>
-          {this.state.step == 1 ? "비밀번호를" : "다시한번"} 입력해주세요.
+          {this.state.step == 1
+            ? i18n.t("account_check.insert_password")
+            : i18n.t("account_check.password_confirm")}
         </H1Text>
         {this.state.step == 2 && (
           <TextInput
-            type="비밀번호 확인하기"
+            type={i18n.t("label.account_password_confirm")}
             edit={true}
             eventHandler={this.setInput2}
             value={""}
@@ -76,24 +79,27 @@ export class Signup extends Component<props, state> {
           />
         )}
         <TextInput
-          type="비밀번호"
+          type={i18n.t("label.account_password")}
           edit={this.state.step == 1 ? true : false}
           eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
           value={""}
           secure={true}
         />
         <TextInput
-          type="이메일"
+          type={i18n.t("label.account_email")}
           edit={false}
           eventHandler={() => {}}
           value={this.props.email}
           secure={false}
         />
         {this.state.step == 1 ? (
-          <SubmitButton title="계속" handler={() => this.nextStep(2)} />
+          <SubmitButton
+            title={i18n.t("label.continue")}
+            handler={() => this.nextStep(2)}
+          />
         ) : (
           <SubmitButton
-            title="가입하기"
+            title={i18n.t("label.signup")}
             handler={() =>
               this.props.stageHandler(this.state.input1, this.state.input2)
             }
