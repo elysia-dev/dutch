@@ -8,7 +8,7 @@ configure(() => {
 
 const StorybookUIRoot = getStorybookUI({
   onDeviceUI: false,
-  asyncStorage: require('react-native').AsyncStorage || null
+  asyncStorage: require("react-native").AsyncStorage || null,
 });
 
 export default StorybookUIRoot;

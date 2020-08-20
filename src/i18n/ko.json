@@ -61,7 +61,9 @@
     "gender": "성별",
     "complete_input": "입력완료",
     "shoot_again": "재촬영하기",
-    "submit": "제출하기"
+    "submit": "제출하기",
+    "male": "남성",
+    "female": "여성"
   },
   "kyc": {
     "start_kyc": "KYC 인증하기",

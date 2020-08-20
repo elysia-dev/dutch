@@ -1,13 +1,13 @@
-import React, { FunctionComponent } from "react";
+import React, { Component, useState } from "react";
 import { StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
+import DatePicker from "react-native-datepicker";
 import styled from "styled-components/native";
 
 interface props {
   type: string;
-  value: string;
-  edit: boolean;
-  eventHandler: (text: string) => void;
-  secure: boolean;
+}
+interface state {
+  birthday: string;
 }
 
 const InputHeaderText = styled.Text`
@@ -24,19 +24,47 @@ const InputTextForm = styled.TextInput`
   border-bottom-color: #a7a7a7;
 `;
 
-export const DataInput: FunctionComponent<props> = (props) => {
-  return (
-    <View>
-      <InputHeaderText>{props.type}</InputHeaderText>
-      <InputTextForm
-        defaultValue={props.value}
-        editable={props.edit}
-        onChangeText={(text) => props.eventHandler(text)}
-        enablesReturnKeyAutomatically={true}
-        secureTextEntry={props.secure}
-        maxLength={30}
-        // minLength={8}
-      />
-    </View>
-  );
-};
+export class DateInput extends Component<props, state> {
+  constructor(props: props) {
+    super(props);
+    this.state = { birthday: "2020-01-01" };
+  }
+
+  render() {
+    return (
+      <View>
+        <InputHeaderText>{this.props.type}</InputHeaderText>
+        <DatePicker
+          date={this.state.birthday}
+          onDateChange={(date) => this.setState({ birthday: date })}
+          mode="date"
+          androidMode="spinner"
+          placeholder="select date"
+          format="YYYY-MM-DD"
+          minDate="1900-01-01"
+          maxDate="2020-01-01"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              opacity: 0,
+              position: "absolute",
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 8,
+              borderTopWidth: 0,
+              borderRightWidth: 0,
+              borderLeftWidth: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: "#D0D8DF",
+            },
+            // ... You can check the source to find the other keys.
+          }}
+        />
+      </View>
+    );
+  }
+}

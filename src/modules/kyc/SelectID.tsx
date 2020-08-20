@@ -79,7 +79,9 @@ export class SelectID extends Component<props, state> {
           checked={
             this.state.idType === "passport" ? (
               <Checked source={CheckedPng} />
-            ) : null
+            ) : (
+              { "": "" }
+            )
           }
         />
         <OptionButton
@@ -95,7 +97,9 @@ export class SelectID extends Component<props, state> {
           checked={
             this.state.idType === "drivers" ? (
               <Checked source={CheckedPng} />
-            ) : null
+            ) : (
+              { "": "" }
+            )
           }
         />
         <OptionButton
@@ -111,7 +115,9 @@ export class SelectID extends Component<props, state> {
           checked={
             this.state.idType === "idCard" ? (
               <Checked source={CheckedPng} />
-            ) : null
+            ) : (
+              { "": "" }
+            )
           }
         />
         <SubmitButton title={i18n.t("kyc_label.shoot")} handler={() => {}} />

@@ -1,10 +1,18 @@
 import React, { Component, FunctionComponent } from "react";
-import { StyleSheet, Text, View, Picker, PickerIOS } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Picker,
+  PickerIOS,
+  Platform,
+} from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
 import nations from "./argos.json";
 
-import RNPickerSelect from "react-native-picker-select";
+import RNPickerSelect, { Item } from "react-native-picker-select";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
@@ -23,7 +31,6 @@ const InputPicker = styled.Picker`
   width: 90%;
   margin: 8px 10px;
   padding: 5px;
-  background-color: #fff;
   font-size: 7px;
   border: solid 1px #d0d8df;
   border-radius: 5px;
@@ -37,6 +44,12 @@ interface state {
   nationality: string;
 }
 
+interface placeholder {
+  label: string;
+  value: string;
+  color: string;
+}
+
 export class NationInput extends Component<props, state> {
   constructor(props: props) {
     super(props);
@@ -45,42 +58,101 @@ export class NationInput extends Component<props, state> {
     };
   }
 
-  NationList = nations.map((nation, Key) =>
-    //   <Picker.Item label={nation.Nationality} value={nation.Argos} />
+  NationList_ios = nations.map((nation, Key) => ({
+    label: nation.Nationality,
+    value: nation.Argos,
+  }));
 
-    ({ label: nation.Nationality, value: nation.Argos })
-  );
+  NationList_and = nations.map((nation, Key) => (
+    <Picker.Item
+      key={nation.Key}
+      label={nation.Nationality}
+      value={nation.Argos}
+    />
+  ));
 
   render() {
+    const placeholder: placeholder = {
+      label: "Select your nationality",
+      value: "",
+      color: "#1C1C1C",
+    };
+
     return (
       <View>
         <InputHeaderText>{this.props.type}</InputHeaderText>
-        {/* <DropDownPicker
-          items={this.NationList}
-          defaultValue={this.state.nationality}
-          containerStyle={{ height: 40 }}
-          style={{
-            backgroundColor: "#fff",
-          }}
-          itemStyle={{
-            justifyContent: "flex-start",
-          }}
-          dropDownStyle={{ backgroundColor: "#fff" }}
-          onChangeItem={(item: any) => {
-            this.setState({
-              nationality: item.value,
-            });
-            console.log(this.state.nationality);
-          }}
-
-        /> */}
-        <RNPickerSelect
-          onValueChange={(item: any) =>
-            this.setState({ nationality: item.value })
-          }
-          items={this.NationList}
-        />
+        {Platform.OS === "android" ? (
+          <Picker
+            // mode="dropdown"
+            selectedValue={this.state.nationality}
+            onValueChange={(value: string) =>
+              this.setState({ nationality: value })
+            }
+          >
+            {this.NationList_and}
+          </Picker>
+        ) : (
+          <RNPickerSelect
+            onValueChange={(value: string) => {
+              this.setState({ nationality: value });
+              console.log(this.state.nationality);
+            }}
+            items={this.NationList_ios}
+            style={pickerSelectStyles}
+            placeholder={placeholder}
+          />
+        )}
       </View>
     );
   }
 }
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    width: "90%",
+    backgroundColor: "#fff",
+    fontSize: 14,
+    marginVertical: 8,
+    marginHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor: "#d0d8df",
+    borderRadius: 5,
+    color: "#1C1C1C",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    width: "90%",
+    backgroundColor: "#fff",
+    fontSize: 14,
+    marginVertical: 8,
+    marginHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor: "#d0d8df",
+    borderRadius: 5,
+    color: "#1C1C1C",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
+
+//<DropDownPicker
+//     items={this.NationList}
+//     defaultValue={this.state.nationality}
+//     containerStyle={{ height: 40 }}
+//     style={{
+//       backgroundColor: "#fff",
+//     }}
+//     itemStyle={{
+//       justifyContent: "flex-start",
+//     }}
+//     dropDownStyle={{ backgroundColor: "#fff" }}
+//     onChangeItem={(item: any) => {
+//       this.setState({
+//         nationality: item.value,
+//       });
+//       console.log(this.state.nationality);
+//     }}
+//   />
