@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -70,7 +69,7 @@ export class LockAccount extends Component<props, state> {
         <H1Text>{i18n.t("lock_account.lockdown")}</H1Text>
         <PText>{i18n.t("lock_account.lockdown_text")}</PText>
         <TextInput
-          type={i18n.t("label.authentication_code")}
+          type={i18n.t("account_label.authentication_code")}
           value=""
           edit={true}
           eventHandler={this.setCode}
@@ -79,10 +78,10 @@ export class LockAccount extends Component<props, state> {
         <Text>{i18n.t("lock_account.resending_code_mail_label")}</Text>
         <FlatButton
           handler={this.props.resendHandler}
-          title={i18n.t("label.resend_2")}
+          title={i18n.t("account_label.resend_2")}
         />
         <SubmitButton
-          title={i18n.t("label.certify")}
+          title={i18n.t("account_label.certify")}
           handler={() => this.props.stageHandler(this.state.code)}
         />
       </LockAccountWrapper>

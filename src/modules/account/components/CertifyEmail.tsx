@@ -62,14 +62,14 @@ export class CertifyEmail extends Component<props, state> {
             : i18n.t("register.authentication_recover_label")}
         </Text>
         <TextInput
-          type={i18n.t("label.account_email")}
+          type={i18n.t("account_label.account_email")}
           edit={false}
           value={this.props.email}
           eventHandler={() => {}}
           secure={false}
         />
         <TextInput
-          type={i18n.t("label.authentication_code")}
+          type={i18n.t("account_label.authentication_code")}
           edit={true}
           value={""}
           eventHandler={this.setCode}
@@ -84,11 +84,11 @@ export class CertifyEmail extends Component<props, state> {
           {i18n.t("register.expiration_time")} {}
         </Text>
         <FlatButton
-          title={i18n.t("label.resend")}
+          title={i18n.t("account_label.resend")}
           handler={() => this.props.resendHandler}
         />
         <SubmitButton
-          title={i18n.t("label.certify")}
+          title={i18n.t("account_label.certify")}
           handler={() => this.props.stageHandler(this.state.code)}
         />
       </View>

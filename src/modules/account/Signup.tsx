@@ -70,7 +70,7 @@ export class Signup extends Component<props, state> {
         </H1Text>
         {this.state.step == 2 && (
           <TextInput
-            type={i18n.t("label.account_password_confirm")}
+            type={i18n.t("account_label.account_password_confirm")}
             edit={true}
             eventHandler={this.setInput2}
             value={""}
@@ -79,14 +79,14 @@ export class Signup extends Component<props, state> {
           />
         )}
         <TextInput
-          type={i18n.t("label.account_password")}
+          type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
           eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
           value={""}
           secure={true}
         />
         <TextInput
-          type={i18n.t("label.account_email")}
+          type={i18n.t("account_label.account_email")}
           edit={false}
           eventHandler={() => {}}
           value={this.props.email}
@@ -94,12 +94,12 @@ export class Signup extends Component<props, state> {
         />
         {this.state.step == 1 ? (
           <SubmitButton
-            title={i18n.t("label.continue")}
+            title={i18n.t("account_label.continue")}
             handler={() => this.nextStep(2)}
           />
         ) : (
           <SubmitButton
-            title={i18n.t("label.signup")}
+            title={i18n.t("account_label.signup")}
             handler={() =>
               this.props.stageHandler(this.state.input1, this.state.input2)
             }

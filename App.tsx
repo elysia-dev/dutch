@@ -13,10 +13,15 @@ import { Login } from "./src/modules/account/Login";
 import { Signup } from "./src/modules/account/Signup";
 import { CertifyEmail } from "./src/modules/account/components/CertifyEmail";
 
+import { StartKYC } from "./src/modules/kyc/StartKYC";
+import { SelectID } from "./src/modules/kyc/SelectID";
+import { TakeSelfieBefore } from "./src/modules/kyc/TakeSelfieBefore";
+import { PersonalDataInput } from "./src/modules/kyc/PersonalDataInput";
+
 // import I18n from "./src/i18n/I18n";
 import "./src/i18n/i18n";
 
-const STORYBOOK_START = true;
+const STORYBOOK_START = false;
 
 export const App = () => {
   return (
@@ -25,7 +30,7 @@ export const App = () => {
         <StatusBarBackground />
         <StatusBar style="auto" />
         {/* {STORYBOOK_START && <StorybookUIRoot />} */}
-        {STORYBOOK_START ? <StorybookUIRoot /> : <Account />}
+        {STORYBOOK_START ? <StorybookUIRoot /> : <PersonalDataInput />}
       </View>
     </NavigationContainer>
   );

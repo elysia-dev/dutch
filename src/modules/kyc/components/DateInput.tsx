@@ -1,12 +1,5 @@
 import React, { FunctionComponent } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput as RNTextInput,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from "react-native";
+import { StyleSheet, Text, View, TextInput as RNTextInput } from "react-native";
 import styled from "styled-components/native";
 
 interface props {
@@ -28,10 +21,10 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-  border-bottom-color: #d0d8df;
+  border-bottom-color: #a7a7a7;
 `;
 
-export const TextInput: FunctionComponent<props> = (props) => {
+export const DataInput: FunctionComponent<props> = (props) => {
   return (
     <View>
       <InputHeaderText>{props.type}</InputHeaderText>

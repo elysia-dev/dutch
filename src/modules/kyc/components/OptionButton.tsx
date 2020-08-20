@@ -8,31 +8,39 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 
-const WhiteBtn = styled.TouchableOpacity`
+const OptionBtn = styled.TouchableOpacity`
   color: #000;
   width: 90%;
   margin: 0 auto;
   height: 40px;
-  background-color: #2c6190;
+  background-color: #fff;
   border-radius: 5px;
+  border: solid 1px #d0d8df;
+  display: flex;
+  flex-direction: row;
 `;
-const WhiteBtnText = styled.Text`
-  color: #fff;
+const OptionBtnText = styled.Text`
+  color: #1c1c1c;
   font-size: 14px;
   text-align: center;
   line-height: 40px;
+  z-index: 5;
 `;
 
-export const SubmitButton: FunctionComponent<{
+export const OptionButton: FunctionComponent<{
   title: string;
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
-}> = ({ title, handler }) => {
+  child: any;
+  checked: any;
+}> = ({ title, handler, child, checked }) => {
   return (
     <View>
-      <WhiteBtn onPress={handler}>
-        <WhiteBtnText>{title}</WhiteBtnText>
-      </WhiteBtn>
+      <OptionBtn onPress={handler}>
+        {child}
+        <OptionBtnText>{title}</OptionBtnText>
+        {checked}
+      </OptionBtn>
     </View>
   );
 };

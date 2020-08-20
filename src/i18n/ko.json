@@ -33,7 +33,7 @@
       "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다"
     }
   },
-  "label": {
+  "account_label": {
     "account_email": "이메일",
     "account_password": "비밀번호",
     "account_password_confirm": "비밀번호 확인하기",
@@ -45,5 +45,39 @@
     "resend": "재요청",
     "resend_2": "다시 전송하기",
     "change": "변경하기"
+  },
+  "kyc_label": {
+    "argos_terms": "아르고스 약관보기",
+    "agree_start": "동의하고 시작하기",
+    "shoot": "촬영하기",
+    "passport": "여권",
+    "drivers_license": "운전면허증",
+    "id_card": "주민등록증",
+    "personal_data": "나의 정보",
+    "first_name": "이름",
+    "last_name": "성",
+    "nationality": "국가",
+    "birthday": "생년월일",
+    "gender": "성별",
+    "complete_input": "입력완료",
+    "shoot_again": "재촬영하기",
+    "submit": "제출하기"
+  },
+  "kyc": {
+    "start_kyc": "KYC 인증하기",
+    "start_kyc_text": "약 2분 정도의 시간이 소요될 예정이예요.",
+    "start_kyc_step1": "신분증 사진 촬영하기",
+    "start_kyc_step2": "개인정보 입력하기",
+    "start_kyc_step3": "신분증 들고 셀카 촬영하기",
+    "kyc_step1": "1. 신분증 선택하기",
+    "kyc_step1_text": "다음 단계에서 선택한 신분증으로 촬영할 예정이예요.",
+    "kyc_step2": "2. 개인정보 입력하기",
+    "kyc_step2_text": "개인정보를 정확하게 기입해주세요.",
+    "kyc_step3": "3. 셀피 촬영하기",
+    "kyc_step3_text": "본인인증 사진을 흔들림, 합성 없이 명확하게 촬영해주세요.",
+    "kyc_step3_desc1": "2단계에서 촬영한 신분증과 함께 셀카를 촬영해주세요.",
+    "kyc_step3_desc2": "2단계에서 입력하신 내용과 신분증의 정보가 같아야해요.",
+    "kyc_step3_complete": "3. 셀피 촬영완료",
+    "kyc_step3_complete_text": "본인인증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?."
   }
 }

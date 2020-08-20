@@ -39,14 +39,14 @@ export class InitializeEmail extends Component<props> {
         <BackButton handler={this.goToBack} />
         <H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>
         <TextInput
-          type={i18n.t("label.account_email")}
+          type={i18n.t("account_label.account_email")}
           value={this.props.email}
           eventHandler={this.props.handler}
           edit={true}
           secure={false}
         />
         <SubmitButton
-          title={i18n.t("label.continue")}
+          title={i18n.t("account_label.continue")}
           handler={this.props.stageHandler}
           //백이랑 통신해서 회원가입/로그인 나누는 로직 추가해야함 -> 스테이지로?
         />

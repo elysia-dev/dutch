@@ -89,7 +89,7 @@ export class Login extends Component<props, state> {
         />
         <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
         <TextInput
-          type={i18n.t("label.account_password")}
+          type={i18n.t("account_label.account_password")}
           value={""}
           edit={true}
           eventHandler={this.props.passwordHandler}
@@ -103,14 +103,14 @@ export class Login extends Component<props, state> {
           </Text>
         )}
         <TextInput
-          type={i18n.t("label.account_email")}
+          type={i18n.t("account_label.account_email")}
           value={this.props.email}
           edit={false}
           eventHandler={() => {}}
           secure={false}
         />
         <SubmitButton
-          title={i18n.t("label.login")}
+          title={i18n.t("account_label.login")}
           handler={() => this.props.stageHandler(this.props.password)}
         />
         <FlatButton
