@@ -4,6 +4,23 @@ import { TextInput } from "../../../shared/components/TextInput";
 import { BackButton } from "../../../shared/components/BackButton";
 import { SubmitButton } from "../../../shared/components/SubmitButton";
 import { FlatButton } from "../../../shared/components/FlatButton";
+import styled from "styled-components/native";
+import i18n from "../../../i18n/i18n";
+
+const H1Text = styled.Text`
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+  margin-top: 60px;
+`;
+const PText = styled.Text`
+  color: #626368;
+  margin-bottom: 12px;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 20px;
+`;
 
 interface props {
   email: string;
@@ -11,6 +28,7 @@ interface props {
   // stageHandler: () => void;
   resendHandler: () => void;
   existence: string;
+  certified: string;
 }
 
 interface state {
@@ -33,36 +51,44 @@ export class CertifyEmail extends Component<props, state> {
     return (
       <View>
         <BackButton handler={goToBack} />
+        <H1Text>
+          {this.props.existence == "new"
+            ? i18n.t("register.authentication_signup")
+            : i18n.t("register.authentication_recover")}
+        </H1Text>
         <Text>
           {this.props.existence == "new"
-            ? "메일을 인증해주세요."
-            : "인증코드를 입력해주세요."}
-        </Text>
-        <Text>
-          {this.props.existence == "new"
-            ? "회원가입 진행을"
-            : "비밀번호 찾기를"}
-          위해 해당 메일로 인증코드를 보냈습니다. <br />
-          메일 확인 후, 인증을 진행해주세요.
+            ? i18n.t("register.authentication_signup_label")
+            : i18n.t("register.authentication_recover_label")}
         </Text>
         <TextInput
-          type="이메일"
+          type={i18n.t("account_label.account_email")}
           edit={false}
           value={this.props.email}
           eventHandler={() => {}}
           secure={false}
         />
         <TextInput
-          type="인증코드"
+          type={i18n.t("account_label.authentication_code")}
           edit={true}
           value={""}
           eventHandler={this.setCode}
           secure={false}
         />
-        <Text>유효시간 {}</Text>
-        <FlatButton title="재요청" handler={()=>this.props.resendHandler} />
+        {this.props.certified === "pending" && (
+          <Text>
+            {i18n.t("errors.messages.authentication_code_do_not_match")}
+          </Text>
+        )}
+        <Text>
+          {i18n.t("register.expiration_time")} {}
+        </Text>
+        <FlatButton
+          title={i18n.t("account_label.resend")}
+          handler={() => this.props.resendHandler}
+        />
         <SubmitButton
-          title="인증하기"
+          title={i18n.t("account_label.certify")}
           handler={() => this.props.stageHandler(this.state.code)}
         />
       </View>

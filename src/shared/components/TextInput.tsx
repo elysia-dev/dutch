@@ -28,7 +28,7 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-  border-bottom-color: #a7a7a7;
+  border-bottom-color: #d0d8df;
 `;
 
 export const TextInput: FunctionComponent<props> = (props) => {
@@ -47,29 +47,3 @@ export const TextInput: FunctionComponent<props> = (props) => {
     </View>
   );
 };
-
-// export class TextInput extends Component {
-//   constructor(props: any) {
-//     super(props);
-//     this.state = { input: "" };
-//   }
-
-//   render() {
-//     return (
-//       <View>
-//         <Text>{this.props.type}</Text>
-//         <RNTextInput
-//           value={this.props.value}
-//           onChangeText={(text) => this.setState({ input: text })}
-//           editable={true}
-//           enablesReturnKeyAutomatically={true}
-//         >
-//           {" "}
-//         </RNTextInput>
-//         <Text>Optinal Message 채워넣기</Text>
-//       </View>
-//     );
-//   }
-// }
-
-const styles = StyleSheet.create({});

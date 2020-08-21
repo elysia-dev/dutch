@@ -4,6 +4,7 @@ import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
+import i18n from "../../i18n/i18n";
 
 interface props {
   email: string;
@@ -30,23 +31,22 @@ export class InitializeEmail extends Component<props> {
     super(props);
     // this.goToBack = this.goToBack.bind(this);
   }
-
   goToBack() {}
 
   render() {
     return (
       <InitializeEmailWrapper>
         <BackButton handler={this.goToBack} />
-        <H1Text>이메일을 입력해주세요.</H1Text>
+        <H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>
         <TextInput
-          type="이메일"
+          type={i18n.t("account_label.account_email")}
           value={this.props.email}
           eventHandler={this.props.handler}
           edit={true}
           secure={false}
         />
         <SubmitButton
-          title="계속"
+          title={i18n.t("account_label.continue")}
           handler={this.props.stageHandler}
           //백이랑 통신해서 회원가입/로그인 나누는 로직 추가해야함 -> 스테이지로?
         />
