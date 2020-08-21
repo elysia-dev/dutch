@@ -200,4 +200,3 @@ export class TakeID extends Component<props, state> {
       );
     }
   }
-}

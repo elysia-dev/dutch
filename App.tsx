@@ -37,6 +37,7 @@ export const App = () => {
         <StatusBar style="auto" />
         {STORYBOOK_START ? <StorybookUIRoot /> : <Kyc />}
         <MyTabs />
+
       </View>
     </NavigationContainer>
   );
@@ -71,5 +72,6 @@ function MyTabs() {
     </View>
   );
 }
+
 
 export default App;
