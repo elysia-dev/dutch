@@ -7,6 +7,7 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Modal } from "../../shared/components/Modal";
 import AcceptedImg from "./images/accepted.png";
 import styled from "styled-components/native";
+import i18n from "../../i18n/i18n";
 
 const H1Text = styled.Text`
   color: #000;
@@ -83,20 +84,22 @@ export class ChangePassword extends Component<props, state> {
           <View>
             <Text>비밀번호 변경</Text>
             <Text>
-              {this.state.step == 1 ? "비밀번호를" : "다시한번"} 입력해주세요.
+              {this.state.step == 1
+                ? i18n.t("account_check.insert_password")
+                : i18n.t("account_check.password_confirm")}
             </Text>
           </View>
         )}
         {this.props.login === false && (
           <Text>
             {this.state.step == 1
-              ? "비밀번호 변경을 진행해주세요."
-              : "다시한번 입력해주세요."}
+              ? i18n.t("account_check.recover_password")
+              : i18n.t("account_check.password_confirm")}
           </Text>
         )}
         {this.state.step == 2 && (
           <TextInput
-            type="비밀번호 확인하기"
+            type={i18n.t("account_label.account_password_confirm")}
             edit={true}
             eventHandler={this.setInput2}
             value={""}
@@ -105,24 +108,27 @@ export class ChangePassword extends Component<props, state> {
           />
         )}
         <TextInput
-          type="비밀번호"
+          type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
           eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
           value={""}
           secure={true}
         />
         <TextInput
-          type="이메일"
+          type={i18n.t("account_label.account_email")}
           edit={false}
           eventHandler={() => {}}
           value={this.props.email}
           secure={false}
         />
         {this.state.step == 1 ? (
-          <SubmitButton title="계속" handler={() => this.nextStep(2)} />
+          <SubmitButton
+            title={i18n.t("account_label.continue")}
+            handler={() => this.nextStep(2)}
+          />
         ) : (
           <SubmitButton
-            title="변경하기"
+            title={i18n.t("account_label.change")}
             handler={() => {
               this.setModalVisible(true);
               this.props.passwordHandler(this.state.input1, this.state.input2);
@@ -134,8 +140,8 @@ export class ChangePassword extends Component<props, state> {
             child={
               <View>
                 <Accepted source={AcceptedImg} />
-                <H1Text>비밀번호가 변경되었습니다</H1Text>
-                <PText>변경된 비밀번호로 로그인해주세요.</PText>
+                <H1Text>{i18n.t("account_check.password_changed")}</H1Text>
+                <PText>{i18n.t("account_check.login_request")}</PText>
               </View>
             }
             modalHandler={() => this.props.stageHandler("Login")}

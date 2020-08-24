@@ -8,6 +8,7 @@ import { Modal } from "../../shared/components/Modal";
 import styled from "styled-components/native";
 import WarningImg from "./images/warning.png";
 import { withNavigation } from "react-navigation";
+import i18n from "../../i18n/i18n";
 
 let lastError = 0;
 
@@ -51,7 +52,6 @@ interface state {
 export class Login extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.navigation = this.props;
     this.goToBack = this.goToBack.bind(this);
     this.state = { modalVisible: false };
     this.setModalVisible = this.setModalVisible.bind(this);
@@ -84,33 +84,37 @@ export class Login extends Component<props, state> {
         <BackButton
           handler={() => {
             // this.props.navigation.navigate({ routeName: "InitializeEmail" });
-            this.props.navigation.goBack();
+            // this.props.navigation.goBack();
           }}
         />
-        <H1Text>비밀번호를 입력해주세요.</H1Text>
+        <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
         <TextInput
-          type="비밀번호"
+          type={i18n.t("account_label.account_password")}
           value={""}
           edit={true}
           eventHandler={this.props.passwordHandler}
           secure={true}
         />
         {this.props.error > 0 && (
-          <Text>비밀번호가 틀렸습니다. ({this.props.error}/5)</Text>
+          <Text>
+            {i18n.t("errors.messages.password_do_not_match")} (
+            {this.props.error}
+            /5)
+          </Text>
         )}
         <TextInput
-          type="이메일"
+          type={i18n.t("account_label.account_email")}
           value={this.props.email}
           edit={false}
           eventHandler={() => {}}
           secure={false}
         />
         <SubmitButton
-          title="로그인"
+          title={i18n.t("account_label.login")}
           handler={() => this.props.stageHandler(this.props.password)}
         />
         <FlatButton
-          title="비밀번호를 잊으셨나요?"
+          title={i18n.t("account_check.forget_password_link")}
           handler={this.props.findPassword}
         />
         {this.activateModal() == true && (
@@ -118,8 +122,12 @@ export class Login extends Component<props, state> {
             child={
               <View>
                 <Warning source={WarningImg} />
-                <H1Text>비밀번호가 틀렸습니다</H1Text>
-                <PText>5회 실패시 계정이 잠금되며 추가인증이 요구됩니다.</PText>
+                <H1Text>
+                  {i18n.t("errors.messages.password_do_not_match")}
+                </H1Text>
+                <PText>
+                  {i18n.t("errors.messages.incorrect_password_warning")}
+                </PText>
                 <Text>({this.props.error}/5)</Text>
               </View>
             }

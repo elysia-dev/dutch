@@ -7,8 +7,8 @@ import {
   Image,
   Text,
 } from "react-native";
-import styled from 'styled-components/native';
-import BackButtonImg from '../../../src/shared/assets/images/backbutton.png';
+import styled from "styled-components/native";
+import BackButtonImg from "../../../src/shared/assets/images/backbutton.png";
 
 const ArrowImg = styled.Image`
   width: 16px;
@@ -16,7 +16,7 @@ const ArrowImg = styled.Image`
   margin: 12px;
 `;
 const WhiteBtn = styled.TouchableOpacity`
-  background-color: #fff;
+  background-color: transparent;
 `;
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;
