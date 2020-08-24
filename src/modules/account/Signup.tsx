@@ -6,11 +6,12 @@ import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from 'styled-components/native';
 import WarningImg from '../../../src/shared/assets/images/warning.png';
+import i18n from "../../i18n/i18n";
 
 interface props {
   email: string;
-  // stageHandler: (input1: string, input2: string) => void;
-  stageHandler: () => void;
+  stageHandler: (input1: string, input2: string) => void;
+  // stageHandler: () => void;
 }
 
 const SignupWrapper = styled.View`
@@ -20,7 +21,7 @@ const SignupWrapper = styled.View`
 `;
 const H1Text = styled.Text`
   font-size: 20px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   text-align: left;
   margin: 25px 5%;
   font-weight: bold;
@@ -59,8 +60,9 @@ export class Signup extends Component<props, state> {
     this.setInput2 = this.setInput2.bind(this);
   }
 
-  nextStep(number: number) {
-    this.setState({ step: 2 });
+  nextStep(input: number) {
+    console.log(this.state.step);
+    this.setState({ step: input });
   } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
 
   setInput1(input: string) {
@@ -71,6 +73,7 @@ export class Signup extends Component<props, state> {
     } else {
       this.setState({ errorState: 0}); // 모든 조건을 만족하면 만약 1이나 2일 경우를 위해 ErrorState = 0 으로 변경 한 뒤
       this.setState({ input1: input }); // 마저 인풋 저장
+      console.log(`input1: ${this.state.input1}`);
     }
   } // 첫 비밀번호 인풋을 저장
 
@@ -80,19 +83,26 @@ export class Signup extends Component<props, state> {
     } else {
       this.setState({ errorState: 0});
       this.setState({ input2: input }); // input2 저장.
+      console.log(`input2: ${this.state.input2}`);
     }
   } 
 
   render() {
     return (
       <SignupWrapper>
-        <BackButton handler={goToBack} />
+        <BackButton
+          handler={() => {
+            this.state.step == 2 && this.nextStep(1);
+          }}
+        />
         <H1Text>
-          {this.state.step == 1 ? "비밀번호를" : "다시 한번"} 입력해주세요.
+          {this.state.step == 1
+            ? i18n.t("account_check.insert_password")
+            : i18n.t("account_check.password_confirm")}
         </H1Text>
         {this.state.step == 2 && (
           <TextInput
-            type="비밀번호 확인하기"
+            type={i18n.t("account_label.account_password_confirm")}
             edit={true}
             eventHandler={this.setInput2}
             value={""}
@@ -107,7 +117,7 @@ export class Signup extends Component<props, state> {
           </PText>
         )}
         <TextInput
-          type="비밀번호"
+          type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
           eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
           value={""}
@@ -128,7 +138,7 @@ export class Signup extends Component<props, state> {
         )}
         
         <TextInput
-          type="이메일"
+          type={i18n.t("account_label.account_email")}
           edit={false}
           eventHandler={() => {}}
           value={this.props.email}
@@ -142,6 +152,20 @@ export class Signup extends Component<props, state> {
           <SubmitButton title="비밀번호를 확인해주세요" handler={() => { }}/>
           :
           <SubmitButton title="가입하기" handler={this.props.stageHandler} />
+          /*
+          {this.state.step == 1 ? (
+          <SubmitButton
+            title={i18n.t("account_label.continue")}
+            handler={() => this.nextStep(2)}
+          />
+        ) : (
+          <SubmitButton
+            title={i18n.t("account_label.signup")}
+            handler={() =>
+              this.props.stageHandler(this.state.input1, this.state.input2)
+            }
+          />
+          */
         )}
       </SignupWrapper>
     );

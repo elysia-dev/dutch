@@ -7,7 +7,7 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from "react-native";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 interface props {
   type: string;
@@ -18,9 +18,8 @@ interface props {
 }
 
 const InputHeaderText = styled.Text`
-  color: #A7A7A7;
+  color: #a7a7a7;
   margin: 5px 20px;
-  font-family: Roboto;
   font-size: 12px;
   text-align: left;
 `;
@@ -29,7 +28,7 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-  border-bottom-color: #A7A7A7;
+  border-bottom-color: #d0d8df;
 `;
 
 export const TextInput: FunctionComponent<props> = (props) => {
@@ -42,33 +41,9 @@ export const TextInput: FunctionComponent<props> = (props) => {
         onChangeText={(text) => props.eventHandler(text)}
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
+        maxLength={30}
+        // minLength={8}
       />
     </View>
   );
 };
-
-// export class TextInput extends Component {
-//   constructor(props: any) {
-//     super(props);
-//     this.state = { input: "" };
-//   }
-
-//   render() {
-//     return (
-//       <View>
-//         <Text>{this.props.type}</Text>
-//         <RNTextInput
-//           value={this.props.value}
-//           onChangeText={(text) => this.setState({ input: text })}
-//           editable={true}
-//           enablesReturnKeyAutomatically={true}
-//         >
-//           {" "}
-//         </RNTextInput>
-//         <Text>Optinal Message 채워넣기</Text>
-//       </View>
-//     );
-//   }
-// }
-
-const styles = StyleSheet.create({});
