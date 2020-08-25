@@ -6,6 +6,8 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
+import { page } from "./Kyc";
+import { useNavigation } from "@react-navigation/native";
 
 const H1Text = styled.Text`
   color: #000;
@@ -26,11 +28,13 @@ const ClockImg = styled.Image`
   height: 13px;
 `;
 
-export const StartKYC: FunctionComponent<{
+interface props {
   handler: any;
-}> = ({ handler }) => {
+}
+export const StartKYC: FunctionComponent<props> = (props) => {
+  // const navigation = useNavigation();
   return (
-    <View>
+    <View style={{ backgroundColor: "#fff", height: "100%" }}>
       <BackButton handler={() => {}} />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
       <ClockImg source={ClockPng} />
@@ -45,6 +49,7 @@ export const StartKYC: FunctionComponent<{
       <SubmitButton
         title={i18n.t("kyc_label.agree_start")}
         handler={() => {}}
+        // handler={() => navigation.navigate(page.SelectID)}
       />
     </View>
   );

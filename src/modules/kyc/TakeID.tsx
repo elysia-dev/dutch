@@ -12,6 +12,10 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { page } from "./Kyc";
+import { RouteProp } from "@react-navigation/native";
+
 const H1Text = styled.Text`
   color: #fff;
   font-weight: bold;
@@ -32,7 +36,8 @@ const ButtonImg = styled.Image`
 
 interface props {
   // camera: HTMLDivElement;
-  idType: string;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
@@ -92,6 +97,9 @@ export class TakeID extends Component<props, state> {
   };
 
   render() {
+    // const { route, navigation } = this.props;
+    // const { idType } = route.params;
+
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
@@ -101,19 +109,21 @@ export class TakeID extends Component<props, state> {
             flex: 1,
             width: "100%",
             position: "relative",
-            top: 0,
-            height: 900,
-            // borderColor: "black",
-            // borderWidth: 1,
+            top: -90,
+            height: "100%",
+            borderColor: "black",
+            borderWidth: 1,
           }}
         >
           <Camera
             style={{
               flex: 1,
               width: "100%",
-              height: 700,
-              borderColor: "black",
-              borderWidth: 1,
+              position: "relative",
+              top: 0,
+              height: "100%",
+              // borderColor: "black",
+              // borderWidth: 1,
             }}
             type={this.state.type}
             ref={(ref) => {
@@ -130,7 +140,7 @@ export class TakeID extends Component<props, state> {
               }}
             >
               <BackButton handler={() => {}} />
-              <H1Text>{i18n.t(`kyc_label.${this.props.idType}`)}</H1Text>
+              <H1Text>{"네비게이션 해결 후 신분증 종류가 써질 것"}</H1Text>
 
               <View
                 style={{

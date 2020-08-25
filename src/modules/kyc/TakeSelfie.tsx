@@ -29,9 +29,7 @@ const ButtonImg = styled.Image`
   height: 47px;
 `;
 
-interface props {
-  camera: HTMLDivElement;
-}
+interface props {}
 
 interface state {
   hasPermission: boolean;
@@ -42,23 +40,23 @@ export class TakeSelfie extends Component<props, state> {
   camera: any;
   constructor(props: props) {
     super(props);
-    this.camera = camera;
     this.state = {
       hasPermission: false,
       type: Camera.Constants.Type.back,
     };
   }
 
-  //   async componentWillMount() {
-  //     if (Platform.OS === "ios") {
-  //       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-  //       if (status !== "granted") {
-  //         alert("Sorry, we need camera roll permissions to make this work!");
-  //       }
-  //     }
-  //     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-  //     this.setState({ hasPermission: status === "granted" });
-  //   } 셀피 이전 신분증 촬영에서 카메라 승인 받으면 다시 승인 받을 필요 없지 않나?
+  async componentWillMount() {
+    if (Platform.OS === "ios") {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasPermission: status === "granted" });
+  }
+  // 셀피 이전 신분증 촬영에서 카메라 승인 받으면 다시 승인 받을 필요 없지 않나? -> storybook에 한해 살리기
 
   reverseCamera = () => {
     this.setState({
