@@ -27,17 +27,12 @@ const OptionBtnText = styled.Text`
   z-index: 5;
 `;
 
-<<<<<<< HEAD
 interface props {
-=======
-export const OptionButton: FunctionComponent<{
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
   title: string;
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
   child: any;
   checked: any;
-<<<<<<< HEAD
 }
 
 export const OptionButton: FunctionComponent<props> = (props) => {
@@ -47,15 +42,6 @@ export const OptionButton: FunctionComponent<props> = (props) => {
         {props.child}
         <OptionBtnText>{props.title}</OptionBtnText>
         {props.checked}
-=======
-}> = ({ title, handler, child, checked }) => {
-  return (
-    <View>
-      <OptionBtn onPress={handler}>
-        {child}
-        <OptionBtnText>{title}</OptionBtnText>
-        {checked}
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
       </OptionBtn>
     </View>
   );

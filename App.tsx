@@ -42,25 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const AccountNavigator = createStackNavigator({
-//   InitializeEmail: InitializeEmail,
-//   Login: Login,
-//   CertifyEmail: CertifyEmail,
-//   Signup: Signup,
-// });
-
-const Tab = createBottomTabNavigator();
-
-function MyTabs() {
-  return (
-    <View style={{ width: "100%" }}>
-      <Tab.Navigator>
-        <Tab.Screen name="Test" component={Kyc} />
-        <Tab.Screen name="Info" component={Info} />
-      </Tab.Navigator>
-    </View>
-  );
-}
-
-
 export default App;

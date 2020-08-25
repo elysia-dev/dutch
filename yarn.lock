@@ -12362,15 +12362,9 @@ react-native-color-picker@^0.4.0:
     tinycolor2 "^1.4.1"
 
 react-native-date-picker@^3.1.0:
-<<<<<<< HEAD
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-3.2.1.tgz#957e386885b04c6dcb58c5ddf82330e54762e37e"
-  integrity sha512-79IE6NyGg1Qbpu44yLVK27nyHtOXwhV8o9FgEOUZVRoTkA0ttjUruinENvK8q9nq/Q6+6buuRlrqd3BFpW4L/Q==
-=======
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-3.1.0.tgz#8821444b971680352e3b3e75082c8b9539d5048a"
   integrity sha512-tKO6t/oumnfurrbuDNmAG7NdCH2jwrcYilNEt0vWqhrOTKESxDbui1l4XXQU9HRt8598MA3dB76tuxrG0UV8OA==
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
   dependencies:
     moment "^2.22.1"
 
@@ -12540,15 +12534,9 @@ react-native-web@~0.11.7:
     react-timer-mixin "^0.13.4"
 
 react-native-webview@^10.7.0:
-<<<<<<< HEAD
-  version "10.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.8.0.tgz#d5b8fb47899ce8ed1f8d104c659089dbbefccbda"
-  integrity sha512-Zp59e9F8+IVhYwND/2WNxm88XgTM3Tn73H4ip6+uVTKXlIJFqtlF5tCPZgEuhgmSsZQ4FS2n5xBW8EY+j6TFaw==
-=======
   version "10.7.0"
   resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.7.0.tgz#b96e152ffdae4eeffaa74f43671a35733885b52d"
   integrity sha512-4TSYwJqMBUTKB9+xqGbPwx+eLXbp6RRD7lQ2BumT8eSTfuuqr2rXNqcrlKU1VRla7QGGYowmYmxl2aXIx5k9wA==
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

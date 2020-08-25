@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import { StatusBar } from "expo-status-bar";
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
 import axios from "axios";
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
@@ -12,7 +8,6 @@ import { PersonalDataInput } from "./PersonalDataInput";
 import { TakeSelfieBefore } from "./TakeSelfieBefore";
 import { TakeSelfie } from "./TakeSelfie";
 import { ConfirmSelfie } from "./ConfirmSelfie";
-<<<<<<< HEAD
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { NavigationContainer } from "@react-navigation/native";
@@ -50,38 +45,21 @@ export function kycNavigator() {
     </Stack.Navigator>
   );
 }
-=======
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
 
 interface props {}
 interface state {
   stage: string;
-<<<<<<< HEAD
   idType: string;
-=======
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
 }
 
 export class Kyc extends Component<props, state> {
   constructor(props: props) {
     super(props);
-<<<<<<< HEAD
-    this.state = { stage: "", idType: "passport" };
-    this.setID = this.setID.bind(this);
-  }
-
-  setID(text: string) {
-    this.state.idType != text
-      ? this.setState({ idType: text })
-      : this.setState({ idType: "" });
-=======
     this.state = { stage: "ConfirmSelfie" };
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
   }
 
   render() {
     return (
-<<<<<<< HEAD
       <View
         style={{
           width: "100%",
@@ -127,16 +105,6 @@ export class Kyc extends Component<props, state> {
           {this.state.stage === "TakeSelfie" && <TakeSelfie />}
           {this.state.stage === "ConfirmSelfie" && <ConfirmSelfie />} */}
         </NavigationContainer>
-=======
-      <View>
-        {this.state.stage === "StartKYC" && <StartKYC handler={() => {}} />}
-        {this.state.stage === "SelectID" && <SelectID />}
-        {this.state.stage === "TakeID" && <TakeID />}
-        {this.state.stage === "PersonalDataInput" && <PersonalDataInput />}
-        {this.state.stage === "TakeSelfieBefore" && <TakeSelfieBefore />}
-        {this.state.stage === "TakeSelfie" && <TakeSelfie />}
-        {this.state.stage === "ConfirmSelfie" && <ConfirmSelfie />}
->>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
       </View>
     );
   }
