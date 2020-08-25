@@ -49,17 +49,18 @@ const styles = StyleSheet.create({
 //   Signup: Signup,
 // });
 
-// const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
-// function MyTabs() {
-//   return (
-//     <View style={{ width: "100%", position: "absolute", bottom: 0 }}>
-//       <Tab.Navigator>
-//         <Tab.Screen name="Test" component={Kyc} />
-//         <Tab.Screen name="Info" component={Info} />
-//       </Tab.Navigator>
-//     </View>
-//   );
-// }
+function MyTabs() {
+  return (
+    <View style={{ width: "100%" }}>
+      <Tab.Navigator>
+        <Tab.Screen name="Test" component={Kyc} />
+        <Tab.Screen name="Info" component={Info} />
+      </Tab.Navigator>
+    </View>
+  );
+}
+
 
 export default App;

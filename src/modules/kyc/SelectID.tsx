@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, FunctionComponent, Props } from "react";
 import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
@@ -53,6 +53,7 @@ export class SelectID extends Component<props, state> {
   constructor(props: props) {
     super(props);
     this.state = { idType: "" };
+    this.setID = this.setID.bind(this);
   }
 
   setID(text: string) {
@@ -64,7 +65,7 @@ export class SelectID extends Component<props, state> {
   // navigation = useNavigation();
 
   render() {
-    const { navigation } = this.props;
+    // const { navigation } = this.props;
     return (
       <View style={{ backgroundColor: "#fff", height: "100%" }}>
         <BackButton handler={() => navigation.goBack()} />

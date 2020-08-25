@@ -5,6 +5,10 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Modal } from "../../shared/components/Modal";
 import styled from "styled-components/native";
 import KycSubmitPng from "./images/kycsubmit.png";
+<<<<<<< HEAD
+=======
+import styled from "styled-components/native";
+>>>>>>> e99f9c28f7b1bfd8e0d092a805f1b3b51b2ecfca
 
 import i18n from "../../i18n/i18n";
 
