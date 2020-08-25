@@ -9,7 +9,6 @@ import {
 import styled from "styled-components/native";
 
 const WhiteBtn = styled.TouchableOpacity`
-  color: #000;
   width: 90%;
   margin: 0 auto;
   height: 40px;

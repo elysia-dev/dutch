@@ -85,5 +85,19 @@
     "kyc_take_ID_text": "신분증의 모든 모서리가 명확히 보여야합니다.",
     "kyc_submit": "KYC 인증 제출이 완료되었어요!",
     "kyc_submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요."
+  },
+  "product": {
+    "filter_text": "어떻게 필터링 해드릴까요."
+  },
+  "product_label": {
+    "select_nationality": "국가 선택",
+    "select_payment": "결제수단 선택",
+    "set_again": "재설정하기",
+    "set_filter": "필터설정하기",
+    "korean": "한국인",
+    "foreigner": "외국인",
+    "sorting_return": "수익률순",
+    "sorting_popularity": "인기순",
+    "filter": "필터"
   }
 }

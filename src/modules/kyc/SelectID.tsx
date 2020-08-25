@@ -15,6 +15,8 @@ import CheckedDriverPng from "./images/checkeddriver.png";
 import CheckedIDCardPng from "./images/checkedidcard.png";
 
 import i18n from "../../i18n/i18n";
+import { NavigationScreenProp } from "react-navigation";
+import { page } from "./Kyc";
 
 const H1Text = styled.Text`
   color: #000;
@@ -39,7 +41,9 @@ const Checked = styled.Image`
   height: 5px;
 `;
 
-interface props {}
+interface props {
+  navigation: NavigationScreenProp<any>;
+}
 
 interface state {
   idType: string;
@@ -58,10 +62,13 @@ export class SelectID extends Component<props, state> {
       : this.setState({ idType: "" });
   }
 
+  // navigation = useNavigation();
+
   render() {
+    // const { navigation } = this.props;
     return (
-      <View>
-        <BackButton handler={() => {}} />
+      <View style={{ backgroundColor: "#fff", height: "100%" }}>
+        <BackButton handler={() => navigation.goBack()} />
         <H1Text>{i18n.t("kyc.kyc_step1")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step1_text")}</PText>
         <OptionButton
@@ -80,47 +87,58 @@ export class SelectID extends Component<props, state> {
             this.state.idType === "passport" ? (
               <Checked source={CheckedPng} />
             ) : (
-              { "": "" }
+              <View />
             )
           }
         />
         <OptionButton
           title={i18n.t("kyc_label.drivers_license")}
-          handler={() => this.setID("drivers")}
+          handler={() => this.setID("drivers_license")}
           child={
             <IDImg
               source={
-                this.state.idType === "drivers" ? CheckedDriverPng : DriverPng
+                this.state.idType === "drivers_license"
+                  ? CheckedDriverPng
+                  : DriverPng
               }
             />
           }
           checked={
-            this.state.idType === "drivers" ? (
+            this.state.idType === "drivers_license" ? (
               <Checked source={CheckedPng} />
             ) : (
-              { "": "" }
+              <View />
             )
           }
         />
         <OptionButton
           title={i18n.t("kyc_label.id_card")}
-          handler={() => this.setID("idCard")}
+          handler={() => this.setID("id_card")}
           child={
             <IDImg
               source={
-                this.state.idType === "idCard" ? CheckedIDCardPng : IDCardPng
+                this.state.idType === "id_card" ? CheckedIDCardPng : IDCardPng
               }
             />
           }
           checked={
-            this.state.idType === "idCard" ? (
+            this.state.idType === "id_card" ? (
               <Checked source={CheckedPng} />
             ) : (
-              { "": "" }
+              <View />
             )
           }
         />
-        <SubmitButton title={i18n.t("kyc_label.shoot")} handler={() => {}} />
+        <SubmitButton
+          title={i18n.t("kyc_label.shoot")}
+          handler={() => {
+            if (this.state.idType === "") {
+              alert("신분증을 선택해주세요");
+            } else {
+              navigation.navigate(page.TakeID, { idType: this.state.idType });
+            }
+          }}
+        />
       </View>
     );
   }
