@@ -86,7 +86,7 @@ const CameraFocus = styled.View`
   width: 90%;
   height: 100%;
   border-color: rgba(255, 255, 255, 0.5);
-  border-width: 1;
+  border-width: 1px;
 `;
 const CameraInnerWLine = styled.View`
   position: absolute;
@@ -95,9 +95,9 @@ const CameraInnerWLine = styled.View`
   margin-top: 22.5%;
   margin-bottom: 22.5%;
   border-top-color: rgba(255, 255, 255, 0.5);
-  border-top-width: 1;
+  border-top-width: 1px;
   border-bottom-color: rgba(255, 255, 255, 0.5);
-  border-bottom-width: 1;
+  border-bottom-width: 1px;
 `;
 const CameraInnerDLine = styled.View`
   position: absolute;
@@ -106,9 +106,9 @@ const CameraInnerDLine = styled.View`
   margin-left: 30%;
   margin-right: 30%;
   border-left-color: rgba(255, 255, 255, 0.5);
-  border-left-width: 1;
+  border-left-width: 1px;
   border-right-color: rgba(255, 255, 255, 0.5);
-  border-right-width: 1;
+  border-right-width: 1px;
 `;
 const CameraInnerLeftTopLine = styled.View`
   position: absolute;
@@ -171,16 +171,23 @@ export class TakeID extends Component<props, state> {
       type: Camera.Constants.Type.back,
     };
   }
-  async componentWillMount() {
+
+  componentDidMount() {
     if (Platform.OS === "ios") {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
+      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then((status) => {
+        if (!status.granted) {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        } else {
+          this.setState({ hasPermission: status.granted });
+        }
+      });
+    } else {
+      Permissions.askAsync(Permissions.CAMERA).then((status) => {
+        this.setState({ hasPermission: status.granted });
+      });
     }
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasPermission: status === "granted" });
   }
+
   reverseCamera = () => {
     this.setState({
       type:
@@ -215,14 +222,11 @@ export class TakeID extends Component<props, state> {
 
     const { id_type } = route.params;
 
-
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
       return (
-
         <TakeIdWrapper>
-
           <Camera
             style={{
               flex: 1,
