@@ -9,6 +9,8 @@ import MailPng from "./images/mail.png";
 import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { page } from "./Products";
+import { NavigationScreenProp } from "react-navigation";
 
 const MailImg = styled.Image`
   width: 22px;
@@ -44,16 +46,20 @@ const FilterBtnText = styled.Text`
   align-content: center;
 `;
 
-const FilterButton: FunctionComponent = () => {
+const FilterButton: FunctionComponent<{ handler: () => void }> = ({
+  handler,
+}) => {
   return (
-    <FilterBtn>
+    <FilterBtn onPress={handler}>
       <FilterImg source={FilterPng} />
       <FilterBtnText>{i18n.t("product_label.filter")}</FilterBtnText>
     </FilterBtn>
   );
 };
 
-interface props {}
+interface props {
+  navigation: NavigationScreenProp<any>;
+}
 
 interface state {
   return: boolean;
@@ -72,8 +78,18 @@ export class MainList extends Component<props, state> {
   //   }));
 
   render() {
+    const { navigation } = this.props;
+
     return (
-      <View style={{ width: "100%", position: "absolute", top: 0 }}>
+      <View
+        style={{
+          width: "100%",
+          position: "absolute",
+          top: 0,
+          backgroundColor: "#fff",
+          height: "100%",
+        }}
+      >
         <View
           style={{
             backgroundColor: "#2C6190",
@@ -96,7 +112,7 @@ export class MainList extends Component<props, state> {
               paddingRight: 16,
             }}
           >
-            <FilterButton />
+            <FilterButton handler={() => navigation.navigate(page.Filter)} />
             <SortingButton
               title={i18n.t("product_label.sorting_return")}
               check={this.state.return}

@@ -1,12 +1,14 @@
-import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
+import React, { Component } from "react";
+import { Text, View } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
 import SelfieBeforePng from "./images/selfiebefore.png";
+import { NavigationRoute, NavigationScreenProp } from "react-navigation";
+import { page } from "./Kyc";
 
 import i18n from "../../i18n/i18n";
+import { ScrollView } from "react-native-gesture-handler";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -26,6 +28,8 @@ const Container = styled.View`
   flex: 1;
   background-color: #fff;
   width: 90%;
+  height: 206px;
+  left: 5%;
   border-radius: 13px;
   border: solid 2px #d0d8df;
 `;
@@ -37,6 +41,8 @@ const Selfie = styled.Image`
 
 interface props {
   // handler: () => void;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 interface state {}
 //modal state 때문에 class로
@@ -46,17 +52,30 @@ export class TakeSelfieBefore extends Component<props, state> {
   }
 
   render() {
+    const { route, navigation } = this.props;
+    const { id_type, photoId_hash, photoId } = route.params;
     return (
-      <View>
-        <BackButton handler={() => {}} />
-        <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
-        <Container>
-          <Selfie source={SelfieBeforePng} />
-        </Container>
-        <Text>{i18n.t("kyc.kyc_step3_desc1")}</Text>
-        <Text>{i18n.t("kyc.kyc_step3_desc2")}</Text>
-        <SubmitButton title={i18n.t("kyc_label.shoot")} handler={() => {}} />
+      <View style={{ backgroundColor: "#fff", height: "100%" }}>
+        <ScrollView>
+          <BackButton handler={() => navigation.navigate(page.TakeSelfie)} />
+          <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
+          <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
+          <Container>
+            <Selfie source={SelfieBeforePng} />
+          </Container>
+          <Text>{i18n.t("kyc.kyc_step2_desc1")}</Text>
+          <Text>{i18n.t("kyc.kyc_step2_desc2")}</Text>
+          <SubmitButton
+            title={i18n.t("kyc_label.shoot")}
+            handler={() =>
+              navigation.navigate(page.TakeSelfie, {
+                id_type: id_type,
+                photoId_hash: photoId_hash,
+                photoId: photoId,
+              })
+            }
+          />
+        </ScrollView>
       </View>
     );
   }

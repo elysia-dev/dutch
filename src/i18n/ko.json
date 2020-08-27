@@ -7,7 +7,8 @@
     "authentication_recover": "인증코드를 입력해주세요",
     "authentication_signup_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
-    "expiration_time": "유효시간"
+    "expiration_time": "유효시간",
+    "authentication_error": "동일한 메일은 5분 뒤에 인증을 요청해 주세요."
   },
   "account_check": {
     "insert_password": "비밀번호를 입력해주세요.",
@@ -24,11 +25,11 @@
     "resending_code_mail_link": "다시 전송하기"
   },
   "errors": {
-    "messages:": {
+    "messages": {
       "wrong_email": "잘못된 이메일 형식이에요.",
       "password_do_not_match": "비밀번호가 일치하지 않아요.",
       "authentication_code_do_not_match": "인증번호가 일치하지 않아요.",
-      "password_too_short": "비밀번호는 최소 '%{password_minimum_length}'자리여야 해요.",
+      "password_too_short": "비밀번호는 최소 8자리여야 해요.",
       "simple_password": "비밀번호는 영문, 숫자가 모두 포함되어야 해요.",
       "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다"
     }
@@ -52,7 +53,7 @@
     "shoot": "촬영하기",
     "passport": "여권",
     "drivers_license": "운전면허증",
-    "id_card": "주민등록증",
+    "government_id": "주민등록증",
     "personal_data": "나의 정보",
     "first_name": "이름",
     "last_name": "성",
@@ -69,22 +70,26 @@
     "start_kyc": "KYC 인증하기",
     "start_kyc_text": "약 2분 정도의 시간이 소요될 예정이예요.",
     "start_kyc_step1": "신분증 사진 촬영하기",
-    "start_kyc_step2": "개인정보 입력하기",
-    "start_kyc_step3": "신분증 들고 셀카 촬영하기",
+    "start_kyc_step2": "신분증 들고 셀카 촬영하기",
+    "start_kyc_step3": "개인정보 입력하기",
     "kyc_step1": "1. 신분증 선택하기",
     "kyc_step1_text": "다음 단계에서 선택한 신분증으로 촬영할 예정이예요.",
-    "kyc_step2": "2. 개인정보 입력하기",
-    "kyc_step2_text": "개인정보를 정확하게 기입해주세요.",
-    "kyc_step3": "3. 셀피 촬영하기",
-    "kyc_step3_text": "본인인증 사진을 흔들림, 합성 없이 명확하게 촬영해주세요.",
-    "kyc_step3_desc1": "2단계에서 촬영한 신분증과 함께 셀카를 촬영해주세요.",
-    "kyc_step3_desc2": "2단계에서 입력하신 내용과 신분증의 정보가 같아야해요.",
-    "kyc_step3_complete": "3. 셀피 촬영완료",
-    "kyc_step3_complete_text": "본인인증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?.",
+    "kyc_step1_complete": "1. 신분증 촬영완료",
+    "kyc_step1_complete_text": "신분증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
+    "kyc_step3": "3. 개인정보 입력하기",
+    "kyc_step3_text": "개인정보를 정확하게 기입해주세요.",
+    "kyc_step2": "2. 셀피 촬영하기",
+    "kyc_step2_text": "본인인증 사진을 흔들림, 합성 없이 명확하게 촬영해주세요.",
+    "kyc_step2_desc1": "1단계에서 촬영한 신분증과 함께 셀카를 촬영해주세요.",
+    "kyc_step2_desc2": "1단계에서 입력하신 내용과 신분증의 정보가 같아야해요.",
+    "kyc_step2_complete": "2. 셀피 촬영완료",
+    "kyc_step2_complete_text": "본인인증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
     "kyc_take_ID": "신분증 앞면 촬영하기",
     "kyc_take_ID_text": "신분증의 모든 모서리가 명확히 보여야합니다.",
     "kyc_submit": "KYC 인증 제출이 완료되었어요!",
-    "kyc_submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요."
+    "kyc_submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요.",
+    "alert_id": "신분증을 선택해주세요.",
+    "alert_data": "개인정보를 모두 입력해주세요."
   },
   "product": {
     "filter_text": "어떻게 필터링 해드릴까요."
@@ -99,5 +104,8 @@
     "sorting_return": "수익률순",
     "sorting_popularity": "인기순",
     "filter": "필터"
+  },
+  "info_label": {
+    "need_kyc": "KYC 인증이 필요합니다."
   }
 }

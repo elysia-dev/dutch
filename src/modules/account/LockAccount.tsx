@@ -1,17 +1,14 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  GestureResponderEvent,
-} from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import LockAccountPng from "./images/lockaccount.png";
 import i18n from "../../i18n/i18n";
+import { page } from "./Account";
+import Api from "../../api/account";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 
 const LockAccountImg = styled.Image`
   width: 209px;
@@ -42,18 +39,19 @@ const LockAccountTextInput = styled.TextInput`
 `;
 
 interface props {
-  stageHandler: (input: string) => void;
-  resendHandler: () => void;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
   code: string;
+  verificationId: string;
 }
 
 export class LockAccount extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { code: "" };
+    this.state = { code: "", verificationId: "" };
     this.setCode = this.setCode.bind(this);
   }
 
@@ -63,6 +61,8 @@ export class LockAccount extends Component<props, state> {
   }
 
   render() {
+    const { route, navigation } = this.props;
+    const { email, status, verificationId } = route.params;
     return (
       <LockAccountWrapper>
         <LockAccountImg source={LockAccountPng} />
@@ -77,12 +77,29 @@ export class LockAccount extends Component<props, state> {
         />
         <Text>{i18n.t("lock_account.resending_code_mail_label")}</Text>
         <FlatButton
-          handler={this.props.resendHandler}
+          handler={() => Api.certifyEmail_recover(email, "Account")}
           title={i18n.t("account_label.resend_2")}
         />
         <SubmitButton
           title={i18n.t("account_label.certify")}
-          handler={() => this.props.stageHandler(this.state.code)}
+          handler={() =>
+            Api.certifyEmail(
+              this.state.verificationId === ""
+                ? verificationId
+                : this.state.verificationId,
+              this.state.code
+            )
+              .then((res) =>
+                navigation.navigate(page.ChangePassword, {
+                  status: res.data.status,
+                  verificationId:
+                    this.state.verificationId === ""
+                      ? verificationId
+                      : this.state.verificationId,
+                })
+              )
+              .catch((e) => {})
+          }
         />
       </LockAccountWrapper>
     );

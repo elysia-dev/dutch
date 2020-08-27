@@ -5,6 +5,8 @@ import styled from "styled-components/native";
 
 interface props {
   type: string;
+  eventHandler: (input: string) => void;
+  birthday: string;
 }
 interface state {
   birthday: string;
@@ -35,8 +37,13 @@ export class DateInput extends Component<props, state> {
       <View>
         <InputHeaderText>{this.props.type}</InputHeaderText>
         <DatePicker
-          date={this.state.birthday}
-          onDateChange={(date) => this.setState({ birthday: date })}
+          style={{ width: "90%" }}
+          date={this.props.birthday}
+          // onDateChange={(date) => {
+          //   this.setState({ birthday: date });
+          //   this.props.eventHandler(this.state.birthday);
+          // }}
+          onDateChange={this.props.eventHandler}
           mode="date"
           androidMode="spinner"
           placeholder="select date"
@@ -46,6 +53,9 @@ export class DateInput extends Component<props, state> {
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
+            btnTextConfirm: {
+              color: "#2C6190",
+            },
             dateIcon: {
               opacity: 0,
               position: "absolute",

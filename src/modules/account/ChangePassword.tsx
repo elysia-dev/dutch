@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
@@ -8,6 +7,9 @@ import { Modal } from "../../shared/components/Modal";
 import AcceptedImg from "./images/accepted.png";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
+import { page } from "./Account";
+import Api from "../../api/account";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 
 const H1Text = styled.Text`
   color: #000;
@@ -30,15 +32,15 @@ const Accepted = styled.Image`
 
 interface props {
   email: string;
-  passwordHandler: (input1: string, input2: string) => void;
-  stageHandler: (text: string) => void;
   login: boolean;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
   step: number;
-  input1: string;
-  input2: string;
+  password: string;
+  passwordConfirmation: string;
   modalVisible: boolean;
 }
 
@@ -47,13 +49,11 @@ export class ChangePassword extends Component<props, state> {
     super(props);
     this.state = {
       step: 1,
-      input1: "",
-      input2: "",
+      password: "",
+      passwordConfirmation: "",
       modalVisible: false,
     };
     this.nextStep = this.nextStep.bind(this);
-    this.setInput1 = this.setInput1.bind(this);
-    this.setInput2 = this.setInput2.bind(this);
     this.setModalVisible = this.setModalVisible.bind(this);
   }
 
@@ -61,26 +61,19 @@ export class ChangePassword extends Component<props, state> {
     this.setState({ step: number });
   } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
 
-  setInput1(input: string) {
-    this.setState({ input1: input });
-    console.log(this.state.input1);
-  } // 첫 비밀번호 인풋을 저장
-
-  setInput2(input: string) {
-    this.setState({ input2: input });
-    console.log(this.state.input2);
-  } // 비밀번호 확인 인풋을 저장
-
   setModalVisible = (visible: boolean) => {
     this.setState({ modalVisible: visible });
     console.log(this.state.modalVisible);
   };
 
   render() {
+    const { route, navigation } = this.props;
+    const { email, status, verificationId, login } = route.params;
+    //로그인하고 info에서 넘어올 때는 login 값에 true를 담아서 보내주자
     return (
       <View>
-        <BackButton handler={goToBack} />
-        {this.props.login === true && (
+        <BackButton handler={() => navigation.goBack()} />
+        {login === true && (
           <View>
             <Text>비밀번호 변경</Text>
             <Text>
@@ -90,7 +83,7 @@ export class ChangePassword extends Component<props, state> {
             </Text>
           </View>
         )}
-        {this.props.login === false && (
+        {login === false && (
           <Text>
             {this.state.step == 1
               ? i18n.t("account_check.recover_password")
@@ -101,16 +94,22 @@ export class ChangePassword extends Component<props, state> {
           <TextInput
             type={i18n.t("account_label.account_password_confirm")}
             edit={true}
-            eventHandler={this.setInput2}
+            eventHandler={(input: string) =>
+              this.setState({ passwordConfirmation: input })
+            }
             value={""}
             secure={true}
-            //input1, input2 비교
+            //password, passwordConfirmation 비교
           />
         )}
         <TextInput
           type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
-          eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
+          eventHandler={
+            this.state.step == 1
+              ? (input: string) => this.setState({ password: input })
+              : () => {}
+          }
           value={""}
           secure={true}
         />
@@ -118,7 +117,7 @@ export class ChangePassword extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           edit={false}
           eventHandler={() => {}}
-          value={this.props.email}
+          value={email}
           secure={false}
         />
         {this.state.step == 1 ? (
@@ -130,8 +129,19 @@ export class ChangePassword extends Component<props, state> {
           <SubmitButton
             title={i18n.t("account_label.change")}
             handler={() => {
-              this.setModalVisible(true);
-              this.props.passwordHandler(this.state.input1, this.state.input2);
+              if (this.state.password != this.state.passwordConfirmation) {
+                alert(i18n.t("errors.messages.password_do_not_match"));
+              } else if (this.state.password.length < 8) {
+                alert(i18n.t("errors.messages.password_too_short"));
+              } else {
+                Api.recoverPassword(verificationId, this.state.password)
+                  .then((res) => {
+                    if (res.data.status === "success") {
+                      this.setModalVisible(true);
+                    }
+                  })
+                  .catch((e) => {});
+              }
             }}
           />
         )}
@@ -144,7 +154,7 @@ export class ChangePassword extends Component<props, state> {
                 <PText>{i18n.t("account_check.login_request")}</PText>
               </View>
             }
-            modalHandler={() => this.props.stageHandler("Login")}
+            modalHandler={() => navigation.navigate(page.Login)}
             visible={this.state.modalVisible}
           ></Modal>
         )}
@@ -152,5 +162,3 @@ export class ChangePassword extends Component<props, state> {
     );
   }
 }
-
-const goToBack = () => {};

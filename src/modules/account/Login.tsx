@@ -9,12 +9,17 @@ import styled from "styled-components/native";
 import WarningImg from "./images/warning.png";
 import { withNavigation } from "react-navigation";
 import i18n from "../../i18n/i18n";
+import Api from "../../api/account";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { page } from "./Account";
+import AsyncStorage from "@react-native-community/async-storage";
 
 let lastError = 0;
 
 const LoginWrapper = styled.View`
   width: 375px;
   height: 811px;
+  background-color: #fff;
   border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요 나중에 제거
 `;
 const H1Text = styled.Text`
@@ -37,28 +42,41 @@ const Warning = styled.Image`
 `;
 
 interface props {
-  email: string;
-  password: string;
-  stageHandler: (stage: string) => void;
-  passwordHandler: (text: string) => void;
-  findPassword: () => void;
-  error: number;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
   modalVisible: boolean;
+  error: number;
+  password: string;
 }
 
 export class Login extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.goToBack = this.goToBack.bind(this);
-    this.state = { modalVisible: false };
+    this.state = { modalVisible: false, error: 0, password: "" };
     this.setModalVisible = this.setModalVisible.bind(this);
     this.activateModal = this.activateModal.bind(this);
+    this.storeToken = this.storeToken.bind(this);
+    this.storeEmail = this.storeEmail.bind(this);
   }
 
-  goToBack() {}
+  storeEmail = async (email: string) => {
+    try {
+      await AsyncStorage.setItem("@email", email);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  storeToken = async (token: string) => {
+    try {
+      await AsyncStorage.setItem("@token", token);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   setModalVisible = () => {
     this.setState({ modalVisible: !this.state.modalVisible });
@@ -66,12 +84,12 @@ export class Login extends Component<props, state> {
   };
 
   activateModal = () => {
-    if (this.props.error == 0) {
+    if (this.state.error == 0) {
       return this.state.modalVisible;
-    } else if (this.props.error != lastError) {
+    } else if (this.state.error != lastError) {
       console.log(`lastError: ${lastError}`);
-      console.log(`this.props.error: ${this.props.error}`);
-      lastError = this.props.error;
+      console.log(`this.props.error: ${this.state.error}`);
+      lastError = this.state.error;
       this.setState({ modalVisible: true });
       console.log(`finally: ${lastError}`);
     }
@@ -79,12 +97,13 @@ export class Login extends Component<props, state> {
   };
 
   render() {
+    const { route, navigation } = this.props;
+    const { email } = route.params;
     return (
       <LoginWrapper>
         <BackButton
           handler={() => {
-            // this.props.navigation.navigate({ routeName: "InitializeEmail" });
-            // this.props.navigation.goBack();
+            navigation.goBack();
           }}
         />
         <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
@@ -92,30 +111,69 @@ export class Login extends Component<props, state> {
           type={i18n.t("account_label.account_password")}
           value={""}
           edit={true}
-          eventHandler={this.props.passwordHandler}
+          eventHandler={(input: string) => this.setState({ password: input })}
           secure={true}
         />
-        {this.props.error > 0 && (
+        {this.state.error > 0 && (
           <Text>
             {i18n.t("errors.messages.password_do_not_match")} (
-            {this.props.error}
+            {this.state.error}
             /5)
           </Text>
         )}
         <TextInput
           type={i18n.t("account_label.account_email")}
-          value={this.props.email}
+          value={email}
           edit={false}
           eventHandler={() => {}}
           secure={false}
         />
         <SubmitButton
           title={i18n.t("account_label.login")}
-          handler={() => this.props.stageHandler(this.props.password)}
+          handler={() => {
+            if (this.state.password === "") {
+              alert(i18n.t("account_check.insert_password"));
+            } else {
+              Api.login(email, this.state.password)
+                .then((res) => {
+                  //token local storage 저장
+                  if (res.data.status == "wrong") {
+                    this.setState({ error: res.data.counts });
+                  } else if (
+                    res.data.counts >= 5 ||
+                    res.data.status === "locked"
+                  ) {
+                    navigation.navigate(page.LockAccount, {
+                      verificationId: res.data.verificationId,
+                    });
+                  } else if (res.data.status === "success") {
+                    this.storeToken(res.data.token);
+                    this.storeEmail(email);
+                    navigation.navigate("Main", {
+                      email: email,
+                      password: this.state.password,
+                    });
+                  }
+                })
+                .catch((e) => {
+                  this.setState({ error: e.response.data.counts });
+                  if (e.response.status === 400) {
+                    alert(i18n.t("account_check.insert_password"));
+                  } else if (e.response.status === 404) {
+                    alert(i18n.t("errors.messages.wrong_email"));
+                  }
+                });
+              //locked처리 해야함
+            }
+          }}
         />
         <FlatButton
           title={i18n.t("account_check.forget_password_link")}
-          handler={this.props.findPassword}
+          handler={() =>
+            Api.certifyEmail_recover(email, "Password")
+              .then()
+              .catch()
+          }
         />
         {this.activateModal() == true && (
           <Modal
@@ -128,7 +186,7 @@ export class Login extends Component<props, state> {
                 <PText>
                   {i18n.t("errors.messages.incorrect_password_warning")}
                 </PText>
-                <Text>({this.props.error}/5)</Text>
+                <Text>({this.state.error}/5)</Text>
               </View>
             }
             modalHandler={this.setModalVisible}

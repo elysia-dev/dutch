@@ -9,7 +9,7 @@ interface props {
   series: string;
 }
 
-export const Products: FunctionComponent<props> = (props) => {
+export const Item: FunctionComponent<props> = (props) => {
   return (
     <View
       style={{

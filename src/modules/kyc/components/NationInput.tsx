@@ -38,11 +38,11 @@ const InputPicker = styled.Picker`
 
 interface props {
   type: string;
+  nationality: string;
+  eventHandler: (input: string) => void;
 }
 
-interface state {
-  nationality: string;
-}
+interface state {}
 
 interface placeholder {
   label: string;
@@ -84,19 +84,14 @@ export class NationInput extends Component<props, state> {
         {Platform.OS === "android" ? (
           <Picker
             // mode="dropdown"
-            selectedValue={this.state.nationality}
-            onValueChange={(value: string) =>
-              this.setState({ nationality: value })
-            }
+            selectedValue={this.props.nationality}
+            onValueChange={this.props.eventHandler}
           >
             {this.NationList_and}
           </Picker>
         ) : (
           <RNPickerSelect
-            onValueChange={(value: string) => {
-              this.setState({ nationality: value });
-              console.log(this.state.nationality);
-            }}
+            onValueChange={this.props.eventHandler}
             items={this.NationList_ios}
             style={pickerSelectStyles}
             placeholder={placeholder}
