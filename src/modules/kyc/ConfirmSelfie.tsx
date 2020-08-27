@@ -6,9 +6,9 @@ import { Modal } from "../../shared/components/Modal";
 import styled from "styled-components/native";
 import KycSubmitPng from "./images/kycsubmit.png";
 import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { page } from "./Kyc";
 import Api from "../../api/kyc";
 import i18n from "../../i18n/i18n";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -57,7 +57,7 @@ export class ConfirmSelfie extends Component<props, state> {
         <SelfieImg source={{ uri: selfie.uri }} />
         <SubmitButton
           title={i18n.t("kyc_label.shoot_again")}
-          handler={() => navigation.navigate(page.TakeSelfie)}
+          handler={() => navigation.navigate(KycPage.TakeSelfie)}
         />
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
@@ -65,7 +65,7 @@ export class ConfirmSelfie extends Component<props, state> {
             //서버로 리퀘스트 보내는 함수
             Api.selfie(selfie.base64)
               .then((res) => {
-                navigation.navigate(page.PersonalDataInput, {
+                navigation.navigate(KycPage.PersonalDataInput, {
                   selfie_hash: res.data.filehash,
                   id_type: id_type,
                   photoId_hash: photoId_hash,

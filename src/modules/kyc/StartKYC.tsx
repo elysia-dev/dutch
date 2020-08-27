@@ -5,8 +5,8 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import { page } from "./Kyc";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #000;
@@ -53,7 +53,7 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         // handler={() => {}}
         handler={() =>
           navigation.navigate(
-            page.SelectID
+            KycPage.SelectID
             // { token: token, email: email }
           )
         }

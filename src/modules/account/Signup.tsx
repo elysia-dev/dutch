@@ -8,7 +8,6 @@ import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Account";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const SignupWrapper = styled.View`

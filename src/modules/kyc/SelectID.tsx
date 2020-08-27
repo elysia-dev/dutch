@@ -15,7 +15,7 @@ import CheckedIDCardPng from "./images/checkedidcard.png";
 
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Kyc";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #000;
@@ -136,7 +136,7 @@ export class SelectID extends Component<props, state> {
             if (this.state.idType === "") {
               alert(i18n.t("kyc.alert_id"));
             } else {
-              navigation.navigate(page.TakeID, {
+              navigation.navigate(KycPage.TakeID, {
                 // email: email,
                 // token: token,
                 id_type: this.state.idType,

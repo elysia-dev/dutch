@@ -13,7 +13,7 @@ import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Kyc";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #fff;
@@ -199,7 +199,7 @@ export class TakeID extends Component<props, state> {
                   alignItems: "center",
                 }}
                 onPress={async () => {
-                  navigation.navigate(page.ConfirmID, {
+                  navigation.navigate(KycPage.ConfirmID, {
                     id_type: id_type,
                     idPhoto: await this.takePicture(),
                   });

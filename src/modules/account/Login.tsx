@@ -11,8 +11,8 @@ import { withNavigation } from "react-navigation";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Account";
 import AsyncStorage from "@react-native-community/async-storage";
+import { AccountPage } from "../../enums/pageEnum";
 
 let lastError = 0;
 
@@ -143,7 +143,7 @@ export class Login extends Component<props, state> {
                     res.data.counts >= 5 ||
                     res.data.status === "locked"
                   ) {
-                    navigation.navigate(page.LockAccount, {
+                    navigation.navigate(AccountPage.LockAccount, {
                       verificationId: res.data.verificationId,
                     });
                   } else if (res.data.status === "success") {

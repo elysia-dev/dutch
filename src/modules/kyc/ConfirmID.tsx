@@ -6,10 +6,10 @@ import { Modal } from "../../shared/components/Modal";
 import styled from "styled-components/native";
 import KycSubmitPng from "./images/kycsubmit.png";
 import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { page } from "./Kyc";
 import Api from "../../api/kyc";
 import i18n from "../../i18n/i18n";
 import AsyncStorage from "@react-native-community/async-storage";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -60,7 +60,7 @@ export class ConfirmID extends Component<props, state> {
         <SelfieImg source={{ uri: idPhoto.uri }} />
         <SubmitButton
           title={i18n.t("kyc_label.shoot_again")}
-          handler={() => navigation.navigate(page.TakeID)}
+          handler={() => navigation.navigate(KycPage.TakeID)}
         />
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
@@ -71,7 +71,7 @@ export class ConfirmID extends Component<props, state> {
               id_type === "passport" ? "passport" : "government_id"
             )
               .then((res) => {
-                navigation.navigate(page.TakeSelfieBefore, {
+                navigation.navigate(KycPage.TakeSelfieBefore, {
                   photoId_hash: res.data.filehash,
                   id_type: id_type,
                   photoId: idPhoto,

@@ -9,8 +9,8 @@ import MailPng from "./images/mail.png";
 import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { page } from "./Products";
 import { NavigationScreenProp } from "react-navigation";
+import { ProductPage } from "../../enums/pageEnum";
 
 const MailImg = styled.Image`
   width: 22px;
@@ -112,7 +112,9 @@ export class MainList extends Component<props, state> {
               paddingRight: 16,
             }}
           >
-            <FilterButton handler={() => navigation.navigate(page.Filter)} />
+            <FilterButton
+              handler={() => navigation.navigate(ProductPage.Filter)}
+            />
             <SortingButton
               title={i18n.t("product_label.sorting_return")}
               check={this.state.return}
