@@ -9,13 +9,14 @@ import { NavigationRoute, NavigationScreenProp } from "react-navigation";
 import { page } from "./Kyc";
 import Api from "../../api/kyc";
 import i18n from "../../i18n/i18n";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
   text-align: center;
   margin: 25px auto;
-  font-weight: bold;
+  font-weight: bold;xw
 `;
 const PText = styled.Text`
   font-size: 12px;
@@ -24,6 +25,7 @@ const PText = styled.Text`
   margin: 5px auto 32px auto;
   width: 90%;
 `;
+
 const SelfieImg = styled.Image`
   width: 90%;
   height: 30%;
@@ -40,39 +42,47 @@ interface props {
 
 interface state {}
 
-export class ConfirmSelfie extends Component<props, state> {
+export class ConfirmID extends Component<props, state> {
   constructor(props: props) {
     super(props);
+    this.state = { modalVisible: false };
   }
 
   render() {
     const { route, navigation } = this.props;
-    const { selfie, id_type, photoId_hash, photoId } = route.params;
+    const { id_type, idPhoto } = route.params;
 
     return (
       <View style={{ backgroundColor: "#fff", height: "100%" }}>
-        <BackButton handler={() => {}} />
-        <H1Text>{i18n.t("kyc.kyc_step3_complete")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step3_complete_text")}</PText>
-        <SelfieImg source={{ uri: selfie.uri }} />
+        <BackButton handler={() => navigation.goBack()} />
+        <H1Text>{i18n.t("kyc.kyc_step1_complete")}</H1Text>
+        <PText>{i18n.t("kyc.kyc_step1_complete_text")}</PText>
+        <SelfieImg source={{ uri: idPhoto.uri }} />
         <SubmitButton
           title={i18n.t("kyc_label.shoot_again")}
-          handler={() => navigation.navigate(page.TakeSelfie)}
+          handler={() => navigation.navigate(page.TakeID)}
         />
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
-          handler={() => {
-            //서버로 리퀘스트 보내는 함수
-            Api.selfie(selfie.base64)
+          handler={async () => {
+            // const token = this.getToken;
+            Api.photoId(
+              idPhoto.base64,
+              id_type === "passport" ? "passport" : "government_id"
+            )
               .then((res) => {
-                navigation.navigate(page.PersonalDataInput, {
-                  selfie_hash: res.data.filehash,
+                navigation.navigate(page.TakeSelfieBefore, {
+                  photoId_hash: res.data.filehash,
                   id_type: id_type,
-                  photoId_hash: photoId_hash,
-                  photoId: photoId,
+                  photoId: idPhoto,
                 });
               })
-              .catch();
+              .catch((e) => {
+                console.error(e);
+                alert(
+                  "아르고스 서버 통신 오류입니다. 담당자에게 문의 바랍니다."
+                );
+              });
           }}
         />
       </View>

@@ -1,6 +1,5 @@
-import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
+import React, { Component } from "react";
+import { View } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { OptionButton } from "./components/OptionButton";
@@ -15,7 +14,7 @@ import CheckedDriverPng from "./images/checkeddriver.png";
 import CheckedIDCardPng from "./images/checkedidcard.png";
 
 import i18n from "../../i18n/i18n";
-import { NavigationScreenProp } from "react-navigation";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { page } from "./Kyc";
 
 const H1Text = styled.Text`
@@ -50,6 +49,7 @@ const SelectIdWrapper = styled.View`
 
 interface props {
   navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
@@ -69,10 +69,11 @@ export class SelectID extends Component<props, state> {
       : this.setState({ idType: "" });
   }
 
-  //navigation = useNavigation();
 
   render() {
-    const { navigation } = this.props;
+    const { route, navigation } = this.props;
+    // const { email, token } = route.params;
+
     return (
       <SelectIdWrapper>
         <BackButton handler={() => navigation.goBack()} />
@@ -125,17 +126,19 @@ export class SelectID extends Component<props, state> {
           }
         />
         <OptionButton
-          title={i18n.t("kyc_label.id_card")}
-          handler={() => this.setID("id_card")}
+          title={i18n.t("kyc_label.government_id")}
+          handler={() => this.setID("government_id")}
           child={
             <IDImg
               source={
-                this.state.idType === "id_card" ? CheckedIDCardPng : IDCardPng
+                this.state.idType === "government_id"
+                  ? CheckedIDCardPng
+                  : IDCardPng
               }
             />
           }
           checked={
-            this.state.idType === "id_card" ? (
+            this.state.idType === "government_id" ? (
               <Checked source={CheckedPng} />
             ) : (
               <View />
@@ -149,9 +152,13 @@ export class SelectID extends Component<props, state> {
           title={i18n.t("kyc_label.shoot")}
           handler={() => {
             if (this.state.idType === "") {
-              alert("신분증을 선택해주세요");
+              alert(i18n.t("kyc.alert_id"));
             } else {
-              navigation.navigate(page.TakeID, { idType: this.state.idType });
+              navigation.navigate(page.TakeID, {
+                // email: email,
+                // token: token,
+                id_type: this.state.idType,
+              });
             }
           }}
         />

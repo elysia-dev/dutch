@@ -1,15 +1,17 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-
+import { BackButton } from "../../shared/components/BackButton";
 import styled from "styled-components/native";
 import ReversePng from "./images/reverse.png";
 import RecordPng from "./images/recordbutton.png";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { page } from "./Kyc";
 
 const H1Text = styled.Text`
   color: #fff;
@@ -29,7 +31,10 @@ const ButtonImg = styled.Image`
   height: 47px;
 `;
 
-interface props {}
+interface props {
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
+}
 
 interface state {
   hasPermission: boolean;
@@ -70,14 +75,15 @@ export class TakeSelfie extends Component<props, state> {
   takePicture = async () => {
     // const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync({
+      let selfie = await this.camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
       });
       // setPath(`${photo.uri}`);
-      const asset = await MediaLibrary.createAssetAsync(`${photo.uri}`);
+      const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
       // console.log(path);
+      return selfie;
     }
   };
 
@@ -88,6 +94,9 @@ export class TakeSelfie extends Component<props, state> {
   };
 
   render() {
+    const { route, navigation } = this.props;
+    const { id_type, photoId_hash, photoId } = route.params;
+
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
@@ -118,7 +127,9 @@ export class TakeSelfie extends Component<props, state> {
                 backgroundColor: "transparent",
                 flexDirection: "column",
               }}
-            ></View>
+            >
+              <BackButton handler={() => navigation.goBack()} />
+            </View>
 
             <View
               style={{
@@ -160,7 +171,14 @@ export class TakeSelfie extends Component<props, state> {
                   alignSelf: "flex-end",
                   alignItems: "center",
                 }}
-                onPress={this.takePicture}
+                onPress={async () => {
+                  navigation.navigate(page.ConfirmSelfie, {
+                    selfie: await this.takePicture(),
+                    id_type: id_type,
+                    photoId_hash: photoId_hash,
+                    photoId: photoId,
+                  });
+                }}
               >
                 <ButtonImg source={RecordPng} />
               </TouchableOpacity>

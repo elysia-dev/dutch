@@ -6,6 +6,9 @@ import { SubmitButton } from "../../../shared/components/SubmitButton";
 import { FlatButton } from "../../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { page } from "../Account";
+import Api from "../../../api/account";
 
 const H1Text = styled.Text`
   color: #000;
@@ -23,23 +26,24 @@ const PText = styled.Text`
 `;
 
 interface props {
-  email: string;
-  stageHandler: (input: string) => void;
-  // stageHandler: () => void;
-  resendHandler: () => void;
   existence: string;
   certified: string;
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
   code: string;
+  verificationId: string;
 }
 
 export class CertifyEmail extends Component<props, state> {
+  api: any;
   constructor(props: props) {
     super(props);
-    this.state = { code: "" };
+    this.state = { code: "", verificationId: "" };
     this.setCode = this.setCode.bind(this);
+    this.api = new Api();
   }
 
   setCode(input: string) {
@@ -48,23 +52,26 @@ export class CertifyEmail extends Component<props, state> {
   }
 
   render() {
+    const { route, navigation } = this.props;
+    const { email, status, verificationId } = route.params;
+    //render 될 때마다 verificationId는 이전 route에서 받은 값으로 설정되나? 어떻게 update?
     return (
-      <View>
-        <BackButton handler={goToBack} />
+      <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
+        <BackButton handler={() => navigation.navigate(page.InitializeEmail)} />
         <H1Text>
-          {this.props.existence == "new"
+          {status == "new"
             ? i18n.t("register.authentication_signup")
             : i18n.t("register.authentication_recover")}
         </H1Text>
         <Text>
-          {this.props.existence == "new"
+          {status == "new"
             ? i18n.t("register.authentication_signup_label")
             : i18n.t("register.authentication_recover_label")}
         </Text>
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
-          value={this.props.email}
+          value={email}
           eventHandler={() => {}}
           secure={false}
         />
@@ -85,18 +92,47 @@ export class CertifyEmail extends Component<props, state> {
         </Text>
         <FlatButton
           title={i18n.t("account_label.resend")}
-          handler={() => this.props.resendHandler}
+          handler={() =>
+            status == "new"
+              ? Api.initializeEmail(email)
+                  .then((res) =>
+                    this.setState({ verificationId: res.data.verificationId })
+                  )
+                  .catch((e) => {
+                    alert(i18n.t("register.authentication_error"));
+                  })
+              : Api.certifyEmail_recover(email, "Password")
+                  .then((res) => {
+                    this.setState({ verificationId: res.data.verificationId });
+                  })
+                  .catch((e) => {})
+          }
         />
         <SubmitButton
           title={i18n.t("account_label.certify")}
-          handler={() => this.props.stageHandler(this.state.code)}
+          handler={() =>
+            Api.certifyEmail(
+              this.state.verificationId === ""
+                ? verificationId
+                : this.state.verificationId,
+              this.state.code
+            )
+              .then((res) => {
+                navigation.navigate(
+                  status === "new" ? page.Signup : page.ChangePassword,
+                  {
+                    email: email,
+                    verificationId:
+                      this.state.verificationId === ""
+                        ? verificationId
+                        : this.state.verificationId,
+                  }
+                );
+              })
+              .catch((e) => {})
+          }
         />
       </View>
     );
   }
 }
-
-const goToBack = () => {};
-// bind issue 없나?  보내줄 일이 없어서 ㄱㅊ
-// 메서드가 다른 컴포넌트에서 사용되는 것이 아니라 이 certifyemail 컴포넌트가 호출되었을 때 사용되기 때문에
-// 제대로 불러올 수 있는 것으로 ..!

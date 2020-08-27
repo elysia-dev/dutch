@@ -7,16 +7,15 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from 'styled-components/native';
 import WarningImg from '../../../src/shared/assets/images/warning.png';
 import i18n from "../../i18n/i18n";
-
-interface props {
-  email: string;
-  stageHandler: (input1: string, input2: string) => void;
-  // stageHandler: () => void;
-}
+import Api from "../../api/account";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { page } from "./Account";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const SignupWrapper = styled.View`
   width: 375px;
   height: 811px;
+  background-color: #fff;
   border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요
 `;
 const H1Text = styled.Text`
@@ -40,11 +39,17 @@ const PText = styled.Text`
   margin: 0px 5%;
 `;
 
+interface props {
+  navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
+}
+
 interface state {
   step: number;
-  input1: string;
-  input2: string;
-  errorState: number;
+
+  password: string;
+  passwordConfirmation: string;
+
 }
 const CheckPassword = function(input1: string) { // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
   var reg_pwd = /^.*(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
@@ -54,45 +59,47 @@ const CheckPassword = function(input1: string) { // 숫자와 영문이 모두 �
 export class Signup extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { step: 1, input1: "", input2: "", errorState: 0 };
+
+    this.state = { step: 1, password: "", passwordConfirmation: "" };
+
     this.nextStep = this.nextStep.bind(this);
-    this.setInput1 = this.setInput1.bind(this);
-    this.setInput2 = this.setInput2.bind(this);
+    this.storeToken = this.storeToken.bind(this);
+    this.storeEmail = this.storeEmail.bind(this);
   }
+
+  storeEmail = async (email: string) => {
+    try {
+      await AsyncStorage.setItem("@email", email).then((res) =>
+        console.log("successfully stored")
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   nextStep(input: number) {
     console.log(this.state.step);
     this.setState({ step: input });
   } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
 
-  setInput1(input: string) {
-    if(input.length < 7){ // 만약 7자리 이하라면
-      this.setState({ errorState: 1}); // ErrorState = 1
-    } else if (!CheckPassword(input)) { // 함수를 체크하고 만약 영문, 숫자가 있지 않다면
-      this.setState({ errorState: 2}); // ErrorState = 2
-    } else {
-      this.setState({ errorState: 0}); // 모든 조건을 만족하면 만약 1이나 2일 경우를 위해 ErrorState = 0 으로 변경 한 뒤
-      this.setState({ input1: input }); // 마저 인풋 저장
-      console.log(`input1: ${this.state.input1}`);
+  storeToken = async (token: string) => {
+    try {
+      await AsyncStorage.setItem("@token", token);
+      console.log("successfully stored");
+    } catch (e) {
+      console.error(e);
     }
-  } // 첫 비밀번호 인풋을 저장
+  };
 
-  setInput2(input: string) {
-    if(input != this.state.input1) { // 현재 input과 input1 state를 비교
-      this.setState({ errorState: 3}); // 불일치시 ErrorState = 3
-    } else {
-      this.setState({ errorState: 0});
-      this.setState({ input2: input }); // input2 저장.
-      console.log(`input2: ${this.state.input2}`);
-    }
-  } 
 
   render() {
+    const { route, navigation } = this.props;
+    const { verificationId, email } = route.params;
     return (
       <SignupWrapper>
         <BackButton
           handler={() => {
-            this.state.step == 2 && this.nextStep(1);
+            this.state.step == 2 ? this.nextStep(1) : navigation.goBack();
           }}
         />
         <H1Text>
@@ -104,10 +111,11 @@ export class Signup extends Component<props, state> {
           <TextInput
             type={i18n.t("account_label.account_password_confirm")}
             edit={true}
-            eventHandler={this.setInput2}
+            eventHandler={(input: string) => {
+              this.setState({ passwordConfirmation: input });
+            }}
             value={""}
             secure={true}
-            //input1, input2 비교
           />
         )}
         {this.state.errorState == 3 && (
@@ -119,7 +127,13 @@ export class Signup extends Component<props, state> {
         <TextInput
           type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
-          eventHandler={this.state.step == 1 ? this.setInput1 : () => {}}
+          eventHandler={
+            this.state.step == 1
+              ? (input: string) => {
+                  this.setState({ password: input });
+                }
+              : () => {}
+          }
           value={""}
           secure={true}
         />
@@ -141,7 +155,7 @@ export class Signup extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           edit={false}
           eventHandler={() => {}}
-          value={this.props.email}
+          value={email}
           secure={false}
         />
         {this.state.step == 1 && (
@@ -161,9 +175,28 @@ export class Signup extends Component<props, state> {
         ) : (
           <SubmitButton
             title={i18n.t("account_label.signup")}
-            handler={() =>
-              this.props.stageHandler(this.state.input1, this.state.input2)
-            }
+            handler={() => {
+              if (this.state.password != this.state.passwordConfirmation) {
+                alert(i18n.t("errors.messages.password_do_not_match"));
+              } else if (this.state.password.length < 8) {
+                alert(i18n.t("errors.messages.password_too_short"));
+              } else {
+                Api.signup(verificationId, this.state.password)
+                  .then((res) => {
+                    if (res.data.status === "success") {
+                      this.storeToken(res.data.token);
+                      this.storeEmail(email);
+                      navigation.navigate("Main", {
+                        email: email,
+                        password: this.state.password,
+                      });
+                    }
+                  })
+                  .catch((e) => {
+                    alert(i18n.t("register.authentication_error"));
+                  });
+              }
+            }}
           />
           */
         )}
@@ -171,6 +204,3 @@ export class Signup extends Component<props, state> {
     );
   }
 }
-
-const goToBack = () => {};
-const goToNext = () => {};

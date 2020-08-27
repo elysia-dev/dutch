@@ -1,13 +1,12 @@
-import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
+import React, { FunctionComponent, Props } from "react";
+import { Text, View } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { page } from "./Kyc";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const StartKycWrapper = styled.View`
   padding-top: 25px;
@@ -75,6 +74,8 @@ interface props {
 }
 export const StartKYC: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
+  const route = useRoute();
+
   return (
     <StartKycWrapper>
       <BackButton handler={() => {}} />
@@ -110,5 +111,6 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         />
       </FlexBtnWrapper>
     </StartKycWrapper>
+
   );
 };

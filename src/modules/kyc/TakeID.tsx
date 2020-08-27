@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
@@ -8,13 +8,12 @@ import * as MediaLibrary from "expo-media-library";
 import styled from "styled-components/native";
 import ReversePng from "./images/reverse.png";
 import RecordPng from "./images/recordbutton.png";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { page } from "./Kyc";
-import { RouteProp } from "@react-navigation/native";
 
 const HeaderText = styled.Text`
   position: absolute;
@@ -154,7 +153,6 @@ const CameraInnerRightBottomLine = styled.View`
   left: 89%;
 `;
 interface props {
-  // camera: HTMLDivElement;
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
@@ -192,18 +190,17 @@ export class TakeID extends Component<props, state> {
     });
   };
 
-  // 사진을 찍으면 앨범에도 저장되고 상위 컴포넌트의 state에도 저장되어서 sibling 컴포넌트에서 불러올 수 있게
   takePicture = async () => {
     const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync({
+      let idPhoto = await this.camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
       });
-      setPath(`${photo.uri}`);
-      const asset = await MediaLibrary.createAssetAsync(`${photo.uri}`);
-      // console.log(path);
+      // setPath(`${photo.uri}`);
+      // const asset = await MediaLibrary.createAssetAsync(`${photo.uri}`);
+      return idPhoto;
     }
   };
 
@@ -215,13 +212,17 @@ export class TakeID extends Component<props, state> {
 
   render() {
     const { route, navigation } = this.props;
-    const { idType } = route.params;
+
+    const { id_type } = route.params;
+
 
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
       return (
+
         <TakeIdWrapper>
+
           <Camera
             style={{
               flex: 1,
@@ -239,9 +240,9 @@ export class TakeID extends Component<props, state> {
           >
             <HeaderCameraWrapper>
               <HeaderTextWrapper>
-                <BackButton handler={() => {}} isWhite={true} />
+                <BackButton handler={() => navigation.goBack()} isWhite={true} />
                 <HeaderText>
-                  {"네비게이션 해결 후 신분증 종류가 써질 것"}
+                 {i18n.t(`kyc_label.${id_type}`)}
                 </HeaderText>
               </HeaderTextWrapper>
               {/*}
@@ -297,7 +298,12 @@ export class TakeID extends Component<props, state> {
                     alignSelf: "flex-end",
                     alignItems: "center",
                   }}
-                  onPress={this.takePicture}
+                  onPress={async () => {
+                  navigation.navigate(page.ConfirmID, {
+                    id_type: id_type,
+                    idPhoto: await this.takePicture(),
+                  });
+                }}
                 >
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>
@@ -313,6 +319,7 @@ export class TakeID extends Component<props, state> {
                 </TouchableOpacity>
               </BottomButtonWrapper>
             </BottomCameraWrapper>
+
           </Camera>
         </TakeIdWrapper>
       );
