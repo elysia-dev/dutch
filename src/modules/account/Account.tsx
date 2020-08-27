@@ -10,7 +10,7 @@ import { CertifyEmail } from "./components/CertifyEmail";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountPage } from "../../enums/pageEnum";
 
-interface props {}
+interface props { }
 
 interface state {
   login: boolean; //로그인 여부 판별
@@ -69,7 +69,13 @@ export class Account extends Component<props, state> {
           name={AccountPage.InitializeEmail}
           component={InitializeEmail}
         />
-        <Stack.Screen name={AccountPage.Signup} component={Signup} />
+        <Stack.Screen
+          name={AccountPage.Signup}
+          component={Signup}
+          options={{
+            gestureEnabled: false,
+          }}
+        />
         <Stack.Screen name={AccountPage.Login} component={Login} />
         <Stack.Screen name={AccountPage.LockAccount} component={LockAccount} />
         <Stack.Screen
