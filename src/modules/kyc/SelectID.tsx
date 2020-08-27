@@ -43,9 +43,9 @@ const Checked = styled.Image`
   margin-right: 15px;
 `;
 const SelectIdWrapper = styled.View`
-  width: 375px;
-  height: 811px;
-  border: 1px solid #000;
+  padding-top: 25px;
+  flex: 1;
+  background-color: #fff;
 `;
 
 interface props {
@@ -69,10 +69,10 @@ export class SelectID extends Component<props, state> {
       : this.setState({ idType: "" });
   }
 
-  // navigation = useNavigation();
+  //navigation = useNavigation();
 
   render() {
-    // const { navigation } = this.props;
+    const { navigation } = this.props;
     return (
       <SelectIdWrapper>
         <BackButton handler={() => navigation.goBack()} />

@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 const StartKycWrapper = styled.View`
   padding-top: 25px;
   flex: 1;
-  background-color: #fff;
+  background-color: #FFFFFF;
 `;
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -49,7 +49,7 @@ const CircleWrapper = styled.View`
 `;
 const CircleText = styled.Text`
   position: absolute;
-  color: #1C1C1C;
+  color: #1c1c1c;
   font-size: 14px;
   margin-left: 36px;
   margin-top: 3px;
@@ -74,7 +74,7 @@ interface props {
   handler: any;
 }
 export const StartKYC: FunctionComponent<props> = (props) => {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   return (
     <StartKycWrapper>
       <BackButton handler={() => {}} />
@@ -105,11 +105,10 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         />
         <SubmitButton
           title={i18n.t("kyc_label.agree_start")}
-          handler={() => {}}
-          // handler={() => navigation.navigate(page.SelectID)}
+          // handler={() => {}}
+          handler={() => navigation.navigate(page.SelectID)}
         />
       </FlexBtnWrapper>
-
     </StartKycWrapper>
   );
 };
