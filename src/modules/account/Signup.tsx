@@ -26,14 +26,14 @@ const WarningIcon = styled.Image`
   width: 12px;
   height: 12px;
   margin: 0px 5px;
-  position: relative;
   top: 1px;
+  position: absolute;
 `;
 const PText = styled.Text`
   font-size: 12px;
   color: #1C1C1C;
   text-align: right;
-  margin: 0px 5%;
+  margin: 10px 5%;
 `;
 
 interface props {
@@ -43,7 +43,8 @@ interface props {
 
 interface state {
   step: number;
-
+  errorLength: number;
+  errorReg: number;
   password: string;
   passwordConfirmation: string;
 
@@ -57,7 +58,13 @@ export class Signup extends Component<props, state> {
   constructor(props: props) {
     super(props);
 
-    this.state = { step: 1, password: "", passwordConfirmation: "" };
+    this.state = {
+      step: 1,
+      password: "",
+      passwordConfirmation: "",
+      errorLength: 0,
+      errorReg: 0,
+    };
 
     this.nextStep = this.nextStep.bind(this);
     this.storeToken = this.storeToken.bind(this);
@@ -88,7 +95,6 @@ export class Signup extends Component<props, state> {
     }
   };
 
-
   render() {
     const { route, navigation } = this.props;
     const { verificationId, email } = route.params;
@@ -109,11 +115,20 @@ export class Signup extends Component<props, state> {
             type={i18n.t("account_label.account_password_confirm")}
             edit={true}
             eventHandler={(input: string) => {
-              this.setState({ passwordConfirmation: input });
+              this.setState({
+                passwordConfirmation: input,
+                errorLength: input !== this.state.password ? 2 : 0
+              });
             }}
             value={""}
             secure={true}
           />
+        )}
+        {this.state.step == 2 && this.state.errorLength == 2 && (
+          <PText>
+            <WarningIcon source={WarningImg} />
+            <PText> 비밀번호가 일치하지 않습니다.</PText>
+          </PText>
         )}
         <TextInput
           type={i18n.t("account_label.account_password")}
@@ -121,13 +136,29 @@ export class Signup extends Component<props, state> {
           eventHandler={
             this.state.step == 1
               ? (input: string) => {
-                this.setState({ password: input });
+                this.setState({
+                  password: input,
+                  errorLength: input.length < 8 ? 1 : 0,
+                  errorReg: CheckPassword(input) ? 0 : 1
+                });
               }
               : () => { }
           }
           value={""}
           secure={true}
         />
+        {this.state.errorLength == 1 && (
+          <PText>
+            <WarningIcon source={WarningImg} resizeMode={'center'} />
+            <PText> 비밀번호는 8자 이상이어야 합니다 </PText>
+          </PText>
+        )}
+        {this.state.errorLength == 0 && this.state.errorReg == 1 && (
+          <PText>
+            <WarningIcon source={WarningImg} resizeMode={'center'} />
+            비밀번호는 영문, 숫자가 모두 포함되어야 합니다.
+          </PText>
+        )}
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
@@ -138,7 +169,12 @@ export class Signup extends Component<props, state> {
         {this.state.step == 1 ? (
           <SubmitButton
             title={i18n.t("account_label.continue")}
-            handler={() => this.nextStep(2)}
+            handler={() => {
+              if (this.state.password.length < 8) {
+                return;
+              }
+              this.nextStep(2)
+            }}
           />
         ) : (
             <SubmitButton

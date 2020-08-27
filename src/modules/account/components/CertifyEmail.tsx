@@ -110,7 +110,11 @@ export class CertifyEmail extends Component<props, state> {
         />
         <SubmitButton
           title={i18n.t("account_label.certify")}
-          handler={() =>
+          handler={() => {
+            if (!this.state.code) {
+              alert("인증번호를 입력해주세요");
+              return;
+            }
             Api.certifyEmail(
               this.state.verificationId === ""
                 ? verificationId
@@ -118,18 +122,25 @@ export class CertifyEmail extends Component<props, state> {
               this.state.code
             )
               .then((res) => {
-                navigation.navigate(
-                  status === "new" ? AccountPage.Signup : AccountPage.ChangePassword,
-                  {
-                    email: email,
-                    verificationId:
-                      this.state.verificationId === ""
-                        ? verificationId
-                        : this.state.verificationId,
-                  }
-                );
+                if (res.data.status === "completed") {
+                  navigation.navigate(
+                    status === "new" ? AccountPage.Signup : AccountPage.ChangePassword,
+                    {
+                      email: email,
+                      verificationId:
+                        this.state.verificationId === ""
+                          ? verificationId
+                          : this.state.verificationId,
+                    }
+                  );
+                } else if (res.data.status === "expired") {
+                  navigation.navigate(AccountPage.InitializeEmail);
+                } else {
+                  alert(`인증번호가 올바르지 않아요. (${res.data.counts}/5)`)
+                }
               })
               .catch((e) => { })
+          }
           }
         />
       </SafeAreaView>

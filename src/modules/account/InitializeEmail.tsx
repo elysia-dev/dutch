@@ -71,7 +71,7 @@ export class InitializeEmail extends Component<props, state> {
                 );
               })
               .catch((e) => {
-                alert(i18n.t(e));
+                alert("5분 뒤에 다시 시도해주세요");
               });
           }}
         />
