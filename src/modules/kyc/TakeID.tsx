@@ -242,7 +242,7 @@ export class TakeID extends Component<props, state> {
               <HeaderTextWrapper>
                 <BackButton handler={() => navigation.goBack()} isWhite={true} />
                 <HeaderText>
-                 {i18n.t(`kyc_label.${id_type}`)}
+                  {i18n.t(`kyc_label.${id_type}`)}
                 </HeaderText>
               </HeaderTextWrapper>
               {/*}
@@ -299,12 +299,12 @@ export class TakeID extends Component<props, state> {
                     alignItems: "center",
                   }}
                   onPress={async () => {
-                  navigation.navigate(page.ConfirmID, {
+                    navigation.navigate(KycPage.ConfirmID, {
 
-                    id_type: id_type,
-                    idPhoto: await this.takePicture(),
-                  });
-                }}
+                      id_type: id_type,
+                      idPhoto: await this.takePicture(),
+                    });
+                  }}
                 >
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>

@@ -78,7 +78,7 @@ export const StartKYC: FunctionComponent<props> = (props) => {
 
   return (
     <StartKycWrapper>
-      <BackButton handler={() => {}} />
+      <BackButton handler={() => { }} />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
 
       <PText>
@@ -102,13 +102,13 @@ export const StartKYC: FunctionComponent<props> = (props) => {
       <FlexBtnWrapper>
         <SubmitButton
           title={i18n.t("kyc_label.argos_terms")}
-          handler={() => {}}
+          handler={() => { }}
           ButtonTheme={"WhiteTheme"}
         />
         <SubmitButton
           title={i18n.t("kyc_label.agree_start")}
           // handler={() => {}}
-          handler={() => navigation.navigate(page.SelectID)}
+          handler={() => navigation.navigate(KycPage.SelectID)}
         />
       </FlexBtnWrapper>
     </StartKycWrapper>

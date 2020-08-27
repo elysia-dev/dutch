@@ -57,7 +57,7 @@ export class CertifyEmail extends Component<props, state> {
     //render 될 때마다 verificationId는 이전 route에서 받은 값으로 설정되나? 어떻게 update?
     return (
       <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-        <BackButton handler={() => navigation.navigate(page.InitializeEmail)} />
+        <BackButton handler={() => navigation.navigate(AccountPage.InitializeEmail)} />
         <H1Text>
           {status == "new"
             ? i18n.t("register.authentication_signup")
