@@ -78,7 +78,7 @@ export const StartKYC: FunctionComponent<props> = (props) => {
 
   return (
     <StartKycWrapper>
-      <BackButton handler={() => { }} />
+      <BackButton handler={() => { navigation.goBack() }} />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
 
       <PText>

@@ -27,11 +27,7 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {}
-
-const HOC = (text: string) => {
-  return <Text>{text}</Text>;
-};
+interface state { }
 
 export class Info extends Component<props, state> {
   constructor(props: props) {
@@ -61,8 +57,6 @@ export class Info extends Component<props, state> {
             height: "15%",
           }}
         >
-          <H1Text>{this.Email}</H1Text>
-          {/* <HOC text={this.Email} /> */}
         </View>
         <View
           style={{

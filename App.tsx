@@ -41,7 +41,7 @@ export const App = () => {
     <NavigationContainer>
       <UserProvider>
         {STORYBOOK_START && <StorybookUIRoot />}
-        <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
+        <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
           <RootStack.Screen name={"Account"} component={Account} />
           <RootStack.Screen name={"Main"} component={TabNavigatior} />
           <RootStack.Screen name={"Kyc"} component={Kyc} />
@@ -91,23 +91,6 @@ const TabNavigatior = () => {
                 width: 26,
               }}
               source={focused ? WalletBlackPng : WalletPng}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Products2"
-        component={Products}
-        options={{
-          tabBarLabel: "",
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{
-                resizeMode: "center",
-                height: 26,
-                width: 26,
-              }}
-              source={focused ? ElysiaBlackPng : ElysiaPng}
             />
           ),
         }}
