@@ -16,11 +16,9 @@ import { AccountPage } from "../../enums/pageEnum";
 
 let lastError = 0;
 
-const LoginWrapper = styled.View`
-  width: 375px;
-  height: 811px;
+const LoginWrapper = styled.SafeAreaView`
+  height: 100%;
   background-color: #fff;
-  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요 나중에 제거
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -125,7 +123,7 @@ export class Login extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           value={email}
           edit={false}
-          eventHandler={() => {}}
+          eventHandler={() => { }}
           secure={false}
         />
         <SubmitButton

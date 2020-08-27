@@ -11,6 +11,7 @@ import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const H1Text = styled.Text`
   color: #000;
@@ -72,7 +73,7 @@ export class ChangePassword extends Component<props, state> {
     const { email, status, verificationId, login } = route.params;
     //로그인하고 info에서 넘어올 때는 login 값에 true를 담아서 보내주자
     return (
-      <View>
+      <SafeAreaView>
         <BackButton handler={() => navigation.goBack()} />
         {login === true && (
           <View>
@@ -159,7 +160,7 @@ export class ChangePassword extends Component<props, state> {
             visible={this.state.modalVisible}
           ></Modal>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 }

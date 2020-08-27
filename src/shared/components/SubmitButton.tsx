@@ -22,7 +22,6 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({ title, hand
     margin-bottom: ${props => props.BtnTheme == "WhiteTheme" ? '25px' : '36px'};
   `;
   const WhiteBtn = styled.TouchableOpacity`
-  
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;

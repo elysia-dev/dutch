@@ -41,7 +41,7 @@ export const App = () => {
     <NavigationContainer>
       <UserProvider>
         {STORYBOOK_START && <StorybookUIRoot />}
-        <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
+        <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
           <RootStack.Screen name={"Account"} component={Account} />
           <RootStack.Screen name={"Main"} component={TabNavigatior} />
           <RootStack.Screen name={"Kyc"} component={Kyc} />

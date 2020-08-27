@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
+import { Text, SafeAreaView } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
@@ -8,11 +8,9 @@ import Api from "../../api/account";
 import { NavigationScreenProp } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
 
-const InitializeEmailWrapper = styled.View`
-  width: 375px;
-  height: 811px;
+const InitializeEmailWrapper = styled.SafeAreaView`
+  height: 100%;
   background-color: #fff;
-  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -51,7 +49,6 @@ export class InitializeEmail extends Component<props, state> {
           edit={true}
           secure={false}
         />
-        <Text>{this.state.email}</Text>
         <SubmitButton
           title={i18n.t("account_label.continue")}
           handler={() => {

@@ -15,10 +15,8 @@ const LockAccountImg = styled.Image`
   height: 198px;
   margin: 25px auto;
 `;
-const LockAccountWrapper = styled.View`
-  width: 375px;
-  height: 811px;
-  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요 나중에 제거
+const LockAccountWrapper = styled.SafeAreaView`
+  height: 100%;
 `;
 const H1Text = styled.Text`
   font-size: 20px;

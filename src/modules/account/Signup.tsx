@@ -11,11 +11,9 @@ import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const SignupWrapper = styled.View`
-  width: 375px;
-  height: 811px;
+const SignupWrapper = styled.SafeAreaView`
+  height: 100%;
   background-color: #fff;
-  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -50,7 +48,7 @@ interface state {
   passwordConfirmation: string;
 
 }
-const CheckPassword = function(input1: string) { // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
+const CheckPassword = function (input1: string) { // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
   var reg_pwd = /^.*(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
   return !reg_pwd.test(input1) ? false : true;
 };
@@ -117,88 +115,58 @@ export class Signup extends Component<props, state> {
             secure={true}
           />
         )}
-        {this.state.errorState == 3 && (
-          <PText>
-            <WarningIcon source={WarningImg} />
-            비밀번호가 일치하지 않습니다.
-          </PText>
-        )}
         <TextInput
           type={i18n.t("account_label.account_password")}
           edit={this.state.step == 1 ? true : false}
           eventHandler={
             this.state.step == 1
               ? (input: string) => {
-                  this.setState({ password: input });
-                }
-              : () => {}
+                this.setState({ password: input });
+              }
+              : () => { }
           }
           value={""}
           secure={true}
         />
-        
-        {this.state.errorState == 1 && ( // ErrorState 1 : 비밀번호 자리수가 너무 적음
-          <PText>
-            <WarningIcon source={WarningImg} />
-            비밀번호는 7자 이상이어야 합니다
-          </PText>
-        )}
-        {this.state.errorState == 2 && ( // ErrorState 2 : 영문과 숫자가 모두 포함되어야 함
-          <PText>
-            <WarningIcon source={WarningImg} />
-            비밀번호는 영문, 숫자가 모두 포함되어야 합니다.
-          </PText>
-        )}
-        
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
-          eventHandler={() => {}}
+          eventHandler={() => { }}
           value={email}
           secure={false}
         />
-        {this.state.step == 1 && (
-          <SubmitButton title="계속" handler={this.nextStep} />
-        )}
-        {this.state.step == 2 && (
-          this.state.errorState == 3 ? // ErrorState 3 : 비밀번호가 일치하지 않으면 아무 이벤트 없는 handler 버튼을 출력, 일치하면 stageHandler button 변환
-          <SubmitButton title="비밀번호를 확인해주세요" handler={() => { }}/>
-          :
-          <SubmitButton title="가입하기" handler={this.props.stageHandler} />
-          /*
-          {this.state.step == 1 ? (
+        {this.state.step == 1 ? (
           <SubmitButton
             title={i18n.t("account_label.continue")}
             handler={() => this.nextStep(2)}
           />
         ) : (
-          <SubmitButton
-            title={i18n.t("account_label.signup")}
-            handler={() => {
-              if (this.state.password != this.state.passwordConfirmation) {
-                alert(i18n.t("errors.messages.password_do_not_match"));
-              } else if (this.state.password.length < 8) {
-                alert(i18n.t("errors.messages.password_too_short"));
-              } else {
-                Api.signup(verificationId, this.state.password)
-                  .then((res) => {
-                    if (res.data.status === "success") {
-                      this.storeToken(res.data.token);
-                      this.storeEmail(email);
-                      navigation.navigate("Main", {
-                        email: email,
-                        password: this.state.password,
-                      });
-                    }
-                  })
-                  .catch((e) => {
-                    alert(i18n.t("register.authentication_error"));
-                  });
-              }
-            }}
-          />
-          */
-        )}
+            <SubmitButton
+              title={i18n.t("account_label.signup")}
+              handler={() => {
+                if (this.state.password != this.state.passwordConfirmation) {
+                  alert(i18n.t("errors.messages.password_do_not_match"));
+                } else if (this.state.password.length < 8) {
+                  alert(i18n.t("errors.messages.password_too_short"));
+                } else {
+                  Api.signup(verificationId, this.state.password)
+                    .then((res) => {
+                      if (res.data.status === "success") {
+                        this.storeToken(res.data.token);
+                        this.storeEmail(email);
+                        navigation.navigate("Main", {
+                          email: email,
+                          password: this.state.password,
+                        });
+                      }
+                    })
+                    .catch((e) => {
+                      alert(i18n.t("register.authentication_error"));
+                    });
+                }
+              }}
+            />
+          )}
       </SignupWrapper>
     );
   }
