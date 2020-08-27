@@ -19,26 +19,33 @@ import { NavigationScreenProp } from "react-navigation";
 import { page } from "./Kyc";
 
 const H1Text = styled.Text`
-  color: #000;
+  color: #1C1C1C;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
+  text-align: left;
+  margin: 40px 5% 6px 5%;
 `;
 const PText = styled.Text`
   color: #626368;
-  margin-bottom: 12px;
   font-size: 13px;
-  text-align: center;
-  margin-top: 20px;
+  margin: 0px 5%;
+  margin-bottom: 42px;
 `;
 const IDImg = styled.Image`
   width: 28px;
   height: 28px;
+  margin: 6px 11px 6px 22px;
 `;
 const Checked = styled.Image`
-  width: 7.5px;
-  height: 5px;
+  width: 12px;
+  height: 12px;
+  margin-top: 12px;
+  margin-right: 15px;
+`;
+const SelectIdWrapper = styled.View`
+  width: 375px;
+  height: 811px;
+  border: 1px solid #000;
 `;
 
 interface props {
@@ -67,7 +74,7 @@ export class SelectID extends Component<props, state> {
   render() {
     // const { navigation } = this.props;
     return (
-      <View style={{ backgroundColor: "#fff", height: "100%" }}>
+      <SelectIdWrapper>
         <BackButton handler={() => navigation.goBack()} />
         <H1Text>{i18n.t("kyc.kyc_step1")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step1_text")}</PText>
@@ -90,6 +97,9 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
+          selected={
+            this.state.idType === "passport" && "selected"
+          }
         />
         <OptionButton
           title={i18n.t("kyc_label.drivers_license")}
@@ -110,6 +120,9 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
+          selected={
+            this.state.idType === "drivers_license" && "selected"
+          }
         />
         <OptionButton
           title={i18n.t("kyc_label.id_card")}
@@ -128,6 +141,9 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
+          selected={
+            this.state.idType === "id_card" && "selected"
+          }
         />
         <SubmitButton
           title={i18n.t("kyc_label.shoot")}
@@ -139,7 +155,7 @@ export class SelectID extends Component<props, state> {
             }
           }}
         />
-      </View>
+      </SelectIdWrapper>
     );
   }
 }

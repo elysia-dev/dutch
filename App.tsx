@@ -17,7 +17,7 @@ import { Filter } from "./src/modules/products/Filter";
 import "./src/i18n/i18n";
 import { kycNavigator } from "./src/navigator/kycNavigator";
 
-const STORYBOOK_START = true;
+const STORYBOOK_START = false;
 
 export const App = () => {
   return (

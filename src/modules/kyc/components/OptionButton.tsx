@@ -11,11 +11,11 @@ import styled from "styled-components/native";
 const OptionBtn = styled.TouchableOpacity`
   color: #000;
   width: 90%;
-  margin: 0 auto;
+  margin: 5px auto;
   height: 40px;
   background-color: #fff;
   border-radius: 5px;
-  border: solid 1px #d0d8df;
+  border: solid 1px ${props => props.checking == "selected" ? "#3679B5" : "#d0d8df"};
   display: flex;
   flex-direction: row;
 `;
@@ -26,6 +26,10 @@ const OptionBtnText = styled.Text`
   line-height: 40px;
   z-index: 5;
 `;
+const OptionBtnChecked = styled.View`
+  flex-direction: row;
+  margin-left: auto;
+`;
 
 interface props {
   title: string;
@@ -33,15 +37,16 @@ interface props {
   handler: any;
   child: any;
   checked: any;
+  selected?: string;
 }
 
 export const OptionButton: FunctionComponent<props> = (props) => {
   return (
     <View>
-      <OptionBtn onPress={props.handler}>
+      <OptionBtn onPress={props.handler} checking={props.selected}>
         {props.child}
         <OptionBtnText>{props.title}</OptionBtnText>
-        {props.checked}
+        <OptionBtnChecked>{props.checked}</OptionBtnChecked>
       </OptionBtn>
     </View>
   );
