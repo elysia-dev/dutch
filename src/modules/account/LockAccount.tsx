@@ -6,7 +6,6 @@ import { FlatButton } from "../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import LockAccountPng from "./images/lockaccount.png";
 import i18n from "../../i18n/i18n";
-import { page } from "./Account";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 
@@ -90,7 +89,7 @@ export class LockAccount extends Component<props, state> {
               this.state.code
             )
               .then((res) =>
-                navigation.navigate(page.ChangePassword, {
+                navigation.navigate(AccountPage.ChangePassword, {
                   status: res.data.status,
                   verificationId:
                     this.state.verificationId === ""

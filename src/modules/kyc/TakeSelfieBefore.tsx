@@ -5,7 +5,6 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
 import SelfieBeforePng from "./images/selfiebefore.png";
 import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { page } from "./Kyc";
 
 import i18n from "../../i18n/i18n";
 import { ScrollView } from "react-native-gesture-handler";
@@ -57,7 +56,7 @@ export class TakeSelfieBefore extends Component<props, state> {
     return (
       <View style={{ backgroundColor: "#fff", height: "100%" }}>
         <ScrollView>
-          <BackButton handler={() => navigation.navigate(page.TakeSelfie)} />
+          <BackButton handler={() => navigation.navigate(KycPage.TakeSelfie)} />
           <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
           <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
           <Container>
@@ -68,7 +67,7 @@ export class TakeSelfieBefore extends Component<props, state> {
           <SubmitButton
             title={i18n.t("kyc_label.shoot")}
             handler={() =>
-              navigation.navigate(page.TakeSelfie, {
+              navigation.navigate(KycPage.TakeSelfie, {
                 id_type: id_type,
                 photoId_hash: photoId_hash,
                 photoId: photoId,

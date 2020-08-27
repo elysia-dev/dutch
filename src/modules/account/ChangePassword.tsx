@@ -4,10 +4,10 @@ import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Modal } from "../../shared/components/Modal";
-import AcceptedImg from "./images/accepted.png";
+const AcceptedImg = require("./images/accepted.png");
+
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import { page } from "./Account";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 
@@ -154,7 +154,7 @@ export class ChangePassword extends Component<props, state> {
                 <PText>{i18n.t("account_check.login_request")}</PText>
               </View>
             }
-            modalHandler={() => navigation.navigate(page.Login)}
+            modalHandler={() => navigation.navigate(AccountPage.Login)}
             visible={this.state.modalVisible}
           ></Modal>
         )}

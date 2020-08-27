@@ -11,7 +11,7 @@ import RecordPng from "./images/recordbutton.png";
 import { Ionicons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Kyc";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #fff;
@@ -172,7 +172,7 @@ export class TakeSelfie extends Component<props, state> {
                   alignItems: "center",
                 }}
                 onPress={async () => {
-                  navigation.navigate(page.ConfirmSelfie, {
+                  navigation.navigate(KycPage.ConfirmSelfie, {
                     selfie: await this.takePicture(),
                     id_type: id_type,
                     photoId_hash: photoId_hash,

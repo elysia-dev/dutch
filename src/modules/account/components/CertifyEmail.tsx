@@ -7,8 +7,8 @@ import { FlatButton } from "../../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "../Account";
 import Api from "../../../api/account";
+import { AccountPage } from "../../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #000;
@@ -72,7 +72,7 @@ export class CertifyEmail extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           edit={false}
           value={email}
-          eventHandler={() => {}}
+          eventHandler={() => { }}
           secure={false}
         />
         <TextInput
@@ -95,17 +95,17 @@ export class CertifyEmail extends Component<props, state> {
           handler={() =>
             status == "new"
               ? Api.initializeEmail(email)
-                  .then((res) =>
-                    this.setState({ verificationId: res.data.verificationId })
-                  )
-                  .catch((e) => {
-                    alert(i18n.t("register.authentication_error"));
-                  })
+                .then((res) =>
+                  this.setState({ verificationId: res.data.verificationId })
+                )
+                .catch((e) => {
+                  alert(i18n.t("register.authentication_error"));
+                })
               : Api.certifyEmail_recover(email, "Password")
-                  .then((res) => {
-                    this.setState({ verificationId: res.data.verificationId });
-                  })
-                  .catch((e) => {})
+                .then((res) => {
+                  this.setState({ verificationId: res.data.verificationId });
+                })
+                .catch((e) => { })
           }
         />
         <SubmitButton
@@ -119,7 +119,7 @@ export class CertifyEmail extends Component<props, state> {
             )
               .then((res) => {
                 navigation.navigate(
-                  status === "new" ? page.Signup : page.ChangePassword,
+                  status === "new" ? AccountPage.Signup : AccountPage.ChangePassword,
                   {
                     email: email,
                     verificationId:
@@ -129,7 +129,7 @@ export class CertifyEmail extends Component<props, state> {
                   }
                 );
               })
-              .catch((e) => {})
+              .catch((e) => { })
           }
         />
       </View>

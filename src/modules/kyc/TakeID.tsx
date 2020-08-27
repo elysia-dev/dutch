@@ -13,7 +13,7 @@ import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { page } from "./Kyc";
+import { KycPage } from "../../enums/pageEnum";
 
 const HeaderText = styled.Text`
   position: absolute;
@@ -300,6 +300,7 @@ export class TakeID extends Component<props, state> {
                   }}
                   onPress={async () => {
                   navigation.navigate(page.ConfirmID, {
+
                     id_type: id_type,
                     idPhoto: await this.takePicture(),
                   });

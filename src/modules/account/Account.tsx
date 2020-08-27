@@ -8,6 +8,7 @@ import { LockAccount } from "./LockAccount";
 import { ChangePassword } from "./ChangePassword";
 import { CertifyEmail } from "./components/CertifyEmail";
 import { createStackNavigator } from "@react-navigation/stack";
+import { AccountPage } from "../../enums/pageEnum";
 
 interface props {}
 
@@ -61,15 +62,24 @@ export class Account extends Component<props, state> {
   render() {
     return (
       <Stack.Navigator
-        initialRouteName={page.InitializeEmail}
+        initialRouteName={AccountPage.InitializeEmail}
         headerMode="none"
       >
-        <Stack.Screen name={page.InitializeEmail} component={InitializeEmail} />
-        <Stack.Screen name={page.Signup} component={Signup} />
-        <Stack.Screen name={page.Login} component={Login} />
-        <Stack.Screen name={page.LockAccount} component={LockAccount} />
-        <Stack.Screen name={page.ChangePassword} component={ChangePassword} />
-        <Stack.Screen name={page.CertifyEmail} component={CertifyEmail} />
+        <Stack.Screen
+          name={AccountPage.InitializeEmail}
+          component={InitializeEmail}
+        />
+        <Stack.Screen name={AccountPage.Signup} component={Signup} />
+        <Stack.Screen name={AccountPage.Login} component={Login} />
+        <Stack.Screen name={AccountPage.LockAccount} component={LockAccount} />
+        <Stack.Screen
+          name={AccountPage.ChangePassword}
+          component={ChangePassword}
+        />
+        <Stack.Screen
+          name={AccountPage.CertifyEmail}
+          component={CertifyEmail}
+        />
       </Stack.Navigator>
     );
   }
@@ -77,64 +87,4 @@ export class Account extends Component<props, state> {
   styles = StyleSheet.create({});
 }
 
-export enum page {
-  InitializeEmail = "InitializeEmail",
-  Signup = "Signup",
-  Login = "Login",
-  LockAccount = "LockAccount",
-  ChangePassword = "ChangePassword",
-  CertifyEmail = "CertifyEmail",
-}
 const Stack = createStackNavigator();
-// const AccountStackNav = () => {
-//   return (
-//     <Stack.Navigator initialRouteName={page.InitializeEmail} headerMode="none">
-//       <Stack.Screen name={page.InitializeEmail} component={InitializeEmail} />
-//       <Stack.Screen name={page.Signup} component={Signup} />
-//       <Stack.Screen name={page.Login} component={Login} />
-//       <Stack.Screen name={page.LockAccount} component={LockAccount} />
-//       <Stack.Screen name={page.ChangePassword} component={ChangePassword} />
-//       <Stack.Screen name={page.CertifyEmail} component={CertifyEmail} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// {this.state.stage === "InitializeEmail" && (
-//   <InitializeEmail />
-// )}
-// {this.state.stage === "CertifyEmail" && (
-//   <CertifyEmail
-//     email={this.state.email}
-//     certified={this.state.certified}
-//     existence={this.state.exist}
-//     // resendHandler={
-//     //   this.state.exist == "new"
-//     //     ? this.certifyEmail_signup
-//     //     : this.certifyEmail_recoverPassword
-//     // }
-//   />
-// )}
-// {this.state.stage === "Signup" && <Signup email={this.state.email} />}
-// {this.state.stage === "Login" && (
-//   <Login
-//     email={this.state.email}
-//     password={this.state.password}
-//     passwordHandler={this.setUserPassword}
-//     error={this.state.error}
-//   />
-// )}
-// {this.state.stage === "LockAccount" && (
-//   <LockAccount />
-
-//   //인증되면 login state로 바꾸는 작업 수행해야 함 기억!!
-// )}
-// {this.state.stage === "RecoverPassword" && (
-//   <ChangePassword email={this.state.email} login={this.state.login} />
-// )}
-// {/* 비밀번호 찾기와 변경은 같은 컴포넌트 로드하지만 넘겨주는 props가 다름 */}
-// {this.state.stage === "ChangePassword" && (
-//   <ChangePassword email={this.state.email} login={this.state.login} />
-// )}
-// {this.state.stage === "mainpage" && (
-//   <View>{/* <Text>메인페이지가 있다고 생각합시다</Text> */}</View>
-// )}

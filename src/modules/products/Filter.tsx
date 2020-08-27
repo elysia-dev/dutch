@@ -16,8 +16,8 @@ import ArchwayPng from "./images/archway.png";
 import EthereumPng from "./images/ethereum.png";
 import ElysiaPng from "./images/elysia.png";
 
-import { page } from "./Products";
 import { NavigationScreenProp } from "react-navigation";
+import { ProductPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -152,7 +152,7 @@ export class Filter extends Component<props, state> {
             // const filtered = methods.filter(method => this.state. === true)
             // console `${this.state.paypal && "paypal,"}`
 
-            navigation.navigate(page.MainList, {});
+            navigation.navigate(ProductPage.MainList, {});
           }}
         />
       </View>

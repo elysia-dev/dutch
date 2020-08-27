@@ -11,7 +11,6 @@ import { NationInput } from "./components/NationInput";
 import { DateInput } from "./components/DateInput";
 import { ShortOptionButton } from "./components/ShortOptionButton";
 import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { page } from "./Kyc";
 import Api from "../../api/kyc";
 
 const H1Text = styled.Text`
@@ -202,7 +201,7 @@ export class PersonalDataInput extends Component<props, state> {
               modalHandler={() => {
                 this.setModalVisible(false);
               }}
-              // 다시 더보기 페이지로 돌아가게끔!
+            // 다시 더보기 페이지로 돌아가게끔!
             ></Modal>
           )}
         </ScrollView>

@@ -1,9 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Image } from "react-native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
 import StorybookUIRoot from "./storybook/index";
-import StatusBarBackground from "./src/shared/components/StatusBarBackground";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -38,13 +36,10 @@ const Icon = styled.Image`
 
 //local storage에서 token 확인하는 로직
 
-
 export const App = () => {
   return (
     <NavigationContainer>
       <UserProvider>
-        <StatusBarBackground />
-        <StatusBar style="auto" />
         {STORYBOOK_START && <StorybookUIRoot />}
         <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
           <RootStack.Screen name={"Account"} component={Account} />
@@ -57,16 +52,6 @@ export const App = () => {
 };
 
 const RootStack = createStackNavigator();
-
-// const Root = () => {
-//   return (
-//     <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
-//       <RootStack.Screen name={"Account"} component={Account} />
-//       <RootStack.Screen name={"Main"} component={TabNavigatior} />
-//       <RootStack.Screen name={"Kyc"} component={Kyc} />
-//     </RootStack.Navigator>
-//   );
-// };
 
 const Tab = createBottomTabNavigator();
 

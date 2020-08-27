@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp } from "react-navigation";
-import { page } from "./Account";
+import { AccountPage } from "../../enums/pageEnum";
 
 const InitializeEmailWrapper = styled.View`
   width: 375px;
@@ -58,7 +58,9 @@ export class InitializeEmail extends Component<props, state> {
             Api.initializeEmail(this.state.email)
               .then((res) => {
                 navigation.navigate(
-                  res.data.status == "ok" ? page.Login : page.CertifyEmail,
+                  res.data.status == "ok"
+                    ? AccountPage.Login
+                    : AccountPage.CertifyEmail,
                   {
                     verificationId: res.data.verificationId,
                     status: res.data.status,

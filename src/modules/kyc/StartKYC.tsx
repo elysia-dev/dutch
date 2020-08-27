@@ -5,8 +5,8 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import { page } from "./Kyc";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { KycPage } from "../../enums/pageEnum";
 
 const StartKycWrapper = styled.View`
   padding-top: 25px;
@@ -80,6 +80,7 @@ export const StartKYC: FunctionComponent<props> = (props) => {
     <StartKycWrapper>
       <BackButton handler={() => {}} />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
+
       <PText>
         <ClockImg source={ClockPng} /> {i18n.t("kyc.start_kyc_text")}
       </PText>
@@ -111,6 +112,7 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         />
       </FlexBtnWrapper>
     </StartKycWrapper>
+
 
   );
 };
