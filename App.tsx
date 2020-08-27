@@ -35,6 +35,7 @@ const Icon = styled.Image`
 `;
 
 //local storage에서 token 확인하는 로직
+
 export const App = () => {
   return (
     <NavigationContainer>

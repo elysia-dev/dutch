@@ -8,23 +8,65 @@ import i18n from "../../i18n/i18n";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KycPage } from "../../enums/pageEnum";
 
+const StartKycWrapper = styled.View`
+  padding-top: 25px;
+  flex: 1;
+  background-color: #FFFFFF;
+`;
 const H1Text = styled.Text`
-  color: #000;
+  color: #1c1c1c;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
+  text-align: left;
+  margin: 40px 5% 6px 5%;
 `;
 const PText = styled.Text`
   color: #626368;
-  margin-bottom: 12px;
   font-size: 13px;
-  text-align: center;
-  margin-top: 20px;
+  margin: 0px 5%;
+  margin-bottom: 42px;
 `;
 const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
+  margin-right: 10px;
+`;
+const Circle = styled.Text`
+  width: 26px;
+  height: 26px;
+  background-color: #3679b5;
+  border-radius: 15px;
+  color: #fff;
+  line-height: 25px;
+  text-align: center;
+`;
+const CircleWrapper = styled.View`
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 50px;
+  font-size: 13px;
+`;
+const CircleText = styled.Text`
+  position: absolute;
+  color: #1c1c1c;
+  font-size: 14px;
+  margin-left: 36px;
+  margin-top: 3px;
+  margin-bottom: 42px;
+`;
+const HrLine = styled.View`
+  position: absolute;
+  height: 175px;
+  border-left-width: 1px;
+  border-left-color: #3679b5;
+  left: 12px;
+  margin-left: 5%;
+`;
+const KycGuideWrapper = styled.View`
+  position: relative;
+`;
+const FlexBtnWrapper = styled.View`
+  flex: 5;
 `;
 
 interface props {
@@ -33,31 +75,44 @@ interface props {
 export const StartKYC: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
-  // const { email } = route.params;
 
   return (
-    <View style={{ backgroundColor: "#fff", height: "100%" }}>
-      <BackButton handler={() => navigation.goBack()} />
+    <StartKycWrapper>
+      <BackButton handler={() => {}} />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
-      <ClockImg source={ClockPng} />
-      <PText>{i18n.t("kyc.start_kyc_text")}</PText>
-      <Text>{i18n.t("kyc.start_kyc_step1")}</Text>
-      <Text>{i18n.t("kyc.start_kyc_step2")}</Text>
-      <Text>{i18n.t("kyc.start_kyc_step3")}</Text>
-      <SubmitButton
-        title={i18n.t("kyc_label.argos_terms")}
-        handler={() => {}}
-      />
-      <SubmitButton
-        title={i18n.t("kyc_label.agree_start")}
-        // handler={() => {}}
-        handler={() =>
-          navigation.navigate(
-            KycPage.SelectID
-            // { token: token, email: email }
-          )
-        }
-      />
-    </View>
+
+      <PText>
+        <ClockImg source={ClockPng} /> {i18n.t("kyc.start_kyc_text")}
+      </PText>
+      <KycGuideWrapper>
+        <HrLine />
+        <CircleWrapper>
+          <Circle>1</Circle>
+          <CircleText>{i18n.t("kyc.start_kyc_step1")}</CircleText>
+        </CircleWrapper>
+        <CircleWrapper>
+          <Circle>2</Circle>
+          <CircleText>{i18n.t("kyc.start_kyc_step2")}</CircleText>
+        </CircleWrapper>
+        <CircleWrapper>
+          <Circle>3</Circle>
+          <CircleText>{i18n.t("kyc.start_kyc_step3")}</CircleText>
+        </CircleWrapper>
+      </KycGuideWrapper>
+      <FlexBtnWrapper>
+        <SubmitButton
+          title={i18n.t("kyc_label.argos_terms")}
+          handler={() => {}}
+          ButtonTheme={"WhiteTheme"}
+        />
+        <SubmitButton
+          title={i18n.t("kyc_label.agree_start")}
+          // handler={() => {}}
+          handler={() => navigation.navigate(page.SelectID)}
+        />
+      </FlexBtnWrapper>
+    </StartKycWrapper>
+
+
   );
 };
