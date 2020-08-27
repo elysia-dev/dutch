@@ -8,6 +8,7 @@ import { NavigationRoute, NavigationScreenProp } from "react-navigation";
 
 import i18n from "../../i18n/i18n";
 import { ScrollView } from "react-native-gesture-handler";
+import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -43,7 +44,7 @@ interface props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
-interface state {}
+interface state { }
 //modal state 때문에 class로
 export class TakeSelfieBefore extends Component<props, state> {
   constructor(props: props) {

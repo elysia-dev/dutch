@@ -4,12 +4,13 @@ import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Modal } from "../../shared/components/Modal";
-const AcceptedImg = require("./images/accepted.png");
+import AcceptedImg from "./images/accepted.png";
 
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { AccountPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #000;
@@ -99,7 +100,7 @@ export class ChangePassword extends Component<props, state> {
             }
             value={""}
             secure={true}
-            //password, passwordConfirmation 비교
+          //password, passwordConfirmation 비교
           />
         )}
         <TextInput
@@ -108,7 +109,7 @@ export class ChangePassword extends Component<props, state> {
           eventHandler={
             this.state.step == 1
               ? (input: string) => this.setState({ password: input })
-              : () => {}
+              : () => { }
           }
           value={""}
           secure={true}
@@ -116,7 +117,7 @@ export class ChangePassword extends Component<props, state> {
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
-          eventHandler={() => {}}
+          eventHandler={() => { }}
           value={email}
           secure={false}
         />
@@ -126,25 +127,25 @@ export class ChangePassword extends Component<props, state> {
             handler={() => this.nextStep(2)}
           />
         ) : (
-          <SubmitButton
-            title={i18n.t("account_label.change")}
-            handler={() => {
-              if (this.state.password != this.state.passwordConfirmation) {
-                alert(i18n.t("errors.messages.password_do_not_match"));
-              } else if (this.state.password.length < 8) {
-                alert(i18n.t("errors.messages.password_too_short"));
-              } else {
-                Api.recoverPassword(verificationId, this.state.password)
-                  .then((res) => {
-                    if (res.data.status === "success") {
-                      this.setModalVisible(true);
-                    }
-                  })
-                  .catch((e) => {});
-              }
-            }}
-          />
-        )}
+            <SubmitButton
+              title={i18n.t("account_label.change")}
+              handler={() => {
+                if (this.state.password != this.state.passwordConfirmation) {
+                  alert(i18n.t("errors.messages.password_do_not_match"));
+                } else if (this.state.password.length < 8) {
+                  alert(i18n.t("errors.messages.password_too_short"));
+                } else {
+                  Api.recoverPassword(verificationId, this.state.password)
+                    .then((res) => {
+                      if (res.data.status === "success") {
+                        this.setModalVisible(true);
+                      }
+                    })
+                    .catch((e) => { });
+                }
+              }}
+            />
+          )}
         {this.state.modalVisible === true && (
           <Modal
             child={

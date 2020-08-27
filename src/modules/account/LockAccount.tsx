@@ -8,6 +8,7 @@ import LockAccountPng from "./images/lockaccount.png";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { AccountPage } from "../../enums/pageEnum";
 
 const LockAccountImg = styled.Image`
   width: 209px;
@@ -97,7 +98,7 @@ export class LockAccount extends Component<props, state> {
                       : this.state.verificationId,
                 })
               )
-              .catch((e) => {})
+              .catch((e) => { })
           }
         />
       </LockAccountWrapper>
