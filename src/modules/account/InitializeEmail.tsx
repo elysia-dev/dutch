@@ -52,6 +52,11 @@ export class InitializeEmail extends Component<props, state> {
         <SubmitButton
           title={i18n.t("account_label.continue")}
           handler={() => {
+            if (!this.state.email) {
+              alert("이메일 입력해주세요");
+              return;
+            }
+
             Api.initializeEmail(this.state.email)
               .then((res) => {
                 navigation.navigate(
