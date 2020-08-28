@@ -37,9 +37,9 @@ const InputPicker = styled.Picker`
 `;
 
 interface props {
-  type: string;
-  nationality: string;
-  eventHandler: (input: string) => void;
+  type?: string;
+  nationality?: string;
+  eventHandler?: (input: string) => void;
 }
 
 interface state {}
@@ -53,9 +53,6 @@ interface placeholder {
 export class NationInput extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = {
-      nationality: "",
-    };
   }
 
   NationList_ios = nations.map((nation, Key) => ({

@@ -11,7 +11,7 @@ import { KycPage } from "../../enums/pageEnum";
 const StartKycWrapper = styled.View`
   padding-top: 25px;
   flex: 1;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 `;
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -112,7 +112,5 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         />
       </FlexBtnWrapper>
     </StartKycWrapper>
-
-
   );
 };
