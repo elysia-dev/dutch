@@ -60,7 +60,7 @@ export class InitializeEmail extends Component<props, state> {
             Api.initializeEmail(this.state.email)
               .then((res) => {
                 navigation.navigate(
-                  res.data.status == "ok"
+                  res.data.status == "exist"
                     ? AccountPage.Login
                     : AccountPage.CertifyEmail,
                   {
