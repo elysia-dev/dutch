@@ -8,7 +8,6 @@ import { NavigationRoute, NavigationScreenProp } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
 import i18n from "../../i18n/i18n";
 import { ScrollView } from "react-native-gesture-handler";
-import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
