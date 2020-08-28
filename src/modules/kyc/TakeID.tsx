@@ -215,14 +215,11 @@ export class TakeID extends Component<props, state> {
 
     const { id_type } = route.params;
 
-
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
     } else {
       return (
-
         <TakeIdWrapper>
-
           <Camera
             style={{
               flex: 1,
@@ -240,10 +237,11 @@ export class TakeID extends Component<props, state> {
           >
             <HeaderCameraWrapper>
               <HeaderTextWrapper>
-                <BackButton handler={() => navigation.goBack()} isWhite={true} />
-                <HeaderText>
-                 {i18n.t(`kyc_label.${id_type}`)}
-                </HeaderText>
+                <BackButton
+                  handler={() => navigation.goBack()}
+                  isWhite={true}
+                />
+                <HeaderText>{i18n.t(`kyc_label.${id_type}`)}</HeaderText>
               </HeaderTextWrapper>
               {/*}
                 <View
@@ -299,12 +297,11 @@ export class TakeID extends Component<props, state> {
                     alignItems: "center",
                   }}
                   onPress={async () => {
-                  navigation.navigate(page.ConfirmID, {
-
-                    id_type: id_type,
-                    idPhoto: await this.takePicture(),
-                  });
-                }}
+                    navigation.navigate(KycPage.ConfirmID, {
+                      id_type: id_type,
+                      idPhoto: await this.takePicture(),
+                    });
+                  }}
                 >
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>
@@ -320,7 +317,6 @@ export class TakeID extends Component<props, state> {
                 </TouchableOpacity>
               </BottomButtonWrapper>
             </BottomCameraWrapper>
-
           </Camera>
         </TakeIdWrapper>
       );
