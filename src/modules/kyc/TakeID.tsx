@@ -244,10 +244,11 @@ export class TakeID extends Component<props, state> {
           >
             <HeaderCameraWrapper>
               <HeaderTextWrapper>
-                <BackButton handler={() => navigation.goBack()} isWhite={true} />
-                <HeaderText>
-                  {i18n.t(`kyc_label.${id_type}`)}
-                </HeaderText>
+                <BackButton
+                  handler={() => navigation.goBack()}
+                  isWhite={true}
+                />
+                <HeaderText>{i18n.t(`kyc_label.${id_type}`)}</HeaderText>
               </HeaderTextWrapper>
               {/*}
                 <View
@@ -304,7 +305,6 @@ export class TakeID extends Component<props, state> {
                   }}
                   onPress={async () => {
                     navigation.navigate(KycPage.ConfirmID, {
-
                       id_type: id_type,
                       idPhoto: await this.takePicture(),
                     });
@@ -324,7 +324,6 @@ export class TakeID extends Component<props, state> {
                 </TouchableOpacity>
               </BottomButtonWrapper>
             </BottomCameraWrapper>
-
           </Camera>
         </TakeIdWrapper>
       );

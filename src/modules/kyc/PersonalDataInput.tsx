@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, SafeAreaView } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Modal } from "../../shared/components/Modal";
@@ -14,11 +14,13 @@ import { NavigationRoute, NavigationScreenProp } from "react-navigation";
 import Api from "../../api/kyc";
 
 const H1Text = styled.Text`
-  font-size: 20px;
   color: #1c1c1c;
-  text-align: center;
-  margin: 25px auto;
+  font-size: 20px;
   font-weight: bold;
+  text-align: left;
+  margin-top: 40px;
+  margin-left: 5%;
+  margin-bottom: 6px;
 `;
 const PText = styled.Text`
   font-size: 12px;
@@ -45,6 +47,26 @@ const ConfirmImg = styled.Image`
   width: 150px;
   height: 150px;
 `;
+const PersonalDataInputWrapper = styled.SafeAreaView`
+  padding-top: 25px;
+  flex: 1;
+  background-color: #ffffff;
+`;
+const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
+  contentContainerStyle: {
+    showsVerticalScrollIndicator: false,
+  },
+}))`
+  flex-direction: column;
+  background-color: rgba(250, 250, 250, 1);
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 10px;
+  border: 1px solid rgba(167, 167, 167, 1);
+  overflow: hidden;
+  margin-bottom: 30px;
+`;
 
 interface props {
   navigation: NavigationScreenProp<any>;
@@ -55,8 +77,8 @@ interface state {
   gender: string;
   firstName: string;
   lastName: string;
-  nationality: string;
-  birthday: string;
+  nationality?: string;
+  birthday?: string;
   modalVisible: boolean;
 }
 
@@ -94,28 +116,13 @@ export class PersonalDataInput extends Component<props, state> {
     const { route, navigation } = this.props;
     const { selfie_hash, id_type, photoId_hash, photoId } = route.params;
     return (
-      <View
-        style={{
-          width: "100%",
-          backgroundColor: "#fff",
-          height: "100%",
-          flex: 1,
-          top: 0,
-          position: "relative",
-        }}
-      >
-        <ScrollView
-          style={{
-            width: "100%",
-            flex: 1,
-          }}
-          contentContainerStyle={{ flex: 1 }}
-        >
-          <BackButton handler={() => navigation.goBack()} />
-          <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
-          <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
-          <IdImg source={{ uri: photoId.uri }} />
-          <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
+      <PersonalDataInputWrapper>
+        <BackButton handler={() => navigation.goBack()} />
+        <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
+        <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
+        <IdImg source={{ uri: photoId.uri }} />
+        <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
+        <ScrollViewWrapper>
           <TextInput
             type={i18n.t("kyc_label.last_name")}
             value=""
@@ -144,8 +151,11 @@ export class PersonalDataInput extends Component<props, state> {
             eventHandler={this.setBirthday}
             birthday={this.state.birthday}
           />
+
           <InputHeaderText>{i18n.t("kyc_label.gender")}</InputHeaderText>
-          <View style={{ display: "flex", flexDirection: "row" }}>
+          <View
+            style={{ display: "flex", flexDirection: "row", marginBottom: 80 }}
+          >
             <ShortOptionButton
               check={this.state.gender === "male" ? "checked" : ""}
               title={i18n.t("kyc_label.male")}
@@ -201,11 +211,11 @@ export class PersonalDataInput extends Component<props, state> {
               modalHandler={() => {
                 this.setModalVisible(false);
               }}
-            // 다시 더보기 페이지로 돌아가게끔!
+              // 다시 더보기 페이지로 돌아가게끔!
             ></Modal>
           )}
-        </ScrollView>
-      </View>
+        </ScrollViewWrapper>
+      </PersonalDataInputWrapper>
       // </ScrollView>
     );
   }
