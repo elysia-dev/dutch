@@ -186,10 +186,10 @@ export class Signup extends Component<props, state> {
                   alert(i18n.t("errors.messages.password_too_short"));
                 } else {
                   Api.signup(verificationId, this.state.password)
-                    .then((res) => {
+                    .then(async (res) => {
                       if (res.data.status === "success") {
-                        this.storeToken(res.data.token);
-                        this.storeEmail(email);
+                        await this.storeToken(res.data.token);
+                        await this.storeEmail(email);
                         navigation.navigate("Main", {
                           email: email,
                           password: this.state.password,

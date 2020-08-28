@@ -25,7 +25,9 @@ import SectionsBlackPng from "./assets/sections_black.png";
 import WalletPng from "./assets/wallet.png";
 import WalletBlackPng from "./assets/wallet_black.png";
 
-import { UserProvider } from "./src/contexts/userInfo";
+import UserContext from "./src/contexts/UserContext";
+import { KycStatus } from "./src/enums/status";
+import Api from "./src/api/account";
 
 const STORYBOOK_START = false;
 
@@ -36,24 +38,67 @@ const Icon = styled.Image`
 
 //local storage에서 token 확인하는 로직
 
-export const App = () => {
-  return (
-    <NavigationContainer>
-      <UserProvider>
-        {STORYBOOK_START && <StorybookUIRoot />}
-        <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
-          <RootStack.Screen name={"Account"} component={Account} />
-          <RootStack.Screen name={"Main"} component={TabNavigatior} />
-          <RootStack.Screen name={"Kyc"} component={Kyc} />
-        </RootStack.Navigator>
-      </UserProvider>
-    </NavigationContainer>
-  );
+interface AppState {
+  signedIn: boolean;
+  user: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    kycStatus: KycStatus;
+  }
+}
+
+const defaultState = {
+  signedIn: false,
+  user: {
+    email: "",
+    firstName: "",
+    lastName: "",
+    kycStatus: KycStatus.NONE,
+  }
+}
+
+class App extends React.Component<any, AppState> {
+  constructor(props: any) {
+    super(props);
+    this.state = defaultState;
+  }
+
+  async componentDidMount() {
+    Api.me().then((res) => {
+      this.setState({
+        signedIn: true,
+        user: res.data
+      });
+    }).catch(() => {
+      this.setState(defaultState);
+    })
+  }
+
+  render() {
+    return (
+      <NavigationContainer>
+        <UserContext.Provider value={this.state}>
+          {STORYBOOK_START && <StorybookUIRoot />}
+          {
+            this.state.signedIn ?
+              <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
+                <RootStack.Screen name={"Main"} component={TabNavigatior} />
+                <RootStack.Screen name={"Kyc"} component={Kyc} />
+              </RootStack.Navigator>
+              :
+              <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
+                <RootStack.Screen name={"Account"} component={Account} />
+              </RootStack.Navigator>
+          }
+        </UserContext.Provider>
+      </NavigationContainer >
+    );
+  }
 };
 
-const RootStack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
+const RootStack = createStackNavigator();
 
 const TabNavigatior = () => {
   return (

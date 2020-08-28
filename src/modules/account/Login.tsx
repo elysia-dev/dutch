@@ -133,7 +133,7 @@ export class Login extends Component<props, state> {
               alert(i18n.t("account_check.insert_password"));
             } else {
               Api.login(email, this.state.password)
-                .then((res) => {
+                .then(async (res) => {
                   //token local storage 저장
                   if (res.data.status == "wrong") {
                     this.setState({ error: res.data.counts });
@@ -145,8 +145,8 @@ export class Login extends Component<props, state> {
                       verificationId: res.data.verificationId,
                     });
                   } else if (res.data.status === "success") {
-                    this.storeToken(res.data.token);
-                    this.storeEmail(email);
+                    await this.storeToken(res.data.token);
+                    await this.storeEmail(email);
                     navigation.navigate("Main", {
                       email: email,
                       password: this.state.password,
