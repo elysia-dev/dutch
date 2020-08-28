@@ -27,7 +27,7 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state { }
+interface state {}
 
 export class Info extends Component<props, state> {
   constructor(props: props) {
@@ -56,8 +56,7 @@ export class Info extends Component<props, state> {
             borderBottomWidth: 5,
             height: "15%",
           }}
-        >
-        </View>
+        ></View>
         <View
           style={{
             flex: 1,
@@ -70,6 +69,13 @@ export class Info extends Component<props, state> {
           <SubmitButton
             title={i18n.t("info_label.need_kyc")}
             handler={() => navigation.navigate("Kyc")}
+          />
+          <SubmitButton
+            title={"로그아웃"}
+            handler={() => {
+              Api.logout();
+              navigation.navigate("Account");
+            }}
           />
         </View>
       </View>

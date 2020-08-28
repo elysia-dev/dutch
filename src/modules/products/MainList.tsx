@@ -1,5 +1,11 @@
 import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  GestureResponderEvent,
+  ScrollView,
+} from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -11,6 +17,8 @@ import { SortingButton } from "./components/SortingButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NavigationScreenProp } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
+import Api from "../../api/product";
+import { Item } from "./Item";
 
 const MailImg = styled.Image`
   width: 22px;
@@ -64,22 +72,42 @@ interface props {
 interface state {
   return: boolean;
   popularity: boolean;
+  payments: string;
+  productList: Array<Object>;
 }
 
 export class MainList extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { return: false, popularity: false };
+    this.state = {
+      return: false,
+      popularity: false,
+      payments: "btc,el,eth,el",
+      productList: [],
+    };
   }
 
-  //   productList = products.map((product, Key) => ({
-  //     // label: nation.Nationality,
-  //     // value: nation.Argos,
-  //   }));
+  componentDidMount() {
+    Api.products(
+      this.state.payments,
+      this.state.return ? "expectedAnnualReturn" : "createdAt"
+    )
+      .then((res) => {
+        console.log(res);
+        this.setState({ productList: res.data });
+        console.log(this.state.productList);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
 
   render() {
     const { navigation } = this.props;
-
+    const listToShow = this.state.productList.map((product, index) => (
+      //   <Item annualReturn={product.data.financials.expectedAnnualReturn} />
+      <Item annualReturn={product.expectedAnnualReturn} />
+    ));
     return (
       <View
         style={{
@@ -123,6 +151,19 @@ export class MainList extends Component<props, state> {
                   return: !this.state.return,
                   popularity: false,
                 });
+                console.log(this.state.return);
+                Api.products(
+                  this.state.payments,
+                  this.state.return ? "createdAt" : "expectedAnnualReturn"
+                )
+                  .then((res) => {
+                    console.log(res);
+                    this.setState({ productList: res.data });
+                    console.log(this.state.productList);
+                  })
+                  .catch((e) => {
+                    console.error(e);
+                  });
               }}
             />
             <SortingButton
@@ -136,6 +177,9 @@ export class MainList extends Component<props, state> {
               }}
             />
           </View>
+        </View>
+        <View style={{ position: "relative", top: 180 }}>
+          <ScrollView>{listToShow}</ScrollView>
         </View>
       </View>
     );

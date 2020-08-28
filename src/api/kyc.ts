@@ -104,4 +104,14 @@ export default class Api {
       }
     );
   };
+
+  static logout = async () => {
+    try {
+      await AsyncStorage.removeItem("@token");
+      console.log("removed");
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  };
 }

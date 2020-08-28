@@ -45,7 +45,7 @@ interface AppState {
     firstName: string;
     lastName: string;
     kycStatus: KycStatus;
-  }
+  };
 }
 
 const defaultState = {
@@ -55,8 +55,8 @@ const defaultState = {
     firstName: "",
     lastName: "",
     kycStatus: KycStatus.NONE,
-  }
-}
+  },
+};
 
 class App extends React.Component<any, AppState> {
   constructor(props: any) {
@@ -65,14 +65,16 @@ class App extends React.Component<any, AppState> {
   }
 
   async componentDidMount() {
-    Api.me().then((res) => {
-      this.setState({
-        signedIn: true,
-        user: res.data
+    Api.me()
+      .then((res) => {
+        this.setState({
+          signedIn: true,
+          user: res.data,
+        });
+      })
+      .catch(() => {
+        this.setState(defaultState);
       });
-    }).catch(() => {
-      this.setState(defaultState);
-    })
   }
 
   render() {
@@ -80,22 +82,21 @@ class App extends React.Component<any, AppState> {
       <NavigationContainer>
         <UserContext.Provider value={this.state}>
           {STORYBOOK_START && <StorybookUIRoot />}
-          {
-            this.state.signedIn ?
-              <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
-                <RootStack.Screen name={"Main"} component={TabNavigatior} />
-                <RootStack.Screen name={"Kyc"} component={Kyc} />
-              </RootStack.Navigator>
-              :
-              <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
-                <RootStack.Screen name={"Account"} component={Account} />
-              </RootStack.Navigator>
-          }
+          {this.state.signedIn ? (
+            <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
+              <RootStack.Screen name={"Main"} component={TabNavigatior} />
+              <RootStack.Screen name={"Kyc"} component={Kyc} />
+            </RootStack.Navigator>
+          ) : (
+            <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
+              <RootStack.Screen name={"Account"} component={Account} />
+            </RootStack.Navigator>
+          )}
         </UserContext.Provider>
-      </NavigationContainer >
+      </NavigationContainer>
     );
   }
-};
+}
 
 const Tab = createBottomTabNavigator();
 const RootStack = createStackNavigator();

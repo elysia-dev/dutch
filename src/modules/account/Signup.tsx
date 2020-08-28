@@ -4,8 +4,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from 'styled-components/native';
-import WarningImg from '../../../src/shared/assets/images/warning.png';
+import styled from "styled-components/native";
+import WarningImg from "../../../src/shared/assets/images/warning.png";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
@@ -31,7 +31,7 @@ const WarningIcon = styled.Image`
 `;
 const PText = styled.Text`
   font-size: 12px;
-  color: #1C1C1C;
+  color: #1c1c1c;
   text-align: right;
   margin: 10px 5%;
 `;
@@ -47,9 +47,9 @@ interface state {
   errorReg: number;
   password: string;
   passwordConfirmation: string;
-
 }
-const CheckPassword = function (input1: string) { // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
+const CheckPassword = function(input1: string) {
+  // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
   var reg_pwd = /^.*(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
   return !reg_pwd.test(input1) ? false : true;
 };
@@ -117,7 +117,7 @@ export class Signup extends Component<props, state> {
             eventHandler={(input: string) => {
               this.setState({
                 passwordConfirmation: input,
-                errorLength: input !== this.state.password ? 2 : 0
+                errorLength: input !== this.state.password ? 2 : 0,
               });
             }}
             value={""}
@@ -136,33 +136,33 @@ export class Signup extends Component<props, state> {
           eventHandler={
             this.state.step == 1
               ? (input: string) => {
-                this.setState({
-                  password: input,
-                  errorLength: input.length < 8 ? 1 : 0,
-                  errorReg: CheckPassword(input) ? 0 : 1
-                });
-              }
-              : () => { }
+                  this.setState({
+                    password: input,
+                    errorLength: input.length < 8 ? 1 : 0,
+                    errorReg: CheckPassword(input) ? 0 : 1,
+                  });
+                }
+              : () => {}
           }
           value={""}
           secure={true}
         />
         {this.state.errorLength == 1 && (
           <PText>
-            <WarningIcon source={WarningImg} resizeMode={'center'} />
+            <WarningIcon source={WarningImg} resizeMode={"center"} />
             <PText> 비밀번호는 8자 이상이어야 합니다 </PText>
           </PText>
         )}
         {this.state.errorLength == 0 && this.state.errorReg == 1 && (
           <PText>
-            <WarningIcon source={WarningImg} resizeMode={'center'} />
+            <WarningIcon source={WarningImg} resizeMode={"center"} />
             비밀번호는 영문, 숫자가 모두 포함되어야 합니다.
           </PText>
         )}
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
-          eventHandler={() => { }}
+          eventHandler={() => {}}
           value={email}
           secure={false}
         />
@@ -173,36 +173,36 @@ export class Signup extends Component<props, state> {
               if (this.state.password.length < 8) {
                 return;
               }
-              this.nextStep(2)
+              this.nextStep(2);
             }}
           />
         ) : (
-            <SubmitButton
-              title={i18n.t("account_label.signup")}
-              handler={() => {
-                if (this.state.password != this.state.passwordConfirmation) {
-                  alert(i18n.t("errors.messages.password_do_not_match"));
-                } else if (this.state.password.length < 8) {
-                  alert(i18n.t("errors.messages.password_too_short"));
-                } else {
-                  Api.signup(verificationId, this.state.password)
-                    .then(async (res) => {
-                      if (res.data.status === "success") {
-                        await this.storeToken(res.data.token);
-                        await this.storeEmail(email);
-                        navigation.navigate("Main", {
-                          email: email,
-                          password: this.state.password,
-                        });
-                      }
-                    })
-                    .catch((e) => {
-                      alert(i18n.t("register.authentication_error"));
-                    });
-                }
-              }}
-            />
-          )}
+          <SubmitButton
+            title={i18n.t("account_label.signup")}
+            handler={() => {
+              if (this.state.password != this.state.passwordConfirmation) {
+                alert(i18n.t("errors.messages.password_do_not_match"));
+              } else if (this.state.password.length < 8) {
+                alert(i18n.t("errors.messages.password_too_short"));
+              } else {
+                Api.signup(verificationId, this.state.password)
+                  .then(async (res) => {
+                    if (res.data.status === "success") {
+                      await this.storeToken(res.data.token);
+                      await this.storeEmail(email);
+                      // navigation.navigate("Main", {
+                      //   email: email,
+                      //   password: this.state.password,
+                      // });
+                    }
+                  })
+                  .catch((e) => {
+                    alert(i18n.t("register.authentication_error"));
+                  });
+              }
+            }}
+          />
+        )}
       </SignupWrapper>
     );
   }

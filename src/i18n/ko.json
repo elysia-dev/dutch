@@ -103,7 +103,10 @@
     "foreigner": "외국인",
     "sorting_return": "수익률순",
     "sorting_popularity": "인기순",
-    "filter": "필터"
+    "filter": "필터",
+    "expected_annual_return": "연 %{return}%",
+    "return_on_rent": "월세",
+    "return_on_sale": "매매차익"
   },
   "info_label": {
     "need_kyc": "KYC 인증이 필요합니다."

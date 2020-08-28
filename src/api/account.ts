@@ -42,7 +42,7 @@ type UserResponse = {
   gender: string;
   firstName: string;
   lastName: string;
-}
+};
 
 export default class Api {
   static initializeEmail = async (
@@ -118,7 +118,6 @@ export default class Api {
   };
 
   static me = async (): Promise<AxiosResponse<UserResponse>> => {
-    return (await authenticatedEspressoClient())
-      .get('/auth/me');
-  }
+    return (await authenticatedEspressoClient()).get("/auth/me");
+  };
 }
