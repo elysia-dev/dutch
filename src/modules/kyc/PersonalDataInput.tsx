@@ -193,6 +193,7 @@ export class PersonalDataInput extends Component<props, state> {
                 // )
                 //   .then((res) => {
                 this.setModalVisible(true);
+                navigation.navigate("Main");
                 // })
                 // .catch((e) => console.error(e));
               }
@@ -211,7 +212,7 @@ export class PersonalDataInput extends Component<props, state> {
               modalHandler={() => {
                 this.setModalVisible(false);
               }}
-              // 다시 더보기 페이지로 돌아가게끔!
+            // 다시 더보기 페이지로 돌아가게끔!
             ></Modal>
           )}
         </ScrollViewWrapper>

@@ -8,7 +8,7 @@ const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
   text-align: left;
-  margin-bottom: 15px,
+  margin-bottom: 15px
   font-weight: bold;
 `;
 const PText = styled.Text`

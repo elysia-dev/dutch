@@ -82,10 +82,10 @@ class App extends React.Component<any, AppState> {
       <NavigationContainer>
         <UserContext.Provider value={this.state}>
           {STORYBOOK_START && <StorybookUIRoot />}
-          <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
+          <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
             <RootStack.Screen name={"Main"} component={TabNavigatior} />
-            <RootStack.Screen name={"Kyc"} component={Kyc} />
             <RootStack.Screen name={"Account"} component={Account} />
+            <RootStack.Screen name={"Kyc"} component={Kyc} />
           </RootStack.Navigator>
         </UserContext.Provider>
       </NavigationContainer>
