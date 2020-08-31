@@ -190,10 +190,7 @@ export class Signup extends Component<props, state> {
                     if (res.data.status === "success") {
                       await this.storeToken(res.data.token);
                       await this.storeEmail(email);
-                      // navigation.navigate("Main", {
-                      //   email: email,
-                      //   password: this.state.password,
-                      // });
+                      navigation.navigate("Main");
                     }
                   })
                   .catch((e) => {

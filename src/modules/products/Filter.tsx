@@ -16,7 +16,7 @@ import ArchwayPng from "./images/archway.png";
 import EthereumPng from "./images/ethereum.png";
 import ElysiaPng from "./images/elysia.png";
 
-import { NavigationScreenProp } from "react-navigation";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
@@ -46,14 +46,15 @@ const Payment = styled.Image`
 
 interface props {
   navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
   nation: string;
-  paypal: boolean;
-  btc: boolean;
-  el: boolean;
-  eth: boolean;
+  paypal: string;
+  btc: string;
+  el: string;
+  eth: string;
 }
 
 export class Filter extends Component<props, state> {
@@ -61,23 +62,33 @@ export class Filter extends Component<props, state> {
     super(props);
     this.state = {
       nation: "",
-      paypal: false,
-      btc: false,
-      el: false,
-      eth: false,
+      paypal: "",
+      btc: "",
+      el: "",
+      eth: "",
     };
-    this.setNation = this.setNation.bind(this);
+    this.setFilter = this.setFilter.bind(this);
   }
 
-  setNation(text: string) {
+  setFilter(text: string) {
     this.state.nation != text
       ? this.setState({ nation: text })
       : this.setState({ nation: "" });
   }
 
   render() {
-    const { navigation } = this.props;
-
+    const { navigation, route } = this.props;
+    const { setPayments } = route.params;
+    const methods = [
+      this.state.paypal,
+      this.state.btc,
+      this.state.el,
+      this.state.eth,
+    ];
+    const filtered = methods.filter((method) => {
+      return method != "";
+    });
+    const methodsToSend = filtered.toString();
     return (
       <View style={{ backgroundColor: "#fff", height: "100%" }}>
         <BackButton handler={() => navigation.goBack()} />
@@ -89,12 +100,12 @@ export class Filter extends Component<props, state> {
           <ShortOptionButton
             title={i18n.t("product_label.korean")}
             check={this.state.nation === "korean" ? "checked" : ""}
-            handler={() => this.setNation("korean")}
+            handler={() => this.setFilter("korean")}
           />
           <ShortOptionButton
             title={i18n.t("product_label.foreigner")}
             check={this.state.nation === "foreigner" ? "checked" : ""}
-            handler={() => this.setNation("foreigner")}
+            handler={() => this.setFilter("foreigner")}
           />
         </View>
         <InputHeaderText>
@@ -109,26 +120,42 @@ export class Filter extends Component<props, state> {
           <PaymentButton
             child={<Payment source={PaypalGrayPng} />}
             checked_child={<Payment source={PaypalPng} />}
-            check={this.state.paypal}
-            handler={() => this.setState({ paypal: !this.state.paypal })}
+            check={this.state.paypal !== ""}
+            handler={() =>
+              this.setState({
+                paypal: this.state.paypal !== "paypal" ? "paypal" : "",
+              })
+            }
           />
           <PaymentButton
             child={<Payment source={ArchwayGrayPng} />}
             checked_child={<Payment source={ArchwayPng} />}
-            check={this.state.btc}
-            handler={() => this.setState({ btc: !this.state.btc })}
+            check={this.state.btc !== ""}
+            handler={() =>
+              this.setState({
+                btc: this.state.btc !== "btc" ? "btc" : "",
+              })
+            }
           />
           <PaymentButton
             child={<Payment source={ElysiaGrayPng} />}
             checked_child={<Payment source={ElysiaPng} />}
-            check={this.state.el}
-            handler={() => this.setState({ el: !this.state.el })}
+            check={this.state.el !== ""}
+            handler={() =>
+              this.setState({
+                el: this.state.el !== "el" ? "el" : "",
+              })
+            }
           />
           <PaymentButton
             child={<Payment source={EthereumGrayPng} />}
             checked_child={<Payment source={EthereumPng} />}
-            check={this.state.eth}
-            handler={() => this.setState({ eth: !this.state.eth })}
+            check={this.state.eth !== ""}
+            handler={() =>
+              this.setState({
+                eth: this.state.eth !== "eth" ? "eth" : "",
+              })
+            }
           />
         </View>
         <SubmitButton
@@ -137,22 +164,18 @@ export class Filter extends Component<props, state> {
           handler={() =>
             this.setState({
               nation: "",
-              paypal: false,
-              btc: false,
-              el: false,
-              eth: false,
+              paypal: "",
+              btc: "",
+              el: "",
+              eth: "",
             })
           }
         />
         <SubmitButton
           title={i18n.t("product_label.set_filter")}
           handler={() => {
-            //서버 요청 보낸 후
-            // const methods = ["paypal", "btc", "el", "eth"];
-            // const filtered = methods.filter(method => this.state. === true)
-            // console `${this.state.paypal && "paypal,"}`
-
-            navigation.navigate(ProductPage.MainList, {});
+            setPayments(methodsToSend);
+            navigation.navigate(ProductPage.MainList);
           }}
         />
       </View>

@@ -1,84 +1,18 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import styled from "styled-components/native";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/kyc";
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { InfoPage } from "../../enums/pageEnum";
+import { MainInfo } from "./MainInfo";
+import { MyPage } from "./Mypage";
 
-const H1Text = styled.Text`
-  color: #000;
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-align: left;
-  margin-top: 40px;
-  margin-left: 30px;
-`;
-const PText = styled.Text`
-  color: #626368;
-  margin-bottom: 12px;
-  font-size: 13px;
-  text-align: center;
-  margin-top: 20px;
-`;
+interface props {}
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+const Stack = createStackNavigator();
 
-interface state {}
-
-export class Info extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = {};
-  }
-
-  Email = Api.getEmail;
-
-  render() {
-    const { route, navigation } = this.props;
-    // const { email, password } = route.params;
-    return (
-      <View
-        style={{
-          width: "100%",
-          backgroundColor: "#fff",
-          height: "100%",
-          flex: 1,
-        }}
-      >
-        <View
-          style={{
-            width: "100%",
-            borderBottomColor: "#F6F6F8",
-            borderBottomWidth: 5,
-            height: "15%",
-          }}
-        ></View>
-        <View
-          style={{
-            flex: 1,
-            borderBottomColor: "#F6F6F8",
-            borderBottomWidth: 5,
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <SubmitButton
-            title={i18n.t("info_label.need_kyc")}
-            handler={() => navigation.navigate("Kyc")}
-          />
-          <SubmitButton
-            title={"로그아웃"}
-            handler={() => {
-              Api.logout();
-              navigation.navigate("Account");
-            }}
-          />
-        </View>
-      </View>
-    );
-  }
-}
+export const Info = () => {
+  return (
+    <Stack.Navigator initialRouteName={InfoPage.MainInfo} headerMode="none">
+      <Stack.Screen name={InfoPage.MainInfo} component={MainInfo} />
+      <Stack.Screen name={InfoPage.MyPage} component={MyPage} />
+    </Stack.Navigator>
+  );
+};

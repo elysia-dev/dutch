@@ -22,3 +22,8 @@ export enum AccountPage {
   ChangePassword = "ChangePassword",
   CertifyEmail = "CertifyEmail",
 }
+
+export enum InfoPage {
+  MainInfo = "MainInfo",
+  MyPage = "MyPage",
+}

@@ -109,6 +109,17 @@
     "return_on_sale": "매매차익"
   },
   "info_label": {
-    "need_kyc": "KYC 인증이 필요합니다."
+    "need_kyc": "KYC 인증이 필요합니다.",
+    "confirm": "확인하기",
+    "investment_history": "투자내역",
+    "transaction_history": "거래내역",
+    "progress_history": "진행내역",
+    "elysia": "엘리시아",
+    "notice": "공지사항",
+    "service_terms": "서비스 이용약관",
+    "contact": "문의하기",
+    "faq": "FAQ",
+    "my_account": "나의 계정",
+    "logout": "로그아웃"
   }
 }

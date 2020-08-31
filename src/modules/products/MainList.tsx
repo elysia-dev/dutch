@@ -15,7 +15,7 @@ import MailPng from "./images/mail.png";
 import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { NavigationScreenProp } from "react-navigation";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
 import Api from "../../api/product";
 import { Item } from "./Item";
@@ -67,6 +67,7 @@ const FilterButton: FunctionComponent<{ handler: () => void }> = ({
 
 interface props {
   navigation: NavigationScreenProp<any>;
+  route: NavigationRoute;
 }
 
 interface state {
@@ -82,32 +83,51 @@ export class MainList extends Component<props, state> {
     this.state = {
       return: false,
       popularity: false,
-      payments: "btc,el,eth,el",
+      payments: "paypal,btc,el,eth",
       productList: [],
     };
+    this.setPayments = this.setPayments.bind(this);
   }
 
-  componentDidMount() {
+  setPayments(input: string) {
+    this.setState({ payments: input });
+  }
+
+  callApi() {
     Api.products(
-      this.state.payments,
+      this.state.payments === "" ? "paypal,btc,el,eth" : this.state.payments,
       this.state.return ? "expectedAnnualReturn" : "createdAt"
     )
       .then((res) => {
         console.log(res);
         this.setState({ productList: res.data });
-        console.log(this.state.productList);
       })
       .catch((e) => {
         console.error(e);
       });
   }
 
+  componentDidMount() {
+    this.callApi();
+  }
+
+  componentDidUpdate(
+    _prevProps: object,
+    prevState: { return: boolean; payments: string }
+  ) {
+    if (
+      prevState.payments !== this.state.payments ||
+      prevState.return !== this.state.return
+    )
+      this.callApi();
+  }
+
   render() {
-    const { navigation } = this.props;
-    const listToShow = this.state.productList.map((product, index) => (
-      //   <Item annualReturn={product.data.financials.expectedAnnualReturn} />
+    const { navigation, route } = this.props;
+    const listToShow = this.state.productList.map((product, _index) => (
       <Item annualReturn={product.expectedAnnualReturn} />
     ));
+    console.log(this.state.payments);
     return (
       <View
         style={{
@@ -141,7 +161,11 @@ export class MainList extends Component<props, state> {
             }}
           >
             <FilterButton
-              handler={() => navigation.navigate(ProductPage.Filter)}
+              handler={() =>
+                navigation.navigate(ProductPage.Filter, {
+                  setPayments: this.setPayments,
+                })
+              }
             />
             <SortingButton
               title={i18n.t("product_label.sorting_return")}
@@ -151,19 +175,6 @@ export class MainList extends Component<props, state> {
                   return: !this.state.return,
                   popularity: false,
                 });
-                console.log(this.state.return);
-                Api.products(
-                  this.state.payments,
-                  this.state.return ? "createdAt" : "expectedAnnualReturn"
-                )
-                  .then((res) => {
-                    console.log(res);
-                    this.setState({ productList: res.data });
-                    console.log(this.state.productList);
-                  })
-                  .catch((e) => {
-                    console.error(e);
-                  });
               }}
             />
             <SortingButton
