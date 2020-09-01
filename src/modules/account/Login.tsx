@@ -7,7 +7,6 @@ import { FlatButton } from "../../shared/components/FlatButton";
 import { Modal } from "../../shared/components/Modal";
 import styled from "styled-components/native";
 import WarningImg from "./images/warning.png";
-import { withNavigation } from "react-navigation";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
@@ -57,16 +56,7 @@ export class Login extends Component<props, state> {
     this.setModalVisible = this.setModalVisible.bind(this);
     this.activateModal = this.activateModal.bind(this);
     this.storeToken = this.storeToken.bind(this);
-    this.storeEmail = this.storeEmail.bind(this);
   }
-
-  storeEmail = async (email: string) => {
-    try {
-      await AsyncStorage.setItem("@email", email);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   storeToken = async (token: string) => {
     try {
@@ -93,6 +83,64 @@ export class Login extends Component<props, state> {
     }
     return this.state.modalVisible;
   };
+
+  callRecoverApi() {
+    const { route, navigation } = this.props;
+    const { email, status } = route.params;
+    Api.certifyEmail_recover(email, "recoverPassword")
+      .then((res) =>
+        navigation.navigate(AccountPage.CertifyRecover, {
+          email: email,
+          verificationId: res.data.verificationId,
+          status: status,
+        })
+      )
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t("checking_account.invalid_email"));
+          return;
+        } else {
+          alert(i18n.t("checking_account.try_again_later"));
+        }
+      });
+  }
+
+  callLoginApi() {
+    const { route, navigation } = this.props;
+    const { email } = route.params;
+    if (this.state.password === "") {
+      alert(i18n.t("account_check.insert_password"));
+      return;
+    } else if (this.state.password.length < 8) {
+      alert(i18n.t("errors.messages.password_too_short"));
+      return;
+    } else {
+      Api.login(email, this.state.password)
+        .then(async (res) => {
+          console.log(res.data);
+          //token local storage 저장
+          if (res.data.status === "wrong") {
+            this.setState({ error: res.data.counts });
+          } else if (res.data.status === "locked") {
+            navigation.navigate(AccountPage.LockAccount, {
+              verificationId: res.data.verificationId,
+              email: email,
+            });
+          } else if (res.data.status === "success") {
+            await this.storeToken(res.data.token);
+            navigation.navigate("Main");
+          }
+        })
+        .catch((e) => {
+          this.setState({ error: e.response.data.counts });
+          if (e.response.status === 400) {
+            alert(i18n.t("account_check.insert_password"));
+          } else if (e.response.status === 404) {
+            alert(i18n.t("errors.messages.wrong_email"));
+          }
+        });
+    }
+  }
 
   render() {
     const { route, navigation } = this.props;
@@ -123,55 +171,16 @@ export class Login extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           value={email}
           edit={false}
-          eventHandler={() => { }}
+          eventHandler={() => {}}
           secure={false}
         />
         <SubmitButton
           title={i18n.t("account_label.login")}
-          handler={() => {
-            if (this.state.password === "") {
-              alert(i18n.t("account_check.insert_password"));
-            } else {
-              Api.login(email, this.state.password)
-                .then(async (res) => {
-                  //token local storage 저장
-                  if (res.data.status == "wrong") {
-                    this.setState({ error: res.data.counts });
-                  } else if (
-                    res.data.counts >= 5 ||
-                    res.data.status === "locked"
-                  ) {
-                    navigation.navigate(AccountPage.LockAccount, {
-                      verificationId: res.data.verificationId,
-                    });
-                  } else if (res.data.status === "success") {
-                    await this.storeToken(res.data.token);
-                    await this.storeEmail(email);
-                    navigation.navigate("Main", {
-                      email: email,
-                      password: this.state.password,
-                    });
-                  }
-                })
-                .catch((e) => {
-                  this.setState({ error: e.response.data.counts });
-                  if (e.response.status === 400) {
-                    alert(i18n.t("account_check.insert_password"));
-                  } else if (e.response.status === 404) {
-                    alert(i18n.t("errors.messages.wrong_email"));
-                  }
-                });
-              //locked처리 해야함
-            }
-          }}
+          handler={() => this.callLoginApi()}
         />
         <FlatButton
           title={i18n.t("account_check.forget_password_link")}
-          handler={() =>
-            Api.certifyEmail_recover(email, "Password")
-              .then()
-              .catch()
-          }
+          handler={() => this.callRecoverApi()}
         />
         {this.activateModal() == true && (
           <Modal

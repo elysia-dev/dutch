@@ -68,18 +68,7 @@ export class Signup extends Component<props, state> {
 
     this.nextStep = this.nextStep.bind(this);
     this.storeToken = this.storeToken.bind(this);
-    this.storeEmail = this.storeEmail.bind(this);
   }
-
-  storeEmail = async (email: string) => {
-    try {
-      await AsyncStorage.setItem("@email", email).then((res) =>
-        console.log("successfully stored")
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   nextStep(input: number) {
     console.log(this.state.step);
@@ -94,6 +83,27 @@ export class Signup extends Component<props, state> {
       console.error(e);
     }
   };
+
+  callSignupApi() {
+    const { route, navigation } = this.props;
+    const { verificationId, email } = route.params;
+    if (this.state.password != this.state.passwordConfirmation) {
+      alert(i18n.t("errors.messages.password_do_not_match"));
+    } else if (this.state.password.length < 8) {
+      alert(i18n.t("errors.messages.password_too_short"));
+    } else {
+      Api.signup(verificationId, this.state.password)
+        .then(async (res) => {
+          if (res.data.status === "success") {
+            await this.storeToken(res.data.token);
+            navigation.navigate("Main");
+          }
+        })
+        .catch((e) => {
+          alert(i18n.t("register.try_again_later"));
+        });
+    }
+  }
 
   render() {
     const { route, navigation } = this.props;
@@ -127,7 +137,7 @@ export class Signup extends Component<props, state> {
         {this.state.step == 2 && this.state.errorLength == 2 && (
           <PText>
             <WarningIcon source={WarningImg} />
-            <PText> 비밀번호가 일치하지 않습니다.</PText>
+            <PText> {i18n.t("errors.messages.password_do_not_match")}</PText>
           </PText>
         )}
         <TextInput
@@ -150,13 +160,13 @@ export class Signup extends Component<props, state> {
         {this.state.errorLength == 1 && (
           <PText>
             <WarningIcon source={WarningImg} resizeMode={"center"} />
-            <PText> 비밀번호는 8자 이상이어야 합니다 </PText>
+            <PText>{i18n.t("errors.messages.password_too_short")}</PText>
           </PText>
         )}
         {this.state.errorLength == 0 && this.state.errorReg == 1 && (
           <PText>
             <WarningIcon source={WarningImg} resizeMode={"center"} />
-            비밀번호는 영문, 숫자가 모두 포함되어야 합니다.
+            {i18n.t("errors.messages.simple_password")}
           </PText>
         )}
         <TextInput
@@ -171,6 +181,7 @@ export class Signup extends Component<props, state> {
             title={i18n.t("account_label.continue")}
             handler={() => {
               if (this.state.password.length < 8) {
+                alert(i18n.t("errors.messages.password_too_short"));
                 return;
               }
               this.nextStep(2);
@@ -179,25 +190,7 @@ export class Signup extends Component<props, state> {
         ) : (
           <SubmitButton
             title={i18n.t("account_label.signup")}
-            handler={() => {
-              if (this.state.password != this.state.passwordConfirmation) {
-                alert(i18n.t("errors.messages.password_do_not_match"));
-              } else if (this.state.password.length < 8) {
-                alert(i18n.t("errors.messages.password_too_short"));
-              } else {
-                Api.signup(verificationId, this.state.password)
-                  .then(async (res) => {
-                    if (res.data.status === "success") {
-                      await this.storeToken(res.data.token);
-                      await this.storeEmail(email);
-                      navigation.navigate("Main");
-                    }
-                  })
-                  .catch((e) => {
-                    alert(i18n.t("register.authentication_error"));
-                  });
-              }
-            }}
+            handler={() => this.callSignupApi()}
           />
         )}
       </SignupWrapper>

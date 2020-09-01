@@ -88,6 +88,26 @@ export class ConfirmID extends Component<props, state> {
     this.state = { modalVisible: false };
   }
 
+  // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
+  // callKycApi() {
+  //   const { route, navigation } = this.props;
+  //   const { id_type, idPhoto } = route.params;
+  //   Api.photoId(
+  //     idPhoto.base64,
+  //     id_type === "passport" ? "passport" : "government_id"
+  //   )
+  //     .then((res) => {
+  //       navigation.navigate(KycPage.TakeSelfieBefore, {
+  //         photoId_hash: res.data.filehash,
+  //         id_type: id_type,
+  //         photoId: idPhoto,
+  //       });
+  //     })
+  //     .catch((e) => {
+  //       alert(i18n.t("kyc.submit_error"));
+  //     });
+  // }
+
   render() {
     const { route, navigation } = this.props;
     const { id_type, idPhoto } = route.params;
@@ -113,24 +133,10 @@ export class ConfirmID extends Component<props, state> {
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
           handler={async () => {
-            // const token = this.getToken;
-            // Api.photoId(
-            //   idPhoto.base64,
-            //   id_type === "passport" ? "passport" : "government_id"
-            // )
-            //   .then((res) => {
             navigation.navigate(KycPage.TakeSelfieBefore, {
-              // photoId_hash: res.data.filehash,
               id_type: id_type,
               photoId: idPhoto,
             });
-            // })
-            // .catch((e) => {
-            //   console.error(e);
-            //   alert(
-            //     "아르고스 서버 통신 오류입니다. 담당자에게 문의 바랍니다."
-            //   );
-            // });
           }}
         />
       </ConfirmIdWrapper>

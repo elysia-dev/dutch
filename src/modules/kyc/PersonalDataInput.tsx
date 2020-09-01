@@ -42,6 +42,7 @@ const IdImg = styled.Image`
   align-content: center;
   left: 5%;
   position: relative;
+  elevation: 5;
 `;
 const ConfirmImg = styled.Image`
   width: 150px;
@@ -53,6 +54,7 @@ const PersonalDataInputWrapper = styled.SafeAreaView`
   background-color: #ffffff;
 `;
 const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
+  backgroundColor: "#fff",
   contentContainerStyle: {
     showsVerticalScrollIndicator: false,
   },
@@ -77,8 +79,8 @@ interface state {
   gender: string;
   firstName: string;
   lastName: string;
-  nationality?: string;
-  birthday?: string;
+  nationality: string;
+  birthday: string;
   modalVisible: boolean;
 }
 
@@ -112,17 +114,50 @@ export class PersonalDataInput extends Component<props, state> {
     this.setState({ birthday: input });
   }
 
-  render() {
+  callKycApi() {
     const { route, navigation } = this.props;
     const { selfie_hash, id_type, photoId_hash, photoId } = route.params;
+    if (this.state.gender === "") {
+      alert(i18n.t("kyc.alert_data"));
+      return;
+    } else if (this.state.firstName === "" || this.state.lastName === "") {
+      alert(i18n.t("kyc.alert_data"));
+      return;
+    } else if (this.state.birthday === "" || this.state.nationality === "") {
+      alert(i18n.t("kyc.alert_data"));
+      return;
+    } else {
+      Api.submission(
+        this.state.firstName,
+        this.state.lastName,
+        this.state.nationality,
+        this.state.birthday,
+        this.state.gender,
+        id_type === "passport" ? "passport" : "government_id",
+        photoId_hash,
+        selfie_hash
+      )
+        .then((res) => {
+          this.setModalVisible(true);
+        })
+        .catch((e) => {
+          alert(i18n.t("kyc.submit_error"));
+          navigation.navigate("Main", { screen: "Info" });
+        });
+    }
+  }
+
+  render() {
+    const { route, navigation } = this.props;
+    const { photoId } = route.params;
     return (
       <PersonalDataInputWrapper>
         <BackButton handler={() => navigation.goBack()} />
         <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
-        <IdImg source={{ uri: photoId.uri }} />
-        <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
         <ScrollViewWrapper>
+          <IdImg source={{ uri: photoId.uri }} />
+          <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
           <TextInput
             type={i18n.t("kyc_label.last_name")}
             value=""
@@ -177,27 +212,7 @@ export class PersonalDataInput extends Component<props, state> {
           </View>
           <SubmitButton
             title={i18n.t("kyc_label.complete_input")}
-            handler={() => {
-              if (this.state.gender === "") {
-                alert(i18n.t("kyc.alert_data"));
-              } else {
-                // Api.submission(
-                //   this.state.firstName,
-                //   this.state.lastName,
-                //   this.state.nationality,
-                //   this.state.birthday,
-                //   this.state.gender,
-                //   id_type === "passport" ? "passport" : "government_id",
-                //   photoId_hash,
-                //   selfie_hash
-                // )
-                //   .then((res) => {
-                this.setModalVisible(true);
-                navigation.navigate("Main");
-                // })
-                // .catch((e) => console.error(e));
-              }
-            }}
+            handler={() => this.setModalVisible(true)}
           />
           {this.state.modalVisible === true && (
             <Modal
@@ -211,13 +226,13 @@ export class PersonalDataInput extends Component<props, state> {
               visible={this.state.modalVisible}
               modalHandler={() => {
                 this.setModalVisible(false);
+                navigation.navigate("Main", { screen: "Info" });
               }}
-            // 다시 더보기 페이지로 돌아가게끔!
+              // 다시 더보기 페이지로 돌아가게끔!
             ></Modal>
           )}
         </ScrollViewWrapper>
       </PersonalDataInputWrapper>
-      // </ScrollView>
     );
   }
 }

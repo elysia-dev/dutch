@@ -34,9 +34,35 @@ export class InitializeEmail extends Component<props, state> {
     this.state = { email: "" };
   }
 
-  render() {
+  setEmail(input: string) {
+    this.setState({ email: input });
+  }
+
+  callEmailApi() {
+    if (!this.state.email) {
+      alert(i18n.t("checking_account.insert_account_email"));
+      return;
+    }
     const { navigation } = this.props;
 
+    Api.initializeEmail(this.state.email)
+      .then((res) => {
+        navigation.navigate(
+          res.data.status == "exist"
+            ? AccountPage.Login
+            : AccountPage.CertifySignup,
+          {
+            verificationId: res.data.verificationId,
+            email: this.state.email,
+          }
+        );
+      })
+      .catch((e) => {
+        alert(i18n.t("checking_account.try_again_later"));
+      });
+  }
+
+  render() {
     return (
       <InitializeEmailWrapper>
         <H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>
@@ -51,29 +77,7 @@ export class InitializeEmail extends Component<props, state> {
         />
         <SubmitButton
           title={i18n.t("account_label.continue")}
-          handler={() => {
-            if (!this.state.email) {
-              alert("이메일 입력해주세요");
-              return;
-            }
-
-            Api.initializeEmail(this.state.email)
-              .then((res) => {
-                navigation.navigate(
-                  res.data.status == "exist"
-                    ? AccountPage.Login
-                    : AccountPage.CertifyEmail,
-                  {
-                    verificationId: res.data.verificationId,
-                    status: res.data.status,
-                    email: this.state.email,
-                  }
-                );
-              })
-              .catch((e) => {
-                alert("5분 뒤에 다시 시도해주세요");
-              });
-          }}
+          handler={() => this.callEmailApi()}
         />
       </InitializeEmailWrapper>
     );

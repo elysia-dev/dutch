@@ -29,7 +29,7 @@ const InputTextForm = styled.TextInput`
 export class DateInput extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { birthday: "2020-01-01" };
+    this.state = { birthday: "" };
   }
 
   render() {

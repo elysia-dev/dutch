@@ -4,9 +4,9 @@ import { Account } from "../modules/account/Account";
 import { InitializeEmail } from "../modules/account/InitializeEmail";
 import { Signup } from "../modules/account/Signup";
 import { Login } from "../modules/account/Login";
-import { ChangePassword } from "../modules/account/ChangePassword";
+import { ChangePassword } from "../modules/account/RecoverPassword";
 import { LockAccount } from "../modules/account/LockAccount";
-import { CertifyEmail } from "../modules/account/components/CertifyEmail";
+import { CertifyEmail } from "../modules/account/CertifySignup";
 
 const Stack = createStackNavigator();
 

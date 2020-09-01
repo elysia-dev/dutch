@@ -99,7 +99,8 @@ export class TakeSelfie extends Component<props, state> {
         base64: true,
       });
       // setPath(`${photo.uri}`);
-      const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
+      // const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
+      // 웹에서 불가. 나중에 살리기
       // console.log(path);
       return selfie;
     }
@@ -140,7 +141,7 @@ export class TakeSelfie extends Component<props, state> {
                 top: 220,
               }}
             >
-              <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
+              <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
             </View>
             <BottomCameraWrapper>
               <BottomButtonWrapper>

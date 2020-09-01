@@ -57,6 +57,24 @@ export class ConfirmSelfie extends Component<props, state> {
     super(props);
   }
 
+  // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
+  // callKycApi() {
+  //   const { route, navigation } = this.props;
+  //   const { photoId_hash, selfie, id_type, photoId } = route.params;
+  //   Api.selfie(selfie.base64)
+  //     .then((res) => {
+  //       navigation.navigate(KycPage.PersonalDataInput, {
+  //         selfie_hash: res.data.filehash,
+  //         id_type: id_type,
+  //         photoId_hash: photoId_hash,
+  //         photoId: photoId,
+  //       });
+  //     })
+  //     .catch((e) => {
+  //       alert(i18n.t("kyc.submit_error"));
+  //     });
+  // }
+
   render() {
     const { route, navigation } = this.props;
     const { selfie, id_type, photoId } = route.params;

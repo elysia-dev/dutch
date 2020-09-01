@@ -7,6 +7,7 @@ import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import Api from "../../api/kyc";
 import { BackButton } from "../../shared/components/BackButton";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { AccountPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
   color: #000;
@@ -48,7 +49,9 @@ export class MyPage extends Component<props, state> {
         <TouchableOpacity
           onPress={() => {
             Api.logout;
-            navigation.navigate("Account");
+            navigation.navigate("Account", {
+              screen: AccountPage.InitializeEmail,
+            });
           }}
           style={{
             backgroundColor: "#E6ECF2",
@@ -62,6 +65,27 @@ export class MyPage extends Component<props, state> {
           }}
         >
           <PText>{i18n.t("info_label.logout")}</PText>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            Api.logout;
+            navigation.navigate("Account", {
+              screen: AccountPage.CurrentPassword,
+            });
+          }}
+          style={{
+            backgroundColor: "#E6ECF2",
+            borderRadius: 5,
+            width: 120,
+            height: 25,
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
+          <PText>{"비밀번호 변경(임시)"}</PText>
         </TouchableOpacity>
       </View>
     );

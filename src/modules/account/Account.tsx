@@ -5,10 +5,13 @@ import { InitializeEmail } from "./InitializeEmail";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { LockAccount } from "./LockAccount";
-import { ChangePassword } from "./ChangePassword";
-import { CertifyEmail } from "./components/CertifyEmail";
+import { CurrentPassword } from "./CurrentPassword";
+import { ResetPassword } from "./ResetPassword";
+import { RecoverPassword } from "./RecoverPassword";
+import { CertifySignup } from "./CertifySignup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountPage } from "../../enums/pageEnum";
+import { CertifyRecover } from "./CertifyRecover";
 
 interface props {}
 
@@ -40,12 +43,24 @@ export class Account extends Component<props, state> {
         <Stack.Screen name={AccountPage.Login} component={Login} />
         <Stack.Screen name={AccountPage.LockAccount} component={LockAccount} />
         <Stack.Screen
-          name={AccountPage.ChangePassword}
-          component={ChangePassword}
+          name={AccountPage.CurrentPassword}
+          component={CurrentPassword}
         />
         <Stack.Screen
-          name={AccountPage.CertifyEmail}
-          component={CertifyEmail}
+          name={AccountPage.ResetPassword}
+          component={ResetPassword}
+        />
+        <Stack.Screen
+          name={AccountPage.RecoverPassword}
+          component={RecoverPassword}
+        />
+        <Stack.Screen
+          name={AccountPage.CertifySignup}
+          component={CertifySignup}
+        />
+        <Stack.Screen
+          name={AccountPage.CertifyRecover}
+          component={CertifyRecover}
         />
       </Stack.Navigator>
     );

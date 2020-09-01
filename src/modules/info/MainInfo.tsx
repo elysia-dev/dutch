@@ -87,6 +87,7 @@ export class MainInfo extends Component<props, state> {
             title={i18n.t("info_label.need_kyc")}
             handler={() => navigation.navigate("Kyc")}
           />
+          {/* kyc 인증된 후 표시할 버튼 (혹은 뷰) 새로 만들기 */}
         </View>
         <View
           style={{

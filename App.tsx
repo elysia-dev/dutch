@@ -11,6 +11,7 @@ import { Kyc } from "./src/modules/kyc/Kyc";
 import { Info } from "./src/modules/info/Info";
 import { Products } from "./src/modules/products/Products";
 import { Account } from "./src/modules/account/Account";
+import { Dashboard } from "./src/modules/dashboard/Dashboard";
 
 import styled from "styled-components/native";
 
@@ -82,7 +83,7 @@ class App extends React.Component<any, AppState> {
       <NavigationContainer>
         <UserContext.Provider value={this.state}>
           {STORYBOOK_START && <StorybookUIRoot />}
-          <RootStack.Navigator initialRouteName={"Account"} headerMode="none">
+          <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
             <RootStack.Screen name={"Main"} component={TabNavigatior} />
             <RootStack.Screen name={"Account"} component={Account} />
             <RootStack.Screen name={"Kyc"} component={Kyc} />
@@ -98,10 +99,10 @@ const RootStack = createStackNavigator();
 
 const TabNavigatior = () => {
   return (
-    <Tab.Navigator initialRouteName="Product">
+    <Tab.Navigator initialRouteName="Dashboard">
       <Tab.Screen
-        name="Product12"
-        component={Products}
+        name="Dashboard"
+        component={Dashboard}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (

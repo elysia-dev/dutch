@@ -7,7 +7,9 @@ type InitializeResponse = {
   status: string;
 };
 
-type NoResponse = {};
+type ResetResponse = {
+  status: string;
+};
 
 type SignupResponse = {
   token: string;
@@ -55,7 +57,7 @@ export default class Api {
     email: string,
     password: string
   ): Promise<AxiosResponse<LoginResponse>> => {
-    return espressoClient.post("auth", { email: email, password: password });
+    return espressoClient.post("/auth", { email: email, password: password });
   };
 
   static signup = async (
@@ -84,7 +86,7 @@ export default class Api {
   ): Promise<AxiosResponse<VerificationResponse>> => {
     return espressoClient.post(`/verifications`, {
       email: email,
-      type: `Recover${recoverType}`,
+      type: recoverType,
     });
   };
 
@@ -93,28 +95,19 @@ export default class Api {
     password: string
   ): Promise<AxiosResponse<RecoverResponse>> => {
     return espressoClient.post(`/auth/recover`, {
-      verificationId: verificationId,
       password: password,
+      verificationId: verificationId,
     });
   };
 
-  resetPassword = async (
-    token: string,
+  static resetPassword = async (
     password: string,
-    passwordConfirmation: string
-  ): Promise<AxiosResponse<NoResponse>> => {
-    return espressoClient.put(
-      `/users`,
-      {
-        password: password,
-        passwordConfirmation: passwordConfirmation,
-      },
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    currentPassword: string
+  ): Promise<AxiosResponse<ResetResponse>> => {
+    return (await authenticatedEspressoClient()).put(`/users`, {
+      password: password,
+      currentPassword: currentPassword,
+    });
   };
 
   static me = async (): Promise<AxiosResponse<UserResponse>> => {

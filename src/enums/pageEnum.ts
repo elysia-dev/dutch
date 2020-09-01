@@ -19,11 +19,18 @@ export enum AccountPage {
   Signup = "Signup",
   Login = "Login",
   LockAccount = "LockAccount",
-  ChangePassword = "ChangePassword",
-  CertifyEmail = "CertifyEmail",
+  RecoverPassword = "RecoverPassword",
+  CurrentPassword = "CurrentPassword",
+  ResetPassword = "ResetPassword",
+  CertifySignup = "CertifySignup",
+  CertifyRecover = "CertifyRecover",
 }
 
 export enum InfoPage {
   MainInfo = "MainInfo",
   MyPage = "MyPage",
+}
+
+export enum DashboardPage {
+  Main = "Main",
 }
