@@ -1,6 +1,6 @@
 export enum KycStatus {
-    NONE = 'none',
-    PENDING = 'pending',
-    SUCCESS = 'success',
-    REJECTED = 'rejected'
+  NONE = "none",
+  PENDING = "pending",
+  SUCCESS = "success",
+  REJECTED = "rejected",
 }

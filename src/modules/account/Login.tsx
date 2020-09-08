@@ -12,6 +12,7 @@ import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import AsyncStorage from "@react-native-community/async-storage";
 import { AccountPage } from "../../enums/pageEnum";
+import { Dashboard } from "../dashboard/Dashboard";
 
 let lastError = 0;
 

@@ -17,8 +17,6 @@ import styled from "styled-components/native";
 
 import ChartPng from "./assets/chart.png";
 import ChartBlackPng from "./assets/chart_black.png";
-import ElysiaPng from "./assets/elysia.png";
-import ElysiaBlackPng from "./assets/elysia_black.png";
 import OptionsPng from "./assets/options.png";
 import OptionsBlackPng from "./assets/options_black.png";
 import SectionsPng from "./assets/sections.png";
@@ -29,6 +27,7 @@ import WalletBlackPng from "./assets/wallet_black.png";
 import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
 import Api from "./src/api/account";
+import { MainInfo } from "./src/modules/info/MainInfo";
 
 const STORYBOOK_START = false;
 
@@ -36,8 +35,6 @@ const Icon = styled.Image`
   width: 24px;
   height: 24px;
 `;
-
-//local storage에서 token 확인하는 로직
 
 interface AppState {
   signedIn: boolean;

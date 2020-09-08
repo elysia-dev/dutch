@@ -58,6 +58,7 @@ export class InitializeEmail extends Component<props, state> {
         );
       })
       .catch((e) => {
+        console.error(e);
         alert(i18n.t("checking_account.try_again_later"));
       });
   }

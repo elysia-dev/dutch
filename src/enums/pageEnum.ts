@@ -12,6 +12,7 @@ export enum KycPage {
 export enum ProductPage {
   MainList = "MainList",
   Filter = "Filter",
+  ProductInfo = "ProductInfo",
 }
 
 export enum AccountPage {
@@ -29,8 +30,12 @@ export enum AccountPage {
 export enum InfoPage {
   MainInfo = "MainInfo",
   MyPage = "MyPage",
+  InvestmentHistory = "InvestmentHistory",
+  TransactionHistory = "TransactionHistory",
 }
 
 export enum DashboardPage {
   Main = "Main",
+  TotalValue = "TotalValue",
+  AverageProfit = "AverageProfit",
 }

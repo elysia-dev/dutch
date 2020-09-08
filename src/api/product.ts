@@ -3,43 +3,6 @@ axios.defaults.baseURL = "http://localhost:3000";
 import AsyncStorage from "@react-native-community/async-storage";
 import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
 
-// type ProductResponse = {
-//   id: number;
-//   title: string;
-//   paymentMethods: [];
-//   data: {
-//     address: string;
-//     pricePerToken: number;
-//     images: [];
-//     financials: {
-//       expectedAnnualReturn: string;
-//       returnOnRent: string;
-//       returnOnSale: string;
-//       monthlyRentIncomeDistributionCycle: string;
-//       lockupPeriod: string;
-//       expectedSaleDate: string;
-//       propertyPriceUSD: string;
-//       propertyPriceKRW: string;
-//       netDepositUSD: string;
-//       netDepositKRW: string;
-//       netRentPerYearUSD: string;
-//       netRentPerYearKRW: string;
-//       bankLoan: string;
-//     };
-//   };
-//   propertyHighlightes: {
-//     propertyType: string;
-//     Ground: string;
-//     Underground: string;
-//     Bedroom: string;
-//     buldingCompletionDate: string;
-//     totalParkingAvailable: string;
-//     airConditioning: string;
-//     heating: string;
-//     securityFacilities: string;
-//   };
-// };
-
 type ProductResponse = {
   id: number;
   title: string;
@@ -51,7 +14,7 @@ type ProductResponse = {
   updatedAt: string;
   data: {
     address: string;
-    pricePerToken: number;
+    pricePerTokenUSD: number;
     images: [];
     financials: {
       expectedAnnualReturn: string;

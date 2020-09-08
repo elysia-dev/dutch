@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { KycStatus } from "../enums/status";
 import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
+import AsyncStorage from "@react-native-community/async-storage";
 
 type InitializeResponse = {
   verificationId: string;
@@ -112,5 +113,14 @@ export default class Api {
 
   static me = async (): Promise<AxiosResponse<UserResponse>> => {
     return (await authenticatedEspressoClient()).get("/auth/me");
+  };
+
+  static logout = async () => {
+    try {
+      await AsyncStorage.removeItem("@token");
+      return true;
+    } catch (exception) {
+      return false;
+    }
   };
 }

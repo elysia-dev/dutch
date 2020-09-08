@@ -1,24 +1,15 @@
 import React, { Component, FunctionComponent, Props } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  GestureResponderEvent,
-  ScrollView,
-} from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import MailPng from "./images/mail.png";
 import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
 import Api from "../../api/product";
-import { Item } from "./Item";
+import { Item } from "./components/Item";
+import { ProductInfo } from "./ProductInfo";
 
 const MailImg = styled.Image`
   width: 22px;
@@ -94,6 +85,8 @@ export class MainList extends Component<props, state> {
   }
 
   callApi() {
+    const { navigation, route } = this.props;
+
     Api.products(
       this.state.payments === "" ? "paypal,btc,el,eth" : this.state.payments,
       this.state.return ? "expectedAnnualReturn" : "createdAt"
@@ -101,9 +94,12 @@ export class MainList extends Component<props, state> {
       .then((res) => {
         console.log(res);
         this.setState({ productList: res.data });
+        console.log(this.state.productList);
       })
       .catch((e) => {
         console.error(e);
+        alert(i18n.t("checking_account.need_login"));
+        navigation.navigate("Account");
       });
   }
 
@@ -124,10 +120,17 @@ export class MainList extends Component<props, state> {
 
   render() {
     const { navigation, route } = this.props;
-    const listToShow = this.state.productList.map((product, _index) => (
-      <Item annualReturn={product.expectedAnnualReturn} />
+    const listToShow = this.state.productList.map((product, index) => (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(ProductPage.ProductInfo, {
+            product: this.state.productList[index],
+          })
+        }
+      >
+        <Item annualReturn={product.expectedAnnualReturn} />
+      </TouchableOpacity>
     ));
-    console.log(this.state.payments);
     return (
       <View
         style={{
@@ -189,8 +192,14 @@ export class MainList extends Component<props, state> {
             />
           </View>
         </View>
-        <View style={{ position: "relative", top: 180 }}>
-          <ScrollView>{listToShow}</ScrollView>
+        <View
+          style={{
+            position: "relative",
+            top: 155,
+            paddingBottom: 150,
+          }}
+        >
+          <ScrollView scrollEnabled={true}>{listToShow}</ScrollView>
         </View>
       </View>
     );

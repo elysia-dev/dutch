@@ -1,19 +1,17 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const baseURL = "http://localhost:3000";
+const baseURL = "http://172.30.1.42:3000";
 
 export const authenticatedEspressoClient = async () => {
-    const token = await AsyncStorage.getItem("@token");
+  const token = await AsyncStorage.getItem("@token");
 
-    return axios.create({
-        baseURL,
-        timeout: 1000,
-        headers: { 'authorization': token }
-    });
-}
+  return axios.create({
+    baseURL,
+    headers: { authorization: token },
+  });
+};
 
 export const espressoClient = axios.create({
-    baseURL,
-    timeout: 1000,
+  baseURL,
 });
