@@ -10,6 +10,7 @@ import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import AsyncStorage from "@react-native-community/async-storage";
+import { Dashboard } from "../dashboard/Dashboard";
 
 const SignupWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
@@ -86,7 +87,7 @@ export class Signup extends Component<props, state> {
 
   callSignupApi() {
     const { route, navigation } = this.props;
-    const { verificationId, email } = route.params;
+    const { verificationId } = route.params;
     if (this.state.password != this.state.passwordConfirmation) {
       alert(i18n.t("errors.messages.password_do_not_match"));
     } else if (this.state.password.length < 8) {

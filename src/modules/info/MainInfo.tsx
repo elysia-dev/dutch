@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/kyc";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { KycStatus } from "../../enums/status";
+import Api from "../../api/account";
 import { InfoPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
@@ -32,12 +39,33 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {}
+interface state {
+  email: string;
+  kyc: KycStatus;
+}
 
 export class MainInfo extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = {};
+    this.state = { email: "", kyc: KycStatus.NONE };
+  }
+
+  async componentDidMount() {
+    const { route, navigation } = this.props;
+
+    Api.me()
+      .then((res) => {
+        this.setState({
+          email: res.data.email,
+          kyc: res.data.kycStatus,
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          alert(i18n.t("checking_account.need_login"));
+          navigation.navigate("Account");
+        }
+      });
   }
 
   render() {
@@ -61,7 +89,7 @@ export class MainInfo extends Component<props, state> {
             // flexDirection: "row",
           }}
         >
-          <H1Text>{"email@email.com"}</H1Text>
+          <H1Text>{this.state.email}</H1Text>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(InfoPage.MyPage);
@@ -83,11 +111,26 @@ export class MainInfo extends Component<props, state> {
             alignContent: "center",
           }}
         >
-          <SubmitButton
-            title={i18n.t("info_label.need_kyc")}
-            handler={() => navigation.navigate("Kyc")}
-          />
-          {/* kyc 인증된 후 표시할 버튼 (혹은 뷰) 새로 만들기 */}
+          {this.state.kyc === KycStatus.NONE && (
+            <SubmitButton
+              title={i18n.t("info_label.need_kyc")}
+              handler={() => navigation.navigate("Kyc")}
+            />
+          )}
+          {this.state.kyc === KycStatus.PENDING && (
+            <SubmitButton
+              title={i18n.t("info_label.proceed_kyc")}
+              handler={() => {
+                alert(i18n.t("info.kyc_proceeding_wait"));
+              }}
+            />
+          )}
+          {this.state.kyc === KycStatus.SUCCESS && (
+            <SubmitButton
+              title={i18n.t("info_label.approved_kyc")}
+              handler={() => {}}
+            />
+          )}
         </View>
         <View
           style={{
@@ -101,9 +144,16 @@ export class MainInfo extends Component<props, state> {
           <View>
             <H1Text>{i18n.t("info_label.confirm")}</H1Text>
           </View>
-          <View style={{ flex: 1, flexDirection: "row" }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+            }}
+          >
             <PText>{i18n.t("info_label.investment_history")}</PText>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(InfoPage.InvestmentHistory)}
+            >
               <Image
                 source={require("../../../assets/next_gray.png")}
                 style={{ width: 5, height: 8, resizeMode: "center" }}
@@ -112,16 +162,9 @@ export class MainInfo extends Component<props, state> {
           </View>
           <View style={{ flex: 1, flexDirection: "row" }}>
             <PText>{i18n.t("info_label.transaction_history")}</PText>
-            <TouchableOpacity onPress={() => {}}>
-              <Image
-                source={require("../../../assets/next_gray.png")}
-                style={{ width: 5, height: 8, resizeMode: "center" }}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <PText>{i18n.t("info_label.progress_history")}</PText>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(InfoPage.TransactionHistory)}
+            >
               <Image
                 source={require("../../../assets/next_gray.png")}
                 style={{ width: 5, height: 8, resizeMode: "center" }}
@@ -131,7 +174,7 @@ export class MainInfo extends Component<props, state> {
         </View>
         <View
           style={{
-            flex: 1,
+            flex: 2,
             borderBottomColor: "#F6F6F8",
             borderBottomWidth: 5,
             justifyContent: "center",

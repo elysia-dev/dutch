@@ -2,7 +2,8 @@
   "checking_account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "try_again_later": "동일한 이메일의 인증 요청은 5분 뒤에 가능해요.",
-    "invalid_email": "올바르지 않은 이메일 형식이에요."
+    "invalid_email": "올바르지 않은 이메일 형식이에요.",
+    "need_login": "로그인되지 않았습니다. 로그인을 진행해주세요."
   },
   "register": {
     "authentication_signup": "메일을 인증해주세요",
@@ -107,6 +108,47 @@
   "product": {
     "filter_text": "어떻게 필터링 해드릴까요."
   },
+  "product_financial": {
+    "expected_annual_return": "예상 연 수익률",
+    "return_rent": "월세",
+    "return_sale": "매각수익률",
+    "rent_distribution": "월세분배일",
+    "lockup_period": "Lockup Period",
+    "expected_sale_date": "Expected Sale Date",
+    "price_USD": "Price(USD)",
+    "price_KRW": "Price(KRW)",
+    "net_deposit_USD": "Net Deposit(USD)",
+    "net_deposit_KRW": "Net Deposit(KRW)",
+    "net_rent_year_USD": "Net Rent per year(USD)",
+    "net_rent_year_KRW": "Net Rent per year(KRW)",
+    "bankloan": "",
+    "Daily": "매일",
+    "1 week": "1주",
+    "3 year later": "3년 후"
+  },
+  "product_highlight": {
+    "type": "분류",
+    "ground": "지상 층수",
+    "underground": "지하 층수",
+    "bedroom": "침실",
+    "completion_date": "건물 완공일",
+    "total_parking_available": "주차 가능 차량 수",
+    "air_conditioning": "냉방",
+    "heating": "난방",
+    "security_facilities": "보안시설",
+    "Residential Multiplex": "주거용 다세대 빌라",
+    "Residential Villa (24-Unit Multifamaily)": "주거용 빌라 (24unit)",
+    "4th floor": "지상 4층",
+    "5th floor": "지상 5층",
+    "B1 floor": "지하 1층",
+    "33 Unit Multifamily": "다세대 (33unit)",
+    "18 Unit Multifamily": "다세대 (18unit)",
+    "22 Unit Multifamily": "다세대 (22unit)",
+    "1 bedroom 2 bathroom": "1침실 2욕실",
+    "Wall Air Conditioning": "벽면 냉방",
+    "Individual heating / city gas": "개별 난방/도시가스",
+    "Security window, video phone, interphone, card key, door security, CCTV": "방범창, 비디오 폰, 인터폰, 카드키, 도어락, CCTV"
+  },
   "product_label": {
     "select_nationality": "국가 선택",
     "select_payment": "결제수단 선택",
@@ -119,10 +161,29 @@
     "filter": "필터",
     "expected_annual_return": "연 %{return}%",
     "return_on_rent": "월세",
-    "return_on_sale": "매매차익"
+    "return_on_sale": "매매차익",
+    "expected_annual_rate": "예상 연수익률",
+    "rent_distribution": "월세 분배일",
+    "price_per_token": "토큰당 가격",
+    "return_method": "지급수단",
+    "return_calculator": "예상 수익률 계산기",
+    "investment": "투자금",
+    "expected_return": "예상 수익금",
+    "more_info": "자세히",
+    "invest_now": "지금 투자하기",
+    "address": "주소",
+    "location": "위치",
+    "property_info": "부동산 정보",
+    "property_video": "부동산 실영상",
+    "financials": "재무정보",
+    "property_highlightes": "부동산 핵심정보",
+    "product_info": "상품 정보",
+    "abstract": "요약"
   },
   "info_label": {
     "need_kyc": "KYC 인증이 필요합니다.",
+    "proceed_kyc": "KYC 인증이 진행중입니다.",
+    "approved_kyc": "KYC 인증이 완료되었습니다.",
     "confirm": "확인하기",
     "investment_history": "투자내역",
     "transaction_history": "거래내역",
@@ -133,6 +194,43 @@
     "contact": "문의하기",
     "faq": "FAQ",
     "my_account": "나의 계정",
-    "logout": "로그아웃"
+    "my_info": "나의 정보",
+    "logout": "로그아웃",
+    "name": "이름",
+    "gender": "성별",
+    "nationality": "국가",
+    "signout": "회원탈퇴",
+    "my_inv_history": "나의 투자내역",
+    "product_name": "상품명",
+    "entire_profit": "전체 수익률",
+    "expectd_sale_profit": "예상 매각수익률",
+    "transaction_term": "거래기간",
+    "transaction_log": "입출금 기록",
+    "transaction_method": "사용수단",
+    "all": "전체",
+    "deposit": "입금",
+    "withdraw": "출금"
+  },
+  "info": {
+    "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요."
+  },
+  "dashboard_label": {
+    "total_value": "총 자산가치",
+    "average_profit": "총 평균수익률",
+    "rent_rate": "월세 수익률",
+    "monthly_profit": "이번달 수익",
+    "expected_sale_rate": "매매 예상수익률",
+    "my_investment": "내 투자 현황",
+    "product_name": "상품명",
+    "total_profit": "전체 수익률",
+    "expected_sale_profit": "예상 매각 수익",
+    "property_value": "부동산가치",
+    "usd": "보유 USD",
+    "el": "보유 EL",
+    "more_history": "더보기"
+  },
+  "dashboard": {
+    "total_value_desc": "부동산가치 + 보유 USD + 보유 EL (세금, 수수료 제외)",
+    "average_profit_desc": "월세 수익률 + 이번달 수익 + 매매 예상수익률"
   }
 }
