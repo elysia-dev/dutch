@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, SafeAreaView } from "react-native";
+import { Text, SafeAreaView, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
@@ -9,6 +9,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
 
 const InitializeEmailWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
   height: 100%;
   background-color: #fff;
 `;
@@ -26,12 +27,24 @@ interface props {
 
 interface state {
   email: string;
+  errorLength: number;
+  errorReg: number;
 }
+
+const CheckMailForm = function(input1: string) {
+  // 이메일 주소 검증 정규표현식입니다.
+  var regMail = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+  return !regMail.test(input1) ? false : true;
+};
 
 export class InitializeEmail extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { email: "" };
+    this.state = {
+      email: "",
+      errorLength: 1, // 처음은 TextInput이 null이기 때문에 없음을 가정
+      errorReg: 0,
+    };
   }
 
   setEmail(input: string) {
@@ -70,15 +83,36 @@ export class InitializeEmail extends Component<props, state> {
           type={i18n.t("account_label.account_email")}
           value={""}
           eventHandler={(input: string) => {
-            this.setState({ email: input });
+            this.setState({
+              email: input,
+              errorLength: input.length == 0 ? 1 : 0,
+              errorReg: CheckMailForm(input) ? 0 : 1,
+            });
           }}
           edit={true}
           secure={false}
+          autocapitalize={"none"}
         />
-        <SubmitButton
-          title={i18n.t("account_label.continue")}
-          handler={() => this.callEmailApi()}
-        />
+        {this.state.errorLength == 1 && (
+          <SubmitButton
+            title={"이메일을 입력해주세요"}
+            handler={() => {}}
+            ButtonTheme={"GrayTheme"}
+          />
+        )}
+        {this.state.errorLength == 0 && this.state.errorReg == 1 && (
+          <SubmitButton
+            title={"이메일 주소를 확인해주세요"}
+            handler={() => {}}
+            ButtonTheme={"GrayTheme"}
+          />
+        )}
+        {this.state.errorLength == 0 && this.state.errorReg == 0 && (
+          <SubmitButton
+            title={i18n.t("account_label.continue")}
+            handler={() => this.callEmailApi()}
+          />
+        )}
       </InitializeEmailWrapper>
     );
   }

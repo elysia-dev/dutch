@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
@@ -10,14 +10,14 @@ import Api from "../../api/account";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
 
-const LockAccountImg = styled.Image`
-  width: 209px;
-  height: 198px;
-  margin: 25px auto;
-`;
 const LockAccountWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
   height: 100%;
   background-color: #fff;
+`;
+const LockAccountImg = styled.Image`
+  width: 209px;
+  margin: 20px auto 5px auto;
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -27,14 +27,32 @@ const H1Text = styled.Text`
   font-weight: bold;
 `;
 const PText = styled.Text`
-  font-size: 12px;
+  font-size: 13px;
   color: #626368;
   text-align: left;
-  margin: 5px auto 32px auto;
+  margin: 5px auto 16px auto;
   width: 90%;
 `;
-const LockAccountTextInput = styled.TextInput`
-  margin-top: 30px;
+const ButtonWrapper = styled.View`
+  flex-direction: row-reverse;
+  width: 90%;
+  margin: 0 auto;
+`;
+const FlatButtonWrapper = styled.View`
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #36a1ff;
+  color: #1c1c1c;
+  width: 120px;
+  height: 29px;
+`;
+const ExpTimeText = styled.Text`
+  color: #1c1c1c;
+  font-size: 13px;
+  margin-right: 2%;
+  margin-bottom: 42px;
+  line-height: 28px;
 `;
 
 interface props {
@@ -115,12 +133,21 @@ export class LockAccount extends Component<props, state> {
           edit={true}
           eventHandler={this.setCode}
           secure={false}
+          autoFocus={true}
         />
-        <Text>{i18n.t("lock_account.resending_code_mail_label")}</Text>
-        <FlatButton
-          handler={() => this.callResendApi()}
-          title={i18n.t("account_label.resend_2")}
-        />
+
+        <ButtonWrapper>
+          <FlatButtonWrapper>
+            <FlatButton
+              handler={() => this.callResendApi()}
+              title={i18n.t("account_label.resend_2")}
+            />
+          </FlatButtonWrapper>
+          <ExpTimeText>
+            {i18n.t("lock_account.resending_code_mail_label")}
+          </ExpTimeText>
+        </ButtonWrapper>
+
         <SubmitButton
           title={i18n.t("account_label.certify")}
           handler={() => this.callCertifyApi()}

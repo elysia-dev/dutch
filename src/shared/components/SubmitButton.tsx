@@ -25,16 +25,25 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
       case "WhiteTheme":
         return "border: 1px solid #3679B5; background-color: #FFFFFF;";
       case "GrayTheme":
-        return "border: 1px solid #FFFFFF; background-color: #AAAAAA;";
+        return "border: 0px solid #FFFFFF; background-color: #AAAAAA;";
       default:
-        return "border: 1px solid #FFFFFF; background-color: #2c6190;";
+        return "border: 0px solid #FFFFFF; background-color: #2c6190;";
+    }
+  };
+  const handleThemeWrapperType = (BtnTheme) => {
+    switch (BtnTheme) {
+      case "WithFlat":
+        return "margin-bottom: 5px;";
+      case "WhiteTheme":
+        return "margin-bottom: 25px;";
+      default:
+        return "margin-bottom: 36px;";
     }
   };
   const WhiteBtnWrapper = styled.View`
     flex: ${(props) => (props.BtnTheme == "WhiteTheme" ? "4" : "1")};
     justify-content: flex-end;
-    margin-bottom: ${(props) =>
-      props.BtnTheme == "WhiteTheme" ? "25px" : "36px"};
+    ${({ BtnTheme }) => handleThemeWrapperType(BtnTheme)};
   `;
   const WhiteBtn = styled.TouchableOpacity`
     width: 90%;

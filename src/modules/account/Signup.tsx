@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -12,6 +12,7 @@ import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import AsyncStorage from "@react-native-community/async-storage";
 
 const SignupWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
   height: 100%;
   background-color: #fff;
 `;
@@ -25,9 +26,8 @@ const H1Text = styled.Text`
 const WarningIcon = styled.Image`
   width: 12px;
   height: 12px;
-  margin: 0px 5px;
   top: 1px;
-  position: absolute;
+  flex: 1;
 `;
 const PText = styled.Text`
   font-size: 12px;
@@ -136,8 +136,8 @@ export class Signup extends Component<props, state> {
         )}
         {this.state.step == 2 && this.state.errorLength == 2 && (
           <PText>
-            <WarningIcon source={WarningImg} />
-            <PText> {i18n.t("errors.messages.password_do_not_match")}</PText>
+            <WarningIcon source={WarningImg} />{" "}
+            <PText>{i18n.t("errors.messages.password_do_not_match")}</PText>
           </PText>
         )}
         <TextInput
@@ -159,13 +159,13 @@ export class Signup extends Component<props, state> {
         />
         {this.state.errorLength == 1 && (
           <PText>
-            <WarningIcon source={WarningImg} resizeMode={"center"} />
+            <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
             <PText>{i18n.t("errors.messages.password_too_short")}</PText>
           </PText>
         )}
         {this.state.errorLength == 0 && this.state.errorReg == 1 && (
           <PText>
-            <WarningIcon source={WarningImg} resizeMode={"center"} />
+            <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
             {i18n.t("errors.messages.simple_password")}
           </PText>
         )}
