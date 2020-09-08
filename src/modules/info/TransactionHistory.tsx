@@ -135,7 +135,7 @@ export class TransactionHistory extends Component<props, state> {
         <H1Text>{i18n.t("info_label.transaction_history")}</H1Text>
         <PText>{i18n.t("info_label.transaction_term")}</PText>
         <View style={{ marginBottom: 15 }}>
-          <DateInput eventHandler={() => {}} birthday={""} />
+          <DateInput eventHandler={() => {}} />
         </View>
         <PText>{i18n.t("info_label.transaction_log")}</PText>
 

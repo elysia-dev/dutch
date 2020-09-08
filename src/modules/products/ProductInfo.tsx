@@ -205,7 +205,7 @@ export class ProductInfo extends Component<props, state> {
                 sliderHandler={this.setInvestment}
               />
               {/* web에서 테스트하려면 Map 주석처리해야함!! */}
-              <Map product={product} />
+              {/* <Map product={product} /> */}
               <WrappedInfo product={product} />
             </View>
           </ScrollView>
