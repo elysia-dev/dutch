@@ -20,7 +20,6 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   handler,
   ButtonTheme,
 }) => {
-<<<<<<< HEAD
   const handleThemeType = (BtnTheme) => {
     switch (BtnTheme) {
       case "WhiteTheme":
@@ -45,13 +44,6 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
     flex: ${(props) => (props.BtnTheme == "WhiteTheme" ? "4" : "1")};
     justify-content: flex-end;
     ${({ BtnTheme }) => handleThemeWrapperType(BtnTheme)};
-=======
-  const WhiteBtnWrapper = styled.View`
-    flex: ${(props) => (props.BtnTheme == "WhiteTheme" ? "4" : "1")};
-    justify-content: flex-end;
-    margin-bottom: ${(props) =>
-      props.BtnTheme == "WhiteTheme" ? "25px" : "36px"};
->>>>>>> origin/master
   `;
   const WhiteBtn = styled.TouchableOpacity`
     width: 90%;
@@ -62,14 +54,7 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
     position: absolute;
     bottom: 0;
 
-<<<<<<< HEAD
     ${({ BtnTheme }) => handleThemeType(BtnTheme)};
-=======
-    border: 1px solid
-      ${(props) => (props.BtnTheme == "WhiteTheme" ? "#3679B5" : "#FFFFFF")};
-    background-color: ${(props) =>
-      props.BtnTheme == "WhiteTheme" ? "#FFFFFF" : "#2c6190"};
->>>>>>> origin/master
   `;
   const WhiteBtnText = styled.Text`
     font-size: 14px;

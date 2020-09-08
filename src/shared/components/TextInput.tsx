@@ -28,10 +28,6 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-<<<<<<< HEAD
-=======
-  border-bottom-color: #a7a7a7;
->>>>>>> origin/master
 `;
 export const TextInput: FunctionComponent<props> = (
   props,
