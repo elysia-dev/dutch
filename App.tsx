@@ -6,6 +6,7 @@ import StorybookUIRoot from "./storybook/index";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { Kyc } from "./src/modules/kyc/Kyc";
 import { Info } from "./src/modules/info/Info";
@@ -27,7 +28,6 @@ import WalletBlackPng from "./assets/wallet_black.png";
 import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
 import Api from "./src/api/account";
-import { MainInfo } from "./src/modules/info/MainInfo";
 
 const STORYBOOK_START = false;
 
@@ -43,6 +43,7 @@ interface AppState {
     firstName: string;
     lastName: string;
     kycStatus: KycStatus;
+    gender: string;
   };
 }
 
@@ -52,6 +53,7 @@ const defaultState = {
     email: "",
     firstName: "",
     lastName: "",
+    gender: "",
     kycStatus: KycStatus.NONE,
   },
 };
@@ -63,7 +65,11 @@ class App extends React.Component<any, AppState> {
   }
 
   async componentDidMount() {
-    Api.me()
+    await this.signIn();
+  }
+
+  signIn = async () => {
+    await Api.me()
       .then((res) => {
         this.setState({
           signedIn: true,
@@ -75,18 +81,38 @@ class App extends React.Component<any, AppState> {
       });
   }
 
+  signOut = async () => {
+    await AsyncStorage.removeItem("@token");
+    this.setState(defaultState);
+  }
+
   render() {
     return (
       <NavigationContainer>
-        <UserContext.Provider value={this.state}>
+        <UserContext.Provider
+          value={{
+            ...this.state,
+            signIn: this.signIn,
+            signOut: this.signOut
+          }}
+        >
           {STORYBOOK_START && <StorybookUIRoot />}
-          <RootStack.Navigator initialRouteName={"Main"} headerMode="none">
-            <RootStack.Screen name={"Main"} component={TabNavigatior} />
-            <RootStack.Screen name={"Account"} component={Account} />
-            <RootStack.Screen name={"Kyc"} component={Kyc} />
+          <RootStack.Navigator headerMode="none">
+            {
+              this.state.signedIn ? (
+                <>
+                  <RootStack.Screen name={"Main"} component={TabNavigatior} />
+                  <RootStack.Screen name={"Kyc"} component={Kyc} />
+                </>
+              ) : (
+                  <>
+                    <RootStack.Screen name={"Account"} component={Account} />
+                  </>
+                )
+            }
           </RootStack.Navigator>
         </UserContext.Provider>
-      </NavigationContainer>
+      </NavigationContainer >
     );
   }
 }
