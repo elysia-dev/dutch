@@ -1,9 +1,8 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { InitializeEmail } from "./InitializeEmail";
-import { Signup } from "./Signup";
-import { Login } from "./Login";
+import Signup from "./Signup";
+import Login from "./Login";
 import { LockAccount } from "./LockAccount";
 import { CurrentPassword } from "./CurrentPassword";
 import { ResetPassword } from "./ResetPassword";
@@ -13,12 +12,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AccountPage } from "../../enums/pageEnum";
 import { CertifyRecover } from "./CertifyRecover";
 
-interface props {}
-
-interface state {}
-
-export class Account extends Component<props, state> {
-  constructor(props: props) {
+export class Account extends Component<{}, {}> {
+  constructor(props: {}) {
     super(props);
     this.state = {};
   }

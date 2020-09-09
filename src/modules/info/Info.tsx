@@ -2,11 +2,9 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { InfoPage } from "../../enums/pageEnum";
 import { MainInfo } from "./MainInfo";
-import { MyPage } from "./Mypage";
+import MyPage from "./Mypage";
 import { InvestmentHistory } from "./InvestmentHistory";
 import { TransactionHistory } from "./TransactionHistory";
-
-interface props {}
 
 const Stack = createStackNavigator();
 

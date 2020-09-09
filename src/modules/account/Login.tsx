@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { FunctionComponent, useContext, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
@@ -9,10 +9,10 @@ import styled from "styled-components/native";
 import WarningImg from "./images/warning.png";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from "@react-native-community/async-storage";
 import { AccountPage } from "../../enums/pageEnum";
-import { Dashboard } from "../dashboard/Dashboard";
+import UserContext from "../../contexts/UserContext";
 
 let lastError = 0;
 
@@ -39,59 +39,41 @@ const Warning = styled.Image`
   height: 60px;
 `;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
-
-interface state {
-  modalVisible: boolean;
-  error: number;
-  password: string;
-}
-
-export class Login extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = { modalVisible: false, error: 0, password: "" };
-    this.setModalVisible = this.setModalVisible.bind(this);
-    this.activateModal = this.activateModal.bind(this);
-    this.storeToken = this.storeToken.bind(this);
+type ParamList = {
+  Login: {
+    email: string;
   }
+};
 
-  storeToken = async (token: string) => {
-    try {
-      await AsyncStorage.setItem("@token", token);
-    } catch (e) {
-      console.error(e);
+const Login: FunctionComponent = () => {
+  const [state, setState] = useState({ modalVisible: false, error: 0, password: "" });
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, 'Login'>>();
+  const { signIn } = useContext(UserContext);
+
+  const storeToken = async (token: string) => {
+    await AsyncStorage.setItem("@token", token);
+  };
+
+  const setModalVisible = () => {
+    setState({ ...state, modalVisible: !state.modalVisible });
+  };
+
+  const activateModal = () => {
+    if (state.error == 0) {
+      return state.modalVisible;
+    } else if (state.error != lastError) {
+      lastError = state.error;
+      setState({ ...state, modalVisible: true });
     }
+    return state.modalVisible;
   };
 
-  setModalVisible = () => {
-    this.setState({ modalVisible: !this.state.modalVisible });
-    console.log(this.state.modalVisible);
-  };
-
-  activateModal = () => {
-    if (this.state.error == 0) {
-      return this.state.modalVisible;
-    } else if (this.state.error != lastError) {
-      console.log(`lastError: ${lastError}`);
-      console.log(`this.props.error: ${this.state.error}`);
-      lastError = this.state.error;
-      this.setState({ modalVisible: true });
-      console.log(`finally: ${lastError}`);
-    }
-    return this.state.modalVisible;
-  };
-
-  callRecoverApi() {
-    const { route, navigation } = this.props;
-    const { email, status } = route.params;
-    Api.certifyEmail_recover(email, "recoverPassword")
+  const callRecoverApi = () => {
+    Api.certifyEmail_recover(route.params.email, "recoverPassword")
       .then((res) =>
         navigation.navigate(AccountPage.CertifyRecover, {
-          email: email,
+          email: route.params.email,
           verificationId: res.data.verificationId,
           status: status,
         })
@@ -106,34 +88,32 @@ export class Login extends Component<props, state> {
       });
   }
 
-  callLoginApi() {
-    const { route, navigation } = this.props;
-    const { email } = route.params;
-    if (this.state.password === "") {
+  const callLoginApi = () => {
+    if (state.password === "") {
       alert(i18n.t("account_check.insert_password"));
       return;
-    } else if (this.state.password.length < 8) {
+    } else if (state.password.length < 8) {
       alert(i18n.t("errors.messages.password_too_short"));
       return;
     } else {
-      Api.login(email, this.state.password)
+      Api.login(route.params.email, state.password)
         .then(async (res) => {
           console.log(res.data);
           //token local storage 저장
           if (res.data.status === "wrong") {
-            this.setState({ error: res.data.counts });
+            setState({ ...state, error: res.data.counts });
           } else if (res.data.status === "locked") {
             navigation.navigate(AccountPage.LockAccount, {
               verificationId: res.data.verificationId,
-              email: email,
+              email: route.params.email,
             });
           } else if (res.data.status === "success") {
-            await this.storeToken(res.data.token);
-            navigation.navigate("Main");
+            await storeToken(res.data.token);
+            await signIn();
           }
         })
         .catch((e) => {
-          this.setState({ error: e.response.data.counts });
+          setState({ ...state, error: e.response.data.counts });
           if (e.response.status === 400) {
             alert(i18n.t("account_check.insert_password"));
           } else if (e.response.status === 404) {
@@ -143,66 +123,64 @@ export class Login extends Component<props, state> {
     }
   }
 
-  render() {
-    const { route, navigation } = this.props;
-    const { email } = route.params;
-    return (
-      <LoginWrapper>
-        <BackButton
-          handler={() => {
-            navigation.goBack();
-          }}
-        />
-        <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
-        <TextInput
-          type={i18n.t("account_label.account_password")}
-          value={""}
-          edit={true}
-          eventHandler={(input: string) => this.setState({ password: input })}
-          secure={true}
-        />
-        {this.state.error > 0 && (
-          <Text>
-            {i18n.t("errors.messages.password_do_not_match")} (
-            {this.state.error}
+  return (
+    <LoginWrapper>
+      <BackButton
+        handler={() => {
+          navigation.goBack();
+        }}
+      />
+      <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
+      <TextInput
+        type={i18n.t("account_label.account_password")}
+        value={""}
+        edit={true}
+        eventHandler={(input: string) => setState({ ...state, password: input })}
+        secure={true}
+      />
+      {state.error > 0 && (
+        <Text>
+          {i18n.t("errors.messages.password_do_not_match")} (
+          {state.error}
             /5)
-          </Text>
-        )}
-        <TextInput
-          type={i18n.t("account_label.account_email")}
-          value={email}
-          edit={false}
-          eventHandler={() => {}}
-          secure={false}
-        />
-        <SubmitButton
-          title={i18n.t("account_label.login")}
-          handler={() => this.callLoginApi()}
-        />
-        <FlatButton
-          title={i18n.t("account_check.forget_password_link")}
-          handler={() => this.callRecoverApi()}
-        />
-        {this.activateModal() == true && (
-          <Modal
-            child={
-              <View>
-                <Warning source={WarningImg} />
-                <H1Text>
-                  {i18n.t("errors.messages.password_do_not_match")}
-                </H1Text>
-                <PText>
-                  {i18n.t("errors.messages.incorrect_password_warning")}
-                </PText>
-                <Text>({this.state.error}/5)</Text>
-              </View>
-            }
-            modalHandler={this.setModalVisible}
-            visible={this.state.modalVisible}
-          ></Modal>
-        )}
-      </LoginWrapper>
-    );
-  }
+        </Text>
+      )}
+      <TextInput
+        type={i18n.t("account_label.account_email")}
+        value={route.params.email}
+        edit={false}
+        eventHandler={() => { }}
+        secure={false}
+      />
+      <SubmitButton
+        title={i18n.t("account_label.login")}
+        handler={() => callLoginApi()}
+      />
+      <FlatButton
+        title={i18n.t("account_check.forget_password_link")}
+        handler={() => callRecoverApi()}
+      />
+      {activateModal() == true && (
+        <Modal
+          child={
+            <View>
+              <Warning source={WarningImg} />
+              <H1Text>
+                {i18n.t("errors.messages.password_do_not_match")}
+              </H1Text>
+              <PText>
+                {i18n.t("errors.messages.incorrect_password_warning")}
+              </PText>
+              <Text>({state.error}/5)</Text>
+            </View>
+          }
+          modalHandler={setModalVisible}
+          visible={state.modalVisible}
+        ></Modal>
+      )}
+    </LoginWrapper>
+  );
 }
 const styles = StyleSheet.create({});
+
+export default Login
