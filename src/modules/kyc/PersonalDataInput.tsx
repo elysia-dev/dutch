@@ -56,6 +56,7 @@ const PersonalDataInputWrapper = styled.SafeAreaView`
 const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
   backgroundColor: "#fff",
   contentContainerStyle: {
+    showsHorizontalScrollIndicator: false,
     showsVerticalScrollIndicator: false,
   },
 }))`

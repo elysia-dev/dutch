@@ -57,7 +57,7 @@ export const TextInput: FunctionComponent<props> = (
         maxLength={30}
         autoCapitalize={autocapitalize}
         // minLength={8}
-        onChange={() => setFocus(true)}
+        onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
       />
     </View>

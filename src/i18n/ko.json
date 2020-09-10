@@ -63,6 +63,7 @@
   "kyc_label": {
     "argos_terms": "아르고스 약관보기",
     "agree_start": "동의하고 시작하기",
+    "camera_access_return": "돌아가기",
     "shoot": "촬영하기",
     "passport": "여권",
     "drivers_license": "운전면허증",
@@ -103,7 +104,9 @@
     "kyc_submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요.",
     "alert_id": "신분증을 선택해주세요.",
     "alert_data": "개인정보를 모두 입력해주세요.",
-    "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요."
+    "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요.",
+    "camera_access_denied": "카메라 접근을 허용해주세요!",
+    "camera_access_denied_text": "KYC 인증단계에서 셀피촬영이 필요해요.\n카메라 접근을 허용해주시면, KYC 인증을 계속 진행할게요."
   },
   "product": {
     "filter_text": "어떻게 필터링 해드릴까요."
@@ -181,6 +184,7 @@
     "abstract": "요약"
   },
   "info_label": {
+    "need_kyc_label": "KYC 인증을 진행해주세요.",
     "need_kyc": "KYC 인증이 필요합니다.",
     "proceed_kyc": "KYC 인증이 진행중입니다.",
     "approved_kyc": "KYC 인증이 완료되었습니다.",

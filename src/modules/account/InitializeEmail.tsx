@@ -7,6 +7,7 @@ import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { NavigationScreenProp } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
+import { createGlobalStyle } from "styled-components";
 
 const InitializeEmailWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
@@ -19,6 +20,7 @@ const H1Text = styled.Text`
   text-align: left;
   margin: 25px 5%;
   font-weight: bold;
+  font-family: Roboto;
 `;
 
 interface props {
