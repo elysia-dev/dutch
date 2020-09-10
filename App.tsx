@@ -28,6 +28,8 @@ import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
 import Api from "./src/api/account";
 import { Main } from "./src/modules/dashboard/Main";
+import LocaleType from "./src/enums/LocaleType";
+import currentLocale from "./src/utiles/currentLocale";
 
 const STORYBOOK_START = false;
 
@@ -38,6 +40,7 @@ const Icon = styled.Image`
 
 interface AppState {
   signedIn: boolean;
+  locale: LocaleType;
   user: {
     email: string;
     firstName: string;
@@ -49,6 +52,7 @@ interface AppState {
 
 const defaultState = {
   signedIn: false,
+  locale: currentLocale(),
   user: {
     email: "",
     firstName: "",
