@@ -1,21 +1,17 @@
-import React, { Component } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import {
-  StyleSheet,
   View,
-  Text,
   ScrollView,
-  Image,
   TouchableOpacity,
-  SafeAreaView,
   Platform,
 } from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 import { KycStatus } from "../../enums/status";
-import Api from "../../api/account";
 import { InfoPage } from "../../enums/pageEnum";
+import UserContext from "../../contexts/UserContext";
 
 const MainInfoWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
@@ -94,231 +90,185 @@ const InfoButtonInnerWrapper = styled.View`
 // width: 5px,
 // height: 8px`;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+const MainInfo: FunctionComponent = () => {
+  const { user } = useContext(UserContext);
+  const navigation = useNavigation();
 
-interface state {
-  email: string;
-  kyc: KycStatus;
-  first_name: string;
-  last_name: string;
-  isNameNull: boolean;
-}
-
-export class MainInfo extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = {
-      email: "",
-      kyc: KycStatus.NONE,
-      first_name: "",
-      last_name: "",
-      isNameNull: true,
-    };
-  }
-
-  async componentDidMount() {
-    const { route, navigation } = this.props;
-
-    Api.me()
-      .then((res) => {
-        this.setState({
-          email: res.data.email,
-          kyc: res.data.kycStatus,
-          first_name: res.data.firstName,
-          last_name: res.data.lastName,
-        });
-        if (res.data.firstName != null && res.data.lastName != null) {
-          this.setState({ isNameNull: false });
-        }
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          alert(i18n.t("checking_account.need_login"));
-          navigation.navigate("Account");
-        }
-      });
-  }
-
-  render() {
-    const { route, navigation } = this.props;
-    return (
-      <MainInfoWrapper>
-        <ScrollView>
-          <InfoHeaderWrapper>
-            <InfoUserWrapper>
-              <InfoHeaderH1Text>{this.state.email}</InfoHeaderH1Text>
-              <InfoHeaderUserName>
-                <InfoHeaderUserImg
-                  source={require("../kyc/images/userIcon.png")}
-                />
-                {"  "}
-                {this.state.isNameNull == true ? (
+  return (
+    <MainInfoWrapper>
+      <ScrollView>
+        <InfoHeaderWrapper>
+          <InfoUserWrapper>
+            <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
+            <InfoHeaderUserName>
+              <InfoHeaderUserImg
+                source={require("../kyc/images/userIcon.png")}
+              />
+              {"  "}
+              {user.kycStatus !== KycStatus.SUCCESS ? (
+                <InfoHeaderUserName>
+                  {i18n.t("info_label.need_kyc_label")}
+                </InfoHeaderUserName>
+              ) : (
                   <InfoHeaderUserName>
-                    {i18n.t("info_label.need_kyc_label")}
-                  </InfoHeaderUserName>
-                ) : (
-                  <InfoHeaderUserName>
-                    {this.state.first_name} {this.state.last_name}
+                    {user.firstName} {user.lastName}
                   </InfoHeaderUserName>
                 )}
-              </InfoHeaderUserName>
-            </InfoUserWrapper>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(InfoPage.MyPage);
+            </InfoHeaderUserName>
+          </InfoUserWrapper>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(InfoPage.MyPage);
+            }}
+          >
+            <InfoHeaderSettingImg
+              source={require("../../../assets/setting.png")}
+            />
+          </TouchableOpacity>
+        </InfoHeaderWrapper>
+        <View
+          style={{
+            borderBottomColor: "#F6F6F8",
+            borderBottomWidth: 5,
+            height: 116,
+          }}
+        >
+          {user.kycStatus === KycStatus.NONE && (
+            <SubmitButton
+              title={i18n.t("info_label.need_kyc")}
+              handler={() => navigation.navigate("Kyc")}
+            />
+          )}
+          {user.kycStatus === KycStatus.PENDING && (
+            <SubmitButton
+              title={i18n.t("info_label.proceed_kyc")}
+              handler={() => {
+                alert(i18n.t("info.kyc_proceeding_wait"));
               }}
+              ButtonTheme={"GrayTheme"}
+            />
+          )}
+          {user.kycStatus === KycStatus.SUCCESS && (
+            <SubmitButton
+              title={i18n.t("info_label.approved_kyc")}
+              handler={() => { }}
+              ButtonTheme={"GrayTheme"}
+            />
+          )}
+        </View>
+        <View
+          style={{
+            borderBottomColor: "#F6F6F8",
+            borderBottomWidth: 5,
+          }}
+        >
+          <H1Text>{i18n.t("info_label.confirm")}</H1Text>
+          <InfoButtonTabWrapper>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(InfoPage.InvestmentHistory)}
             >
-              <InfoHeaderSettingImg
-                source={require("../../../assets/setting.png")}
-              />
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.investment_history")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
             </TouchableOpacity>
-          </InfoHeaderWrapper>
-          <View
-            style={{
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-              height: 116,
-            }}
-          >
-            {this.state.kyc === KycStatus.NONE && (
-              <SubmitButton
-                title={i18n.t("info_label.need_kyc")}
-                handler={() => navigation.navigate("Kyc")}
-              />
-            )}
-            {this.state.kyc === KycStatus.PENDING && (
-              <SubmitButton
-                title={i18n.t("info_label.proceed_kyc")}
-                handler={() => {
-                  alert(i18n.t("info.kyc_proceeding_wait"));
-                }}
-                ButtonTheme={"GrayTheme"}
-              />
-            )}
-            {this.state.kyc === KycStatus.SUCCESS && (
-              <SubmitButton
-                title={i18n.t("info_label.approved_kyc")}
-                handler={() => {}}
-                ButtonTheme={"GrayTheme"}
-              />
-            )}
+          </InfoButtonTabWrapper>
+
+          <InfoButtonTabWrapper>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(InfoPage.TransactionHistory)}
+            >
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.transaction_history")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
+            </TouchableOpacity>
+          </InfoButtonTabWrapper>
+        </View>
+        <View
+          style={{
+            flex: 2,
+            borderBottomColor: "#F6F6F8",
+            borderBottomWidth: 5,
+            justifyContent: "center",
+            alignContent: "flex-start",
+          }}
+        >
+          <View>
+            <H1Text>{i18n.t("info_label.elysia")}</H1Text>
           </View>
 
-          <View
-            style={{
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-            }}
-          >
-            <H1Text>{i18n.t("info_label.confirm")}</H1Text>
-            <InfoButtonTabWrapper>
-              <TouchableOpacity
-                onPress={() => navigation.navigate(InfoPage.InvestmentHistory)}
-              >
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.investment_history")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-
-            <InfoButtonTabWrapper>
-              <TouchableOpacity
-                onPress={() => navigation.navigate(InfoPage.TransactionHistory)}
-              >
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.transaction_history")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-          </View>
-          <View
-            style={{
-              flex: 2,
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-              justifyContent: "center",
-              alignContent: "flex-start",
-            }}
-          >
-            <View>
-              <H1Text>{i18n.t("info_label.elysia")}</H1Text>
-            </View>
-
-            <InfoButtonTabWrapper>
-              <TouchableOpacity onPress={() => {}}>
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.notice")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-            <InfoButtonTabWrapper>
-              <TouchableOpacity onPress={() => {}}>
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.service_terms")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-            <InfoButtonTabWrapper>
-              <TouchableOpacity onPress={() => {}}>
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.contact")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-            <InfoButtonTabWrapper>
-              <TouchableOpacity onPress={() => {}}>
-                <InfoButtonInnerWrapper>
-                  <PText>{i18n.t("info_label.faq")}</PText>
-                  <InfoArrowImg
-                    source={require("../../../assets/next_gray.png")}
-                  />
-                </InfoButtonInnerWrapper>
-              </TouchableOpacity>
-            </InfoButtonTabWrapper>
-          </View>
-          <View
-            style={{
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-            }}
-          >
-            <H1Text>앱 설정</H1Text>
-            <PText>언어</PText>
-          </View>
-          <View
-            style={{
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-            }}
-          >
-            <H1Text>EL 거래소</H1Text>
-          </View>
-          <View
-            style={{
-              height: 1000,
-              backgroundColor: "#FFF",
-            }}
-          />
-        </ScrollView>
-      </MainInfoWrapper>
-    );
-  }
+          <InfoButtonTabWrapper>
+            <TouchableOpacity onPress={() => { }}>
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.notice")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
+            </TouchableOpacity>
+          </InfoButtonTabWrapper>
+          <InfoButtonTabWrapper>
+            <TouchableOpacity onPress={() => { }}>
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.service_terms")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
+            </TouchableOpacity>
+          </InfoButtonTabWrapper>
+          <InfoButtonTabWrapper>
+            <TouchableOpacity onPress={() => { }}>
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.contact")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
+            </TouchableOpacity>
+          </InfoButtonTabWrapper>
+          <InfoButtonTabWrapper>
+            <TouchableOpacity onPress={() => { }}>
+              <InfoButtonInnerWrapper>
+                <PText>{i18n.t("info_label.faq")}</PText>
+                <InfoArrowImg
+                  source={require("../../../assets/next_gray.png")}
+                />
+              </InfoButtonInnerWrapper>
+            </TouchableOpacity>
+          </InfoButtonTabWrapper>
+        </View>
+        <View
+          style={{
+            borderBottomColor: "#F6F6F8",
+            borderBottomWidth: 5,
+          }}
+        >
+          <H1Text>앱 설정</H1Text>
+          <PText>언어</PText>
+        </View>
+        <View
+          style={{
+            borderBottomColor: "#F6F6F8",
+            borderBottomWidth: 5,
+          }}
+        >
+          <H1Text>EL 거래소</H1Text>
+        </View>
+        <View
+          style={{
+            height: 1000,
+            backgroundColor: "#FFF",
+          }}
+        />
+      </ScrollView>
+    </MainInfoWrapper >
+  );
 }
+
+export default MainInfo

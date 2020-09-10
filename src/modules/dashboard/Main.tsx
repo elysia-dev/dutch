@@ -53,8 +53,6 @@ const moreHistory = (handler: () => void) => {
       onPress={handler}
       style={{
         marginTop: 30,
-        paddingTop: 12,
-        flexDirection: "row",
         justifyContent: "center",
         alignContent: "center",
         width: "100%",
@@ -69,6 +67,7 @@ const moreHistory = (handler: () => void) => {
         style={{
           fontSize: 14,
           color: "#1C1C1C",
+          textAlign: "center",
         }}
       >
         {i18n.t("dashboard_label.more_history") + " >"}

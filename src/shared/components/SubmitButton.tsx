@@ -1,12 +1,21 @@
 import React, { FunctionComponent } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Text,
-} from "react-native";
-import styled, { css } from "styled-components/native";
+import { StyleSheet, View, TouchableOpacity, GestureResponderEvent, Text } from "react-native";
+import styled from 'styled-components/native';
+
+const WhiteBtn = styled.TouchableOpacity`
+  color: #000;
+  width: 90%;
+  margin: 0 auto;
+  height: 40px;
+  background-color: #2C6190;
+  border-radius: 5px;
+`;
+const WhiteBtnText = styled.Text`
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  line-height: 40px;
+`;
 
 interface SubmitButtonProps {
   title: string;
@@ -15,12 +24,16 @@ interface SubmitButtonProps {
   ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
 }
 
+type ButtonProps = {
+  theme: string;
+}
+
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   title,
   handler,
   ButtonTheme,
 }) => {
-  const handleThemeType = (BtnTheme) => {
+  const handleThemeType = (BtnTheme: string) => {
     switch (BtnTheme) {
       case "WhiteTheme":
         return "border: 1px solid #3679B5; background-color: #FFFFFF;";
@@ -30,7 +43,7 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
         return "border: 0px solid #FFFFFF; background-color: #2c6190;";
     }
   };
-  const handleThemeWrapperType = (BtnTheme) => {
+  const handleThemeWrapperType = (BtnTheme: string) => {
     switch (BtnTheme) {
       case "WithFlat":
         return "margin-bottom: 5px;";
@@ -41,9 +54,9 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
     }
   };
   const WhiteBtnWrapper = styled.View`
-    flex: ${(props) => (props.BtnTheme == "WhiteTheme" ? "4" : "1")};
+    flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
     justify-content: flex-end;
-    ${({ BtnTheme }) => handleThemeWrapperType(BtnTheme)};
+    ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
   `;
   const WhiteBtn = styled.TouchableOpacity`
     width: 90%;
@@ -54,20 +67,20 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
     position: absolute;
     bottom: 0;
 
-    ${({ BtnTheme }) => handleThemeType(BtnTheme)};
+    ${(props: ButtonProps) => handleThemeType(props.theme)};
   `;
   const WhiteBtnText = styled.Text`
     font-size: 14px;
     text-align: center;
     line-height: 40px;
 
-    color: ${(props) =>
-      props.BtnTheme == "WhiteTheme" ? "#000000" : "#FFFFFF"};
+    color: ${(props: ButtonProps) =>
+      props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
   `;
   return (
-    <WhiteBtnWrapper BtnTheme={ButtonTheme}>
-      <WhiteBtn onPress={handler} BtnTheme={ButtonTheme}>
-        <WhiteBtnText BtnTheme={ButtonTheme}>{title}</WhiteBtnText>
+    <WhiteBtnWrapper theme={ButtonTheme}>
+      <WhiteBtn onPress={handler} theme={ButtonTheme}>
+        <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
       </WhiteBtn>
     </WhiteBtnWrapper>
   );

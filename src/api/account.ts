@@ -45,6 +45,17 @@ type UserResponse = {
   gender: string;
   firstName: string;
   lastName: string;
+  dashboard: {
+    userId: number;
+    summary: {
+      el: string;
+      paypal: string;
+      eth: string;
+      btc: string;
+      properties: [];
+      profits: [];
+    };
+  };
 };
 
 export default class Api {

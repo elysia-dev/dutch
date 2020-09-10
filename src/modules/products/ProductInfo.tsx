@@ -19,6 +19,7 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import { Calculator } from "./components/Calculator";
 import { WrappedInfo } from "./components/WrappedInfo";
 import { Map } from "./components/Map";
+import { currentLocale } from "i18n-js";
 
 const WH1Text = styled.Text`
   margin-top: 14px;
@@ -96,6 +97,17 @@ export class ProductInfo extends Component<props, state> {
   render() {
     const { navigation, route } = this.props;
     const { product } = route.params;
+
+    const currentLang = () => {
+      if (i18n.currentLocale() === "ko-KR") {
+        return "ko";
+      } else if (i18n.currentLocale() === "zh-CN") {
+        return "ch";
+      } else {
+        return "en";
+      }
+    };
+
     return (
       <SafeAreaView
         style={{
@@ -146,7 +158,7 @@ export class ProductInfo extends Component<props, state> {
                   }}
                 >
                   <WH1Text>{product.title}</WH1Text>
-                  <WText>{product.createdAt}</WText>
+                  <WText>{product.data.buildingCompletionDate}</WText>
                 </View>
                 <Image
                   source={{ uri: product.data.images[0] }}
@@ -161,20 +173,20 @@ export class ProductInfo extends Component<props, state> {
                 />
                 <DesView>
                   <GText>{i18n.t("product_label.expected_annual_rate")}</GText>
-                  <PText>{`${product.expectedAnnualReturn}%`}</PText>
+                  <PText>{`${product.data.expectedAnnualReturn}%`}</PText>
                 </DesView>
                 <DesView>
                   <GText>{i18n.t("product_label.rent_distribution")}</GText>
                   <PText>
-                    {i18n.t(
-                      `product_financial.${product.data.financials.monthlyRentIncomeDistributionCycle}`
-                    )}
+                    {
+                      product.data.descriptions[currentLang()]
+                        .monthlyRentIncomeDistributionCycle
+                    }
                   </PText>
                 </DesView>
                 <DesView>
                   <GText>{i18n.t("product_label.price_per_token")}</GText>
-                  <PText>{`${product.data.pricePerToken ||
-                    product.data.pricePerTokenUSD} USD`}</PText>
+                  <PText>{`${product.data.pricePerToken} USD`}</PText>
                 </DesView>
                 <DesView>
                   <GText>{i18n.t("product_label.return_method")}</GText>

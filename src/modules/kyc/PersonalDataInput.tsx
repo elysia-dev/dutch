@@ -103,12 +103,10 @@ export class PersonalDataInput extends Component<props, state> {
 
   setModalVisible = (visible: boolean) => {
     this.setState({ modalVisible: visible });
-    console.log(this.state.modalVisible);
   };
 
   setNationality(input: string) {
     this.setState({ nationality: input });
-    console.log(this.state.nationality);
   }
 
   setBirthday(input: string) {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, FunctionComponent } from "react";
 import {
   StyleSheet,
   View,
@@ -8,10 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { InfoPage } from "../../enums/pageEnum";
-import { BackButton } from "../../shared/components/BackButton";
+import i18n from "../../../i18n/i18n";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -32,13 +29,12 @@ const Item = styled.View`
 `;
 
 interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
+  name: string;
+  rate: string;
+  expectedSale: string;
 }
 
-interface state {}
-
-const historyItem = (name: string, rate: string, expectedSale: string) => {
+export const OwnershipItem: FunctionComponent<props> = (props) => {
   return (
     <View
       style={{
@@ -52,7 +48,7 @@ const historyItem = (name: string, rate: string, expectedSale: string) => {
     >
       <View style={{ flex: 1, paddingLeft: 10, paddingRight: 10, height: 50 }}>
         <Image
-          source={require("./images/building.png")}
+          source={require("../images/building.png")}
           style={{
             width: "100%",
             height: "100%",
@@ -68,47 +64,17 @@ const historyItem = (name: string, rate: string, expectedSale: string) => {
       >
         <Item>
           <GText>{i18n.t("info_label.product_name")}</GText>
-          <Text>{name}</Text>
+          <Text>{props.name}</Text>
         </Item>
         <Item>
           <GText>{i18n.t("info_label.entire_profit")}</GText>
-          <Text>{`${rate}%`}</Text>
+          <Text>{`${props.rate}%`}</Text>
         </Item>
         <Item>
           <GText>{i18n.t("info_label.expectd_sale_profit")}</GText>
-          <Text>{`${expectedSale}%`}</Text>
+          <Text>{`${props.expectedSale}%`}</Text>
         </Item>
       </View>
     </View>
   );
 };
-
-export class InvestmentHistory extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {}
-
-  render() {
-    const { navigation, route } = this.props;
-    return (
-      <View
-        style={{
-          backgroundColor: "#fff",
-          width: "100%",
-          height: "100%",
-          padding: 20,
-        }}
-      >
-        <BackButton
-          handler={() => navigation.navigate(InfoPage.MainInfo)}
-        ></BackButton>
-        <H1Text>{i18n.t("info_label.my_inv_history")}</H1Text>
-        <View>{historyItem("Asset #1", "4.02", "15.00")}</View>
-        <View>{historyItem("Asset #2", "4.02", "15.00")}</View>
-      </View>
-    );
-  }
-}
