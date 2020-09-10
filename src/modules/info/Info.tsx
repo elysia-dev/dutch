@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { InfoPage } from "../../enums/pageEnum";
 import { MainInfo } from "./MainInfo";
 import { MyPage } from "./Mypage";
-import { InvestmentHistory } from "./InvestmentHistory";
+import { OwnershipHistory } from "./OwnershipHistory";
 import { TransactionHistory } from "./TransactionHistory";
 
 interface props {}
@@ -16,8 +16,8 @@ export const Info = () => {
       <Stack.Screen name={InfoPage.MainInfo} component={MainInfo} />
       <Stack.Screen name={InfoPage.MyPage} component={MyPage} />
       <Stack.Screen
-        name={InfoPage.InvestmentHistory}
-        component={InvestmentHistory}
+        name={InfoPage.OwnershipHistory}
+        component={OwnershipHistory}
       />
       <Stack.Screen
         name={InfoPage.TransactionHistory}

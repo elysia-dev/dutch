@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
@@ -32,7 +38,6 @@ const ButtonText = styled.Text`
   color: #5c5b5b;
   font-size: 13px;
   text-align: center;
-  margin-top: 4px;
 `;
 
 interface props {
@@ -84,7 +89,7 @@ export class MyPage extends Component<props, state> {
   render() {
     const { route, navigation } = this.props;
     return (
-      <View
+      <SafeAreaView
         style={{
           width: "100%",
           backgroundColor: "#fff",
@@ -97,7 +102,7 @@ export class MyPage extends Component<props, state> {
         />
         <View
           style={{
-            flex: 1,
+            // flex: 1,
             flexDirection: "row",
             justifyContent: "space-between",
             padding: 20,
@@ -118,6 +123,8 @@ export class MyPage extends Component<props, state> {
               borderRadius: 5,
               width: 80,
               height: 25,
+              justifyContent: "center",
+              alignContent: "center",
             }}
           >
             <ButtonText>{i18n.t("info_label.logout")}</ButtonText>
@@ -147,6 +154,8 @@ export class MyPage extends Component<props, state> {
               borderRadius: 5,
               width: 120,
               height: 25,
+              justifyContent: "center",
+              alignContent: "center",
             }}
           >
             <ButtonText>{"비밀번호 변경(임시)"}</ButtonText>
@@ -170,7 +179,7 @@ export class MyPage extends Component<props, state> {
         <View style={{ padding: 20 }}>
           <ButtonText>{i18n.t("info_label.signout")}</ButtonText>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

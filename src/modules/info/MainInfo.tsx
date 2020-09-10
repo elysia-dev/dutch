@@ -58,9 +58,11 @@ export class MainInfo extends Component<props, state> {
         this.setState({
           email: res.data.email,
           kyc: res.data.kycStatus,
+          //type정의를 마스터에 반영되지 않은 문서화로만 해서 임시 에러남. 나중에 서버 받고 해결할 것(data.user.email)
         });
       })
       .catch((e) => {
+        console.error(e);
         if (e.response.status === 401) {
           alert(i18n.t("checking_account.need_login"));
           navigation.navigate("Account");
@@ -90,6 +92,7 @@ export class MainInfo extends Component<props, state> {
           }}
         >
           <H1Text>{this.state.email}</H1Text>
+
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(InfoPage.MyPage);
@@ -152,7 +155,7 @@ export class MainInfo extends Component<props, state> {
           >
             <PText>{i18n.t("info_label.investment_history")}</PText>
             <TouchableOpacity
-              onPress={() => navigation.navigate(InfoPage.InvestmentHistory)}
+              onPress={() => navigation.navigate(InfoPage.OwnershipHistory)}
             >
               <Image
                 source={require("../../../assets/next_gray.png")}

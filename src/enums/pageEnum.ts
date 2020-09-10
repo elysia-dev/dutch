@@ -30,7 +30,7 @@ export enum AccountPage {
 export enum InfoPage {
   MainInfo = "MainInfo",
   MyPage = "MyPage",
-  InvestmentHistory = "InvestmentHistory",
+  OwnershipHistory = "OwnershipHistory",
   TransactionHistory = "TransactionHistory",
 }
 

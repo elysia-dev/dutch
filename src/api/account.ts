@@ -40,11 +40,24 @@ type RecoverResponse = {
 };
 
 type UserResponse = {
-  email: string;
-  kycStatus: KycStatus;
-  gender: string;
-  firstName: string;
-  lastName: string;
+  user: {
+    email: string;
+    kycStatus: KycStatus;
+    gender: string;
+    firstName: string;
+    lastName: string;
+  };
+  dashboard: {
+    userId: number;
+    summary: {
+      el: string;
+      paypal: string;
+      eth: string;
+      btc: string;
+      properties: [];
+      profits: [];
+    };
+  };
 };
 
 export default class Api {

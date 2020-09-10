@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
 
-const baseURL = "http://172.30.1.42:3000";
+const baseURL = "http://172.30.1.50:3000";
 
 export const authenticatedEspressoClient = async () => {
   const token = await AsyncStorage.getItem("@token");

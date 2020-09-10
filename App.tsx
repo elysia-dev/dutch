@@ -28,6 +28,8 @@ import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
 import Api from "./src/api/account";
 import { MainInfo } from "./src/modules/info/MainInfo";
+import { Main } from "./src/modules/dashboard/Main";
+import { DashboardPage } from "./src/enums/pageEnum";
 
 const STORYBOOK_START = false;
 
@@ -99,7 +101,7 @@ const TabNavigatior = () => {
     <Tab.Navigator initialRouteName="Dashboard">
       <Tab.Screen
         name="Dashboard"
-        component={Dashboard}
+        component={Main}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (

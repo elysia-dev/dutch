@@ -1,16 +1,27 @@
 import React, { Component } from "react";
-import { Text, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
+import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import Api from "../../api/account";
-import { NavigationScreenProp } from "react-navigation";
-import { AccountPage } from "../../enums/pageEnum";
 
-const InitializeEmailWrapper = styled.SafeAreaView`
-  height: 100%;
-  background-color: #fff;
+// import i18n from "i18next";
+import { withTranslation } from "react-i18next";
+// import { t } from "../../i18n/i18n";
+
+const { t } = useTranslation();
+
+interface props {
+  email: string;
+  handler: (text: string) => void;
+  // handler: (event: GestureResponderEvent) => void;
+  // stageHandler: (stage: string) => void;
+  stageHandler: () => void;
+}
+const InitializeEmailWrapper = styled.View`
+  width: 375px;
+  height: 811px;
+  border: 1px solid #000; // 웹에서 모바일처럼 화면잡고 구분하기 좋게 border 그어뒀어요
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -20,67 +31,34 @@ const H1Text = styled.Text`
   font-weight: bold;
 `;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-}
-
-interface state {
-  email: string;
-}
-
-export class InitializeEmail extends Component<props, state> {
+export class InitializeEmail extends Component<props> {
   constructor(props: props) {
     super(props);
-    this.state = { email: "" };
+    // this.goToBack = this.goToBack.bind(this);
   }
 
-  setEmail(input: string) {
-    this.setState({ email: input });
-  }
-
-  callEmailApi() {
-    if (!this.state.email) {
-      alert(i18n.t("checking_account.insert_account_email"));
-      return;
-    }
-    const { navigation } = this.props;
-
-    Api.initializeEmail(this.state.email)
-      .then((res) => {
-        navigation.navigate(
-          res.data.status == "exist"
-            ? AccountPage.Login
-            : AccountPage.CertifySignup,
-          {
-            verificationId: res.data.verificationId,
-            email: this.state.email,
-          }
-        );
-      })
-      .catch((e) => {
-        console.error(e);
-        alert(i18n.t("checking_account.try_again_later"));
-      });
-  }
+  goToBack() {}
 
   render() {
     return (
       <InitializeEmailWrapper>
-        <H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>
+        <BackButton handler={this.goToBack} />
+        <H1Text>{t("checking_account.insert_account_email")}</H1Text>
         <TextInput
-          type={i18n.t("account_label.account_email")}
-          value={""}
-          eventHandler={(input: string) => {
-            this.setState({ email: input });
-          }}
+          type="이메일"
+          value={this.props.email}
+          eventHandler={this.props.handler}
           edit={true}
           secure={false}
         />
         <SubmitButton
-          title={i18n.t("account_label.continue")}
-          handler={() => this.callEmailApi()}
+          title="계속"
+          handler={this.props.stageHandler}
+          //백이랑 통신해서 회원가입/로그인 나누는 로직 추가해야함 -> 스테이지로?
         />
       </InitializeEmailWrapper>
     );
   }
 }
+
+const styles = StyleSheet.create({});

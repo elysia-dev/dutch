@@ -13,6 +13,8 @@ import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { InfoPage } from "../../enums/pageEnum";
 import { BackButton } from "../../shared/components/BackButton";
 import { DateInput } from "./components/DateInput";
+import { PeriodPicker } from "./components/PeriodPicker";
+import Api from "../../api/info";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -27,6 +29,12 @@ const PText = styled.Text`
   text-align: left;
   margin-bottom: 10px;
 `;
+const GText = styled.Text`
+  color: #a7a7a7;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 16px;
+`;
 
 interface props {
   navigation: NavigationScreenProp<any>;
@@ -34,6 +42,9 @@ interface props {
 }
 
 interface state {
+  period: string;
+  startDate: string;
+  endDate: string;
   all: string;
   deposit: string;
   withdraw: string;
@@ -105,12 +116,29 @@ export class TransactionHistory extends Component<props, state> {
       paypal: "",
       eth: "",
       btc: "",
+      period: "0",
+      startDate: "",
+      endDate: "",
     };
+    this.setPeriod = this.setPeriod.bind(this);
+    this.setStartDate = this.setStartDate.bind(this);
+    this.setEndDate = this.setEndDate.bind(this);
   }
 
-  render() {
-    const { navigation, route } = this.props;
+  setPeriod(input: string) {
+    this.setState({ period: input, startDate: "", endDate: "" });
+  }
 
+  setStartDate(input: string) {
+    this.setState({ startDate: input, period: "0" });
+  }
+
+  setEndDate(input: string) {
+    this.setState({ endDate: input, period: "0" });
+  }
+
+  callApi() {
+    //startdate enddate 비교?
     const methods = [
       this.state.paypal,
       this.state.btc,
@@ -121,6 +149,30 @@ export class TransactionHistory extends Component<props, state> {
     const methodToSend = methods.filter((method) => {
       return method !== "";
     });
+
+    const sortingTypes = [
+      this.state.all,
+      this.state.deposit,
+      this.state.withdraw,
+    ];
+
+    const sortingTypesToSend = sortingTypes.filter((type) => {
+      return type !== "";
+    });
+
+    Api.TransactionHistory(
+      this.state.startDate,
+      this.state.endDate,
+      this.state.period,
+      sortingTypesToSend.toString(),
+      methodToSend
+    )
+      .then()
+      .catch();
+  }
+
+  render() {
+    const { navigation, route } = this.props;
 
     return (
       <View
@@ -134,8 +186,49 @@ export class TransactionHistory extends Component<props, state> {
         <BackButton handler={() => navigation.goBack()}></BackButton>
         <H1Text>{i18n.t("info_label.transaction_history")}</H1Text>
         <PText>{i18n.t("info_label.transaction_term")}</PText>
-        <View style={{ marginBottom: 15 }}>
-          <DateInput eventHandler={() => {}} />
+        <View
+          style={{
+            marginBottom: 15,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ width: "20%" }}>
+            <PeriodPicker
+              period={this.state.period}
+              eventHandler={this.setPeriod}
+            />
+          </View>
+          <View style={{ width: "35%" }}>
+            <DateInput
+              maxDate={this.state.endDate}
+              eventHandler={this.setStartDate}
+              date={this.state.startDate}
+            />
+          </View>
+          <View
+            style={{
+              width: "2%",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#4E4E4E",
+              }}
+            >
+              {"~"}
+            </Text>
+          </View>
+          <View style={{ width: "35%" }}>
+            <DateInput
+              minDate={this.state.startDate}
+              eventHandler={this.setEndDate}
+              date={this.state.endDate}
+            />
+          </View>
         </View>
         <PText>{i18n.t("info_label.transaction_log")}</PText>
 
@@ -242,6 +335,24 @@ export class TransactionHistory extends Component<props, state> {
           }}
         >
           {submitButton("검색하기", () => {})}
+        </View>
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            flexDirection: "column",
+            flex: 1,
+          }}
+        >
+          <Image
+            source={require("./images/warning.png")}
+            style={{
+              width: 45,
+              height: 45,
+              resizeMode: "center",
+            }}
+          />
+          <GText>{i18n.t("info.no_transaction")}</GText>
         </View>
       </View>
     );

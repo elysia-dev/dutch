@@ -7,7 +7,7 @@ import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
-import Api from "../../api/product";
+import Api, { ProductResponse } from "../../api/product";
 import { Item } from "./components/Item";
 import { ProductInfo } from "./ProductInfo";
 
@@ -65,7 +65,7 @@ interface state {
   return: boolean;
   popularity: boolean;
   payments: string;
-  productList: Array<Object>;
+  productList: Array<ProductResponse>;
 }
 
 export class MainList extends Component<props, state> {
@@ -92,7 +92,6 @@ export class MainList extends Component<props, state> {
       this.state.return ? "expectedAnnualReturn" : "createdAt"
     )
       .then((res) => {
-        console.log(res);
         this.setState({ productList: res.data });
         console.log(this.state.productList);
       })
@@ -128,7 +127,7 @@ export class MainList extends Component<props, state> {
           })
         }
       >
-        <Item annualReturn={product.expectedAnnualReturn} />
+        <Item annualReturn={product.data.expectedAnnualReturn} />
       </TouchableOpacity>
     ));
     return (

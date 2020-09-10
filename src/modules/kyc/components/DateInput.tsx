@@ -31,7 +31,7 @@ export class DateInput extends Component<props, state> {
     super(props);
     this.state = { birthday: "" };
   }
-
+  currentDate = new Date();
   render() {
     return (
       <View>
@@ -49,7 +49,7 @@ export class DateInput extends Component<props, state> {
           placeholder="select date"
           format="YYYY-MM-DD"
           minDate="1900-01-01"
-          maxDate="2020-01-01"
+          maxDate={this.currentDate}
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
