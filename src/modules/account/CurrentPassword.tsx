@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -13,12 +13,17 @@ import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const CurrentPasswordWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
+  height: 100%;
+  background-color: #fff;
+`;
 const H1Text = styled.Text`
-  color: #000;
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: left;
+  margin: 25px 5%;
   font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
 `;
 const PText = styled.Text`
   color: #626368;
@@ -54,15 +59,10 @@ export class CurrentPassword extends Component<props, state> {
     const { route, navigation } = this.props;
 
     return (
-      <SafeAreaView
-        style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}
-      >
+      <CurrentPasswordWrapper>
         <BackButton handler={() => navigation.goBack()} />
-
-        <View>
-          <Text>비밀번호 변경</Text>
-          <H1Text>{i18n.t("account_check.insert_current_password")}</H1Text>
-        </View>
+        <H1Text>비밀번호 변경</H1Text>
+        <H1Text>{i18n.t("account_check.insert_current_password")}</H1Text>
 
         <TextInput
           type={i18n.t("account_label.current_password")}
@@ -80,7 +80,7 @@ export class CurrentPassword extends Component<props, state> {
             })
           }
         />
-      </SafeAreaView>
+      </CurrentPasswordWrapper>
     );
   }
 }

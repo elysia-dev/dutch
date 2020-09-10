@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -14,12 +14,17 @@ import { AccountPage } from "../../enums/pageEnum";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { isRTL } from "expo-localization";
 
+const RecoverPasswordWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
+  height: 100%;
+  background-color: #fff;
+`;
 const H1Text = styled.Text`
-  color: #000;
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: left;
+  margin: 25px 5%;
   font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
 `;
 const PText = styled.Text`
   color: #626368;
@@ -31,6 +36,21 @@ const PText = styled.Text`
 const Accepted = styled.Image`
   width: 64px;
   height: 60px;
+  margin: 10px auto;
+`;
+const AcceptedH1Text = styled.Text`
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: center;
+  margin: 15px 5%;
+  font-weight: bold;
+`;
+const AcceptedPText = styled.Text`
+  color: #626368;
+  margin-bottom: 15px;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 40px;
 `;
 
 interface props {
@@ -100,11 +120,21 @@ export class RecoverPassword extends Component<props, state> {
     const { route, navigation } = this.props;
     const { email } = route.params;
     return (
-      <SafeAreaView
-        style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}
-      >
+      <RecoverPasswordWrapper>
+        <View
+          style={{
+            top: 25,
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            zIndex: this.state.modalVisible === false ? 0 : 999,
+            backgroundColor:
+              this.state.modalVisible === false ? "#FFFFFF" : "#000000",
+            display: this.state.modalVisible === false ? "none" : "flex",
+            opacity: this.state.modalVisible === false ? 0 : 0.6,
+          }}
+        ></View>
         <BackButton handler={() => navigation.goBack()} />
-
         <H1Text>
           {this.state.step == 1
             ? i18n.t("account_check.recover_password")
@@ -165,8 +195,12 @@ export class RecoverPassword extends Component<props, state> {
             child={
               <View>
                 <Accepted source={AcceptedImg} />
-                <H1Text>{i18n.t("account_check.password_changed")}</H1Text>
-                <PText>{i18n.t("account_check.login_request")}</PText>
+                <AcceptedH1Text>
+                  {i18n.t("account_check.password_changed")}
+                </AcceptedH1Text>
+                <AcceptedPText>
+                  {i18n.t("account_check.login_request")}
+                </AcceptedPText>
               </View>
             }
             modalHandler={() =>
@@ -175,7 +209,7 @@ export class RecoverPassword extends Component<props, state> {
             visible={this.state.modalVisible}
           ></Modal>
         )}
-      </SafeAreaView>
+      </RecoverPasswordWrapper>
     );
   }
 }

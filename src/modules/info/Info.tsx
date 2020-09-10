@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { InfoPage } from "../../enums/pageEnum";
-import { MainInfo } from "./MainInfo";
-import { MyPage } from "./Mypage";
+import MainInfo from "./MainInfo";
+import MyPage from "./Mypage";
 import { OwnershipHistory } from "./OwnershipHistory";
 import { TransactionHistory } from "./TransactionHistory";
 

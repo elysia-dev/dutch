@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, Platform } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+  SafeAreaView,
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
@@ -11,9 +17,11 @@ import RecordPng from "./images/recordbutton.png";
 import { Ionicons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
+import { SubmitButton } from "../../shared/components/SubmitButton";
 
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
+import CameraPermissionPng from "./images/cameraPermission.png";
 
 const HeaderText = styled.Text`
   position: absolute;
@@ -21,8 +29,8 @@ const HeaderText = styled.Text`
   font-size: 18px;
   font-weight: bold;
   text-align: left;
-  margin-top: 9px;
-  margin-left: 40px;
+  margin-top: 27px;
+  margin-left: 13%;
 `;
 const H1Text = styled.Text`
   color: #fff;
@@ -152,6 +160,30 @@ const CameraInnerRightBottomLine = styled.View`
   top: 90%;
   left: 89%;
 `;
+const TakeIdDeniedWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
+  flex: 1;
+  background-color: #ffffff;
+`;
+const CameraPermissionImg = styled.Image`
+  width: 209px;
+  margin: 20% auto 15px auto;
+`;
+const DeniedH1Text = styled.Text`
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: center;
+  margin: 28px auto 0 auto;
+  font-weight: bold;
+`;
+const DeniedPText = styled.Text`
+  font-size: 13px;
+  color: #626368;
+  text-align: center;
+  margin: 10px auto 16px auto;
+  width: 90%;
+`;
+
 interface props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
@@ -174,13 +206,15 @@ export class TakeID extends Component<props, state> {
 
   componentDidMount() {
     if (Platform.OS === "ios") {
-      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then((status) => {
-        if (!status.granted) {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        } else {
-          this.setState({ hasPermission: status.granted });
+      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
+        (status) => {
+          if (!status.granted) {
+            alert("Sorry, we need camera roll permissions to make this work!");
+          } else {
+            this.setState({ hasPermission: status.granted });
+          }
         }
-      });
+      );
     } else {
       Permissions.askAsync(Permissions.CAMERA).then((status) => {
         this.setState({ hasPermission: status.granted });
@@ -223,7 +257,18 @@ export class TakeID extends Component<props, state> {
     const { id_type } = route.params;
 
     if (this.state.hasPermission === false) {
-      return <Text>No access to camera</Text>;
+      return (
+        <TakeIdDeniedWrapper>
+          <BackButton handler={() => navigation.goBack()} />
+          <CameraPermissionImg source={CameraPermissionPng} />
+          <DeniedH1Text>{i18n.t("kyc.camera_access_denied")}</DeniedH1Text>
+          <DeniedPText>{i18n.t("kyc.camera_access_denied_text")}</DeniedPText>
+          <SubmitButton
+            title={i18n.t("kyc_label.camera_access_return")}
+            handler={() => navigation.goBack()}
+          />
+        </TakeIdDeniedWrapper>
+      );
     } else {
       return (
         <TakeIdWrapper>

@@ -40,13 +40,11 @@ type RecoverResponse = {
 };
 
 type UserResponse = {
-  user: {
-    email: string;
-    kycStatus: KycStatus;
-    gender: string;
-    firstName: string;
-    lastName: string;
-  };
+  email: string;
+  kycStatus: KycStatus;
+  gender: string;
+  firstName: string;
+  lastName: string;
   dashboard: {
     userId: number;
     summary: {

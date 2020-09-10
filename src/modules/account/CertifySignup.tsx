@@ -5,6 +5,7 @@ import {
   View,
   TextInput as RNTextInput,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
@@ -15,20 +16,60 @@ import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
+import WarningImg from "../../../src/shared/assets/images/warning.png";
 
+const CertifySignupWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
+  height: 100%;
+  background-color: #fff;
+`;
 const H1Text = styled.Text`
-  color: #000;
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: left;
+  margin: 25px 5%;
   font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
 `;
 const PText = styled.Text`
-  color: #626368;
-  margin-bottom: 12px;
+  color: #1c1c1c;
   font-size: 13px;
-  text-align: center;
-  margin-top: 20px;
+  margin: 0px 5%;
+  margin-bottom: 42px;
+`;
+const FlatButtonWrapper = styled.View`
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #36a1ff;
+  color: #1c1c1c;
+  width: 76px;
+  height: 29px;
+`;
+const ButtonWrapper = styled.View`
+  flex-direction: row-reverse;
+  width: 90%;
+  margin: 0 auto;
+`;
+const ExpTimeText = styled.Text`
+  color: #1c1c1c;
+  font-size: 13px;
+  margin-right: 2%;
+  margin-bottom: 42px;
+  line-height: 28px;
+`;
+const WarningIcon = styled.Image`
+  width: 12px;
+  height: 12px;
+  top: 1px;
+  position: absolute;
+`;
+const WarningText = styled.Text`
+  color: #1c1c1c;
+  font-size: 13px;
+  margin-right: 5px;
+  line-height: 29px;
+  flex-direction: row;
+  flex: 10;
 `;
 
 interface props {
@@ -117,14 +158,12 @@ export class CertifySignup extends Component<props, state> {
     const { email, status, verificationId } = route.params;
     //render 될 때마다 verificationId는 이전 route에서 받은 값으로 설정되나? 어떻게 update?
     return (
-      <SafeAreaView
-        style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}
-      >
+      <CertifySignupWrapper>
         <BackButton
           handler={() => navigation.navigate(AccountPage.InitializeEmail)}
         />
         <H1Text>{i18n.t("register.authentication_signup")}</H1Text>
-        <Text>{i18n.t("register.authentication_signup_label")}</Text>
+        <PText>{i18n.t("register.authentication_signup_label")}</PText>
         <TextInput
           type={i18n.t("account_label.account_email")}
           edit={false}
@@ -139,23 +178,28 @@ export class CertifySignup extends Component<props, state> {
           eventHandler={this.setCode}
           secure={false}
         />
-        {this.props.certified === "pending" && (
-          <Text>
-            {i18n.t("errors.messages.authentication_code_do_not_match")}
-          </Text>
-        )}
-        <Text>
-          {i18n.t("register.expiration_time")} {}
-        </Text>
-        <FlatButton
-          title={i18n.t("account_label.resend")}
-          handler={() => this.callResendApi()}
-        />
+        <ButtonWrapper>
+          <FlatButtonWrapper>
+            <FlatButton
+              title={i18n.t("account_label.resend")}
+              handler={() => this.callResendApi()}
+            />
+          </FlatButtonWrapper>
+          <ExpTimeText>03:00</ExpTimeText>
+          <ExpTimeText>{i18n.t("register.expiration_time")}</ExpTimeText>
+          {this.props.certified === "pending" && (
+            <WarningText>
+              <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
+              {i18n.t("errors.messages.authentication_code_do_not_match")}
+            </WarningText>
+          )}
+        </ButtonWrapper>
+
         <SubmitButton
           title={i18n.t("account_label.certify")}
           handler={() => this.callCertifyApi()}
         />
-      </SafeAreaView>
+      </CertifySignupWrapper>
     );
   }
 }

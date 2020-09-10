@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,8 +15,8 @@ interface props {
   edit: boolean;
   eventHandler: (text: string) => void;
   secure: boolean;
+  autoFocus?: boolean;
 }
-
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
   margin: 5px 20px;
@@ -28,21 +28,37 @@ const InputTextForm = styled.TextInput`
   margin: 8px auto;
   height: 25px;
   border-bottom-width: 1px;
-  border-bottom-color: #a7a7a7;
 `;
+export const TextInput: FunctionComponent<props> = (
+  props,
+  { onFocused = false, autocapitalize = "none" }
+) => {
+  let textInputReference = useRef(null);
+  const [focusing, setFocus] = useState(onFocused);
 
-export const TextInput: FunctionComponent<props> = (props) => {
   return (
     <View>
-      <InputHeaderText>{props.type}</InputHeaderText>
+      <InputHeaderText
+        style={{
+          color: focusing == true ? "#2C6190" : "#A7A7A7",
+        }}
+      >
+        {props.type}
+      </InputHeaderText>
       <InputTextForm
+        style={{
+          borderBottomColor: focusing == true ? "#2C6190" : "#A7A7A7",
+        }}
         defaultValue={props.value}
         editable={props.edit}
         onChangeText={(text) => props.eventHandler(text)}
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
         maxLength={30}
+        autoCapitalize={autocapitalize}
         // minLength={8}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
       />
     </View>
   );

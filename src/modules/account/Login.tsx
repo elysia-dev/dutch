@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { View, Platform } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -17,8 +17,9 @@ import UserContext from "../../contexts/UserContext";
 let lastError = 0;
 
 const LoginWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
   height: 100%;
-  background-color: #fff;
+  z-index: 1;
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -27,16 +28,41 @@ const H1Text = styled.Text`
   margin: 25px 5%;
   font-weight: bold;
 `;
-const PText = styled.Text`
+const WarningH1Text = styled.Text`
+  font-size: 20px;
+  color: #1c1c1c;
+  text-align: center;
+  margin: 15px 5%;
+  font-weight: bold;
+`;
+const WarningPText = styled.Text`
   color: #626368;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   font-size: 13px;
   text-align: center;
-  margin-top: 20px;
+`;
+const WarningCount = styled.Text`
+  color: #1c1c1c;
+  margin-bottom: 40px;
+  font-size: 13px;
+  text-align: center;
 `;
 const Warning = styled.Image`
   width: 64px;
   height: 60px;
+  margin: 10px auto;
+`;
+const WarningIconImg = styled.Image`
+  width: 12px;
+  height: 12px;
+  top: 1px;
+  position: absolute;
+`;
+const WarningText = styled.Text`
+  font-size: 12px;
+  color: #1c1c1c;
+  text-align: right;
+  margin: 10px 5%;
 `;
 
 type ParamList = {
@@ -129,6 +155,19 @@ export const Login: FunctionComponent = () => {
 
   return (
     <LoginWrapper>
+      <View
+        style={{
+          top: 25,
+          position: "absolute",
+          height: "100%",
+          width: "100%",
+          zIndex: state.modalVisible === false ? 0 : 999,
+          backgroundColor:
+            state.modalVisible === false ? "#FFFFFF" : "#000000",
+          display: state.modalVisible === false ? "none" : "flex",
+          opacity: state.modalVisible === false ? 0 : 0.6,
+        }}
+      ></View>
       <BackButton
         handler={() => {
           navigation.goBack();
@@ -139,42 +178,46 @@ export const Login: FunctionComponent = () => {
         type={i18n.t("account_label.account_password")}
         value={""}
         edit={true}
-        eventHandler={(input: string) =>
-          setState({ ...state, password: input })
-        }
+        eventHandler={(input: string) => setState({ ...state, password: input })}
         secure={true}
       />
       {state.error > 0 && (
-        <Text>
-          {i18n.t("errors.messages.password_do_not_match")} ({state.error}
-          /5)
-        </Text>
+        <WarningText>
+          <WarningIconImg source={WarningImg} />{" "}
+          {i18n.t("errors.messages.password_do_not_match")} (
+          {state.error}
+            /5)
+        </WarningText>
       )}
       <TextInput
         type={i18n.t("account_label.account_email")}
         value={route.params.email}
         edit={false}
-        eventHandler={() => {}}
+        eventHandler={() => { }}
         secure={false}
       />
       <SubmitButton
         title={i18n.t("account_label.login")}
         handler={() => callLoginApi()}
+        ButtonTheme={"WithFlat"}
       />
       <FlatButton
         title={i18n.t("account_check.forget_password_link")}
         handler={() => callRecoverApi()}
       />
+      <View style={{ height: 15 }} />
       {activateModal() == true && (
         <Modal
           child={
             <View>
               <Warning source={WarningImg} />
-              <H1Text>{i18n.t("errors.messages.password_do_not_match")}</H1Text>
-              <PText>
+              <WarningH1Text>
+                {i18n.t("errors.messages.password_do_not_match")}
+              </WarningH1Text>
+              <WarningPText>
                 {i18n.t("errors.messages.incorrect_password_warning")}
-              </PText>
-              <Text>({state.error}/5)</Text>
+              </WarningPText>
+              <WarningCount>({state.error}/5)</WarningCount>
             </View>
           }
           modalHandler={setModalVisible}
@@ -183,7 +226,6 @@ export const Login: FunctionComponent = () => {
       )}
     </LoginWrapper>
   );
-};
-const styles = StyleSheet.create({});
+}
 
 export default Login;

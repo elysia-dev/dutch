@@ -12,7 +12,6 @@ import { Kyc } from "./src/modules/kyc/Kyc";
 import { Info } from "./src/modules/info/Info";
 import { Products } from "./src/modules/products/Products";
 import { Account } from "./src/modules/account/Account";
-import { Dashboard } from "./src/modules/dashboard/Dashboard";
 
 import styled from "styled-components/native";
 
@@ -105,10 +104,10 @@ class App extends React.Component<any, AppState> {
                 <RootStack.Screen name={"Kyc"} component={Kyc} />
               </>
             ) : (
-              <>
-                <RootStack.Screen name={"Account"} component={Account} />
-              </>
-            )}
+                <>
+                  <RootStack.Screen name={"Account"} component={Account} />
+                </>
+              )}
           </RootStack.Navigator>
         </UserContext.Provider>
       </NavigationContainer>

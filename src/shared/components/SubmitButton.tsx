@@ -17,18 +17,71 @@ const WhiteBtnText = styled.Text`
   line-height: 40px;
 `;
 
-export const SubmitButton: FunctionComponent<{
+interface SubmitButtonProps {
   title: string;
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
-}> = ({ title, handler }) => {
+  ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
+}
+
+type ButtonProps = {
+  theme: string;
+}
+
+export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
+  title,
+  handler,
+  ButtonTheme,
+}) => {
+  const handleThemeType = (BtnTheme: string) => {
+    switch (BtnTheme) {
+      case "WhiteTheme":
+        return "border: 1px solid #3679B5; background-color: #FFFFFF;";
+      case "GrayTheme":
+        return "border: 0px solid #FFFFFF; background-color: #AAAAAA;";
+      default:
+        return "border: 0px solid #FFFFFF; background-color: #2c6190;";
+    }
+  };
+  const handleThemeWrapperType = (BtnTheme: string) => {
+    switch (BtnTheme) {
+      case "WithFlat":
+        return "margin-bottom: 5px;";
+      case "WhiteTheme":
+        return "margin-bottom: 25px;";
+      default:
+        return "margin-bottom: 36px;";
+    }
+  };
+  const WhiteBtnWrapper = styled.View`
+    flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
+    justify-content: flex-end;
+    ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
+  `;
+  const WhiteBtn = styled.TouchableOpacity`
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 40px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+
+    ${(props: ButtonProps) => handleThemeType(props.theme)};
+  `;
+  const WhiteBtnText = styled.Text`
+    font-size: 14px;
+    text-align: center;
+    line-height: 40px;
+
+    color: ${(props: ButtonProps) =>
+      props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
+  `;
   return (
-    <View>
-      <WhiteBtn onPress={handler}>
-        <WhiteBtnText>
-          {title}
-        </WhiteBtnText>
+    <WhiteBtnWrapper theme={ButtonTheme}>
+      <WhiteBtn onPress={handler} theme={ButtonTheme}>
+        <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
       </WhiteBtn>
-    </View>
+    </WhiteBtnWrapper>
   );
 };
