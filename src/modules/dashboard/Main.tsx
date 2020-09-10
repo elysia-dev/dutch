@@ -127,7 +127,7 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {}
+interface state { }
 
 export class Main extends Component<props, state> {
   constructor(props: props) {

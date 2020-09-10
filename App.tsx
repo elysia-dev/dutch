@@ -27,9 +27,9 @@ import WalletBlackPng from "./assets/wallet_black.png";
 import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
 import Api from "./src/api/account";
-import { Main } from "./src/modules/dashboard/Main";
 import LocaleType from "./src/enums/LocaleType";
 import currentLocale from "./src/utiles/currentLocale";
+import { Dashboard } from "./src/modules/dashboard/Dashboard";
 
 const STORYBOOK_START = false;
 
@@ -105,7 +105,7 @@ class App extends React.Component<any, AppState> {
             {this.state.signedIn ? (
               <>
                 <RootStack.Screen name={"Main"} component={TabNavigatior} />
-                <RootStack.Screen name={"Kyc"} component={Kyc} />
+                {this.state.user.kycStatus === KycStatus.NONE && <RootStack.Screen name={"Kyc"} component={Kyc} />}
               </>
             ) : (
                 <>
@@ -127,7 +127,7 @@ const TabNavigatior = () => {
     <Tab.Navigator initialRouteName="Dashboard">
       <Tab.Screen
         name="Dashboard"
-        component={Main}
+        component={Dashboard}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
@@ -142,23 +142,6 @@ const TabNavigatior = () => {
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
             <Icon source={focused ? SectionsBlackPng : SectionsPng} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Products1"
-        component={Products}
-        options={{
-          tabBarLabel: "",
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{
-                resizeMode: "center",
-                height: 26,
-                width: 26,
-              }}
-              source={focused ? WalletBlackPng : WalletPng}
-            />
           ),
         }}
       />
