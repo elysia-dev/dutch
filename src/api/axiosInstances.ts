@@ -1,7 +1,9 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-community/async-storage";
+import Constants from "expo-constants";
+const { manifest } = Constants;
 
-const baseURL = "http://172.30.1.50:3000";
+const baseURL = `http://${(manifest.debuggerHost || 'localhost').split(':').shift()}:3000`;
 
 export const authenticatedEspressoClient = async () => {
   const token = await AsyncStorage.getItem("@token");
