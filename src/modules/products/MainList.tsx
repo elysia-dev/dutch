@@ -7,9 +7,10 @@ import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
-import Api, { ProductResponse } from "../../api/product";
+import Api from "../../api/product";
 import { Item } from "./components/Item";
-import { ProductInfo } from "./ProductInfo";
+import ProductInfo from "./ProductInfo";
+import Product from "../../types/product";
 
 const MailImg = styled.Image`
   width: 22px;
@@ -65,7 +66,7 @@ interface state {
   return: boolean;
   popularity: boolean;
   payments: string;
-  productList: Array<ProductResponse>;
+  productList: Product[];
 }
 
 export class MainList extends Component<props, state> {
@@ -126,6 +127,7 @@ export class MainList extends Component<props, state> {
             product: this.state.productList[index],
           })
         }
+        key={`item-${index}`}
       >
         <Item annualReturn={product.data.expectedAnnualReturn} />
       </TouchableOpacity>
