@@ -23,7 +23,7 @@ const WhiteBtn = styled.TouchableOpacity`
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;
   isWhite?: boolean;
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 }> = ({ handler, isWhite = false, style = {} }) => {
   return (
     <View style={style}>
