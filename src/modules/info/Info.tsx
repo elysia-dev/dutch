@@ -6,8 +6,6 @@ import { MyPage } from "./Mypage";
 import { OwnershipHistory } from "./OwnershipHistory";
 import { TransactionHistory } from "./TransactionHistory";
 
-interface props {}
-
 const Stack = createStackNavigator();
 
 export const Info = () => {

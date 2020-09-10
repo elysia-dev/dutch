@@ -7,8 +7,11 @@ const UserContext = createContext({
     email: "",
     firstName: "",
     lastName: "",
+    gender: "",
     kycStatus: KycStatus.NONE,
-  }
+  },
+  signIn: async () => { },
+  signOut: async () => { },
 });
 
 export default UserContext;
