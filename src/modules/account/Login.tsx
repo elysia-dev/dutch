@@ -105,11 +105,11 @@ export const Login: FunctionComponent = () => {
         navigation.navigate(AccountPage.CertifyRecover, {
           email: route.params.email,
           verificationId: res.data.verificationId,
-          status: status,
+          status: res.data.status,
         })
       )
       .catch((e) => {
-        if (e.response.status === 400) {
+        if (e.response && e.response.status === 400) {
           alert(i18n.t("checking_account.invalid_email"));
           return;
         } else {
