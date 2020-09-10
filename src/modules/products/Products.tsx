@@ -4,9 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { MainList } from "./MainList";
 import { Filter } from "./Filter";
 import { ProductPage } from "../../enums/pageEnum";
-import { ProductInfo } from "./ProductInfo";
-
-interface props {}
+import ProductInfo from "./ProductInfo";
 
 const Stack = createStackNavigator();
 
