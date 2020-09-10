@@ -1,28 +1,16 @@
-import React, { Component, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput as RNTextInput,
-  SafeAreaView,
-  Platform,
-} from "react-native";
+import React, { FunctionComponent, useState } from "react";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
-import WarningImg from "../../../src/shared/assets/images/warning.png";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import AccountLayout from "../../shared/components/AccountLayout";
+import ValidationMessage from "../../shared/components/ValidationMessage";
 
-const CertifySignupWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
-  height: 100%;
-  background-color: #fff;
-`;
 const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
@@ -57,78 +45,53 @@ const ExpTimeText = styled.Text`
   margin-bottom: 42px;
   line-height: 28px;
 `;
-const WarningIcon = styled.Image`
-  width: 12px;
-  height: 12px;
-  top: 1px;
-  position: absolute;
-`;
-const WarningText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
-  margin-right: 5px;
-  line-height: 29px;
-  flex-direction: row;
-  flex: 10;
-`;
 
 interface props {
   existence: string;
   certified: string;
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
 }
 
-interface state {
-  code: string;
-  verificationId: string;
-}
+type ParamList = {
+  CertifySignup: {
+    email: string;
+    verificationId: string;
+  };
+};
 
-export class CertifySignup extends Component<props, state> {
-  api: any;
-  constructor(props: props) {
-    super(props);
-    this.state = { code: "", verificationId: "" };
-    this.setCode = this.setCode.bind(this);
-    this.api = new Api();
-  }
+const CertifySignup: FunctionComponent<props> = (props) => {
+  const [state, setState] = useState({
+    code: "", verificationId: ""
+  })
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "CertifySignup">>();
 
-  setCode(input: string) {
-    this.setState({ code: input });
-    console.log(this.state.code);
-  }
-
-  callResendApi() {
-    const { route, navigation } = this.props;
-    const { email } = route.params;
-    Api.initializeEmail(email)
-      .then((res) => this.setState({ verificationId: res.data.verificationId }))
+  const callResendApi = () => {
+    Api.initializeEmail(route.params.email)
+      .then((res) => setState({ ...state, verificationId: res.data.verificationId }))
       .catch((e) => {
         alert(i18n.t("register.try_again_later"));
       });
   }
 
-  callCertifyApi() {
-    const { route, navigation } = this.props;
-    const { email, verificationId } = route.params;
-    if (!this.state.code) {
+  const callCertifyApi = () => {
+    if (!state.code) {
       alert(i18n.t("register.authentication_recover"));
       return;
     }
     Api.certifyEmail(
-      this.state.verificationId === ""
-        ? verificationId
-        : this.state.verificationId,
-      this.state.code
+      state.verificationId === ""
+        ? route.params.verificationId
+        : state.verificationId,
+      state.code
     )
       .then((res) => {
         if (res.data.status === "completed") {
           navigation.navigate(AccountPage.Signup, {
-            email: email,
+            email: route.params.email,
             verificationId:
-              this.state.verificationId === ""
-                ? verificationId
-                : this.state.verificationId,
+              state.verificationId === ""
+                ? route.params.verificationId
+                : state.verificationId,
           });
         } else if (res.data.status === "expired") {
           alert(i18n.t("register.expired_verification"));
@@ -153,53 +116,59 @@ export class CertifySignup extends Component<props, state> {
       });
   }
 
-  render() {
-    const { route, navigation } = this.props;
-    const { email, status, verificationId } = route.params;
-    //render 될 때마다 verificationId는 이전 route에서 받은 값으로 설정되나? 어떻게 update?
-    return (
-      <CertifySignupWrapper>
-        <BackButton
-          handler={() => navigation.navigate(AccountPage.InitializeEmail)}
-        />
-        <H1Text>{i18n.t("register.authentication_signup")}</H1Text>
-        <PText>{i18n.t("register.authentication_signup_label")}</PText>
-        <TextInput
-          type={i18n.t("account_label.account_email")}
-          edit={false}
-          value={email}
-          eventHandler={() => {}}
-          secure={false}
-        />
-        <TextInput
-          type={i18n.t("account_label.authentication_code")}
-          edit={true}
-          value={""}
-          eventHandler={this.setCode}
-          secure={false}
-        />
-        <ButtonWrapper>
-          <FlatButtonWrapper>
-            <FlatButton
-              title={i18n.t("account_label.resend")}
-              handler={() => this.callResendApi()}
-            />
-          </FlatButtonWrapper>
-          <ExpTimeText>03:00</ExpTimeText>
-          <ExpTimeText>{i18n.t("register.expiration_time")}</ExpTimeText>
-          {this.props.certified === "pending" && (
-            <WarningText>
-              <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
-              {i18n.t("errors.messages.authentication_code_do_not_match")}
-            </WarningText>
-          )}
-        </ButtonWrapper>
+  return (
+    <AccountLayout
+      title={
+        <>
+          <BackButton
+            handler={() => navigation.navigate(AccountPage.InitializeEmail)}
+          />
+          <H1Text>{i18n.t("register.authentication_signup")}</H1Text>
+          <PText>{i18n.t("register.authentication_signup_label")}</PText>
+        </>
+      }
+      body={
+        <>
+          <TextInput
+            type={i18n.t("account_label.account_email")}
+            edit={false}
+            value={route.params.email}
+            eventHandler={() => { }}
+            secure={false}
+          />
+          <TextInput
+            type={i18n.t("account_label.authentication_code")}
+            edit={true}
+            value={""}
+            eventHandler={(value) => setState({ ...state, code: value })}
+            secure={false}
+          />
+        </>
+      }
+      button={
+        <>
+          <ButtonWrapper>
+            <FlatButtonWrapper>
+              <FlatButton
+                title={i18n.t("account_label.resend")}
+                handler={() => callResendApi()}
+              />
+            </FlatButtonWrapper>
+            <ExpTimeText>03:00</ExpTimeText>
+            <ExpTimeText>{i18n.t("register.expiration_time")}</ExpTimeText>
+            {props.certified === "pending" && (
+              <ValidationMessage message={i18n.t("errors.messages.authentication_code_do_not_match")} />
+            )}
+          </ButtonWrapper>
 
-        <SubmitButton
-          title={i18n.t("account_label.certify")}
-          handler={() => this.callCertifyApi()}
-        />
-      </CertifySignupWrapper>
-    );
-  }
+          <SubmitButton
+            title={i18n.t("account_label.certify")}
+            handler={() => callCertifyApi()}
+          />
+        </>
+      }
+    />
+  );
 }
+
+export default CertifySignup;

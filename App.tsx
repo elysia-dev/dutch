@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { Kyc } from "./src/modules/kyc/Kyc";
 import { Info } from "./src/modules/info/Info";
 import { Products } from "./src/modules/products/Products";
-import { Account } from "./src/modules/account/Account";
+import Account from "./src/modules/account/Account";
 
 import styled from "styled-components/native";
 
