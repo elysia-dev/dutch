@@ -1,24 +1,15 @@
-import React, { Component, FunctionComponent, Props } from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
+import React, { Component, FunctionComponent } from "react";
+import { View, ScrollView, TouchableOpacity, SafeAreaView } from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import MailPng from "./images/mail.png";
 import FilterPng from "./images/filter.png";
 import { SortingButton } from "./components/SortingButton";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { ProductPage } from "../../enums/pageEnum";
 import Api from "../../api/product";
 import { Item } from "./components/Item";
-import ProductInfo from "./ProductInfo";
 import Product from "../../types/product";
 
-const MailImg = styled.Image`
-  width: 22px;
-  height: 16px;
-  top: 70px;
-  left: 330px;
-  position: relative;
-`;
 const FilterImg = styled.Image`
   width: 12px;
   height: 12px;
@@ -139,26 +130,19 @@ export class MainList extends Component<props, state> {
       </TouchableOpacity>
     ));
     return (
-      <View
-        style={{
-          width: "100%",
-          position: "absolute",
-          top: 0,
-          backgroundColor: "#fff",
-          height: "100%",
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: "#2C6190",
-            height: 155,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            width: "100%",
-            position: "absolute",
-            top: 0,
-          }}
-        >
+      <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
+        <ScrollView scrollEnabled={true}>
+          <View
+            style={{
+              backgroundColor: "#2C6190",
+              height: 155,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              width: "100%",
+              position: "absolute",
+              top: 0,
+            }}
+          />
           <View
             style={{
               flex: 1,
@@ -200,17 +184,11 @@ export class MainList extends Component<props, state> {
               }}
             />
           </View>
-        </View>
-        <View
-          style={{
-            position: "relative",
-            top: 155,
-            paddingBottom: 150,
-          }}
-        >
-          <ScrollView scrollEnabled={true}>{listToShow}</ScrollView>
-        </View>
-      </View>
+          <View style={{ marginTop: 155 }}>
+            {listToShow}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
