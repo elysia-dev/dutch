@@ -1,12 +1,13 @@
 {
   "checking_account": {
     "insert_account_email": "이메일을 입력해주세요.",
+    "check_email": "이메일 주소를 확인해주세요.",
     "try_again_later": "동일한 이메일의 인증 요청은 5분 뒤에 가능해요.",
     "invalid_email": "올바르지 않은 이메일 형식이에요.",
     "need_login": "로그인되지 않았습니다. 로그인을 진행해주세요."
   },
   "register": {
-    "authentication_signup": "메일을 인증해주세요",
+    "authentication_signup": "메일을 인증해주세요.",
     "authentication_recover": "인증코드를 입력해주세요.",
     "authentication_signup_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",

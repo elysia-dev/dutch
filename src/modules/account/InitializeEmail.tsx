@@ -75,9 +75,9 @@ const InitializeEmail: FunctionComponent = () => {
         <SubmitButton
           title={
             state.errorLength == 1
-              ? "이메일을 입력해주세요"
+              ? i18n.t("checking_account.insert_account_email")
               : state.errorReg == 1
-              ? "이메일 주소를 확인해주세요"
+              ? i18n.t("checking_account.chekck_email")
               : i18n.t("account_label.continue")
           }
           handler={() => callEmailApi()}

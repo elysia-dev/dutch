@@ -22,16 +22,24 @@ const Signup: FunctionComponent = () => {
   };
 
   const callSignupApi = (password: string): void => {
-    Api.signup(route.params.verificationId, password)
-      .then(async (res) => {
-        if (res.data.status === "success") {
-          await storeToken(res.data.token);
-          await signIn();
-        }
-      })
-      .catch((e) => {
-        alert(i18n.t("register.try_again_later"));
-      });
+    if (password.length < 8) {
+      alert(i18n.t("errors.messages.password_too_short"));
+    } else {
+      Api.signup(route.params.verificationId, password)
+        .then(async (res) => {
+          if (res.data.status === "success") {
+            await storeToken(res.data.token);
+            await signIn();
+          }
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            alert(i18n.t("register.try_again_later"));
+          } else if (e.response.status === 500) {
+            alert(i18n.t("errors.messages.server"));
+          }
+        });
+    }
   };
 
   return (

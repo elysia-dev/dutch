@@ -28,7 +28,7 @@ const CurrentPassword: FunctionComponent = () => {
       title={
         <>
           <BackButton handler={() => navigation.goBack()} />
-          <H1Text>비밀번호 변경</H1Text>
+          <H1Text>{i18n.t("account_label.change_password")}</H1Text>
           <H1Text>{i18n.t("account_check.insert_current_password")}</H1Text>
         </>
       }
