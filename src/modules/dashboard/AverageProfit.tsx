@@ -4,9 +4,8 @@ import styled from "styled-components/native";
 import { BackButton } from "../../shared/components/BackButton";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/kyc";
-import { DashboardPage } from "../../enums/pageEnum";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { UserResponse } from "../../api/account";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 
 const H1Text = styled.Text`
   color: #626368;
@@ -42,9 +41,14 @@ interface props {
   route: NavigationRoute;
 }
 
+type ParamList = {
+  User: UserResponse;
+};
+
 export const AverageProfit: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamList, "User">>();
+  const dashboardInfo = route.params.dashboard.summary.profits;
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>

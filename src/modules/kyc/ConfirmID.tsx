@@ -104,7 +104,12 @@ export class ConfirmID extends Component<props, state> {
   //       });
   //     })
   //     .catch((e) => {
-  //       alert(i18n.t("kyc.submit_error"));
+  //       if (e.response.status === 404) {
+  //         alert(i18n.t("kyc.submit_error"));
+  // navigation.navigate("Main", { screen: "Info" });
+  //       } else if (e.response.status === 500) {
+  //         alert(i18n.t("errors.messages.server"));
+  //       }
   //     });
   // }
 

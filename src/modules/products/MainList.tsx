@@ -97,9 +97,12 @@ export class MainList extends Component<props, state> {
         console.log(this.state.productList);
       })
       .catch((e) => {
-        console.error(e);
-        alert(i18n.t("checking_account.need_login"));
-        navigation.navigate("Account");
+        if (e.response.status === 401) {
+          alert(i18n.t("checking_account.need_login"));
+          navigation.navigate("Account");
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.server.duplicate_email"));
+        }
       });
   }
 
@@ -123,8 +126,11 @@ export class MainList extends Component<props, state> {
     const listToShow = this.state.productList.map((product, index) => (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(ProductPage.ProductInfo, {
-            product: this.state.productList[index],
+          navigation.navigate("Product", {
+            screen: ProductPage.ProductInfo,
+            params: {
+              product: this.state.productList[index],
+            },
           })
         }
         key={`item-${index}`}

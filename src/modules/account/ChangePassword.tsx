@@ -146,5 +146,3 @@ export class ChangePassword extends Component<props, state> {
     );
   }
 }
-
-const goToBack = () => {};

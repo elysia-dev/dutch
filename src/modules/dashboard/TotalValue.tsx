@@ -4,9 +4,8 @@ import styled from "styled-components/native";
 import { BackButton } from "../../shared/components/BackButton";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/kyc";
-import { DashboardPage } from "../../enums/pageEnum";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { UserResponse } from "../../api/account";
 
 const H1Text = styled.Text`
   color: #626368;
@@ -36,15 +35,26 @@ const NumText2 = styled.Text`
   margin-left: 20px;
   font-weight: bold;
 `;
+const NumWrapper = styled.View`
+  display: flex,
+  flex-direction: row,
+  justify-content: space-between,
+  align-content: center,
+  `;
 
 interface props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
 
+type ParamList = {
+  User: UserResponse;
+};
+
 export const TotalValue: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamList, "User">>();
+  const dashboardInfo = route.params.dashboard.summary.properties;
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
@@ -79,18 +89,11 @@ export const TotalValue: FunctionComponent<props> = (props) => {
           padding: 20,
         }}
       >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "center",
-          }}
-        >
+        <NumWrapper>
           <PText>{i18n.t("dashboard_label.property_value")}</PText>
-          <NumText2>{"208.68$"}</NumText2>
-        </View>
-        <View
+          <NumText2>{dashboardInfo.totalProperties}</NumText2>
+        </NumWrapper>
+        <NumWrapper
           style={{
             display: "flex",
             flexDirection: "row",
@@ -99,9 +102,9 @@ export const TotalValue: FunctionComponent<props> = (props) => {
           }}
         >
           <PText>{i18n.t("dashboard_label.usd")}</PText>
-          <NumText2>{"120,000.0892$"}</NumText2>
-        </View>
-        <View
+          <NumText2>{dashboardInfo.paypal}</NumText2>
+        </NumWrapper>
+        <NumWrapper
           style={{
             display: "flex",
             flexDirection: "row",
@@ -110,8 +113,8 @@ export const TotalValue: FunctionComponent<props> = (props) => {
           }}
         >
           <PText>{i18n.t("dashboard_label.el")}</PText>
-          <NumText2>{"3,000.05%"}</NumText2>
-        </View>
+          <NumText2>{dashboardInfo.el}</NumText2>
+        </NumWrapper>
       </View>
     </View>
   );

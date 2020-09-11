@@ -102,7 +102,10 @@ export class CertifySignup extends Component<props, state> {
     const { route, navigation } = this.props;
     const { email } = route.params;
     Api.initializeEmail(email)
-      .then((res) => this.setState({ verificationId: res.data.verificationId }))
+      .then((res) => {
+        this.setState({ verificationId: res.data.verificationId });
+        alert(i18n.t("register.resend_verification"));
+      })
       .catch((e) => {
         alert(i18n.t("register.try_again_later"));
       });
@@ -149,6 +152,8 @@ export class CertifySignup extends Component<props, state> {
         } else if (e.response.status === 404) {
           alert(i18n.t("register.expired_verification"));
           navigation.navigate(AccountPage.InitializeEmail);
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.messages.server"));
         }
       });
   }

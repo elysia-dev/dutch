@@ -5,8 +5,6 @@ import { Main } from "./Main";
 import { TotalValue } from "./TotalValue";
 import { AverageProfit } from "./AverageProfit";
 
-interface props {}
-
 const Stack = createStackNavigator();
 
 export const Dashboard = () => {

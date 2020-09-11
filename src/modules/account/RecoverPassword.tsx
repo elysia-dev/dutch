@@ -111,6 +111,8 @@ export class RecoverPassword extends Component<props, state> {
           } else if (e.reponse.status === 404) {
             alert(i18n.t("account_check.recover_verification_error"));
             navigation.navigate(AccountPage.InitializeEmail);
+          } else if (e.response.status === 500) {
+            alert(i18n.t("errors.messages.server"));
           }
         });
     }

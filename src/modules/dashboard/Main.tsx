@@ -4,9 +4,11 @@ import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/kyc";
+import Api, { UserResponse } from "../../api/account";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { DashboardPage, InfoPage } from "../../enums/pageEnum";
+import { DashboardPage, InfoPage, AccountPage } from "../../enums/pageEnum";
+import { OwnershipItem } from "../info/components/OwnershipItem";
+import { Dashboard } from "./Dashboard";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -76,63 +78,40 @@ const moreHistory = (handler: () => void) => {
   );
 };
 
-const historyItem = (name: string, rate: string, expectedSale: string) => {
-  return (
-    <View
-      style={{
-        marginTop: 15,
-
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderBottomColor: "#E5E5E5",
-        paddingBottom: 15,
-        // marginBottom: 15,
-      }}
-    >
-      <View style={{ flex: 1, paddingLeft: 10, paddingRight: 10, height: 50 }}>
-        <Image
-          source={require("./images/building.png")}
-          style={{
-            width: "100%",
-            height: "100%",
-            resizeMode: "center",
-          }}
-        ></Image>
-      </View>
-      <View
-        style={{
-          flex: 4,
-          flexDirection: "column",
-        }}
-      >
-        <Item>
-          <GText>{i18n.t("info_label.product_name")}</GText>
-          <Text>{name}</Text>
-        </Item>
-        <Item>
-          <GText>{i18n.t("info_label.entire_profit")}</GText>
-          <Text>{`${rate}%`}</Text>
-        </Item>
-        <Item>
-          <GText>{i18n.t("info_label.expectd_sale_profit")}</GText>
-          <Text>{`${expectedSale}%`}</Text>
-        </Item>
-      </View>
-    </View>
-  );
-};
-
 interface props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
 
-interface state {}
+interface state {
+  user: UserResponse;
+}
 
 export class Main extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = {};
+    this.state = { user: {} };
+  }
+
+  callApi() {
+    const { navigation } = this.props;
+
+    Api.me()
+      .then((res) => {
+        this.setState({ user: res.data });
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          alert(i18n.t("checking_account.need_login"));
+          navigation.navigate(AccountPage.InitializeEmail);
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.messages.server"));
+        }
+      });
+  }
+
+  componentDidMount() {
+    this.callApi();
   }
 
   render() {
@@ -175,7 +154,12 @@ export class Main extends Component<props, state> {
         >
           <TotalText>{"123,000$"}</TotalText>
           <TouchableOpacity
-            onPress={() => navigation.navigate(DashboardPage.TotalValue)}
+            onPress={() => {
+              navigation.navigate("Dashboard", {
+                screen: DashboardPage.TotalValue,
+                params: { user: this.state.user },
+              });
+            }}
           >
             <PText>{i18n.t("dashboard_label.total_value") + " >"}</PText>
           </TouchableOpacity>
@@ -190,7 +174,14 @@ export class Main extends Component<props, state> {
             }}
           ></View>
           <TouchableOpacity
-            onPress={() => navigation.navigate(DashboardPage.AverageProfit)}
+            onPress={() =>
+              navigation.navigate("User", {
+                screen: DashboardPage.AverageProfit,
+                params: {
+                  user: this.state.user,
+                },
+              })
+            }
             style={{ elevation: 5 }}
           >
             <View
@@ -227,9 +218,21 @@ export class Main extends Component<props, state> {
           }}
         >
           <H1Text>{i18n.t("dashboard_label.my_investment")}</H1Text>
-          <View>{historyItem("Asset #1", "4.02", "15.00")}</View>
-          <View>{historyItem("Asset #1", "4.02", "15.00")}</View>
-          <View>{historyItem("Asset #1", "4.02", "15.00")}</View>
+          <OwnershipItem
+            name={"Asset #1"}
+            rate={"4.02"}
+            expectedSale={"15.00"}
+          />
+          <OwnershipItem
+            name={"Asset #1"}
+            rate={"4.02"}
+            expectedSale={"15.00"}
+          />
+          <OwnershipItem
+            name={"Asset #1"}
+            rate={"4.02"}
+            expectedSale={"15.00"}
+          />
 
           <View>
             {moreHistory(() =>

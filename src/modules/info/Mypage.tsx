@@ -66,6 +66,8 @@ const MyPage: FunctionComponent = () => {
             borderRadius: 5,
             width: 80,
             height: 25,
+            justifyContent: "center",
+            alignContent: "center",
           }}
         >
           <ButtonText>{i18n.t("info_label.logout")}</ButtonText>
@@ -90,6 +92,8 @@ const MyPage: FunctionComponent = () => {
             borderRadius: 5,
             width: 120,
             height: 25,
+            justifyContent: "center",
+            alignContent: "center",
           }}
         >
           <ButtonText>{"비밀번호 변경(임시)"}</ButtonText>
@@ -110,9 +114,6 @@ const MyPage: FunctionComponent = () => {
           <PText>{user.gender}</PText>
         </View>
       )}
-      <View style={{ padding: 20 }}>
-        <ButtonText>{i18n.t("info_label.signout")}</ButtonText>
-      </View>
     </SafeAreaView>
   );
 };

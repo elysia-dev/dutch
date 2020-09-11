@@ -20,6 +20,7 @@ const LoginWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
   height: 100%;
   z-index: 1;
+  background-color: #fff;
 `;
 const H1Text = styled.Text`
   font-size: 20px;
@@ -148,6 +149,8 @@ export const Login: FunctionComponent = () => {
             alert(i18n.t("account_check.insert_password"));
           } else if (e.response.status === 404) {
             alert(i18n.t("errors.messages.wrong_email"));
+          } else if (e.response.status === 500) {
+            alert(i18n.t("errors.messages.server"));
           }
         });
     }
@@ -162,8 +165,7 @@ export const Login: FunctionComponent = () => {
           height: "100%",
           width: "100%",
           zIndex: state.modalVisible === false ? 0 : 999,
-          backgroundColor:
-            state.modalVisible === false ? "#FFFFFF" : "#000000",
+          backgroundColor: state.modalVisible === false ? "#FFFFFF" : "#000000",
           display: state.modalVisible === false ? "none" : "flex",
           opacity: state.modalVisible === false ? 0 : 0.6,
         }}
@@ -178,22 +180,23 @@ export const Login: FunctionComponent = () => {
         type={i18n.t("account_label.account_password")}
         value={""}
         edit={true}
-        eventHandler={(input: string) => setState({ ...state, password: input })}
+        eventHandler={(input: string) =>
+          setState({ ...state, password: input })
+        }
         secure={true}
       />
       {state.error > 0 && (
         <WarningText>
           <WarningIconImg source={WarningImg} />{" "}
-          {i18n.t("errors.messages.password_do_not_match")} (
-          {state.error}
-            /5)
+          {i18n.t("errors.messages.password_do_not_match")} ({state.error}
+          /5)
         </WarningText>
       )}
       <TextInput
         type={i18n.t("account_label.account_email")}
         value={route.params.email}
         edit={false}
-        eventHandler={() => { }}
+        eventHandler={() => {}}
         secure={false}
       />
       <SubmitButton
@@ -226,6 +229,6 @@ export const Login: FunctionComponent = () => {
       )}
     </LoginWrapper>
   );
-}
+};
 
 export default Login;

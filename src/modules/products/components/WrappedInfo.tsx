@@ -44,13 +44,16 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
   const [state, setState] = useState({
     financial: false,
     highlight: false,
-    abstract: false
+    abstract: false,
   });
 
   const { locale } = useContext(UserContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[product.data.languages.includes(locale) ? locale : LocaleType.EN]
+  const productDescription =
+    product.data.descriptions[
+      product.data.languages.includes(locale) ? locale : LocaleType.EN
+    ];
 
   return (
     <View style={{ width: "100%" }}>
@@ -64,9 +67,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         <H1Text>{i18n.t("product_label.property_info")}</H1Text>
         <View style={{ position: "relative", marginBottom: 10 }}>
           <TouchableOpacity
-            onPress={() =>
-              setState({ ...state, financial: !state.financial })
-            }
+            onPress={() => setState({ ...state, financial: !state.financial })}
           >
             <View
               style={{
@@ -116,17 +117,11 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_financial.lockup_period")}</GText>
-                <PText>
-                  {productDescription.lockupPeriod}
-                </PText>
+                <PText>{productDescription.lockupPeriod}</PText>
               </DesView>
               <DesView>
-                <GText>
-                  {i18n.t("product_financial.expected_sale_date")}
-                </GText>
-                <PText>
-                  {productDescription.expectedSaleDate}
-                </PText>
+                <GText>{i18n.t("product_financial.expected_sale_date")}</GText>
+                <PText>{productDescription.expectedSaleDate}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_financial.price")}</GText>
@@ -152,9 +147,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         </View>
         <View style={{ position: "relative" }}>
           <TouchableOpacity
-            onPress={() =>
-              setState({ ...state, highlight: !state.highlight })
-            }
+            onPress={() => setState({ ...state, highlight: !state.highlight })}
           >
             <View
               style={{
@@ -184,61 +177,41 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
             <View style={{ paddingBottom: 20 }}>
               <DesView>
                 <GText>{i18n.t("product_highlight.type")}</GText>
-                <PText>
-                  {productDescription.propertyType}
-                </PText>
+                <PText>{productDescription.propertyType}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.ground")}</GText>
-                <PText>
-                  {productDescription.ground}
-                </PText>
+                <PText>{productDescription.ground}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.underground")}</GText>
-                <PText>
-                  {productDescription.underground}
-                </PText>
+                <PText>{productDescription.underground}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.bedroom")}</GText>
-                <PText>
-                  {productDescription.bedroom}
-                </PText>
+                <PText>{productDescription.bedroom}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.completion_date")}</GText>
-                <PText>
-                  {product.data.buildingCompletionDate}
-                </PText>
+                <PText>{product.data.buildingCompletionDate}</PText>
               </DesView>
               <DesView>
                 <GText>
                   {i18n.t("product_highlight.total_parking_available")}
                 </GText>
-                <PText>
-                  {productDescription.totalParkingAvailable}
-                </PText>
+                <PText>{productDescription.totalParkingAvailable}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.air_conditioning")}</GText>
-                <PText>
-                  {productDescription.airConditioning}
-                </PText>
+                <PText>{productDescription.airConditioning}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t("product_highlight.heating")}</GText>
-                <PText>
-                  {productDescription.heating}
-                </PText>
+                <PText>{productDescription.heating}</PText>
               </DesView>
               <DesView>
-                <GText>
-                  {i18n.t("product_highlight.security_facilities")}
-                </GText>
-                <PText>
-                  {productDescription.securityFacilities}
-                </PText>
+                <GText>{i18n.t("product_highlight.security_facilities")}</GText>
+                <PText>{productDescription.securityFacilities}</PText>
               </DesView>
             </View>
           )}
@@ -272,9 +245,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
                     resizeMode: "center",
                   },
                   {
-                    transform: [
-                      { rotate: state.abstract ? "180deg" : "0deg" },
-                    ],
+                    transform: [{ rotate: state.abstract ? "180deg" : "0deg" }],
                   },
                 ]}
               />
@@ -283,14 +254,12 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         </View>
         {state.abstract && (
           <View>
-            <PText>
-              {productDescription.summary}
-            </PText>
+            <PText>{productDescription.summary}</PText>
           </View>
         )}
       </View>
     </View>
   );
-}
+};
 
-export default WrappedInfo
+export default WrappedInfo;

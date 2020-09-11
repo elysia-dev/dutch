@@ -110,6 +110,8 @@ export class CertifyRecover extends Component<props, state> {
         if (e.response.status === 400) {
           alert(i18n.t("checking_account.invalid_email"));
           return;
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.messages.server"));
         } else {
           alert(i18n.t("checking_account.try_again_later"));
         }

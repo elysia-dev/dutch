@@ -338,5 +338,3 @@ typings/
 node_modules/**/*
 .expo/*
 npm-debug.*
-
-.vscode/.react/*

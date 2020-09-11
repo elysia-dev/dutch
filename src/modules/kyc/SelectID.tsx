@@ -18,7 +18,7 @@ import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
-  color: #1C1C1C;
+  color: #1c1c1c;
   font-size: 20px;
   font-weight: bold;
   text-align: left;
@@ -69,7 +69,6 @@ export class SelectID extends Component<props, state> {
       : this.setState({ idType: "" });
   }
 
-
   render() {
     const { route, navigation } = this.props;
     // const { email, token } = route.params;
@@ -98,9 +97,7 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
-          selected={
-            this.state.idType === "passport" && "selected"
-          }
+          selected={this.state.idType === "passport" && "selected"}
         />
         <OptionButton
           title={i18n.t("kyc_label.drivers_license")}
@@ -121,9 +118,7 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
-          selected={
-            this.state.idType === "drivers_license" && "selected"
-          }
+          selected={this.state.idType === "drivers_license" && "selected"}
         />
         <OptionButton
           title={i18n.t("kyc_label.government_id")}
@@ -144,9 +139,7 @@ export class SelectID extends Component<props, state> {
               <View />
             )
           }
-          selected={
-            this.state.idType === "id_card" && "selected"
-          }
+          selected={this.state.idType === "id_card" && "selected"}
         />
         <SubmitButton
           title={i18n.t("kyc_label.shoot")}

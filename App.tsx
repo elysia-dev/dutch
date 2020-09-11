@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Image } from "react-native";
-import StorybookUIRoot from "./storybook/index";
+// import StorybookUIRoot from "./storybook/index";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -30,6 +30,9 @@ import Api from "./src/api/account";
 import { Main } from "./src/modules/dashboard/Main";
 import LocaleType from "./src/enums/LocaleType";
 import currentLocale from "./src/utiles/currentLocale";
+import { Dashboard } from "./src/modules/dashboard/Dashboard";
+import MainInfo from "./src/modules/info/MainInfo";
+import { MainList } from "./src/modules/products/MainList";
 
 const STORYBOOK_START = false;
 
@@ -100,18 +103,21 @@ class App extends React.Component<any, AppState> {
             signOut: this.signOut,
           }}
         >
-          {STORYBOOK_START && <StorybookUIRoot />}
+          {/* {STORYBOOK_START && <StorybookUIRoot />} */}
           <RootStack.Navigator headerMode="none">
             {this.state.signedIn ? (
               <>
                 <RootStack.Screen name={"Main"} component={TabNavigatior} />
                 <RootStack.Screen name={"Kyc"} component={Kyc} />
+                <RootStack.Screen name={"Dashboard"} component={Dashboard} />
+                <RootStack.Screen name={"Info"} component={Info} />
+                <RootStack.Screen name={"Product"} component={Products} />
               </>
             ) : (
-                <>
-                  <RootStack.Screen name={"Account"} component={Account} />
-                </>
-              )}
+              <>
+                <RootStack.Screen name={"Account"} component={Account} />
+              </>
+            )}
           </RootStack.Navigator>
         </UserContext.Provider>
       </NavigationContainer>
@@ -124,9 +130,9 @@ const RootStack = createStackNavigator();
 
 const TabNavigatior = () => {
   return (
-    <Tab.Navigator initialRouteName="Dashboard">
+    <Tab.Navigator initialRouteName="DashboardMain">
       <Tab.Screen
-        name="Dashboard"
+        name="DashboardMain"
         component={Main}
         options={{
           tabBarLabel: "",
@@ -136,8 +142,8 @@ const TabNavigatior = () => {
         }}
       />
       <Tab.Screen
-        name="Products"
-        component={Products}
+        name="ProductsMain"
+        component={MainList}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
@@ -146,8 +152,8 @@ const TabNavigatior = () => {
         }}
       />
       <Tab.Screen
-        name="Products1"
-        component={Products}
+        name="Wallet"
+        component={MainList}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
@@ -163,8 +169,8 @@ const TabNavigatior = () => {
         }}
       />
       <Tab.Screen
-        name="Info"
-        component={Info}
+        name="InfoMain"
+        component={MainInfo}
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
@@ -182,14 +188,5 @@ const TabNavigatior = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default App;

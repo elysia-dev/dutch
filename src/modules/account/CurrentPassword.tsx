@@ -43,7 +43,6 @@ interface props {
 }
 
 interface state {
-  step: number;
   password: string;
 }
 

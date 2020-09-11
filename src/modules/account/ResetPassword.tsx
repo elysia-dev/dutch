@@ -90,6 +90,8 @@ export class ResetPassword extends Component<props, state> {
             alert(i18n.t("account_check.reset_error"));
           } else if (e.response.status === 401) {
             alert(i18n.t("account_check.recover_verification_error"));
+          } else if (e.response.status === 500) {
+            alert(i18n.t("errors.messages.server"));
           }
           navigation.navigate("Main", { screen: "Info" });
         });

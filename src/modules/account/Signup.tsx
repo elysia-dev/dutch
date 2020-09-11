@@ -36,7 +36,7 @@ const PText = styled.Text`
   margin: 10px 5%;
 `;
 
-const CheckPassword = function (input1: string) {
+const CheckPassword = function(input1: string) {
   // 숫자와 영문이 모두 있는지 검사하고 T/F return 하는 함수입니다.
   var reg_pwd = /^.*(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
   return !reg_pwd.test(input1) ? false : true;
@@ -134,50 +134,44 @@ export const Signup: FunctionComponent = () => {
         value={""}
         secure={true}
       />
-      {
-        state.errorLength == 1 && (
-          <PText>
-            <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
-            <PText>{i18n.t("errors.messages.password_too_short")}</PText>
-          </PText>
-        )
-      }
-      {
-        state.errorLength == 0 && state.errorReg == 1 && (
-          <PText>
-            <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
-            {i18n.t("errors.messages.simple_password")}
-          </PText>
-        )
-      }
+      {state.errorLength == 1 && (
+        <PText>
+          <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
+          <PText>{i18n.t("errors.messages.password_too_short")}</PText>
+        </PText>
+      )}
+      {state.errorLength == 0 && state.errorReg == 1 && (
+        <PText>
+          <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
+          {i18n.t("errors.messages.simple_password")}
+        </PText>
+      )}
       <TextInput
         type={i18n.t("account_label.account_email")}
         edit={false}
-        eventHandler={() => { }}
+        eventHandler={() => {}}
         value={route.params.email}
         secure={false}
       />
-      {
-        state.step == 1 ? (
-          <SubmitButton
-            title={i18n.t("account_label.continue")}
-            handler={() => {
-              if (state.password.length < 8) {
-                alert(i18n.t("errors.messages.password_too_short"));
-                return;
-              }
-              nextStep(2);
-            }}
-          />
-        ) : (
-            <SubmitButton
-              title={i18n.t("account_label.signup")}
-              handler={() => callSignupApi()}
-            />
-          )
-      }
-    </SignupWrapper >
+      {state.step == 1 ? (
+        <SubmitButton
+          title={i18n.t("account_label.continue")}
+          handler={() => {
+            if (state.password.length < 8) {
+              alert(i18n.t("errors.messages.password_too_short"));
+              return;
+            }
+            nextStep(2);
+          }}
+        />
+      ) : (
+        <SubmitButton
+          title={i18n.t("account_label.signup")}
+          handler={() => callSignupApi()}
+        />
+      )}
+    </SignupWrapper>
   );
-}
+};
 
 export default Signup;

@@ -81,7 +81,10 @@ export class LockAccount extends Component<props, state> {
     const { route } = this.props;
     const { email } = route.params;
     Api.certifyEmail_recover(email, "recoverAccount")
-      .then((res) => this.setState({ verificationId: res.data.verificationId }))
+      .then((res) => {
+        this.setState({ verificationId: res.data.verificationId });
+        alert(i18n.t("register.resend_verification"));
+      })
       .catch((e) => alert(i18n.t("checking_account.try_again_later")));
   }
 
@@ -118,7 +121,13 @@ export class LockAccount extends Component<props, state> {
           );
         }
       })
-      .catch((e) => {});
+      .catch((e) => {
+        if (e.response.status === 404) {
+          alert(i18n.t("resigter.expired_verification"));
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.messages.server"));
+        }
+      });
   }
 
   render() {

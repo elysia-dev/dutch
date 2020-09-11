@@ -12,7 +12,8 @@
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "expiration_time": "유효시간",
     "expired_verification": "인증이 만료되었어요. 다시 인증을 요청해 주세요.",
-    "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)"
+    "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)",
+    "resend_verification": "인증이 재요청되었습니다. 새로운 인증번호를 확인해주세요."
   },
   "account_check": {
     "insert_password": "비밀번호를 입력해주세요.",
@@ -42,7 +43,9 @@
       "authentication_code_do_not_match": "인증번호가 일치하지 않아요.",
       "password_too_short": "비밀번호는 최소 8자리여야 해요.",
       "simple_password": "비밀번호는 영문, 숫자가 모두 포함되어야 해요.",
-      "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다"
+      "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다",
+      "server": "서버 통신 오류입니다. 담당자에게 문의하세요.",
+      "duplicate_email": "이메일 중복 오류입니다. 다른 이메일로 다시 진행해 주세요."
     }
   },
   "account_label": {

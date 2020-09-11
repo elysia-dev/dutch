@@ -1,10 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import {
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { View, ScrollView, TouchableOpacity, Platform } from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
@@ -41,6 +36,7 @@ const InfoHeaderUserImg = styled.Image`
   width: 20px;
   height: 20px;
   margin: 50px 5% 0px 5%;
+  resize-mode: center;
 `;
 const InfoHeaderUserName = styled.Text`
   font-size: 14px;
@@ -104,21 +100,20 @@ const MainInfo: FunctionComponent = () => {
               <InfoHeaderUserImg
                 source={require("../kyc/images/userIcon.png")}
               />
-              {"  "}
               {user.kycStatus !== KycStatus.SUCCESS ? (
                 <InfoHeaderUserName>
                   {i18n.t("info_label.need_kyc_label")}
                 </InfoHeaderUserName>
               ) : (
-                  <InfoHeaderUserName>
-                    {user.firstName} {user.lastName}
-                  </InfoHeaderUserName>
-                )}
+                <InfoHeaderUserName>
+                  {user.firstName} {user.lastName}
+                </InfoHeaderUserName>
+              )}
             </InfoHeaderUserName>
           </InfoUserWrapper>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate(InfoPage.MyPage);
+              navigation.navigate("Info", { screen: InfoPage.MyPage });
             }}
           >
             <InfoHeaderSettingImg
@@ -151,7 +146,7 @@ const MainInfo: FunctionComponent = () => {
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               title={i18n.t("info_label.approved_kyc")}
-              handler={() => { }}
+              handler={() => {}}
               ButtonTheme={"GrayTheme"}
             />
           )}
@@ -165,7 +160,11 @@ const MainInfo: FunctionComponent = () => {
           <H1Text>{i18n.t("info_label.confirm")}</H1Text>
           <InfoButtonTabWrapper>
             <TouchableOpacity
-              onPress={() => navigation.navigate(InfoPage.InvestmentHistory)}
+              onPress={() =>
+                navigation.navigate("Info", {
+                  screen: InfoPage.OwnershipHistory,
+                })
+              }
             >
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.investment_history")}</PText>
@@ -178,7 +177,11 @@ const MainInfo: FunctionComponent = () => {
 
           <InfoButtonTabWrapper>
             <TouchableOpacity
-              onPress={() => navigation.navigate(InfoPage.TransactionHistory)}
+              onPress={() =>
+                navigation.navigate("Info", {
+                  screen: InfoPage.TransactionHistory,
+                })
+              }
             >
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.transaction_history")}</PText>
@@ -203,7 +206,7 @@ const MainInfo: FunctionComponent = () => {
           </View>
 
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.notice")}</PText>
                 <InfoArrowImg
@@ -213,7 +216,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.service_terms")}</PText>
                 <InfoArrowImg
@@ -223,7 +226,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.contact")}</PText>
                 <InfoArrowImg
@@ -233,7 +236,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.faq")}</PText>
                 <InfoArrowImg
@@ -267,8 +270,8 @@ const MainInfo: FunctionComponent = () => {
           }}
         />
       </ScrollView>
-    </MainInfoWrapper >
+    </MainInfoWrapper>
   );
-}
+};
 
-export default MainInfo
+export default MainInfo;

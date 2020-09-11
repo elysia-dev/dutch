@@ -23,6 +23,12 @@ const GText = styled.Text`
   text-align: left;
   font-weight: 300;
 `;
+const ButtonText = styled.Text`
+  color: #626368;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 300;
+`;
 
 export const Calculator: FunctionComponent<props> = (props: props) => {
   return (
@@ -94,11 +100,11 @@ export const Calculator: FunctionComponent<props> = (props: props) => {
                 backgroundColor: "#F6F6F8",
                 borderWidth: 1,
                 borderColor: "#D0D8DF",
-                paddingLeft: 23,
-                paddingTop: 4,
+                justifyContent: "center",
+                alignContent: "center",
               }}
             >
-              <GText>{i18n.t("product_label.more_info")}</GText>
+              <ButtonText>{i18n.t("product_label.more_info")}</ButtonText>
             </View>
           </TouchableOpacity>
         </View>

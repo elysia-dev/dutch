@@ -39,7 +39,7 @@ type RecoverResponse = {
   status: string;
 };
 
-type UserResponse = {
+export type UserResponse = {
   email: string;
   kycStatus: KycStatus;
   gender: string;
@@ -48,12 +48,21 @@ type UserResponse = {
   dashboard: {
     userId: number;
     summary: {
-      el: string;
-      paypal: string;
-      eth: string;
-      btc: string;
-      properties: [];
-      profits: [];
+      properties: {
+        el: string;
+        btc: string;
+        paypal: string;
+        eth: string;
+        totalProperties: string;
+      };
+      profits: {
+        returnOnSale: string;
+        returnOnRent: string;
+        returnOfMonth: string;
+        totalReturnOnSale: string;
+        totalReturnOnRent: string;
+        totalOwnedToken: string;
+      };
     };
   };
 };
