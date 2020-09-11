@@ -174,7 +174,7 @@ export class Main extends Component<props, state> {
           ></View>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("User", {
+              navigation.navigate("Dashboard", {
                 screen: DashboardPage.AverageProfit,
                 params: {
                   user: this.state.user,
