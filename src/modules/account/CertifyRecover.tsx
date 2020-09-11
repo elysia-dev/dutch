@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import { FlatButton } from "../../shared/components/FlatButton";
+import BorderFlatButton from "../../shared/components/BorderFlatButton";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
@@ -10,42 +11,24 @@ import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import AccountLayout from "../../shared/components/AccountLayout";
-import ValidationMessage from "../../shared/components/ValidationMessage";
 
 const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
   text-align: left;
-  margin: 25px 5%;
   font-weight: bold;
 `;
 const PText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
-  margin: 0px 5%;
-  margin-bottom: 42px;
 `;
 
-const FlatButtonWrapper = styled.View`
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #36a1ff;
-  color: #1c1c1c;
-  width: 76px;
-  height: 29px;
-`;
-const ButtonWrapper = styled.View`
-  flex-direction: row-reverse;
-  width: 90%;
-  margin: 0 auto;
-`;
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
   margin-right: 2%;
-  margin-bottom: 42px;
-  line-height: 28px;
+  line-height: 21px;
+  height: 21px;
 `;
 
 interface props {
@@ -134,8 +117,9 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
         <>
           <BackButton
             handler={() => navigation.navigate(AccountPage.InitializeEmail)}
+            style={{ marginTop: 20, marginBottom: 20 }}
           />
-          <H1Text>{i18n.t("register.authentication_recover")}</H1Text>
+          <H1Text style={{ marginBottom: 10 }}>{i18n.t("register.authentication_recover")}</H1Text>
           <PText>{i18n.t("register.authentication_recover_label")}</PText>
         </>
       }
@@ -147,6 +131,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
             value={route.params.email}
             eventHandler={() => { }}
             secure={false}
+            style={{ marginBottom: 30 }}
           />
           <TextInput
             type={i18n.t("account_label.authentication_code")}
@@ -155,28 +140,20 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
             eventHandler={(value) => { setState({ ...state, code: value }) }}
             secure={false}
           />
+          <View style={{ marginTop: 10, display: "flex", flexDirection: "row" }}>
+            <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t("register.expiration_time")} 03:00 `}</ExpTimeText>
+            <BorderFlatButton
+              title={i18n.t("account_label.resend")}
+              handler={() => callResendApi()}
+            />
+          </View>
         </>
       }
       button={
-        <>
-          <ButtonWrapper>
-            <FlatButtonWrapper>
-              <FlatButton
-                title={i18n.t("account_label.resend")}
-                handler={() => callResendApi()}
-              />
-            </FlatButtonWrapper>
-            <ExpTimeText>03:00</ExpTimeText>
-            <ExpTimeText>{i18n.t("register.expiration_time")}</ExpTimeText>
-            {props.certified === "pending" && (
-              <ValidationMessage message={i18n.t("errors.messages.authentication_code_do_not_match")} />
-            )}
-          </ButtonWrapper>
-          <SubmitButton
-            title={i18n.t("account_label.certify")}
-            handler={() => callCertifyApi()}
-          />
-        </>
+        <SubmitButton
+          title={i18n.t("account_label.certify")}
+          handler={() => callCertifyApi()}
+        />
       }
     />
   );

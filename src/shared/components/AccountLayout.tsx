@@ -21,10 +21,10 @@ const AccountLayout: FunctionComponent<IProps> = (props) => {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={{ flex: 1, flexDirection: "column" }}
       >
-        <View style={{ marginTop: 20, marginLeft: 20 }}>
+        <View style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           {props.title}
         </View>
-        <View style={{ marginTop: 20, marginLeft: 20 }}>
+        <View style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           {props.body}
         </View>
         <View style={{ marginTop: "auto", marginBottom: 10 }}>

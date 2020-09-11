@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -27,7 +27,7 @@ type ParamList = {
   };
 };
 
-export const Login: FunctionComponent = () => {
+const Login: FunctionComponent = () => {
   const [state, setState] = useState({
     modalVisible: false,
     error: 0,

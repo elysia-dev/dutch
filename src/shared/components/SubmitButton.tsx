@@ -55,15 +55,17 @@ interface SubmitButtonProps {
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
   ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
+  disabled?: boolean;
 }
 
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   title,
   handler,
   ButtonTheme,
+  disabled
 }) => {
   return (
-    <WhiteBtn onPress={handler} theme={ButtonTheme}>
+    <WhiteBtn onPress={handler} theme={ButtonTheme} disabled={disabled}>
       <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
     </WhiteBtn>
   );

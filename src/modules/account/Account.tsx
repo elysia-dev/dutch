@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from "react";
-import { InitializeEmail } from "./InitializeEmail";
-import { Signup } from "./Signup";
-import { Login } from "./Login";
-import { LockAccount } from "./LockAccount";
-import { CurrentPassword } from "./CurrentPassword";
-import { ResetPassword } from "./ResetPassword";
-import { RecoverPassword } from "./RecoverPassword";
+import InitializeEmail from "./InitializeEmail";
+import Signup from "./Signup";
+import Login from "./Login";
+import LockAccount from "./LockAccount";
+import CurrentPassword from "./CurrentPassword";
+import ResetPassword from "./ResetPassword";
+import RecoverPassword from "./RecoverPassword";
 import CertifySignup from "./CertifySignup";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AccountPage } from "../../enums/pageEnum";
