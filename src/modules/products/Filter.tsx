@@ -175,7 +175,7 @@ export class Filter extends Component<props, state> {
           title={i18n.t("product_label.set_filter")}
           handler={() => {
             setPayments(methodsToSend);
-            navigation.navigate(ProductPage.MainList);
+            navigation.navigate("Main", { screen: ProductPage.MainList });
           }}
         />
       </View>

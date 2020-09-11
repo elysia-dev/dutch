@@ -75,7 +75,7 @@ export class MainList extends Component<props, state> {
     this.state = {
       return: false,
       popularity: false,
-      payments: "paypal,btc,el,eth",
+      payments: "",
       productList: [],
     };
     this.setPayments = this.setPayments.bind(this);

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { Component, FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
@@ -10,6 +10,7 @@ import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import AccountLayout from "../../shared/components/AccountLayout";
+import { Timer } from "./components/Timer";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -27,7 +28,6 @@ const ButtonWrapper = styled.View`
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
-  margin-right: 2%;
   line-height: 21px;
   height: 21px;
 `;
@@ -54,9 +54,13 @@ const CertifySignup: FunctionComponent<props> = (props) => {
 
   const callResendApi = () => {
     Api.initializeEmail(route.params.email)
-      .then((res) =>
-        setState({ ...state, verificationId: res.data.verificationId })
-      )
+      .then((res) => {
+        setState({
+          ...state,
+          verificationId: res.data.verificationId,
+        });
+        alert(i18n.t("register.resend_verification"));
+      })
       .catch((e) => {
         alert(i18n.t("register.try_again_later"));
       });
@@ -143,9 +147,12 @@ const CertifySignup: FunctionComponent<props> = (props) => {
               title={i18n.t("account_label.resend")}
               handler={() => callResendApi()}
             />
-            <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t(
-              "register.expiration_time"
-            )} 03:00 `}</ExpTimeText>
+            <View style={{ flexDirection: "row", width: "100%" }}>
+              <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t(
+                "register.expiration_time"
+              )}`}</ExpTimeText>
+              <Timer verif={state.verificationId} />
+            </View>
           </ButtonWrapper>
         </>
       }

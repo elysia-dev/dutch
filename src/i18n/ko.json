@@ -12,6 +12,7 @@
     "authentication_signup_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "expiration_time": "유효시간",
+    "expired_time": "만료",
     "expired_verification": "인증이 만료되었어요. 다시 인증을 요청해 주세요.",
     "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)",
     "resend_verification": "인증이 재요청되었습니다. 새로운 인증번호를 확인해주세요."
@@ -62,7 +63,8 @@
     "certify": "인증하기",
     "resend": "재요청",
     "resend_2": "다시 전송하기",
-    "change": "변경하기"
+    "change": "변경하기",
+    "change_password": "비밀번호 변경"
   },
   "kyc_label": {
     "argos_terms": "아르고스 약관보기",
