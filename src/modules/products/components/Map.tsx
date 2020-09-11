@@ -10,6 +10,8 @@ import {
 import latlon from "../latlon";
 import i18n from "../../../i18n/i18n";
 import styled from "styled-components/native";
+import Product from "../../../types/product";
+import ProductInfo from "../ProductInfo";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -35,14 +37,13 @@ const PText = styled.Text`
 `;
 
 interface props {
-  product: { id: number; data: { address: string } };
-  // product: object;
+  product: Product
 }
 
 export const Map: FunctionComponent<props> = (props: props) => {
   const markerCord = {
-    latitude: latlon[props.product.id].lat,
-    longitude: latlon[props.product.id].lat,
+    latitude: parseFloat(props.product.data.latitude),
+    longitude: parseFloat(props.product.data.longitude),
   };
 
   return (
@@ -65,8 +66,8 @@ export const Map: FunctionComponent<props> = (props: props) => {
         <MapView
           style={styles.mapStyle}
           initialRegion={{
-            latitude: latlon[props.product.id].lat,
-            longitude: latlon[props.product.id].lon,
+            latitude: parseFloat(props.product.data.latitude),
+            longitude: parseFloat(props.product.data.longitude),
             latitudeDelta: 0.007,
             longitudeDelta: 0.007,
           }}
@@ -80,9 +81,9 @@ export const Map: FunctionComponent<props> = (props: props) => {
           }}
         >
           <GText>{i18n.t("product_label.location")}</GText>
-          <PText>{props.product.data.address}</PText>
+          <PText>{props.product.data.descriptions["en"].address}</PText>
         </View>
-        <View>{videoButton(() => {})}</View>
+        <View>{videoButton(() => { })}</View>
       </View>
     </View>
   );

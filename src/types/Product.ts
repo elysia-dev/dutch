@@ -18,6 +18,8 @@ type Product = {
     netDeposit: string;
     netRentPerYear: string;
     bankLoan: string;
+    latitude: string;
+    longitude: string;
     descriptions: {
       en: ProductDescription
       ko: ProductDescription
