@@ -159,7 +159,6 @@ export class MainList extends Component<props, state> {
             top: 0,
           }}
         >
-          <MailImg source={MailPng} />
           <View
             style={{
               flex: 1,
