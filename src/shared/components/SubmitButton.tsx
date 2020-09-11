@@ -1,20 +1,53 @@
 import React, { FunctionComponent } from "react";
-import { StyleSheet, View, TouchableOpacity, GestureResponderEvent, Text } from "react-native";
 import styled from 'styled-components/native';
 
+type ButtonProps = {
+  theme: string;
+}
+
+const handleThemeType = (BtnTheme: string) => {
+  switch (BtnTheme) {
+    case "WhiteTheme":
+      return "border: 1px solid #3679B5; background-color: #FFFFFF;";
+    case "GrayTheme":
+      return "border: 0px solid #FFFFFF; background-color: #AAAAAA;";
+    default:
+      return "border: 0px solid #FFFFFF; background-color: #2c6190;";
+  }
+};
+const handleThemeWrapperType = (BtnTheme: string) => {
+  switch (BtnTheme) {
+    case "WithFlat":
+      return "margin-bottom: 5px;";
+    case "WhiteTheme":
+      return "margin-bottom: 25px;";
+    default:
+      return "margin-bottom: 36px;";
+  }
+};
+
+const WhiteBtnWrapper = styled.View`
+flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
+justify-content: flex-end;
+${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
+`;
+
 const WhiteBtn = styled.TouchableOpacity`
-  color: #000;
-  width: 90%;
-  margin: 0 auto;
-  height: 40px;
-  background-color: #2C6190;
-  border-radius: 5px;
+width: 90%;
+margin-left: 5%;
+margin-right: 5%;
+height: 40px;
+border-radius: 5px;
+
+${(props: ButtonProps) => handleThemeType(props.theme)};
 `;
 const WhiteBtnText = styled.Text`
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  line-height: 40px;
+font-size: 14px;
+text-align: center;
+line-height: 40px;
+
+color: ${(props: ButtonProps) =>
+    props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
 `;
 
 interface SubmitButtonProps {
@@ -22,66 +55,18 @@ interface SubmitButtonProps {
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
   ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
-}
-
-type ButtonProps = {
-  theme: string;
+  disabled?: boolean;
 }
 
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   title,
   handler,
   ButtonTheme,
+  disabled
 }) => {
-  const handleThemeType = (BtnTheme: string) => {
-    switch (BtnTheme) {
-      case "WhiteTheme":
-        return "border: 1px solid #3679B5; background-color: #FFFFFF;";
-      case "GrayTheme":
-        return "border: 0px solid #FFFFFF; background-color: #AAAAAA;";
-      default:
-        return "border: 0px solid #FFFFFF; background-color: #2c6190;";
-    }
-  };
-  const handleThemeWrapperType = (BtnTheme: string) => {
-    switch (BtnTheme) {
-      case "WithFlat":
-        return "margin-bottom: 5px;";
-      case "WhiteTheme":
-        return "margin-bottom: 25px;";
-      default:
-        return "margin-bottom: 36px;";
-    }
-  };
-  const WhiteBtnWrapper = styled.View`
-    flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
-    justify-content: flex-end;
-    ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
-  `;
-  const WhiteBtn = styled.TouchableOpacity`
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-    height: 40px;
-    border-radius: 5px;
-    position: absolute;
-    bottom: 0;
-
-    ${(props: ButtonProps) => handleThemeType(props.theme)};
-  `;
-  const WhiteBtnText = styled.Text`
-    font-size: 14px;
-    text-align: center;
-    line-height: 40px;
-
-    color: ${(props: ButtonProps) =>
-      props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
-  `;
   return (
-    <WhiteBtnWrapper theme={ButtonTheme}>
-      <WhiteBtn onPress={handler} theme={ButtonTheme}>
-        <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
-      </WhiteBtn>
-    </WhiteBtnWrapper>
+    <WhiteBtn onPress={handler} theme={ButtonTheme} disabled={disabled}>
+      <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
+    </WhiteBtn>
   );
 };

@@ -1,76 +1,34 @@
-import React, { Component, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput as RNTextInput,
-  SafeAreaView,
-  Platform,
-} from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import { FlatButton } from "../../shared/components/FlatButton";
+import BorderFlatButton from "../../shared/components/BorderFlatButton";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
-import WarningImg from "../../../src/shared/assets/images/warning.png";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import AccountLayout from "../../shared/components/AccountLayout";
 
-const CertifyRecoverWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
-  height: 100%;
-  background-color: #fff;
-`;
 const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
   text-align: left;
-  margin: 25px 5%;
   font-weight: bold;
 `;
 const PText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
-  margin: 0px 5%;
-  margin-bottom: 42px;
 `;
 
-const FlatButtonWrapper = styled.View`
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #36a1ff;
-  color: #1c1c1c;
-  width: 76px;
-  height: 29px;
-`;
-const ButtonWrapper = styled.View`
-  flex-direction: row-reverse;
-  width: 90%;
-  margin: 0 auto;
-`;
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
   margin-right: 2%;
-  margin-bottom: 42px;
-  line-height: 28px;
-`;
-const WarningIcon = styled.Image`
-  width: 12px;
-  height: 12px;
-  top: 1px;
-  position: absolute;
-`;
-const WarningText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
-  margin-right: 5px;
-  line-height: 29px;
-  flex-direction: row;
-  flex: 10;
+  line-height: 21px;
+  height: 21px;
 `;
 
 interface props {
@@ -80,31 +38,25 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {
-  code: string;
-  verificationId: string;
-}
+type ParamList = {
+  CertifyRecover: {
+    email: string;
+    verificationId: string;
+  };
+};
 
-export class CertifyRecover extends Component<props, state> {
-  api: any;
-  constructor(props: props) {
-    super(props);
-    this.state = { code: "", verificationId: "" };
-    this.setCode = this.setCode.bind(this);
-    this.api = new Api();
-  }
+const CertifyRecover: FunctionComponent<props> = (props) => {
+  const [state, setState] = useState({
+    code: "", verificationId: ""
+  });
 
-  setCode(input: string) {
-    this.setState({ code: input });
-    console.log(this.state.code);
-  }
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "CertifyRecover">>();
 
-  callResendApi() {
-    const { route, navigation } = this.props;
-    const { email } = route.params;
-    Api.certifyEmail_recover(email, "recoverPassword")
+  const callResendApi = () => {
+    Api.certifyEmail_recover(route.params.email, "recoverPassword")
       .then((res) => {
-        this.setState({ verificationId: res.data.verificationId });
+        setState({ ...state, verificationId: res.data.verificationId });
       })
       .catch((e) => {
         if (e.response.status === 400) {
@@ -118,27 +70,25 @@ export class CertifyRecover extends Component<props, state> {
       });
   }
 
-  callCertifyApi() {
-    const { route, navigation } = this.props;
-    const { email, verificationId } = route.params;
-    if (!this.state.code) {
+  const callCertifyApi = () => {
+    if (!state.code) {
       alert(i18n.t("register.authentication_recover"));
       return;
     }
     Api.certifyEmail(
-      this.state.verificationId === ""
-        ? verificationId
-        : this.state.verificationId,
-      this.state.code
+      state.verificationId === ""
+        ? route.params.verificationId
+        : state.verificationId,
+      state.code
     )
       .then((res) => {
         if (res.data.status === "completed") {
           navigation.navigate(AccountPage.RecoverPassword, {
-            email: email,
+            email: route.params.email,
             verificationId:
-              this.state.verificationId === ""
-                ? verificationId
-                : this.state.verificationId,
+              state.verificationId === ""
+                ? route.params.verificationId
+                : state.verificationId,
           });
         } else if (res.data.status === "expired") {
           alert(i18n.t("register.expired_verification"));
@@ -163,54 +113,52 @@ export class CertifyRecover extends Component<props, state> {
       });
   }
 
-  render() {
-    const { route, navigation } = this.props;
-    const { email, verificationId } = route.params;
-    //render 될 때마다 verificationId는 이전 route에서 받은 값으로 설정되나? 어떻게 update?
-    return (
-      <CertifyRecoverWrapper>
-        <BackButton
-          handler={() => navigation.navigate(AccountPage.InitializeEmail)}
-        />
-        <H1Text>{i18n.t("register.authentication_recover")}</H1Text>
-        <PText>{i18n.t("register.authentication_recover_label")}</PText>
-        <TextInput
-          type={i18n.t("account_label.account_email")}
-          edit={false}
-          value={email}
-          eventHandler={() => {}}
-          secure={false}
-        />
-        <TextInput
-          type={i18n.t("account_label.authentication_code")}
-          edit={true}
-          value={""}
-          eventHandler={this.setCode}
-          secure={false}
-        />
-
-        <ButtonWrapper>
-          <FlatButtonWrapper>
-            <FlatButton
+  return (
+    <AccountLayout
+      title={
+        <>
+          <BackButton
+            handler={() => navigation.navigate(AccountPage.InitializeEmail)}
+            style={{ marginTop: 20, marginBottom: 20 }}
+          />
+          <H1Text style={{ marginBottom: 10 }}>{i18n.t("register.authentication_recover")}</H1Text>
+          <PText>{i18n.t("register.authentication_recover_label")}</PText>
+        </>
+      }
+      body={
+        <>
+          <TextInput
+            type={i18n.t("account_label.account_email")}
+            edit={false}
+            value={route.params.email}
+            eventHandler={() => { }}
+            secure={false}
+            style={{ marginBottom: 30 }}
+          />
+          <TextInput
+            type={i18n.t("account_label.authentication_code")}
+            edit={true}
+            value={""}
+            eventHandler={(value) => { setState({ ...state, code: value }) }}
+            secure={false}
+          />
+          <View style={{ marginTop: 10, display: "flex", flexDirection: "row" }}>
+            <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t("register.expiration_time")} 03:00 `}</ExpTimeText>
+            <BorderFlatButton
               title={i18n.t("account_label.resend")}
-              handler={() => this.callResendApi()}
+              handler={() => callResendApi()}
             />
-          </FlatButtonWrapper>
-          <ExpTimeText>03:00</ExpTimeText>
-          <ExpTimeText>{i18n.t("register.expiration_time")}</ExpTimeText>
-          {this.props.certified === "pending" && (
-            <WarningText>
-              <WarningIcon source={WarningImg} resizeMode={"center"} />{" "}
-              {i18n.t("errors.messages.authentication_code_do_not_match")}
-            </WarningText>
-          )}
-        </ButtonWrapper>
-
+          </View>
+        </>
+      }
+      button={
         <SubmitButton
           title={i18n.t("account_label.certify")}
-          handler={() => this.callCertifyApi()}
+          handler={() => callCertifyApi()}
         />
-      </CertifyRecoverWrapper>
-    );
-  }
+      }
+    />
+  );
 }
+
+export default CertifyRecover

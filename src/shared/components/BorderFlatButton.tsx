@@ -5,6 +5,13 @@ import {
 import styled from "styled-components/native";
 
 const WhiteBtn = styled.TouchableOpacity`
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #36a1ff;
+  color: #1c1c1c;
+  height: 21px;
+  padding: 3px 21px;
 `;
 const WhiteBtnText = styled.Text`
   color: #000;
@@ -12,7 +19,7 @@ const WhiteBtnText = styled.Text`
   text-align: center;
 `;
 
-export const FlatButton: FunctionComponent<{
+const FlatBorderButton: FunctionComponent<{
   title: string;
   handler: (event: GestureResponderEvent) => void;
 }> = ({ title, handler }) => {
@@ -22,3 +29,5 @@ export const FlatButton: FunctionComponent<{
     </WhiteBtn>
   );
 };
+
+export default FlatBorderButton

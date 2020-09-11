@@ -1,18 +1,14 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { Text, View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import { Modal } from "../../shared/components/Modal";
-import AcceptedImg from "./images/accepted.png";
 
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { AccountPage } from "../../enums/pageEnum";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CurrentPassword } from "./CurrentPassword";
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
+import AccountLayout from "../../shared/components/AccountLayout";
 
 const H1Text = styled.Text`
   color: #000;
@@ -28,52 +24,35 @@ const PText = styled.Text`
   text-align: center;
   margin-top: 20px;
 `;
-const Accepted = styled.Image`
-  width: 64px;
-  height: 60px;
-`;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+type ParamList = {
+  ResetPassword: {
+    currentPassword: string;
+  };
+};
 
-interface state {
-  step: number;
-  password: string;
-  passwordConfirmation: string;
-}
+const ResetPassword: FunctionComponent = () => {
+  const [state, setState] = useState({
+    step: 1,
+    password: "",
+    passwordConfirmation: "",
+  })
 
-export class ResetPassword extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = {
-      step: 1,
-      password: "",
-      passwordConfirmation: "",
-    };
-    this.nextStep = this.nextStep.bind(this);
-  }
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "ResetPassword">>();
 
-  nextStep(number: number) {
-    this.setState({ step: number });
-  } //'계속' 버튼을 누르면 state가 2로 변하고 비밀번호 확인하기 인풋과 가입하기 버튼이 활성화됨
-
-  callChangeApi() {
-    const { route, navigation } = this.props;
-    const { currentPassword } = route.params;
-
-    if (this.state.password != this.state.passwordConfirmation) {
+  const callChangeApi = () => {
+    if (state.password != state.passwordConfirmation) {
       alert(i18n.t("errors.messages.password_do_not_match"));
       return;
-    } else if (this.state.password.length < 8) {
+    } else if (state.password.length < 8) {
       alert(i18n.t("errors.messages.password_too_short"));
       return;
-    } else if (this.state.password == currentPassword) {
+    } else if (state.password == route.params.currentPassword) {
       alert(i18n.t("account_check.reset_current_same"));
       return;
     } else {
-      Api.resetPassword(this.state.password, currentPassword)
+      Api.resetPassword(state.password, route.params.currentPassword)
         .then((res) => {
           // info페이지로 다시 돌아가게 해야함 !!
           if (res.data.status === "success") {
@@ -98,78 +77,87 @@ export class ResetPassword extends Component<props, state> {
     }
   }
 
-  render() {
-    const { route, navigation } = this.props;
-    const { currentPassword } = route.params;
-    return (
-      <SafeAreaView
-        style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}
-      >
-        <BackButton
-          handler={() => {
-            this.state.step == 2 ? this.nextStep(1) : navigation.goBack();
-          }}
-        />
-
-        <View>
-          <Text>비밀번호 변경</Text>
-          <H1Text>
-            {this.state.step == 1
-              ? i18n.t("account_check.insert_new_password")
-              : i18n.t("account_check.password_confirm")}
-          </H1Text>
-        </View>
-
-        {this.state.step == 2 && (
+  return (
+    <AccountLayout
+      title={
+        <>
+          <BackButton
+            handler={() => {
+              state.step == 2 ? setState({ ...state, step: 1 }) : navigation.goBack();
+            }}
+            style={{ marginTop: 20, marginBottom: 20 }}
+          />
+          <View>
+            <Text>비밀번호 변경</Text>
+            <H1Text>
+              {state.step == 1
+                ? i18n.t("account_check.insert_new_password")
+                : i18n.t("account_check.password_confirm")}
+            </H1Text>
+          </View>
+        </>
+      }
+      body={
+        <>
+          {state.step == 2 && (
+            <TextInput
+              type={i18n.t("account_label.account_password_confirm")}
+              edit={true}
+              eventHandler={(input: string) =>
+                setState({ ...state, passwordConfirmation: input })
+              }
+              value={""}
+              secure={true}
+            />
+          )}
           <TextInput
-            type={i18n.t("account_label.account_password_confirm")}
-            edit={true}
-            eventHandler={(input: string) =>
-              this.setState({ passwordConfirmation: input })
+            type={i18n.t("account_label.new_password")}
+            edit={state.step == 1 ? true : false}
+            eventHandler={
+              state.step == 1
+                ? (input: string) => setState({ ...state, password: input })
+                : () => { }
             }
             value={""}
             secure={true}
           />
-        )}
-        <TextInput
-          type={i18n.t("account_label.new_password")}
-          edit={this.state.step == 1 ? true : false}
-          eventHandler={
-            this.state.step == 1
-              ? (input: string) => this.setState({ password: input })
-              : () => {}
+          {state.password === route.params.currentPassword && (
+            <PText>{i18n.t("account_check.reset_current_same")}</PText>
+          )}
+          <TextInput
+            type={i18n.t("account_label.current_password")}
+            edit={false}
+            eventHandler={() => { }}
+            value={route.params.currentPassword}
+            secure={true}
+          />
+        </>
+      }
+      button={
+        <>
+          {
+            state.step == 1 ? (
+              <SubmitButton
+                title={i18n.t("account_label.continue")}
+                handler={() => {
+                  if (state.password === "") {
+                    alert(i18n.t("account_check.insert_password"));
+                    return;
+                  }
+                  setState({ ...state, step: 2 });
+                }}
+              />
+            ) : (
+                <SubmitButton
+                  title={i18n.t("account_label.change")}
+                  handler={() => callChangeApi()}
+                />
+              )
           }
-          value={""}
-          secure={true}
-        />
-        {this.state.password === currentPassword && (
-          <PText>{i18n.t("account_check.reset_current_same")}</PText>
-        )}
-        <TextInput
-          type={i18n.t("account_label.current_password")}
-          edit={false}
-          eventHandler={() => {}}
-          value={currentPassword}
-          secure={true}
-        />
-        {this.state.step == 1 ? (
-          <SubmitButton
-            title={i18n.t("account_label.continue")}
-            handler={() => {
-              if (this.state.password === "") {
-                alert(i18n.t("account_check.insert_password"));
-                return;
-              }
-              this.nextStep(2);
-            }}
-          />
-        ) : (
-          <SubmitButton
-            title={i18n.t("account_label.change")}
-            handler={() => this.callChangeApi()}
-          />
-        )}
-      </SafeAreaView>
-    );
-  }
+        </>
+      }
+    />
+  );
 }
+
+export default ResetPassword;

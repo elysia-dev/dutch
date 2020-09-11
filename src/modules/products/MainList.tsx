@@ -172,8 +172,11 @@ export class MainList extends Component<props, state> {
           >
             <FilterButton
               handler={() =>
-                navigation.navigate(ProductPage.Filter, {
-                  setPayments: this.setPayments,
+                navigation.navigate("Product", {
+                  screen: ProductPage.Filter,
+                  params: {
+                    setPayments: this.setPayments,
+                  },
                 })
               }
             />

@@ -7,7 +7,7 @@
   },
   "register": {
     "authentication_signup": "메일을 인증해주세요",
-    "authentication_recover": "인증코드를 입력해주세요",
+    "authentication_recover": "인증코드를 입력해주세요.",
     "authentication_signup_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "expiration_time": "유효시간",
@@ -17,7 +17,7 @@
   },
   "account_check": {
     "insert_password": "비밀번호를 입력해주세요.",
-    "insert_current_password": "기존 비밀번호를 입력해주세요",
+    "insert_current_password": "기존 비밀번호를 입력해주세요.",
     "insert_new_password": "변경할 비밀번호를 입력해주세요.",
     "recover_password": "비밀번호 변경을 진행해주세요.",
     "forget_password_link": "비밀번호를 잊으셨나요?",
@@ -31,9 +31,9 @@
     "reset_error": "비밀번호 변경 오류입니다. 처음부터 다시 진행해주세요."
   },
   "lock_account": {
-    "lockdown": "엘리시아 계정이 잠겼습니다!",
-    "lockdown_text": "고객님의 계정은 로그인 시도 5회 실패로 인해 보호조치 되었어요.\n고객님의 계정 이메일 주소로 전송된 인증코드를 입력 해주세요.",
-    "resending_code_mail_label": "혹시 메일이 오지 않으셨나요?",
+    "lockdown": "계정이 잠겼습니다!",
+    "lockdown_text": "로그인 시도 5회 실패로 인해 보호조치 되었어요. 이메일 주소로 전송된 인증코드를 입력 해주세요.",
+    "resending_code_mail_label": "혹시 메일이 오지 않았나요?",
     "resending_code_mail_link": "다시 전송하기"
   },
   "errors": {

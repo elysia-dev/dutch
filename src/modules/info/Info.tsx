@@ -14,7 +14,7 @@ export const Info = () => {
       <Stack.Screen name={InfoPage.MainInfo} component={MainInfo} />
       <Stack.Screen name={InfoPage.MyPage} component={MyPage} />
       <Stack.Screen
-        name={InfoPage.OwnershipHistory}
+        name={InfoPage.InvestmentHistory}
         component={OwnershipHistory}
       />
       <Stack.Screen

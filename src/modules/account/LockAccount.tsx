@@ -1,20 +1,16 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, Platform } from "react-native";
+import React, { FunctionComponent, useState } from "react";
+import { View } from "react-native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import { FlatButton } from "../../shared/components/FlatButton";
+import BorderFlatButton from "../../shared/components/BorderFlatButton";
 import styled from "styled-components/native";
 import LockAccountPng from "./images/lockaccount.png";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { AccountPage } from "../../enums/pageEnum";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import AccountLayout from "../../shared/components/AccountLayout";
 
-const LockAccountWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === "android" ? "41px" : "16px"};
-  height: 100%;
-  background-color: #fff;
-`;
 const LockAccountImg = styled.Image`
   width: 209px;
   margin: 20px auto 5px auto;
@@ -23,92 +19,59 @@ const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
   text-align: center;
-  margin: 25px auto;
   font-weight: bold;
 `;
 const PText = styled.Text`
   font-size: 13px;
   color: #626368;
   text-align: left;
-  margin: 5px auto 16px auto;
-  width: 90%;
-`;
-const ButtonWrapper = styled.View`
-  flex-direction: row-reverse;
-  width: 90%;
-  margin: 0 auto;
-`;
-const FlatButtonWrapper = styled.View`
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #36a1ff;
-  color: #1c1c1c;
-  width: 120px;
-  height: 29px;
 `;
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
   margin-right: 2%;
-  margin-bottom: 42px;
-  line-height: 28px;
+  line-height: 21px;
+  height: 21px;
 `;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+type ParamList = {
+  LockAccount: {
+    email: string;
+    verificationId: string;
+  };
+};
 
-interface state {
-  code: string;
-  verificationId: string;
-}
+const LockAccount: FunctionComponent = () => {
+  const [state, setState] = useState({
+    code: "",
+    verificationId: "",
+  });
 
-export class LockAccount extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = { code: "", verificationId: "" };
-    this.setCode = this.setCode.bind(this);
-  }
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "LockAccount">>();
 
-  setCode(input: string) {
-    this.setState({ code: input });
-    console.log(this.state.code);
-  }
-
-  callResendApi() {
-    const { route } = this.props;
-    const { email } = route.params;
-    Api.certifyEmail_recover(email, "recoverAccount")
-      .then((res) => {
-        this.setState({ verificationId: res.data.verificationId });
-        alert(i18n.t("register.resend_verification"));
-      })
+  const callResendApi = () => {
+    Api.certifyEmail_recover(route.params.email, "recoverAccount")
+      .then((res) =>
+        setState({ ...state, verificationId: res.data.verificationId })
+      )
       .catch((e) => alert(i18n.t("checking_account.try_again_later")));
-  }
+  };
 
-  callCertifyApi() {
-    const { route, navigation } = this.props;
-    const { email, verificationId } = route.params;
-    if (!this.state.code) {
+  const callCertifyApi = () => {
+    if (!state.code) {
       alert(i18n.t("register.authentication_recover"));
       return;
     }
     Api.certifyEmail(
-      this.state.verificationId === ""
-        ? verificationId
-        : this.state.verificationId,
-      this.state.code
+      state.verificationId || route.params.verificationId,
+      state.code
     )
       .then((res) => {
         if (res.data.status === "completed") {
           navigation.navigate(AccountPage.RecoverPassword, {
-            verificationId:
-              this.state.verificationId === ""
-                ? verificationId
-                : this.state.verificationId,
-            email: email,
+            verificationId: state.verificationId || route.params.verificationId,
+            email: route.params.email,
           });
         } else if (res.data.status === "expired") {
           alert(i18n.t("register.expired_verification"));
@@ -128,42 +91,52 @@ export class LockAccount extends Component<props, state> {
           alert(i18n.t("errors.messages.server"));
         }
       });
-  }
+  };
 
-  render() {
-    return (
-      <LockAccountWrapper>
-        <LockAccountImg source={LockAccountPng} />
-        <H1Text>{i18n.t("lock_account.lockdown")}</H1Text>
-        <PText>{i18n.t("lock_account.lockdown_text")}</PText>
-        <TextInput
-          type={i18n.t("account_label.authentication_code")}
-          value=""
-          edit={true}
-          eventHandler={this.setCode}
-          secure={false}
-          autoFocus={true}
-        />
-
-        <ButtonWrapper>
-          <FlatButtonWrapper>
-            <FlatButton
-              handler={() => this.callResendApi()}
+  return (
+    <AccountLayout
+      title={
+        <>
+          <LockAccountImg source={LockAccountPng} />
+          <H1Text style={{ marginTop: 10 }}>
+            {i18n.t("lock_account.lockdown")}
+          </H1Text>
+          <PText style={{ marginTop: 10 }}>
+            {i18n.t("lock_account.lockdown_text")}
+          </PText>
+        </>
+      }
+      body={
+        <>
+          <TextInput
+            type={i18n.t("account_label.authentication_code")}
+            value=""
+            edit={true}
+            eventHandler={(value) => setState({ ...state, code: value })}
+            secure={false}
+            autoFocus={true}
+          />
+          <View
+            style={{ marginTop: 10, display: "flex", flexDirection: "row" }}
+          >
+            <ExpTimeText style={{ marginLeft: "auto" }}>
+              {i18n.t("lock_account.resending_code_mail_label")}
+            </ExpTimeText>
+            <BorderFlatButton
+              handler={() => callResendApi()}
               title={i18n.t("account_label.resend_2")}
             />
-          </FlatButtonWrapper>
-          <ExpTimeText>
-            {i18n.t("lock_account.resending_code_mail_label")}
-          </ExpTimeText>
-        </ButtonWrapper>
-
+          </View>
+        </>
+      }
+      button={
         <SubmitButton
           title={i18n.t("account_label.certify")}
-          handler={() => this.callCertifyApi()}
+          handler={() => callCertifyApi()}
         />
-      </LockAccountWrapper>
-    );
-  }
-}
+      }
+    />
+  );
+};
 
-const styles = StyleSheet.create({});
+export default LockAccount;

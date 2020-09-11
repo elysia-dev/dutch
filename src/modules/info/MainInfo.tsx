@@ -71,7 +71,7 @@ const InfoArrowImg = styled.Image`
 const InfoButtonTabWrapper = styled.View`
   width: 90%;
   height: 50px;
-  line-height: 50px;
+
   margin-right: 5%;
   margin-left: 5%;
   flex: 1;
