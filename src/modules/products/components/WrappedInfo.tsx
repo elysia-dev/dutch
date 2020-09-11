@@ -52,7 +52,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription =
     product.data.descriptions[
-      product.data.languages.includes(locale) ? locale : LocaleType.EN
+    product.data.languages.includes(locale) ? locale : LocaleType.EN
     ];
 
   return (
@@ -65,7 +65,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         }}
       >
         <H1Text>{i18n.t("product_label.property_info")}</H1Text>
-        <View style={{ position: "relative", marginBottom: 10 }}>
+        <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
             onPress={() => setState({ ...state, financial: !state.financial })}
           >
@@ -145,7 +145,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
             </View>
           )}
         </View>
-        <View style={{ position: "relative" }}>
+        <View>
           <TouchableOpacity
             onPress={() => setState({ ...state, highlight: !state.highlight })}
           >
@@ -225,7 +225,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         }}
       >
         <H1Text>{i18n.t("product_label.product_info")}</H1Text>
-        <View style={{ position: "relative", marginBottom: 10 }}>
+        <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
             onPress={() => setState({ ...state, abstract: !state.abstract })}
           >

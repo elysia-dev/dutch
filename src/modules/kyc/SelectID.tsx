@@ -75,7 +75,10 @@ export class SelectID extends Component<props, state> {
 
     return (
       <SelectIdWrapper>
-        <BackButton handler={() => navigation.goBack()} />
+        <BackButton
+          handler={() => navigation.goBack()}
+          style={{ marginTop: 30, marginLeft: 20 }}
+        />
         <H1Text>{i18n.t("kyc.kyc_step1")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step1_text")}</PText>
         <OptionButton
@@ -94,8 +97,8 @@ export class SelectID extends Component<props, state> {
             this.state.idType === "passport" ? (
               <Checked source={CheckedPng} />
             ) : (
-              <View />
-            )
+                <View />
+              )
           }
           selected={this.state.idType === "passport" && "selected"}
         />
@@ -115,8 +118,8 @@ export class SelectID extends Component<props, state> {
             this.state.idType === "drivers_license" ? (
               <Checked source={CheckedPng} />
             ) : (
-              <View />
-            )
+                <View />
+              )
           }
           selected={this.state.idType === "drivers_license" && "selected"}
         />
@@ -136,8 +139,8 @@ export class SelectID extends Component<props, state> {
             this.state.idType === "government_id" ? (
               <Checked source={CheckedPng} />
             ) : (
-              <View />
-            )
+                <View />
+              )
           }
           selected={this.state.idType === "id_card" && "selected"}
         />
@@ -154,6 +157,7 @@ export class SelectID extends Component<props, state> {
               });
             }
           }}
+          style={{ marginTop: "auto", marginBottom: 10 }}
         />
       </SelectIdWrapper>
     );

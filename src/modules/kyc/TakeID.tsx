@@ -258,14 +258,18 @@ export class TakeID extends Component<props, state> {
 
     if (this.state.hasPermission === false) {
       return (
-        <TakeIdDeniedWrapper>
-          <BackButton handler={() => navigation.goBack()} />
+        <TakeIdDeniedWrapper style={{ display: "flex" }}>
+          <BackButton
+            handler={() => navigation.goBack()}
+            style={{ marginTop: 30, marginLeft: 20 }}
+          />
           <CameraPermissionImg source={CameraPermissionPng} />
           <DeniedH1Text>{i18n.t("kyc.camera_access_denied")}</DeniedH1Text>
           <DeniedPText>{i18n.t("kyc.camera_access_denied_text")}</DeniedPText>
           <SubmitButton
             title={i18n.t("kyc_label.camera_access_return")}
             handler={() => navigation.goBack()}
+            style={{ marginTop: "auto", marginBottom: 10 }}
           />
         </TakeIdDeniedWrapper>
       );

@@ -4,11 +4,12 @@ import Slider from "react-native-slider";
 
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
+import Product from "../../../types/product";
 
 interface props {
   sliderHandler: (value: number) => void;
   investment: number;
-  product: object;
+  product: Product;
 }
 
 const H1Text = styled.Text`
@@ -61,7 +62,7 @@ export const Calculator: FunctionComponent<props> = (props: props) => {
         >
           <GText>{i18n.t("product_label.expected_return")}</GText>
           <Text>{`${Math.round(
-            props.investment * parseInt(props.product.expectedAnnualReturn)
+            props.investment * parseInt(props.product.data.expectedAnnualReturn) / 100
           )}$`}</Text>
         </View>
       </View>
@@ -91,7 +92,7 @@ export const Calculator: FunctionComponent<props> = (props: props) => {
           ></Slider>
         </View>
         <View style={{ flex: 1, paddingTop: 7.5, paddingRight: 20 }}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <View
               style={{
                 width: 80,

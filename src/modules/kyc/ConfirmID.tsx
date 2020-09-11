@@ -23,7 +23,6 @@ const H1Text = styled.Text`
   font-size: 20px;
   font-weight: bold;
   text-align: left;
-  margin-top: 25%;
   margin-left: 5%;
 `;
 const PText = styled.Text`
@@ -80,7 +79,7 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {}
+interface state { }
 
 export class ConfirmID extends Component<props, state> {
   constructor(props: props) {
@@ -118,8 +117,11 @@ export class ConfirmID extends Component<props, state> {
     const { id_type, idPhoto } = route.params;
 
     return (
-      <ConfirmIdWrapper>
-        <BackButton handler={() => navigation.goBack()} />
+      <ConfirmIdWrapper style={{ display: "flex" }}>
+        <BackButton
+          handler={() => navigation.goBack()}
+          style={{ marginTop: 30, marginLeft: 20, marginBottom: 30 }}
+        />
         <H1Text>{i18n.t("kyc.kyc_step1_complete")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step1_complete_text")}</PText>
         <SelfieImg source={{ uri: idPhoto.uri }} />
@@ -134,6 +136,7 @@ export class ConfirmID extends Component<props, state> {
           title={i18n.t("kyc_label.shoot_again")}
           handler={() => navigation.navigate(KycPage.TakeID)}
           ButtonTheme={"WhiteTheme"}
+          style={{ marginTop: "auto", marginBottom: 10 }}
         />
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
@@ -143,6 +146,7 @@ export class ConfirmID extends Component<props, state> {
               photoId: idPhoto,
             });
           }}
+          style={{ marginBottom: 10 }}
         />
       </ConfirmIdWrapper>
     );

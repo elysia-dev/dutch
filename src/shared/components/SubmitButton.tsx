@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from 'styled-components/native';
+import { StyleProp, ViewStyle } from "react-native";
 
 type ButtonProps = {
   theme: string;
@@ -56,16 +57,18 @@ interface SubmitButtonProps {
   handler: any;
   ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
   disabled?: boolean;
+  style?: StyleProp<ViewStyle>
 }
 
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   title,
   handler,
   ButtonTheme,
-  disabled
+  disabled,
+  style
 }) => {
   return (
-    <WhiteBtn onPress={handler} theme={ButtonTheme} disabled={disabled}>
+    <WhiteBtn onPress={handler} theme={ButtonTheme} disabled={disabled} style={style}>
       <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
     </WhiteBtn>
   );

@@ -1,11 +1,4 @@
 import React, { FunctionComponent } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Text,
-} from "react-native";
 import styled from "styled-components/native";
 
 const OptionBtn = styled.TouchableOpacity`

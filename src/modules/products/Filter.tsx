@@ -1,5 +1,5 @@
 import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, GestureResponderEvent } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, GestureResponderEvent } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
@@ -25,13 +25,6 @@ const H1Text = styled.Text`
   text-align: center;
   margin: 25px auto;
   font-weight: bold;
-`;
-const PText = styled.Text`
-  font-size: 12px;
-  color: #626368;
-  text-align: left;
-  margin: 5px auto 32px auto;
-  width: 90%;
 `;
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
@@ -90,13 +83,16 @@ export class Filter extends Component<props, state> {
     });
     const methodsToSend = filtered.toString();
     return (
-      <View style={{ backgroundColor: "#fff", height: "100%" }}>
-        <BackButton handler={() => navigation.goBack()} />
+      <SafeAreaView style={{ backgroundColor: "#fff", height: "100%", display: "flex" }}>
+        <BackButton
+          handler={() => navigation.goBack()}
+          style={{ marginTop: 30, marginLeft: 20 }}
+        />
         <H1Text>{i18n.t("product.filter_text")}</H1Text>
-        <InputHeaderText>
+        <InputHeaderText >
           {i18n.t("product_label.select_nationality")}
         </InputHeaderText>
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", marginBottom: 20 }}>
           <ShortOptionButton
             title={i18n.t("product_label.korean")}
             check={this.state.nation === "korean" ? "checked" : ""}
@@ -171,6 +167,7 @@ export class Filter extends Component<props, state> {
             })
           }
         />
+        <View style={{ height: 10 }} />
         <SubmitButton
           title={i18n.t("product_label.set_filter")}
           handler={() => {
@@ -178,7 +175,8 @@ export class Filter extends Component<props, state> {
             navigation.navigate("Main", { screen: ProductPage.MainList });
           }}
         />
-      </View>
+        <View style={{ height: 10 }} />
+      </SafeAreaView>
     );
   }
 }

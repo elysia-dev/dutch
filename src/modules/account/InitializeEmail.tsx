@@ -77,8 +77,13 @@ const InitializeEmail: FunctionComponent = () => {
             state.errorLength == 1
               ? i18n.t("checking_account.insert_account_email")
               : state.errorReg == 1
+<<<<<<< HEAD
               ? i18n.t("checking_account.check_email")
               : i18n.t("account_label.continue")
+=======
+                ? i18n.t("checking_account.check_email")
+                : i18n.t("account_label.continue")
+>>>>>>> 9b036fe8f696d2f6c04ff139639c458f080f7079
           }
           handler={() => callEmailApi()}
           ButtonTheme={

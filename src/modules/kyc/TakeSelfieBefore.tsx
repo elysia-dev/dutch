@@ -77,7 +77,10 @@ export class TakeSelfieBefore extends Component<props, state> {
     return (
       <TakeSelfieBeforeWrapper>
         <ScrollView>
-          <BackButton handler={() => navigation.navigate(KycPage.TakeSelfie)} />
+          <BackButton
+            handler={() => navigation.navigate(KycPage.ConfirmID)}
+            style={{ marginTop: 30, marginLeft: 20 }}
+          />
           <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
           <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
           <Container>
@@ -101,6 +104,7 @@ export class TakeSelfieBefore extends Component<props, state> {
               photoId: photoId,
             })
           }
+          style={{ marginBottom: 10 }}
         />
       </TakeSelfieBeforeWrapper>
     );
