@@ -12,7 +12,8 @@
     "authentication_recover_label": "비밀번호 찾기를 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
     "expiration_time": "유효시간",
     "expired_verification": "인증이 만료되었어요. 다시 인증을 요청해 주세요.",
-    "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)"
+    "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)",
+    "try_again_later": "동일한 이메일의 인증 요청은 5분 뒤에 가능해요."
   },
   "account_check": {
     "insert_password": "비밀번호를 입력해주세요.",

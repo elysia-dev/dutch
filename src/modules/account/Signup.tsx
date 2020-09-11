@@ -39,10 +39,10 @@ const Signup: FunctionComponent = () => {
       submitHandler={callSignupApi}
       email={route.params.email}
       submitButtonTitle={i18n.t("account_label.signup")}
-      message1={i18n.t("account_check.new_password")}
+      message1={i18n.t("account_check.insert_password")}
       message2={i18n.t("account_check.password_confirm")}
     />
   );
-}
+};
 
 export default Signup;

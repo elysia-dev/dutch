@@ -9,18 +9,25 @@ const Wrapper = styled.SafeAreaView`
 `;
 
 interface IProps {
-  title: React.ReactNode
-  body: React.ReactNode
-  button: React.ReactNode
+  title: React.ReactNode;
+  body: React.ReactNode;
+  button: React.ReactNode;
 }
-
+const ConditionalKeyboardAvoidingView: FunctionComponent = (props) =>
+  Platform.OS == "ios" ? (
+    <KeyboardAvoidingView
+      behavior={"padding"}
+      style={{ flex: 1, flexDirection: "column" }}
+    >
+      {props.children}
+    </KeyboardAvoidingView>
+  ) : (
+    <View style={{ flex: 1 }}>{props.children}</View>
+  );
 const AccountLayout: FunctionComponent<IProps> = (props) => {
   return (
     <Wrapper>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={{ flex: 1, flexDirection: "column" }}
-      >
+      <ConditionalKeyboardAvoidingView>
         <View style={{ marginTop: 20, marginLeft: 20, marginRight: 20 }}>
           {props.title}
         </View>
@@ -30,9 +37,9 @@ const AccountLayout: FunctionComponent<IProps> = (props) => {
         <View style={{ marginTop: "auto", marginBottom: 10 }}>
           {props.button}
         </View>
-      </KeyboardAvoidingView>
+      </ConditionalKeyboardAvoidingView>
     </Wrapper>
-  )
-}
+  );
+};
 
 export default AccountLayout;
