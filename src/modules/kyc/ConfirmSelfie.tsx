@@ -50,7 +50,7 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {}
+interface state { }
 
 export class ConfirmSelfie extends Component<props, state> {
   constructor(props: props) {
@@ -85,8 +85,11 @@ export class ConfirmSelfie extends Component<props, state> {
     const { selfie, id_type, photoId } = route.params;
 
     return (
-      <ConfirmSelfieWrapper>
-        <BackButton handler={() => {}} />
+      <ConfirmSelfieWrapper style={{ display: "flex" }}>
+        <BackButton
+          handler={() => navigation.navigate(KycPage.TakeSelfie)}
+          style={{ marginTop: 30, marginLeft: 20 }}
+        />
         <H1Text>{i18n.t("kyc.kyc_step2_complete")}</H1Text>
         <PText>{i18n.t("kyc.kyc_step2_complete_text")}</PText>
         <SelfieImg source={{ uri: selfie.uri }} />
@@ -94,6 +97,7 @@ export class ConfirmSelfie extends Component<props, state> {
           title={i18n.t("kyc_label.shoot_again")}
           handler={() => navigation.navigate(KycPage.TakeSelfie)}
           ButtonTheme={"WhiteTheme"}
+          style={{ marginTop: "auto", marginBottom: 10 }}
         />
         <SubmitButton
           title={i18n.t("kyc_label.submit")}
@@ -110,6 +114,7 @@ export class ConfirmSelfie extends Component<props, state> {
             // })
             // .catch();
           }}
+          style={{ marginBottom: 10 }}
         />
       </ConfirmSelfieWrapper>
     );

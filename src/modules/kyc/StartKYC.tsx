@@ -1,5 +1,5 @@
 import React, { FunctionComponent, Props } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
@@ -65,9 +65,6 @@ const HrLine = styled.View`
 const KycGuideWrapper = styled.View`
   position: relative;
 `;
-const FlexBtnWrapper = styled.View`
-  flex: 5;
-`;
 
 interface props {
   handler: any;
@@ -77,10 +74,12 @@ export const StartKYC: FunctionComponent<props> = (props) => {
   const route = useRoute();
 
   return (
-    <StartKycWrapper>
-      <BackButton handler={() => { navigation.goBack() }} />
+    <StartKycWrapper style={{ display: "flex", flexDirection: "column" }}>
+      <BackButton
+        handler={() => { navigation.goBack() }}
+        style={{ marginTop: 30, marginLeft: 20 }}
+      />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
-
       <PText>
         <ClockImg source={ClockPng} /> {i18n.t("kyc.start_kyc_text")}
       </PText>
@@ -99,18 +98,19 @@ export const StartKYC: FunctionComponent<props> = (props) => {
           <CircleText>{i18n.t("kyc.start_kyc_step3")}</CircleText>
         </CircleWrapper>
       </KycGuideWrapper>
-      <FlexBtnWrapper>
+      <View style={{ marginTop: "auto", marginBottom: 10 }}>
         <SubmitButton
           title={i18n.t("kyc_label.argos_terms")}
           handler={() => { }}
           ButtonTheme={"WhiteTheme"}
+          style={{ marginBottom: 10 }}
         />
         <SubmitButton
           title={i18n.t("kyc_label.agree_start")}
           // handler={() => {}}
           handler={() => navigation.navigate(KycPage.SelectID)}
         />
-      </FlexBtnWrapper>
+      </View>
     </StartKycWrapper>
   );
 };
