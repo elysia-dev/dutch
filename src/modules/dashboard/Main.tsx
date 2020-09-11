@@ -122,7 +122,6 @@ export class Main extends Component<props, state> {
         style={{
           width: "100%",
           height: "100%",
-          position: "absolute",
           top: 0,
           backgroundColor: "#fff",
         }}
@@ -202,19 +201,14 @@ export class Main extends Component<props, state> {
         <View
           style={{
             width: "100%",
-            height: 0,
-            borderTopWidth: 5,
             borderColor: "#F6F6F8",
-            position: "relative",
-            top: 130,
           }}
         ></View>
         <View
           style={{
-            width: "100%",
-            position: "relative",
-            top: 130,
-            padding: "5%",
+            marginTop: 130,
+            marginLeft: 20,
+            marginRight: 20
           }}
         >
           <H1Text>{i18n.t("dashboard_label.my_investment")}</H1Text>
@@ -233,8 +227,7 @@ export class Main extends Component<props, state> {
             rate={"4.02"}
             expectedSale={"15.00"}
           />
-
-          <View>
+          <View style={{ marginBottom: 20 }}>
             {moreHistory(() =>
               navigation.navigate("Info", { screen: "InvestmentHistory" })
             )}
