@@ -2,6 +2,8 @@ import React, { FunctionComponent, useState } from "react";
 import {
   StyleSheet,
   View,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import styled from "styled-components/native";
 
@@ -13,6 +15,7 @@ interface props {
   secure: boolean;
   autoFocus?: boolean;
   placeHolder?: string;
+  style?: StyleProp<ViewStyle>;
 }
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
@@ -20,18 +23,18 @@ const InputHeaderText = styled.Text`
   text-align: left;
 `;
 const InputTextForm = styled.TextInput`
-  width: 90%;
+  width: 100%;
   height: 25px;
   border-bottom-width: 1px;
 `;
 export const TextInput: FunctionComponent<props> = (
   props,
-  { onFocused = false, autocapitalize = "none" }
+  { onFocused = false, autocapitalize = "none", }
 ) => {
   const [focusing, setFocus] = useState(onFocused);
 
   return (
-    <View>
+    <View style={props.style}>
       <InputHeaderText
         style={{
           color: focusing == true ? "#2C6190" : "#A7A7A7",
