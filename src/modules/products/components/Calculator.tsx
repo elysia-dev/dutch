@@ -62,7 +62,7 @@ export const Calculator: FunctionComponent<props> = (props: props) => {
         >
           <GText>{i18n.t("product_label.expected_return")}</GText>
           <Text>{`${Math.round(
-            props.investment * parseInt(props.product.data.expectedAnnualReturn)
+            props.investment * parseInt(props.product.data.expectedAnnualReturn) / 100
           )}$`}</Text>
         </View>
       </View>
