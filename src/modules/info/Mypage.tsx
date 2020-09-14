@@ -46,6 +46,7 @@ const MyPage: FunctionComponent = () => {
         handler={() => {
           navigation.goBack();
         }}
+        style={{ marginTop: 20, marginBottom: 20, marginLeft: 20 }}
       />
       <View
         style={{
@@ -86,7 +87,7 @@ const MyPage: FunctionComponent = () => {
         <LabelText>{i18n.t("account_label.account_password")}</LabelText>
 
         <TouchableOpacity
-          onPress={() => {}}
+          onPress={() => { }}
           style={{
             backgroundColor: "#E6ECF2",
             borderRadius: 5,
