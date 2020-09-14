@@ -1,5 +1,5 @@
 import React, { FunctionComponent, Props } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
@@ -20,12 +20,6 @@ const H1Text = styled.Text`
   text-align: left;
   margin: 40px 5% 6px 5%;
 `;
-const PText = styled.Text`
-  color: #626368;
-  font-size: 13px;
-  margin: 0px 5%;
-  margin-bottom: 42px;
-`;
 const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
@@ -35,7 +29,7 @@ const Circle = styled.Text`
   width: 26px;
   height: 26px;
   background-color: #3679b5;
-  border-radius: 15px;
+  border-radius: 50%;
   color: #fff;
   line-height: 25px;
   text-align: center;
@@ -80,10 +74,11 @@ export const StartKYC: FunctionComponent<props> = (props) => {
         style={{ marginTop: 30, marginLeft: 20 }}
       />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
-      <PText>
-        <ClockImg source={ClockPng} /> {i18n.t("kyc.start_kyc_text")}
-      </PText>
-      <KycGuideWrapper>
+      <View style={{ display: "flex", flexDirection: "row", marginTop: 20, marginLeft: 20 }}>
+        <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
+        <Text>{i18n.t("kyc.start_kyc_text")}</Text>
+      </View>
+      <KycGuideWrapper style={{ marginTop: 20 }}>
         <HrLine />
         <CircleWrapper>
           <Circle>1</Circle>

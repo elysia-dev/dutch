@@ -45,11 +45,11 @@ const InfoHeaderWrapper = styled.View`
 const InfoHeaderH1Text = styled.Text`
   color: #1c1c1c;
   font-size: 20px;
-  text-align: left;
-  margin: 50px 5% 0px 5%;
   font-weight: bold;
   line-height: 21px;
   height: 21px;
+  text-align: left;
+  margin: 50px 5% 0px 5%;
 `;
 const InfoHeaderSettingImg = styled.Image`
   width: 21px;
@@ -76,7 +76,7 @@ const H1Text = styled.Text`
   color: #1c1c1c;
   font-weight: bold;
   text-align: left;
-  margin-left: 5%;
+  margin-left: 20px;
   font-size: 18px;
   margin-top: 20px;
   margin-bottom: 25px;
@@ -90,26 +90,19 @@ const PText = styled.Text`
 const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
-  margin: 20px 5%;
+  margin: 20px 20px;
   resize-mode: center;
 `;
 const InfoButtonTabWrapper = styled.View`
-  width: 90%;
   height: 50px;
-
-  margin-right: 5%;
-  margin-left: 5%;
-  flex: 1;
+  margin-right: 20px;
+  margin-left: 20px;
   margin-bottom: 15px;
 `;
 const InfoButtonInnerWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-// const NextImg = styled.Image`
-// width: 5px,
-// height: 8px`;
 
 const MainInfo: FunctionComponent = () => {
   const { user } = useContext(UserContext);
@@ -159,6 +152,15 @@ const MainInfo: FunctionComponent = () => {
             />
           </TouchableOpacity>
         </InfoHeaderWrapper>
+        <View
+          style={{
+            marginTop: 10,
+            marginLeft: 20,
+            marginRight: 20,
+            display: "flex",
+            flexDirection: "row",
+          }}
+        ></View>
         <View
           style={{
             borderBottomColor: "#F6F6F8",
@@ -232,7 +234,6 @@ const MainInfo: FunctionComponent = () => {
         </View>
         <View
           style={{
-            flex: 2,
             borderBottomColor: "#F6F6F8",
             borderBottomWidth: 5,
             justifyContent: "center",
