@@ -13,7 +13,8 @@ import Product from "../../types/product";
 const FilterImg = styled.Image`
   width: 12px;
   height: 12px;
-  position: relative;
+  top: 8px;
+  margin: 2px 3px;
 `;
 const FilterBtn = styled.TouchableOpacity`
   width: 50px;
@@ -31,7 +32,7 @@ const FilterBtnText = styled.Text`
   color: #fff;
   font-size: 12px;
   text-align: center;
-  line-height: 40px;
+  line-height: 30px;
   z-index: 5;
   justify-content: center;
   align-content: center;

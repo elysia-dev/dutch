@@ -19,10 +19,8 @@ const H1Text = styled.Text`
 `;
 const PText = styled.Text`
   font-size: 12px;
-  color: #626368;
-  text-align: left;
-  margin: 5px auto 32px auto;
-  width: 90%;
+  text-align: center;
+  line-height: 20px;
 `;
 
 interface props {
@@ -64,14 +62,12 @@ export const Item: FunctionComponent<props> = (props) => {
               backgroundColor: "#E6ECF2",
               width: 50,
               height: 20,
-              paddingLeft: 14,
-              paddingTop: 3,
               marginRight: 10,
             }}
           >
-            <Text style={{ color: "#626368" }}>
+            <PText style={{ color: "#626368" }}>
               {i18n.t("product_label.return_on_rent")}
-            </Text>
+            </PText>
           </View>
 
           <View
@@ -80,13 +76,11 @@ export const Item: FunctionComponent<props> = (props) => {
               backgroundColor: "#A7A7A7",
               width: 60,
               height: 20,
-              paddingLeft: 8,
-              paddingTop: 3,
             }}
           >
-            <Text style={{ color: "#fff" }}>
+            <PText style={{ color: "#fff" }}>
               {i18n.t("product_label.return_on_sale")}
-            </Text>
+            </PText>
           </View>
         </View>
       </View>
