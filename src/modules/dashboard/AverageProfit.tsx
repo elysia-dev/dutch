@@ -54,8 +54,9 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-      <BackButton handler={() => navigation.goBack()} />
-
+      <View style={{ paddingTop: 40, paddingLeft: 20 }}>
+        <BackButton handler={() => navigation.goBack()} />
+      </View>
       <View
         style={{
           width: "100%",

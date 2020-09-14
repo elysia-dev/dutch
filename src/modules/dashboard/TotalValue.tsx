@@ -36,11 +36,11 @@ const NumText2 = styled.Text`
   font-weight: bold;
 `;
 const NumWrapper = styled.View`
-  display: flex,
-  flex-direction: row,
-  justify-content: space-between,
-  align-content: center,
-  `;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+`;
 
 interface props {
   navigation: NavigationScreenProp<any>;
@@ -60,7 +60,9 @@ export const TotalValue: FunctionComponent<props> = (props) => {
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-      <BackButton handler={() => navigation.goBack()} />
+      <View style={{ paddingTop: 40, paddingLeft: 20 }}>
+        <BackButton handler={() => navigation.goBack()} />
+      </View>
 
       <View
         style={{

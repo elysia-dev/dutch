@@ -28,6 +28,8 @@ const MText = styled.Text`
   color: #1c1c1c;
   font-size: 14px;
   font-weight: 300;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 const DesView = styled.View`
   margin-top: 18px;
@@ -52,7 +54,7 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription =
     product.data.descriptions[
-    product.data.languages.includes(locale) ? locale : LocaleType.EN
+      product.data.languages.includes(locale) ? locale : LocaleType.EN
     ];
 
   return (

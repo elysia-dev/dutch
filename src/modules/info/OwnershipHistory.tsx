@@ -114,26 +114,28 @@ export class OwnershipHistory extends Component<props, state> {
           paddingLeft: "5%",
         }}
       >
-        <BackButton
-          handler={() => {
-            this.state.status === Status.Active
-              ? navigation.goBack()
-              : this.setState({
-                  status: Status.Active,
+        <ScrollView>
+          <BackButton
+            handler={() => {
+              this.state.status === Status.Active
+                ? navigation.goBack()
+                : this.setState({
+                    status: Status.Active,
+                  });
+            }}
+          ></BackButton>
+          <H1Text>{i18n.t("info_label.my_inv_history")}</H1Text>
+          {listToShow}
+          {this.state.status === Status.Active && (
+            <View style={{ paddingBottom: 20 }}>
+              {this.moreHistory(() => {
+                this.setState({
+                  status: Status.Deactive,
                 });
-          }}
-        ></BackButton>
-        <H1Text>{i18n.t("info_label.my_inv_history")}</H1Text>
-        <ScrollView>{listToShow}</ScrollView>
-        {this.state.status === Status.Active && (
-          <View>
-            {this.moreHistory(() => {
-              this.setState({
-                status: Status.Deactive,
-              });
-            })}
-          </View>
-        )}
+              })}
+            </View>
+          )}
+        </ScrollView>
       </View>
     );
   }

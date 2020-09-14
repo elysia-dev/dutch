@@ -63,6 +63,8 @@ export const Item: FunctionComponent<props> = (props) => {
               width: 50,
               height: 20,
               marginRight: 10,
+              justifyContent: "center",
+              alignContent: "center",
             }}
           >
             <PText style={{ color: "#626368" }}>
@@ -76,6 +78,8 @@ export const Item: FunctionComponent<props> = (props) => {
               backgroundColor: "#A7A7A7",
               width: 60,
               height: 20,
+              justifyContent: "center",
+              alignContent: "center",
             }}
           >
             <PText style={{ color: "#fff" }}>

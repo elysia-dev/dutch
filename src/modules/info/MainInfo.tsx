@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Platform,
   Picker,
+  StyleSheet,
   Text,
 } from "react-native";
 import styled from "styled-components/native";
@@ -16,6 +17,7 @@ import { InfoPage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
 import ExchangeBithumbPng from "./images/bithumb_logo.png";
 import ExchangebobooPng from "./images/boboo_logo.png";
+import RNPickerSelect, { Item } from "react-native-picker-select";
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -306,11 +308,28 @@ const MainInfo: FunctionComponent = () => {
               marginBottom: 20,
             }}
           >
-            <Picker style={{}}>
-              <Picker.Item label="한국어" value="ko" />
-              <Picker.Item label="English" value="en" />
-              <Picker.Item label="简体中文" value="zh-hans" />
-            </Picker>
+            {Platform.OS === "android" ? (
+              <Picker style={{}}>
+                <Picker.Item label="한국어" value="ko" />
+                <Picker.Item label="English" value="en" />
+                <Picker.Item label="简体中文" value="zh-hans" />
+              </Picker>
+            ) : (
+              <RNPickerSelect
+                style={pickerSelectStyles}
+                onValueChange={(value) => {}}
+                items={[
+                  { label: "한국어", value: "ko" },
+                  { label: "English", value: "en" },
+                  { label: "简体中文", value: "zh-hans" },
+                ]}
+                placeholder={{
+                  label: "Select your app language",
+                  value: "",
+                  color: "#1C1C1C",
+                }}
+              />
+            )}
           </View>
         </View>
         <View
@@ -347,3 +366,25 @@ const MainInfo: FunctionComponent = () => {
 };
 
 export default MainInfo;
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#fff",
+    fontSize: 16,
+    color: "#1C1C1C",
+    justifyContent: "center",
+    alignContent: "center",
+    textAlign: "center",
+  },
+  inputAndroid: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#fff",
+    fontSize: 16,
+    color: "#1C1C1C",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+});

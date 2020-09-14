@@ -39,7 +39,7 @@ const InputPicker = styled.Picker`
 interface props {
   type?: string;
   nationality?: string;
-  eventHandler?: (input: string) => void;
+  eventHandler: (input: string) => void;
 }
 
 interface state {}
@@ -99,7 +99,7 @@ export class NationInput extends Component<props, state> {
   }
 }
 
-const pickerSelectStyles = StyleSheet.create({
+export const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     width: "90%",
     backgroundColor: "#fff",
@@ -129,22 +129,3 @@ const pickerSelectStyles = StyleSheet.create({
     paddingRight: 30, // to ensure the text is never behind the icon
   },
 });
-
-//<DropDownPicker
-//     items={this.NationList}
-//     defaultValue={this.state.nationality}
-//     containerStyle={{ height: 40 }}
-//     style={{
-//       backgroundColor: "#fff",
-//     }}
-//     itemStyle={{
-//       justifyContent: "flex-start",
-//     }}
-//     dropDownStyle={{ backgroundColor: "#fff" }}
-//     onChangeItem={(item: any) => {
-//       this.setState({
-//         nationality: item.value,
-//       });
-//       console.log(this.state.nationality);
-//     }}
-//   />
