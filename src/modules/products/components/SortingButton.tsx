@@ -39,7 +39,7 @@ const OptionBtnText = styled.Text`
   color: #a7a7a7;
   font-size: 12px;
   text-align: center;
-  line-height: 40px;
+  line-height: 30px;
   z-index: 5;
   justify-content: center;
   align-content: center;
@@ -48,13 +48,14 @@ const CheckedOptionBtnText = styled.Text`
   color: #1c1c1c;
   font-size: 12px;
   text-align: center;
-  line-height: 40px;
+  line-height: 30px;
   z-index: 5;
 `;
 const BlueCheckImg = styled.Image`
-  position: relative;
   width: 12px;
   height: 12px;
+  top: 8px;
+  margin-left: 3px;
 `;
 
 export const SortingButton: FunctionComponent<{

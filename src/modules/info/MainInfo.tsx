@@ -1,5 +1,12 @@
 import React, { FunctionComponent, useContext } from "react";
-import { View, ScrollView, TouchableOpacity, Platform } from "react-native";
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Platform,
+  Picker,
+  Text,
+} from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
@@ -7,7 +14,22 @@ import { useNavigation } from "@react-navigation/native";
 import { KycStatus } from "../../enums/status";
 import { InfoPage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
+import ExchangeBithumbPng from "./images/bithumb_logo.png";
+import ExchangebobooPng from "./images/boboo_logo.png";
 
+const ExchangeBithumbImg = styled.Image`
+  width: 40%;
+  flex: 1;
+  height: 60px;
+  resize-mode: center;
+`;
+const ExchangeBobooImg = styled.Image`
+  width: 40%;
+  flex: 1;
+  height: 60px;
+  resize-mode: center;
+  top: 3px;
+`;
 const MainInfoWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
   background-color: #ffffff;
@@ -18,6 +40,7 @@ const InfoHeaderWrapper = styled.View`
   flex-direction: row;
   border-bottom-color: #f6f6f8;
   border-bottom-width: 5px;
+  margin-bottom: 30px;
 `;
 const InfoHeaderH1Text = styled.Text`
   color: #1c1c1c;
@@ -26,6 +49,7 @@ const InfoHeaderH1Text = styled.Text`
   margin: 50px 5% 0px 5%;
   font-weight: bold;
   line-height: 21px;
+  height: 21px;
 `;
 const InfoHeaderSettingImg = styled.Image`
   width: 21px;
@@ -35,13 +59,14 @@ const InfoHeaderSettingImg = styled.Image`
 const InfoHeaderUserImg = styled.Image`
   width: 20px;
   height: 20px;
-  margin: 50px 5% 0px 5%;
-  resize-mode: center;
 `;
 const InfoHeaderUserName = styled.Text`
   font-size: 14px;
   color: #838383;
-  margin: 3% 5%;
+  margin: 0 5%;
+  height: 20px;
+  line-height: 25px;
+  flex: 1;
 `;
 const InfoUserWrapper = styled.View`
   flex: 1;
@@ -96,20 +121,33 @@ const MainInfo: FunctionComponent = () => {
         <InfoHeaderWrapper>
           <InfoUserWrapper>
             <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
-            <InfoHeaderUserName>
+            <Text
+              style={{
+                marginLeft: "5%",
+                height: 50,
+                lineHeight: 20,
+                textAlign: "justify",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "stretch",
+                alignContent: "stretch",
+              }}
+            >
               <InfoHeaderUserImg
                 source={require("../kyc/images/userIcon.png")}
               />
               {user.kycStatus !== KycStatus.SUCCESS ? (
                 <InfoHeaderUserName>
+                  {" "}
                   {i18n.t("info_label.need_kyc_label")}
                 </InfoHeaderUserName>
               ) : (
                 <InfoHeaderUserName>
+                  {" "}
                   {user.firstName} {user.lastName}
                 </InfoHeaderUserName>
               )}
-            </InfoHeaderUserName>
+            </Text>
           </InfoUserWrapper>
           <TouchableOpacity
             onPress={() => {
@@ -125,7 +163,7 @@ const MainInfo: FunctionComponent = () => {
           style={{
             borderBottomColor: "#F6F6F8",
             borderBottomWidth: 5,
-            height: 116,
+            height: 86,
           }}
         >
           {user.kycStatus === KycStatus.NONE && (
@@ -253,7 +291,26 @@ const MainInfo: FunctionComponent = () => {
           }}
         >
           <H1Text>앱 설정</H1Text>
-          <PText>언어</PText>
+          <H1Text style={{ fontSize: 16 }}>언어</H1Text>
+          <View
+            style={{
+              borderColor: "#d6d6d8",
+              borderWidth: 1,
+              borderStyle: "solid",
+              marginLeft: "5%",
+              marginRight: "5%",
+              borderRadius: 5,
+              height: 50,
+              width: "90%",
+              marginBottom: 20,
+            }}
+          >
+            <Picker style={{}}>
+              <Picker.Item label="한국어" value="ko" />
+              <Picker.Item label="English" value="en" />
+              <Picker.Item label="简体中文" value="zh-hans" />
+            </Picker>
+          </View>
         </View>
         <View
           style={{
@@ -262,11 +319,25 @@ const MainInfo: FunctionComponent = () => {
           }}
         >
           <H1Text>EL 거래소</H1Text>
+          <View style={{ flexDirection: "row", marginBottom: 30 }}>
+            <ExchangeBithumbImg source={ExchangeBithumbPng} />
+            <ExchangeBobooImg source={ExchangebobooPng} />
+          </View>
         </View>
+        <Text
+          style={{
+            backgroundColor: "#F6F6F8",
+            textAlign: "right",
+            paddingRight: "5%",
+            fontSize: 10,
+          }}
+        >
+          Ver demo sprint3
+        </Text>
         <View
           style={{
-            height: 1000,
-            backgroundColor: "#FFF",
+            height: 100,
+            backgroundColor: "#F6F6F8",
           }}
         />
       </ScrollView>

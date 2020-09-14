@@ -1,5 +1,12 @@
 import React, { Component, FunctionComponent, Props } from "react";
-import { StyleSheet, Text, View, SafeAreaView, GestureResponderEvent } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  GestureResponderEvent,
+  Platform,
+} from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import styled from "styled-components/native";
@@ -22,8 +29,8 @@ import { ProductPage } from "../../enums/pageEnum";
 const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
-  text-align: center;
-  margin: 25px auto;
+  text-align: left;
+  margin: 25px 5%;
   font-weight: bold;
 `;
 const InputHeaderText = styled.Text`
@@ -35,6 +42,12 @@ const InputHeaderText = styled.Text`
 const Payment = styled.Image`
   width: 27px;
   height: 27px;
+`;
+const FilterWrapper = styled.SafeAreaView`
+  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
+  padding-top: 25px;
+  background-color: #fff;
+  height: 100%;
 `;
 
 interface props {
@@ -83,13 +96,13 @@ export class Filter extends Component<props, state> {
     });
     const methodsToSend = filtered.toString();
     return (
-      <SafeAreaView style={{ backgroundColor: "#fff", height: "100%", display: "flex" }}>
+      <FilterWrapper>
         <BackButton
           handler={() => navigation.goBack()}
           style={{ marginTop: 30, marginLeft: 20 }}
         />
         <H1Text>{i18n.t("product.filter_text")}</H1Text>
-        <InputHeaderText >
+        <InputHeaderText>
           {i18n.t("product_label.select_nationality")}
         </InputHeaderText>
         <View style={{ flexDirection: "row", marginBottom: 20 }}>
@@ -176,7 +189,7 @@ export class Filter extends Component<props, state> {
           }}
         />
         <View style={{ height: 10 }} />
-      </SafeAreaView>
+      </FilterWrapper>
     );
   }
 }
