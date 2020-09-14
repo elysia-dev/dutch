@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from "react";
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 import { StyleProp, ViewStyle } from "react-native";
 
 type ButtonProps = {
   theme: string;
-}
+};
 
 const handleThemeType = (BtnTheme: string) => {
   switch (BtnTheme) {
@@ -28,26 +28,28 @@ const handleThemeWrapperType = (BtnTheme: string) => {
 };
 
 const WhiteBtnWrapper = styled.View`
-flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
-justify-content: flex-end;
-${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
+  flex: ${(props: ButtonProps) => (props.theme === "WhiteTheme" ? "4" : "1")};
+  justify-content: flex-end;
+  ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
 `;
 
 const WhiteBtn = styled.TouchableOpacity`
-width: 90%;
-margin-left: 5%;
-margin-right: 5%;
-height: 40px;
-border-radius: 5px;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 40px;
+  border-radius: 5px;
+  justify-content: center;
+  align-content: center;
 
-${(props: ButtonProps) => handleThemeType(props.theme)};
+  ${(props: ButtonProps) => handleThemeType(props.theme)};
 `;
 const WhiteBtnText = styled.Text`
-font-size: 14px;
-text-align: center;
-line-height: 40px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 40px;
 
-color: ${(props: ButtonProps) =>
+  color: ${(props: ButtonProps) =>
     props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
 `;
 
@@ -57,7 +59,7 @@ interface SubmitButtonProps {
   handler: any;
   ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
   disabled?: boolean;
-  style?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>;
 }
 
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
@@ -65,10 +67,15 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   handler,
   ButtonTheme,
   disabled,
-  style
+  style,
 }) => {
   return (
-    <WhiteBtn onPress={handler} theme={ButtonTheme} disabled={disabled} style={style}>
+    <WhiteBtn
+      onPress={handler}
+      theme={ButtonTheme}
+      disabled={disabled}
+      style={style}
+    >
       <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
     </WhiteBtn>
   );

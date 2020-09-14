@@ -191,7 +191,7 @@ const ProductInfo: FunctionComponent = () => {
               setState({ ...state, investment: value });
             }}
           />
-          {/*<Map product={product} />*/}
+          <Map product={product} />
           <WrappedInfo product={product} />
         </ScrollView>
       </View>
