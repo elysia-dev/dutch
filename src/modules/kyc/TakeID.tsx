@@ -296,6 +296,7 @@ export class TakeID extends Component<props, state> {
                 <BackButton
                   handler={() => navigation.goBack()}
                   isWhite={true}
+                  style={{ marginTop: 30, marginLeft: 20 }}
                 />
                 <HeaderText>{i18n.t(`kyc_label.${id_type}`)}</HeaderText>
               </HeaderTextWrapper>

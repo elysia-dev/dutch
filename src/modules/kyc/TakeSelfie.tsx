@@ -129,7 +129,11 @@ export class TakeSelfie extends Component<props, state> {
             }}
           >
             <HeaderCameraWrapper>
-              <BackButton handler={() => navigation.goBack()} isWhite={true} />
+              <BackButton
+                handler={() => navigation.goBack()}
+                isWhite={true}
+                style={{ marginTop: 30, marginLeft: 20 }}
+              />
             </HeaderCameraWrapper>
 
             <View

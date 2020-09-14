@@ -19,28 +19,22 @@ const H1Text = styled.Text`
   font-weight: bold;
   text-align: left;
   margin-top: 40px;
-  margin-left: 5%;
   margin-bottom: 6px;
 `;
 const PText = styled.Text`
   font-size: 12px;
   color: #626368;
   text-align: left;
-  margin: 5px auto 32px auto;
-  width: 90%;
 `;
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
-  margin: 5px 20px;
   font-size: 12px;
   text-align: left;
 `;
 const IdImg = styled.Image`
-  width: 90%;
   height: 30%;
   justify-content: center;
   align-content: center;
-  left: 5%;
   position: relative;
   elevation: 5;
 `;
@@ -50,7 +44,6 @@ const ConfirmImg = styled.Image`
 `;
 const PersonalDataInputWrapper = styled.SafeAreaView`
   padding-top: 25px;
-  flex: 1;
   background-color: #ffffff;
 `;
 const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
@@ -61,14 +54,10 @@ const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
   },
 }))`
   flex-direction: column;
-  background-color: rgba(250, 250, 250, 1);
-  width: 90%;
-  margin-left: 5%;
-  margin-right: 5%;
-  border-radius: 10px;
-  border: 1px solid rgba(167, 167, 167, 1);
-  overflow: hidden;
-  margin-bottom: 30px;
+  background-color: #ffffff;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 30px;
 `;
 
 interface props {
@@ -155,10 +144,13 @@ export class PersonalDataInput extends Component<props, state> {
     const { photoId } = route.params;
     return (
       <PersonalDataInputWrapper>
-        <BackButton handler={() => navigation.goBack()} />
-        <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
         <ScrollViewWrapper>
+          <BackButton
+            handler={() => navigation.goBack()}
+            style={{ marginTop: 30 }}
+          />
+          <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
+          <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
           <IdImg source={{ uri: photoId.uri }} />
           <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
           <TextInput
@@ -169,6 +161,9 @@ export class PersonalDataInput extends Component<props, state> {
               this.setState({ lastName: input });
             }}
             secure={false}
+            style={{
+              marginTop: 20
+            }}
           />
           <TextInput
             type={i18n.t("kyc_label.first_name")}
@@ -178,21 +173,29 @@ export class PersonalDataInput extends Component<props, state> {
               this.setState({ firstName: input });
             }}
             secure={false}
+            style={{
+              marginTop: 20
+            }}
           />
           <NationInput
             type={i18n.t("kyc_label.nationality")}
             eventHandler={this.setNationality}
             nationality={this.state.nationality}
+            style={{
+              marginTop: 20
+            }}
           />
           <DateInput
             type={i18n.t("kyc_label.birthday")}
             eventHandler={this.setBirthday}
             birthday={this.state.birthday}
+            style={{
+              marginTop: 20
+            }}
           />
-
-          <InputHeaderText>{i18n.t("kyc_label.gender")}</InputHeaderText>
+          <InputHeaderText style={{ marginTop: 20 }}>{i18n.t("kyc_label.gender")}</InputHeaderText>
           <View
-            style={{ display: "flex", flexDirection: "row", marginBottom: 80 }}
+            style={{ display: "flex", flexDirection: "row", marginBottom: 80, marginTop: 10 }}
           >
             <ShortOptionButton
               check={this.state.gender === "male" ? "checked" : ""}
@@ -216,6 +219,7 @@ export class PersonalDataInput extends Component<props, state> {
           <SubmitButton
             title={i18n.t("kyc_label.complete_input")}
             handler={() => this.setModalVisible(true)}
+            style={{ marginBottom: 20 }}
           />
           {this.state.modalVisible === true && (
             <Modal
@@ -231,7 +235,7 @@ export class PersonalDataInput extends Component<props, state> {
                 this.setModalVisible(false);
                 navigation.navigate("Main", { screen: "Info" });
               }}
-              // 다시 더보기 페이지로 돌아가게끔!
+            // 다시 더보기 페이지로 돌아가게끔!
             ></Modal>
           )}
         </ScrollViewWrapper>
