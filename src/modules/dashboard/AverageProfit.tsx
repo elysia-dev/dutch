@@ -53,9 +53,17 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
   const dashboardInfo = route.params.user.dashboard.summary.profits;
 
   return (
-    <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-      <BackButton handler={() => navigation.goBack()} />
-
+    <View
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        height: "100%",
+        paddingTop: 50,
+      }}
+    >
+      <View style={{ marginLeft: "5%" }}>
+        <BackButton handler={() => navigation.goBack()} />
+      </View>
       <View
         style={{
           width: "100%",
