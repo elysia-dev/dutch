@@ -6,6 +6,8 @@ import {
   Picker,
   PickerIOS,
   Platform,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
@@ -16,30 +18,15 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
-  margin: 5px 20px;
   font-size: 12px;
   text-align: left;
-`;
-const InputTextForm = styled.TextInput`
-  width: 90%;
-  margin: 8px auto;
-  height: 25px;
-  border-bottom-width: 1px;
-  border-bottom-color: #a7a7a7;
-`;
-const InputPicker = styled.Picker`
-  width: 90%;
-  margin: 8px 10px;
-  padding: 5px;
-  font-size: 7px;
-  border: solid 1px #d0d8df;
-  border-radius: 5px;
 `;
 
 interface props {
   type?: string;
   nationality?: string;
-  eventHandler: (input: string) => void;
+  eventHandler?: (input: string) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 interface state {}
@@ -76,8 +63,10 @@ export class NationInput extends Component<props, state> {
     };
 
     return (
-      <View>
-        <InputHeaderText>{this.props.type}</InputHeaderText>
+      <View style={this.props.style}>
+        <InputHeaderText style={{ marginBottom: 10 }}>
+          {this.props.type}
+        </InputHeaderText>
         {Platform.OS === "android" ? (
           <Picker
             // mode="dropdown"
@@ -101,11 +90,8 @@ export class NationInput extends Component<props, state> {
 
 export const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    width: "90%",
     backgroundColor: "#fff",
     fontSize: 14,
-    marginVertical: 8,
-    marginHorizontal: 10,
     paddingVertical: 12,
     paddingHorizontal: 5,
     borderWidth: 1,
@@ -115,11 +101,8 @@ export const pickerSelectStyles = StyleSheet.create({
     paddingRight: 30, // to ensure the text is never behind the icon
   },
   inputAndroid: {
-    width: "90%",
     backgroundColor: "#fff",
     fontSize: 14,
-    marginVertical: 8,
-    marginHorizontal: 10,
     paddingVertical: 12,
     paddingHorizontal: 5,
     borderWidth: 1,

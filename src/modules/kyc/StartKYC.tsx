@@ -29,7 +29,7 @@ const Circle = styled.Text`
   width: 26px;
   height: 26px;
   background-color: #3679b5;
-  border-radius: 50%;
+  border-radius: 13px;
   color: #fff;
   line-height: 25px;
   text-align: center;
