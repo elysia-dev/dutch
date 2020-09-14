@@ -128,6 +128,15 @@ export class Main extends Component<props, state> {
       >
         <View
           style={{
+            position: "absolute",
+            backgroundColor: "#2C6190",
+            width: "100%",
+            height: 1000,
+            top: -1000,
+          }}
+        />
+        <View
+          style={{
             backgroundColor: "#2C6190",
             height: 236,
             borderBottomLeftRadius: 20,
@@ -149,6 +158,7 @@ export class Main extends Component<props, state> {
             shadowColor: "#00000033",
             shadowOpacity: 0.8,
             shadowRadius: 6,
+            elevation: 5,
           }}
         >
           <TotalText>{"123,000$"}</TotalText>
@@ -208,7 +218,7 @@ export class Main extends Component<props, state> {
           style={{
             marginTop: 130,
             marginLeft: 20,
-            marginRight: 20
+            marginRight: 20,
           }}
         >
           <H1Text>{i18n.t("dashboard_label.my_investment")}</H1Text>

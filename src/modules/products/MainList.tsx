@@ -130,8 +130,17 @@ export class MainList extends Component<props, state> {
       </TouchableOpacity>
     ));
     return (
-      <SafeAreaView style={{ height: "100%", backgroundColor: "#fff" }}>
+      <View style={{ height: "100%" }}>
         <ScrollView scrollEnabled={true}>
+          <View
+            style={{
+              position: "absolute",
+              backgroundColor: "#2C6190",
+              width: "100%",
+              height: 1000,
+              top: -1000,
+            }}
+          />
           <View
             style={{
               backgroundColor: "#2C6190",
@@ -184,11 +193,9 @@ export class MainList extends Component<props, state> {
               }}
             />
           </View>
-          <View style={{ marginTop: 155 }}>
-            {listToShow}
-          </View>
+          <View style={{ marginTop: 155 }}>{listToShow}</View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }
