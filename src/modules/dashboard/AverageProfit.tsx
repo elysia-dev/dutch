@@ -42,13 +42,15 @@ interface props {
 }
 
 type ParamList = {
-  User: UserResponse;
+  UserInfo: {
+    user: UserResponse;
+  };
 };
 
 export const AverageProfit: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "User">>();
-  const dashboardInfo = route.params.dashboard.summary.profits;
+  const route = useRoute<RouteProp<ParamList, "UserInfo">>();
+  const dashboardInfo = route.params.user.dashboard.summary.profits;
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
@@ -64,7 +66,8 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
         }}
       >
         <H1Text>{i18n.t("dashboard_label.average_profit")}</H1Text>
-        <NumText>{"2.275 %"}</NumText>
+        <NumText>{`${parseInt(dashboardInfo.returnOnRent) +
+          parseInt(dashboardInfo.returnOnSale)}%`}</NumText>
         <PText>{i18n.t("dashboard.average_profit_desc")}</PText>
       </View>
       <View
@@ -92,7 +95,7 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
           }}
         >
           <PText>{i18n.t("dashboard_label.rent_rate")}</PText>
-          <NumText2>{"1.412%"}</NumText2>
+          <NumText2>{`${dashboardInfo.returnOnRent}%`}</NumText2>
         </View>
         <View
           style={{
@@ -103,7 +106,7 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
           }}
         >
           <PText>{i18n.t("dashboard_label.monthly_profit")}</PText>
-          <NumText2>{"0.243$"}</NumText2>
+          <NumText2>{`${dashboardInfo.returnOfMonth}$`}</NumText2>
         </View>
         <View
           style={{
@@ -114,7 +117,7 @@ export const AverageProfit: FunctionComponent<props> = (props) => {
           }}
         >
           <PText>{i18n.t("dashboard_label.expected_sale_rate")}</PText>
-          <NumText2>{"0.863%"}</NumText2>
+          <NumText2>{`${dashboardInfo.returnOnSale}%`}</NumText2>
         </View>
       </View>
     </View>

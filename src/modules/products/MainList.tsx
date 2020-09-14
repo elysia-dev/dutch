@@ -126,7 +126,7 @@ export class MainList extends Component<props, state> {
         }
         key={`item-${index}`}
       >
-        <Item annualReturn={product.data.expectedAnnualReturn} />
+        <Item annualReturn={product.expectedAnnualReturn} />
       </TouchableOpacity>
     ));
     return (
