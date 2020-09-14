@@ -12,46 +12,29 @@ const MainInfoWrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
   background-color: #ffffff;
 `;
-const InfoHeaderWrapper = styled.View`
-  width: 100%;
-  height: 10%;
-  flex-direction: row;
-  border-bottom-color: #f6f6f8;
-  border-bottom-width: 5px;
-`;
 const InfoHeaderH1Text = styled.Text`
   color: #1c1c1c;
   font-size: 20px;
-  text-align: left;
-  margin: 50px 5% 0px 5%;
   font-weight: bold;
   line-height: 21px;
 `;
 const InfoHeaderSettingImg = styled.Image`
   width: 21px;
   height: 21px;
-  margin: 50px 5% 5px 5%;
 `;
 const InfoHeaderUserImg = styled.Image`
   width: 20px;
   height: 20px;
-  margin: 50px 5% 0px 5%;
-  resize-mode: center;
 `;
 const InfoHeaderUserName = styled.Text`
   font-size: 14px;
   color: #838383;
-  margin: 3% 5%;
-`;
-const InfoUserWrapper = styled.View`
-  flex: 1;
-  height: 28px;
 `;
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-weight: bold;
   text-align: left;
-  margin-left: 5%;
+  margin-left: 20px;
   font-size: 18px;
   margin-top: 20px;
   margin-bottom: 25px;
@@ -65,26 +48,19 @@ const PText = styled.Text`
 const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
-  margin: 20px 5%;
+  margin: 20px 20px;
   resize-mode: center;
 `;
 const InfoButtonTabWrapper = styled.View`
-  width: 90%;
   height: 50px;
-
-  margin-right: 5%;
-  margin-left: 5%;
-  flex: 1;
+  margin-right: 20px;
+  margin-left: 20px;
   margin-bottom: 15px;
 `;
 const InfoButtonInnerWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-// const NextImg = styled.Image`
-// width: 5px,
-// height: 8px`;
 
 const MainInfo: FunctionComponent = () => {
   const { user } = useContext(UserContext);
@@ -93,39 +69,42 @@ const MainInfo: FunctionComponent = () => {
   return (
     <MainInfoWrapper>
       <ScrollView>
-        <InfoHeaderWrapper>
-          <InfoUserWrapper>
-            <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
-            <InfoHeaderUserName>
-              <InfoHeaderUserImg
-                source={require("../kyc/images/userIcon.png")}
-              />
-              {user.kycStatus !== KycStatus.SUCCESS ? (
-                <InfoHeaderUserName>
-                  {i18n.t("info_label.need_kyc_label")}
-                </InfoHeaderUserName>
-              ) : (
-                <InfoHeaderUserName>
-                  {user.firstName} {user.lastName}
-                </InfoHeaderUserName>
-              )}
-            </InfoHeaderUserName>
-          </InfoUserWrapper>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Info", { screen: InfoPage.MyPage });
+        <View style={{ margin: 20, display: "flex", flexDirection: "row" }}>
+          <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
+          <View
+            style={{
+              marginLeft: "auto"
             }}
           >
-            <InfoHeaderSettingImg
-              source={require("../../../assets/setting.png")}
-            />
-          </TouchableOpacity>
-        </InfoHeaderWrapper>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Info", { screen: InfoPage.MyPage });
+              }}
+            >
+              <InfoHeaderSettingImg
+                source={require("../../../assets/setting.png")}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20, display: "flex", flexDirection: "row" }}>
+          <InfoHeaderUserImg
+            source={require("../kyc/images/userIcon.png")}
+          />
+          <InfoHeaderUserName style={{ marginLeft: 10 }}>
+            {user.kycStatus !== KycStatus.SUCCESS ?
+              i18n.t("info_label.need_kyc_label")
+              :
+              user.firstName + user.lastName
+            }
+          </InfoHeaderUserName>
+        </View>
         <View
           style={{
             borderBottomColor: "#F6F6F8",
             borderBottomWidth: 5,
-            height: 116,
+            marginTop: 20,
+            paddingBottom: 20
           }}
         >
           {user.kycStatus === KycStatus.NONE && (
@@ -146,7 +125,7 @@ const MainInfo: FunctionComponent = () => {
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               title={i18n.t("info_label.approved_kyc")}
-              handler={() => {}}
+              handler={() => { }}
               ButtonTheme={"GrayTheme"}
             />
           )}
@@ -194,7 +173,6 @@ const MainInfo: FunctionComponent = () => {
         </View>
         <View
           style={{
-            flex: 2,
             borderBottomColor: "#F6F6F8",
             borderBottomWidth: 5,
             justifyContent: "center",
@@ -206,7 +184,7 @@ const MainInfo: FunctionComponent = () => {
           </View>
 
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.notice")}</PText>
                 <InfoArrowImg
@@ -216,7 +194,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.service_terms")}</PText>
                 <InfoArrowImg
@@ -226,7 +204,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.contact")}</PText>
                 <InfoArrowImg
@@ -236,7 +214,7 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => { }}>
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.faq")}</PText>
                 <InfoArrowImg
@@ -253,7 +231,7 @@ const MainInfo: FunctionComponent = () => {
           }}
         >
           <H1Text>앱 설정</H1Text>
-          <PText>언어</PText>
+          <PText style={{ marginLeft: 20 }}>언어</PText>
         </View>
         <View
           style={{
@@ -263,12 +241,6 @@ const MainInfo: FunctionComponent = () => {
         >
           <H1Text>EL 거래소</H1Text>
         </View>
-        <View
-          style={{
-            height: 1000,
-            backgroundColor: "#FFF",
-          }}
-        />
       </ScrollView>
     </MainInfoWrapper>
   );
