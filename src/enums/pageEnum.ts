@@ -32,7 +32,6 @@ export enum InfoPage {
   MyPage = "MyPage",
   OwnershipHistory = "OwnershipHistory",
   TransactionHistory = "TransactionHistory",
-  InvestmentHistory = "InvestmentHistory",
 }
 
 export enum DashboardPage {

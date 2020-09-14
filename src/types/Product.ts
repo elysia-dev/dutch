@@ -5,6 +5,7 @@ type Product = {
   id: number;
   title: string;
   allowedPayments: string[];
+  expectedAnnualReturn: string;
   data: {
     type: string;
     languages: LocaleType[];
@@ -21,9 +22,9 @@ type Product = {
     latitude: string;
     longitude: string;
     descriptions: {
-      en: ProductDescription
-      ko: ProductDescription
-      ch: ProductDescription
+      en: ProductDescription;
+      ko: ProductDescription;
+      ch: ProductDescription;
     };
   };
 };

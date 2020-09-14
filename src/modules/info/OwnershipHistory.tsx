@@ -5,7 +5,7 @@ import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { InfoPage } from "../../enums/pageEnum";
 import { BackButton } from "../../shared/components/BackButton";
-import Api, { OwnershipResponse } from "../../api/info";
+import { Api, OwnershipResponse } from "../../api/info";
 import { OwnershipItem } from "./components/OwnershipItem";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -27,14 +27,14 @@ interface state {
   status: Status;
 }
 enum Status {
-  Activated = "activated",
-  Deactivated = "deactivated",
+  Active = "active",
+  Deactive = "deactive",
 }
 
 export class OwnershipHistory extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { productList: [], status: Status.Activated };
+    this.state = { productList: [], status: Status.Active };
   }
 
   moreHistory = (handler: () => void) => {
@@ -61,7 +61,7 @@ export class OwnershipHistory extends Component<props, state> {
           }}
         >
           {i18n.t(
-            this.state.status === Status.Activated
+            this.state.status === Status.Active
               ? "info_label.last_investments"
               : "info_label.current_investments"
           ) + " >"}
@@ -84,8 +84,12 @@ export class OwnershipHistory extends Component<props, state> {
   }
 
   componentDidMount() {
-    // this.callApi();
+    this.callApi();
     // 서버 작업 후 호출
+  }
+
+  componentDidUpdate(_prevProps: object, prevState: { status: Status }) {
+    if (prevState.status !== this.state.status) this.callApi();
   }
 
   render() {
@@ -94,8 +98,8 @@ export class OwnershipHistory extends Component<props, state> {
       //나중에 touchaleopacity로 감싸서 productList[index]를 params로 상세페이지 연결
       <OwnershipItem
         name={item.product.title}
-        rate={item.product.expectedAnnualReturn}
-        expectedSale={item.product.returnOnSale}
+        rate={item.product.data.expectedAnnualReturn}
+        expectedSale={item.product.data.returnOnSale}
       />
     ));
 
@@ -111,25 +115,25 @@ export class OwnershipHistory extends Component<props, state> {
         }}
       >
         <BackButton
-          handler={() => navigation.navigate(InfoPage.MainInfo)}
+          handler={() => {
+            this.state.status === Status.Active
+              ? navigation.goBack()
+              : this.setState({
+                  status: Status.Active,
+                });
+          }}
         ></BackButton>
         <H1Text>{i18n.t("info_label.my_inv_history")}</H1Text>
-        {/* 이 가짜 데이터들 지우고 list 받아오기 */}
-        <OwnershipItem name={"Asset #1"} rate={"4.02"} expectedSale={"15.00"} />
-        <OwnershipItem name={"Asset #1"} rate={"4.02"} expectedSale={"15.00"} />
-        {/* <ScrollView>{listToShow}</ScrollView> */}
-        <View>
-          {this.moreHistory(() => {
-            this.setState({
-              status:
-                this.state.status === Status.Deactivated
-                  ? Status.Activated
-                  : Status.Deactivated,
-            });
-            // 지난 투자내역 불러오는 거 확인, lifecycle고려
-            // 안 되면 현재/과거 state 관리 말고 직접 버튼에서 과거 투자내역 api 호출
-          })}
-        </View>
+        <ScrollView>{listToShow}</ScrollView>
+        {this.state.status === Status.Active && (
+          <View>
+            {this.moreHistory(() => {
+              this.setState({
+                status: Status.Deactive,
+              });
+            })}
+          </View>
+        )}
       </View>
     );
   }

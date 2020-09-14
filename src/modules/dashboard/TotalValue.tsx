@@ -48,13 +48,15 @@ interface props {
 }
 
 type ParamList = {
-  User: UserResponse;
+  User: {
+    user: UserResponse;
+  };
 };
 
 export const TotalValue: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, "User">>();
-  const dashboardInfo = route.params.dashboard.summary.properties;
+  const dashboardInfo = route.params.user.dashboard.summary.properties;
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>

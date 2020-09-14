@@ -5,10 +5,13 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import Api, { UserResponse } from "../../api/account";
+import { Api as HistoryApi } from "../../api/info";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { DashboardPage, InfoPage, AccountPage } from "../../enums/pageEnum";
 import { OwnershipItem } from "../info/components/OwnershipItem";
 import { Dashboard } from "./Dashboard";
+import { OwnershipResponse } from "../../api/info";
+import { KycStatus } from "../../enums/status";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -85,12 +88,42 @@ interface props {
 
 interface state {
   user: UserResponse;
+  ownership: Array<OwnershipResponse>;
 }
 
 export class Main extends Component<props, state> {
   constructor(props: props) {
     super(props);
-    this.state = { user: {} };
+    this.state = {
+      user: {
+        email: "",
+        kycStatus: KycStatus.NONE,
+        gender: "",
+        firstName: "",
+        lastName: "",
+        dashboard: {
+          userId: 0,
+          summary: {
+            properties: {
+              el: "",
+              btc: "",
+              paypal: "",
+              eth: "",
+              totalProperties: "",
+            },
+            profits: {
+              returnOnSale: "",
+              returnOnRent: "",
+              returnOfMonth: "",
+              totalReturnOnSale: "",
+              totalReturnOnRent: "",
+              totalOwnedToken: "",
+            },
+          },
+        },
+      },
+      ownership: [],
+    };
   }
 
   callApi() {
@@ -99,6 +132,24 @@ export class Main extends Component<props, state> {
     Api.me()
       .then((res) => {
         this.setState({ user: res.data });
+        console.log(this.state.user);
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          alert(i18n.t("checking_account.need_login"));
+          navigation.navigate(AccountPage.InitializeEmail);
+        } else if (e.response.status === 500) {
+          alert(i18n.t("errors.messages.server"));
+        }
+      });
+  }
+
+  callHistoryApi() {
+    const { navigation } = this.props;
+
+    HistoryApi.OwnershipHistory("active")
+      .then((res) => {
+        this.setState({ ownership: res.data });
       })
       .catch((e) => {
         if (e.response.status === 401) {
@@ -112,10 +163,20 @@ export class Main extends Component<props, state> {
 
   componentDidMount() {
     this.callApi();
+    // this.callHistoryApi();
   }
 
   render() {
     const { route, navigation } = this.props;
+    // const listToShow = this.state.ownership.map((item, index) => (
+    //   //나중에 touchaleopacity로 감싸서 productList[index]를 params로 상세페이지 연결
+    //   <OwnershipItem
+    //     name={item.product.title}
+    //     rate={item.product.data.expectedAnnualReturn}
+    //     expectedSale={item.product.data.returnOnSale}
+    //   />
+    // ));
+
     return (
       // <ScrollView>
       <ScrollView
@@ -204,7 +265,12 @@ export class Main extends Component<props, state> {
               }}
             >
               <PText>{i18n.t("dashboard_label.average_profit")}</PText>
-              <AverageText>{"12.8%"}</AverageText>
+              <AverageText>{`${parseFloat(
+                this.state.user.dashboard.summary.profits.returnOnRent
+              ) +
+                parseFloat(
+                  this.state.user.dashboard.summary.profits.returnOnSale
+                )}%`}</AverageText>
             </View>
           </TouchableOpacity>
         </View>
@@ -239,7 +305,7 @@ export class Main extends Component<props, state> {
           />
           <View style={{ marginBottom: 20 }}>
             {moreHistory(() =>
-              navigation.navigate("Info", { screen: "InvestmentHistory" })
+              navigation.navigate("Info", { screen: InfoPage.OwnershipHistory })
             )}
           </View>
         </View>

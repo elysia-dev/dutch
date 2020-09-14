@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import Product from "../types/product";
 import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
 
 type TransactionResponse = {
@@ -12,19 +13,22 @@ type TransactionResponse = {
 
 export type OwnershipResponse = {
   id: number;
-  status: string;
+  userId: number;
   paymentMethod: string;
   paymentValue: string;
+  value: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  deactivatedAt: string;
   product: {
+    id: number;
     title: string;
-    images: [];
-    expectedAnnualReturn: string;
-    returnOnRent: string;
-    returnOnSale: string;
+    data: Product["data"];
   };
 };
 
-export default class Api {
+export class Api {
   static TransactionHistory = async (
     startDate: string,
     endDate: string,

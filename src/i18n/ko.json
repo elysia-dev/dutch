@@ -230,7 +230,7 @@
     "more_history": "더보기"
   },
   "dashboard": {
-    "total_value_desc": "부동산가치 + 보유 USD + 보유 EL (세금, 수수료 제외)",
-    "average_profit_desc": "월세 수익률 + 이번달 수익 + 매매 예상수익률"
+    "total_value_desc": "부동산가치 + 보유 USD + 보유 EL + 보유 BTC + 보유 ETH (세금, 수수료 제외)",
+    "average_profit_desc": "월세 수익률 + 매매 예상수익률"
   }
 }
