@@ -11,6 +11,7 @@ import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import AccountLayout from "../../shared/components/AccountLayout";
+import { Timer } from "./components/Timer";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -22,7 +23,9 @@ const PText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
 `;
-
+const ButtonWrapper = styled.View`
+  flex-direction: row-reverse;
+`;
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
   font-size: 13px;
@@ -47,7 +50,8 @@ type ParamList = {
 
 const CertifyRecover: FunctionComponent<props> = (props) => {
   const [state, setState] = useState({
-    code: "", verificationId: ""
+    code: "",
+    verificationId: "",
   });
 
   const navigation = useNavigation();
@@ -57,6 +61,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
     Api.certifyEmail_recover(route.params.email, "recoverPassword")
       .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId });
+        alert(i18n.t("register.resend_verification"));
       })
       .catch((e) => {
         if (e.response.status === 400) {
@@ -68,7 +73,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
           alert(i18n.t("checking_account.try_again_later"));
         }
       });
-  }
+  };
 
   const callCertifyApi = () => {
     if (!state.code) {
@@ -111,7 +116,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
           navigation.navigate(AccountPage.InitializeEmail);
         }
       });
-  }
+  };
 
   return (
     <AccountLayout
@@ -121,7 +126,9 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
             handler={() => navigation.navigate(AccountPage.InitializeEmail)}
             style={{ marginTop: 20, marginBottom: 20 }}
           />
-          <H1Text style={{ marginBottom: 10 }}>{i18n.t("register.authentication_recover")}</H1Text>
+          <H1Text style={{ marginBottom: 10 }}>
+            {i18n.t("register.authentication_recover")}
+          </H1Text>
           <PText>{i18n.t("register.authentication_recover_label")}</PText>
         </>
       }
@@ -131,7 +138,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
             type={i18n.t("account_label.account_email")}
             edit={false}
             value={route.params.email}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
             secure={false}
             style={{ marginBottom: 30 }}
           />
@@ -139,16 +146,23 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
             type={i18n.t("account_label.authentication_code")}
             edit={true}
             value={""}
-            eventHandler={(value) => { setState({ ...state, code: value }) }}
+            eventHandler={(value) => {
+              setState({ ...state, code: value });
+            }}
             secure={false}
           />
-          <View style={{ marginTop: 10, display: "flex", flexDirection: "row" }}>
-            <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t("register.expiration_time")} 03:00 `}</ExpTimeText>
+          <ButtonWrapper style={{ marginTop: 10 }}>
             <BorderFlatButton
               title={i18n.t("account_label.resend")}
               handler={() => callResendApi()}
             />
-          </View>
+            <View style={{ flexDirection: "row", width: "100%" }}>
+              <ExpTimeText style={{ marginLeft: "auto" }}>{`${i18n.t(
+                "register.expiration_time"
+              )}`}</ExpTimeText>
+              <Timer verif={state.verificationId} />
+            </View>
+          </ButtonWrapper>
         </>
       }
       button={
@@ -159,6 +173,6 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
       }
     />
   );
-}
+};
 
-export default CertifyRecover
+export default CertifyRecover;
