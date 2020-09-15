@@ -14,7 +14,7 @@ import i18n from "../../i18n/i18n";
 import { useNavigation } from "@react-navigation/native";
 import { KycStatus } from "../../enums/status";
 import { InfoPage } from "../../enums/pageEnum";
-import UserContext, { LocalizationContext } from "../../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
 import ExchangeBithumbPng from "./images/bithumb_logo.png";
 import ExchangebobooPng from "./images/boboo_logo.png";
 import RNPickerSelect, { Item } from "react-native-picker-select";
@@ -109,7 +109,6 @@ const InfoButtonInnerWrapper = styled.View`
 
 const MainInfo: FunctionComponent = () => {
   const { user } = useContext(UserContext);
-  const [locale, setLocale] = React.useState(LocalizationContext);
   const navigation = useNavigation();
 
   return (
@@ -319,9 +318,7 @@ const MainInfo: FunctionComponent = () => {
             ) : (
               <RNPickerSelect
                 style={pickerSelectStyles}
-                onValueChange={(value) => {
-                  setLocale(value);
-                }}
+                onValueChange={(value) => {}}
                 items={[
                   { label: "한국어", value: LocaleType.KO },
                   { label: "English", value: LocaleType.EN },
