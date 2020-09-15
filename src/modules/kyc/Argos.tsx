@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
@@ -19,8 +19,9 @@ const PText = styled.Text`
   color: #5c5b5b;
   margin-bottom: 10px;
   font-size: 15px;
-  line-height: 50px;
+  line-height: 30px;
   text-align: left;
+  padding-bottom: 110px;
 `;
 type ParamList = {
   Argos: {
@@ -36,24 +37,38 @@ export const Argos: FunctionComponent<{}> = () => {
   const route = useRoute<RouteProp<ParamList, "Argos">>();
 
   return (
-    <ScrollView
-      style={{
-        backgroundColor: "#fff",
-        width: "100%",
-        padding: 20,
-      }}
-    >
-      <H1Text>{i18n.t("kyc_label.argos_terms")}</H1Text>
-      <PText>{localeTerms}</PText>
-      <SubmitButton
-        title={i18n.t("kyc_label.agree")}
-        handler={() => {
-          route.params.updateAgree(true);
-          navigation.goBack();
+    <View>
+      <ScrollView
+        style={{
+          backgroundColor: "#fff",
+          width: "100%",
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 40,
         }}
-        style={{ marginBottom: 50 }}
-      />
-    </ScrollView>
+      >
+        <H1Text>{i18n.t("kyc_label.argos_terms")}</H1Text>
+        <PText>{localeTerms}</PText>
+      </ScrollView>
+      <View
+        style={{
+          backgroundColor: "#fff",
+          width: "100%",
+          height: 60,
+          position: "absolute",
+          bottom: 0,
+        }}
+      >
+        <SubmitButton
+          title={i18n.t("kyc_label.agree")}
+          handler={() => {
+            route.params.updateAgree(true);
+            navigation.goBack();
+          }}
+          style={{ position: "absolute", bottom: 20 }}
+        />
+      </View>
+    </View>
   );
 };
 
