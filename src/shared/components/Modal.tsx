@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, FunctionComponent } from "react";
 import { Modal as RNModal } from "react-native";
 import styled from "styled-components/native";
 import QuitButtonImg from "../../../src/shared/assets/images/quitbutton.png";
@@ -50,42 +50,21 @@ interface props {
   modalHandler: () => void;
 }
 
-interface state {
-  modalVisible: boolean;
-}
-
-export class Modal extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    // this.state = { modalVisible: false };
-    // this.setModalVisible = this.setModalVisible.bind(this);
-  }
-
-  // setModalVisible = (visible: boolean) => {
-  //   this.setState({ modalVisible: visible });
-  //   console.log(this.state.modalVisible);
-  // };
-
-  render() {
-    return (
-      <CenteredView>
-        <RNModal
-          animationType="slide"
-          transparent={true}
-          visible={this.props.visible}
-        >
-          <CenteredView>
-            <ModalView>
-              <ModalBtnWrapper>
-                <ModalButton onPress={() => this.props.modalHandler()}>
-                  <QuitBtn source={QuitButtonImg} />
-                </ModalButton>
-                {this.props.child}
-              </ModalBtnWrapper>
-            </ModalView>
-          </CenteredView>
-        </RNModal>
-      </CenteredView>
-    );
-  }
-}
+export const Modal: FunctionComponent<props> = (props) => {
+  return (
+    <CenteredView>
+      <RNModal animationType="slide" transparent={true} visible={props.visible}>
+        <CenteredView>
+          <ModalView>
+            <ModalBtnWrapper>
+              <ModalButton onPress={() => props.modalHandler()}>
+                <QuitBtn source={QuitButtonImg} />
+              </ModalButton>
+              {props.child}
+            </ModalBtnWrapper>
+          </ModalView>
+        </CenteredView>
+      </RNModal>
+    </CenteredView>
+  );
+};

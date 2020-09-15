@@ -114,7 +114,15 @@
     "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요.",
     "camera_access_denied": "카메라 접근을 허용해주세요!",
     "camera_access_denied_text": "KYC 인증단계에서 셀피촬영이 필요해요.\n카메라 접근을 허용해주시면, KYC 인증을 계속 진행할게요.",
-    "argos": "아르고스 약관을 읽고 동의해주세요"
+    "argos": "아르고스 약관을 읽고 동의해주세요",
+    "take_selfie_before_title": "참고해주세요!",
+    "decline_warning": "다음사항에 해당되는 경우에는 KYC승인이 거절될 수 있어요.",
+    "accepted_shoot": "참고완료, 촬영하기",
+    "decline_case1": "포토샵 처리된 이미지를 제출한 경우",
+    "decline_case2": "신분증과 함께가 아닌 셀피사진만 제출한 경우",
+    "decline_case3": "입력하신 내용이 신분증 상의 정보와 다른 경우",
+    "decline_case4": "사진, 성명, 생년월일, 국적 중 하나 또는 복수 항목이 없는 신분증을 제출한 경우",
+    "decline_case5": "주민등록번호 뒷자리를 가리지 않고 제출한 경우(한국인만 해당됩니다)"
   },
   "product": {
     "filter_text": "어떻게 필터링 해드릴까요."
