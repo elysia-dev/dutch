@@ -10,8 +10,9 @@ import ReversePng from "./images/reverse.png";
 import RecordPng from "./images/recordbutton.png";
 import { Ionicons } from "@expo/vector-icons";
 import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { NavigationScreenProp } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
+import { RouteProp } from "@react-navigation/native";
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -51,13 +52,20 @@ const BottomButtonWrapper = styled.View`
 
 interface props {
   navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
+  route: RouteProp<ParamList, "TakeSelfie">;
 }
 
 interface state {
   hasPermission: boolean;
   type: any;
 }
+
+type ParamList = {
+  TakeSelfie: {
+    id_type: string;
+    idPhoto: any;
+  };
+};
 
 export class TakeSelfie extends Component<props, state> {
   camera: any;
@@ -69,7 +77,7 @@ export class TakeSelfie extends Component<props, state> {
     };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     if (Platform.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
@@ -91,30 +99,33 @@ export class TakeSelfie extends Component<props, state> {
   };
 
   takePicture = async () => {
-    // const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (this.camera) {
       let selfie = await this.camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
       });
-      // setPath(`${photo.uri}`);
-      // const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
+      const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
       // 웹에서 불가. 나중에 살리기
-      // console.log(path);
       return selfie;
     }
   };
 
   pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let selfieAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      base64: true,
     });
+
+    return selfieAlbum;
   };
 
   render() {
     const { route, navigation } = this.props;
-    const { id_type, photoId } = route.params;
+    const { id_type, idPhoto } = route.params;
+    //photoId_hash도 나중엔 받아야함
 
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
@@ -155,7 +166,14 @@ export class TakeSelfie extends Component<props, state> {
                     alignItems: "center",
                     backgroundColor: "transparent",
                   }}
-                  onPress={this.pickImage}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmSelfie, {
+                      selfie: await this.pickImage(),
+                      id_type: id_type,
+                      // photoId_hash: photoId_hash,
+                      idPhoto: idPhoto,
+                    });
+                  }}
                 >
                   <Ionicons
                     name="ios-photos"
@@ -173,7 +191,7 @@ export class TakeSelfie extends Component<props, state> {
                       selfie: await this.takePicture(),
                       id_type: id_type,
                       // photoId_hash: photoId_hash,
-                      photoId: photoId,
+                      idPhoto: idPhoto,
                     });
                   }}
                 >

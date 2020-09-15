@@ -100,6 +100,7 @@ export class OwnershipHistory extends Component<props, state> {
         name={item.product.title}
         rate={item.product.data.expectedAnnualReturn}
         expectedSale={item.product.data.returnOnSale}
+        key={`item-${index}`}
       />
     ));
 

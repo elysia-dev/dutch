@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -15,6 +15,7 @@ import CheckedIDCardPng from "./images/checkedidcard.png";
 
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
@@ -52,114 +53,96 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state {
-  idType: string;
-}
+export const SelectID: FunctionComponent<props> = (props) => {
+  const [state, setState] = useState({
+    idType: "",
+  });
+  const navigation = useNavigation();
 
-export class SelectID extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = { idType: "" };
-    this.setID = this.setID.bind(this);
-  }
+  const setID = (text: string) => {
+    state.idType != text
+      ? setState({ idType: text })
+      : setState({ idType: "" });
+  };
 
-  setID(text: string) {
-    this.state.idType != text
-      ? this.setState({ idType: text })
-      : this.setState({ idType: "" });
-  }
-
-  render() {
-    const { route, navigation } = this.props;
-    // const { email, token } = route.params;
-
-    return (
-      <SelectIdWrapper>
-        <BackButton
-          handler={() => navigation.goBack()}
-          style={{ marginTop: 30, marginLeft: 20 }}
-        />
-        <H1Text>{i18n.t("kyc.kyc_step1")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step1_text")}</PText>
-        <OptionButton
-          title={i18n.t("kyc_label.passport")}
-          handler={() => this.setID("passport")}
-          child={
-            <IDImg
-              source={
-                this.state.idType === "passport"
-                  ? CheckedPassportPng
-                  : PassportPng
-              }
-            />
-          }
-          checked={
-            this.state.idType === "passport" ? (
-              <Checked source={CheckedPng} />
-            ) : (
-                <View />
-              )
-          }
-          selected={this.state.idType === "passport" && "selected"}
-        />
-        <OptionButton
-          title={i18n.t("kyc_label.drivers_license")}
-          handler={() => this.setID("drivers_license")}
-          child={
-            <IDImg
-              source={
-                this.state.idType === "drivers_license"
-                  ? CheckedDriverPng
-                  : DriverPng
-              }
-            />
-          }
-          checked={
-            this.state.idType === "drivers_license" ? (
-              <Checked source={CheckedPng} />
-            ) : (
-                <View />
-              )
-          }
-          selected={this.state.idType === "drivers_license" && "selected"}
-        />
-        <OptionButton
-          title={i18n.t("kyc_label.government_id")}
-          handler={() => this.setID("government_id")}
-          child={
-            <IDImg
-              source={
-                this.state.idType === "government_id"
-                  ? CheckedIDCardPng
-                  : IDCardPng
-              }
-            />
-          }
-          checked={
-            this.state.idType === "government_id" ? (
-              <Checked source={CheckedPng} />
-            ) : (
-                <View />
-              )
-          }
-          selected={this.state.idType === "id_card" && "selected"}
-        />
-        <SubmitButton
-          title={i18n.t("kyc_label.shoot")}
-          handler={() => {
-            if (this.state.idType === "") {
-              alert(i18n.t("kyc.alert_id"));
-            } else {
-              navigation.navigate(KycPage.TakeID, {
-                // email: email,
-                // token: token,
-                id_type: this.state.idType,
-              });
+  return (
+    <SelectIdWrapper>
+      <BackButton
+        handler={() => navigation.goBack()}
+        style={{ marginTop: 30, marginLeft: 20 }}
+      />
+      <H1Text>{i18n.t("kyc.kyc_step1")}</H1Text>
+      <PText>{i18n.t("kyc.kyc_step1_text")}</PText>
+      <OptionButton
+        title={i18n.t("kyc_label.passport")}
+        handler={() => setID("passport")}
+        child={
+          <IDImg
+            source={
+              state.idType === "passport" ? CheckedPassportPng : PassportPng
             }
-          }}
-          style={{ marginTop: "auto", marginBottom: 10 }}
-        />
-      </SelectIdWrapper>
-    );
-  }
-}
+          />
+        }
+        checked={
+          state.idType === "passport" ? (
+            <Checked source={CheckedPng} />
+          ) : (
+            <View />
+          )
+        }
+        selected={state.idType === "passport" ? "selected" : ""}
+      />
+      <OptionButton
+        title={i18n.t("kyc_label.drivers_license")}
+        handler={() => setID("drivers_license")}
+        child={
+          <IDImg
+            source={
+              state.idType === "drivers_license" ? CheckedDriverPng : DriverPng
+            }
+          />
+        }
+        checked={
+          state.idType === "drivers_license" ? (
+            <Checked source={CheckedPng} />
+          ) : (
+            <View />
+          )
+        }
+        selected={state.idType === "drivers_license" ? "selected" : ""}
+      />
+      <OptionButton
+        title={i18n.t("kyc_label.government_id")}
+        handler={() => setID("government_id")}
+        child={
+          <IDImg
+            source={
+              state.idType === "government_id" ? CheckedIDCardPng : IDCardPng
+            }
+          />
+        }
+        checked={
+          state.idType === "government_id" ? (
+            <Checked source={CheckedPng} />
+          ) : (
+            <View />
+          )
+        }
+        selected={state.idType === "government_id" ? "selected" : ""}
+      />
+      <SubmitButton
+        title={i18n.t("kyc_label.shoot")}
+        handler={() => {
+          if (state.idType === "") {
+            alert(i18n.t("kyc.alert_id"));
+          } else {
+            navigation.navigate(KycPage.TakeID, {
+              id_type: state.idType,
+            });
+          }
+        }}
+        style={{ marginTop: "auto", marginBottom: 10 }}
+      />
+    </SelectIdWrapper>
+  );
+};

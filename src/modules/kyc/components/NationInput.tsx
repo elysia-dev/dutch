@@ -25,11 +25,9 @@ const InputHeaderText = styled.Text`
 interface props {
   type?: string;
   nationality?: string;
-  eventHandler?: (input: string) => void;
+  eventHandler: (input: string) => void;
   style?: StyleProp<ViewStyle>;
 }
-
-interface state {}
 
 interface placeholder {
   label: string;
@@ -37,58 +35,49 @@ interface placeholder {
   color: string;
 }
 
-export class NationInput extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-  }
-
-  NationList_ios = nations.map((nation, Key) => ({
+export const NationInput: FunctionComponent<props> = (props) => {
+  const NationList_ios = nations.map((nation, Key) => ({
     label: nation.Nationality,
     value: nation.Argos,
+    key: Key,
   }));
 
-  NationList_and = nations.map((nation, Key) => (
-    <Picker.Item
-      key={nation.Key}
-      label={nation.Nationality}
-      value={nation.Argos}
-    />
+  const NationList_and = nations.map((nation, Key) => (
+    <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
   ));
 
-  render() {
-    const placeholder: placeholder = {
-      label: "Select your nationality",
-      value: "",
-      color: "#1C1C1C",
-    };
+  const placeholder: placeholder = {
+    label: "Select your nationality",
+    value: "",
+    color: "#1C1C1C",
+  };
 
-    return (
-      <View style={this.props.style}>
-        <InputHeaderText style={{ marginBottom: 10 }}>
-          {this.props.type}
-        </InputHeaderText>
-        {Platform.OS === "android" ? (
-          <Picker
-            // mode="dropdown"
-            selectedValue={this.props.nationality}
-            onValueChange={this.props.eventHandler}
-          >
-            {this.NationList_and}
-          </Picker>
-        ) : (
-          <RNPickerSelect
-            onValueChange={this.props.eventHandler}
-            items={this.NationList_ios}
-            style={pickerSelectStyles}
-            placeholder={placeholder}
-          />
-        )}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={props.style}>
+      <InputHeaderText style={{ marginBottom: 10 }}>
+        {props.type}
+      </InputHeaderText>
+      {Platform.OS === "android" ? (
+        <Picker
+          // mode="dropdown"
+          selectedValue={props.nationality}
+          onValueChange={props.eventHandler}
+        >
+          {NationList_and}
+        </Picker>
+      ) : (
+        <RNPickerSelect
+          onValueChange={props.eventHandler}
+          items={NationList_ios}
+          style={pickerSelectStyles}
+          placeholder={placeholder}
+        />
+      )}
+    </View>
+  );
+};
 
-export const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     backgroundColor: "#fff",
     fontSize: 14,

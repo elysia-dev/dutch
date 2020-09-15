@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-  SafeAreaView,
-} from "react-native";
+import { TouchableOpacity, Platform, SafeAreaView } from "react-native";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
@@ -22,6 +16,7 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
 import CameraPermissionPng from "./images/cameraPermission.png";
+import { RouteProp } from "@react-navigation/native";
 
 const HeaderText = styled.Text`
   position: absolute;
@@ -186,13 +181,19 @@ const DeniedPText = styled.Text`
 
 interface props {
   navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
+  route: RouteProp<ParamList, "TakeID">;
 }
 
 interface state {
   hasPermission: boolean;
   type: any;
 }
+
+type ParamList = {
+  TakeID: {
+    id_type: string;
+  };
+};
 
 export class TakeID extends Component<props, state> {
   camera: any;
@@ -240,20 +241,22 @@ export class TakeID extends Component<props, state> {
         base64: true,
       });
       // setPath(`${photo.uri}`);
-      // const asset = await MediaLibrary.createAssetAsync(`${photo.uri}`);
+      const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
       return idPhoto;
     }
   };
 
   pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let selfieAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      base64: true,
     });
+    return selfieAlbum;
   };
 
   render() {
     const { route, navigation } = this.props;
-
     const { id_type } = route.params;
 
     if (this.state.hasPermission === false) {
@@ -340,7 +343,13 @@ export class TakeID extends Component<props, state> {
                     alignItems: "center",
                     backgroundColor: "transparent",
                   }}
-                  onPress={this.pickImage}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmID, {
+                      idPhoto: await this.pickImage(),
+                      id_type: id_type,
+                      // photoId_hash: photoId_hash,
+                    });
+                  }}
                 >
                   <Ionicons
                     name="ios-photos"

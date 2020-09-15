@@ -1,6 +1,7 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { KycStatus } from "../enums/status";
 import LocaleType from "../enums/LocaleType";
+import * as Localization from "expo-localization";
 
 const UserContext = createContext({
   signedIn: false,
@@ -12,8 +13,8 @@ const UserContext = createContext({
     gender: "",
     kycStatus: KycStatus.NONE,
   },
-  signIn: async () => { },
-  signOut: async () => { },
+  signIn: async () => {},
+  signOut: async () => {},
 });
 
 export default UserContext;

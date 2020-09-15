@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { Text, View, SafeAreaView } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -8,6 +8,7 @@ import { NavigationRoute, NavigationScreenProp } from "react-navigation";
 import { KycPage } from "../../enums/pageEnum";
 import i18n from "../../i18n/i18n";
 import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -59,54 +60,52 @@ const InformationCircle = styled.View`
   border-radius: 10px;
 `;
 
-interface props {
-  // handler: () => void;
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
-interface state { }
-//modal state 때문에 class로
-export class TakeSelfieBefore extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-  }
+type ParamList = {
+  TakeSelfieBefore: {
+    id_type: string;
+    idPhoto: any;
+  };
+};
 
-  render() {
-    const { route, navigation } = this.props;
-    const { id_type, photoId } = route.params;
-    return (
-      <TakeSelfieBeforeWrapper>
-        <ScrollView>
-          <BackButton
-            handler={() => navigation.navigate(KycPage.ConfirmID)}
-            style={{ marginTop: 30, marginLeft: 20 }}
-          />
-          <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
-          <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
-          <Container>
-            <Selfie source={SelfieBeforePng} />
-          </Container>
-          <InformationWrapper>
-            <InformationText>
-              <InformationCircle /> {i18n.t("kyc.kyc_step2_desc1")}
-            </InformationText>
-            <InformationText>
-              <InformationCircle /> {i18n.t("kyc.kyc_step2_desc2")}
-            </InformationText>
-          </InformationWrapper>
-        </ScrollView>
-        <SubmitButton
-          title={i18n.t("kyc_label.shoot")}
-          handler={() =>
-            navigation.navigate(KycPage.TakeSelfie, {
-              id_type: id_type,
-              // photoId_hash: photoId_hash,
-              photoId: photoId,
-            })
-          }
-          style={{ marginBottom: 10 }}
+export const TakeSelfieBefore: FunctionComponent<{}> = () => {
+  const [state, setState] = useState({
+    modalVisible: false,
+  });
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "TakeSelfieBefore">>();
+
+  return (
+    <TakeSelfieBeforeWrapper>
+      <ScrollView>
+        <BackButton
+          handler={() => navigation.navigate(KycPage.ConfirmID)}
+          style={{ marginTop: 30, marginLeft: 20 }}
         />
-      </TakeSelfieBeforeWrapper>
-    );
-  }
-}
+        <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
+        <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
+        <Container>
+          <Selfie source={SelfieBeforePng} />
+        </Container>
+        <InformationWrapper>
+          <InformationText>
+            <InformationCircle /> {i18n.t("kyc.kyc_step2_desc1")}
+          </InformationText>
+          <InformationText>
+            <InformationCircle /> {i18n.t("kyc.kyc_step2_desc2")}
+          </InformationText>
+        </InformationWrapper>
+      </ScrollView>
+      <SubmitButton
+        title={i18n.t("kyc_label.shoot")}
+        handler={() =>
+          navigation.navigate(KycPage.TakeSelfie, {
+            id_type: route.params.id_type,
+            // photoId_hash: photoId_hash,
+            idPhoto: route.params.idPhoto,
+          })
+        }
+        style={{ marginBottom: 10 }}
+      />
+    </TakeSelfieBeforeWrapper>
+  );
+};

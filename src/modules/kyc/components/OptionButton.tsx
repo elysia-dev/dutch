@@ -15,9 +15,12 @@ const OptionBtn = styled.TouchableOpacity`
   height: 40px;
   background-color: #fff;
   border-radius: 5px;
-  border: solid 1px ${props => props.checking == "selected" ? "#3679B5" : "#d0d8df"};
+  border: solid 1px
+    ${(props) => (props.checking == "selected" ? "#3679B5" : "#d0d8df")};
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-content: center;
 `;
 const OptionBtnText = styled.Text`
   color: #1c1c1c;
@@ -33,7 +36,6 @@ const OptionBtnChecked = styled.View`
 
 interface props {
   title: string;
-  // handler: (event: GestureResponderEvent) => void;
   handler: any;
   child: any;
   checked: any;

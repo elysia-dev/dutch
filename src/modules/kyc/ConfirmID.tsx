@@ -1,21 +1,12 @@
-import React, { Component, FunctionComponent, Props } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  GestureResponderEvent,
-  SafeAreaView,
-} from "react-native";
+import React, { Component, FunctionComponent, Props, useState } from "react";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
-import { Modal } from "../../shared/components/Modal";
 import WarningImg from "../../../src/shared/assets/images/warning_white.png";
 import styled from "styled-components/native";
-import KycSubmitPng from "./images/kycsubmit.png";
 import { NavigationRoute, NavigationScreenProp } from "react-navigation";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import Api from "../../api/kyc";
 import i18n from "../../i18n/i18n";
-import AsyncStorage from "@react-native-community/async-storage";
 import { KycPage } from "../../enums/pageEnum";
 
 const H1Text = styled.Text`
@@ -79,16 +70,19 @@ interface props {
   route: NavigationRoute;
 }
 
-interface state { }
+type ParamList = {
+  ConfirmID: {
+    id_type: string;
+    idPhoto: any;
+  };
+};
 
-export class ConfirmID extends Component<props, state> {
-  constructor(props: props) {
-    super(props);
-    this.state = { modalVisible: false };
-  }
+export const ConfirmID: FunctionComponent<props> = (props) => {
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, "ConfirmID">>();
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
-  // callKycApi() {
+  // const callKycApi = () => {
   //   const { route, navigation } = this.props;
   //   const { id_type, idPhoto } = route.params;
   //   Api.photoId(
@@ -112,43 +106,38 @@ export class ConfirmID extends Component<props, state> {
   //     });
   // }
 
-  render() {
-    const { route, navigation } = this.props;
-    const { id_type, idPhoto } = route.params;
-
-    return (
-      <ConfirmIdWrapper style={{ display: "flex" }}>
-        <BackButton
-          handler={() => navigation.goBack()}
-          style={{ marginTop: 30, marginLeft: 20, marginBottom: 30 }}
-        />
-        <H1Text>{i18n.t("kyc.kyc_step1_complete")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step1_complete_text")}</PText>
-        <SelfieImg source={{ uri: idPhoto.uri }} />
-        <WarningWrapper>
-          <WarningHeaderText>
-            <WarningIcon source={WarningImg} /> 사진이 잘 보이려면?
-          </WarningHeaderText>
-          <WarningInfoText>· 대비되는 배경위에서 촬영해주세요</WarningInfoText>
-          <WarningInfoText>· 프레임에 맞춰서 촬영해주세요</WarningInfoText>
-        </WarningWrapper>
-        <SubmitButton
-          title={i18n.t("kyc_label.shoot_again")}
-          handler={() => navigation.navigate(KycPage.TakeID)}
-          ButtonTheme={"WhiteTheme"}
-          style={{ marginTop: "auto", marginBottom: 10 }}
-        />
-        <SubmitButton
-          title={i18n.t("kyc_label.submit")}
-          handler={async () => {
-            navigation.navigate(KycPage.TakeSelfieBefore, {
-              id_type: id_type,
-              photoId: idPhoto,
-            });
-          }}
-          style={{ marginBottom: 10 }}
-        />
-      </ConfirmIdWrapper>
-    );
-  }
-}
+  return (
+    <ConfirmIdWrapper style={{ display: "flex" }}>
+      <BackButton
+        handler={() => navigation.goBack()}
+        style={{ marginTop: 30, marginLeft: 20, marginBottom: 30 }}
+      />
+      <H1Text>{i18n.t("kyc.kyc_step1_complete")}</H1Text>
+      <PText>{i18n.t("kyc.kyc_step1_complete_text")}</PText>
+      <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
+      <WarningWrapper>
+        <WarningHeaderText>
+          <WarningIcon source={WarningImg} /> 사진이 잘 보이려면?
+        </WarningHeaderText>
+        <WarningInfoText>· 대비되는 배경위에서 촬영해주세요</WarningInfoText>
+        <WarningInfoText>· 프레임에 맞춰서 촬영해주세요</WarningInfoText>
+      </WarningWrapper>
+      <SubmitButton
+        title={i18n.t("kyc_label.shoot_again")}
+        handler={() => navigation.navigate(KycPage.TakeID)}
+        ButtonTheme={"WhiteTheme"}
+        style={{ marginTop: "auto", marginBottom: 10 }}
+      />
+      <SubmitButton
+        title={i18n.t("kyc_label.submit")}
+        handler={async () => {
+          navigation.navigate(KycPage.TakeSelfieBefore, {
+            id_type: route.params.id_type,
+            idPhoto: route.params.idPhoto,
+          });
+        }}
+        style={{ marginBottom: 10 }}
+      />
+    </ConfirmIdWrapper>
+  );
+};
