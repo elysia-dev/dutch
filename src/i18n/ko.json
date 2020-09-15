@@ -221,7 +221,8 @@
     "current_investments": "현재 투자내역",
     "app_setting": "앱 설정",
     "language": "언어",
-    "el_exchange": "EL 거래소"
+    "el_exchange": "EL 거래소",
+    "search": "검색하기"
   },
   "info": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",

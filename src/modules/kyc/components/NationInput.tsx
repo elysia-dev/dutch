@@ -4,7 +4,6 @@ import {
   Text,
   View,
   Picker,
-  PickerIOS,
   Platform,
   StyleProp,
   ViewStyle,
@@ -87,7 +86,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: "#d0d8df",
     borderRadius: 5,
     color: "#1C1C1C",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
   },
   inputAndroid: {
     backgroundColor: "#fff",
@@ -98,6 +97,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: "#d0d8df",
     borderRadius: 5,
     color: "#1C1C1C",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
   },
 });

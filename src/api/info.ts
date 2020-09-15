@@ -33,15 +33,10 @@ export class Api {
     startDate: string,
     endDate: string,
     period: string,
-    sortingType: string,
-    paymentMethods: string[]
+    sortingType: string
   ): Promise<AxiosResponse<TransactionResponse[]>> => {
-    const paymentMethodsToSend = "";
-    paymentMethods.forEach((method, index) => {
-      paymentMethodsToSend.concat(`&paymentMethods[${index}]=${method}`);
-    });
     return (await authenticatedEspressoClient()).get(
-      `/history/transactions?&start=${startDate}&end=${endDate}&period=${period}&sortingType=${sortingType}${paymentMethodsToSend}"`
+      `/history/transactions?&start=${startDate}&end=${endDate}&period=${period}&sortingType=${sortingType}`
     );
   };
 

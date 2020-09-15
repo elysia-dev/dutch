@@ -5,11 +5,10 @@ import i18n from "../../../i18n/i18n";
 
 import RNPickerSelect from "react-native-picker-select";
 
-import { forModalPresentationIOS } from "@react-navigation/stack/lib/typescript/src/TransitionConfigs/CardStyleInterpolators";
-
 interface props {
   period: string;
   eventHandler: (input: string) => void;
+  resetHandler: () => void;
 }
 
 interface placeholder {
@@ -43,11 +42,11 @@ export const PeriodPicker: FunctionComponent<props> = (props) => {
   ];
 
   const TermList_and = [
-    <Picker.Item label={i18n.t("info_label.all")} value="0" />,
-    <Picker.Item label={i18n.t("info_label.1_month")} value="30" />,
-    <Picker.Item label={i18n.t("info_label.3_months")} value="90" />,
-    <Picker.Item label={i18n.t("info_label.6_months")} value="180" />,
-    <Picker.Item label={i18n.t("info_label.1_year")} value="365" />,
+    <Picker.Item label={i18n.t("info_label.all")} value="0" key={0} />,
+    <Picker.Item label={i18n.t("info_label.1_month")} value="30" key={1} />,
+    <Picker.Item label={i18n.t("info_label.3_months")} value="90" key={2} />,
+    <Picker.Item label={i18n.t("info_label.6_months")} value="180" key={3} />,
+    <Picker.Item label={i18n.t("info_label.1_year")} value="365" key={4} />,
   ];
 
   const placeholder: placeholder = {
@@ -62,12 +61,16 @@ export const PeriodPicker: FunctionComponent<props> = (props) => {
         <Picker
           // mode="dropdown"
           selectedValue={props.period}
-          onValueChange={props.eventHandler}
+          onValueChange={(input: string) => {
+            props.eventHandler(input);
+            props.resetHandler();
+          }}
         >
           {TermList_and}
         </Picker>
       ) : (
         <RNPickerSelect
+          onClose={props.resetHandler}
           value={props.period}
           onValueChange={props.eventHandler}
           items={TermList_ios}
@@ -100,10 +103,10 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 14,
     paddingVertical: 12,
     paddingHorizontal: 5,
+    textAlign: "center",
     borderWidth: 1,
     borderColor: "#d0d8df",
     borderRadius: 5,
     color: "#1C1C1C",
-    paddingRight: 30, // to ensure the text is never behind the icon
   },
 });

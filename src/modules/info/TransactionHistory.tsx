@@ -14,7 +14,7 @@ import { InfoPage } from "../../enums/pageEnum";
 import { BackButton } from "../../shared/components/BackButton";
 import { DateInput } from "./components/DateInput";
 import { PeriodPicker } from "./components/PeriodPicker";
-import Api from "../../api/info";
+import { Api } from "../../api/info";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -48,10 +48,6 @@ interface state {
   all: string;
   deposit: string;
   withdraw: string;
-  el: string;
-  paypal: string;
-  eth: string;
-  btc: string;
 }
 
 const filterButton = (state: boolean, handler: () => void, title: string) => {
@@ -112,21 +108,22 @@ export class TransactionHistory extends Component<props, state> {
       all: "",
       deposit: "",
       withdraw: "",
-      el: "",
-      paypal: "",
-      eth: "",
-      btc: "",
       period: "0",
       startDate: "",
       endDate: "",
     };
     this.setPeriod = this.setPeriod.bind(this);
+    this.resetDate = this.resetDate.bind(this);
     this.setStartDate = this.setStartDate.bind(this);
     this.setEndDate = this.setEndDate.bind(this);
   }
 
   setPeriod(input: string) {
-    this.setState({ period: input, startDate: "", endDate: "" });
+    this.setState({ period: input });
+  }
+
+  resetDate() {
+    this.setState({ startDate: "", endDate: "" });
   }
 
   setStartDate(input: string) {
@@ -134,21 +131,14 @@ export class TransactionHistory extends Component<props, state> {
   }
 
   setEndDate(input: string) {
-    this.setState({ endDate: input, period: "0" });
+    this.setState({
+      endDate: input,
+      period: "0",
+    });
   }
 
   callApi() {
     //startdate enddate 비교?
-    const methods = [
-      this.state.paypal,
-      this.state.btc,
-      this.state.el,
-      this.state.eth,
-    ];
-
-    const methodToSend = methods.filter((method) => {
-      return method !== "";
-    });
 
     const sortingTypes = [
       this.state.all,
@@ -164,8 +154,7 @@ export class TransactionHistory extends Component<props, state> {
       this.state.startDate,
       this.state.endDate,
       this.state.period,
-      sortingTypesToSend.toString(),
-      methodToSend
+      sortingTypesToSend.toString()
     )
       .then()
       .catch();
@@ -196,14 +185,15 @@ export class TransactionHistory extends Component<props, state> {
           <View style={{ width: "20%" }}>
             <PeriodPicker
               period={this.state.period}
+              resetHandler={this.resetDate}
               eventHandler={this.setPeriod}
             />
           </View>
           <View style={{ width: "35%" }}>
             <DateInput
+              date={this.state.startDate}
               maxDate={this.state.endDate}
               eventHandler={this.setStartDate}
-              date={this.state.startDate}
             />
           </View>
           <View
@@ -224,9 +214,9 @@ export class TransactionHistory extends Component<props, state> {
           </View>
           <View style={{ width: "35%" }}>
             <DateInput
+              date={this.state.endDate}
               minDate={this.state.startDate}
               eventHandler={this.setEndDate}
-              date={this.state.endDate}
             />
           </View>
         </View>
@@ -278,55 +268,6 @@ export class TransactionHistory extends Component<props, state> {
           </View>
         </View>
 
-        <PText>{i18n.t("info_label.transaction_method")}</PText>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 15,
-          }}
-        >
-          <View style={{ width: "22.5%" }}>
-            {filterButton(
-              this.state.paypal === "paypal",
-              () =>
-                this.setState({
-                  paypal: this.state.paypal !== "paypal" ? "paypal" : "",
-                }),
-              "PAYPAL"
-            )}
-          </View>
-          <View style={{ width: "22.5%" }}>
-            {filterButton(
-              this.state.btc === "btc",
-              () =>
-                this.setState({
-                  btc: this.state.btc !== "btc" ? "btc" : "",
-                }),
-              "BTC"
-            )}
-          </View>
-          <View style={{ width: "22.5%" }}>
-            {filterButton(
-              this.state.el === "el",
-              () =>
-                this.setState({
-                  el: this.state.el !== "el" ? "el" : "",
-                }),
-              "EL"
-            )}
-          </View>
-          <View style={{ width: "22.5%" }}>
-            {filterButton(
-              this.state.eth === "eth",
-              () =>
-                this.setState({
-                  eth: this.state.eth !== "eth" ? "eth" : "",
-                }),
-              "ETH"
-            )}
-          </View>
-        </View>
         <View
           style={{
             width: "100%",
@@ -334,7 +275,7 @@ export class TransactionHistory extends Component<props, state> {
             marginTop: 20,
           }}
         >
-          {submitButton("검색하기", () => {})}
+          {submitButton(i18n.t("info_label.search"), () => {})}
         </View>
         <View
           style={{
@@ -350,6 +291,8 @@ export class TransactionHistory extends Component<props, state> {
               width: 45,
               height: 45,
               resizeMode: "center",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           />
           <GText>{i18n.t("info.no_transaction")}</GText>
