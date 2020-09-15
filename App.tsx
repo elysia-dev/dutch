@@ -132,7 +132,10 @@ const RootStack = createStackNavigator();
 
 const TabNavigatior = () => {
   return (
-    <Tab.Navigator initialRouteName="DashboardMain">
+    <Tab.Navigator
+      initialRouteName="DashboardMain"
+      tabBarOptions={{ showLabel: false }}
+    >
       <Tab.Screen
         name="DashboardMain"
         component={Main}
