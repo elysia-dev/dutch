@@ -68,6 +68,7 @@
   },
   "kyc_label": {
     "argos_terms": "아르고스 약관보기",
+    "agree": "동의하기",
     "agree_start": "동의하고 시작하기",
     "camera_access_return": "돌아가기",
     "shoot": "촬영하기",
@@ -112,7 +113,8 @@
     "alert_data": "개인정보를 모두 입력해주세요.",
     "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요.",
     "camera_access_denied": "카메라 접근을 허용해주세요!",
-    "camera_access_denied_text": "KYC 인증단계에서 셀피촬영이 필요해요.\n카메라 접근을 허용해주시면, KYC 인증을 계속 진행할게요."
+    "camera_access_denied_text": "KYC 인증단계에서 셀피촬영이 필요해요.\n카메라 접근을 허용해주시면, KYC 인증을 계속 진행할게요.",
+    "argos": "아르고스 약관을 읽고 동의해주세요"
   },
   "product": {
     "filter_text": "어떻게 필터링 해드릴까요."
@@ -208,7 +210,10 @@
     "1_year": "1년",
     "term": "기간",
     "last_investments": "지난 투자내역",
-    "current_investments": "현재 투자내역"
+    "current_investments": "현재 투자내역",
+    "app_setting": "앱 설정",
+    "language": "언어",
+    "el_exchange": "EL 거래소"
   },
   "info": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",

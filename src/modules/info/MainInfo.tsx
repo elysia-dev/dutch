@@ -294,8 +294,10 @@ const MainInfo: FunctionComponent = () => {
             borderBottomWidth: 5,
           }}
         >
-          <H1Text>앱 설정</H1Text>
-          <H1Text style={{ fontSize: 16 }}>언어</H1Text>
+          <H1Text>{i18n.t("info_label.app_setting")}</H1Text>
+          <H1Text style={{ fontSize: 16 }}>
+            {i18n.t("info_label.language")}
+          </H1Text>
           <View
             style={{
               borderColor: "#d6d6d8",
@@ -339,7 +341,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomWidth: 5,
           }}
         >
-          <H1Text>EL 거래소</H1Text>
+          <H1Text>{i18n.t("info_label.el_exchange")}</H1Text>
           <View style={{ flexDirection: "row", marginBottom: 30 }}>
             <ExchangeBithumbImg source={ExchangeBithumbPng} />
             <ExchangeBobooImg source={ExchangebobooPng} />

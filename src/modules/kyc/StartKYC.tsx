@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { View, Text } from "react-native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
@@ -62,7 +62,9 @@ const KycGuideWrapper = styled.View`
 
 export const StartKYC: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-
+  const [state, setState] = useState({
+    agree: false,
+  });
   return (
     <StartKycWrapper style={{ display: "flex", flexDirection: "column" }}>
       <BackButton
@@ -101,13 +103,23 @@ export const StartKYC: FunctionComponent<{}> = () => {
       <View style={{ marginTop: "auto", marginBottom: 10 }}>
         <SubmitButton
           title={i18n.t("kyc_label.argos_terms")}
-          handler={() => {}}
+          handler={() =>
+            navigation.navigate(KycPage.Argos, {
+              agree: state.agree,
+              updateAgree: (input: boolean) => setState({ agree: input }),
+            })
+          }
           ButtonTheme={"WhiteTheme"}
           style={{ marginBottom: 10 }}
         />
         <SubmitButton
           title={i18n.t("kyc_label.agree_start")}
-          handler={() => navigation.navigate(KycPage.SelectID)}
+          handler={() =>
+            state.agree === false
+              ? alert(i18n.t("kyc.argos"))
+              : navigation.navigate(KycPage.SelectID)
+          }
+          ButtonTheme={state.agree === false ? "GrayTheme" : undefined}
         />
       </View>
     </StartKycWrapper>

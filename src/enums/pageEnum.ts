@@ -1,5 +1,6 @@
 export enum KycPage {
   StartKYC = "StartKYC",
+  Argos = "Argos",
   SelectID = "SelectID",
   TakeID = "TakeID",
   ConfirmID = "ConfirmID",
