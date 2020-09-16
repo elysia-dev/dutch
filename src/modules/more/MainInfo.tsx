@@ -13,7 +13,7 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { useNavigation } from "@react-navigation/native";
 import { KycStatus } from "../../enums/status";
-import { InfoPage } from "../../enums/pageEnum";
+import { MorePage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
 import ExchangeBithumbPng from "./images/bithumb_logo.png";
 import ExchangebobooPng from "./images/boboo_logo.png";
@@ -148,7 +148,7 @@ const MainInfo: FunctionComponent = () => {
           </InfoUserWrapper>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Info", { screen: InfoPage.MyPage });
+              navigation.navigate("More", { screen: MorePage.MyPage });
             }}
           >
             <InfoHeaderSettingImg
@@ -205,8 +205,8 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Info", {
-                  screen: InfoPage.OwnershipHistory,
+                navigation.navigate("More", {
+                  screen: MorePage.OwnershipHistory,
                 })
               }
             >
@@ -222,8 +222,8 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Info", {
-                  screen: InfoPage.TransactionHistory,
+                navigation.navigate("More", {
+                  screen: MorePage.TransactionHistory,
                 })
               }
             >
@@ -271,7 +271,7 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Info", { screen: InfoPage.Contact })
+                navigation.navigate("More", { screen: MorePage.Contact })
               }
             >
               <InfoButtonInnerWrapper>

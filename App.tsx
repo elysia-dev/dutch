@@ -9,7 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-community/async-storage";
 
 import { Kyc } from "./src/modules/kyc/Kyc";
-import { Info } from "./src/modules/info/Info";
+import { More } from "./src/modules/more/More";
 import { Products } from "./src/modules/products/Products";
 import { Account } from "./src/modules/account/Account";
 
@@ -28,7 +28,7 @@ import Api from "./src/api/account";
 import LocaleType from "./src/enums/LocaleType";
 import currentLocale from "./src/utiles/currentLocale";
 import { Dashboard } from "./src/modules/dashboard/Dashboard";
-import MainInfo from "./src/modules/info/MainInfo";
+import MainInfo from "./src/modules/more/MainInfo";
 import { MainList } from "./src/modules/products/MainList";
 import { Main } from "./src/modules/dashboard/Main";
 
@@ -110,7 +110,7 @@ class App extends React.Component<any, AppState> {
                   <RootStack.Screen name={"Kyc"} component={Kyc} />
                 )}
                 <RootStack.Screen name={"Dashboard"} component={Dashboard} />
-                <RootStack.Screen name={"Info"} component={Info} />
+                <RootStack.Screen name={"More"} component={More} />
                 <RootStack.Screen name={"Product"} component={Products} />
               </>
             ) : (
@@ -156,7 +156,7 @@ const TabNavigatior = () => {
       />
 
       <Tab.Screen
-        name="InfoMain"
+        name="MoreMain"
         component={MainInfo}
         options={{
           tabBarLabel: "",

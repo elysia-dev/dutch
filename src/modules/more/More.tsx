@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { InfoPage } from "../../enums/pageEnum";
+import { MorePage } from "../../enums/pageEnum";
 import MainInfo from "./MainInfo";
 import MyPage from "./Mypage";
 import { OwnershipHistory } from "./OwnershipHistory";
@@ -9,20 +9,20 @@ import Contact from "./Contact";
 
 const Stack = createStackNavigator();
 
-export const Info = () => {
+export const More = () => {
   return (
-    <Stack.Navigator initialRouteName={InfoPage.MainInfo} headerMode="none">
-      <Stack.Screen name={InfoPage.MainInfo} component={MainInfo} />
-      <Stack.Screen name={InfoPage.MyPage} component={MyPage} />
+    <Stack.Navigator initialRouteName={MorePage.MainInfo} headerMode="none">
+      <Stack.Screen name={MorePage.MainInfo} component={MainInfo} />
+      <Stack.Screen name={MorePage.MyPage} component={MyPage} />
       <Stack.Screen
-        name={InfoPage.OwnershipHistory}
+        name={MorePage.OwnershipHistory}
         component={OwnershipHistory}
       />
       <Stack.Screen
-        name={InfoPage.TransactionHistory}
+        name={MorePage.TransactionHistory}
         component={TransactionHistory}
       />
-      <Stack.Screen name={InfoPage.Contact} component={Contact} />
+      <Stack.Screen name={MorePage.Contact} component={Contact} />
     </Stack.Navigator>
   );
 };

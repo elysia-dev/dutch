@@ -10,7 +10,6 @@ import {
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { InfoPage } from "../../enums/pageEnum";
 import { BackButton } from "../../shared/components/BackButton";
 import { DateInput } from "./components/DateInput";
 import { PeriodPicker } from "./components/PeriodPicker";

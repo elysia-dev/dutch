@@ -36,7 +36,7 @@ const ResetPassword: FunctionComponent = () => {
     step: 1,
     password: "",
     passwordConfirmation: "",
-  })
+  });
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, "ResetPassword">>();
@@ -62,7 +62,7 @@ const ResetPassword: FunctionComponent = () => {
           } else if (res.data.status === "same") {
             alert(i18n.t("account_check.reset_current_same"));
           }
-          navigation.navigate("Main", { screen: "Info" });
+          navigation.navigate("Main", { screen: "MoreMain" });
         })
         .catch((e) => {
           if (e.response.status === 400) {
@@ -72,10 +72,10 @@ const ResetPassword: FunctionComponent = () => {
           } else if (e.response.status === 500) {
             alert(i18n.t("errors.messages.server"));
           }
-          navigation.navigate("Main", { screen: "Info" });
+          navigation.navigate("Main", { screen: "MoreMain" });
         });
     }
-  }
+  };
 
   return (
     <AccountLayout
@@ -83,7 +83,9 @@ const ResetPassword: FunctionComponent = () => {
         <>
           <BackButton
             handler={() => {
-              state.step == 2 ? setState({ ...state, step: 1 }) : navigation.goBack();
+              state.step == 2
+                ? setState({ ...state, step: 1 })
+                : navigation.goBack();
             }}
             style={{ marginTop: 20, marginBottom: 20 }}
           />
@@ -116,7 +118,7 @@ const ResetPassword: FunctionComponent = () => {
             eventHandler={
               state.step == 1
                 ? (input: string) => setState({ ...state, password: input })
-                : () => { }
+                : () => {}
             }
             value={""}
             secure={true}
@@ -127,7 +129,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextInput
             type={i18n.t("account_label.current_password")}
             edit={false}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -135,29 +137,27 @@ const ResetPassword: FunctionComponent = () => {
       }
       button={
         <>
-          {
-            state.step == 1 ? (
-              <SubmitButton
-                title={i18n.t("account_label.continue")}
-                handler={() => {
-                  if (state.password === "") {
-                    alert(i18n.t("account_check.insert_password"));
-                    return;
-                  }
-                  setState({ ...state, step: 2 });
-                }}
-              />
-            ) : (
-                <SubmitButton
-                  title={i18n.t("account_label.change")}
-                  handler={() => callChangeApi()}
-                />
-              )
-          }
+          {state.step == 1 ? (
+            <SubmitButton
+              title={i18n.t("account_label.continue")}
+              handler={() => {
+                if (state.password === "") {
+                  alert(i18n.t("account_check.insert_password"));
+                  return;
+                }
+                setState({ ...state, step: 2 });
+              }}
+            />
+          ) : (
+            <SubmitButton
+              title={i18n.t("account_label.change")}
+              handler={() => callChangeApi()}
+            />
+          )}
         </>
       }
     />
   );
-}
+};
 
 export default ResetPassword;

@@ -127,7 +127,7 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
         .catch((e) => {
           if (e.response.status === 404) {
             alert(i18n.t("kyc.submit_error"));
-            navigation.navigate("Main", { screen: "Info" });
+            navigation.navigate("Main", { screen: "MoreMain" });
           } else if (e.response.status === 500) {
             alert(i18n.t("errors.messages.server"));
           }
@@ -234,7 +234,7 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
             visible={state.modalVisible}
             modalHandler={() => {
               setModalVisible(false);
-              navigation.navigate("Main", { screen: "Info" });
+              navigation.navigate("Main", { screen: "MoreMain" });
             }}
           ></Modal>
         )}

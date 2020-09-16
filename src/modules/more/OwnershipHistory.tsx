@@ -3,7 +3,6 @@ import { View, TouchableOpacity, Text } from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { InfoPage } from "../../enums/pageEnum";
 import { BackButton } from "../../shared/components/BackButton";
 import { Api, OwnershipResponse } from "../../api/info";
 import { OwnershipItem } from "./components/OwnershipItem";

@@ -13,6 +13,7 @@ import AccountLayout from "../../shared/components/AccountLayout";
 
 const LockAccountImg = styled.Image`
   width: 209px;
+  height: 200px;
   margin: 20px auto 5px auto;
 `;
 const H1Text = styled.Text`
@@ -52,9 +53,10 @@ const LockAccount: FunctionComponent = () => {
 
   const callResendApi = () => {
     Api.certifyEmail_recover(route.params.email, "recoverAccount")
-      .then((res) =>
-        setState({ ...state, verificationId: res.data.verificationId })
-      )
+      .then((res) => {
+        setState({ ...state, verificationId: res.data.verificationId });
+        alert(i18n.t("register.resend_verification"));
+      })
       .catch((e) => alert(i18n.t("checking_account.try_again_later")));
   };
 

@@ -28,7 +28,7 @@ export enum AccountPage {
   CertifyRecover = "CertifyRecover",
 }
 
-export enum InfoPage {
+export enum MorePage {
   MainInfo = "MainInfo",
   MyPage = "MyPage",
   OwnershipHistory = "OwnershipHistory",
@@ -38,5 +38,5 @@ export enum InfoPage {
 
 export enum DashboardPage {
   Main = "Main",
-  MyAsset = "MyAsset",
+  SummaryReport = "SummaryReport",
 }

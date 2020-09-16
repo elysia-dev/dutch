@@ -4,8 +4,10 @@ import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
+import { AssetGraphCard } from "./components/AssetGraphCard";
+import { AssetValueGraphCard } from "./components/AssetValueGraphCard";
 import { AverageReturnCard } from "./components/AverageReturnCard";
-import { TotalBalanceCard } from "./components/TotalBalanceCard";
+import { SummaryPropertyCard } from "./components/SummaryPropertyCard";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -18,7 +20,7 @@ const H1Text = styled.Text`
 
 interface props {}
 
-export const MyAsset: FunctionComponent<props> = (props) => {
+export const SummaryReport: FunctionComponent<props> = (props) => {
   const navigation = useNavigation();
   return (
     <ScrollView
@@ -35,9 +37,11 @@ export const MyAsset: FunctionComponent<props> = (props) => {
         handler={() => navigation.goBack()}
       />
 
-      <H1Text>{i18n.t("dashboard_label.my_asset_management")}</H1Text>
-      <TotalBalanceCard balance={"$33.58"} />
+      <H1Text>{i18n.t("dashboard_label.asset_report")}</H1Text>
+      <SummaryPropertyCard balance={"$33.58"} />
       <AverageReturnCard return={"8.58%"} />
+      <AssetGraphCard />
+      <AssetValueGraphCard />
     </ScrollView>
   );
 };

@@ -95,9 +95,10 @@ const RecoverPassword: FunctionComponent = () => {
               </AcceptedPText>
             </View>
           }
-          modalHandler={() =>
-            navigation.navigate(AccountPage.InitializeEmail, { email: "" })
-          }
+          modalHandler={() => {
+            setState({ modalVisible: false });
+            navigation.navigate(AccountPage.InitializeEmail, { email: "" });
+          }}
           visible={state.modalVisible}
         ></Modal>
       )}

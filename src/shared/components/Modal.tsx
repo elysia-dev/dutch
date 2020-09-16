@@ -57,7 +57,7 @@ export const Modal: FunctionComponent<props> = (props) => {
         <CenteredView>
           <ModalView>
             <ModalBtnWrapper>
-              <ModalButton onPress={() => props.modalHandler()}>
+              <ModalButton onPress={props.modalHandler}>
                 <QuitBtn source={QuitButtonImg} />
               </ModalButton>
               {props.child}

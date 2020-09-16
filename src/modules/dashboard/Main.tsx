@@ -32,7 +32,7 @@ export class Main extends Component<props, state> {
             profit={"+ $3.18"}
             handler={() =>
               navigation.navigate("Dashboard", {
-                screen: DashboardPage.MyAsset,
+                screen: DashboardPage.SummaryReport,
               })
             }
           />

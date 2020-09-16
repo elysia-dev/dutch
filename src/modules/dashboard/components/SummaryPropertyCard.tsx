@@ -30,7 +30,7 @@ const NumText2 = styled.Text`
   font-size: 15px;
   text-align: right;
 `;
-export const TotalBalanceCard: FunctionComponent<props> = (props) => {
+export const SummaryPropertyCard: FunctionComponent<props> = (props) => {
   return (
     <View
       style={{
