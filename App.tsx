@@ -21,8 +21,6 @@ import OptionsPng from "./assets/options.png";
 import OptionsBlackPng from "./assets/options_black.png";
 import SectionsPng from "./assets/sections.png";
 import SectionsBlackPng from "./assets/sections_black.png";
-import WalletPng from "./assets/wallet.png";
-import WalletBlackPng from "./assets/wallet_black.png";
 
 import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";

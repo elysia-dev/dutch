@@ -5,6 +5,7 @@ import MainInfo from "./MainInfo";
 import MyPage from "./Mypage";
 import { OwnershipHistory } from "./OwnershipHistory";
 import { TransactionHistory } from "./TransactionHistory";
+import Contact from "./Contact";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export const Info = () => {
         name={InfoPage.TransactionHistory}
         component={TransactionHistory}
       />
+      <Stack.Screen name={InfoPage.Contact} component={Contact} />
     </Stack.Navigator>
   );
 };

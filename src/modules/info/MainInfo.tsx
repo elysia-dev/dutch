@@ -19,6 +19,7 @@ import ExchangeBithumbPng from "./images/bithumb_logo.png";
 import ExchangebobooPng from "./images/boboo_logo.png";
 import RNPickerSelect, { Item } from "react-native-picker-select";
 import LocaleType from "../../enums/LocaleType";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -268,7 +269,11 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Info", { screen: InfoPage.Contact })
+              }
+            >
               <InfoButtonInnerWrapper>
                 <PText>{i18n.t("info_label.contact")}</PText>
                 <InfoArrowImg
@@ -320,7 +325,9 @@ const MainInfo: FunctionComponent = () => {
             ) : (
               <RNPickerSelect
                 style={pickerSelectStyles}
-                onValueChange={(value) => {}}
+                onValueChange={async (value: LocaleType) => {
+                  await AsyncStorage.setItem("@locale", value);
+                }}
                 items={[
                   { label: "한국어", value: LocaleType.KO },
                   { label: "English", value: LocaleType.EN },

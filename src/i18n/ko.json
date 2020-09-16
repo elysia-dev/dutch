@@ -222,11 +222,15 @@
     "app_setting": "앱 설정",
     "language": "언어",
     "el_exchange": "EL 거래소",
-    "search": "검색하기"
+    "search": "검색하기",
+    "contact_contents": "남기실 문의사항",
+    "tel": "전화번호"
   },
   "info": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
-    "no_transaction": "해당기간 내 거래내역이 없습니다."
+    "no_transaction": "해당기간 내 거래내역이 없습니다.",
+    "contact_text": "아래 필수양식을 작성 후, 제출해주세요.",
+    "elysia_contact": "엘리시아에 문의남기기"
   },
   "dashboard_label": {
     "total_value": "총 자산가치",
@@ -241,7 +245,12 @@
     "property_value": "부동산가치",
     "usd": "보유 USD",
     "el": "보유 EL",
-    "more_history": "더보기"
+    "more_history": "더보기",
+    "my_asset_management": "내 자산관리",
+    "total_property": "총 부동산 자산가치",
+    "total_interest": "누적 이자수익",
+    "withdrawn_interest": "출금완료 이자수익",
+    "available_interest": "출금가능 이자수익"
   },
   "dashboard": {
     "total_value_desc": "부동산가치 + 보유 USD + 보유 EL + 보유 BTC + 보유 ETH (세금, 수수료 제외)",

@@ -172,7 +172,10 @@ export class TransactionHistory extends Component<props, state> {
           padding: 20,
         }}
       >
-        <BackButton handler={() => navigation.goBack()}></BackButton>
+        <BackButton
+          style={{ marginTop: 30, marginBottom: 10 }}
+          handler={() => navigation.goBack()}
+        ></BackButton>
         <H1Text>{i18n.t("info_label.transaction_history")}</H1Text>
         <PText>{i18n.t("info_label.transaction_term")}</PText>
         <View

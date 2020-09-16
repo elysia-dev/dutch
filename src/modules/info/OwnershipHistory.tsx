@@ -117,6 +117,7 @@ export class OwnershipHistory extends Component<props, state> {
       >
         <ScrollView>
           <BackButton
+            style={{ marginBottom: 10 }}
             handler={() => {
               this.state.status === Status.Active
                 ? navigation.goBack()

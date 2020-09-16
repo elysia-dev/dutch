@@ -1,18 +1,13 @@
 import React, { FunctionComponent, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  StyleProp,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, View, StyleProp, ViewStyle } from "react-native";
 import styled from "styled-components/native";
 
 interface props {
   type: string;
-  value: string;
-  edit: boolean;
+  value?: string;
+  edit?: boolean;
   eventHandler: (text: string) => void;
-  secure: boolean;
+  secure?: boolean;
   autoFocus?: boolean;
   placeHolder?: string;
   style?: StyleProp<ViewStyle>;
@@ -29,7 +24,7 @@ const InputTextForm = styled.TextInput`
 `;
 export const TextInput: FunctionComponent<props> = (
   props,
-  { onFocused = false, autocapitalize = "none", }
+  { onFocused = false, autocapitalize = "none" }
 ) => {
   const [focusing, setFocus] = useState(onFocused);
 
@@ -60,5 +55,3 @@ export const TextInput: FunctionComponent<props> = (
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

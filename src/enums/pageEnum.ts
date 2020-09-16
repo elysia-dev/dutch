@@ -33,10 +33,10 @@ export enum InfoPage {
   MyPage = "MyPage",
   OwnershipHistory = "OwnershipHistory",
   TransactionHistory = "TransactionHistory",
+  Contact = "Contact",
 }
 
 export enum DashboardPage {
   Main = "Main",
-  TotalValue = "TotalValue",
-  AverageProfit = "AverageProfit",
+  MyAsset = "MyAsset",
 }
