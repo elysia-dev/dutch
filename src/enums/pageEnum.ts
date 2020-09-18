@@ -12,8 +12,8 @@ export enum KycPage {
 
 export enum ProductPage {
   MainList = "MainList",
-  Filter = "Filter",
-  ProductInfo = "ProductInfo",
+  ProductStory = "ProductStory",
+  ProductBuying = "ProductBuying",
 }
 
 export enum AccountPage {

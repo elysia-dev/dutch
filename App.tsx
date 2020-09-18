@@ -12,15 +12,18 @@ import { Kyc } from "./src/modules/kyc/Kyc";
 import { More } from "./src/modules/more/More";
 import { Products } from "./src/modules/products/Products";
 import { Account } from "./src/modules/account/Account";
+import { Notification } from "./src/modules/notification/Notification";
 
 import styled from "styled-components/native";
 
-import ChartPng from "./assets/chart.png";
-import ChartBlackPng from "./assets/chart_black.png";
-import OptionsPng from "./assets/options.png";
-import OptionsBlackPng from "./assets/options_black.png";
-import SectionsPng from "./assets/sections.png";
-import SectionsBlackPng from "./assets/sections_black.png";
+import DashboardBlackPng from "./src/shared/assets/images/dashboard_black.png";
+import DashboardPng from "./src/shared/assets/images/dashboard.png";
+import ProductBlackPng from "./src/shared/assets/images/product_black.png";
+import ProductPng from "./src/shared/assets/images/product.png";
+import NotificationBlackPng from "./src/shared/assets/images/notification_black.png";
+import NotificationPng from "./src/shared/assets/images/notification.png";
+import OptionsPng from "./src/shared/assets/images/options.png";
+import OptionsBlackPng from "./src/shared/assets/images/options_black.png";
 
 import UserContext from "./src/contexts/UserContext";
 import { KycStatus } from "./src/enums/status";
@@ -35,8 +38,8 @@ import { Main } from "./src/modules/dashboard/Main";
 const STORYBOOK_START = false;
 
 const Icon = styled.Image`
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
 `;
 
 interface AppState {
@@ -78,8 +81,9 @@ class App extends React.Component<any, AppState> {
       .then((res) => {
         this.setState({
           signedIn: true,
-          user: res.data,
+          user: res.data.userInfo,
         });
+        console.log(this.state);
       })
       .catch(() => {
         this.setState(defaultState);
@@ -140,7 +144,10 @@ const TabNavigatior = () => {
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
-            <Icon source={focused ? ChartBlackPng : ChartPng} />
+            <Icon
+              source={focused ? DashboardBlackPng : DashboardPng}
+              style={{ width: 30, height: 30 }}
+            />
           ),
         }}
       />
@@ -150,7 +157,20 @@ const TabNavigatior = () => {
         options={{
           tabBarLabel: "",
           tabBarIcon: ({ focused }) => (
-            <Icon source={focused ? SectionsBlackPng : SectionsPng} />
+            <Icon source={focused ? ProductBlackPng : ProductPng} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="NotificationMain"
+        component={Notification}
+        options={{
+          tabBarLabel: "",
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              source={focused ? NotificationBlackPng : NotificationPng}
+              style={{ resizeMode: "contain" }}
+            />
           ),
         }}
       />

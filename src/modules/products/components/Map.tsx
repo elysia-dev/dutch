@@ -11,7 +11,7 @@ import latlon from "../latlon";
 import i18n from "../../../i18n/i18n";
 import styled from "styled-components/native";
 import Product from "../../../types/product";
-import ProductInfo from "../ProductInfo";
+import ProductInfo from "../ProductBuying";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -37,7 +37,7 @@ const PText = styled.Text`
 `;
 
 interface props {
-  product: Product
+  product: Product;
 }
 
 export const Map: FunctionComponent<props> = (props: props) => {
@@ -49,12 +49,13 @@ export const Map: FunctionComponent<props> = (props: props) => {
   return (
     <View
       style={{
-        padding: 20,
+        padding: 10,
         borderBottomColor: "#F6F6F8",
         borderBottomWidth: 5,
-        height: 354,
+        height: 254,
       }}
     >
+      {/* <H1Text>{i18n.t("product_label.address")}</H1Text> */}
       <H1Text>{i18n.t("product_label.address")}</H1Text>
       <View
         style={{
@@ -83,7 +84,7 @@ export const Map: FunctionComponent<props> = (props: props) => {
           <GText>{i18n.t("product_label.location")}</GText>
           <PText>{props.product.data.descriptions["en"].address}</PText>
         </View>
-        <View>{videoButton(() => { })}</View>
+        <View>{videoButton(() => {})}</View>
       </View>
     </View>
   );

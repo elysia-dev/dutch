@@ -90,7 +90,7 @@ const data = [
   {
     name: "ELYSIA Asset #1",
     population: 215000,
-    color: "#2C6190",
+    color: "#3679B5",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },

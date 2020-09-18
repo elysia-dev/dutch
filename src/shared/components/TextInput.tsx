@@ -32,14 +32,14 @@ export const TextInput: FunctionComponent<props> = (
     <View style={props.style}>
       <InputHeaderText
         style={{
-          color: focusing == true ? "#2C6190" : "#A7A7A7",
+          color: focusing == true ? "#3679B5" : "#A7A7A7",
         }}
       >
         {props.type}
       </InputHeaderText>
       <InputTextForm
         style={{
-          borderBottomColor: focusing == true ? "#2C6190" : "#A7A7A7",
+          borderBottomColor: focusing == true ? "#3679B5" : "#A7A7A7",
         }}
         defaultValue={props.value}
         editable={props.edit}

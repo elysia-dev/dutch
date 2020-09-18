@@ -9,21 +9,21 @@ interface props {
 }
 
 const H1Text = styled.Text`
-  color: #1c1c1c;
+  color: #fff;
   font-size: 15px;
   text-align: left;
   margin-bottom: 30px;
 `;
 const NumText = styled.Text`
-  color: #1c1c1c;
+  color: #fff;
   font-size: 35px;
   text-align: left;
   font-weight: bold;
 `;
 const NumText2 = styled.Text`
-  color: #3679b5;
+  color: #fff;
   font-size: 23px;
-  text-align: left;
+  text-align: right;
   font-weight: bold;
 `;
 export const BalanceCard: FunctionComponent<props> = (props) => {
@@ -31,26 +31,38 @@ export const BalanceCard: FunctionComponent<props> = (props) => {
     <TouchableOpacity onPress={props.handler}>
       <View
         style={{
-          backgroundColor: "#fff",
+          backgroundColor: "#3679B5",
           width: "100%",
           height: 200,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },
-          shadowColor: "#00000033",
+          shadowColor: "#3679B54D",
           shadowOpacity: 0.8,
           shadowRadius: 6,
           padding: 20,
+          marginBottom: 25,
         }}
       >
         <H1Text>{"Total Balance"}</H1Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "column" }}>
-            <NumText>{props.balance}</NumText>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: "#fff",
+                borderStyle: "dashed",
+                paddingBottom: 3,
+                marginBottom: 3,
+              }}
+            >
+              <NumText>{props.balance}</NumText>
+            </View>
+
             <NumText2>{props.profit}</NumText2>
           </View>
           <View
             style={{
-              backgroundColor: "#2C6190",
+              backgroundColor: "#fff",
               width: 60,
               height: 60,
               borderRadius: 30,

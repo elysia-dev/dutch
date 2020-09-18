@@ -28,12 +28,12 @@ export const SummaryReport: FunctionComponent<props> = (props) => {
         width: "100%",
         height: "100%",
         top: 0,
-        backgroundColor: "#F6F6F8",
+        backgroundColor: "#FAFCFF",
         padding: 20,
       }}
     >
       <BackButton
-        style={{ marginTop: 50 }}
+        style={{ marginTop: 30 }}
         handler={() => navigation.goBack()}
       />
 

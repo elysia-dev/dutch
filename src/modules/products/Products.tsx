@@ -2,17 +2,20 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { MainList } from "./MainList";
-import { Filter } from "./Filter";
 import { ProductPage } from "../../enums/pageEnum";
-import ProductInfo from "./ProductInfo";
+import ProductBuying from "./ProductBuying";
+import ProductStory from "./ProductStory";
 
 const Stack = createStackNavigator();
 
 export const Products = () => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name={ProductPage.Filter} component={Filter} />
-      <Stack.Screen name={ProductPage.ProductInfo} component={ProductInfo} />
+      <Stack.Screen name={ProductPage.ProductStory} component={ProductStory} />
+      <Stack.Screen
+        name={ProductPage.ProductBuying}
+        component={ProductBuying}
+      />
     </Stack.Navigator>
   );
 };

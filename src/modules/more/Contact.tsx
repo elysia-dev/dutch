@@ -5,14 +5,13 @@ import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 import { useNavigation } from "@react-navigation/native";
-import { TextInput } from "../../shared/components/TextInput";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextArea } from "./components/TextArea";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 28px;
   text-align: left;
   margin-bottom: 10px;
 `;
@@ -20,7 +19,7 @@ const PText = styled.Text`
   color: #5c5b5b;
   font-size: 12px;
   text-align: left;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 `;
 const LabelText = styled.Text`
   color: #1c1c1c;
@@ -32,9 +31,6 @@ const LabelText = styled.Text`
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, setState] = useState({
-    name: "",
-    tel: "",
-    email: "",
     contents: "",
   });
 
@@ -52,7 +48,7 @@ const Contact: FunctionComponent = () => {
             handler={() => {
               navigation.goBack();
             }}
-            style={{ marginTop: 20, marginBottom: 20 }}
+            style={{ marginTop: 20, marginBottom: 35 }}
           />
           <H1Text>{i18n.t("info_label.contact")}</H1Text>
           <PText>{i18n.t("info.contact_text")}</PText>
@@ -65,34 +61,15 @@ const Contact: FunctionComponent = () => {
               borderRadius: 10,
               backgroundColor: "#fff",
               shadowOffset: { width: 0, height: 2 },
-              shadowColor: "#00000040",
+              shadowColor: "#00000029",
               shadowOpacity: 0.8,
               shadowRadius: 6,
               marginBottom: 30,
             }}
           >
-            <LabelText>{i18n.t("info.elysia_contact")}</LabelText>
-            <TextInput
-              type={i18n.t("info_label.name")}
-              eventHandler={(input: string) =>
-                setState({ ...state, name: input })
-              }
-              style={{ marginBottom: 20 }}
-            />
-            <TextInput
-              type={i18n.t("info_label.tel")}
-              eventHandler={(input: string) =>
-                setState({ ...state, tel: input })
-              }
-              style={{ marginBottom: 20 }}
-            />
-            <TextInput
-              type={i18n.t("account_label.account_email")}
-              eventHandler={(input: string) =>
-                setState({ ...state, email: input })
-              }
-              style={{ marginBottom: 20 }}
-            />
+            {/* <LabelText>{i18n.t("info.elysia_contact")}</LabelText> */}
+            <LabelText>{"Contact"}</LabelText>
+
             <TextArea
               eventHandler={(input: string) =>
                 setState({ ...state, contents: input })
@@ -105,7 +82,7 @@ const Contact: FunctionComponent = () => {
                 textAlign: "right",
                 marginTop: 2,
               }}
-            >{`${state.contents.length}/100`}</Text>
+            >{`${state.contents.length}/1000`}</Text>
           </View>
         </View>
         <SubmitButton title={i18n.t("kyc_label.submit")} handler={() => {}} />

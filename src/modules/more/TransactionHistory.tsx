@@ -81,7 +81,7 @@ const submitButton = (title: string, handler: () => void) => {
       style={{
         width: "100%",
         height: 40,
-        backgroundColor: "#2C6190",
+        backgroundColor: "#3679B5",
         borderRadius: 5,
         justifyContent: "center",
         alignContent: "center",

@@ -47,7 +47,7 @@ export class DateInput extends Component<props, state> {
           iconSource={require("../images/calender.png")}
           customStyles={{
             btnTextConfirm: {
-              color: "#2C6190",
+              color: "#3679B5",
             },
             dateIcon: {
               width: 13.75,

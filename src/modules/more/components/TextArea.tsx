@@ -17,7 +17,7 @@ export const TextArea: FunctionComponent<props> = (props) => {
     <View>
       <Text
         style={{
-          color: state.focus ? "#2C6190" : "#A7A7A7",
+          color: state.focus ? "#3679B5" : "#A7A7A7",
           fontSize: 12,
           textAlign: "left",
           marginBottom: 10,
@@ -27,13 +27,13 @@ export const TextArea: FunctionComponent<props> = (props) => {
       </Text>
       <TextInput
         onChangeText={props.eventHandler}
-        maxLength={100}
+        maxLength={1000}
         style={{
-          borderColor: state.focus ? "#2C6190" : "#00000040",
+          borderColor: state.focus ? "#3679B5" : "#00000040",
           borderRadius: 10,
           borderWidth: 1,
           width: "100%",
-          height: 90,
+          height: 300,
           fontSize: 14,
           padding: 10,
         }}

@@ -140,7 +140,6 @@ const MainInfo: FunctionComponent = () => {
                 </InfoHeaderUserName>
               ) : (
                 <InfoHeaderUserName>
-                  {" "}
                   {user.firstName} {user.lastName}
                 </InfoHeaderUserName>
               )}
@@ -151,9 +150,7 @@ const MainInfo: FunctionComponent = () => {
               navigation.navigate("More", { screen: MorePage.MyPage });
             }}
           >
-            <InfoHeaderSettingImg
-              source={require("../../../assets/setting.png")}
-            />
+            <InfoHeaderSettingImg source={require("./images/setting.png")} />
           </TouchableOpacity>
         </InfoHeaderWrapper>
         <View
@@ -174,12 +171,24 @@ const MainInfo: FunctionComponent = () => {
         >
           {user.kycStatus === KycStatus.NONE && (
             <SubmitButton
+              style={{
+                shadowOffset: { width: 2, height: 1 },
+                shadowColor: "#00000064",
+                shadowOpacity: 0.8,
+                shadowRadius: 6,
+              }}
               title={i18n.t("info_label.need_kyc")}
               handler={() => navigation.navigate("Kyc")}
             />
           )}
           {user.kycStatus === KycStatus.PENDING && (
             <SubmitButton
+              style={{
+                shadowOffset: { width: 2, height: 1 },
+                shadowColor: "#00000064",
+                shadowOpacity: 0.8,
+                shadowRadius: 6,
+              }}
               title={i18n.t("info_label.proceed_kyc")}
               handler={() => {
                 alert(i18n.t("info.kyc_proceeding_wait"));
@@ -189,6 +198,12 @@ const MainInfo: FunctionComponent = () => {
           )}
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
+              style={{
+                shadowOffset: { width: 2, height: 1 },
+                shadowColor: "#00000064",
+                shadowOpacity: 0.8,
+                shadowRadius: 6,
+              }}
               title={i18n.t("info_label.approved_kyc")}
               handler={() => {}}
               ButtonTheme={"GrayTheme"}
