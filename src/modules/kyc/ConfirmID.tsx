@@ -1,13 +1,13 @@
-import React, { Component, FunctionComponent, Props, useState } from "react";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import WarningImg from "../../../src/shared/assets/images/warning_white.png";
-import styled from "styled-components/native";
-import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import Api from "../../api/kyc";
-import i18n from "../../i18n/i18n";
-import { KycPage } from "../../enums/pageEnum";
+import React, { Component, FunctionComponent, Props, useState } from 'react';
+import styled from 'styled-components/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import WarningImg from '../../shared/assets/images/warning_white.png';
+import Api from '../../api/kyc';
+import i18n from '../../i18n/i18n';
+import { KycPage } from '../../enums/pageEnum';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -65,11 +65,6 @@ const WarningInfoText = styled.Text`
   margin-left: 30px;
 `;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
-
 type ParamList = {
   ConfirmID: {
     id_type: string;
@@ -77,9 +72,9 @@ type ParamList = {
   };
 };
 
-export const ConfirmID: FunctionComponent<props> = (props) => {
+export const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "ConfirmID">>();
+  const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
   // const callKycApi = () => {
@@ -101,19 +96,19 @@ export const ConfirmID: FunctionComponent<props> = (props) => {
   //         alert(i18n.t("kyc.submit_error"));
   // navigation.navigate("Main", { screen: "MoreMain" });
   //       } else if (e.response.status === 500) {
-  //         alert(i18n.t("errors.messages.server"));
+  //         alert(i18n.t("account_errors.server"));
   //       }
   //     });
   // }
 
   return (
-    <ConfirmIdWrapper style={{ display: "flex" }}>
+    <ConfirmIdWrapper style={{ display: 'flex' }}>
       <BackButton
         handler={() => navigation.goBack()}
         style={{ marginTop: 30, marginLeft: 20, marginBottom: 30 }}
       />
-      <H1Text>{i18n.t("kyc.kyc_step1_complete")}</H1Text>
-      <PText>{i18n.t("kyc.kyc_step1_complete_text")}</PText>
+      <H1Text>{i18n.t('kyc.step1_complete')}</H1Text>
+      <PText>{i18n.t('kyc.step1_complete_text')}</PText>
       <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
       <WarningWrapper>
         <WarningHeaderText>
@@ -123,15 +118,16 @@ export const ConfirmID: FunctionComponent<props> = (props) => {
         <WarningInfoText>· 프레임에 맞춰서 촬영해주세요</WarningInfoText>
       </WarningWrapper>
       <SubmitButton
-        title={i18n.t("kyc_label.shoot_again")}
+        title={i18n.t('kyc_label.shoot_again')}
         handler={() => navigation.navigate(KycPage.TakeID)}
-        ButtonTheme={"WhiteTheme"}
-        style={{ marginTop: "auto", marginBottom: 10 }}
+        ButtonTheme={'WhiteTheme'}
+        style={{ marginTop: 'auto', marginBottom: 10 }}
       />
       <SubmitButton
-        title={i18n.t("kyc_label.submit")}
+        title={i18n.t('kyc_label.submit')}
         handler={async () => {
           navigation.navigate(KycPage.TakeSelfieBefore, {
+            // eslint-disable-next-line @typescript-eslint/camelcase
             id_type: route.params.id_type,
             idPhoto: route.params.idPhoto,
           });

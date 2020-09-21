@@ -1,9 +1,10 @@
-import React, { FunctionComponent } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
-import i18n from "../../../i18n/i18n";
+import React, { FunctionComponent } from 'react';
+import styled from 'styled-components/native';
 
-interface props {
+import { View } from 'react-native';
+import i18n from '../../../i18n/i18n';
+
+interface Props {
   balance: string;
 }
 
@@ -30,76 +31,69 @@ const NumText2 = styled.Text`
   font-size: 15px;
   text-align: right;
 `;
-export const SummaryPropertyCard: FunctionComponent<props> = (props) => {
+export const SummaryPropertyCard: FunctionComponent<Props> = props => {
   return (
     <View
       style={{
-        backgroundColor: "#fff",
-        width: "100%",
+        backgroundColor: '#fff',
+        width: '100%',
         height: 265,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
-        shadowColor: "#00000033",
+        shadowColor: '#3679B540',
         shadowOpacity: 0.8,
         shadowRadius: 5,
         padding: 20,
         marginBottom: 20,
-      }}
-    >
-      <H1Text>{"Total Balance"}</H1Text>
+      }}>
+      <H1Text>{'Total Balance'}</H1Text>
       <NumText>{props.balance}</NumText>
-
       <View
         style={{
           borderWidth: 1,
           borderRadius: 10,
-          borderColor: "#F1F1F1",
-          width: "100%",
+          borderColor: '#F1F1F1',
+          width: '100%',
           height: 150,
           padding: 20,
-          flexDirection: "column",
-        }}
-      >
+          flexDirection: 'column',
+        }}>
         <View
           style={{
             flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignContent: "center",
-          }}
-        >
-          <PText>{i18n.t("dashboard_label.total_property")}</PText>
-          <NumText2>{"$ 30.00"}</NumText2>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignContent: 'center',
+          }}>
+          <PText>{i18n.t('dashboard_label.total_property')}</PText>
+          <NumText2>{'$ 30.00'}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <PText>{i18n.t("dashboard_label.total_interest")}</PText>
-          <NumText2>{"$ 3.58"}</NumText2>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <PText>{i18n.t('dashboard_label.total_interest')}</PText>
+          <NumText2>{'$ 3.58'}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <PText>{i18n.t("dashboard_label.withdrawn_interest")}</PText>
-          <NumText2>{"$ 0.00"}</NumText2>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <PText>{i18n.t('dashboard_label.withdrawn_interest')}</PText>
+          <NumText2>{'$ 0.00'}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <PText>{i18n.t("dashboard_label.available_interest")}</PText>
-          <NumText2>{"$ 3.58"}</NumText2>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <PText>{i18n.t('dashboard_label.available_interest')}</PText>
+          <NumText2>{'$ 3.58'}</NumText2>
         </View>
       </View>
     </View>

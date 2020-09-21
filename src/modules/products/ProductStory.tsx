@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState, useContext } from "react";
 import { View, ScrollView, Image, SafeAreaView, Platform } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import styled from "styled-components/native";
+import { HeaderHeightContext } from "@react-navigation/stack";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
 import { Calculator } from "./components/Calculator";
@@ -10,7 +11,6 @@ import Product, { Story } from "../../types/product";
 import UserContext from "../../contexts/UserContext";
 import LocaleType from "../../enums/LocaleType";
 import { Map } from "./components/Map";
-import { HeaderHeightContext } from "@react-navigation/stack";
 
 const WH1Text = styled.Text`
   margin-top: 30px;
@@ -68,8 +68,7 @@ const ProductStory: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, "Story">>();
-  const { locale } = useContext(UserContext);
-  const product = route.params.product;
+  const { product } = route.params;
 
   return (
     <ProductInfoWrapper>
@@ -87,9 +86,9 @@ const ProductStory: FunctionComponent = () => {
         >
           <View
             style={{
+              top: 0,
               width: "100%",
               height: 382,
-              padding: 20,
             }}
           >
             <Image
@@ -102,10 +101,11 @@ const ProductStory: FunctionComponent = () => {
                 resizeMode: "cover",
               }}
             />
-            <View style={{ position: "absolute" }}>
+            <View style={{ position: "absolute", padding: 20 }}>
               <BackButton handler={() => navigation.goBack()}></BackButton>
             </View>
           </View>
+          <View>{route.params.product.body}</View>
         </ScrollView>
       </View>
     </ProductInfoWrapper>

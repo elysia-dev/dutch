@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
+import styled from "styled-components/native";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { Modal } from "../../shared/components/Modal";
 import AcceptedImg from "./images/accepted.png";
 
-import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import PasswordForm from "./PasswordForm";
 
 const Accepted = styled.Image`
@@ -54,10 +54,10 @@ const RecoverPassword: FunctionComponent = () => {
         if (e.response.status === 400) {
           alert(i18n.t("recover_error"));
         } else if (e.reponse.status === 404) {
-          alert(i18n.t("account_check.recover_verification_error"));
+          alert(i18n.t("account.recover_verification_error"));
           navigation.navigate(AccountPage.InitializeEmail);
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.messages.server"));
+          alert(i18n.t("account_errors.server"));
         }
       });
   };
@@ -79,8 +79,8 @@ const RecoverPassword: FunctionComponent = () => {
       <PasswordForm
         submitButtonTitle={i18n.t("account_label.change")}
         submitHandler={callChangeApi}
-        message1={i18n.t("account_check.insert_new_password")}
-        message2={i18n.t("account_check.password_confirm")}
+        message1={i18n.t("account.insert_new_password")}
+        message2={i18n.t("account.password_confirm")}
       />
       {state.modalVisible === true && (
         <Modal
@@ -88,11 +88,9 @@ const RecoverPassword: FunctionComponent = () => {
             <View>
               <Accepted source={AcceptedImg} />
               <AcceptedH1Text>
-                {i18n.t("account_check.password_changed")}
+                {i18n.t("account.password_changed")}
               </AcceptedH1Text>
-              <AcceptedPText>
-                {i18n.t("account_check.login_request")}
-              </AcceptedPText>
+              <AcceptedPText>{i18n.t("account.login_request")}</AcceptedPText>
             </View>
           }
           modalHandler={() => {

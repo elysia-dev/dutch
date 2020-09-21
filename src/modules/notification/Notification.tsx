@@ -1,11 +1,12 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { DashboardPage } from "../../enums/pageEnum";
-import { NotiBox } from "./components/NotiBox";
-import styled from "styled-components/native";
-import Api, { NotificationResponse } from "../../api/notification";
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import styled from 'styled-components/native';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+
+import i18n from '../../i18n/i18n';
+import { DashboardPage } from '../../enums/pageEnum';
+import { NotiBox } from './components/NotiBox';
+import Api, { NotificationResponse } from '../../api/notification';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -14,16 +15,16 @@ const H1Text = styled.Text`
   text-align: left;
 `;
 
-interface props {
+interface Props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
-interface state {
+interface State {
   notificationList: Array<NotificationResponse>;
 }
 
-export class Notification extends Component<props, state> {
-  constructor(props: props) {
+export class Notification extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { notificationList: [] };
   }
@@ -32,13 +33,13 @@ export class Notification extends Component<props, state> {
     const { navigation } = this.props;
 
     Api.notification()
-      .then((res) => this.setState({ notificationList: res.data }))
-      .catch((e) => {
+      .then(res => this.setState({ notificationList: res.data }))
+      .catch(e => {
         if (e.response.status === 401) {
-          alert(i18n.t("checking_account.need_login"));
-          navigation.navigate("Account");
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.server.duplicate_email"));
+          alert(i18n.t('errors.server.duplicate_email'));
         }
       });
   }
@@ -60,21 +61,20 @@ export class Notification extends Component<props, state> {
     const listToShow = this.state.notificationList.map(
       (notification, index) => (
         <NotiBox notification={notification} key={index}></NotiBox>
-      )
+      ),
     );
 
     return (
       <ScrollView
         style={{
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
           top: 0,
-          backgroundColor: "#FFF",
+          backgroundColor: '#FFF',
           padding: 20,
-        }}
-      >
+        }}>
         <View style={{ marginTop: 50, marginBottom: 25 }}>
-          <H1Text>{"알림"}</H1Text>
+          <H1Text>{i18n.t('notification_label.notification')}</H1Text>
         </View>
         <View>{listToShow}</View>
       </ScrollView>

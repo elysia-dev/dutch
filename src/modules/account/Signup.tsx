@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useContext } from "react";
-import i18n from "../../i18n/i18n";
-import Api from "../../api/account";
 import AsyncStorage from "@react-native-community/async-storage";
 import { useRoute, RouteProp } from "@react-navigation/native";
+import i18n from "../../i18n/i18n";
+import Api from "../../api/account";
 import UserContext from "../../contexts/UserContext";
 import PasswordForm from "./PasswordForm";
 
@@ -23,7 +23,7 @@ const Signup: FunctionComponent = () => {
 
   const callSignupApi = (password: string): void => {
     if (password.length < 8) {
-      alert(i18n.t("errors.messages.password_too_short"));
+      alert(i18n.t("account_errors.password_too_short"));
     } else {
       Api.signup(route.params.verificationId, password)
         .then(async (res) => {
@@ -34,9 +34,9 @@ const Signup: FunctionComponent = () => {
         })
         .catch((e) => {
           if (e.response.status === 404) {
-            alert(i18n.t("register.try_again_later"));
+            alert(i18n.t("account.try_again_later"));
           } else if (e.response.status === 500) {
-            alert(i18n.t("errors.messages.server"));
+            alert(i18n.t("account_errors.server"));
           }
         });
     }
@@ -47,8 +47,8 @@ const Signup: FunctionComponent = () => {
       submitHandler={callSignupApi}
       email={route.params.email}
       submitButtonTitle={i18n.t("account_label.signup")}
-      message1={i18n.t("account_check.insert_password")}
-      message2={i18n.t("account_check.password_confirm")}
+      message1={i18n.t("account.insert_password")}
+      message2={i18n.t("account.password_confirm")}
     />
   );
 };

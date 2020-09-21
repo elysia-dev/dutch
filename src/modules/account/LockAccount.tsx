@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useState } from "react";
 import { View } from "react-native";
+import styled from "styled-components/native";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { TextInput } from "../../shared/components/TextInput";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import BorderFlatButton from "../../shared/components/BorderFlatButton";
-import styled from "styled-components/native";
 import LockAccountPng from "./images/lockaccount.png";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
 import { AccountPage } from "../../enums/pageEnum";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import AccountLayout from "../../shared/components/AccountLayout";
 
 const LockAccountImg = styled.Image`
@@ -55,19 +55,19 @@ const LockAccount: FunctionComponent = () => {
     Api.certifyEmail_recover(route.params.email, "recoverAccount")
       .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId });
-        alert(i18n.t("register.resend_verification"));
+        alert(i18n.t("account.resend_verification"));
       })
-      .catch((e) => alert(i18n.t("checking_account.try_again_later")));
+      .catch((e) => alert(i18n.t("account.try_again_later")));
   };
 
   const callCertifyApi = () => {
     if (!state.code) {
-      alert(i18n.t("register.authentication_recover"));
+      alert(i18n.t("account.authentication_recover"));
       return;
     }
     Api.certifyEmail(
       state.verificationId || route.params.verificationId,
-      state.code
+      state.code,
     )
       .then((res) => {
         if (res.data.status === "completed") {
@@ -76,13 +76,13 @@ const LockAccount: FunctionComponent = () => {
             email: route.params.email,
           });
         } else if (res.data.status === "expired") {
-          alert(i18n.t("register.expired_verification"));
+          alert(i18n.t("account.expired_verification"));
           return;
         } else {
           alert(
-            i18n.t("register.unmatched_verification", {
+            i18n.t("account.unmatched_verification", {
               error: res.data.counts,
-            })
+            }),
           );
         }
       })
@@ -90,7 +90,7 @@ const LockAccount: FunctionComponent = () => {
         if (e.response.status === 404) {
           alert(i18n.t("resigter.expired_verification"));
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.messages.server"));
+          alert(i18n.t("account_errors.server"));
         }
       });
   };
@@ -101,10 +101,10 @@ const LockAccount: FunctionComponent = () => {
         <>
           <LockAccountImg source={LockAccountPng} />
           <H1Text style={{ marginTop: 10 }}>
-            {i18n.t("lock_account.lockdown")}
+            {i18n.t("account.lockdown")}
           </H1Text>
           <PText style={{ marginTop: 10 }}>
-            {i18n.t("lock_account.lockdown_text")}
+            {i18n.t("account.lockdown_text")}
           </PText>
         </>
       }
@@ -122,7 +122,7 @@ const LockAccount: FunctionComponent = () => {
             style={{ marginTop: 10, display: "flex", flexDirection: "row" }}
           >
             <ExpTimeText style={{ marginLeft: "auto" }}>
-              {i18n.t("lock_account.resending_code_mail_label")}
+              {i18n.t("account.resending_code_mail_label")}
             </ExpTimeText>
             <BorderFlatButton
               handler={() => callResendApi()}

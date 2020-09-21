@@ -9,17 +9,17 @@ import {
   Text,
 } from "react-native";
 import styled from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
+import RNPickerSelect, { Item } from "react-native-picker-select";
+import AsyncStorage from "@react-native-community/async-storage";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
-import { useNavigation } from "@react-navigation/native";
 import { KycStatus } from "../../enums/status";
 import { MorePage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
 import ExchangeBithumbPng from "./images/bithumb_logo.png";
 import ExchangebobooPng from "./images/boboo_logo.png";
-import RNPickerSelect, { Item } from "react-native-picker-select";
 import LocaleType from "../../enums/LocaleType";
-import AsyncStorage from "@react-native-community/async-storage";
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -135,8 +135,7 @@ const MainInfo: FunctionComponent = () => {
               />
               {user.kycStatus !== KycStatus.SUCCESS ? (
                 <InfoHeaderUserName>
-                  {" "}
-                  {i18n.t("info_label.need_kyc_label")}
+                  {i18n.t("more_label.need_kyc_label")}
                 </InfoHeaderUserName>
               ) : (
                 <InfoHeaderUserName>
@@ -177,7 +176,7 @@ const MainInfo: FunctionComponent = () => {
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("info_label.need_kyc")}
+              title={i18n.t("more_label.need_kyc")}
               handler={() => navigation.navigate("Kyc")}
             />
           )}
@@ -189,9 +188,9 @@ const MainInfo: FunctionComponent = () => {
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("info_label.proceed_kyc")}
+              title={i18n.t("more_label.proceed_kyc")}
               handler={() => {
-                alert(i18n.t("info.kyc_proceeding_wait"));
+                alert(i18n.t("more.kyc_proceeding_wait"));
               }}
               ButtonTheme={"GrayTheme"}
             />
@@ -204,7 +203,7 @@ const MainInfo: FunctionComponent = () => {
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("info_label.approved_kyc")}
+              title={i18n.t("more_label.approved_kyc")}
               handler={() => {}}
               ButtonTheme={"GrayTheme"}
             />
@@ -216,7 +215,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomWidth: 5,
           }}
         >
-          <H1Text>{i18n.t("info_label.confirm")}</H1Text>
+          <H1Text>{i18n.t("more_label.confirm")}</H1Text>
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
@@ -226,7 +225,7 @@ const MainInfo: FunctionComponent = () => {
               }
             >
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.investment_history")}</PText>
+                <PText>{i18n.t("more_label.investment_history")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -243,7 +242,7 @@ const MainInfo: FunctionComponent = () => {
               }
             >
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.transaction_history")}</PText>
+                <PText>{i18n.t("more_label.transaction_history")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -260,13 +259,13 @@ const MainInfo: FunctionComponent = () => {
           }}
         >
           <View>
-            <H1Text>{i18n.t("info_label.elysia")}</H1Text>
+            <H1Text>{i18n.t("more_label.elysia")}</H1Text>
           </View>
 
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.notice")}</PText>
+                <PText>{i18n.t("more_label.notice")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -276,7 +275,7 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.service_terms")}</PText>
+                <PText>{i18n.t("more_label.service_terms")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -290,7 +289,7 @@ const MainInfo: FunctionComponent = () => {
               }
             >
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.contact")}</PText>
+                <PText>{i18n.t("more_label.contact")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -300,7 +299,7 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("info_label.faq")}</PText>
+                <PText>{i18n.t("more_label.faq")}</PText>
                 <InfoArrowImg
                   source={require("../../../assets/next_gray.png")}
                 />
@@ -314,9 +313,9 @@ const MainInfo: FunctionComponent = () => {
             borderBottomWidth: 5,
           }}
         >
-          <H1Text>{i18n.t("info_label.app_setting")}</H1Text>
+          <H1Text>{i18n.t("more_label.app_setting")}</H1Text>
           <H1Text style={{ fontSize: 16 }}>
-            {i18n.t("info_label.language")}
+            {i18n.t("more_label.language")}
           </H1Text>
           <View
             style={{
@@ -363,7 +362,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomWidth: 5,
           }}
         >
-          <H1Text>{i18n.t("info_label.el_exchange")}</H1Text>
+          <H1Text>{i18n.t("more_label.el_exchange")}</H1Text>
           <View style={{ flexDirection: "row", marginBottom: 30 }}>
             <ExchangeBithumbImg source={ExchangeBithumbPng} />
             <ExchangeBobooImg source={ExchangebobooPng} />

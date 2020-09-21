@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { SafeAreaView, View, Text } from "react-native";
 import styled from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { BackButton } from "../../shared/components/BackButton";
-import { useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native-gesture-handler";
 import { TextArea } from "./components/TextArea";
 
 const H1Text = styled.Text`
@@ -50,8 +50,8 @@ const Contact: FunctionComponent = () => {
             }}
             style={{ marginTop: 20, marginBottom: 35 }}
           />
-          <H1Text>{i18n.t("info_label.contact")}</H1Text>
-          <PText>{i18n.t("info.contact_text")}</PText>
+          <H1Text>{i18n.t("more_label.contact")}</H1Text>
+          <PText>{i18n.t("more.contact_text")}</PText>
           <View
             style={{
               paddingLeft: 15,
@@ -67,7 +67,7 @@ const Contact: FunctionComponent = () => {
               marginBottom: 30,
             }}
           >
-            {/* <LabelText>{i18n.t("info.elysia_contact")}</LabelText> */}
+            {/* <LabelText>{i18n.t("more.elysia_contact")}</LabelText> */}
             <LabelText>{"Contact"}</LabelText>
 
             <TextArea

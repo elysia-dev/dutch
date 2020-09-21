@@ -1,14 +1,14 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { View } from "react-native";
+import styled from "styled-components/native";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
-import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import AsyncStorage from "@react-native-community/async-storage";
 import { AccountPage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
 import AccountLayout from "../../shared/components/AccountLayout";
@@ -48,30 +48,29 @@ const Login: FunctionComponent = () => {
           email: route.params.email,
           verificationId: res.data.verificationId,
           status: res.data.status,
-        })
-      )
+        }))
       .catch((e) => {
         if (e.response && e.response.status === 400) {
-          alert(i18n.t("checking_account.invalid_email"));
+          alert(i18n.t("account.invalid_email"));
           return;
         } else {
-          alert(i18n.t("checking_account.try_again_later"));
+          alert(i18n.t("account.try_again_later"));
         }
       });
   };
 
   const callLoginApi = () => {
     if (state.password === "") {
-      alert(i18n.t("account_check.insert_password"));
+      alert(i18n.t("account.insert_password"));
       return;
     } else if (state.password.length < 8) {
-      alert(i18n.t("errors.messages.password_too_short"));
+      alert(i18n.t("account_errors.password_too_short"));
       return;
     } else {
       Api.login(route.params.email, state.password)
         .then(async (res) => {
           console.log(res.data);
-          //token local storage 저장
+          // token local storage 저장
           if (res.data.status === "wrong") {
             setState({ ...state, error: res.data.counts });
           } else if (res.data.status === "locked") {
@@ -87,11 +86,11 @@ const Login: FunctionComponent = () => {
         .catch((e) => {
           setState({ ...state, error: e.response.data.counts });
           if (e.response.status === 400) {
-            alert(i18n.t("account_check.insert_password"));
+            alert(i18n.t("account.insert_password"));
           } else if (e.response.status === 404) {
-            alert(i18n.t("errors.messages.wrong_email"));
+            alert(i18n.t("account_errors.wrong_email"));
           } else if (e.response.status === 500) {
-            alert(i18n.t("errors.messages.server"));
+            alert(i18n.t("account_errors.server"));
           }
         });
     }
@@ -107,7 +106,7 @@ const Login: FunctionComponent = () => {
             }}
             style={{ marginTop: 20, marginBottom: 20 }}
           />
-          <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
+          <H1Text>{i18n.t("account.insert_password")}</H1Text>
         </>
       }
       body={
@@ -124,7 +123,7 @@ const Login: FunctionComponent = () => {
           <View style={{ height: 30 }}>
             {state.error !== 0 && (
               <ValidationMessage
-                message={` ${i18n.t("errors.messages.password_do_not_match")} ${
+                message={` ${i18n.t("account_errors.password_do_not_match")} ${
                   state.error
                 }/5`}
               />
@@ -148,7 +147,7 @@ const Login: FunctionComponent = () => {
           />
           <View style={{ height: 15 }} />
           <FlatButton
-            title={i18n.t("account_check.forget_password_link")}
+            title={i18n.t("account.forget_password_link")}
             handler={() => callRecoverApi()}
           />
         </>

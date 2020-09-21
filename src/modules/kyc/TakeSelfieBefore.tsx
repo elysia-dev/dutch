@@ -1,15 +1,16 @@
-import React, { FunctionComponent, useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from "styled-components/native";
-import SelfieBeforePng from "./images/selfiebefore.png";
-import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { KycPage } from "../../enums/pageEnum";
-import i18n from "../../i18n/i18n";
-import { ScrollView } from "react-native-gesture-handler";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { Modal } from "../../shared/components/Modal";
+/* eslint-disable @typescript-eslint/camelcase */
+import React, { FunctionComponent, useState } from 'react';
+import { Text, View, SafeAreaView, ScrollView } from 'react-native';
+import styled from 'styled-components/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
+
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import SelfieBeforePng from './images/selfiebefore.png';
+import { KycPage } from '../../enums/pageEnum';
+import i18n from '../../i18n/i18n';
+import { Modal } from '../../shared/components/Modal';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -72,7 +73,7 @@ export const TakeSelfieBefore: FunctionComponent<{}> = () => {
     modalVisible: false,
   });
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "TakeSelfieBefore">>();
+  const route = useRoute<RouteProp<ParamList, 'TakeSelfieBefore'>>();
 
   return (
     <TakeSelfieBeforeWrapper>
@@ -81,24 +82,22 @@ export const TakeSelfieBefore: FunctionComponent<{}> = () => {
           handler={() => navigation.navigate(KycPage.ConfirmID)}
           style={{ marginTop: 30, marginLeft: 20 }}
         />
-        <H1Text>{i18n.t("kyc.kyc_step2")}</H1Text>
-        <PText style={{ marginBottom: 42 }}>
-          {i18n.t("kyc.kyc_step2_text")}
-        </PText>
+        <H1Text>{i18n.t('kyc.step2')}</H1Text>
+        <PText style={{ marginBottom: 42 }}>{i18n.t('kyc.step2_text')}</PText>
         <Container>
           <Selfie source={SelfieBeforePng} />
         </Container>
         <InformationWrapper>
           <InformationText>
-            <InformationCircle /> {i18n.t("kyc.kyc_step2_desc1")}
+            <InformationCircle /> {i18n.t('kyc.step2_desc1')}
           </InformationText>
           <InformationText>
-            <InformationCircle /> {i18n.t("kyc.kyc_step2_desc2")}
+            <InformationCircle /> {i18n.t('kyc.step2_desc2')}
           </InformationText>
         </InformationWrapper>
       </ScrollView>
       <SubmitButton
-        title={i18n.t("kyc_label.shoot")}
+        title={i18n.t('kyc_label.shoot')}
         handler={() => setState({ modalVisible: true })}
         style={{ marginBottom: 10 }}
       />
@@ -106,39 +105,38 @@ export const TakeSelfieBefore: FunctionComponent<{}> = () => {
         <Modal
           child={
             <View>
-              <H1Text style={{ textAlign: "center" }}>
-                {i18n.t("kyc.take_selfie_before_title")}
+              <H1Text style={{ textAlign: 'center' }}>
+                {i18n.t('kyc.take_selfie_before_title')}
               </H1Text>
-              <PText style={{ textAlign: "center", marginBottom: 10 }}>
-                {i18n.t("kyc.decline_warning")}
+              <PText style={{ textAlign: 'center', marginBottom: 10 }}>
+                {i18n.t('kyc.decline_warning')}
               </PText>
               <View
                 style={{
-                  backgroundColor: "#F1F1F1",
+                  backgroundColor: '#F1F1F1',
                   borderRadius: 10,
-                  width: "100%",
+                  width: '100%',
                   padding: 15,
                   marginBottom: 10,
-                }}
-              >
+                }}>
                 <PText style={{ marginBottom: 5 }}>
-                  {i18n.t("kyc.decline_case1")}
+                  {i18n.t('kyc.decline_case1')}
                 </PText>
                 <PText style={{ marginBottom: 5 }}>
-                  {i18n.t("kyc.decline_case2")}
+                  {i18n.t('kyc.decline_case2')}
                 </PText>
                 <PText style={{ marginBottom: 5 }}>
-                  {i18n.t("kyc.decline_case3")}
+                  {i18n.t('kyc.decline_case3')}
                 </PText>
                 <PText style={{ marginBottom: 5 }}>
-                  {i18n.t("kyc.decline_case4")}
+                  {i18n.t('kyc.decline_case4')}
                 </PText>
                 <PText style={{ marginBottom: 5 }}>
-                  {i18n.t("kyc.decline_case5")}
+                  {i18n.t('kyc.decline_case5')}
                 </PText>
               </View>
               <SubmitButton
-                title={i18n.t("kyc.accepted_shoot")}
+                title={i18n.t('kyc.accepted_shoot')}
                 handler={() => {
                   setState({ modalVisible: false });
                   navigation.navigate(KycPage.TakeSelfie, {
@@ -153,8 +151,7 @@ export const TakeSelfieBefore: FunctionComponent<{}> = () => {
           modalHandler={() => {
             setState({ modalVisible: false });
           }}
-          visible={state.modalVisible}
-        ></Modal>
+          visible={state.modalVisible}></Modal>
       )}
     </TakeSelfieBeforeWrapper>
   );

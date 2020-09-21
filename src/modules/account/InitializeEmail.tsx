@@ -1,13 +1,13 @@
-import React, { FunctionComponent, useState } from "react";
-import { TextInput } from "../../shared/components/TextInput";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import Api from "../../api/account";
-import { AccountPage } from "../../enums/pageEnum";
-import AccountLayout from "../../shared/components/AccountLayout";
-import checkMail from "../../utiles/checkMail";
-import { useNavigation } from "@react-navigation/native";
+import React, { FunctionComponent, useState } from 'react';
+import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { TextInput } from '../../shared/components/TextInput';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import i18n from '../../i18n/i18n';
+import Api from '../../api/account';
+import { AccountPage } from '../../enums/pageEnum';
+import AccountLayout from '../../shared/components/AccountLayout';
+import checkMail from '../../utiles/checkMail';
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -18,7 +18,7 @@ const H1Text = styled.Text`
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
-    email: "",
+    email: '',
     errorLength: 1, // 처음은 TextInput이 null이기 때문에 없음을 가정
     errorReg: 0,
   });
@@ -27,42 +27,42 @@ const InitializeEmail: FunctionComponent = () => {
 
   const callEmailApi = () => {
     if (!state.email) {
-      alert(i18n.t("checking_account.insert_account_email"));
+      alert(i18n.t('account.insert_account_email'));
       return;
     }
 
     Api.initializeEmail(state.email)
-      .then((res) => {
+      .then(res => {
         navigation.navigate(
-          res.data.status == "exist"
+          res.data.status === 'exist'
             ? AccountPage.Login
             : AccountPage.CertifySignup,
           {
             verificationId: res.data.verificationId,
             email: state.email,
-          }
+          },
         );
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
-          alert(i18n.t("checking_account.try_again_later"));
+          alert(i18n.t('account.try_again_later'));
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.messages.server"));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };
 
   return (
     <AccountLayout
-      title={<H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>}
+      title={<H1Text>{i18n.t('account.insert_account_email')}</H1Text>}
       body={
         <TextInput
-          type={i18n.t("account_label.account_email")}
-          value={""}
+          type={i18n.t('account_label.account_email')}
+          value={''}
           eventHandler={(input: string) => {
             setState({
               email: input,
-              errorLength: input.length == 0 ? 1 : 0,
+              errorLength: input.length === 0 ? 1 : 0,
               errorReg: checkMail(input) ? 0 : 1,
             });
           }}
@@ -74,16 +74,17 @@ const InitializeEmail: FunctionComponent = () => {
       button={
         <SubmitButton
           title={
-            state.errorLength == 1
-              ? i18n.t("checking_account.insert_account_email")
-              : state.errorReg == 1
-                ? i18n.t("checking_account.check_email")
-                : i18n.t("account_label.continue")
+            // eslint-disable-next-line no-nested-ternary
+            state.errorLength === 1
+              ? i18n.t('account.insert_account_email')
+              : state.errorReg === 1
+              ? i18n.t('account.check_email')
+              : i18n.t('account_label.continue')
           }
           handler={() => callEmailApi()}
           ButtonTheme={
             state.errorLength === 1 || state.errorReg === 1
-              ? "GrayTheme"
+              ? 'GrayTheme'
               : undefined
           }
         />

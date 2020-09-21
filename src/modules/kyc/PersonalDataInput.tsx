@@ -1,18 +1,18 @@
-import React, { FunctionComponent, useState } from "react";
-import { View, ScrollView, SafeAreaView } from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import { Modal } from "../../shared/components/Modal";
-import styled from "styled-components/native";
-import KycSubmitPng from "./images/kycsubmit.png";
-import i18n from "../../i18n/i18n";
-import { BackButton } from "../../shared/components/BackButton";
-import { NationInput } from "./components/NationInput";
-import { DateInput } from "./components/DateInput";
-import { ShortOptionButton } from "./components/ShortOptionButton";
-import { NavigationRoute, NavigationScreenProp } from "react-navigation";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import Api from "../../api/kyc";
+import React, { FunctionComponent, useState } from 'react';
+import { View, ScrollView, SafeAreaView } from 'react-native';
+import styled from 'styled-components/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+
+import { TextInput } from '../../shared/components/TextInput';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import { Modal } from '../../shared/components/Modal';
+import KycSubmitPng from './images/kycsubmit.png';
+import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
+import { NationInput } from './components/NationInput';
+import { DateInput } from './components/DateInput';
+import { ShortOptionButton } from './components/ShortOptionButton';
+import Api from '../../api/kyc';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -48,7 +48,7 @@ const PersonalDataInputWrapper = styled.SafeAreaView`
   background-color: #ffffff;
 `;
 const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
-  backgroundColor: "#fff",
+  backgroundColor: '#fff',
   contentContainerStyle: {
     showsHorizontalScrollIndicator: false,
     showsVerticalScrollIndicator: false,
@@ -61,11 +61,6 @@ const ScrollViewWrapper = styled.ScrollView.attrs(() => ({
   padding-bottom: 30px;
 `;
 
-interface props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
-
 type ParamList = {
   PersonalDataInput: {
     selfie_hash: string;
@@ -75,18 +70,18 @@ type ParamList = {
   };
 };
 
-export const PersonalDataInput: FunctionComponent<props> = (props) => {
+export const PersonalDataInput: FunctionComponent<{}> = props => {
   const [state, setState] = useState({
-    gender: "",
-    firstName: "",
-    lastName: "",
-    nationality: "",
-    birthday: "",
+    gender: '',
+    firstName: '',
+    lastName: '',
+    nationality: '',
+    birthday: '',
     modalVisible: false,
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "PersonalDataInput">>();
+  const route = useRoute<RouteProp<ParamList, 'PersonalDataInput'>>();
 
   const setModalVisible = (visible: boolean) => {
     setState({ ...state, modalVisible: visible });
@@ -101,14 +96,14 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
   };
 
   const callKycApi = () => {
-    if (state.gender === "") {
-      alert(i18n.t("kyc.alert_data"));
+    if (state.gender === '') {
+      alert(i18n.t('kyc.alert_data'));
       return;
-    } else if (state.firstName === "" || state.lastName === "") {
-      alert(i18n.t("kyc.alert_data"));
+    } else if (state.firstName === '' || state.lastName === '') {
+      alert(i18n.t('kyc.alert_data'));
       return;
-    } else if (state.birthday === "" || state.nationality === "") {
-      alert(i18n.t("kyc.alert_data"));
+    } else if (state.birthday === '' || state.nationality === '') {
+      alert(i18n.t('kyc.alert_data'));
       return;
     } else {
       Api.submission(
@@ -117,19 +112,19 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
         state.nationality,
         state.birthday,
         state.gender,
-        route.params.id_type === "passport" ? "passport" : "government_id",
+        route.params.id_type === 'passport' ? 'passport' : 'government_id',
         route.params.photoId_hash,
-        route.params.selfie_hash
+        route.params.selfie_hash,
       )
-        .then((res) => {
+        .then(res => {
           setModalVisible(true);
         })
-        .catch((e) => {
+        .catch(e => {
           if (e.response.status === 404) {
-            alert(i18n.t("kyc.submit_error"));
-            navigation.navigate("Main", { screen: "MoreMain" });
+            alert(i18n.t('kyc.submit_error'));
+            navigation.navigate('Main', { screen: 'MoreMain' });
           } else if (e.response.status === 500) {
-            alert(i18n.t("errors.messages.server"));
+            alert(i18n.t('account_errors.server'));
           }
         });
     }
@@ -141,12 +136,12 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
           handler={() => navigation.goBack()}
           style={{ marginTop: 30 }}
         />
-        <H1Text>{i18n.t("kyc.kyc_step3")}</H1Text>
-        <PText>{i18n.t("kyc.kyc_step3_text")}</PText>
+        <H1Text>{i18n.t('kyc.step3')}</H1Text>
+        <PText>{i18n.t('kyc.step3_text')}</PText>
         <IdImg source={{ uri: route.params.photoId.uri }} />
-        <H1Text>{i18n.t("kyc_label.personal_data")}</H1Text>
+        <H1Text>{i18n.t('kyc_label.personal_data')}</H1Text>
         <TextInput
-          type={i18n.t("kyc_label.last_name")}
+          type={i18n.t('kyc_label.last_name')}
           value=""
           edit={true}
           eventHandler={(input: string) => {
@@ -158,7 +153,7 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
           }}
         />
         <TextInput
-          type={i18n.t("kyc_label.first_name")}
+          type={i18n.t('kyc_label.first_name')}
           value=""
           edit={true}
           eventHandler={(input: string) => {
@@ -170,7 +165,7 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
           }}
         />
         <NationInput
-          type={i18n.t("kyc_label.nationality")}
+          type={i18n.t('kyc_label.nationality')}
           eventHandler={setNationality}
           nationality={state.nationality}
           style={{
@@ -178,7 +173,7 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
           }}
         />
         <DateInput
-          type={i18n.t("kyc_label.birthday")}
+          type={i18n.t('kyc_label.birthday')}
           eventHandler={setBirthday}
           birthday={state.birthday}
           style={{
@@ -186,39 +181,38 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
           }}
         />
         <InputHeaderText style={{ marginTop: 20 }}>
-          {i18n.t("kyc_label.gender")}
+          {i18n.t('kyc_label.gender')}
         </InputHeaderText>
         <View
           style={{
-            display: "flex",
-            flexDirection: "row",
+            display: 'flex',
+            flexDirection: 'row',
             marginBottom: 80,
             marginTop: 10,
-          }}
-        >
+          }}>
           <ShortOptionButton
-            check={state.gender === "male" ? "checked" : ""}
-            title={i18n.t("kyc_label.male")}
+            check={state.gender === 'male' ? 'checked' : ''}
+            title={i18n.t('kyc_label.male')}
             handler={() =>
               setState({
                 ...state,
-                gender: state.gender === "male" ? "" : "male",
+                gender: state.gender === 'male' ? '' : 'male',
               })
             }
           />
           <ShortOptionButton
-            check={state.gender === "female" ? "checked" : ""}
-            title={i18n.t("kyc_label.female")}
+            check={state.gender === 'female' ? 'checked' : ''}
+            title={i18n.t('kyc_label.female')}
             handler={() =>
               setState({
                 ...state,
-                gender: state.gender === "female" ? "" : "female",
+                gender: state.gender === 'female' ? '' : 'female',
               })
             }
           />
         </View>
         <SubmitButton
-          title={i18n.t("kyc_label.complete_input")}
+          title={i18n.t('kyc_label.complete_input')}
           handler={() => setModalVisible(true)}
           style={{ marginBottom: 20 }}
         />
@@ -227,16 +221,15 @@ export const PersonalDataInput: FunctionComponent<props> = (props) => {
             child={
               <View>
                 <ConfirmImg source={KycSubmitPng} />
-                <H1Text>{i18n.t("kyc.kyc_submit")}</H1Text>
-                <PText>{i18n.t("kyc.kyc_submit_text")}</PText>
+                <H1Text>{i18n.t('kyc.submit')}</H1Text>
+                <PText>{i18n.t('kyc.submit_text')}</PText>
               </View>
             }
             visible={state.modalVisible}
             modalHandler={() => {
               setModalVisible(false);
-              navigation.navigate("Main", { screen: "MoreMain" });
-            }}
-          ></Modal>
+              navigation.navigate('Main', { screen: 'MoreMain' });
+            }}></Modal>
         )}
       </ScrollViewWrapper>
     </PersonalDataInputWrapper>

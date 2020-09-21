@@ -1,14 +1,14 @@
-import React, { FunctionComponent, useState } from "react";
-import { SafeAreaView, View, Text, TextInput } from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent, useState } from 'react';
+import { SafeAreaView, View, Text, TextInput } from 'react-native';
+import styled from 'styled-components/native';
 
-import i18n from "../../../i18n/i18n";
+import i18n from '../../../i18n/i18n';
 
-interface props {
+interface Props {
   eventHandler: (input: string) => void;
 }
 
-export const TextArea: FunctionComponent<props> = (props) => {
+export const TextArea: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
     focus: false,
   });
@@ -17,31 +17,29 @@ export const TextArea: FunctionComponent<props> = (props) => {
     <View>
       <Text
         style={{
-          color: state.focus ? "#3679B5" : "#A7A7A7",
+          color: state.focus ? '#3679B5' : '#A7A7A7',
           fontSize: 12,
-          textAlign: "left",
+          textAlign: 'left',
           marginBottom: 10,
-        }}
-      >
-        {i18n.t("info_label.contact_contents")}
+        }}>
+        {i18n.t('more_label.contact_contents')}
       </Text>
       <TextInput
         onChangeText={props.eventHandler}
         maxLength={1000}
         style={{
-          borderColor: state.focus ? "#3679B5" : "#00000040",
+          borderColor: state.focus ? '#3679B5' : '#00000040',
           borderRadius: 10,
           borderWidth: 1,
-          width: "100%",
+          width: '100%',
           height: 300,
           fontSize: 14,
           padding: 10,
         }}
-        textAlignVertical={"top"}
+        textAlignVertical={'top'}
         multiline={true}
         onFocus={() => setState({ focus: true })}
-        onBlur={() => setState({ focus: false })}
-      ></TextInput>
+        onBlur={() => setState({ focus: false })}></TextInput>
     </View>
   );
 };

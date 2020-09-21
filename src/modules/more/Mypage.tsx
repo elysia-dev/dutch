@@ -1,15 +1,15 @@
 import React, { FunctionComponent, useContext } from "react";
 import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+import { NavigationScreenProp, NavigationRoute } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
 import { KycStatus } from "../../enums/status";
 import Api from "../../api/account";
 import { BackButton } from "../../shared/components/BackButton";
 import { AccountPage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
-import { useNavigation } from "@react-navigation/native";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -57,7 +57,7 @@ const MyPage: FunctionComponent = () => {
           height: 80,
         }}
       >
-        <H1Text>{i18n.t("info_label.my_account")}</H1Text>
+        <H1Text>{i18n.t("more_label.my_account")}</H1Text>
         <TouchableOpacity
           onPress={() => {
             signOut();
@@ -71,7 +71,7 @@ const MyPage: FunctionComponent = () => {
             alignContent: "center",
           }}
         >
-          <ButtonText>{i18n.t("info_label.logout")}</ButtonText>
+          <ButtonText>{i18n.t("more_label.logout")}</ButtonText>
         </TouchableOpacity>
       </View>
       <View
@@ -87,7 +87,7 @@ const MyPage: FunctionComponent = () => {
         <LabelText>{i18n.t("account_label.account_password")}</LabelText>
 
         <TouchableOpacity
-          onPress={() => { }}
+          onPress={() => {}}
           style={{
             backgroundColor: "#E6ECF2",
             borderRadius: 5,
@@ -108,10 +108,10 @@ const MyPage: FunctionComponent = () => {
             borderBottomColor: "#F6F6F8",
           }}
         >
-          <H1Text>{i18n.t("info_label.my_info")}</H1Text>
-          <LabelText>{i18n.t("info_label.name")}</LabelText>
+          <H1Text>{i18n.t("more_label.my_info")}</H1Text>
+          <LabelText>{i18n.t("more_label.name")}</LabelText>
           <PText>{`${user.firstName} ${user.lastName}`}</PText>
-          <LabelText>{i18n.t("info_label.gender")}</LabelText>
+          <LabelText>{i18n.t("more_label.gender")}</LabelText>
           <PText>{user.gender}</PText>
         </View>
       )}

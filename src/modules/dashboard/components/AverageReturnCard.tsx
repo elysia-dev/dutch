@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
-import i18n from "../../../i18n/i18n";
+import React, { FunctionComponent } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
 
-interface props {
+interface Props {
   return: string;
 }
 
@@ -30,23 +30,22 @@ const NumText2 = styled.Text`
   font-size: 15px;
   text-align: right;
 `;
-export const AverageReturnCard: FunctionComponent<props> = (props) => {
+export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
-        backgroundColor: "#fff",
-        width: "100%",
+        backgroundColor: '#fff',
+        width: '100%',
         height: 98,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
-        shadowColor: "#00000033",
+        shadowColor: '#3679B540',
         shadowOpacity: 0.8,
         shadowRadius: 5,
         padding: 20,
         marginBottom: 20,
-      }}
-    >
-      <H1Text>{"Average Return"}</H1Text>
+      }}>
+      <H1Text>{'Average Return'}</H1Text>
       <NumText>{props.return}</NumText>
     </View>
   );

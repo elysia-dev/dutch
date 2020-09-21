@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { BackButton } from "../../shared/components/BackButton";
-import { Api, OwnershipResponse } from "../../api/info";
-import { OwnershipItem } from "./components/OwnershipItem";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { Component } from 'react';
+import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
+import styled from 'styled-components/native';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+
+import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
+import { Api, OwnershipResponse } from '../../api/info';
+import { OwnershipItem } from './components/OwnershipItem';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -16,22 +16,22 @@ const H1Text = styled.Text`
   margin-bottom: 15px;
 `;
 
-interface props {
+interface Props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
 
-interface state {
+interface State {
   productList: Array<OwnershipResponse>;
   status: Status;
 }
 enum Status {
-  Active = "active",
-  Deactive = "deactive",
+  Active = 'active',
+  Deactive = 'deactive',
 }
 
-export class OwnershipHistory extends Component<props, state> {
-  constructor(props: props) {
+export class OwnershipHistory extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { productList: [], status: Status.Active };
   }
@@ -42,28 +42,26 @@ export class OwnershipHistory extends Component<props, state> {
         onPress={handler}
         style={{
           marginTop: 30,
-          justifyContent: "center",
-          alignContent: "center",
-          width: "100%",
+          justifyContent: 'center',
+          alignContent: 'center',
+          width: '100%',
           height: 40,
-          backgroundColor: "#F6F6F8",
+          backgroundColor: '#F6F6F8',
           borderRadius: 5,
           borderWidth: 1,
-          borderColor: "#D0D8DF",
-        }}
-      >
+          borderColor: '#D0D8DF',
+        }}>
         <Text
           style={{
             fontSize: 14,
-            color: "#1C1C1C",
-            textAlign: "center",
-          }}
-        >
+            color: '#1C1C1C',
+            textAlign: 'center',
+          }}>
           {i18n.t(
             this.state.status === Status.Active
-              ? "info_label.last_investments"
-              : "info_label.current_investments"
-          ) + " >"}
+              ? 'more_label.last_investments'
+              : 'more_label.current_investments',
+          ) + ' >'}
         </Text>
       </TouchableOpacity>
     );
@@ -72,29 +70,28 @@ export class OwnershipHistory extends Component<props, state> {
   callApi() {
     const { navigation } = this.props;
     Api.OwnershipHistory(this.state.status)
-      .then((res) => {
+      .then(res => {
         this.setState({ productList: res.data });
       })
-      .catch((e) => {
-        console.error(e);
-        alert(i18n.t("checking_account.need_login"));
-        navigation.navigate("Account");
+      .catch(e => {
+        alert(i18n.t('account.need_login'));
+        navigation.navigate('Account');
       });
   }
 
   componentDidMount() {
-    this.callApi();
+    // this.callApi();
     // 서버 작업 후 호출
   }
 
-  componentDidUpdate(_prevProps: object, prevState: { status: Status }) {
-    if (prevState.status !== this.state.status) this.callApi();
-  }
+  // componentDidUpdate(_prevProps: object, prevState: { status: Status }) {
+  //   if (prevState.status !== this.state.status) this.callApi();
+  // }
 
   render() {
     const { navigation, route } = this.props;
     const listToShow = this.state.productList.map((item, index) => (
-      //나중에 touchaleopacity로 감싸서 productList[index]를 params로 상세페이지 연결
+      // 나중에 touchaleopacity로 감싸서 productList[index]를 params로 상세페이지 연결
       <OwnershipItem
         name={item.product.title}
         rate={item.product.data.expectedAnnualReturn}
@@ -106,14 +103,13 @@ export class OwnershipHistory extends Component<props, state> {
     return (
       <View
         style={{
-          backgroundColor: "#fff",
-          width: "100%",
-          height: "100%",
+          backgroundColor: '#fff',
+          width: '100%',
+          height: '100%',
           paddingTop: 50,
-          paddingRight: "5%",
-          paddingLeft: "5%",
-        }}
-      >
+          paddingRight: '5%',
+          paddingLeft: '5%',
+        }}>
         <ScrollView>
           <BackButton
             style={{ marginBottom: 10 }}
@@ -123,9 +119,8 @@ export class OwnershipHistory extends Component<props, state> {
                 : this.setState({
                     status: Status.Active,
                   });
-            }}
-          ></BackButton>
-          <H1Text>{i18n.t("info_label.my_inv_history")}</H1Text>
+            }}></BackButton>
+          <H1Text>{i18n.t('more_label.my_inv_history')}</H1Text>
           {listToShow}
           {this.state.status === Status.Active && (
             <View style={{ paddingBottom: 20 }}>

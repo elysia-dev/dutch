@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState } from "react";
+import styled from "styled-components/native";
+import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "../../shared/components/TextInput";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 
-import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { AccountPage } from "../../enums/pageEnum";
-import { useNavigation } from "@react-navigation/native";
 import AccountLayout from "../../shared/components/AccountLayout";
 
 const H1Text = styled.Text`
@@ -29,7 +29,7 @@ const CurrentPassword: FunctionComponent = () => {
         <>
           <BackButton handler={() => navigation.goBack()} />
           <H1Text>{i18n.t("account_label.change_password")}</H1Text>
-          <H1Text>{i18n.t("account_check.insert_current_password")}</H1Text>
+          <H1Text>{i18n.t("account.insert_current_password")}</H1Text>
         </>
       }
       body={

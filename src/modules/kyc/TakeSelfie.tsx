@@ -1,18 +1,21 @@
-import React, { Component } from "react";
-import { Text, View, TouchableOpacity, Platform } from "react-native";
-import { Camera } from "expo-camera";
-import * as Permissions from "expo-permissions";
-import * as ImagePicker from "expo-image-picker";
-import * as MediaLibrary from "expo-media-library";
-import { BackButton } from "../../shared/components/BackButton";
-import styled from "styled-components/native";
-import ReversePng from "./images/reverse.png";
-import RecordPng from "./images/recordbutton.png";
-import { Ionicons } from "@expo/vector-icons";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp } from "react-navigation";
-import { KycPage } from "../../enums/pageEnum";
-import { RouteProp } from "@react-navigation/native";
+/* eslint-disable @typescript-eslint/camelcase */
+import React, { Component } from 'react';
+import { Text, View, TouchableOpacity, Platform } from 'react-native';
+import styled from 'styled-components/native';
+import { NavigationScreenProp } from 'react-navigation';
+import { RouteProp } from '@react-navigation/native';
+
+import { Camera } from 'expo-camera';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
+import { Ionicons } from '@expo/vector-icons';
+
+import { BackButton } from '../../shared/components/BackButton';
+import ReversePng from './images/reverse.png';
+import RecordPng from './images/recordbutton.png';
+import i18n from '../../i18n/i18n';
+import { KycPage } from '../../enums/pageEnum';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -50,12 +53,12 @@ const BottomButtonWrapper = styled.View`
   margin: 30px;
 `;
 
-interface props {
+interface Props {
   navigation: NavigationScreenProp<any>;
-  route: RouteProp<ParamList, "TakeSelfie">;
+  route: RouteProp<ParamList, 'TakeSelfie'>;
 }
 
-interface state {
+interface State {
   hasPermission: boolean;
   type: any;
 }
@@ -67,9 +70,9 @@ type ParamList = {
   };
 };
 
-export class TakeSelfie extends Component<props, state> {
+export class TakeSelfie extends Component<Props, State> {
   camera: any;
-  constructor(props: props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       hasPermission: false,
@@ -78,14 +81,14 @@ export class TakeSelfie extends Component<props, state> {
   }
 
   async componentDidMount() {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasPermission: status === "granted" });
+    this.setState({ hasPermission: status === 'granted' });
   }
   // 셀피 이전 신분증 촬영에서 카메라 승인 받으면 다시 승인 받을 필요 없지 않나? -> storybook에 한해 살리기
 
@@ -99,9 +102,8 @@ export class TakeSelfie extends Component<props, state> {
   };
 
   takePicture = async () => {
-    const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (this.camera) {
-      let selfie = await this.camera.takePictureAsync({
+      const selfie = await this.camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
@@ -113,7 +115,7 @@ export class TakeSelfie extends Component<props, state> {
   };
 
   pickImage = async () => {
-    let selfieAlbum = await ImagePicker.launchImageLibraryAsync({
+    const selfieAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       base64: true,
@@ -125,7 +127,7 @@ export class TakeSelfie extends Component<props, state> {
   render() {
     const { route, navigation } = this.props;
     const { id_type, idPhoto } = route.params;
-    //photoId_hash도 나중엔 받아야함
+    // photoId_hash도 나중엔 받아야함
 
     if (this.state.hasPermission === false) {
       return <Text>No access to camera</Text>;
@@ -133,12 +135,11 @@ export class TakeSelfie extends Component<props, state> {
       return (
         <TakeSelfieWrapper>
           <Camera
-            style={{ flex: 1, width: "100%", height: 700 }}
+            style={{ flex: 1, width: '100%', height: 700 }}
             type={this.state.type}
-            ref={(ref) => {
+            ref={ref => {
               this.camera = ref;
-            }}
-          >
+            }}>
             <HeaderCameraWrapper>
               <BackButton
                 handler={() => navigation.goBack()}
@@ -149,62 +150,58 @@ export class TakeSelfie extends Component<props, state> {
 
             <View
               style={{
-                position: "relative",
+                position: 'relative',
                 flex: 1,
-                backgroundColor: "transparent",
-                flexDirection: "column",
+                backgroundColor: 'transparent',
+                flexDirection: 'column',
                 top: 220,
-              }}
-            >
-              <PText>{i18n.t("kyc.kyc_step2_text")}</PText>
+              }}>
+              <PText>{i18n.t('kyc.step2_text')}</PText>
             </View>
             <BottomCameraWrapper>
               <BottomButtonWrapper>
                 <TouchableOpacity
                   style={{
-                    alignSelf: "flex-end",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
                     navigation.navigate(KycPage.ConfirmSelfie, {
                       selfie: await this.pickImage(),
-                      id_type: id_type,
+                      id_type,
                       // photoId_hash: photoId_hash,
-                      idPhoto: idPhoto,
+                      idPhoto,
                     });
-                  }}
-                >
+                  }}>
                   <Ionicons
                     name="ios-photos"
-                    style={{ color: "#fff", fontSize: 40 }}
+                    style={{ color: '#fff', fontSize: 40 }}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     flex: 0.1,
-                    alignSelf: "flex-end",
-                    alignItems: "center",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
                   }}
                   onPress={async () => {
                     navigation.navigate(KycPage.ConfirmSelfie, {
                       selfie: await this.takePicture(),
-                      id_type: id_type,
+                      id_type,
                       // photoId_hash: photoId_hash,
-                      idPhoto: idPhoto,
+                      idPhoto,
                     });
-                  }}
-                >
+                  }}>
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     flex: 0.1,
-                    alignSelf: "flex-end",
-                    alignItems: "center",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
                   }}
-                  onPress={this.reverseCamera}
-                >
+                  onPress={this.reverseCamera}>
                   <ButtonImg source={ReversePng} />
                 </TouchableOpacity>
               </BottomButtonWrapper>

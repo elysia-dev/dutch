@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useContext, useState } from "react";
-import { ScrollView, View } from "react-native";
-import styled from "styled-components/native";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import i18n from "../../i18n/i18n";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import UserContext from "../../contexts/UserContext";
-import LocaleType from "../../enums/LocaleType";
+import React, { FunctionComponent, useContext, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import styled from 'styled-components/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import i18n from '../../i18n/i18n';
+import UserContext from '../../contexts/UserContext';
+import LocaleType from '../../enums/LocaleType';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -34,38 +34,36 @@ export const Argos: FunctionComponent<{}> = () => {
   const { locale } = useContext(UserContext);
   const navigation = useNavigation();
   const localeTerms = terms[locale === LocaleType.KO ? locale : LocaleType.EN];
-  const route = useRoute<RouteProp<ParamList, "Argos">>();
+  const route = useRoute<RouteProp<ParamList, 'Argos'>>();
 
   return (
     <View>
       <ScrollView
         style={{
-          backgroundColor: "#fff",
-          width: "100%",
+          backgroundColor: '#fff',
+          width: '100%',
           paddingLeft: 20,
           paddingRight: 20,
           paddingTop: 40,
-        }}
-      >
-        <H1Text>{i18n.t("kyc_label.argos_terms")}</H1Text>
+        }}>
+        <H1Text>{i18n.t('kyc_label.argos_terms')}</H1Text>
         <PText>{localeTerms}</PText>
       </ScrollView>
       <View
         style={{
-          backgroundColor: "#fff",
-          width: "100%",
+          backgroundColor: '#fff',
+          width: '100%',
           height: 60,
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
-        }}
-      >
+        }}>
         <SubmitButton
-          title={i18n.t("kyc_label.agree")}
+          title={i18n.t('kyc_label.agree')}
           handler={() => {
             route.params.updateAgree(true);
             navigation.goBack();
           }}
-          style={{ position: "absolute", bottom: 20 }}
+          style={{ position: 'absolute', bottom: 20 }}
         />
       </View>
     </View>
@@ -134,7 +132,7 @@ const terms = {
   이 사이트는 귀하가 사이트 사용 방법과 귀하의 경험을 향상시킬 수 있는 방법을 이해하도록 돕기 위해 웹상에서 가장 광범위하고 신뢰할 수 있는 분석 솔루션 중 하나 인 Google Analytics를 사용합니다. 이러한 쿠키는 사이트에 머문 시간과 방문한 페이지를 추적하여 매력적인 콘텐츠를 계속 제작할 수 있습니다.
   Google Analytics 쿠키에 대한 자세한 내용은 공식 Google Analytics 페이지를 참조하십시오.
   제 3 자 분석은 이 사이트의 사용을 추적하고 측정하여 매력적인 콘텐츠를 계속 제작할 수 있도록 합니다. 이러한 쿠키는 귀하가 사이트 또는 페이지 방문에 소비하는 시간을 추적할 수 있습니다. 이는 귀하가 사이트를 개선할 수 있는 방법을 이해하는 데 도움이 됩니다.
-  더 많은 정보를 찾고 계신다면 선호하는 연락 방법 중 하나 인 이메일 : support@argos-solutions.io를 통해 문의하실 수 있습니다.
+  더 많은 정보를 찾고 계신다면 선호하는 연락 방법 중 하나인 이메일 : support@argos-solutions.io를 통해 문의하실 수 있습니다.
   \n10. 추가정보
   개인정보의 침해에 대한 신고나 상담이 필요하신 경우 아래 기관으로 문의하시기 바랍니다.
   개인정보 침해신고 센터 : (국번없이)118 (http://privacy.kisa.or.kr)
@@ -169,7 +167,7 @@ const terms = {
   2) Records on Service Provision Related Laws: Act on Consumer Protection in Electronic Commerce, Etc. Retention period: 5 years
   \n5. Storing Personal Information
   The Company uses Amazon Web Services cloud computing services to encrypt and protect personal information.
-  1) Stored Information Information collected when registering and providing KYC / AML service ​
+  1) Stored Information Information collected when accounting and providing KYC / AML service
   2) Time and location of data storage Country : Countries where Amazon Web Services are provided Time : At signup and inputing/editing personal information
   3) Cloud Service Provider Company : Amazon Web Services, Inc. Address : 1200 12th Avenue South, Suite 1200, Seattle, WA 98144, United States Tel : +1-206-266-4064
   \n6. Destruction of Personal Information
@@ -186,7 +184,7 @@ const terms = {
   Requesting suspension to your personal information processing
   2) The rights under Section 7-1 can be exercised by emailing the person in charge and/or the email address under Personal Information Protection Officer, and the Company shall take action against the request without delay.
   3) If the information subject requests correction or deletion, the Company will not use or provide the personal information of the subject until the request is completed.
-  4) The information subject can request to view, modify, and delete his or her personal information registered at any time.
+  4) The information subject can request to view, modify, and delete his or her personal information accounted at any time.
   \n9. Cookie Policy for argos-solutions
   This is the Cookie Policy for argos-solutions, accessible from https://www.argos-solutions.io/
   What Are Cookies
@@ -203,7 +201,7 @@ const terms = {
   This site uses Google Analytics which is one of the most widespread and trusted analytics solution on the web for helping us to understand how you use the site and ways that we can improve your experience. These cookies may track things such as how long you spend on the site and the pages that you visit so we can continue to produce engaging content.
   For more information on Google Analytics cookies, see the official Google Analytics page.
   Third party analytics are used to track and measure usage of this site so that we can continue to produce engaging content. These cookies may track things such as how long you spend on the site or pages you visit which helps us to understand how we can improve the site for you.
-  However if you are still looking for more information then you can contact us through one of our preferred contact methods: ​ Email: support@argos-solutions.io
+  However if you are still looking for more information then you can contact us through one of our preferred contact methods: ​Email: support@argos-solutions.io
   \n10. More
   If you need to report or discuss any infringement of your personal information, please contact:
   Privacy Reporting Center : (http://privacy.kisa.or.kr)
