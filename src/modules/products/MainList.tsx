@@ -36,7 +36,7 @@ export class MainList extends Component<Props, State> {
   callApi() {
     const { navigation } = this.props;
 
-    Api.productList()
+    Api.storyList()
       .then(res => {
         this.setState({ storyList: res.data });
         console.log(this.state.storyList);

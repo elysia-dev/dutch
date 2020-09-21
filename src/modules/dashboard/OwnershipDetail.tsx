@@ -1,13 +1,14 @@
-import React, { FunctionComponent, useState, useContext } from "react";
-import { View, ScrollView, Image, SafeAreaView, Platform } from "react-native";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { BackButton } from "../../shared/components/BackButton";
-import Product from "../../types/product";
-import UserContext from "../../contexts/UserContext";
-import LocaleType from "../../enums/LocaleType";
-import { HeaderHeightContext } from "@react-navigation/stack";
+import React, { FunctionComponent, useState, useContext } from 'react';
+import { View, ScrollView, Image, SafeAreaView, Platform } from 'react-native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { HeaderHeightContext } from '@react-navigation/stack';
+import styled from 'styled-components/native';
+
+import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
+import Product from '../../types/product';
+import UserContext from '../../contexts/UserContext';
+import LocaleType from '../../enums/LocaleType';
 
 const WH1Text = styled.Text`
   margin-top: 30px;
@@ -60,26 +61,26 @@ type ParamList = {
 
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "OwnershipDetail">>();
+  const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
 
   return (
     <ProductInfoWrapper>
-      <View style={{ backgroundColor: "#FFF" }}>
+      <View style={{ backgroundColor: '#FFF' }}>
         <ScrollView scrollEnabled={true} scrollToOverflowEnabled={true}>
           <View
             style={{
-              width: "100%",
+              width: '100%',
               height: 293,
             }}
           />
           <View
             style={{
-              backgroundColor: "#3679B5",
-              width: "100%",
+              backgroundColor: '#3679B5',
+              width: '100%',
               height: 243,
               borderBottomLeftRadius: 20,
               borderBottomRightRadius: 20,
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               zIndex: -1,
             }}

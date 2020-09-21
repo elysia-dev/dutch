@@ -1,26 +1,32 @@
-import React, { FunctionComponent, useState, useContext } from "react";
-import { View, ScrollView, Image, SafeAreaView, Platform } from "react-native";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { BackButton } from "../../shared/components/BackButton";
-import { Calculator } from "./components/Calculator";
-import WrappedInfo from "./components/WrappedInfo";
-import Product from "../../types/product";
-import UserContext from "../../contexts/UserContext";
-import LocaleType from "../../enums/LocaleType";
-import { Map } from "./components/Map";
-import { HeaderHeightContext } from "@react-navigation/stack";
+import React, { FunctionComponent, useState, useContext } from 'react';
+import {
+  View,
+  ScrollView,
+  Image,
+  Text,
+  SafeAreaView,
+  Platform,
+} from 'react-native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import styled from 'styled-components/native';
+import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
+import { Calculator } from './components/Calculator';
+import WrappedInfo from './components/WrappedInfo';
+import Product from '../../types/product';
+import UserContext from '../../contexts/UserContext';
+import LocaleType from '../../enums/LocaleType';
+import { Map } from './components/Map';
+import BasicInfo from './components/BasicInfo';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import { ProductPage } from '../../enums/pageEnum';
 
-const WH1Text = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 20px;
-  text-align: left;
-`;
 const H1Text = styled.Text`
   color: #1c1c1c;
-  font-size: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 7px;
+  margin-bottom: 6px;
   text-align: left;
   z-index: 3;
 `;
@@ -32,7 +38,7 @@ const WText = styled.Text`
 `;
 const GText = styled.Text`
   color: #626368;
-  font-size: 12px;
+  font-size: 15px;
   text-align: left;
   font-weight: 300;
 `;
@@ -53,8 +59,10 @@ const Method = styled.Image`
   margin-left: 14px;
 `;
 const ProductInfoWrapper = styled.SafeAreaView`
-  background-color: #3679b5;
+  background-color: #fff;
   padding-top: 25px;
+  height: 100%;
+  width: 100%;
 `;
 
 type ParamList = {
@@ -72,110 +80,51 @@ const ProductBuying: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "ProductInfo">>();
+  const route = useRoute<RouteProp<ParamList, 'ProductInfo'>>();
   const { locale } = useContext(UserContext);
-  const product = route.params.product;
-  const productDescription =
-    product.data.descriptions[
-      product.data.languages.includes(locale) ? locale : LocaleType.EN
-    ];
+  const { product } = route.params;
 
   return (
     <ProductInfoWrapper>
-      <View
-        style={{
-          backgroundColor: "#FFF",
-        }}
-      >
-        <ScrollView scrollEnabled={true} scrollToOverflowEnabled={true}>
-          <View
+      <ScrollView
+        scrollEnabled={true}
+        scrollToOverflowEnabled={true}
+        style={{ height: '100%', backgroundColor: '#fff' }}>
+        <View
+          style={{
+            top: 0,
+            width: '100%',
+            height: 293,
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10,
+          }}>
+          <Image
+            source={{ uri: product.data.images[0] }}
             style={{
-              position: "absolute",
-              backgroundColor: "#3679B5",
-              width: "100%",
-              height: 1000,
-              top: -1000,
-            }}
-          />
-          <View
-            style={{
-              backgroundColor: "#3679B5",
-              width: "100%",
-              height: 243,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              position: "absolute",
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              position: 'absolute',
               top: 0,
-              zIndex: -1,
+              width: '100%',
+              height: 293,
+              resizeMode: 'cover',
             }}
           />
-          <View
-            style={{
-              padding: 20,
-              borderBottomColor: "#F6F6F8",
-              borderBottomWidth: 5,
-              height: 480,
-            }}
-          >
-            <BackButton
-              handler={() => navigation.goBack()}
-              isWhite={true}
-            ></BackButton>
-            <View
-              style={{
-                overflow: "visible",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <WH1Text>{product.title}</WH1Text>
-              <WText>
-                {i18n.strftime(
-                  new Date(product.data.buildingCompletionDate),
-                  "%Y-%m-%d"
-                )}
-              </WText>
-            </View>
-            <Image
-              source={{ uri: product.data.images[0] }}
-              style={{
-                top: 20,
-                width: "100%",
-                height: 200,
-                resizeMode: "cover",
-                borderRadius: 5,
-                marginBottom: 20,
-              }}
-            />
-            <DesView>
-              <GText>{i18n.t("product_label.expected_annual_rate")}</GText>
-              <PText>{`${product.data.expectedAnnualReturn}%`}</PText>
-            </DesView>
-            <DesView>
-              <GText>{i18n.t("product_label.rent_distribution")}</GText>
-              <PText>
-                {productDescription.monthlyRentIncomeDistributionCycle}
-              </PText>
-            </DesView>
-            <DesView>
-              <GText>{i18n.t("product_label.price_per_token")}</GText>
-              <PText>{`${product.data.pricePerToken} USD`}</PText>
-            </DesView>
-            <DesView>
-              <GText>{i18n.t("product_label.return_method")}</GText>
-            </DesView>
+          <View style={{ position: 'absolute', padding: 20 }}>
+            <BackButton handler={() => navigation.goBack()} />
           </View>
-          <Calculator
-            investment={state.investment}
-            product={product}
-            sliderHandler={(value: number) => {
-              setState({ ...state, investment: value });
-            }}
-          />
-          {/* <Map product={product} /> */}
-          <WrappedInfo product={product} />
-        </ScrollView>
-      </View>
+        </View>
+        <BasicInfo product={product} />
+        <Map product={product} />
+        <WrappedInfo product={product} />
+      </ScrollView>
+      <SubmitButton
+        style={{ position: 'absolute', bottom: 0, marginBottom: 10 }}
+        handler={() => {
+          navigation.navigate(ProductPage.PaymentSelection);
+        }}
+        title={i18n.t('product_label.invest')}
+      />
     </ProductInfoWrapper>
   );
 };

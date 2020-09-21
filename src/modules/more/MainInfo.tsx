@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
   ScrollView,
@@ -7,19 +7,20 @@ import {
   Picker,
   StyleSheet,
   Text,
-} from "react-native";
-import styled from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
-import RNPickerSelect, { Item } from "react-native-picker-select";
-import AsyncStorage from "@react-native-community/async-storage";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import i18n from "../../i18n/i18n";
-import { KycStatus } from "../../enums/status";
-import { MorePage } from "../../enums/pageEnum";
-import UserContext from "../../contexts/UserContext";
-import ExchangeBithumbPng from "./images/bithumb_logo.png";
-import ExchangebobooPng from "./images/boboo_logo.png";
-import LocaleType from "../../enums/LocaleType";
+} from 'react-native';
+import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect, { Item } from 'react-native-picker-select';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import i18n from '../../i18n/i18n';
+import { KycStatus } from '../../enums/status';
+import { MorePage } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
+import ExchangeBithumbPng from './images/bithumb_logo.png';
+import ExchangebobooPng from './images/boboo_logo.png';
+import LocaleType from '../../enums/LocaleType';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -35,7 +36,7 @@ const ExchangeBobooImg = styled.Image`
   top: 3px;
 `;
 const MainInfoWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
+  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
   background-color: #ffffff;
 `;
 const InfoHeaderWrapper = styled.View`
@@ -120,22 +121,21 @@ const MainInfo: FunctionComponent = () => {
             <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
             <Text
               style={{
-                marginLeft: "5%",
+                marginLeft: '5%',
                 height: 50,
                 lineHeight: 20,
-                textAlign: "justify",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "stretch",
-                alignContent: "stretch",
-              }}
-            >
+                textAlign: 'justify',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+                alignContent: 'stretch',
+              }}>
               <InfoHeaderUserImg
-                source={require("../kyc/images/userIcon.png")}
+                source={require('../kyc/images/userIcon.png')}
               />
               {user.kycStatus !== KycStatus.SUCCESS ? (
                 <InfoHeaderUserName>
-                  {i18n.t("more_label.need_kyc_label")}
+                  {i18n.t('more_label.need_kyc_label')}
                 </InfoHeaderUserName>
               ) : (
                 <InfoHeaderUserName>
@@ -146,10 +146,9 @@ const MainInfo: FunctionComponent = () => {
           </InfoUserWrapper>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("More", { screen: MorePage.MyPage });
-            }}
-          >
-            <InfoHeaderSettingImg source={require("./images/setting.png")} />
+              navigation.navigate('More', { screen: MorePage.MyPage });
+            }}>
+            <InfoHeaderSettingImg source={require('./images/setting.png')} />
           </TouchableOpacity>
         </InfoHeaderWrapper>
         <View
@@ -157,78 +156,72 @@ const MainInfo: FunctionComponent = () => {
             marginTop: 10,
             marginLeft: 20,
             marginRight: 20,
-            display: "flex",
-            flexDirection: "row",
-          }}
-        ></View>
+            display: 'flex',
+            flexDirection: 'row',
+          }}></View>
         <View
           style={{
-            borderBottomColor: "#F6F6F8",
+            borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
             height: 86,
-          }}
-        >
+          }}>
           {user.kycStatus === KycStatus.NONE && (
             <SubmitButton
               style={{
                 shadowOffset: { width: 2, height: 1 },
-                shadowColor: "#00000064",
+                shadowColor: '#00000064',
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("more_label.need_kyc")}
-              handler={() => navigation.navigate("Kyc")}
+              title={i18n.t('more_label.need_kyc')}
+              handler={() => navigation.navigate('Kyc')}
             />
           )}
           {user.kycStatus === KycStatus.PENDING && (
             <SubmitButton
               style={{
                 shadowOffset: { width: 2, height: 1 },
-                shadowColor: "#00000064",
+                shadowColor: '#00000064',
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("more_label.proceed_kyc")}
+              title={i18n.t('more_label.proceed_kyc')}
               handler={() => {
-                alert(i18n.t("more.kyc_proceeding_wait"));
+                alert(i18n.t('more.kyc_proceeding_wait'));
               }}
-              ButtonTheme={"GrayTheme"}
+              ButtonTheme={'GrayTheme'}
             />
           )}
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{
                 shadowOffset: { width: 2, height: 1 },
-                shadowColor: "#00000064",
+                shadowColor: '#00000064',
                 shadowOpacity: 0.8,
                 shadowRadius: 6,
               }}
-              title={i18n.t("more_label.approved_kyc")}
+              title={i18n.t('more_label.approved_kyc')}
               handler={() => {}}
-              ButtonTheme={"GrayTheme"}
+              ButtonTheme={'GrayTheme'}
             />
           )}
         </View>
         <View
           style={{
-            borderBottomColor: "#F6F6F8",
+            borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-          }}
-        >
-          <H1Text>{i18n.t("more_label.confirm")}</H1Text>
+          }}>
+          <H1Text>{i18n.t('more_label.confirm')}</H1Text>
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("More", {
+                navigation.navigate('More', {
                   screen: MorePage.OwnershipHistory,
                 })
-              }
-            >
+              }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.investment_history")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.investment_history')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
@@ -236,101 +229,86 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("More", {
+                navigation.navigate('More', {
                   screen: MorePage.TransactionHistory,
                 })
-              }
-            >
+              }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.transaction_history")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.transaction_history')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
         </View>
         <View
           style={{
-            borderBottomColor: "#F6F6F8",
+            borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-            justifyContent: "center",
-            alignContent: "flex-start",
-          }}
-        >
+            justifyContent: 'center',
+            alignContent: 'flex-start',
+          }}>
           <View>
-            <H1Text>{i18n.t("more_label.elysia")}</H1Text>
+            <H1Text>{i18n.t('more_label.elysia')}</H1Text>
           </View>
 
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.notice")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.notice')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.service_terms")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.service_terms')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("More", { screen: MorePage.Contact })
-              }
-            >
+                navigation.navigate('More', { screen: MorePage.Contact })
+              }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.contact")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.contact')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t("more_label.faq")}</PText>
-                <InfoArrowImg
-                  source={require("../../../assets/next_gray.png")}
-                />
+                <PText>{i18n.t('more_label.faq')}</PText>
+                <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
           </InfoButtonTabWrapper>
         </View>
         <View
           style={{
-            borderBottomColor: "#F6F6F8",
+            borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-          }}
-        >
-          <H1Text>{i18n.t("more_label.app_setting")}</H1Text>
+          }}>
+          <H1Text>{i18n.t('more_label.app_setting')}</H1Text>
           <H1Text style={{ fontSize: 16 }}>
-            {i18n.t("more_label.language")}
+            {i18n.t('more_label.language')}
           </H1Text>
           <View
             style={{
-              borderColor: "#d6d6d8",
+              borderColor: '#d6d6d8',
               borderWidth: 1,
-              borderStyle: "solid",
-              marginLeft: "5%",
-              marginRight: "5%",
+              borderStyle: 'solid',
+              marginLeft: '5%',
+              marginRight: '5%',
               borderRadius: 5,
               height: 50,
-              width: "90%",
+              width: '90%',
               marginBottom: 20,
-            }}
-          >
-            {Platform.OS === "android" ? (
+            }}>
+            {Platform.OS === 'android' ? (
               <Picker style={{}}>
                 <Picker.Item label="한국어" value="ko" />
                 <Picker.Item label="English" value="en" />
@@ -340,17 +318,17 @@ const MainInfo: FunctionComponent = () => {
               <RNPickerSelect
                 style={pickerSelectStyles}
                 onValueChange={async (value: LocaleType) => {
-                  await AsyncStorage.setItem("@locale", value);
+                  await AsyncStorage.setItem('@locale', value);
                 }}
                 items={[
-                  { label: "한국어", value: LocaleType.KO },
-                  { label: "English", value: LocaleType.EN },
-                  { label: "简体中文", value: LocaleType.CH },
+                  { label: '한국어', value: LocaleType.KO },
+                  { label: 'English', value: LocaleType.EN },
+                  { label: '简体中文', value: LocaleType.CH },
                 ]}
                 placeholder={{
-                  label: "Select your app language",
-                  value: "",
-                  color: "#1C1C1C",
+                  label: 'Select your app language',
+                  value: '',
+                  color: '#1C1C1C',
                 }}
               />
             )}
@@ -358,30 +336,28 @@ const MainInfo: FunctionComponent = () => {
         </View>
         <View
           style={{
-            borderBottomColor: "#F6F6F8",
+            borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-          }}
-        >
-          <H1Text>{i18n.t("more_label.el_exchange")}</H1Text>
-          <View style={{ flexDirection: "row", marginBottom: 30 }}>
+          }}>
+          <H1Text>{i18n.t('more_label.el_exchange')}</H1Text>
+          <View style={{ flexDirection: 'row', marginBottom: 30 }}>
             <ExchangeBithumbImg source={ExchangeBithumbPng} />
             <ExchangeBobooImg source={ExchangebobooPng} />
           </View>
         </View>
         <Text
           style={{
-            backgroundColor: "#F6F6F8",
-            textAlign: "right",
-            paddingRight: "5%",
+            backgroundColor: '#F6F6F8',
+            textAlign: 'right',
+            paddingRight: '5%',
             fontSize: 10,
-          }}
-        >
+          }}>
           Ver demo sprint3
         </Text>
         <View
           style={{
             height: 100,
-            backgroundColor: "#F6F6F8",
+            backgroundColor: '#F6F6F8',
           }}
         />
       </ScrollView>
@@ -393,22 +369,22 @@ export default MainInfo;
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#fff",
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
     fontSize: 16,
-    color: "#1C1C1C",
-    justifyContent: "center",
-    alignContent: "center",
-    textAlign: "center",
+    color: '#1C1C1C',
+    justifyContent: 'center',
+    alignContent: 'center',
+    textAlign: 'center',
   },
   inputAndroid: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#fff",
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
     fontSize: 16,
-    color: "#1C1C1C",
-    justifyContent: "center",
-    alignContent: "center",
+    color: '#1C1C1C',
+    justifyContent: 'center',
+    alignContent: 'center',
   },
 });
