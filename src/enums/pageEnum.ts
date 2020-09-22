@@ -14,6 +14,7 @@ export enum ProductPage {
   MainList = 'MainList',
   ProductStory = 'ProductStory',
   ProductBuying = 'ProductBuying',
+  SliderProductBuying = 'SliderProductBuying',
   PaymentSelection = 'PaymentSelection',
 }
 

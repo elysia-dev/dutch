@@ -5,13 +5,17 @@ import { MainList } from './MainList';
 import { ProductPage } from '../../enums/pageEnum';
 import ProductBuying from './ProductBuying';
 import ProductStory from './ProductStory';
-import PaymentSelection from './PaymentSelection';
+import SliderProductBuying from './SliderProductBuying';
 
 const Stack = createStackNavigator();
 
 export const Products = () => {
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator
+      headerMode="none"
+      screenOptions={{
+        gestureEnabled: false,
+      }}>
       <Stack.Screen name={ProductPage.ProductStory} component={ProductStory} />
       <Stack.Screen name={'BuyModalStack'} component={BuyModalStack} />
     </Stack.Navigator>
@@ -24,6 +28,7 @@ const BuyModalStack = () => {
       headerMode="none"
       mode="modal"
       screenOptions={{
+        gestureEnabled: false,
         headerShown: false,
         cardStyle: { backgroundColor: 'transparent' },
         cardOverlayEnabled: true,
@@ -48,8 +53,8 @@ const BuyModalStack = () => {
         component={ProductBuying}
       />
       <Stack.Screen
-        name={ProductPage.PaymentSelection}
-        component={PaymentSelection}
+        name={ProductPage.SliderProductBuying}
+        component={SliderProductBuying}
       />
     </Stack.Navigator>
   );

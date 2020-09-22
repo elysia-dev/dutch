@@ -1,15 +1,15 @@
-import React, { Component, FunctionComponent, Props } from "react";
+import React, { Component, FunctionComponent, Props } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   GestureResponderEvent,
   Image,
-} from "react-native";
+} from 'react-native';
 
-import styled from "styled-components/native";
-import i18n from "../../../i18n/i18n";
-import { Story } from "../../../types/product";
+import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
+import { Story } from '../../../types/product';
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -25,37 +25,35 @@ const PText = styled.Text`
   margin-bottom: 8px;
 `;
 
-interface props {
+interface Props {
   story: Story;
 }
 
-export const Item: FunctionComponent<props> = (props) => {
+export const Item: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
-        width: "100%",
+        width: '100%',
         height: 416,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
-        shadowColor: "#00000033",
+        shadowColor: '#00000033',
         shadowOpacity: 0.8,
         shadowRadius: 5,
         marginTop: 15,
         marginBottom: 15,
-      }}
-    >
+      }}>
       <Image
-        source={{ uri: props.story.images }}
+        source={{ uri: props.story.image }}
         style={{
-          width: "100%",
-          height: "100%",
-          resizeMode: "cover",
+          width: '100%',
+          height: '100%',
+          resizeMode: 'cover',
           borderRadius: 10,
         }}
       />
       <View
-        style={{ position: "absolute", flexDirection: "column", padding: 20 }}
-      >
+        style={{ position: 'absolute', flexDirection: 'column', padding: 20 }}>
         <PText>{props.story.subTitle}</PText>
         <H1Text>{props.story.title}</H1Text>
       </View>

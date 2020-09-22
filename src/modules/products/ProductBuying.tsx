@@ -81,7 +81,6 @@ const ProductBuying: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductInfo'>>();
-  const { locale } = useContext(UserContext);
   const { product } = route.params;
 
   return (
@@ -115,13 +114,15 @@ const ProductBuying: FunctionComponent = () => {
           </View>
         </View>
         <BasicInfo product={product} />
-        <Map product={product} />
+        {/* <Map product={product} /> */}
         <WrappedInfo product={product} />
       </ScrollView>
       <SubmitButton
         style={{ position: 'absolute', bottom: 0, marginBottom: 10 }}
         handler={() => {
-          navigation.navigate(ProductPage.PaymentSelection);
+          navigation.navigate(ProductPage.SliderProductBuying, {
+            return: product.data.expectedAnnualReturn,
+          });
         }}
         title={i18n.t('product_label.invest')}
       />

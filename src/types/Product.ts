@@ -6,7 +6,7 @@ export type Story = {
   title: string;
   subTitle: string;
   body: string;
-  images: string;
+  image: string;
 };
 
 type Product = {

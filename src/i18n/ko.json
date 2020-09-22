@@ -152,7 +152,7 @@
     "return_method": "지급수단",
     "return_calculator": "예상 수익률 계산기",
     "investment": "투자금",
-    "expected_return": "예상 수익금",
+    "expected_return": "예상 수익금(연)",
     "more_info": "자세히",
     "invest": "구매하기",
     "address": "주소",
@@ -163,7 +163,11 @@
     "property_highlightes": "부동산 핵심정보",
     "product_info": "상품 정보",
     "abstract": "요약",
-    "buy": "지분 구매하기"
+    "buy": "지분 구매하기",
+    "buy_now": "바로 구매하기",
+    "token_count": "부동산 토큰 수",
+    "el_price": "EL (환산)",
+    "eth_price": "ETH (환산)"
   },
   "more_label": {
     "need_kyc_label": "KYC 인증을 진행해주세요.",

@@ -190,7 +190,11 @@ class App extends React.Component<any, AppState> {
             signOut: this.signOut,
           }}>
           {/* {STORYBOOK_START && <StorybookUIRoot />} */}
-          <RootStack.Navigator headerMode="none">
+          <RootStack.Navigator
+            headerMode="none"
+            screenOptions={{
+              gestureEnabled: false,
+            }}>
             {this.state.signedIn ? (
               <>
                 <RootStack.Screen

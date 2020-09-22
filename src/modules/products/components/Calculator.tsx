@@ -1,15 +1,15 @@
-import React, { FunctionComponent } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
-import Slider from "react-native-slider";
+import React, { FunctionComponent } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
+import Slider from 'react-native-slider';
 
-import styled from "styled-components/native";
-import i18n from "../../../i18n/i18n";
-import Product from "../../../types/product";
+import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
+import Product from '../../../types/product';
 
-interface props {
-  sliderHandler: (value: number) => void;
-  investment: number;
-  product: Product;
+interface Props {
+  countHandler: (value: number) => void;
+  tokenCount: number;
+  return: string;
 }
 
 const H1Text = styled.Text`
@@ -17,98 +17,123 @@ const H1Text = styled.Text`
   font-size: 20px;
   text-align: left;
   z-index: 3;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 5px;
 `;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 12px;
+const CountText = styled.Text`
+  color: #3679b5;
+  font-size: 25px;
   text-align: left;
-  font-weight: 300;
+  font-weight: bold;
 `;
-const ButtonText = styled.Text`
-  color: #626368;
-  font-size: 12px;
-  text-align: center;
-  font-weight: 300;
+const CountButton = styled.TouchableOpacity`
+  width: 54px;
+  height: 26px;
+  border-radius: 5px;
+  border-width: 1px;
+  justify-content: center;
+  align-content: center;
 `;
 
-export const Calculator: FunctionComponent<props> = (props: props) => {
+export const Calculator: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
-      style={{
-        height: 180,
-        padding: 20,
-        borderBottomColor: "#F6F6F8",
-        borderBottomWidth: 5,
-      }}
-    >
-      <H1Text>{i18n.t("product_label.return_calculator")}</H1Text>
+      style={{ width: '100%', height: '40%', position: 'relative', top: 0 }}>
+      <Text
+        style={{
+          color: '#1C1C1C',
+          textAlign: 'left',
+          fontSize: 15,
+          marginBottom: 10,
+        }}>
+        {i18n.t('product_label.token_count')}
+      </Text>
+      <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+        <CountText> {Math.round(props.tokenCount)}</CountText>
+        <H1Text>{'ELA1 Token'}</H1Text>
+      </View>
+
+      <View style={{ marginTop: 10, width: '100%' }}>
+        <Slider
+          minimumValue={0}
+          maximumValue={500}
+          minimumTrackTintColor={'#3679B5'}
+          maximumTrackTintColor={'#E9EBEF'}
+          thumbTintColor={'#fff'}
+          thumbStyle={{
+            borderColor: '#FFFFFF',
+            borderWidth: 2,
+            shadowColor: '#00000029',
+            shadowOpacity: 0.6,
+            shadowOffset: { width: 2, height: 1 },
+            shadowRadius: 2,
+          }}
+          trackStyle={{
+            backgroundColor: '#E9EBEF',
+            height: 8,
+            borderWidth: 1,
+            borderColor: '#D0D8DF',
+            borderRadius: 4,
+            shadowColor: '#00000029',
+            shadowOpacity: 0.6,
+            shadowOffset: { width: 0, height: 0 },
+            shadowRadius: 6,
+            width: '100%',
+          }}
+          thumbTouchSize={{ width: 20, height: 20 }}
+          value={props.tokenCount}
+          onValueChange={props.countHandler}></Slider>
+      </View>
       <View
         style={{
-          marginTop: 15,
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          <GText>{i18n.t("product_label.investment")}</GText>
-          <Text>{`${Math.round(props.investment)}$`}</Text>
-        </View>
-        <View
+          flexDirection: 'row',
+          width: '60%',
+          justifyContent: 'space-between',
+          marginTop: 10,
+        }}>
+        <CountButton
+          onPress={() => props.countHandler(1)}
           style={{
-            flex: 1,
-            flexDirection: "column",
-          }}
-        >
-          <GText>{i18n.t("product_label.expected_return")}</GText>
-          <Text>{`${Math.round(
-            props.investment * parseInt(props.product.data.expectedAnnualReturn) / 100
-          )}$`}</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <View style={{ flex: 4 }}>
-          <Slider
-            minimumValue={0}
-            maximumValue={100}
-            minimumTrackTintColor={"#64B6F4"}
-            maximumTrackTintColor={"#fff"}
-            thumbTintColor={"#fff"}
-            thumbStyle={{ borderColor: "#64B6F4", borderWidth: 2 }}
-            trackStyle={{
-              height: 8,
-              borderWidth: 1,
-              borderColor: "#D0D8DF",
-              borderRadius: 4,
-              shadowColor: "#00000029",
-              shadowOpacity: 0.6,
-              shadowOffset: { width: 0, height: 0 },
-              shadowRadius: 6,
-              width: "90%",
-            }}
-            thumbTouchSize={{ width: 20, height: 20 }}
-            value={props.investment}
-            onValueChange={props.sliderHandler}
-          ></Slider>
-        </View>
-        <View style={{ flex: 1, paddingTop: 7.5, paddingRight: 20 }}>
-          <TouchableOpacity onPress={() => { }}>
-            <View
-              style={{
-                width: 80,
-                height: 25,
-                borderRadius: 3,
-                backgroundColor: "#F6F6F8",
-                borderWidth: 1,
-                borderColor: "#D0D8DF",
-                justifyContent: "center",
-                alignContent: "center",
-              }}
-            >
-              <ButtonText>{i18n.t("product_label.more_info")}</ButtonText>
-            </View>
-          </TouchableOpacity>
-        </View>
+            borderColor: props.tokenCount === 1 ? '#3679B5' : '#D0D8DF',
+          }}>
+          <Text
+            style={{
+              color: props.tokenCount === 1 ? '#3679B5' : '#D0D8DF',
+              fontSize: 15,
+              textAlign: 'center',
+            }}>
+            {'01 T'}
+          </Text>
+        </CountButton>
+        <CountButton
+          onPress={() => props.countHandler(10)}
+          style={{
+            borderColor: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+          }}>
+          <Text
+            style={{
+              color: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+              fontSize: 15,
+              textAlign: 'center',
+            }}>
+            {'10 T'}
+          </Text>
+        </CountButton>
+        <CountButton
+          onPress={() => props.countHandler(100)}
+          style={{
+            borderColor: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+          }}>
+          <Text
+            style={{
+              color: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+              fontSize: 15,
+              textAlign: 'center',
+            }}>
+            {'100 T'}
+          </Text>
+        </CountButton>
       </View>
     </View>
   );
