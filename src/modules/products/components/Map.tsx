@@ -1,17 +1,19 @@
-import React, { Component, FunctionComponent } from "react";
-import MapView, { Marker } from "react-native-maps";
+import React, { Component, FunctionComponent, useContext } from 'react';
+import MapView, { Marker } from 'react-native-maps';
 import {
   StyleSheet,
   View,
   Dimensions,
   TouchableOpacity,
   Text,
-} from "react-native";
-import latlon from "../latlon";
-import i18n from "../../../i18n/i18n";
-import styled from "styled-components/native";
-import Product from "../../../types/product";
-import ProductInfo from "../ProductInfo";
+} from 'react-native';
+import latlon from '../latlon';
+import i18n from '../../../i18n/i18n';
+import styled from 'styled-components/native';
+import Product from '../../../types/product';
+import ProductInfo from '../ProductBuying';
+import UserContext from '../../../contexts/UserContext';
+import LocaleType from '../../../enums/LocaleType';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -19,50 +21,51 @@ const H1Text = styled.Text`
   text-align: left;
   z-index: 3;
 `;
-const WText = styled.Text`
-  margin-top: 18px;
-  color: #fff;
-  font-size: 14px;
-`;
+
 const GText = styled.Text`
   color: #626368;
-  font-size: 12px;
+  font-size: 15px;
   text-align: left;
   font-weight: 300;
 `;
 const PText = styled.Text`
   color: #1c1c1c;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 300;
 `;
 
-interface props {
-  product: Product
+interface Props {
+  product: Product;
 }
 
-export const Map: FunctionComponent<props> = (props: props) => {
+export const Map: FunctionComponent<Props> = (props: Props) => {
   const markerCord = {
     latitude: parseFloat(props.product.data.latitude),
     longitude: parseFloat(props.product.data.longitude),
   };
+  const { locale } = useContext(UserContext);
+  const product = props.product;
+  const productDescription =
+    product.data.descriptions[
+      product.data.languages.includes(locale) ? locale : LocaleType.EN
+    ];
 
   return (
     <View
       style={{
         padding: 20,
-        borderBottomColor: "#F6F6F8",
+        borderBottomColor: '#F6F6F8',
         borderBottomWidth: 5,
-        height: 354,
-      }}
-    >
-      <H1Text>{i18n.t("product_label.address")}</H1Text>
+        height: 300,
+      }}>
+      {/* <H1Text>{i18n.t("product_label.address")}</H1Text> */}
+      <H1Text>{i18n.t('product_label.address')}</H1Text>
       <View
         style={{
-          width: "100%",
+          width: '100%',
           height: 180,
           borderRadius: 5,
-        }}
-      >
+        }}>
         <MapView
           style={styles.mapStyle}
           initialRegion={{
@@ -70,20 +73,17 @@ export const Map: FunctionComponent<props> = (props: props) => {
             longitude: parseFloat(props.product.data.longitude),
             latitudeDelta: 0.007,
             longitudeDelta: 0.007,
-          }}
-        >
+          }}>
           <Marker coordinate={markerCord} />
         </MapView>
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <GText>{i18n.t("product_label.location")}</GText>
-          <PText>{props.product.data.descriptions["en"].address}</PText>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <GText>{i18n.t('product_label.location')}</GText>
+          <PText>{productDescription.address}</PText>
         </View>
-        <View>{videoButton(() => { })}</View>
       </View>
     </View>
   );
@@ -92,47 +92,17 @@ export const Map: FunctionComponent<props> = (props: props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mapStyle: {
     // width: Dimensions.get("window").width,
     // height: Dimensions.get("window").height,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 20,
     height: 180,
-    width: "100%",
+    width: '100%',
     borderRadius: 5,
   },
 });
-
-const videoButton = (handler: () => void) => {
-  return (
-    <TouchableOpacity
-      onPress={handler}
-      style={{
-        marginTop: 20,
-        paddingTop: 12,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignContent: "center",
-        width: "100%",
-        height: 40,
-        backgroundColor: "#F6F6F8",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#D0D8DF",
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 14,
-          color: "#1C1C1C",
-        }}
-      >
-        {i18n.t("product_label.property_video") + " >"}
-      </Text>
-    </TouchableOpacity>
-  );
-};

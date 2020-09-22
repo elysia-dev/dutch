@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { View, Text } from "react-native";
-import i18n from "../../../i18n/i18n";
-import styled from "styled-components/native";
+import React, { Component } from 'react';
+import styled from 'styled-components/native';
+import { View, Text } from 'react-native';
+import i18n from '../../../i18n/i18n';
 
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
@@ -11,17 +11,17 @@ const ExpTimeText = styled.Text`
   text-align: center;
 `;
 
-interface props {
+interface Props {
   verif?: string;
 }
 
-interface state {
+interface State {
   minutes: number;
   seconds: number;
 }
 
-export class Timer extends Component<props, state> {
-  constructor(props: props) {
+export class Timer extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       minutes: 10,
@@ -67,10 +67,9 @@ export class Timer extends Component<props, state> {
       <View
         style={{
           width: 50,
-        }}
-      >
+        }}>
         {this.state.minutes === 0 && this.state.seconds === 0 ? (
-          <ExpTimeText>{i18n.t("register.expired_time")}</ExpTimeText>
+          <ExpTimeText>{i18n.t('account.expired_time')}</ExpTimeText>
         ) : (
           <ExpTimeText>
             {this.state.minutes}:

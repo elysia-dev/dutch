@@ -13,7 +13,7 @@ const handleThemeType = (variant: string) => {
     case "GrayTheme":
       return "border: 0px solid #FFFFFF; background-color: #AAAAAA;";
     default:
-      return "border: 0px solid #FFFFFF; background-color: #2c6190;";
+      return "border: 0px solid #FFFFFF; background-color:#3679B5;";
   }
 };
 const handleThemeWrapperType = (variant: string) => {

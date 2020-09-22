@@ -1,22 +1,26 @@
-import React, { Component } from "react";
-import { TouchableOpacity, Platform, SafeAreaView } from "react-native";
-import { Camera } from "expo-camera";
-import * as Permissions from "expo-permissions";
-import * as ImagePicker from "expo-image-picker";
-import * as MediaLibrary from "expo-media-library";
+/* eslint-disable @typescript-eslint/camelcase */
+import React, { Component } from 'react';
+import { TouchableOpacity, Platform, SafeAreaView } from 'react-native';
+import { Camera } from 'expo-camera';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
 
-import styled from "styled-components/native";
-import ReversePng from "./images/reverse.png";
-import RecordPng from "./images/recordbutton.png";
-import { Ionicons } from "@expo/vector-icons";
-import i18n from "../../i18n/i18n";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { RouteProp } from '@react-navigation/native';
 
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { KycPage } from "../../enums/pageEnum";
-import CameraPermissionPng from "./images/cameraPermission.png";
-import { RouteProp } from "@react-navigation/native";
+import styled from 'styled-components/native';
+import { Ionicons } from '@expo/vector-icons';
+
+import ReversePng from './images/reverse.png';
+import RecordPng from './images/recordbutton.png';
+import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+
+import { KycPage } from '../../enums/pageEnum';
+import CameraPermissionPng from './images/cameraPermission.png';
+import { Photo } from '../../types/Photo';
 
 const HeaderText = styled.Text`
   position: absolute;
@@ -156,7 +160,7 @@ const CameraInnerRightBottomLine = styled.View`
   left: 89%;
 `;
 const TakeIdDeniedWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === "android" ? "25px" : "0px"};
+  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
   flex: 1;
   background-color: #ffffff;
 `;
@@ -179,12 +183,12 @@ const DeniedPText = styled.Text`
   width: 90%;
 `;
 
-interface props {
+interface Props {
   navigation: NavigationScreenProp<any>;
-  route: RouteProp<ParamList, "TakeID">;
+  route: RouteProp<ParamList, 'TakeID'>;
 }
 
-interface state {
+interface State {
   hasPermission: boolean;
   type: any;
 }
@@ -195,9 +199,9 @@ type ParamList = {
   };
 };
 
-export class TakeID extends Component<props, state> {
+export class TakeID extends Component<Props, State> {
   camera: any;
-  constructor(props: props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       hasPermission: false,
@@ -206,18 +210,18 @@ export class TakeID extends Component<props, state> {
   }
 
   componentDidMount() {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        (status) => {
+        status => {
           if (!status.granted) {
-            alert("Sorry, we need camera roll permissions to make this work!");
+            alert('Sorry, we need camera roll permissions to make this work!');
           } else {
             this.setState({ hasPermission: status.granted });
           }
-        }
+        },
       );
     } else {
-      Permissions.askAsync(Permissions.CAMERA).then((status) => {
+      Permissions.askAsync(Permissions.CAMERA).then(status => {
         this.setState({ hasPermission: status.granted });
       });
     }
@@ -232,10 +236,10 @@ export class TakeID extends Component<props, state> {
     });
   };
 
-  takePicture = async () => {
-    const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  takePicture = async (): Promise<Photo | undefined> => {
+    // eslint-disable-next-line @typescript-eslint/camelcase
     if (this.camera) {
-      let idPhoto = await this.camera.takePictureAsync({
+      const idPhoto = await this.camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
@@ -247,7 +251,7 @@ export class TakeID extends Component<props, state> {
   };
 
   pickImage = async () => {
-    let selfieAlbum = await ImagePicker.launchImageLibraryAsync({
+    const selfieAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       base64: true,
@@ -257,22 +261,23 @@ export class TakeID extends Component<props, state> {
 
   render() {
     const { route, navigation } = this.props;
+    // eslint-disable-next-line @typescript-eslint/camelcase
     const { id_type } = route.params;
 
     if (this.state.hasPermission === false) {
       return (
-        <TakeIdDeniedWrapper style={{ display: "flex" }}>
+        <TakeIdDeniedWrapper style={{ display: 'flex' }}>
           <BackButton
             handler={() => navigation.goBack()}
             style={{ marginTop: 30, marginLeft: 20 }}
           />
           <CameraPermissionImg source={CameraPermissionPng} />
-          <DeniedH1Text>{i18n.t("kyc.camera_access_denied")}</DeniedH1Text>
-          <DeniedPText>{i18n.t("kyc.camera_access_denied_text")}</DeniedPText>
+          <DeniedH1Text>{i18n.t('kyc.camera_access_denied')}</DeniedH1Text>
+          <DeniedPText>{i18n.t('kyc.camera_access_denied_text')}</DeniedPText>
           <SubmitButton
-            title={i18n.t("kyc_label.camera_access_return")}
+            title={i18n.t('kyc_label.camera_access_return')}
             handler={() => navigation.goBack()}
-            style={{ marginTop: "auto", marginBottom: 10 }}
+            style={{ marginTop: 'auto', marginBottom: 10 }}
           />
         </TakeIdDeniedWrapper>
       );
@@ -282,18 +287,17 @@ export class TakeID extends Component<props, state> {
           <Camera
             style={{
               flex: 1,
-              width: "100%",
-              position: "relative",
+              width: '100%',
+              position: 'relative',
               top: 0,
-              height: "100%",
+              height: '100%',
               // borderColor: "black",
               // borderWidth: 1,
             }}
             type={this.state.type}
-            ref={(ref) => {
+            ref={ref => {
               this.camera = ref;
-            }}
-          >
+            }}>
             <HeaderCameraWrapper>
               <HeaderTextWrapper>
                 <BackButton
@@ -303,23 +307,6 @@ export class TakeID extends Component<props, state> {
                 />
                 <HeaderText>{i18n.t(`kyc_label.${id_type}`)}</HeaderText>
               </HeaderTextWrapper>
-              {/*}
-                <View
-                  style={{
-                    position: "relative",
-                    flex: 1,
-                    backgroundColor: "transparent",
-                    flexDirection: "row",
-                    borderColor: "white",
-                    borderWidth: 2,
-                    marginLeft: 15,
-                    marginRight: 15,
-                    height: 200,
-                    top: 100,
-                  }}
-                >
-                </View>
-                */}
             </HeaderCameraWrapper>
             <CameraFocusWrapper>
               <CameraFocusLeft />
@@ -334,51 +321,48 @@ export class TakeID extends Component<props, state> {
               <CameraFocusRight />
             </CameraFocusWrapper>
             <BottomCameraWrapper>
-              <H1Text>{i18n.t("kyc.kyc_take_ID")}</H1Text>
-              <PText>{i18n.t("kyc.kyc_take_ID_text")}</PText>
+              <H1Text>{i18n.t('kyc.take_ID')}</H1Text>
+              <PText>{i18n.t('kyc.take_ID_text')}</PText>
               <BottomButtonWrapper>
                 <TouchableOpacity
                   style={{
-                    alignSelf: "flex-end",
-                    alignItems: "center",
-                    backgroundColor: "transparent",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
                     navigation.navigate(KycPage.ConfirmID, {
                       idPhoto: await this.pickImage(),
-                      id_type: id_type,
+                      id_type,
                       // photoId_hash: photoId_hash,
                     });
-                  }}
-                >
+                  }}>
                   <Ionicons
                     name="ios-photos"
-                    style={{ color: "#fff", fontSize: 40 }}
+                    style={{ color: '#fff', fontSize: 40 }}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     flex: 0.1,
-                    alignSelf: "flex-end",
-                    alignItems: "center",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
                   }}
                   onPress={async () => {
                     navigation.navigate(KycPage.ConfirmID, {
-                      id_type: id_type,
+                      id_type,
                       idPhoto: await this.takePicture(),
                     });
-                  }}
-                >
+                  }}>
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
                     flex: 0.1,
-                    alignSelf: "flex-end",
-                    alignItems: "center",
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
                   }}
-                  onPress={this.reverseCamera}
-                >
+                  onPress={this.reverseCamera}>
                   <ButtonImg source={ReversePng} />
                 </TouchableOpacity>
               </BottomButtonWrapper>

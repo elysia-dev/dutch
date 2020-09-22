@@ -1,12 +1,10 @@
 {
-  "checking_account": {
+  "account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "check_email": "이메일 주소를 확인해주세요.",
     "try_again_later": "동일한 이메일의 인증 요청은 5분 뒤에 가능해요.",
     "invalid_email": "올바르지 않은 이메일 형식이에요.",
-    "need_login": "로그인되지 않았습니다. 로그인을 진행해주세요."
-  },
-  "register": {
+    "need_login": "로그인되지 않았습니다. 로그인을 진행해주세요.",
     "authentication_signup": "메일을 인증해주세요.",
     "authentication_recover": "인증코드를 입력해주세요.",
     "authentication_signup_label": "회원가입 진행을 위해 해당 메일로 인증코드를 보냈어요\n메일 확인 후, 인증을 진행해주세요.",
@@ -15,9 +13,7 @@
     "expired_time": "만료",
     "expired_verification": "인증이 만료되었어요. 다시 인증을 요청해 주세요.",
     "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)",
-    "resend_verification": "인증이 재요청되었습니다. 새로운 인증번호를 확인해주세요."
-  },
-  "account_check": {
+    "resend_verification": "인증이 재요청되었습니다. 새로운 인증번호를 확인해주세요.",
     "insert_password": "비밀번호를 입력해주세요.",
     "insert_current_password": "기존 비밀번호를 입력해주세요.",
     "insert_new_password": "변경할 비밀번호를 입력해주세요.",
@@ -30,25 +26,21 @@
     "recover_verification_error": "사용자를 찾을 수 없어요. 처음부터 다시 진행해주세요.",
     "reset_current_error": "기존 비밀번호가 맞지 않아요. 처음부터 다시 진행해주세요.",
     "reset_current_same": "기존 비밀번호와 다른 번호로 변경해 주세요.",
-    "reset_error": "비밀번호 변경 오류입니다. 처음부터 다시 진행해주세요."
-  },
-  "lock_account": {
+    "reset_error": "비밀번호 변경 오류입니다. 처음부터 다시 진행해주세요.",
     "lockdown": "계정이 잠겼습니다!",
     "lockdown_text": "로그인 시도 5회 실패로 인해 보호조치 되었어요. 이메일 주소로 전송된 인증코드를 입력 해주세요.",
     "resending_code_mail_label": "혹시 메일이 오지 않았나요?",
     "resending_code_mail_link": "다시 전송하기"
   },
-  "errors": {
-    "messages": {
-      "wrong_email": "잘못된 이메일 형식이에요.",
-      "password_do_not_match": "비밀번호가 일치하지 않아요.",
-      "authentication_code_do_not_match": "인증번호가 일치하지 않아요.",
-      "password_too_short": "비밀번호는 최소 8자리여야 해요.",
-      "simple_password": "비밀번호는 영문, 숫자가 모두 포함되어야 해요.",
-      "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다",
-      "server": "서버 통신 오류입니다. 담당자에게 문의하세요.",
-      "duplicate_email": "이메일 중복 오류입니다. 다른 이메일로 다시 진행해 주세요."
-    }
+  "account_errors": {
+    "wrong_email": "잘못된 이메일 형식이에요.",
+    "password_do_not_match": "비밀번호가 일치하지 않아요.",
+    "authentication_code_do_not_match": "인증번호가 일치하지 않아요.",
+    "password_too_short": "비밀번호는 최소 8자리여야 해요.",
+    "simple_password": "비밀번호는 영문, 숫자가 모두 포함되어야 해요.",
+    "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다",
+    "server": "서버 통신 오류입니다. 담당자에게 문의하세요.",
+    "duplicate_email": "이메일 중복 오류입니다. 다른 이메일로 다시 진행해 주세요."
   },
   "account_label": {
     "account_email": "이메일",
@@ -88,27 +80,27 @@
     "female": "여성"
   },
   "kyc": {
-    "start_kyc": "KYC 인증하기",
-    "start_kyc_text": "약 2분 정도의 시간이 소요될 예정이예요.",
-    "start_kyc_step1": "신분증 사진 촬영하기",
-    "start_kyc_step2": "신분증 들고 셀카 촬영하기",
-    "start_kyc_step3": "개인정보 입력하기",
-    "kyc_step1": "1. 신분증 선택하기",
-    "kyc_step1_text": "다음 단계에서 선택한 신분증으로 촬영할 예정이예요.",
-    "kyc_step1_complete": "1. 신분증 촬영완료",
-    "kyc_step1_complete_text": "신분증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
-    "kyc_step3": "3. 개인정보 입력하기",
-    "kyc_step3_text": "개인정보를 정확하게 기입해주세요.",
-    "kyc_step2": "2. 셀피 촬영하기",
-    "kyc_step2_text": "본인인증 사진을 흔들림, 합성 없이 명확하게 촬영해주세요.",
-    "kyc_step2_desc1": "1단계에서 촬영한 신분증과 함께 셀카를 촬영해주세요.",
-    "kyc_step2_desc2": "1단계에서 입력하신 내용과 신분증의 정보가 같아야해요.",
-    "kyc_step2_complete": "2. 셀피 촬영완료",
-    "kyc_step2_complete_text": "본인인증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
-    "kyc_take_ID": "신분증 앞면 촬영하기",
-    "kyc_take_ID_text": "신분증의 모든 모서리가 명확히 보여야합니다.",
-    "kyc_submit": "KYC 인증 제출이 완료되었어요!",
-    "kyc_submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요.",
+    "start": "KYC 인증하기",
+    "start_text": "약 2분 정도의 시간이 소요될 예정이예요.",
+    "start_step1": "신분증 사진 촬영하기",
+    "start_step2": "신분증 들고 셀카 촬영하기",
+    "start_step3": "개인정보 입력하기",
+    "step1": "1. 신분증 선택하기",
+    "step1_text": "다음 단계에서 선택한 신분증으로 촬영할 예정이예요.",
+    "step1_complete": "1. 신분증 촬영완료",
+    "step1_complete_text": "신분증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
+    "step2": "2. 셀피 촬영하기",
+    "step2_text": "본인인증 사진을 흔들림, 합성 없이 명확하게 촬영해주세요.",
+    "step2_desc1": "1단계에서 촬영한 신분증과 함께 셀카를 촬영해주세요.",
+    "step2_desc2": "1단계에서 입력하신 내용과 신분증의 정보가 같아야해요.",
+    "step2_complete": "2. 셀피 촬영완료",
+    "step2_complete_text": "본인인증 사진이 흔들림, 합성 없이 명확하게 촬영되었나요?",
+    "step3": "3. 개인정보 입력하기",
+    "step3_text": "개인정보를 정확하게 기입해주세요.",
+    "take_ID": "신분증 앞면 촬영하기",
+    "take_ID_text": "신분증의 모든 모서리가 명확히 보여야합니다.",
+    "submit": "KYC 인증 제출이 완료되었어요!",
+    "submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요.",
     "alert_id": "신분증을 선택해주세요.",
     "alert_data": "개인정보를 모두 입력해주세요.",
     "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요.",
@@ -119,14 +111,12 @@
     "decline_warning": "다음사항에 해당되는 경우에는 KYC승인이 거절될 수 있어요.",
     "accepted_shoot": "참고완료, 촬영하기",
     "decline_case1": "포토샵 처리된 이미지를 제출한 경우",
-    "decline_case2": "신분증과 함께가 아닌 셀피사진만 제출한 경우",
+    "decline_case2": "신분증과 함께가 아닌 셀피 사진만 제출한 경우",
     "decline_case3": "입력하신 내용이 신분증 상의 정보와 다른 경우",
     "decline_case4": "사진, 성명, 생년월일, 국적 중 하나 또는 복수 항목이 없는 신분증을 제출한 경우",
     "decline_case5": "주민등록번호 뒷자리를 가리지 않고 제출한 경우(한국인만 해당됩니다)"
   },
-  "product": {
-    "filter_text": "어떻게 필터링 해드릴까요."
-  },
+  "product": {},
   "product_financial": {
     "expected_annual_return": "예상 연 수익률",
     "return_rent": "월세",
@@ -151,27 +141,20 @@
     "security_facilities": "보안시설"
   },
   "product_label": {
-    "select_nationality": "국가 선택",
-    "select_payment": "결제수단 선택",
-    "set_again": "재설정하기",
-    "set_filter": "필터설정하기",
-    "korean": "한국인",
-    "foreigner": "외국인",
-    "sorting_return": "수익률순",
-    "sorting_popularity": "인기순",
-    "filter": "필터",
+    "product": "상품",
     "expected_annual_return": "연 %{return}%",
     "return_on_rent": "월세",
     "return_on_sale": "매매차익",
     "expected_annual_rate": "예상 연수익률",
     "rent_distribution": "월세 분배일",
+    "property_type": "상품분류",
     "price_per_token": "토큰당 가격",
     "return_method": "지급수단",
     "return_calculator": "예상 수익률 계산기",
     "investment": "투자금",
     "expected_return": "예상 수익금",
     "more_info": "자세히",
-    "invest_now": "지금 투자하기",
+    "invest": "구매하기",
     "address": "주소",
     "location": "위치",
     "property_info": "부동산 정보",
@@ -179,9 +162,10 @@
     "financials": "재무정보",
     "property_highlightes": "부동산 핵심정보",
     "product_info": "상품 정보",
-    "abstract": "요약"
+    "abstract": "요약",
+    "buy": "지분 구매하기"
   },
-  "info_label": {
+  "more_label": {
     "need_kyc_label": "KYC 인증을 진행해주세요.",
     "need_kyc": "KYC 인증이 필요합니다.",
     "proceed_kyc": "KYC 인증이 진행중입니다.",
@@ -189,7 +173,6 @@
     "confirm": "확인하기",
     "investment_history": "투자내역",
     "transaction_history": "거래내역",
-    "progress_history": "진행내역",
     "elysia": "엘리시아",
     "notice": "공지사항",
     "service_terms": "서비스 이용약관",
@@ -201,7 +184,6 @@
     "name": "이름",
     "gender": "성별",
     "nationality": "국가",
-    "signout": "회원탈퇴",
     "my_inv_history": "나의 투자내역",
     "product_name": "상품명",
     "entire_profit": "전체 수익률",
@@ -222,29 +204,46 @@
     "app_setting": "앱 설정",
     "language": "언어",
     "el_exchange": "EL 거래소",
-    "search": "검색하기"
+    "search": "검색하기",
+    "contact_contents": "남기실 문의사항",
+    "tel": "전화번호"
   },
-  "info": {
+  "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
-    "no_transaction": "해당기간 내 거래내역이 없습니다."
+    "no_transaction": "해당기간 내 거래내역이 없습니다.",
+    "contact_text": "아래 문의사항을 작성 후 제출해주세요.",
+    "elysia_contact": "엘리시아에 문의 남기기"
   },
   "dashboard_label": {
-    "total_value": "총 자산가치",
-    "average_profit": "총 평균수익률",
-    "rent_rate": "월세 수익률",
-    "monthly_profit": "이번달 수익",
-    "expected_sale_rate": "매매 예상수익률",
-    "my_investment": "내 투자 현황",
-    "product_name": "상품명",
-    "total_profit": "전체 수익률",
-    "expected_sale_profit": "예상 매각 수익",
-    "property_value": "부동산가치",
-    "usd": "보유 USD",
-    "el": "보유 EL",
-    "more_history": "더보기"
+    "asset_report": "자산 내역",
+    "total_property": "총 부동산 자산가치",
+    "total_interest": "누적 이자수익",
+    "withdrawn_interest": "출금완료 이자수익",
+    "available_interest": "출금가능 이자수익"
   },
-  "dashboard": {
-    "total_value_desc": "부동산가치 + 보유 USD + 보유 EL + 보유 BTC + 보유 ETH (세금, 수수료 제외)",
-    "average_profit_desc": "월세 수익률 + 매매 예상수익률"
+  "dashboard": {},
+  "notification": {
+    "closeOwnership": " %{name} 종료로 소유권이 만료되었습니다.",
+    "weeklyReport": " %{month}월 %{week}주차 주간 레포트가 발행되었습니다.",
+    "monthlyReport": "%{month}월 월간 레포트가 발행되었습니다.",
+    "successKyc": "KYC가 승인되었습니다.",
+    "failKyc": "KYC가 거절되었습니다.",
+    "newDevice": "새로운 기기(%{device})로 로그인 되었습니다.",
+    "profit": "일일 이자 $%{profit} 적립되었습니다.",
+    "productNotice": "상품 관련 새로운 공지사항이 있습니다.",
+    "elysiaNotice": "새로운 공지사항이 있습니다."
+  },
+  "notification_label": {
+    "notification": "알림",
+    "closeOwnership": "소유권 만료",
+    "weeklyReport": "주간 레포트",
+    "monthlyReport": "월간 레포트",
+    "successKyc": "KYC 승인",
+    "failKyc": "KYC 거절",
+    "newDevice": "새로운 기기",
+    "profit": "이자 수익",
+    "productNotice": "상품 공지",
+    "elysiaNotice": "엘리시아 공지",
+    "date_format": "%m월 %d일"
   }
 }

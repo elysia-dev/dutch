@@ -1,18 +1,18 @@
-import React, { FunctionComponent, useState } from "react";
-import { TextField } from "../../shared/components/TextField";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import { H1Text } from "../../shared/components/H1Text";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import Api from "../../api/account";
-import { AccountPage } from "../../enums/pageEnum";
-import AccountLayout from "../../shared/components/AccountLayout";
-import checkMail from "../../utiles/checkMail";
-import { useNavigation } from "@react-navigation/native";
+import React, { FunctionComponent, useState } from 'react';
+import { TextField } from '../../shared/components/TextField';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import { H1Text } from '../../shared/components/H1Text';
+import styled from 'styled-components/native';
+import i18n from '../../i18n/i18n';
+import Api from '../../api/account';
+import { AccountPage } from '../../enums/pageEnum';
+import AccountLayout from '../../shared/components/AccountLayout';
+import checkMail from '../../utiles/checkMail';
+import { useNavigation } from '@react-navigation/native';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
-    email: "",
+    email: '',
     errorLength: 1,
     errorReg: 0,
   });
@@ -21,27 +21,27 @@ const InitializeEmail: FunctionComponent = () => {
 
   const callEmailApi = () => {
     if (!state.email) {
-      alert(i18n.t("checking_account.insert_account_email"));
+      alert(i18n.t('account.insert_account_email'));
       return;
     }
 
     Api.initializeEmail(state.email)
-      .then((res) => {
+      .then(res => {
         navigation.navigate(
-          res.data.status == "exist"
+          res.data.status === 'exist'
             ? AccountPage.Login
             : AccountPage.CertifySignup,
           {
             verificationId: res.data.verificationId,
             email: state.email,
-          }
+          },
         );
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
-          alert(i18n.t("checking_account.try_again_later"));
+          alert(i18n.t('account.try_again_later'));
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.messages.server"));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };
@@ -51,16 +51,16 @@ const InitializeEmail: FunctionComponent = () => {
       title={
         <H1Text
           style={{ paddingTop: 53 }}
-          label={i18n.t("checking_account.insert_account_email")}
+          label={i18n.t('checking_account.insert_account_email')}
         />
       }
       body={
         <TextField
-          label={i18n.t("account_label.account_email")}
+          label={i18n.t('account_label.account_email')}
           eventHandler={(input: string) => {
             setState({
               email: input,
-              errorLength: input.length == 0 ? 1 : 0,
+              errorLength: input.length === 0 ? 1 : 0,
               errorReg: checkMail(input) ? 0 : 1,
             });
           }}
@@ -71,10 +71,10 @@ const InitializeEmail: FunctionComponent = () => {
         <SubmitButton
           title={
             state.errorLength == 1
-              ? i18n.t("checking_account.insert_account_email")
+              ? i18n.t('checking_account.insert_account_email')
               : state.errorReg == 1
-              ? i18n.t("checking_account.check_email")
-              : i18n.t("account_label.continue")
+              ? i18n.t('checking_account.check_email')
+              : i18n.t('account_label.continue')
           }
           handler={
             state.errorLength == 1 || state.errorReg === 1
@@ -83,7 +83,7 @@ const InitializeEmail: FunctionComponent = () => {
           }
           variant={
             state.errorLength === 1 || state.errorReg === 1
-              ? "GrayTheme"
+              ? 'GrayTheme'
               : undefined
           }
         />

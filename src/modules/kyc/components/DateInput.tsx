@@ -48,7 +48,7 @@ export const DateInput: FunctionComponent<props> = (props) => {
         cancelBtnText="Cancel"
         customStyles={{
           btnTextConfirm: {
-            color: "#2C6190",
+            color: "#3679B5",
           },
           dateIcon: {
             opacity: 0,

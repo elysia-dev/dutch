@@ -1,13 +1,13 @@
-import React, { FunctionComponent, useState } from "react";
-import { Text, View } from "react-native";
-import { TextField } from "../../shared/components/TextField";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import Api from "../../api/account";
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
-import AccountLayout from "../../shared/components/AccountLayout";
+import React, { FunctionComponent, useState } from 'react';
+import { Text, View } from 'react-native';
+import { TextField } from '../../shared/components/TextField';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import styled from 'styled-components/native';
+import i18n from '../../i18n/i18n';
+import Api from '../../api/account';
+import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
+import AccountLayout from '../../shared/components/AccountLayout';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -33,45 +33,45 @@ type ParamList = {
 const ResetPassword: FunctionComponent = () => {
   const [state, setState] = useState({
     step: 1,
-    password: "",
-    passwordConfirmation: "",
+    password: '',
+    passwordConfirmation: '',
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "ResetPassword">>();
+  const route = useRoute<RouteProp<ParamList, 'ResetPassword'>>();
 
   const callChangeApi = () => {
-    if (state.password != state.passwordConfirmation) {
-      alert(i18n.t("errors.messages.password_do_not_match"));
+    if (state.password !== state.passwordConfirmation) {
+      alert(i18n.t('account_errors.password_do_not_match'));
       return;
     } else if (state.password.length < 8) {
-      alert(i18n.t("errors.messages.password_too_short"));
+      alert(i18n.t('account_errors.password_too_short'));
       return;
-    } else if (state.password == route.params.currentPassword) {
-      alert(i18n.t("account_check.reset_current_same"));
+    } else if (state.password === route.params.currentPassword) {
+      alert(i18n.t('account.reset_current_same'));
       return;
     } else {
       Api.resetPassword(state.password, route.params.currentPassword)
-        .then((res) => {
+        .then(res => {
           // info페이지로 다시 돌아가게 해야함 !!
-          if (res.data.status === "success") {
-            alert(i18n.t("account_check.password_changed"));
-          } else if (res.data.status === "wrong") {
-            alert(i18n.t("account_check.reset_current_error"));
-          } else if (res.data.status === "same") {
-            alert(i18n.t("account_check.reset_current_same"));
+          if (res.data.status === 'success') {
+            alert(i18n.t('account.password_changed'));
+          } else if (res.data.status === 'wrong') {
+            alert(i18n.t('account.reset_current_error'));
+          } else if (res.data.status === 'same') {
+            alert(i18n.t('account.reset_current_same'));
           }
-          navigation.navigate("Main", { screen: "Info" });
+          navigation.navigate('Main', { screen: 'MoreMain' });
         })
-        .catch((e) => {
+        .catch(e => {
           if (e.response.status === 400) {
-            alert(i18n.t("account_check.reset_error"));
+            alert(i18n.t('account.reset_error'));
           } else if (e.response.status === 401) {
-            alert(i18n.t("account_check.recover_verification_error"));
+            alert(i18n.t('account.recover_verification_error'));
           } else if (e.response.status === 500) {
-            alert(i18n.t("errors.messages.server"));
+            alert(i18n.t('account_errors.server'));
           }
-          navigation.navigate("Main", { screen: "Info" });
+          navigation.navigate('Main', { screen: 'MoreMain' });
         });
     }
   };
@@ -82,18 +82,18 @@ const ResetPassword: FunctionComponent = () => {
         <>
           <BackButton
             handler={() => {
-              state.step == 2
+              state.step === 2
                 ? setState({ ...state, step: 1 })
                 : navigation.goBack();
             }}
             style={{ marginTop: 201, marginBottom: 20 }}
           />
           <View>
-            <Text>비밀번호 변경</Text>
+            <Text>{i18n.t('account_label.change_password')}</Text>
             <H1Text>
-              {state.step == 1
-                ? i18n.t("account_check.insert_new_password")
-                : i18n.t("account_check.password_confirm")}
+              {state.step === 1
+                ? i18n.t('account.insert_new_password')
+                : i18n.t('account.password_confirm')}
             </H1Text>
           </View>
         </>
@@ -102,31 +102,31 @@ const ResetPassword: FunctionComponent = () => {
         <>
           {state.step == 2 && (
             <TextField
-              label={i18n.t("account_label.account_password_confirm")}
+              label={i18n.t('account_label.account_password_confirm')}
               edit={true}
-              eventHandler={(input: string) =>
+              eventHandler={(input: string): void =>
                 setState({ ...state, passwordConfirmation: input })
               }
-              value={""}
+              value={''}
               secure={true}
             />
           )}
           <TextField
-            label={i18n.t("account_label.new_password")}
+            label={i18n.t('account_label.new_password')}
             edit={state.step == 1 ? true : false}
             eventHandler={
-              state.step == 1
+              state.step === 1
                 ? (input: string) => setState({ ...state, password: input })
                 : () => {}
             }
-            value={""}
+            value={''}
             secure={true}
           />
           {state.password === route.params.currentPassword && (
-            <PText>{i18n.t("account_check.reset_current_same")}</PText>
+            <PText>{i18n.t('account.reset_current_same')}</PText>
           )}
           <TextField
-            label={i18n.t("account_label.current_password")}
+            label={i18n.t('account_label.current_password')}
             editable={false}
             eventHandler={() => {}}
             value={route.params.currentPassword}
@@ -138,10 +138,10 @@ const ResetPassword: FunctionComponent = () => {
         <>
           {state.step == 1 ? (
             <SubmitButton
-              title={i18n.t("account_label.continue")}
+              title={i18n.t('account_label.continue')}
               handler={() => {
-                if (state.password === "") {
-                  alert(i18n.t("account_check.insert_password"));
+                if (state.password === '') {
+                  alert(i18n.t('account_check.insert_password'));
                   return;
                 }
                 setState({ ...state, step: 2 });
@@ -149,7 +149,7 @@ const ResetPassword: FunctionComponent = () => {
             />
           ) : (
             <SubmitButton
-              title={i18n.t("account_label.change")}
+              title={i18n.t('account_label.change')}
               handler={() => callChangeApi()}
             />
           )}

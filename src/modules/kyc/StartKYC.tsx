@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
 import { View, Text } from "react-native";
+import styled from "styled-components/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import ClockPng from "./images/clock.png";
-import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { KycPage } from "../../enums/pageEnum";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -76,7 +76,7 @@ export const StartKYC: FunctionComponent<{}> = () => {
         }}
         style={{ marginLeft: "5%" }}
       />
-      <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
+      <H1Text>{i18n.t("kyc.start")}</H1Text>
       <View
         style={{
           flexDirection: "row",
@@ -84,25 +84,30 @@ export const StartKYC: FunctionComponent<{}> = () => {
           marginLeft: 20,
         }}
       >
+<<<<<<< HEAD
         <ClockImg
           source={ClockPng}
           style={{ marginTop: 2, resizeMode: "center" }}
         />
         <Text>{i18n.t("kyc.start_kyc_text")}</Text>
+=======
+        <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
+        <Text>{i18n.t("kyc.start_text")}</Text>
+>>>>>>> 3ea6f7771dcf2eb08cffe3b7a9eeb0a4f9e06da2
       </View>
       <KycGuideWrapper style={{ marginTop: 20 }}>
         <HrLine />
         <CircleWrapper>
           <Circle>1</Circle>
-          <CircleText>{i18n.t("kyc.start_kyc_step1")}</CircleText>
+          <CircleText>{i18n.t("kyc.start_step1")}</CircleText>
         </CircleWrapper>
         <CircleWrapper>
           <Circle>2</Circle>
-          <CircleText>{i18n.t("kyc.start_kyc_step2")}</CircleText>
+          <CircleText>{i18n.t("kyc.start_step2")}</CircleText>
         </CircleWrapper>
         <CircleWrapper>
           <Circle>3</Circle>
-          <CircleText>{i18n.t("kyc.start_kyc_step3")}</CircleText>
+          <CircleText>{i18n.t("kyc.start_step3")}</CircleText>
         </CircleWrapper>
       </KycGuideWrapper>
       <View style={{ marginTop: "auto", marginBottom: 10 }}>
@@ -120,9 +125,9 @@ export const StartKYC: FunctionComponent<{}> = () => {
         <SubmitButton
           title={i18n.t("kyc_label.agree_start")}
           handler={() =>
-            state.agree === false
+            (state.agree === false
               ? alert(i18n.t("kyc.argos"))
-              : navigation.navigate(KycPage.SelectID)
+              : navigation.navigate(KycPage.SelectID))
           }
           ButtonTheme={state.agree === false ? "GrayTheme" : undefined}
         />

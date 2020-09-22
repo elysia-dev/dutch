@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useContext, useState } from "react";
-import { View, TouchableOpacity, Image } from "react-native";
-import i18n from "../../../i18n/i18n";
-import styled from "styled-components/native";
-import Product from "../../../types/product";
-import UserContext from "../../../contexts/UserContext";
-import LocaleType from "../../../enums/LocaleType";
+import React, { FunctionComponent, useContext, useState } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import i18n from '../../../i18n/i18n';
+import styled from 'styled-components/native';
+import Product from '../../../types/product';
+import UserContext from '../../../contexts/UserContext';
+import LocaleType from '../../../enums/LocaleType';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -38,11 +38,11 @@ const DesView = styled.View`
   justify-content: space-between;
 `;
 
-interface props {
+interface Props {
   product: Product;
 }
 
-const WrappedInfo: FunctionComponent<props> = (props: props) => {
+const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
     financial: false,
     highlight: false,
@@ -58,37 +58,34 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
     ];
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: '100%', paddingBottom: 60 }}>
       <View
         style={{
           padding: 20,
-          borderBottomColor: "#F6F6F8",
+          borderBottomColor: '#F6F6F8',
           borderBottomWidth: 5,
-        }}
-      >
-        <H1Text>{i18n.t("product_label.property_info")}</H1Text>
+        }}>
+        <H1Text>{i18n.t('product_label.property_info')}</H1Text>
         <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
-            onPress={() => setState({ ...state, financial: !state.financial })}
-          >
+            onPress={() => setState({ ...state, financial: !state.financial })}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <MText>{i18n.t("product_label.financials")}</MText>
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <MText>{i18n.t('product_label.financials')}</MText>
               <Image
-                source={require("../images/downbutton.png")}
+                source={require('../images/downbutton.png')}
                 style={[
                   {
                     width: 20,
                     height: 17,
-                    resizeMode: "center",
+                    resizeMode: 'center',
                   },
                   {
                     transform: [
-                      { rotate: state.financial ? "180deg" : "0deg" },
+                      { rotate: state.financial ? '180deg' : '0deg' },
                     ],
                   },
                 ]}
@@ -99,49 +96,49 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
             <View style={{ paddingBottom: 20 }}>
               <DesView>
                 <GText>
-                  {i18n.t("product_financial.expected_annual_return")}
+                  {i18n.t('product_financial.expected_annual_return')}
                 </GText>
                 <PText>{`${props.product.data.expectedAnnualReturn}%`}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.return_rent")}</GText>
+                <GText>{i18n.t('product_financial.return_rent')}</GText>
                 <PText>{`${props.product.data.returnOnRent}%`}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.return_sale")}</GText>
+                <GText>{i18n.t('product_financial.return_sale')}</GText>
                 <PText>{`${props.product.data.returnOnSale}%`}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.rent_distribution")}</GText>
+                <GText>{i18n.t('product_financial.rent_distribution')}</GText>
                 <PText>
                   {productDescription.monthlyRentIncomeDistributionCycle}
                 </PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.lockup_period")}</GText>
+                <GText>{i18n.t('product_financial.lockup_period')}</GText>
                 <PText>{productDescription.lockupPeriod}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.expected_sale_date")}</GText>
+                <GText>{i18n.t('product_financial.expected_sale_date')}</GText>
                 <PText>{productDescription.expectedSaleDate}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_financial.price")}</GText>
+                <GText>{i18n.t('product_financial.price')}</GText>
                 <PText>{`${product.data.propertyPrice}$`}</PText>
               </DesView>
 
               <DesView>
-                <GText>{i18n.t("product_financial.net_deposit")}</GText>
+                <GText>{i18n.t('product_financial.net_deposit')}</GText>
                 <PText>{`${product.data.netDeposit}$`}</PText>
               </DesView>
 
               <DesView>
-                <GText>{i18n.t("product_financial.net_rent_year")}</GText>
+                <GText>{i18n.t('product_financial.net_rent_year')}</GText>
                 <PText>{`${product.data.netRentPerYear}$`}</PText>
               </DesView>
 
               <DesView>
-                <GText>{i18n.t("product_financial.bankloan")}</GText>
+                <GText>{i18n.t('product_financial.bankloan')}</GText>
                 <PText>{`${product.data.bankLoan}`}</PText>
               </DesView>
             </View>
@@ -149,26 +146,24 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
         </View>
         <View>
           <TouchableOpacity
-            onPress={() => setState({ ...state, highlight: !state.highlight })}
-          >
+            onPress={() => setState({ ...state, highlight: !state.highlight })}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <MText>{i18n.t("product_label.property_highlightes")}</MText>
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <MText>{i18n.t('product_label.property_highlightes')}</MText>
               <Image
-                source={require("../images/downbutton.png")}
+                source={require('../images/downbutton.png')}
                 style={[
                   {
                     width: 20,
                     height: 17,
-                    resizeMode: "center",
+                    resizeMode: 'center',
                   },
                   {
                     transform: [
-                      { rotate: state.highlight ? "180deg" : "0deg" },
+                      { rotate: state.highlight ? '180deg' : '0deg' },
                     ],
                   },
                 ]}
@@ -178,41 +173,46 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
           {state.highlight && (
             <View style={{ paddingBottom: 20 }}>
               <DesView>
-                <GText>{i18n.t("product_highlight.type")}</GText>
+                <GText>{i18n.t('product_highlight.type')}</GText>
                 <PText>{productDescription.propertyType}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.ground")}</GText>
+                <GText>{i18n.t('product_highlight.ground')}</GText>
                 <PText>{productDescription.ground}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.underground")}</GText>
+                <GText>{i18n.t('product_highlight.underground')}</GText>
                 <PText>{productDescription.underground}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.bedroom")}</GText>
+                <GText>{i18n.t('product_highlight.bedroom')}</GText>
                 <PText>{productDescription.bedroom}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.completion_date")}</GText>
-                <PText>{product.data.buildingCompletionDate}</PText>
+                <GText>{i18n.t('product_highlight.completion_date')}</GText>
+                <PText>
+                  {i18n.strftime(
+                    new Date(product.data.buildingCompletionDate),
+                    '%Y-%m-%d',
+                  )}
+                </PText>
               </DesView>
               <DesView>
                 <GText>
-                  {i18n.t("product_highlight.total_parking_available")}
+                  {i18n.t('product_highlight.total_parking_available')}
                 </GText>
                 <PText>{productDescription.totalParkingAvailable}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.air_conditioning")}</GText>
+                <GText>{i18n.t('product_highlight.air_conditioning')}</GText>
                 <PText>{productDescription.airConditioning}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.heating")}</GText>
+                <GText>{i18n.t('product_highlight.heating')}</GText>
                 <PText>{productDescription.heating}</PText>
               </DesView>
               <DesView>
-                <GText>{i18n.t("product_highlight.security_facilities")}</GText>
+                <GText>{i18n.t('product_highlight.security_facilities')}</GText>
                 <PText>{productDescription.securityFacilities}</PText>
               </DesView>
             </View>
@@ -222,32 +222,29 @@ const WrappedInfo: FunctionComponent<props> = (props: props) => {
       <View
         style={{
           padding: 20,
-          borderBottomColor: "#F6F6F8",
+          borderBottomColor: '#F6F6F8',
           borderBottomWidth: 5,
-        }}
-      >
-        <H1Text>{i18n.t("product_label.product_info")}</H1Text>
+        }}>
+        <H1Text>{i18n.t('product_label.product_info')}</H1Text>
         <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
-            onPress={() => setState({ ...state, abstract: !state.abstract })}
-          >
+            onPress={() => setState({ ...state, abstract: !state.abstract })}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <MText>{i18n.t("product_label.abstract")}</MText>
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <MText>{i18n.t('product_label.abstract')}</MText>
               <Image
-                source={require("../images/downbutton.png")}
+                source={require('../images/downbutton.png')}
                 style={[
                   {
                     width: 20,
                     height: 17,
-                    resizeMode: "center",
+                    resizeMode: 'center',
                   },
                   {
-                    transform: [{ rotate: state.abstract ? "180deg" : "0deg" }],
+                    transform: [{ rotate: state.abstract ? '180deg' : '0deg' }],
                   },
                 ]}
               />

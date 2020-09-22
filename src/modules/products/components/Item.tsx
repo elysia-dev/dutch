@@ -9,6 +9,7 @@ import {
 
 import styled from "styled-components/native";
 import i18n from "../../../i18n/i18n";
+import { Story } from "../../../types/product";
 
 const H1Text = styled.Text`
   font-size: 20px;
@@ -18,81 +19,45 @@ const H1Text = styled.Text`
   font-weight: bold;
 `;
 const PText = styled.Text`
-  font-size: 12px;
-  text-align: center;
-  line-height: 20px;
+  font-size: 13px;
+  color: #4e4e4e;
+  text-align: left;
+  margin-bottom: 8px;
 `;
 
 interface props {
-  annualReturn: string;
+  story: Story;
 }
 
 export const Item: FunctionComponent<props> = (props) => {
   return (
     <View
       style={{
-        backgroundColor: "#fff",
-        marginLeft: "5%",
-        width: "90%",
-        height: 100,
-        borderRadius: 6,
-        elevation: 5,
-        shadowOffset: { width: 0, height: 2 },
-        shadowColor: "#00000029",
+        width: "100%",
+        height: 416,
+        borderRadius: 10,
+        shadowOffset: { width: 2, height: 2 },
+        shadowColor: "#00000033",
         shadowOpacity: 0.8,
-        shadowRadius: 6,
-        flex: 1,
-        flexDirection: "row",
-        padding: 20,
-        marginTop: 10,
-        marginBottom: 10,
+        shadowRadius: 5,
+        marginTop: 15,
+        marginBottom: 15,
       }}
     >
-      <View style={{ flex: 2, flexDirection: "column" }}>
-        <H1Text>
-          {i18n.t("product_label.expected_annual_return", {
-            return: props.annualReturn,
-          })}
-        </H1Text>
-
-        <View style={{ flex: 1, flexDirection: "row", marginTop: 15 }}>
-          <View
-            style={{
-              borderRadius: 3,
-              backgroundColor: "#E6ECF2",
-              width: 50,
-              height: 20,
-              marginRight: 10,
-              justifyContent: "center",
-              alignContent: "center",
-            }}
-          >
-            <PText style={{ color: "#626368" }}>
-              {i18n.t("product_label.return_on_rent")}
-            </PText>
-          </View>
-
-          <View
-            style={{
-              borderRadius: 3,
-              backgroundColor: "#A7A7A7",
-              width: 60,
-              height: 20,
-              justifyContent: "center",
-              alignContent: "center",
-            }}
-          >
-            <PText style={{ color: "#fff" }}>
-              {i18n.t("product_label.return_on_sale")}
-            </PText>
-          </View>
-        </View>
-      </View>
-      <View style={{ flex: 1 }}>
-        <Image
-          source={require("../images/building.png")}
-          style={{ width: "100%", height: "100%", resizeMode: "contain" }}
-        ></Image>
+      <Image
+        source={{ uri: props.story.images }}
+        style={{
+          width: "100%",
+          height: "100%",
+          resizeMode: "cover",
+          borderRadius: 10,
+        }}
+      />
+      <View
+        style={{ position: "absolute", flexDirection: "column", padding: 20 }}
+      >
+        <PText>{props.story.subTitle}</PText>
+        <H1Text>{props.story.title}</H1Text>
       </View>
     </View>
   );

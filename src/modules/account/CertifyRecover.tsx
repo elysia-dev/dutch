@@ -1,26 +1,19 @@
-import React, { FunctionComponent, useState } from "react";
-import { View } from "react-native";
-import { TextField } from "../../shared/components/TextField";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import BorderFlatButton from "../../shared/components/BorderFlatButton";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import Api from "../../api/account";
-import { AccountPage } from "../../enums/pageEnum";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import AccountLayout from "../../shared/components/AccountLayout";
-import { Timer } from "./components/Timer";
-import { H1Text } from "../../shared/components/H1Text";
-import { PText } from "../../shared/components/PText";
-
-interface props {
-  existence: string;
-  certified: string;
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+import React, { FunctionComponent, useState } from 'react';
+import { View } from 'react-native';
+import { TextField } from '../../shared/components/TextField';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import BorderFlatButton from '../../shared/components/BorderFlatButton';
+import styled from 'styled-components/native';
+import i18n from '../../i18n/i18n';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import Api from '../../api/account';
+import { AccountPage } from '../../enums/pageEnum';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import AccountLayout from '../../shared/components/AccountLayout';
+import { Timer } from './components/Timer';
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 
 type ParamList = {
   CertifyRecover: {
@@ -29,71 +22,71 @@ type ParamList = {
   };
 };
 
-const CertifyRecover: FunctionComponent<props> = (props) => {
+const CertifyRecover: FunctionComponent<{}> = () => {
   const [state, setState] = useState({
-    code: "",
-    verificationId: "",
+    code: '',
+    verificationId: '',
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, "CertifyRecover">>();
+  const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
 
-  const callResendApi = () => {
-    Api.certifyEmail_recover(route.params.email, "recoverPassword")
-      .then((res) => {
+  const callResendApi: () => void = () => {
+    Api.certifyEmail_recover(route.params.email, 'recoverPassword')
+      .then(res => {
         setState({ ...state, verificationId: res.data.verificationId });
-        alert(i18n.t("register.resend_verification"));
+        alert(i18n.t('account.resend_verification'));
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
-          alert(i18n.t("checking_account.invalid_email"));
+          alert(i18n.t('account.invalid_email'));
           return;
         } else if (e.response.status === 500) {
-          alert(i18n.t("errors.messages.server"));
+          alert(i18n.t('account_errors.server'));
         } else {
-          alert(i18n.t("checking_account.try_again_later"));
+          alert(i18n.t('account.try_again_later'));
         }
       });
   };
 
   const callCertifyApi = () => {
     if (!state.code) {
-      alert(i18n.t("register.authentication_recover"));
+      alert(i18n.t('account.authentication_recover'));
       return;
     }
     Api.certifyEmail(
-      state.verificationId === ""
+      state.verificationId === ''
         ? route.params.verificationId
         : state.verificationId,
-      state.code
+      state.code,
     )
-      .then((res) => {
-        if (res.data.status === "completed") {
+      .then(res => {
+        if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             email: route.params.email,
             verificationId:
-              state.verificationId === ""
+              state.verificationId === ''
                 ? route.params.verificationId
                 : state.verificationId,
           });
-        } else if (res.data.status === "expired") {
-          alert(i18n.t("register.expired_verification"));
+        } else if (res.data.status === 'expired') {
+          alert(i18n.t('account.expired_verification'));
           return;
           //   navigation.navigate(AccountPage.InitializeEmail);
         } else {
           alert(
-            i18n.t("register.unmatched_verification", {
+            i18n.t('account.unmatched_verification', {
               error: res.data.counts,
-            })
+            }),
           );
         }
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
-          alert(i18n.t("register.authentication_recover"));
+          alert(i18n.t('account.authentication_recover'));
           return;
         } else if (e.response.status === 404) {
-          alert(i18n.t("register.expired_verification"));
+          alert(i18n.t('account.expired_verification'));
           navigation.navigate(AccountPage.InitializeEmail);
         }
       });
@@ -108,38 +101,38 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
           />
           <H1Text
             style={{ marginBottom: 10 }}
-            label={i18n.t("register.authentication_recover")}
+            label={i18n.t('register.authentication_recover')}
           />
-          <PText label={i18n.t("register.authentication_recover_label")} />
+          <PText label={i18n.t('register.authentication_recover_label')} />
         </>
       }
       body={
         <>
           <TextField
-            label={i18n.t("account_label.account_email")}
+            label={i18n.t('account_label.account_email')}
             editable={false}
             value={route.params.email}
             eventHandler={() => {}}
           />
           <TextField
-            label={i18n.t("account_label.authentication_code")}
-            eventHandler={(value) => {
+            label={i18n.t('account_label.authentication_code')}
+            eventHandler={value => {
               setState({ ...state, code: value });
             }}
           />
-          <View style={{ bottom: 10, flexDirection: "row-reverse" }}>
+          <View style={{ bottom: 10, flexDirection: 'row-reverse' }}>
             <BorderFlatButton
-              title={i18n.t("account_label.resend")}
+              title={i18n.t('account_label.resend')}
               handler={() => callResendApi()}
             />
-            <View style={{ flexDirection: "row", width: "100%" }}>
+            <View style={{ flexDirection: 'row', width: '100%' }}>
               <PText
                 style={{
-                  marginLeft: "auto",
+                  marginLeft: 'auto',
                   lineHeight: 21,
                   height: 21,
                 }}
-                label={`${i18n.t("register.expiration_time")}`}
+                label={`${i18n.t('register.expiration_time')}`}
               />
               <Timer verif={state.verificationId} />
             </View>
@@ -148,7 +141,7 @@ const CertifyRecover: FunctionComponent<props> = (props) => {
       }
       button={
         <SubmitButton
-          title={i18n.t("account_label.certify")}
+          title={i18n.t('account_label.certify')}
           handler={() => callCertifyApi()}
         />
       }

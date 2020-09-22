@@ -1,15 +1,16 @@
-import axios, { AxiosResponse } from "axios";
-axios.defaults.baseURL = "http://localhost:3000";
-import { authenticatedEspressoClient } from "./axiosInstances";
-import Product from "../types/product";
+import axios, { AxiosResponse } from 'axios';
+axios.defaults.baseURL = 'http://localhost:3000';
+import { authenticatedEspressoClient } from './axiosInstances';
+import Product, { Story } from '../types/product';
 
 export default class Api {
-  static products = async (
-    payments: string,
-    sort: string
-  ): Promise<AxiosResponse<Product[]>> => {
+  static storyList = async (): Promise<AxiosResponse<Story[]>> => {
+    return (await authenticatedEspressoClient()).get(`/stories`);
+  };
+
+  static productInfo = async (id: number): Promise<AxiosResponse<Product>> => {
     return (await authenticatedEspressoClient()).get(
-      `/products/?allowedPayments=${payments}&sortingType=${sort}`
+      `/products?productId=${id}`,
     );
   };
 }

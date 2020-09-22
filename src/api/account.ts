@@ -1,7 +1,7 @@
-import { AxiosResponse } from "axios";
-import { KycStatus } from "../enums/status";
-import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
-import AsyncStorage from "@react-native-community/async-storage";
+import { AxiosResponse } from 'axios';
+import { KycStatus } from '../enums/status';
+import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
+import AsyncStorage from '@react-native-community/async-storage';
 
 type InitializeResponse = {
   verificationId: string;
@@ -23,13 +23,13 @@ type LoginResponse = {
   verificationId: string;
 };
 
-//코드 인증하는 함수의 reponse type
+// 코드 인증하는 함수의 reponse type
 type CertifyResponse = {
   counts: number;
   status: string;
 };
 
-//verification 요청하는 함수의 response type
+// verification 요청하는 함수의 response type
 type VerificationResponse = {
   verificationId: string;
   status: string;
@@ -40,104 +40,95 @@ type RecoverResponse = {
 };
 
 export type UserResponse = {
-  email: string;
-  kycStatus: KycStatus;
-  gender: string;
-  firstName: string;
-  lastName: string;
-  dashboard: {
-    userId: number;
-    summary: {
-      properties: {
-        el: string;
-        btc: string;
-        paypal: string;
-        eth: string;
-        totalProperties: string;
-      };
-      profits: {
-        returnOnSale: string;
-        returnOnRent: string;
-        returnOfMonth: string;
-        totalReturnOnSale: string;
-        totalReturnOnRent: string;
-        totalOwnedToken: string;
-      };
-    };
+  userInfo: {
+    email: string;
+    kycStatus: KycStatus;
+    gender: string;
+    firstName: string;
+    lastName: string;
   };
+  summary: [
+    {
+      title: string;
+      productType: string;
+      value: number;
+      profit: number;
+    },
+  ];
+  unreadNotificationCount: number;
 };
 
 export default class Api {
   static initializeEmail = async (
-    email: string
+    email: string,
   ): Promise<AxiosResponse<InitializeResponse>> => {
     return espressoClient.get(`/auth?email=${email}`);
   };
 
   static login = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<AxiosResponse<LoginResponse>> => {
-    return espressoClient.post("/auth", { email: email, password: password });
+    return espressoClient.post('/auth', { email, password });
   };
 
   static signup = async (
     verificationId: string,
-    password: string
+    password: string,
   ): Promise<AxiosResponse<SignupResponse>> => {
     return espressoClient.post(`/users`, {
-      verificationId: verificationId,
-      password: password,
+      verificationId,
+      password,
     });
   };
 
   static certifyEmail = async (
     verificationId: string,
-    code: string
+    code: string,
   ): Promise<AxiosResponse<CertifyResponse>> => {
     return espressoClient.put(`/verifications/${verificationId}`, {
-      code: code, //유저가 입력한 code
+      code, // 유저가 입력한 code
     });
   };
 
-  //비밀번호 찾기 함수 -> 로그인에 같이 넘겨줘야 함, 이메일로 코드를 보내달라는 요청
+  // 비밀번호 찾기 함수 -> 로그인에 같이 넘겨줘야 함, 이메일로 코드를 보내달라는 요청
   static certifyEmail_recover = async (
     email: string,
-    recoverType: string
+    recoverType: string,
   ): Promise<AxiosResponse<VerificationResponse>> => {
     return espressoClient.post(`/verifications`, {
-      email: email,
+      email,
       type: recoverType,
     });
   };
 
   static recoverPassword = async (
     verificationId: string,
-    password: string
+    password: string,
   ): Promise<AxiosResponse<RecoverResponse>> => {
     return espressoClient.post(`/auth/recover`, {
-      password: password,
-      verificationId: verificationId,
+      password,
+      verificationId,
     });
   };
 
   static resetPassword = async (
     password: string,
-    currentPassword: string
+    currentPassword: string,
   ): Promise<AxiosResponse<ResetResponse>> => {
     return (await authenticatedEspressoClient()).put(`/users`, {
-      password: password,
-      currentPassword: currentPassword,
+      password,
+      currentPassword,
     });
   };
 
   static me = async (): Promise<AxiosResponse<UserResponse>> => {
-    return (await authenticatedEspressoClient()).get("/auth/me");
+    return (await authenticatedEspressoClient()).get('/auth/me');
   };
 
   static logout = async () => {
     try {
-      await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem('@token');
       return true;
     } catch (exception) {
       return false;

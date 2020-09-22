@@ -1,15 +1,15 @@
-import React, { FunctionComponent, useState } from "react";
-import { View } from "react-native";
-import { TextField } from "../../shared/components/TextField";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import { H1Text } from "../../shared/components/H1Text";
-import styled from "styled-components/native";
-import i18n from "../../i18n/i18n";
-import { useNavigation } from "@react-navigation/native";
-import AccountLayout from "../../shared/components/AccountLayout";
-import ValidationMessage from "../../shared/components/ValidationMessage";
-import checkPassword from "../../utiles/checkPassword";
+import React, { FunctionComponent, useState } from 'react';
+import { View } from 'react-native';
+import { TextField } from '../../shared/components/TextField';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import { H1Text } from '../../shared/components/H1Text';
+import styled from 'styled-components/native';
+import i18n from '../../i18n/i18n';
+import { useNavigation } from '@react-navigation/native';
+import AccountLayout from '../../shared/components/AccountLayout';
+import ValidationMessage from '../../shared/components/ValidationMessage';
+import checkPassword from '../../utiles/checkPassword';
 
 interface Iprops {
   email?: string;
@@ -19,11 +19,11 @@ interface Iprops {
   message2: string;
 }
 
-const PasswordForm: FunctionComponent<Iprops> = (props) => {
+const PasswordForm: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
     step: 1,
-    password: "",
-    passwordConfirmation: "",
+    password: '',
+    passwordConfirmation: '',
     errorLength: 0,
     errorReg: 0,
   });
@@ -40,7 +40,7 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
                 ? setState({
                     ...state,
                     step: 1,
-                    passwordConfirmation: "",
+                    passwordConfirmation: '',
                     errorLength: 0,
                     errorReg: 0,
                   })
@@ -55,7 +55,7 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
           {state.step == 2 && (
             <>
               <TextField
-                label={i18n.t("account_label.account_password_confirm")}
+                label={i18n.t('account_label.account_password_confirm')}
                 eventHandler={(input: string) => {
                   setState({
                     ...state,
@@ -66,19 +66,19 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
                 secure={true}
                 helperText={
                   state.step == 2 && state.errorLength == 2
-                    ? i18n.t("errors.messages.password_do_not_match")
+                    ? i18n.t('errors.messages.password_do_not_match')
                     : undefined
                 }
                 helperIcon={
                   state.step == 2 && state.errorLength == 2
-                    ? "Error"
+                    ? 'Error'
                     : undefined
                 }
               />
             </>
           )}
           <TextField
-            label={i18n.t("account_label.account_password")}
+            label={i18n.t('account_label.account_password')}
             editable={state.step === 1}
             eventHandler={(input: string) => {
               setState({
@@ -90,22 +90,22 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
             }}
             helperText={
               state.errorLength == 1
-                ? i18n.t("errors.messages.password_too_short")
+                ? i18n.t('errors.messages.password_too_short')
                 : state.errorLength == 0 && state.errorReg == 1
-                ? i18n.t("errors.messages.simple_password")
+                ? i18n.t('errors.messages.simple_password')
                 : undefined
             }
             helperIcon={
               state.errorLength == 1 || state.errorReg == 1
-                ? "Error"
+                ? 'Error'
                 : undefined
             }
-            value={state.step == 2 ? state.password : ""}
+            value={state.step == 2 ? state.password : ''}
             secure={true}
           />
           {props.email && (
             <TextField
-              label={i18n.t("account_label.account_email")}
+              label={i18n.t('account_label.account_email')}
               editable={false}
               eventHandler={() => {}}
               value={props.email}
@@ -117,10 +117,10 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
         <>
           {state.step == 1 ? (
             <SubmitButton
-              title={i18n.t("account_label.continue")}
+              title={i18n.t('account_label.continue')}
               handler={() => {
                 if (state.password.length < 8) {
-                  alert(i18n.t("errors.messages.password_too_short"));
+                  alert(i18n.t('errors.messages.password_too_short'));
                   return;
                 }
                 setState({ ...state, step: 2 });
@@ -128,7 +128,7 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
               disabled={state.errorLength !== 0 || state.errorReg !== 0}
               variant={
                 state.errorLength === 1 || state.errorReg === 1
-                  ? "GrayTheme"
+                  ? 'GrayTheme'
                   : undefined
               }
             />
@@ -145,7 +145,7 @@ const PasswordForm: FunctionComponent<Iprops> = (props) => {
                 !state.passwordConfirmation ||
                 state.errorLength !== 0 ||
                 state.errorReg !== 0
-                  ? "GrayTheme"
+                  ? 'GrayTheme'
                   : undefined
               }
             />

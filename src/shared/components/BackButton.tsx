@@ -1,11 +1,7 @@
 import React, { FunctionComponent } from "react";
 import {
-  StyleSheet,
   View,
-  TouchableOpacity,
   GestureResponderEvent,
-  Image,
-  Text,
   StyleProp,
   ViewStyle,
 } from "react-native";
@@ -14,8 +10,9 @@ import BackButtonImg from "../../../src/shared/assets/images/backbutton.png";
 import BackButtonWhiteImg from "../../../src/shared/assets/images/backbutton_white.png";
 
 const ArrowImg = styled.Image`
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 30px;
+  left: -8px;
 `;
 const WhiteBtn = styled.TouchableOpacity`
   background-color: transparent;
