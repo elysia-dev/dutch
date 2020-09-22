@@ -17,7 +17,7 @@ interface IProps {
 const ConditionalKeyboardAvoidingView: FunctionComponent = (props) =>
   Platform.OS == "ios" ? (
     <KeyboardAvoidingView
-      behavior={"padding"}
+      behavior={"position"}
       style={{ flex: 1, flexDirection: "column" }}
     >
       {props.children}

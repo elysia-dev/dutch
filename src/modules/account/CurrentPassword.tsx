@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { TextInput } from "../../shared/components/TextInput";
+import { TextField } from "../../shared/components/TextField";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 
@@ -33,11 +33,9 @@ const CurrentPassword: FunctionComponent = () => {
         </>
       }
       body={
-        <TextInput
-          type={i18n.t("account_label.current_password")}
-          edit={true}
+        <TextField
+          label={i18n.t("account_label.current_password")}
           eventHandler={(input: string) => setState({ password: input })}
-          value={""}
           secure={true}
         />
       }

@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useContext, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, SafeAreaView, Platform } from "react-native";
 import styled from "styled-components/native";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import i18n from "../../i18n/i18n";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import UserContext from "../../contexts/UserContext";
 import LocaleType from "../../enums/LocaleType";
+import { BackButton } from "../../shared/components/BackButton";
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -37,16 +38,24 @@ export const Argos: FunctionComponent<{}> = () => {
   const route = useRoute<RouteProp<ParamList, "Argos">>();
 
   return (
-    <View>
+    <SafeAreaView
+      style={{
+        backgroundColor: "#fff",
+        width: "100%",
+        paddingTop: 25,
+      }}
+    >
       <ScrollView
         style={{
-          backgroundColor: "#fff",
-          width: "100%",
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 40,
+          paddingLeft: "5%",
+          paddingRight: "5%",
         }}
       >
+        <BackButton
+          handler={() => {
+            navigation.goBack();
+          }}
+        />
         <H1Text>{i18n.t("kyc_label.argos_terms")}</H1Text>
         <PText>{localeTerms}</PText>
       </ScrollView>
@@ -54,7 +63,7 @@ export const Argos: FunctionComponent<{}> = () => {
         style={{
           backgroundColor: "#fff",
           width: "100%",
-          height: 60,
+          height: 80,
           position: "absolute",
           bottom: 0,
         }}
@@ -68,7 +77,7 @@ export const Argos: FunctionComponent<{}> = () => {
           style={{ position: "absolute", bottom: 20 }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

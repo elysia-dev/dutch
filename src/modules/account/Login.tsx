@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from "react";
 import { View } from "react-native";
-import { TextInput } from "../../shared/components/TextInput";
+import { TextField } from "../../shared/components/TextField";
 import { BackButton } from "../../shared/components/BackButton";
 import { SubmitButton } from "../../shared/components/SubmitButton";
 import { FlatButton } from "../../shared/components/FlatButton";
@@ -13,13 +13,7 @@ import { AccountPage } from "../../enums/pageEnum";
 import UserContext from "../../contexts/UserContext";
 import AccountLayout from "../../shared/components/AccountLayout";
 import ValidationMessage from "../../shared/components/ValidationMessage";
-
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  font-weight: bold;
-`;
+import { H1Text } from "../../shared/components/H1Text";
 
 type ParamList = {
   Login: {
@@ -105,37 +99,32 @@ const Login: FunctionComponent = () => {
             handler={() => {
               navigation.goBack();
             }}
-            style={{ marginTop: 20, marginBottom: 20 }}
           />
-          <H1Text>{i18n.t("account_check.insert_password")}</H1Text>
+          <H1Text label={i18n.t("account_check.insert_password")} />
         </>
       }
       body={
         <>
-          <TextInput
-            type={i18n.t("account_label.account_password")}
-            value={""}
-            edit={true}
+          <TextField
+            label={i18n.t("account_label.account_password")}
             eventHandler={(input: string) =>
               setState({ ...state, password: input })
             }
             secure={true}
+            helperText={
+              state.error !== 0
+                ? ` ${i18n.t("errors.messages.password_do_not_match")} ${
+                    state.error
+                  }/5`
+                : undefined
+            }
+            helperIcon={state.error !== 0 ? "Error" : undefined}
           />
-          <View style={{ height: 30 }}>
-            {state.error !== 0 && (
-              <ValidationMessage
-                message={` ${i18n.t("errors.messages.password_do_not_match")} ${
-                  state.error
-                }/5`}
-              />
-            )}
-          </View>
-          <TextInput
-            type={i18n.t("account_label.account_email")}
+          <TextField
+            label={i18n.t("account_label.account_email")}
             value={route.params.email}
-            edit={false}
+            editable={false}
             eventHandler={() => {}}
-            secure={false}
           />
         </>
       }
@@ -144,7 +133,7 @@ const Login: FunctionComponent = () => {
           <SubmitButton
             title={i18n.t("account_label.login")}
             handler={() => callLoginApi()}
-            ButtonTheme={"WithFlat"}
+            variant={"WithFlat"}
           />
           <View style={{ height: 15 }} />
           <FlatButton

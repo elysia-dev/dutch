@@ -262,7 +262,6 @@ export class Main extends Component<props, state> {
                 height: 50,
                 justifyContent: "space-between",
                 alignContent: "center",
-                top: 15,
               }}
             >
               <PText>{i18n.t("dashboard_label.average_profit")}</PText>

@@ -19,6 +19,8 @@ const ArrowImg = styled.Image`
 `;
 const WhiteBtn = styled.TouchableOpacity`
   background-color: transparent;
+  margin-bottom: 25px;
+  margin-top: 13px;
 `;
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;

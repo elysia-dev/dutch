@@ -7,12 +7,8 @@ import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { KycPage } from "../../enums/pageEnum";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const StartKycWrapper = styled.View`
-  padding-top: 25px;
-  flex: 1;
-  background-color: #ffffff;
-`;
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-size: 20px;
@@ -33,6 +29,7 @@ const Circle = styled.Text`
   color: #fff;
   line-height: 25px;
   text-align: center;
+  overflow: hidden;
 `;
 const CircleWrapper = styled.View`
   margin-left: 5%;
@@ -66,23 +63,31 @@ export const StartKYC: FunctionComponent<{}> = () => {
     agree: false,
   });
   return (
-    <StartKycWrapper style={{ display: "flex", flexDirection: "column" }}>
+    <View
+      style={{
+        paddingTop: 40,
+        flexDirection: "column",
+        flex: 1,
+      }}
+    >
       <BackButton
         handler={() => {
           navigation.goBack();
         }}
-        style={{ marginTop: 30, marginLeft: 20 }}
+        style={{ marginLeft: "5%" }}
       />
       <H1Text>{i18n.t("kyc.start_kyc")}</H1Text>
       <View
         style={{
-          display: "flex",
           flexDirection: "row",
           marginTop: 20,
           marginLeft: 20,
         }}
       >
-        <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
+        <ClockImg
+          source={ClockPng}
+          style={{ marginTop: 2, resizeMode: "center" }}
+        />
         <Text>{i18n.t("kyc.start_kyc_text")}</Text>
       </View>
       <KycGuideWrapper style={{ marginTop: 20 }}>
@@ -122,6 +127,6 @@ export const StartKYC: FunctionComponent<{}> = () => {
           ButtonTheme={state.agree === false ? "GrayTheme" : undefined}
         />
       </View>
-    </StartKycWrapper>
+    </View>
   );
 };

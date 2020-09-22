@@ -19,6 +19,7 @@ const PText = styled.Text`
   color: #838383;
   font-size: 14px;
   text-align: left;
+  margin-bottom: 10px;
 `;
 const NumText = styled.Text`
   color: #1c1c1c;
@@ -60,7 +61,7 @@ export const TotalValue: FunctionComponent<props> = (props) => {
 
   return (
     <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-      <View style={{ paddingTop: 40, paddingLeft: 20 }}>
+      <View style={{ paddingTop: 25, paddingLeft: "5%" }}>
         <BackButton handler={() => navigation.goBack()} />
       </View>
 
@@ -70,7 +71,8 @@ export const TotalValue: FunctionComponent<props> = (props) => {
           height: 180,
           borderBottomWidth: 5,
           borderBottomColor: "#F6F6F8",
-          paddingLeft: 20,
+          paddingLeft: "5%",
+          paddingRight: "5%",
         }}
       >
         <H1Text>{i18n.t("dashboard_label.total_value")}</H1Text>

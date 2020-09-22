@@ -169,7 +169,8 @@ export class TransactionHistory extends Component<props, state> {
           backgroundColor: "#fff",
           width: "100%",
           height: "100%",
-          padding: 20,
+          padding: "5%",
+          paddingTop: 25,
         }}
       >
         <BackButton handler={() => navigation.goBack()}></BackButton>
@@ -182,7 +183,11 @@ export class TransactionHistory extends Component<props, state> {
             justifyContent: "space-between",
           }}
         >
-          <View style={{ width: "20%" }}>
+          <View
+            style={{
+              width: "20%",
+            }}
+          >
             <PeriodPicker
               period={this.state.period}
               resetHandler={this.resetDate}

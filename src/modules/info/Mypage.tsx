@@ -41,20 +41,28 @@ const MyPage: FunctionComponent = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{ width: "100%", backgroundColor: "#fff" }}>
+    <SafeAreaView
+      style={{
+        width: "100%",
+        backgroundColor: "#fff",
+        paddingTop: 25,
+        flex: 1,
+      }}
+    >
       <BackButton
         handler={() => {
           navigation.goBack();
         }}
-        style={{ marginTop: 20, marginBottom: 20, marginLeft: 20 }}
+        style={{ marginLeft: "5%" }}
       />
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          padding: 20,
+          paddingLeft: "5%",
+          paddingRight: "5%",
           paddingBottom: 0,
-          height: 80,
+          height: 50,
         }}
       >
         <H1Text>{i18n.t("info_label.my_account")}</H1Text>
@@ -76,7 +84,7 @@ const MyPage: FunctionComponent = () => {
       </View>
       <View
         style={{
-          paddingLeft: 20,
+          paddingLeft: "5%",
           paddingBottom: 20,
           borderBottomWidth: 5,
           borderBottomColor: "#F6F6F8",
@@ -87,7 +95,7 @@ const MyPage: FunctionComponent = () => {
         <LabelText>{i18n.t("account_label.account_password")}</LabelText>
 
         <TouchableOpacity
-          onPress={() => { }}
+          onPress={() => {}}
           style={{
             backgroundColor: "#E6ECF2",
             borderRadius: 5,
@@ -103,7 +111,7 @@ const MyPage: FunctionComponent = () => {
       {user.kycStatus === KycStatus.SUCCESS && (
         <View
           style={{
-            padding: 20,
+            padding: "5%",
             borderBottomWidth: 5,
             borderBottomColor: "#F6F6F8",
           }}

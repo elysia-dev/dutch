@@ -58,16 +58,38 @@ export const PeriodPicker: FunctionComponent<props> = (props) => {
   return (
     <View>
       {Platform.OS === "android" ? (
-        <Picker
-          // mode="dropdown"
-          selectedValue={props.period}
-          onValueChange={(input: string) => {
-            props.eventHandler(input);
-            props.resetHandler();
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: "#d0d8df",
+            borderRadius: 5,
+            height: 40,
           }}
         >
-          {TermList_and}
-        </Picker>
+          <Picker
+            style={{
+              color: "#1C1C1C",
+              width: "90%",
+              height: 40,
+              fontSize: 14,
+              textAlign: "center",
+              paddingVertical: 12,
+              paddingHorizontal: 5,
+            }}
+            itemStyle={{
+              color: "#1C1C1C",
+              fontSize: 10,
+            }}
+            // mode="dropdown"
+            selectedValue={props.period}
+            onValueChange={(input: string) => {
+              props.eventHandler(input);
+              props.resetHandler();
+            }}
+          >
+            {TermList_and}
+          </Picker>
+        </View>
       ) : (
         <RNPickerSelect
           onClose={props.resetHandler}
@@ -90,19 +112,6 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 5,
     fontSize: 14,
-    textAlign: "center",
-    borderWidth: 1,
-    borderColor: "#d0d8df",
-    borderRadius: 5,
-    color: "#1C1C1C",
-  },
-  inputAndroid: {
-    width: "90%",
-    height: 40,
-    backgroundColor: "#fff",
-    fontSize: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 5,
     textAlign: "center",
     borderWidth: 1,
     borderColor: "#d0d8df",

@@ -6,8 +6,8 @@ type ButtonProps = {
   theme: string;
 };
 
-const handleThemeType = (BtnTheme: string) => {
-  switch (BtnTheme) {
+const handleThemeType = (variant: string) => {
+  switch (variant) {
     case "WhiteTheme":
       return "border: 1px solid #3679B5; background-color: #FFFFFF;";
     case "GrayTheme":
@@ -16,8 +16,8 @@ const handleThemeType = (BtnTheme: string) => {
       return "border: 0px solid #FFFFFF; background-color: #2c6190;";
   }
 };
-const handleThemeWrapperType = (BtnTheme: string) => {
-  switch (BtnTheme) {
+const handleThemeWrapperType = (variant: string) => {
+  switch (variant) {
     case "WithFlat":
       return "margin-bottom: 5px;";
     case "WhiteTheme":
@@ -33,7 +33,7 @@ const WhiteBtnWrapper = styled.View`
   ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
 `;
 
-const WhiteBtn = styled.TouchableOpacity`
+const Button = styled.TouchableOpacity`
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
@@ -44,7 +44,7 @@ const WhiteBtn = styled.TouchableOpacity`
 
   ${(props: ButtonProps) => handleThemeType(props.theme)};
 `;
-const WhiteBtnText = styled.Text`
+const ButtonLabel = styled.Text`
   font-size: 14px;
   text-align: center;
   line-height: 40px;
@@ -57,7 +57,7 @@ interface SubmitButtonProps {
   title: string;
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
-  ButtonTheme?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
+  variant?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
 }
@@ -65,18 +65,13 @@ interface SubmitButtonProps {
 export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   title,
   handler,
-  ButtonTheme,
+  variant,
   disabled,
   style,
 }) => {
   return (
-    <WhiteBtn
-      onPress={handler}
-      theme={ButtonTheme}
-      disabled={disabled}
-      style={style}
-    >
-      <WhiteBtnText theme={ButtonTheme}>{title}</WhiteBtnText>
-    </WhiteBtn>
+    <Button onPress={handler} theme={variant} disabled={disabled} style={style}>
+      <ButtonLabel theme={variant}>{title}</ButtonLabel>
+    </Button>
   );
 };

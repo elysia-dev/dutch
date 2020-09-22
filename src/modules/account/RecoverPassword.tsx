@@ -15,19 +15,14 @@ const Accepted = styled.Image`
   height: 60px;
   margin: 10px auto;
 `;
-const AcceptedH1Text = styled.Text`
+const H1Text = styled.Text`
   font-size: 20px;
   color: #1c1c1c;
-  text-align: center;
-  margin: 15px 5%;
   font-weight: bold;
 `;
-const AcceptedPText = styled.Text`
-  color: #626368;
-  margin-bottom: 15px;
+const PText = styled.Text`
+  color: #1c1c1c;
   font-size: 13px;
-  text-align: center;
-  margin-bottom: 40px;
 `;
 
 type ParamList = {
@@ -87,12 +82,25 @@ const RecoverPassword: FunctionComponent = () => {
           child={
             <View>
               <Accepted source={AcceptedImg} />
-              <AcceptedH1Text>
+              <H1Text
+                style={{
+                  textAlign: "center",
+                  marginTop: 15,
+                  marginBottom: 15,
+                  marginLeft: "5%",
+                  marginRight: "5%",
+                }}
+              >
                 {i18n.t("account_check.password_changed")}
-              </AcceptedH1Text>
-              <AcceptedPText>
+              </H1Text>
+              <PText
+                style={{
+                  marginBottom: 40,
+                  textAlign: "center",
+                }}
+              >
                 {i18n.t("account_check.login_request")}
-              </AcceptedPText>
+              </PText>
             </View>
           }
           modalHandler={() =>

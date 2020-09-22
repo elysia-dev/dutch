@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
-import { TextInput } from "../../shared/components/TextInput";
+import { TextField } from "../../shared/components/TextField";
 import { SubmitButton } from "../../shared/components/SubmitButton";
+import { H1Text } from "../../shared/components/H1Text";
 import styled from "styled-components/native";
 import i18n from "../../i18n/i18n";
 import Api from "../../api/account";
@@ -9,17 +10,10 @@ import AccountLayout from "../../shared/components/AccountLayout";
 import checkMail from "../../utiles/checkMail";
 import { useNavigation } from "@react-navigation/native";
 
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  font-weight: bold;
-`;
-
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
     email: "",
-    errorLength: 1, // 처음은 TextInput이 null이기 때문에 없음을 가정
+    errorLength: 1,
     errorReg: 0,
   });
 
@@ -54,11 +48,15 @@ const InitializeEmail: FunctionComponent = () => {
 
   return (
     <AccountLayout
-      title={<H1Text>{i18n.t("checking_account.insert_account_email")}</H1Text>}
+      title={
+        <H1Text
+          style={{ paddingTop: 53 }}
+          label={i18n.t("checking_account.insert_account_email")}
+        />
+      }
       body={
-        <TextInput
-          type={i18n.t("account_label.account_email")}
-          value={""}
+        <TextField
+          label={i18n.t("account_label.account_email")}
           eventHandler={(input: string) => {
             setState({
               email: input,
@@ -66,8 +64,6 @@ const InitializeEmail: FunctionComponent = () => {
               errorReg: checkMail(input) ? 0 : 1,
             });
           }}
-          edit={true}
-          secure={false}
           placeHolder="example@elysia.land"
         />
       }
@@ -77,11 +73,15 @@ const InitializeEmail: FunctionComponent = () => {
             state.errorLength == 1
               ? i18n.t("checking_account.insert_account_email")
               : state.errorReg == 1
-                ? i18n.t("checking_account.check_email")
-                : i18n.t("account_label.continue")
+              ? i18n.t("checking_account.check_email")
+              : i18n.t("account_label.continue")
           }
-          handler={() => callEmailApi()}
-          ButtonTheme={
+          handler={
+            state.errorLength == 1 || state.errorReg === 1
+              ? () => {}
+              : () => callEmailApi()
+          }
+          variant={
             state.errorLength === 1 || state.errorReg === 1
               ? "GrayTheme"
               : undefined
