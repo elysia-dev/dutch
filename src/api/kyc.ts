@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { authenticatedEspressoClient } from './axiosInstances';
 
 type KycResponse = {};
