@@ -89,14 +89,14 @@ const RecoverPassword: FunctionComponent = () => {
                   marginLeft: '5%',
                   marginRight: '5%',
                 }}>
-                {i18n.t('account_check.password_changed')}
+                {i18n.t('account.password_changed')}
               </H1Text>
               <PText
                 style={{
                   marginBottom: 40,
                   textAlign: 'center',
                 }}>
-                {i18n.t('account_check.login_request')}
+                {i18n.t('account.login_request')}
               </PText>
             </View>
           }

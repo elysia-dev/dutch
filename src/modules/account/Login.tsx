@@ -96,7 +96,7 @@ const Login: FunctionComponent = () => {
               navigation.goBack();
             }}
           />
-          <H1Text label={i18n.t('account_check.insert_password')} />
+          <H1Text label={i18n.t('account.insert_password')} />
         </>
       }
       body={
