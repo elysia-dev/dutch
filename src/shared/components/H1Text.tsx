@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
-import { StyleProp, ViewStyle } from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent } from 'react';
+import { StyleProp, TextStyle } from 'react-native';
+import styled from 'styled-components/native';
 
 const H1Title = styled.Text`
   color: #1c1c1c;
@@ -11,7 +11,7 @@ const H1Title = styled.Text`
 
 export const H1Text: FunctionComponent<{
   label: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
   return <H1Title style={style}>{label}</H1Title>;

@@ -12,7 +12,6 @@ import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
@@ -21,6 +20,8 @@ import UserContext from '../../contexts/UserContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import LocaleType from '../../enums/LocaleType';
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -35,9 +36,11 @@ const ExchangeBobooImg = styled.Image`
   resize-mode: center;
   top: 3px;
 `;
-const MainInfoWrapper = styled.SafeAreaView`
+const Wrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  background-color: #ffffff;
+  height: 100%;
+  background-color: #fff;
+  overflow: hidden;
 `;
 const InfoHeaderWrapper = styled.View`
   width: 100%;
@@ -72,26 +75,23 @@ const InfoHeaderUserName = styled.Text`
   height: 20px;
   line-height: 25px;
   flex: 1;
+  //
 `;
-const InfoUserWrapper = styled.View`
-  flex: 1;
-  height: 28px;
-`;
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 20px;
-  font-size: 18px;
-  margin-top: 20px;
-  margin-bottom: 25px;
-`;
-const PText = styled.Text`
-  color: #5c5b5b;
-  margin-bottom: 12px;
-  font-size: 15px;
-  line-height: 50px;
-`;
+// const H1Text = styled.Text`
+//   color: #1c1c1c;
+//   font-weight: bold;
+//   text-align: left;
+//   margin-left: 20px;
+//   font-size: 18px;
+//   margin-top: 20px;
+//   margin-bottom: 25px;
+// `;
+// const PText = styled.Text`
+//   color: #5c5b5b;
+//   margin-bottom: 12px;
+//   font-size: 15px;
+//   line-height: 50px;
+// `;
 const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
@@ -114,17 +114,34 @@ const MainInfo: FunctionComponent = () => {
   const navigation = useNavigation();
 
   return (
-    <MainInfoWrapper>
+    <Wrapper>
       <ScrollView>
-        <InfoHeaderWrapper>
-          <InfoUserWrapper>
-            <InfoHeaderH1Text>{user.email}</InfoHeaderH1Text>
-            <Text
+        <View
+          style={{
+            width: '100%',
+            height: '10%',
+            flexDirection: 'row',
+            borderBottomColor: '#f6f6f8',
+            borderBottomWidth: 5,
+            marginBottom: 30,
+            marginTop: 20,
+            paddingBottom: 150,
+          }}>
+          <View
+            style={{
+              flex: 1,
+              height: 28,
+              marginLeft: '5%',
+              marginRight: '5%',
+            }}>
+            <H1Text
+              label={user.email}
+              style={{ lineHeight: 21, height: 21, marginTop: 50 }}
+            />
+            <View
               style={{
-                marginLeft: '5%',
+                marginTop: 5,
                 height: 50,
-                lineHeight: 20,
-                textAlign: 'justify',
                 flexDirection: 'row',
                 justifyContent: 'flex-start',
                 alignItems: 'stretch',
@@ -134,23 +151,19 @@ const MainInfo: FunctionComponent = () => {
                 source={require('../kyc/images/userIcon.png')}
               />
               {user.kycStatus !== KycStatus.SUCCESS ? (
-                <InfoHeaderUserName>
-                  {i18n.t('more_label.need_kyc_label')}
-                </InfoHeaderUserName>
+                <PText label={i18n.t('more_label.need_kyc_label')} />
               ) : (
-                <InfoHeaderUserName>
-                  {user.firstName} {user.lastName}
-                </InfoHeaderUserName>
+                <PText label={user.firstName + ' ' + user.lastName} />
               )}
-            </Text>
-          </InfoUserWrapper>
+            </View>
+          </View>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('More', { screen: MorePage.MyPage });
             }}>
             <InfoHeaderSettingImg source={require('./images/setting.png')} />
           </TouchableOpacity>
-        </InfoHeaderWrapper>
+        </View>
         <View
           style={{
             marginTop: 10,
@@ -189,7 +202,7 @@ const MainInfo: FunctionComponent = () => {
               handler={() => {
                 alert(i18n.t('more.kyc_proceeding_wait'));
               }}
-              ButtonTheme={'GrayTheme'}
+              variant={'GrayTheme'}
             />
           )}
           {user.kycStatus === KycStatus.SUCCESS && (
@@ -202,7 +215,7 @@ const MainInfo: FunctionComponent = () => {
               }}
               title={i18n.t('more_label.approved_kyc')}
               handler={() => {}}
-              ButtonTheme={'GrayTheme'}
+              variant={'GrayTheme'}
             />
           )}
         </View>
@@ -211,7 +224,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
           }}>
-          <H1Text>{i18n.t('more_label.confirm')}</H1Text>
+          <H1Text label={i18n.t('more_label.confirm')} />
           <InfoButtonTabWrapper>
             <TouchableOpacity
               onPress={() =>
@@ -220,7 +233,7 @@ const MainInfo: FunctionComponent = () => {
                 })
               }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.investment_history')}</PText>
+                <PText label={i18n.t('more_label.investment_history')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -234,7 +247,7 @@ const MainInfo: FunctionComponent = () => {
                 })
               }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.transaction_history')}</PText>
+                <PText label={i18n.t('more_label.transaction_history')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -248,13 +261,13 @@ const MainInfo: FunctionComponent = () => {
             alignContent: 'flex-start',
           }}>
           <View>
-            <H1Text>{i18n.t('more_label.elysia')}</H1Text>
+            <H1Text label={i18n.t('more_label.elysia')} />
           </View>
 
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.notice')}</PText>
+                <PText label={i18n.t('more_label.notice')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -262,7 +275,7 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.service_terms')}</PText>
+                <PText label={i18n.t('more_label.service_terms')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -273,7 +286,7 @@ const MainInfo: FunctionComponent = () => {
                 navigation.navigate('More', { screen: MorePage.Contact })
               }>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.contact')}</PText>
+                <PText label={i18n.t('more_label.contact')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -281,7 +294,7 @@ const MainInfo: FunctionComponent = () => {
           <InfoButtonTabWrapper>
             <TouchableOpacity onPress={() => {}}>
               <InfoButtonInnerWrapper>
-                <PText>{i18n.t('more_label.faq')}</PText>
+                <PText label={i18n.t('more_label.faq')} />
                 <InfoArrowImg source={require('./images/next_gray.png')} />
               </InfoButtonInnerWrapper>
             </TouchableOpacity>
@@ -292,10 +305,11 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
           }}>
-          <H1Text>{i18n.t('more_label.app_setting')}</H1Text>
-          <H1Text style={{ fontSize: 16 }}>
-            {i18n.t('more_label.language')}
-          </H1Text>
+          <H1Text label={i18n.t('more_label.app_setting')} />
+          <H1Text
+            style={{ fontSize: 16 }}
+            label={i18n.t('more_label.language')}
+          />
           <View
             style={{
               borderColor: '#d6d6d8',
@@ -339,7 +353,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
           }}>
-          <H1Text>{i18n.t('more_label.el_exchange')}</H1Text>
+          <H1Text label={i18n.t('more_label.el_exchange')} />
           <View style={{ flexDirection: 'row', marginBottom: 30 }}>
             <ExchangeBithumbImg source={ExchangeBithumbPng} />
             <ExchangeBobooImg source={ExchangebobooPng} />
@@ -361,7 +375,7 @@ const MainInfo: FunctionComponent = () => {
           }}
         />
       </ScrollView>
-    </MainInfoWrapper>
+    </Wrapper>
   );
 };
 

@@ -112,7 +112,7 @@ export const StartKYC: FunctionComponent<{}> = () => {
               updateAgree: (input: boolean) => setState({ agree: input }),
             })
           }
-          ButtonTheme={'WhiteTheme'}
+          variant={'WhiteTheme'}
           style={{ marginBottom: 10 }}
         />
         <SubmitButton
@@ -122,7 +122,7 @@ export const StartKYC: FunctionComponent<{}> = () => {
               ? alert(i18n.t('kyc.argos'))
               : navigation.navigate(KycPage.SelectID)
           }
-          ButtonTheme={state.agree === false ? 'GrayTheme' : undefined}
+          variant={state.agree === false ? 'GrayTheme' : undefined}
         />
       </View>
     </View>

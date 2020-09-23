@@ -51,7 +51,7 @@ const InitializeEmail: FunctionComponent = () => {
       title={
         <H1Text
           style={{ paddingTop: 53 }}
-          label={i18n.t('checking_account.insert_account_email')}
+          label={i18n.t('account.insert_account_email')}
         />
       }
       body={
@@ -72,9 +72,9 @@ const InitializeEmail: FunctionComponent = () => {
           title={
             // eslint-disable-next-line no-nested-ternary
             state.errorLength === 1
-              ? i18n.t('checking_account.insert_account_email')
+              ? i18n.t('account.insert_account_email')
               : state.errorReg === 1
-              ? i18n.t('checking_account.check_email')
+              ? i18n.t('account.check_email')
               : i18n.t('account_label.continue')
           }
           handler={

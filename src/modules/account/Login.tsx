@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { TextField } from '../../shared/components/TextField';
@@ -12,7 +11,6 @@ import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import AccountLayout from '../../shared/components/AccountLayout';
-import ValidationMessage from '../../shared/components/ValidationMessage';
 import { H1Text } from '../../shared/components/H1Text';
 
 type ParamList = {
@@ -96,7 +94,7 @@ const Login: FunctionComponent = () => {
               navigation.goBack();
             }}
           />
-          <H1Text label={i18n.t('account_check.insert_password')} />
+          <H1Text label={i18n.t('account.insert_password')} />
         </>
       }
       body={
@@ -109,7 +107,7 @@ const Login: FunctionComponent = () => {
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('errors.messages.password_do_not_match')} ${
+                ? ` ${i18n.t('account_errors.password_do_not_match')} ${
                     state.error
                   }/5`
                 : undefined
@@ -122,6 +120,13 @@ const Login: FunctionComponent = () => {
             editable={false}
             eventHandler={() => {}}
           />
+          <Text>
+            {state.error !== 0
+              ? ` ${i18n.t('account_errors.password_do_not_match')} ${
+                  state.error
+                }/5`
+              : undefined}
+          </Text>
         </>
       }
       button={

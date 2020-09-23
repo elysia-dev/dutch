@@ -19,9 +19,9 @@ import {
   useHeaderHeight,
   HeaderHeightContext,
 } from '@react-navigation/stack';
+import styled from 'styled-components/native';
 import { Header, Header } from 'react-navigation-stack';
 import { Constants, Constants } from 'expo';
-import styled from 'styled-components/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';

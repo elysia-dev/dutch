@@ -8,7 +8,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text } from '../../shared/components/H1Text';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
-import ValidationMessage from '../../shared/components/ValidationMessage';
 import checkPassword from '../../utiles/checkPassword';
 
 interface Props {
@@ -67,7 +66,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                 secure={true}
                 helperText={
                   state.step === 2 && state.errorLength === 2
-                    ? i18n.t('errors.messages.password_do_not_match')
+                    ? i18n.t('account_errors.password_do_not_match')
                     : undefined
                 }
                 helperIcon={
@@ -92,9 +91,9 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
             helperText={
               // eslint-disable-next-line no-nested-ternary
               state.errorLength === 1
-                ? i18n.t('errors.messages.password_too_short')
+                ? i18n.t('account_errors.password_too_short')
                 : state.errorLength === 0 && state.errorReg === 1
-                ? i18n.t('errors.messages.simple_password')
+                ? i18n.t('account_errors.simple_password')
                 : undefined
             }
             helperIcon={
@@ -122,7 +121,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               title={i18n.t('account_label.continue')}
               handler={() => {
                 if (state.password.length < 8) {
-                  alert(i18n.t('errors.messages.password_too_short'));
+                  alert(i18n.t('account_errors.password_too_short'));
                   return;
                 }
                 setState({ ...state, step: 2 });

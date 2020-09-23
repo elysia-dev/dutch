@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
-import { StyleProp, ViewStyle } from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent } from 'react';
+import { StyleProp, TextStyle } from 'react-native';
+import styled from 'styled-components/native';
 
 const PTitle = styled.Text`
   color: #1c1c1c;
@@ -10,7 +10,7 @@ const PTitle = styled.Text`
 
 export const PText: FunctionComponent<{
   label: string;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
   return <PTitle style={style}>{label}</PTitle>;

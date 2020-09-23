@@ -99,9 +99,9 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           />
           <H1Text
             style={{ marginBottom: 10 }}
-            label={i18n.t('register.authentication_recover')}
+            label={i18n.t('account.authentication_recover')}
           />
-          <PText label={i18n.t('register.authentication_recover_label')} />
+          <PText label={i18n.t('account.authentication_recover_label')} />
         </>
       }
       body={
@@ -130,7 +130,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                   lineHeight: 21,
                   height: 21,
                 }}
-                label={`${i18n.t('register.expiration_time')}`}
+                label={`${i18n.t('account.expiration_time')}`}
               />
               <Timer verif={state.verificationId} />
             </View>

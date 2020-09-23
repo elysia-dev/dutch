@@ -100,9 +100,9 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
           />
           <H1Text
             style={{ marginBottom: 10 }}
-            label={i18n.t('register.authentication_signup')}
+            label={i18n.t('account.authentication_signup')}
           />
-          <PText label={i18n.t('register.authentication_signup_label')} />
+          <PText label={i18n.t('account.authentication_signup_label')} />
         </>
       }
       body={
@@ -125,7 +125,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
             <View style={{ flexDirection: 'row', width: '100%' }}>
               <PText
                 style={{ marginLeft: 'auto', lineHeight: 21, height: 21 }}
-                label={`${i18n.t('register.expiration_time')}`}
+                label={`${i18n.t('account.expiration_time')}`}
               />
               <Timer verif={state.verificationId} />
             </View>
