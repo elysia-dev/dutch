@@ -21,12 +21,13 @@ import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AccountLayout from '../../shared/components/AccountLayoutPosition';
-import { useHeaderHeight } from '@react-navigation/stack';
-import { HeaderHeightContext } from '@react-navigation/stack';
+import { useHeaderHeight, HeaderHeightContext } from '@react-navigation/stack';
+
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import { Header } from 'react-navigation-stack';
 import { Constants } from 'expo';
+import styled from 'styled-components/native';
 
 const LockAccountImg = styled.Image`
   width: 100%;
@@ -113,7 +114,7 @@ const LockAccount: FunctionComponent = () => {
         borderWidth: 10,
       }}>
       <KeyboardAvoidingView
-        behavior="padding" //{Platform.OS == "ios" ? "padding" : "position"}
+        behavior="padding" // {Platform.OS == "ios" ? "padding" : "position"}
         keyboardVerticalOffset={10}
         style={{
           height: '100%',
