@@ -1,10 +1,8 @@
-/* eslint-disable arrow-parens */
-/* eslint-disable implicit-arrow-linebreak */
 import React, { Component, FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { TextInput } from '../../shared/components/TextInput';
+import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
@@ -13,26 +11,8 @@ import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { Timer } from './components/Timer';
-
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  font-weight: bold;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
-`;
-const ButtonWrapper = styled.View`
-  flex-direction: row-reverse;
-`;
-const ExpTimeText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
-  line-height: 21px;
-  height: 21px;
-`;
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 
 interface Props {
   existence: string;
@@ -116,46 +96,40 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
       title={
         <>
           <BackButton
-            handler={(): void =>
-              navigation.navigate(AccountPage.InitializeEmail)
-            }
-            style={{ marginTop: 20, marginBottom: 20 }}
+            handler={() => navigation.navigate(AccountPage.InitializeEmail)}
           />
-          <H1Text style={{ marginBottom: 10 }}>
-            {i18n.t('account.authentication_signup')}
-          </H1Text>
-          <PText>{i18n.t('account.authentication_signup_label')}</PText>
+          <H1Text
+            style={{ marginBottom: 10 }}
+            label={i18n.t('register.authentication_signup')}
+          />
+          <PText label={i18n.t('register.authentication_signup_label')} />
         </>
       }
       body={
         <>
-          <TextInput
-            type={i18n.t('account_label.account_email')}
-            edit={false}
+          <TextField
+            label={i18n.t('account_label.account_email')}
+            editable={false}
             value={route.params.email}
             eventHandler={() => {}}
-            secure={false}
           />
-          <View style={{ height: 30 }} />
-          <TextInput
-            type={i18n.t('account_label.authentication_code')}
-            edit={true}
-            value={''}
+          <TextField
+            label={i18n.t('account_label.authentication_code')}
             eventHandler={value => setState({ ...state, code: value })}
-            secure={false}
           />
-          <ButtonWrapper style={{ marginTop: 10 }}>
+          <View style={{ bottom: 10, flexDirection: 'row-reverse' }}>
             <BorderFlatButton
               title={i18n.t('account_label.resend')}
               handler={() => callResendApi()}
             />
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <ExpTimeText style={{ marginLeft: 'auto' }}>{`${i18n.t(
-                'account.expiration_time',
-              )}`}</ExpTimeText>
+              <PText
+                style={{ marginLeft: 'auto', lineHeight: 21, height: 21 }}
+                label={`${i18n.t('register.expiration_time')}`}
+              />
               <Timer verif={state.verificationId} />
             </View>
-          </ButtonWrapper>
+          </View>
         </>
       }
       button={

@@ -37,7 +37,12 @@ export const Argos: FunctionComponent<{}> = () => {
   const route = useRoute<RouteProp<ParamList, 'Argos'>>();
 
   return (
-    <View>
+    <SafeAreaView
+      style={{
+        backgroundColor: '#fff',
+        width: '100%',
+        paddingTop: 25,
+      }}>
       <ScrollView
         style={{
           backgroundColor: '#fff',
@@ -66,7 +71,7 @@ export const Argos: FunctionComponent<{}> = () => {
           style={{ position: 'absolute', bottom: 20 }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

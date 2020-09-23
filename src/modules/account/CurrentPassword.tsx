@@ -1,24 +1,18 @@
-import React, { FunctionComponent, useState } from "react";
-import styled from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
-import { TextInput } from "../../shared/components/TextInput";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
+import React, { FunctionComponent, useState } from 'react';
+import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { TextField } from '../../shared/components/TextField';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
 
-import i18n from "../../i18n/i18n";
-import { AccountPage } from "../../enums/pageEnum";
-import AccountLayout from "../../shared/components/AccountLayout";
-
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  font-weight: bold;
-`;
+import i18n from '../../i18n/i18n';
+import { AccountPage } from '../../enums/pageEnum';
+import AccountLayout from '../../shared/components/AccountLayout';
+import { H1Text } from '../../shared/components/H1Text';
 
 const CurrentPassword: FunctionComponent = () => {
   const [state, setState] = useState({
-    password: "",
+    password: '',
   });
 
   const navigation = useNavigation();
@@ -28,22 +22,20 @@ const CurrentPassword: FunctionComponent = () => {
       title={
         <>
           <BackButton handler={() => navigation.goBack()} />
-          <H1Text>{i18n.t("account_label.change_password")}</H1Text>
-          <H1Text>{i18n.t("account.insert_current_password")}</H1Text>
+          <H1Text label={i18n.t('account_label.change_password')} />
+          <H1Text label={i18n.t('account.insert_current_password')} />
         </>
       }
       body={
-        <TextInput
-          type={i18n.t("account_label.current_password")}
-          edit={true}
+        <TextField
+          label={i18n.t('account_label.current_password')}
           eventHandler={(input: string) => setState({ password: input })}
-          value={""}
           secure={true}
         />
       }
       button={
         <SubmitButton
-          title={i18n.t("account_label.continue")}
+          title={i18n.t('account_label.continue')}
           handler={() =>
             navigation.navigate(AccountPage.ResetPassword, {
               currentPassword: state.password,

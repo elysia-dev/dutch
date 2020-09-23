@@ -1,7 +1,5 @@
 import React, { FunctionComponent } from "react";
-import {
-  GestureResponderEvent,
-} from "react-native";
+import { GestureResponderEvent } from "react-native";
 import styled from "styled-components/native";
 
 const WhiteBtn = styled.TouchableOpacity`
@@ -17,6 +15,7 @@ const WhiteBtnText = styled.Text`
   color: #000;
   font-size: 12px;
   text-align: center;
+  line-height: 15px;
 `;
 
 const FlatBorderButton: FunctionComponent<{

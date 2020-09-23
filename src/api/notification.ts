@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
+import { AxiosResponse } from "axios";
+import { authenticatedEspressoClient } from "./axiosInstances";
 import NotificationType from "../enums/NotificationType";
 
 export type NotificationResponse = {
@@ -25,7 +25,7 @@ export default class Api {
   };
 
   static read = async (
-    id: number
+    id: number,
   ): Promise<AxiosResponse<NotificationResponse[]>> => {
     return (await authenticatedEspressoClient()).put(`/notifications/${id}`);
   };

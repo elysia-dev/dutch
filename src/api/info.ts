@@ -1,6 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import Product from "../types/product";
-import { espressoClient, authenticatedEspressoClient } from "./axiosInstances";
+import { authenticatedEspressoClient } from "./axiosInstances";
 
 type TransactionResponse = {
   id: number;
@@ -33,18 +33,18 @@ export class Api {
     startDate: string,
     endDate: string,
     period: string,
-    sortingType: string
+    sortingType: string,
   ): Promise<AxiosResponse<TransactionResponse[]>> => {
     return (await authenticatedEspressoClient()).get(
-      `/history/transactions?&start=${startDate}&end=${endDate}&period=${period}&sortingType=${sortingType}`
+      `/history/transactions?&start=${startDate}&end=${endDate}&period=${period}&sortingType=${sortingType}`,
     );
   };
 
   static OwnershipHistory = async (
-    status: string
+    status: string,
   ): Promise<AxiosResponse<OwnershipResponse[]>> => {
     return (await authenticatedEspressoClient()).get(
-      `/history/ownerships?status=${status}`
+      `/history/ownerships?status=${status}`,
     );
   };
 }

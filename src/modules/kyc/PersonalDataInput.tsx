@@ -3,7 +3,7 @@ import { View, ScrollView, SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
-import { TextInput } from '../../shared/components/TextInput';
+import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Modal } from '../../shared/components/Modal';
 import KycSubmitPng from './images/kycsubmit.png';
@@ -137,8 +137,8 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
         <PText>{i18n.t('kyc.step3_text')}</PText>
         <IdImg source={{ uri: route.params.photoId.uri }} />
         <H1Text>{i18n.t('kyc_label.personal_data')}</H1Text>
-        <TextInput
-          type={i18n.t('kyc_label.last_name')}
+        <TextField
+          label={i18n.t('kyc_label.last_name')}
           value=""
           edit={true}
           eventHandler={(input: string) => {
@@ -149,8 +149,8 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
             marginTop: 20,
           }}
         />
-        <TextInput
-          type={i18n.t('kyc_label.first_name')}
+        <TextField
+          label={i18n.t('kyc_label.first_name')}
           value=""
           edit={true}
           eventHandler={(input: string) => {

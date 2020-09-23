@@ -1,5 +1,4 @@
-import React, { createContext } from 'react';
-import * as Localization from 'expo-localization';
+import { createContext } from 'react';
 import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
 

@@ -1,18 +1,14 @@
-import React, { FunctionComponent, useState } from "react";
-import { View, Text } from "react-native";
-import styled from "styled-components/native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { BackButton } from "../../shared/components/BackButton";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import ClockPng from "./images/clock.png";
-import i18n from "../../i18n/i18n";
-import { KycPage } from "../../enums/pageEnum";
+import React, { FunctionComponent, useState } from 'react';
+import { View, Text } from 'react-native';
+import styled from 'styled-components/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BackButton } from '../../shared/components/BackButton';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import ClockPng from './images/clock.png';
+import i18n from '../../i18n/i18n';
+import { KycPage } from '../../enums/pageEnum';
 
-const StartKycWrapper = styled.View`
-  padding-top: 25px;
-  flex: 1;
-  background-color: #ffffff;
-`;
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-size: 20px;
@@ -33,6 +29,7 @@ const Circle = styled.Text`
   color: #fff;
   line-height: 25px;
   text-align: center;
+  overflow: hidden;
 `;
 const CircleWrapper = styled.View`
   margin-left: 5%;
@@ -66,62 +63,65 @@ export const StartKYC: FunctionComponent<{}> = () => {
     agree: false,
   });
   return (
-    <StartKycWrapper style={{ display: "flex", flexDirection: "column" }}>
+    <View
+      style={{
+        paddingTop: 40,
+        flexDirection: 'column',
+        flex: 1,
+      }}>
       <BackButton
         handler={() => {
           navigation.goBack();
         }}
-        style={{ marginTop: 30, marginLeft: 20 }}
+        style={{ marginLeft: '5%' }}
       />
-      <H1Text>{i18n.t("kyc.start")}</H1Text>
+      <H1Text>{i18n.t('kyc.start')}</H1Text>
       <View
         style={{
-          display: "flex",
-          flexDirection: "row",
+          flexDirection: 'row',
           marginTop: 20,
           marginLeft: 20,
-        }}
-      >
+        }}>
         <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
-        <Text>{i18n.t("kyc.start_text")}</Text>
+        <Text>{i18n.t('kyc.start_text')}</Text>
       </View>
       <KycGuideWrapper style={{ marginTop: 20 }}>
         <HrLine />
         <CircleWrapper>
           <Circle>1</Circle>
-          <CircleText>{i18n.t("kyc.start_step1")}</CircleText>
+          <CircleText>{i18n.t('kyc.start_step1')}</CircleText>
         </CircleWrapper>
         <CircleWrapper>
           <Circle>2</Circle>
-          <CircleText>{i18n.t("kyc.start_step2")}</CircleText>
+          <CircleText>{i18n.t('kyc.start_step2')}</CircleText>
         </CircleWrapper>
         <CircleWrapper>
           <Circle>3</Circle>
-          <CircleText>{i18n.t("kyc.start_step3")}</CircleText>
+          <CircleText>{i18n.t('kyc.start_step3')}</CircleText>
         </CircleWrapper>
       </KycGuideWrapper>
-      <View style={{ marginTop: "auto", marginBottom: 10 }}>
+      <View style={{ marginTop: 'auto', marginBottom: 10 }}>
         <SubmitButton
-          title={i18n.t("kyc_label.argos_terms")}
+          title={i18n.t('kyc_label.argos_terms')}
           handler={() =>
             navigation.navigate(KycPage.Argos, {
               agree: state.agree,
               updateAgree: (input: boolean) => setState({ agree: input }),
             })
           }
-          ButtonTheme={"WhiteTheme"}
+          ButtonTheme={'WhiteTheme'}
           style={{ marginBottom: 10 }}
         />
         <SubmitButton
-          title={i18n.t("kyc_label.agree_start")}
+          title={i18n.t('kyc_label.agree_start')}
           handler={() =>
             (state.agree === false
-              ? alert(i18n.t("kyc.argos"))
+              ? alert(i18n.t('kyc.argos'))
               : navigation.navigate(KycPage.SelectID))
           }
-          ButtonTheme={state.agree === false ? "GrayTheme" : undefined}
+          ButtonTheme={state.agree === false ? 'GrayTheme' : undefined}
         />
       </View>
-    </StartKycWrapper>
+    </View>
   );
 };

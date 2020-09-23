@@ -2,22 +2,14 @@ import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
-
-import { TextInput } from '../../shared/components/TextInput';
+import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-
+import { H1Text } from '../../shared/components/H1Text';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
 import ValidationMessage from '../../shared/components/ValidationMessage';
 import checkPassword from '../../utiles/checkPassword';
-
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  font-weight: bold;
-`;
 
 interface Props {
   email?: string;
@@ -44,22 +36,27 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
         <>
           <BackButton
             handler={() => {
+              // eslint-disable-next-line no-unused-expressions
               state.step === 2
-                ? setState({ ...state, step: 1 })
+                ? setState({
+                    ...state,
+                    step: 1,
+                    passwordConfirmation: '',
+                    errorLength: 0,
+                    errorReg: 0,
+                  })
                 : navigation.goBack();
             }}
-            style={{ marginTop: 20, marginBottom: 20 }}
           />
-          <H1Text>{state.step === 1 ? props.message1 : props.message2}</H1Text>
+          <H1Text label={state.step === 1 ? props.message1 : props.message2} />
         </>
       }
       body={
         <>
           {state.step === 2 && (
             <>
-              <TextInput
-                type={i18n.t('account_label.account_password_confirm')}
-                edit={true}
+              <TextField
+                label={i18n.t('account_label.account_password_confirm')}
                 eventHandler={(input: string) => {
                   setState({
                     ...state,
@@ -67,21 +64,23 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                     errorLength: input !== state.password ? 2 : 0,
                   });
                 }}
-                value={''}
                 secure={true}
+                helperText={
+                  state.step === 2 && state.errorLength === 2
+                    ? i18n.t('errors.messages.password_do_not_match')
+                    : undefined
+                }
+                helperIcon={
+                  state.step === 2 && state.errorLength === 2
+                    ? 'Error'
+                    : undefined
+                }
               />
-              <View style={{ height: 30 }}>
-                {state.step === 2 && state.errorLength === 2 && (
-                  <ValidationMessage
-                    message={i18n.t('account_errors.password_do_not_match')}
-                  />
-                )}
-              </View>
             </>
           )}
-          <TextInput
-            type={i18n.t('account_label.account_password')}
-            edit={state.step === 1}
+          <TextField
+            label={i18n.t('account_label.account_password')}
+            editable={state.step === 1}
             eventHandler={(input: string) => {
               setState({
                 ...state,
@@ -90,28 +89,28 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                 errorReg: checkPassword(input) ? 0 : 1,
               });
             }}
-            value={''}
+            helperText={
+              // eslint-disable-next-line no-nested-ternary
+              state.errorLength === 1
+                ? i18n.t('errors.messages.password_too_short')
+                : state.errorLength === 0 && state.errorReg === 1
+                ? i18n.t('errors.messages.simple_password')
+                : undefined
+            }
+            helperIcon={
+              state.errorLength === 1 || state.errorReg === 1
+                ? 'Error'
+                : undefined
+            }
+            value={state.step === 2 ? state.password : ''}
             secure={true}
           />
-          <View style={{ height: 30 }}>
-            {state.errorLength === 1 && (
-              <ValidationMessage
-                message={i18n.t('account_errors.password_too_short')}
-              />
-            )}
-            {state.errorLength === 0 && state.errorReg === 1 && (
-              <ValidationMessage
-                message={i18n.t('account_errors.simple_password')}
-              />
-            )}
-          </View>
           {props.email && (
-            <TextInput
-              type={i18n.t('account_label.account_email')}
-              edit={false}
+            <TextField
+              label={i18n.t('account_label.account_email')}
+              editable={false}
               eventHandler={() => {}}
               value={props.email}
-              secure={false}
             />
           )}
         </>
@@ -123,13 +122,13 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               title={i18n.t('account_label.continue')}
               handler={() => {
                 if (state.password.length < 8) {
-                  alert(i18n.t('account_errors.password_too_short'));
+                  alert(i18n.t('errors.messages.password_too_short'));
                   return;
                 }
                 setState({ ...state, step: 2 });
               }}
               disabled={state.errorLength !== 0 || state.errorReg !== 0}
-              ButtonTheme={
+              variant={
                 state.errorLength === 1 || state.errorReg === 1
                   ? 'GrayTheme'
                   : undefined
@@ -144,7 +143,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                 state.errorLength !== 0 ||
                 state.errorReg !== 0
               }
-              ButtonTheme={
+              variant={
                 !state.passwordConfirmation ||
                 state.errorLength !== 0 ||
                 state.errorReg !== 0

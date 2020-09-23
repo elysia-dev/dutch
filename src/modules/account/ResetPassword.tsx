@@ -1,18 +1,16 @@
 import React, { FunctionComponent, useState } from 'react';
+import { Text, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
-
-import { Text, View } from 'react-native';
-import { TextInput } from '../../shared/components/TextInput';
+import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-
 import i18n from '../../i18n/i18n';
 import Api from '../../api/account';
 import AccountLayout from '../../shared/components/AccountLayout';
 
 const H1Text = styled.Text`
-  color: #000;
+  color: #1c1c1c;
   font-weight: bold;
   margin-bottom: 15px;
   text-align: center;
@@ -86,7 +84,7 @@ const ResetPassword: FunctionComponent = () => {
                 ? setState({ ...state, step: 1 })
                 : navigation.goBack();
             }}
-            style={{ marginTop: 20, marginBottom: 20 }}
+            style={{ marginTop: 201, marginBottom: 20 }}
           />
           <View>
             <Text>{i18n.t('account_label.change_password')}</Text>
@@ -101,8 +99,8 @@ const ResetPassword: FunctionComponent = () => {
       body={
         <>
           {state.step === 2 && (
-            <TextInput
-              type={i18n.t('account_label.account_password_confirm')}
+            <TextField
+              label={i18n.t('account_label.account_password_confirm')}
               edit={true}
               eventHandler={(input: string): void =>
                 setState({ ...state, passwordConfirmation: input })
@@ -111,8 +109,8 @@ const ResetPassword: FunctionComponent = () => {
               secure={true}
             />
           )}
-          <TextInput
-            type={i18n.t('account_label.new_password')}
+          <TextField
+            label={i18n.t('account_label.new_password')}
             edit={state.step === 1}
             eventHandler={
               state.step === 1
@@ -125,9 +123,9 @@ const ResetPassword: FunctionComponent = () => {
           {state.password === route.params.currentPassword && (
             <PText>{i18n.t('account.reset_current_same')}</PText>
           )}
-          <TextInput
-            type={i18n.t('account_label.current_password')}
-            edit={false}
+          <TextField
+            label={i18n.t('account_label.current_password')}
+            editable={false}
             eventHandler={() => {}}
             value={route.params.currentPassword}
             secure={true}
@@ -141,7 +139,7 @@ const ResetPassword: FunctionComponent = () => {
               title={i18n.t('account_label.continue')}
               handler={() => {
                 if (state.password === '') {
-                  alert(i18n.t('account.insert_password'));
+                  alert(i18n.t('account_check.insert_password'));
                   return;
                 }
                 setState({ ...state, step: 2 });
