@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import { KycStatus } from '../../enums/status';
+import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';

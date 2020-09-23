@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import Api from '../../api/product';
 
 const DesView = styled.View`
@@ -66,15 +66,15 @@ class SliderProductBuying extends Component<Props, State> {
 
   callApi() {
     Api.elysiaPrice()
-      .then(res => this.setState({ elPrice: res.data.elysia.usd }))
-      .catch(e => {
+      .then((res) => this.setState({ elPrice: res.data.elysia.usd }))
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
     Api.ethereumPrice()
-      .then(res => this.setState({ ethPrice: res.data.ethereum.usd }))
-      .catch(e => {
+      .then((res) => this.setState({ ethPrice: res.data.ethereum.usd }))
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }

@@ -142,7 +142,7 @@ export class TransactionHistory extends Component<Props, State> {
       this.state.withdraw,
     ];
 
-    const sortingTypesToSend = sortingTypes.filter(type => {
+    const sortingTypesToSend = sortingTypes.filter((type) => {
       return type !== '';
     });
 

@@ -7,10 +7,10 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { DashboardPage } from '../../enums/pageEnum';
 
 interface Props {

@@ -45,13 +45,10 @@ const ResetPassword: FunctionComponent = () => {
   const callChangeApi = () => {
     if (state.password !== state.passwordConfirmation) {
       alert(i18n.t('account_errors.password_do_not_match'));
-      return;
     } else if (state.password.length < 8) {
       alert(i18n.t('account_errors.password_too_short'));
-      return;
     } else if (state.password === route.params.currentPassword) {
       alert(i18n.t('account.reset_current_same'));
-      return;
     } else {
       Api.resetPassword(state.password, route.params.currentPassword)
         .then(res => {
@@ -84,6 +81,7 @@ const ResetPassword: FunctionComponent = () => {
         <>
           <BackButton
             handler={() => {
+              // eslint-disable-next-line no-unused-expressions
               state.step === 2
                 ? setState({ ...state, step: 1 })
                 : navigation.goBack();

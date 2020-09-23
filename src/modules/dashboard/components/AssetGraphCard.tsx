@@ -11,7 +11,7 @@ const H1Text = styled.Text`
   margin-bottom: 10px;
 `;
 
-export const AssetGraphCard: FunctionComponent<{}> = props => {
+export const AssetGraphCard: FunctionComponent<{}> = (props) => {
   return (
     <View
       style={{

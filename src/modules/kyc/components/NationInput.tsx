@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from "react";
+import React, { Component, FunctionComponent } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,13 @@ import {
   Platform,
   StyleProp,
   ViewStyle,
-} from "react-native";
-import styled from "styled-components/native";
-import i18n from "../../../i18n/i18n";
-import nations from "./argos.json";
+} from 'react-native';
+import styled from 'styled-components/native';
+import RNPickerSelect, { Item } from 'react-native-picker-select';
+import DropDownPicker from 'react-native-dropdown-picker';
+import i18n from '../../../i18n/i18n';
+import nations from './argos.json';
 
-import RNPickerSelect, { Item } from "react-native-picker-select";
-import DropDownPicker from "react-native-dropdown-picker";
 
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
@@ -21,34 +21,34 @@ const InputHeaderText = styled.Text`
   text-align: left;
 `;
 
-interface props {
+interface Props {
   type?: string;
   nationality?: string;
   eventHandler: (input: string) => void;
   style?: StyleProp<ViewStyle>;
 }
 
-interface placeholder {
+interface Placeholder {
   label: string;
   value: string;
   color: string;
 }
 
 export const NationInput: FunctionComponent<props> = (props) => {
-  const NationList_ios = nations.map((nation, Key) => ({
+  const NationListIos = nations.map((nation, Key) => ({
     label: nation.Nationality,
     value: nation.Argos,
     key: Key,
   }));
 
-  const NationList_and = nations.map((nation, Key) => (
+  const NationListAnd = nations.map((nation, Key) => (
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
   ));
 
   const placeholder: placeholder = {
-    label: "Select your nationality",
-    value: "",
-    color: "#1C1C1C",
+    label: 'Select your nationality',
+    value: '',
+    color: '#1C1C1C',
   };
 
   return (
@@ -56,18 +56,17 @@ export const NationInput: FunctionComponent<props> = (props) => {
       <InputHeaderText style={{ marginBottom: 10 }}>
         {props.type}
       </InputHeaderText>
-      {Platform.OS === "android" ? (
+      {Platform.OS === 'android' ? (
         <Picker
           // mode="dropdown"
           selectedValue={props.nationality}
-          onValueChange={props.eventHandler}
-        >
-          {NationList_and}
+          onValueChange={props.eventHandler}>
+          {NationListAnd}
         </Picker>
       ) : (
         <RNPickerSelect
           onValueChange={props.eventHandler}
-          items={NationList_ios}
+          items={NationListIos}
           style={pickerSelectStyles}
           placeholder={placeholder}
         />
@@ -78,25 +77,25 @@ export const NationInput: FunctionComponent<props> = (props) => {
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     fontSize: 14,
     paddingVertical: 12,
     paddingHorizontal: 5,
     borderWidth: 1,
-    borderColor: "#d0d8df",
+    borderColor: '#d0d8df',
     borderRadius: 5,
-    color: "#1C1C1C",
+    color: '#1C1C1C',
     paddingRight: 30,
   },
   inputAndroid: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     fontSize: 14,
     paddingVertical: 12,
     paddingHorizontal: 5,
     borderWidth: 1,
-    borderColor: "#d0d8df",
+    borderColor: '#d0d8df',
     borderRadius: 5,
-    color: "#1C1C1C",
+    color: '#1C1C1C',
     paddingRight: 30,
   },
 });

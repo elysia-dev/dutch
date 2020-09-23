@@ -55,6 +55,7 @@ export const SelectID: FunctionComponent<{}> = props => {
   const navigation = useNavigation();
 
   const setID = (text: string) => {
+    // eslint-disable-next-line no-unused-expressions
     state.idType !== text
       ? setState({ idType: text })
       : setState({ idType: '' });

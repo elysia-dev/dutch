@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import i18n from '../../../i18n/i18n';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import i18n from '../../../i18n/i18n';
 import Api, { NotificationResponse } from '../../../api/notification';
 import NotificationType from '../../../enums/NotificationType';
-import { useNavigation } from '@react-navigation/native';
+import images from '../Images';
 
 interface Props {
   notification: NotificationResponse;
@@ -25,7 +26,7 @@ const TitleText = styled.Text`
 const callApi = (id: number) => {
   Api.read(id)
     .then()
-    .catch(e => {
+    .catch((e) => {
       if (e.response.status === 500) {
         alert(i18n.t('errors.server.duplicate_email'));
       }
@@ -34,6 +35,20 @@ const callApi = (id: number) => {
 
 export const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const type = props.notification.notificationType;
+  const typeId = () => {
+ switch (type) {
+    case "closeOwnership": return 0;
+    case "elysiaNotice": return 1;
+    case "failKyc": return 2;
+    case "monthlyReport": return 3;
+    case "newDevice": return 4;
+    case "productNotice": return 5;
+    case "profit": return 6;
+    case "successKyc": return 7;
+    case "weeklyReport": return 8;
+    default: return 0;
+  }
+};
   const status = props.notification.status;
   const data = props.notification.data;
   return (
@@ -48,7 +63,7 @@ export const NotiBox: FunctionComponent<Props> = (props: Props) => {
           <View style={{ flex: 1 }}>
             <Image
               style={{ resizeMode: 'center', width: 13, height: 17 }}
-              // source={require(`../images/${type}_${status}.png`)}
+              source={images[typeId()][status === "read" ? 0 : 1]}
             />
           </View>
           <View style={{ flex: 10, flexDirection: 'column' }}>
@@ -58,7 +73,7 @@ export const NotiBox: FunctionComponent<Props> = (props: Props) => {
             </TypeDateText>
             <TitleText
               style={{
-                color: status === 'read' ? '#A7A7A7' : '1c1c1c',
+                color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
                 fontWeight: status === 'read' ? 'normal' : 'bold',
               }}>
               {i18n.t(`notification.${type}`, {
@@ -101,7 +116,7 @@ export const NotiBox: FunctionComponent<Props> = (props: Props) => {
             ) && (
               <Image
                 style={{ resizeMode: 'center', width: 6, height: 9 }}
-                // source={require(`../images/next_${props.notification.status}.png`)}
+                source={images[9][status === "read" ? 0 : 1]}
               />
             )}
           </View>

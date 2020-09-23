@@ -6,8 +6,8 @@ import {
   ViewStyle,
 } from "react-native";
 import styled from "styled-components/native";
-import BackButtonImg from "../../../src/shared/assets/images/backbutton.png";
-import BackButtonWhiteImg from "../../../src/shared/assets/images/backbutton_white.png";
+import BackButtonImg from "../assets/images/backbutton.png";
+import BackButtonWhiteImg from "../assets/images/backbutton_white.png";
 
 const ArrowImg = styled.Image`
   width: 30px;

@@ -52,7 +52,6 @@ const Login: FunctionComponent = () => {
       .catch((e) => {
         if (e.response && e.response.status === 400) {
           alert(i18n.t("account.invalid_email"));
-          return;
         } else {
           alert(i18n.t("account.try_again_later"));
         }
@@ -62,10 +61,8 @@ const Login: FunctionComponent = () => {
   const callLoginApi = () => {
     if (state.password === "") {
       alert(i18n.t("account.insert_password"));
-      return;
     } else if (state.password.length < 8) {
       alert(i18n.t("account_errors.password_too_short"));
-      return;
     } else {
       Api.login(route.params.email, state.password)
         .then(async (res) => {

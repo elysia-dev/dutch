@@ -32,7 +32,7 @@ const InitializeEmail: FunctionComponent = () => {
     }
 
     Api.initializeEmail(state.email)
-      .then(res => {
+      .then((res) => {
         navigation.navigate(
           res.data.status === 'exist'
             ? AccountPage.Login
@@ -43,7 +43,7 @@ const InitializeEmail: FunctionComponent = () => {
           },
         );
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.try_again_later'));
         } else if (e.response.status === 500) {

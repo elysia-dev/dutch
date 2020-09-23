@@ -114,6 +114,7 @@ export class OwnershipHistory extends Component<Props, State> {
           <BackButton
             style={{ marginBottom: 10 }}
             handler={() => {
+              // eslint-disable-next-line no-unused-expressions
               this.state.status === Status.Active
                 ? navigation.goBack()
                 : this.setState({

@@ -30,4 +30,4 @@ const FlatBorderButton: FunctionComponent<{
   );
 };
 
-export default FlatBorderButton
+export default FlatBorderButton;

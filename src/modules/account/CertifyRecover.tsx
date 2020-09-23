@@ -52,14 +52,13 @@ const CertifyRecover: FunctionComponent<{}> = () => {
 
   const callResendApi: () => void = () => {
     Api.certifyEmail_recover(route.params.email, 'recoverPassword')
-      .then(res => {
+      .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
-          return;
         } else if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         } else {
@@ -79,7 +78,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
         : state.verificationId,
       state.code,
     )
-      .then(res => {
+      .then((res) => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             email: route.params.email,
@@ -90,7 +89,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           });
         } else if (res.data.status === 'expired') {
           alert(i18n.t('account.expired_verification'));
-          return;
+
           //   navigation.navigate(AccountPage.InitializeEmail);
         } else {
           alert(
@@ -100,10 +99,9 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           );
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.authentication_recover'));
-          return;
         } else if (e.response.status === 404) {
           alert(i18n.t('account.expired_verification'));
           navigation.navigate(AccountPage.InitializeEmail);

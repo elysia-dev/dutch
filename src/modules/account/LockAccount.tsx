@@ -77,7 +77,6 @@ const LockAccount: FunctionComponent = () => {
           });
         } else if (res.data.status === "expired") {
           alert(i18n.t("account.expired_verification"));
-          return;
         } else {
           alert(
             i18n.t("account.unmatched_verification", {

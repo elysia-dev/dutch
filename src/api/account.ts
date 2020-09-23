@@ -1,91 +1,38 @@
 import { AxiosResponse } from 'axios';
-import { KycStatus } from '../enums/status';
-import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import AsyncStorage from '@react-native-community/async-storage';
-
-type InitializeResponse = {
-  verificationId: string;
-  status: string;
-};
-
-type ResetResponse = {
-  status: string;
-};
-
-type SignupResponse = {
-  token: string;
-  status: string;
-};
-type LoginResponse = {
-  token: string;
-  status: string;
-  counts: number;
-  verificationId: string;
-};
-
-// 코드 인증하는 함수의 reponse type
-type CertifyResponse = {
-  counts: number;
-  status: string;
-};
-
-// verification 요청하는 함수의 response type
-type VerificationResponse = {
-  verificationId: string;
-  status: string;
-};
-
-type RecoverResponse = {
-  status: string;
-};
-
-export type UserResponse = {
-  userInfo: {
-    email: string;
-    kycStatus: KycStatus;
-    gender: string;
-    firstName: string;
-    lastName: string;
-  };
-  summary: [
-    {
-      title: string;
-      productType: string;
-      value: number;
-      profit: number;
-    },
-  ];
-  unreadNotificationCount: number;
-};
+import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
+import { AccountResponse, UserResponse } from '../types/AccountResponse';
 
 export default class Api {
   static initializeEmail = async (
     email: string,
-  ): Promise<AxiosResponse<InitializeResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.get(`/auth?email=${email}`);
   };
 
   static login = async (
     email: string,
     password: string,
-  ): Promise<AxiosResponse<LoginResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post('/auth', { email, password });
   };
 
   static signup = async (
     verificationId: string,
     password: string,
-  ): Promise<AxiosResponse<SignupResponse>> => {
+    language: string,
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post(`/users`, {
       verificationId,
       password,
+      language,
     });
   };
 
   static certifyEmail = async (
     verificationId: string,
     code: string,
-  ): Promise<AxiosResponse<CertifyResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.put(`/verifications/${verificationId}`, {
       code, // 유저가 입력한 code
     });
@@ -95,7 +42,7 @@ export default class Api {
   static certifyEmail_recover = async (
     email: string,
     recoverType: string,
-  ): Promise<AxiosResponse<VerificationResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post(`/verifications`, {
       email,
       type: recoverType,
@@ -105,7 +52,7 @@ export default class Api {
   static recoverPassword = async (
     verificationId: string,
     password: string,
-  ): Promise<AxiosResponse<RecoverResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post(`/auth/recover`, {
       password,
       verificationId,
@@ -115,7 +62,7 @@ export default class Api {
   static resetPassword = async (
     password: string,
     currentPassword: string,
-  ): Promise<AxiosResponse<ResetResponse>> => {
+  ): Promise<AxiosResponse<AccountResponse>> => {
     return (await authenticatedEspressoClient()).put(`/users`, {
       password,
       currentPassword,

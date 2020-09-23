@@ -1,15 +1,15 @@
-import React, { FunctionComponent, useContext } from "react";
-import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
-import { NavigationScreenProp, NavigationRoute } from "react-navigation";
-import { useNavigation } from "@react-navigation/native";
-import { SubmitButton } from "../../shared/components/SubmitButton";
-import i18n from "../../i18n/i18n";
-import { KycStatus } from "../../enums/status";
-import Api from "../../api/account";
-import { BackButton } from "../../shared/components/BackButton";
-import { AccountPage } from "../../enums/pageEnum";
-import UserContext from "../../contexts/UserContext";
+import React, { FunctionComponent, useContext } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
+import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import i18n from '../../i18n/i18n';
+import { KycStatus } from '../../enums/KycStatus';
+import Api from '../../api/account';
+import { BackButton } from '../../shared/components/BackButton';
+import { AccountPage } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -41,7 +41,7 @@ const MyPage: FunctionComponent = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{ width: "100%", backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ width: '100%', backgroundColor: '#fff' }}>
       <BackButton
         handler={() => {
           navigation.goBack();
@@ -50,28 +50,26 @@ const MyPage: FunctionComponent = () => {
       />
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           padding: 20,
           paddingBottom: 0,
           height: 80,
-        }}
-      >
-        <H1Text>{i18n.t("more_label.my_account")}</H1Text>
+        }}>
+        <H1Text>{i18n.t('more_label.my_account')}</H1Text>
         <TouchableOpacity
           onPress={() => {
             signOut();
           }}
           style={{
-            backgroundColor: "#E6ECF2",
+            backgroundColor: '#E6ECF2',
             borderRadius: 5,
             width: 80,
             height: 25,
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <ButtonText>{i18n.t("more_label.logout")}</ButtonText>
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <ButtonText>{i18n.t('more_label.logout')}</ButtonText>
         </TouchableOpacity>
       </View>
       <View
@@ -79,25 +77,23 @@ const MyPage: FunctionComponent = () => {
           paddingLeft: 20,
           paddingBottom: 20,
           borderBottomWidth: 5,
-          borderBottomColor: "#F6F6F8",
-        }}
-      >
-        <LabelText>{i18n.t("account_label.account_email")}</LabelText>
+          borderBottomColor: '#F6F6F8',
+        }}>
+        <LabelText>{i18n.t('account_label.account_email')}</LabelText>
         <PText>{user.email}</PText>
-        <LabelText>{i18n.t("account_label.account_password")}</LabelText>
+        <LabelText>{i18n.t('account_label.account_password')}</LabelText>
 
         <TouchableOpacity
           onPress={() => {}}
           style={{
-            backgroundColor: "#E6ECF2",
+            backgroundColor: '#E6ECF2',
             borderRadius: 5,
             width: 120,
             height: 25,
-            justifyContent: "center",
-            alignContent: "center",
-          }}
-        >
-          <ButtonText>{"비밀번호 변경(임시)"}</ButtonText>
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <ButtonText>{'비밀번호 변경(임시)'}</ButtonText>
         </TouchableOpacity>
       </View>
       {user.kycStatus === KycStatus.SUCCESS && (
@@ -105,13 +101,12 @@ const MyPage: FunctionComponent = () => {
           style={{
             padding: 20,
             borderBottomWidth: 5,
-            borderBottomColor: "#F6F6F8",
-          }}
-        >
-          <H1Text>{i18n.t("more_label.my_info")}</H1Text>
-          <LabelText>{i18n.t("more_label.name")}</LabelText>
+            borderBottomColor: '#F6F6F8',
+          }}>
+          <H1Text>{i18n.t('more_label.my_info')}</H1Text>
+          <LabelText>{i18n.t('more_label.name')}</LabelText>
           <PText>{`${user.firstName} ${user.lastName}`}</PText>
-          <LabelText>{i18n.t("more_label.gender")}</LabelText>
+          <LabelText>{i18n.t('more_label.gender')}</LabelText>
           <PText>{user.gender}</PText>
         </View>
       )}

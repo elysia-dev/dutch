@@ -50,7 +50,7 @@ const WhiteBtnText = styled.Text`
   line-height: 40px;
 
   color: ${(props: ButtonProps) =>
-    props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF"};
+    (props.theme === "WhiteTheme" ? "#000000" : "#FFFFFF")};
 `;
 
 interface SubmitButtonProps {

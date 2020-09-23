@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import { StartKYC } from "./StartKYC";
 import { SelectID } from "./SelectID";
 import { TakeID } from "./TakeID";
@@ -7,7 +8,6 @@ import { PersonalDataInput } from "./PersonalDataInput";
 import { TakeSelfieBefore } from "./TakeSelfieBefore";
 import { TakeSelfie } from "./TakeSelfie";
 import { ConfirmSelfie } from "./ConfirmSelfie";
-import { createStackNavigator } from "@react-navigation/stack";
 import { KycPage } from "../../enums/pageEnum";
 import { Argos } from "./Argos";
 

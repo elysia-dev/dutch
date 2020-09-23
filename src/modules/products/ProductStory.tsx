@@ -3,11 +3,11 @@ import { View, ScrollView, Image, StyleSheet } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import HTMLView from 'react-native-htmlview';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { Story } from '../../types/product';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Api from '../../api/product';
 
 const H1Text = styled.Text`
@@ -94,7 +94,7 @@ const ProductStory: FunctionComponent = () => {
             borderBottomRightRadius: 10,
           }}>
           <Image
-            source={{ uri: product.images }}
+            source={{ uri: product.image }}
             style={{
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,

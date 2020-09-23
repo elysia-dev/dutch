@@ -50,7 +50,7 @@ const RecoverPassword: FunctionComponent = () => {
       .then(() => {
         setState({ modalVisible: true });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('recover_error'));
         } else if (e.reponse.status === 404) {

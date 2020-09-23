@@ -212,7 +212,7 @@ export class TakeID extends Component<Props, State> {
   componentDidMount() {
     if (Platform.OS === 'ios') {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        status => {
+        (status) => {
           if (!status.granted) {
             alert('Sorry, we need camera roll permissions to make this work!');
           } else {
@@ -221,7 +221,7 @@ export class TakeID extends Component<Props, State> {
         },
       );
     } else {
-      Permissions.askAsync(Permissions.CAMERA).then(status => {
+      Permissions.askAsync(Permissions.CAMERA).then((status) => {
         this.setState({ hasPermission: status.granted });
       });
     }
@@ -295,7 +295,7 @@ export class TakeID extends Component<Props, State> {
               // borderWidth: 1,
             }}
             type={this.state.type}
-            ref={ref => {
+            ref={(ref) => {
               this.camera = ref;
             }}>
             <HeaderCameraWrapper>

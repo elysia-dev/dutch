@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react"
+import React, { FunctionComponent } from "react";
 import { View } from "react-native";
 import styled from "styled-components/native";
 import WarningImg from "../assets/images/warning.png";
@@ -15,7 +15,7 @@ const WarningText = styled.Text`
 
 
 interface Iprops {
-  message: string
+  message: string;
 }
 
 const ValidationMessage: FunctionComponent<Iprops> = ({ message }) => {
@@ -26,7 +26,7 @@ const ValidationMessage: FunctionComponent<Iprops> = ({ message }) => {
         {message}
       </WarningText>
     </View>
-  )
-}
+  );
+};
 
-export default ValidationMessage
+export default ValidationMessage;

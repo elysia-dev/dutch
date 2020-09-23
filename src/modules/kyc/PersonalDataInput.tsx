@@ -70,7 +70,7 @@ type ParamList = {
   };
 };
 
-export const PersonalDataInput: FunctionComponent<{}> = props => {
+export const PersonalDataInput: FunctionComponent<{}> = (props) => {
   const [state, setState] = useState({
     gender: '',
     firstName: '',
@@ -98,13 +98,10 @@ export const PersonalDataInput: FunctionComponent<{}> = props => {
   const callKycApi = () => {
     if (state.gender === '') {
       alert(i18n.t('kyc.alert_data'));
-      return;
     } else if (state.firstName === '' || state.lastName === '') {
       alert(i18n.t('kyc.alert_data'));
-      return;
     } else if (state.birthday === '' || state.nationality === '') {
       alert(i18n.t('kyc.alert_data'));
-      return;
     } else {
       Api.submission(
         state.firstName,
@@ -116,10 +113,10 @@ export const PersonalDataInput: FunctionComponent<{}> = props => {
         route.params.photoId_hash,
         route.params.selfie_hash,
       )
-        .then(res => {
+        .then((res) => {
           setModalVisible(true);
         })
-        .catch(e => {
+        .catch((e) => {
           if (e.response.status === 404) {
             alert(i18n.t('kyc.submit_error'));
             navigation.navigate('Main', { screen: 'MoreMain' });

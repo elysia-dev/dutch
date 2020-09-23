@@ -6,7 +6,7 @@ import { elysiaPriceResponse, ethereumPriceResponse } from '../types/CoinPrice';
 
 export default class Api {
   static storyList = async (): Promise<AxiosResponse<Story[]>> => {
-    return (await authenticatedEspressoClient()).get(`/stories`);
+    return (await authenticatedEspressoClient()).get('/products/stories');
   };
 
   static productInfo = async (id: number): Promise<AxiosResponse<Product>> => {
@@ -19,7 +19,7 @@ export default class Api {
     AxiosResponse<elysiaPriceResponse>
   > => {
     return axios.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd`,
+      'https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd',
     );
   };
 
@@ -27,7 +27,7 @@ export default class Api {
     AxiosResponse<ethereumPriceResponse>
   > => {
     return axios.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`,
+      'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
     );
   };
 }

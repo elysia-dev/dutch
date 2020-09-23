@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import styled from 'styled-components/native';
 import latlon from '../latlon';
 import i18n from '../../../i18n/i18n';
-import styled from 'styled-components/native';
 import Product from '../../../types/product';
 import ProductInfo from '../ProductBuying';
 import UserContext from '../../../contexts/UserContext';

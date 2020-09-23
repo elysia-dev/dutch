@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import i18n from '../../../i18n/i18n';
 import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import UserContext from '../../../contexts/UserContext';
 import LocaleType from '../../../enums/LocaleType';

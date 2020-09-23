@@ -1,7 +1,7 @@
-import React, { Component, FunctionComponent } from "react";
-import { Modal as RNModal } from "react-native";
-import styled from "styled-components/native";
-import QuitButtonImg from "../../../src/shared/assets/images/quitbutton.png";
+import React, { Component, FunctionComponent } from 'react';
+import { Modal as RNModal } from 'react-native';
+import styled from 'styled-components/native';
+import QuitButtonImg from '../assets/images/quitbutton.png';
 
 const CenteredView = styled.View`
   flex: 1;
@@ -44,13 +44,13 @@ const QuitBtn = styled.Image`
   height: 13px;
 `;
 
-interface props {
+interface Props {
   visible: boolean;
   child: any;
   modalHandler: () => void;
 }
 
-export const Modal: FunctionComponent<props> = (props) => {
+export const Modal: FunctionComponent<Props> = (props: Props) => {
   return (
     <CenteredView>
       <RNModal animationType="slide" transparent={true} visible={props.visible}>

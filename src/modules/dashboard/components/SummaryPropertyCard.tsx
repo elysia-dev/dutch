@@ -31,7 +31,7 @@ const NumText2 = styled.Text`
   font-size: 15px;
   text-align: right;
 `;
-export const SummaryPropertyCard: FunctionComponent<Props> = props => {
+export const SummaryPropertyCard: FunctionComponent<Props> = (props) => {
   return (
     <View
       style={{

@@ -8,13 +8,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import styled from 'styled-components/native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
 import { Account } from './src/modules/account/Account';
 import { Notification } from './src/modules/notification/Notification';
-
-import styled from 'styled-components/native';
 
 import DashboardBlackPng from './src/shared/assets/images/dashboard_black.png';
 import DashboardPng from './src/shared/assets/images/dashboard.png';
@@ -26,7 +25,7 @@ import OptionsPng from './src/shared/assets/images/options.png';
 import OptionsBlackPng from './src/shared/assets/images/options_black.png';
 
 import UserContext from './src/contexts/UserContext';
-import { KycStatus } from './src/enums/status';
+import { KycStatus } from './src/enums/KycStatus';
 import Api from './src/api/account';
 import LocaleType from './src/enums/LocaleType';
 import currentLocale from './src/utiles/currentLocale';
@@ -80,10 +79,10 @@ class App extends React.Component<any, AppState> {
 
   signIn = async () => {
     await Api.me()
-      .then(res => {
+      .then((res) => {
         this.setState({
           signedIn: true,
-          user: res.data.userInfo,
+          user: res.data.user,
           unreadNotificationCount: res.data.unreadNotificationCount,
         });
         console.log(this.state);
