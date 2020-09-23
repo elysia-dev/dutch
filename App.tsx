@@ -33,6 +33,8 @@ import { Dashboard } from './src/modules/dashboard/Dashboard';
 import MainInfo from './src/modules/more/MainInfo';
 import { MainList } from './src/modules/products/MainList';
 import { Main } from './src/modules/dashboard/Main';
+import pusherClient from './src/api/pusherClient';
+import userChannel from './src/utiles/userChannel';
 
 const STORYBOOK_START = false;
 
@@ -67,8 +69,8 @@ const defaultState = {
   unreadNotificationCount: 0,
 };
 
-class App extends React.Component<any, AppState> {
-  constructor(props: any) {
+class App extends React.Component<{}, AppState> {
+  constructor(props: {}) {
     super(props);
     this.state = defaultState;
   }
@@ -79,18 +81,28 @@ class App extends React.Component<any, AppState> {
 
   signIn = async () => {
     await Api.me()
-      .then((res) => {
+      .then(async (res) => {
         this.setState({
           signedIn: true,
           user: res.data.user,
           unreadNotificationCount: res.data.unreadNotificationCount,
         });
-        console.log(this.state);
+
+        const pusher = await pusherClient();
+        const channel = pusher.subscribe(userChannel(res.data.user.id));
+        channel.bind('notification', this.handleNotificaiton);
       })
       .catch(() => {
         this.setState(defaultState);
       });
   };
+
+  handleNotificaiton = async (data: Notification) => {
+    this.setState({
+      unreadNotificationCount: this.state.unreadNotificationCount + 1,
+    });
+    alert(this.state.unreadNotificationCount);
+  }
 
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
@@ -208,10 +220,10 @@ class App extends React.Component<any, AppState> {
                 <RootStack.Screen name={'Product'} component={Products} />
               </>
             ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+                <>
+                  <RootStack.Screen name={'Account'} component={Account} />
+                </>
+              )}
           </RootStack.Navigator>
         </UserContext.Provider>
       </NavigationContainer>
