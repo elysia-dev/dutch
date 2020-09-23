@@ -84,16 +84,11 @@ export const StartKYC: FunctionComponent<{}> = () => {
           marginLeft: 20,
         }}
       >
-<<<<<<< HEAD
         <ClockImg
           source={ClockPng}
           style={{ marginTop: 2, resizeMode: "center" }}
         />
         <Text>{i18n.t("kyc.start_kyc_text")}</Text>
-=======
-        <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
-        <Text>{i18n.t("kyc.start_text")}</Text>
->>>>>>> 3ea6f7771dcf2eb08cffe3b7a9eeb0a4f9e06da2
       </View>
       <KycGuideWrapper style={{ marginTop: 20 }}>
         <HrLine />
@@ -132,6 +127,6 @@ export const StartKYC: FunctionComponent<{}> = () => {
           ButtonTheme={state.agree === false ? "GrayTheme" : undefined}
         />
       </View>
-    </View>
+    </View >
   );
 };
