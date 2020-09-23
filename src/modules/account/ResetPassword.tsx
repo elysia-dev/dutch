@@ -129,7 +129,7 @@ const ResetPassword: FunctionComponent = () => {
               title={i18n.t('account_label.continue')}
               handler={() => {
                 if (state.password === '') {
-                  alert(i18n.t('account_check.insert_password'));
+                  alert(i18n.t('account.insert_password'));
                   return;
                 }
                 setState({ ...state, step: 2 });
