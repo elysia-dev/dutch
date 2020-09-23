@@ -51,6 +51,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     // 'no-useless-return': 'off',
     'no-else-return': 'off',
+    'no-confusing-arrow': 'off',
     // 'no-unused-expressions': 'off',
     'no-irregular-whitespace': 'off',
     'implicit-arrow-linebreak': 'off',

@@ -82,8 +82,11 @@ export const StartKYC: FunctionComponent<{}> = () => {
           marginTop: 20,
           marginLeft: 20,
         }}>
-        <ClockImg source={ClockPng} style={{ marginTop: 2 }} />
-        <Text>{i18n.t('kyc.start_text')}</Text>
+        <ClockImg
+          source={ClockPng}
+          style={{ marginTop: 2, resizeMode: 'center' }}
+        />
+        <Text>{i18n.t('kyc.start_kyc_text')}</Text>
       </View>
       <KycGuideWrapper style={{ marginTop: 20 }}>
         <HrLine />
@@ -115,9 +118,9 @@ export const StartKYC: FunctionComponent<{}> = () => {
         <SubmitButton
           title={i18n.t('kyc_label.agree_start')}
           handler={() =>
-            (state.agree === false
+            state.agree === false
               ? alert(i18n.t('kyc.argos'))
-              : navigation.navigate(KycPage.SelectID))
+              : navigation.navigate(KycPage.SelectID)
           }
           ButtonTheme={state.agree === false ? 'GrayTheme' : undefined}
         />

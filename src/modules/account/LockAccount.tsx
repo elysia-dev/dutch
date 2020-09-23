@@ -13,9 +13,14 @@ import {
   Button,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { useHeaderHeight, HeaderHeightContext } from '@react-navigation/stack';
-import { Header } from 'react-navigation-stack';
-import { Constants } from 'expo';
+import {
+  useHeaderHeight,
+  HeaderHeightContext,
+  useHeaderHeight,
+  HeaderHeightContext,
+} from '@react-navigation/stack';
+import { Header, Header } from 'react-navigation-stack';
+import { Constants, Constants } from 'expo';
 import styled from 'styled-components/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
