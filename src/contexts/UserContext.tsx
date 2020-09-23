@@ -12,8 +12,9 @@ const UserContext = createContext({
     gender: '',
     kycStatus: KycStatus.NONE,
   },
-  signIn: async () => {},
-  signOut: async () => {},
+  unreadNotificationCount: 0,
+  signIn: async () => { },
+  signOut: async () => { },
 });
 
 export default UserContext;
