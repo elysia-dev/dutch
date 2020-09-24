@@ -22,6 +22,9 @@ import ExchangebobooPng from './images/boboo_logo.png';
 import LocaleType from '../../enums/LocaleType';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
+import { TitleText } from '../../shared/components/TitleText';
+import WrapperLayout from '../../shared/components/WrapperLayout';
+import { BackButton } from '../../shared/components/BackButton';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -62,7 +65,6 @@ const InfoHeaderH1Text = styled.Text`
 const InfoHeaderSettingImg = styled.Image`
   width: 21px;
   height: 21px;
-  margin: 50px 5% 5px 5%;
 `;
 const InfoHeaderUserImg = styled.Image`
   width: 20px;
@@ -114,268 +116,395 @@ const MainInfo: FunctionComponent = () => {
   const navigation = useNavigation();
 
   return (
-    <Wrapper>
-      <ScrollView>
-        <View
-          style={{
-            width: '100%',
-            height: '10%',
-            flexDirection: 'row',
-            borderBottomColor: '#f6f6f8',
-            borderBottomWidth: 5,
-            marginBottom: 30,
-            marginTop: 20,
-            paddingBottom: 150,
-          }}>
-          <View
-            style={{
-              flex: 1,
-              height: 28,
-              marginLeft: '5%',
-              marginRight: '5%',
-            }}>
-            <H1Text
-              label={user.email}
-              style={{ lineHeight: 21, height: 21, marginTop: 50 }}
-            />
+    <>
+      <WrapperLayout
+        title={
+          <>
             <View
               style={{
-                marginTop: 5,
-                height: 50,
                 flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-                alignContent: 'stretch',
               }}>
-              <InfoHeaderUserImg
-                source={require('../kyc/images/userIcon.png')}
-              />
-              {user.kycStatus !== KycStatus.SUCCESS ? (
-                <PText label={i18n.t('more_label.need_kyc_label')} />
-              ) : (
-                <PText label={user.firstName + ' ' + user.lastName} />
-              )}
+              <View
+                style={{
+                  flex: 1,
+                }}>
+                <TitleText label={'MORE'} />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('More', { screen: MorePage.MyPage });
+                }}>
+                <InfoHeaderSettingImg
+                  source={require('./images/setting.png')}
+                />
+              </TouchableOpacity>
             </View>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('More', { screen: MorePage.MyPage });
-            }}>
-            <InfoHeaderSettingImg source={require('./images/setting.png')} />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            marginTop: 10,
-            marginLeft: 20,
-            marginRight: 20,
-            display: 'flex',
-            flexDirection: 'row',
-          }}></View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-            height: 86,
-          }}>
-          {user.kycStatus === KycStatus.NONE && (
-            <SubmitButton
+          </>
+        }
+        isBackbutton={false}
+        body={
+          <>
+            <View
               style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-              }}
-              title={i18n.t('more_label.need_kyc')}
-              handler={() => navigation.navigate('Kyc')}
-            />
-          )}
-          {user.kycStatus === KycStatus.PENDING && (
-            <SubmitButton
+                borderBottomColor: '#F6F6F8',
+                borderBottomWidth: 5,
+                height: 350,
+              }}>
+              {user.kycStatus === KycStatus.NONE && (
+                <SubmitButton
+                  style={{
+                    shadowOffset: { width: 2, height: 1 },
+                    shadowColor: '#00000064',
+                    shadowOpacity: 0.8,
+                    shadowRadius: 6,
+                    height: 70,
+                  }}
+                  duplicateTitle={i18n.t('more_label.need_kyc_duplicate_label')}
+                  title={i18n.t('more_label.need_kyc')}
+                  handler={() => navigation.navigate('Kyc')}
+                />
+              )}
+              {user.kycStatus === KycStatus.PENDING && (
+                <SubmitButton
+                  style={{
+                    shadowOffset: { width: 2, height: 1 },
+                    shadowColor: '#00000064',
+                    shadowOpacity: 0.8,
+                    shadowRadius: 6,
+                    height: 70,
+                  }}
+                  duplicateTitle={i18n.t(
+                    'more_label.proceed_kyc_duplicate_label',
+                  )}
+                  title={i18n.t('more_label.proceed_kyc')}
+                  handler={() => {
+                    alert(i18n.t('more.kyc_proceeding_wait'));
+                  }}
+                  variant={'GrayTheme'}
+                />
+              )}
+              {user.kycStatus === KycStatus.SUCCESS && (
+                <SubmitButton
+                  style={{
+                    shadowOffset: { width: 2, height: 1 },
+                    shadowColor: '#00000064',
+                    shadowOpacity: 0.8,
+                    shadowRadius: 6,
+                    height: 70,
+                  }}
+                  duplicateTitle={i18n.t(
+                    'more_label.approved_kyc_duplicate_label',
+                  )}
+                  title={i18n.t('more_label.approved_kyc')}
+                  handler={() => {}}
+                  variant={'GrayTheme'}
+                />
+              )}
+              <View
+                style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 38 }}>
+                <H1Text
+                  label={i18n.t('more_label.my_info')}
+                  style={{ marginBottom: 15 }}
+                />
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.OwnershipHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.transaction_history')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.TransactionHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.wallet_connect')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.MyPage,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.my_account')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View
               style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-              }}
-              title={i18n.t('more_label.proceed_kyc')}
-              handler={() => {
-                alert(i18n.t('more.kyc_proceeding_wait'));
-              }}
-              variant={'GrayTheme'}
-            />
-          )}
-          {user.kycStatus === KycStatus.SUCCESS && (
-            <SubmitButton
-              style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-              }}
-              title={i18n.t('more_label.approved_kyc')}
-              handler={() => {}}
-              variant={'GrayTheme'}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <H1Text label={i18n.t('more_label.confirm')} />
-          <InfoButtonTabWrapper>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('More', {
-                  screen: MorePage.OwnershipHistory,
-                })
-              }>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.investment_history')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
+                borderBottomColor: '#F6F6F8',
+                borderBottomWidth: 5,
+              }}>
+              <View
+                style={{
+                  marginLeft: '5%',
+                  marginRight: '5%',
+                  paddingTop: 25,
+                  paddingBottom: 15,
+                }}>
+                <H1Text
+                  label={i18n.t('more_label.service_center')}
+                  style={{ marginBottom: 15 }}
+                />
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.OwnershipHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.notice')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
 
-          <InfoButtonTabWrapper>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('More', {
-                  screen: MorePage.TransactionHistory,
-                })
-              }>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.transaction_history')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-            justifyContent: 'center',
-            alignContent: 'flex-start',
-          }}>
-          <View>
-            <H1Text label={i18n.t('more_label.elysia')} />
-          </View>
-
-          <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.notice')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
-          <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.service_terms')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
-          <InfoButtonTabWrapper>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('More', { screen: MorePage.Contact })
-              }>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.contact')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
-          <InfoButtonTabWrapper>
-            <TouchableOpacity onPress={() => {}}>
-              <InfoButtonInnerWrapper>
-                <PText label={i18n.t('more_label.faq')} />
-                <InfoArrowImg source={require('./images/next_gray.png')} />
-              </InfoButtonInnerWrapper>
-            </TouchableOpacity>
-          </InfoButtonTabWrapper>
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <H1Text label={i18n.t('more_label.app_setting')} />
-          <H1Text
-            style={{ fontSize: 16 }}
-            label={i18n.t('more_label.language')}
-          />
-          <View
-            style={{
-              borderColor: '#d6d6d8',
-              borderWidth: 1,
-              borderStyle: 'solid',
-              marginLeft: '5%',
-              marginRight: '5%',
-              borderRadius: 5,
-              height: 50,
-              width: '90%',
-              marginBottom: 20,
-            }}>
-            {Platform.OS === 'android' ? (
-              <Picker style={{}}>
-                <Picker.Item label="한국어" value="ko" />
-                <Picker.Item label="English" value="en" />
-                <Picker.Item label="简体中文" value="zh-hans" />
-              </Picker>
-            ) : (
-              <RNPickerSelect
-                style={pickerSelectStyles}
-                onValueChange={async (value: LocaleType) => {
-                  await AsyncStorage.setItem('@locale', value);
-                }}
-                items={[
-                  { label: '한국어', value: LocaleType.KO },
-                  { label: 'English', value: LocaleType.EN },
-                  { label: '简体中文', value: LocaleType.CH },
-                ]}
-                placeholder={{
-                  label: 'Select your app language',
-                  value: '',
-                  color: '#1C1C1C',
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.TransactionHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.faq')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.OwnershipHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.contact')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    height: 50,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.OwnershipHistory,
+                      })
+                    }>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <PText
+                        label={i18n.t('more_label.service_terms')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      <InfoArrowImg
+                        source={require('./images/next_gray.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomColor: '#F6F6F8',
+                borderBottomWidth: 5,
+              }}>
+              <View
+                style={{
+                  marginLeft: '5%',
+                  marginRight: '5%',
+                  paddingTop: 25,
+                  paddingBottom: 15,
+                }}>
+                <H1Text
+                  label={i18n.t('more_label.app_setting')}
+                  style={{ marginBottom: 15 }}
+                />
+                <H1Text
+                  style={{ fontSize: 16, marginTop: 10 }}
+                  label={i18n.t('more_label.language')}
+                />
+                <View
+                  style={{
+                    borderColor: '#d6d6d8',
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    borderRadius: 5,
+                    height: 50,
+                    marginBottom: 20,
+                    marginTop: 10,
+                  }}>
+                  {Platform.OS === 'android' ? (
+                    <Picker style={{}}>
+                      <Picker.Item label="한국어" value="ko" />
+                      <Picker.Item label="English" value="en" />
+                      <Picker.Item label="简体中文" value="zh-hans" />
+                    </Picker>
+                  ) : (
+                    <RNPickerSelect
+                      style={pickerSelectStyles}
+                      onValueChange={async (value: LocaleType) => {
+                        await AsyncStorage.setItem('@locale', value);
+                      }}
+                      items={[
+                        { label: '한국어', value: LocaleType.KO },
+                        { label: 'English', value: LocaleType.EN },
+                        { label: '简体中文', value: LocaleType.CH },
+                      ]}
+                      placeholder={{
+                        label: 'Select your app language',
+                        value: '',
+                        color: '#1C1C1C',
+                      }}
+                    />
+                  )}
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                borderBottomColor: '#F6F6F8',
+                borderBottomWidth: 5,
+              }}>
+              <H1Text
+                label={i18n.t('more_label.el_exchange')}
+                style={{
+                  marginTop: 10,
+                  marginLeft: '5%',
+                  marginRight: '5%',
+                  paddingTop: 25,
+                  paddingBottom: 45,
                 }}
               />
-            )}
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <H1Text label={i18n.t('more_label.el_exchange')} />
-          <View style={{ flexDirection: 'row', marginBottom: 30 }}>
-            <ExchangeBithumbImg source={ExchangeBithumbPng} />
-            <ExchangeBobooImg source={ExchangebobooPng} />
-          </View>
-        </View>
-        <Text
-          style={{
-            backgroundColor: '#F6F6F8',
-            textAlign: 'right',
-            paddingRight: '5%',
-            fontSize: 10,
-          }}>
-          Ver demo sprint3
-        </Text>
-        <View
-          style={{
-            height: 100,
-            backgroundColor: '#F6F6F8',
-          }}
-        />
-      </ScrollView>
-    </Wrapper>
+              <View style={{ flexDirection: 'row', marginBottom: 30 }}>
+                <ExchangeBithumbImg source={ExchangeBithumbPng} />
+                <ExchangeBobooImg source={ExchangebobooPng} />
+              </View>
+            </View>
+            <Text
+              style={{
+                backgroundColor: '#F6F6F8',
+                textAlign: 'right',
+                paddingRight: '5%',
+                fontSize: 10,
+              }}>
+              Ver demo sprint3
+            </Text>
+            <View
+              style={{
+                height: 100,
+                backgroundColor: '#F6F6F8',
+              }}
+            />
+          </>
+        }
+      />
+    </>
   );
 };
 
