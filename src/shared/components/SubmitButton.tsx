@@ -27,12 +27,6 @@ const handleThemeWrapperType = (variant: string) => {
   }
 };
 
-const WhiteBtnWrapper = styled.View`
-  flex: ${(props: ButtonProps) => (props.theme === 'WhiteTheme' ? '4' : '1')};
-  justify-content: flex-end;
-  ${(props: ButtonProps) => handleThemeWrapperType(props.theme)};
-`;
-
 const Button = styled.TouchableOpacity`
   width: 90%;
   margin-left: 5%;
@@ -93,14 +87,14 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
           {title}
         </ButtonLabel>
       ) : (
-        <DuplicateUpperLabel theme={variant}>
-          {duplicateTitle}
-          <DuplicateLabel theme={variant}>
-            {'\n'}
-            {title}
-          </DuplicateLabel>
-        </DuplicateUpperLabel>
-      )}
+          <DuplicateUpperLabel theme={variant}>
+            {duplicateTitle}
+            <DuplicateLabel theme={variant}>
+              {'\n'}
+              {title}
+            </DuplicateLabel>
+          </DuplicateUpperLabel>
+        )}
     </Button>
   );
 };
