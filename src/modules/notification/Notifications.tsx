@@ -9,7 +9,7 @@ import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 
 const Notifications: FunctionComponent = () => {
-  const [state, setState] = useState({ scrollY: new Animated.Value(0) });
+  const scrollY = new Animated.Value(0);
   const {
     notifications,
     unreadNotificationCount,
@@ -32,6 +32,8 @@ const Notifications: FunctionComponent = () => {
   }, []);
 
   const readNotification = (notification: Notification) => {
+    if (notification.status === NotificationStatus.READ) return;
+
     Api.read(notification.id)
       .then(() => {
         setNotifications(notifications.map((n) => {
@@ -65,7 +67,7 @@ const Notifications: FunctionComponent = () => {
           backgroundColor: '#fff',
           shadowOffset: { width: 1, height: 1 },
           shadowColor: '#00000033',
-          shadowOpacity: state.scrollY.interpolate({
+          shadowOpacity: scrollY.interpolate({
             inputRange: [0, 15, 1000],
             outputRange: [0, 0.5, 0.5],
           }),
@@ -74,7 +76,7 @@ const Notifications: FunctionComponent = () => {
           paddingLeft: 20,
           transform: [
             {
-              translateY: state.scrollY.interpolate({
+              translateY: scrollY.interpolate({
                 inputRange: [0, 15, 1000],
                 outputRange: [0, -5, -5],
               }),
@@ -90,7 +92,7 @@ const Notifications: FunctionComponent = () => {
             fontSize: 28,
             transform: [
               {
-                scale: state.scrollY.interpolate({
+                scale: scrollY.interpolate({
                   inputRange: [-1000, 0, 15, 1000],
                   outputRange: [1, 1, 0.9, 0.9],
                 }),
@@ -107,7 +109,7 @@ const Notifications: FunctionComponent = () => {
         onScroll={Animated.event(
           [
             {
-              nativeEvent: { contentOffset: { y: state.scrollY } },
+              nativeEvent: { contentOffset: { y: scrollY } },
             },
           ],
           { useNativeDriver: true },
