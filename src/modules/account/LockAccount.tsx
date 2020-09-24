@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import {
   View,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';

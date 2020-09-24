@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { PText } from '../../shared/components/PText';
@@ -103,7 +102,7 @@ const ResetPassword: FunctionComponent = () => {
             eventHandler={
               state.step === 1
                 ? (input: string) => setState({ ...state, password: input })
-                : () => {}
+                : () => { }
             }
             secure={true}
           />
@@ -116,7 +115,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -136,11 +135,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-            <SubmitButton
-              title={i18n.t('account_label.change')}
-              handler={() => callChangeApi()}
-            />
-          )}
+              <SubmitButton
+                title={i18n.t('account_label.change')}
+                handler={() => callChangeApi()}
+              />
+            )}
         </>
       }
     />
