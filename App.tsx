@@ -8,7 +8,6 @@ import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
 import { Account } from './src/modules/account/Account';
-import { Notification } from './src/modules/notification/Notification';
 
 import UserContext from './src/contexts/UserContext';
 import { KycStatus } from './src/enums/KycStatus';
@@ -19,6 +18,8 @@ import { Dashboard } from './src/modules/dashboard/Dashboard';
 import pusherClient from './src/api/pusherClient';
 import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
+import Notification from './src/types/Notification';
+import NotificationContext from './src/contexts/NotificationContext';
 
 interface AppState {
   signedIn: boolean;
@@ -31,6 +32,7 @@ interface AppState {
     gender: string;
   };
   unreadNotificationCount: number;
+  notifications: Notification[];
 }
 
 const defaultState = {
@@ -44,6 +46,7 @@ const defaultState = {
     kycStatus: KycStatus.NONE,
   },
   unreadNotificationCount: 0,
+  notifications: [],
 };
 
 class App extends React.Component<{}, AppState> {
@@ -67,18 +70,18 @@ class App extends React.Component<{}, AppState> {
 
         const pusher = await pusherClient();
         const channel = pusher.subscribe(userChannel(res.data.user.id));
-        channel.bind('notification', this.handleNotificaiton);
+        channel.bind('notification', this.handleNotification);
       })
       .catch(() => {
         this.setState(defaultState);
       });
   };
 
-  handleNotificaiton = async (data: Notification) => {
+  handleNotification = (notification: Notification) => {
     this.setState({
       unreadNotificationCount: this.state.unreadNotificationCount + 1,
+      notifications: [notification, ...this.state.notifications],
     });
-    alert(this.state.unreadNotificationCount);
   }
 
   signOut = async () => {
@@ -97,30 +100,41 @@ class App extends React.Component<{}, AppState> {
             signIn: this.signIn,
             signOut: this.signOut,
           }}>
-          <RootStack.Navigator
-            headerMode="none"
-            screenOptions={{
-              gestureEnabled: false,
-            }}>
-            {this.state.signedIn ? (
-              <>
-                <RootStack.Screen
-                  name={'Main'}
-                  component={Main}
-                />
-                {this.state.user.kycStatus === KycStatus.NONE && (
-                  <RootStack.Screen name={'Kyc'} component={Kyc} />
-                )}
-                <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-                <RootStack.Screen name={'More'} component={More} />
-                <RootStack.Screen name={'Product'} component={Products} />
-              </>
-            ) : (
+          <NotificationContext.Provider
+            value={{
+              notifications: this.state.notifications,
+              unreadNotificationCount: this.state.unreadNotificationCount,
+              setUnreadNotificationCount: (value) => {
+                this.setState({ unreadNotificationCount: value >= 0 ? value : 0 });
+              },
+              setNotifications: (notifications) => { this.setState({ notifications }); },
+            }}
+          >
+            <RootStack.Navigator
+              headerMode="none"
+              screenOptions={{
+                gestureEnabled: false,
+              }}>
+              {this.state.signedIn ? (
                 <>
-                  <RootStack.Screen name={'Account'} component={Account} />
+                  <RootStack.Screen
+                    name={'Main'}
+                    component={Main}
+                  />
+                  {this.state.user.kycStatus === KycStatus.NONE && (
+                    <RootStack.Screen name={'Kyc'} component={Kyc} />
+                  )}
+                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+                  <RootStack.Screen name={'More'} component={More} />
+                  <RootStack.Screen name={'Product'} component={Products} />
                 </>
-              )}
-          </RootStack.Navigator>
+              ) : (
+                  <>
+                    <RootStack.Screen name={'Account'} component={Account} />
+                  </>
+                )}
+            </RootStack.Navigator>
+          </NotificationContext.Provider>
         </UserContext.Provider>
       </NavigationContainer>
     );

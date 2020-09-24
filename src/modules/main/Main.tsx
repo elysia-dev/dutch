@@ -15,8 +15,8 @@ import OptionsBlackPng from '../../shared/assets/images/options_black.png';
 import MainInfo from '../more/MainInfo';
 import { MainList } from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
-import { Notification } from '../notification/Notification';
-import UserContext from '../../contexts/UserContext';
+import Notifications from '../notification/Notifications';
+import NotificationContext from '../../contexts/NotificationContext';
 
 const Icon = styled.Image`
   width: 26px;
@@ -26,7 +26,7 @@ const Icon = styled.Image`
 const Tab = createBottomTabNavigator();
 
 const Main: FunctionComponent = () => {
-  const { unreadNotificationCount } = useContext(UserContext);
+  const { unreadNotificationCount } = useContext(NotificationContext);
 
   return (
     <Tab.Navigator
@@ -57,7 +57,7 @@ const Main: FunctionComponent = () => {
       />
       <Tab.Screen
         name="NotificationMain"
-        component={Notification}
+        component={Notifications}
         options={{
           // tabBarBadge: this.state.unreadNotificationCount,
           tabBarLabel: '',
