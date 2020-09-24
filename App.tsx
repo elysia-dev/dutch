@@ -21,6 +21,8 @@ import Main from './src/modules/main/Main';
 import Notification from './src/types/Notification';
 import NotificationContext from './src/contexts/NotificationContext';
 
+import StorybookUI from "./storybook/index";
+
 interface AppState {
   signedIn: boolean;
   locale: LocaleType;
@@ -141,4 +143,9 @@ class App extends React.Component<{}, AppState> {
   }
 }
 
-export default App;
+const STORY_BOOK_ENABLED = false;
+
+const AppContainer = () =>
+  __DEV__ && STORY_BOOK_ENABLED ? <StorybookUI /> : <App />;
+
+export default AppContainer;

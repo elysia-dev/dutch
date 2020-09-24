@@ -8,7 +8,7 @@
     "eject": "expo eject",
     "test": "jest",
     "lint": "eslint . --ext .tsx --fix",
-    "storybook": "(adb reverse tcp:7007 tcp:7007 || true) && start-storybook"
+    "storybook": "start-storybook"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
@@ -62,10 +62,14 @@
     "react-navigation-stack": "^2.8.2",
     "react-navigation-tabs": "^2.9.0",
     "storybook": "^5.3.19",
-    "styled-components": "^5.1.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.8.6",
+    "styled-components": "^5.1.1",
+    "@react-native-community/async-storage": "^1.12.0",
+    "@react-native-community/datetimepicker": "^3.0.2",
+    "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/netinfo": "^5.9.7",
+    "@react-navigation/bottom-tabs": "^5.8.0",
+    "@react-navigation/native": "^5.7.3",
+    "@react-navigation/stack": "^5.9.0",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-knobs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
@@ -76,7 +80,10 @@
     "@storybook/addons": "^6.0.17",
     "@storybook/react-native": "^5.3.19",
     "@storybook/react-native-server": "^5.3.19",
-    "@storybook/theming": "^6.0.17",
+    "@storybook/theming": "^6.0.17"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
     "@types/axios": "^0.14.0",
     "@types/pusher-js": "^4.2.2",
     "@types/react": "~16.9.41",
@@ -84,13 +91,6 @@
     "@types/styled-components": "^5.1.2",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
-    "@react-native-community/async-storage": "^1.12.0",
-    "@react-native-community/datetimepicker": "^3.0.2",
-    "@react-native-community/masked-view": "0.1.10",
-    "@react-native-community/netinfo": "^5.9.7",
-    "@react-navigation/bottom-tabs": "^5.8.0",
-    "@react-navigation/native": "^5.7.3",
-    "@react-navigation/stack": "^5.9.0",
     "@types/react-native-charts-wrapper": "^0.5.1",
     "@types/react-native-datepicker": "^1.7.0",
     "@types/react-native-htmlview": "^0.12.2",
