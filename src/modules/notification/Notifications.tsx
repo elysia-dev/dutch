@@ -9,7 +9,7 @@ import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 
 const Notifications: FunctionComponent = () => {
-  const scrollY = new Animated.Value(0);
+  const [scrollY] = useState(new Animated.Value(0));
   const {
     notifications,
     unreadNotificationCount,
