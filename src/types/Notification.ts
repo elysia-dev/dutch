@@ -1,16 +1,14 @@
+import NotificationStatus from '../enums/NotificationStatus';
 import NotificationType from '../enums/NotificationType';
+import NotificationData from './NotificationData';
 
-export type NotificationResponse = {
+type Notification = {
   id: number;
+  userId: number;
   notificationType: NotificationType;
-  status: string;
-  data: {
-    reportId?: string;
-    ownershipId?: number;
-    productId?: number;
-    month?: number;
-    week?: number;
-    message?: string;
-  };
-  createdAt: string;
+  status: NotificationStatus;
+  data: NotificationData;
+  createdAt: Date;
 };
+
+export default Notification;

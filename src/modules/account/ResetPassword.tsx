@@ -1,28 +1,14 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Text, View } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
+import { PText } from '../../shared/components/PText';
+import { H1Text } from '../../shared/components/H1Text';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import Api from '../../api/account';
 import AccountLayout from '../../shared/components/AccountLayout';
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  margin-top: 60px;
-`;
-const PText = styled.Text`
-  color: #626368;
-  margin-bottom: 12px;
-  font-size: 13px;
-  text-align: center;
-  margin-top: 20px;
-`;
 
 type ParamList = {
   ResetPassword: {
@@ -88,11 +74,14 @@ const ResetPassword: FunctionComponent = () => {
           />
           <View>
             <Text>{i18n.t('account_label.change_password')}</Text>
-            <H1Text>
-              {state.step === 1
-                ? i18n.t('account.insert_new_password')
-                : i18n.t('account.password_confirm')}
-            </H1Text>
+            <H1Text
+              style={{ marginBottom: 15, marginTop: 60 }}
+              label={
+                state.step === 1
+                  ? i18n.t('account.insert_new_password')
+                  : i18n.t('account.password_confirm')
+              }
+            />
           </View>
         </>
       }
@@ -101,32 +90,32 @@ const ResetPassword: FunctionComponent = () => {
           {state.step === 2 && (
             <TextField
               label={i18n.t('account_label.account_password_confirm')}
-              edit={true}
               eventHandler={(input: string): void =>
                 setState({ ...state, passwordConfirmation: input })
               }
-              value={''}
               secure={true}
             />
           )}
           <TextField
             label={i18n.t('account_label.new_password')}
-            edit={state.step === 1}
+            editable={state.step === 1}
             eventHandler={
               state.step === 1
                 ? (input: string) => setState({ ...state, password: input })
-                : () => {}
+                : () => { }
             }
-            value={''}
             secure={true}
           />
           {state.password === route.params.currentPassword && (
-            <PText>{i18n.t('account.reset_current_same')}</PText>
+            <PText
+              style={{ textAlign: 'center', marginTop: 20, marginBottom: 13 }}
+              label={i18n.t('account.reset_current_same')}
+            />
           )}
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -146,11 +135,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-            <SubmitButton
-              title={i18n.t('account_label.change')}
-              handler={() => callChangeApi()}
-            />
-          )}
+              <SubmitButton
+                title={i18n.t('account_label.change')}
+                handler={() => callChangeApi()}
+              />
+            )}
         </>
       }
     />

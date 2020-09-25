@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 
 const ExpTimeText = styled.Text`
@@ -71,13 +71,13 @@ export class Timer extends Component<Props, State> {
         {this.state.minutes === 0 && this.state.seconds === 0 ? (
           <ExpTimeText>{i18n.t('account.expired_time')}</ExpTimeText>
         ) : (
-          <ExpTimeText>
-            {this.state.minutes}:
-            {this.state.seconds < 10
-              ? `0${this.state.seconds}`
-              : this.state.seconds}
-          </ExpTimeText>
-        )}
+            <ExpTimeText>
+              {this.state.minutes}:
+              {this.state.seconds < 10
+                ? `0${this.state.seconds}`
+                : this.state.seconds}
+            </ExpTimeText>
+          )}
       </View>
     );
   }

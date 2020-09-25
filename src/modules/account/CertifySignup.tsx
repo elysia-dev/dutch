@@ -1,6 +1,5 @@
-import React, { Component, FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
@@ -111,7 +110,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
             label={i18n.t('account_label.account_email')}
             editable={false}
             value={route.params.email}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
           />
           <TextField
             label={i18n.t('account_label.authentication_code')}

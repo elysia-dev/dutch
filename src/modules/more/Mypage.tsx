@@ -10,31 +10,8 @@ import Api from '../../api/account';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-weight: bold;
-  font-size: 20px;
-  text-align: left;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-const LabelText = styled.Text`
-  color: #a7a7a7;
-  font-size: 13px;
-  text-align: left;
-  margin-top: 15px;
-  margin-bottom: 5px;
-`;
-const ButtonText = styled.Text`
-  color: #5c5b5b;
-  font-size: 13px;
-  text-align: center;
-`;
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 
 const MyPage: FunctionComponent = () => {
   const { user, signOut } = useContext(UserContext);
@@ -63,7 +40,7 @@ const MyPage: FunctionComponent = () => {
           paddingBottom: 0,
           height: 50,
         }}>
-        <H1Text>{i18n.t('more_label.my_account')}</H1Text>
+        <H1Text label={i18n.t('more_label.my_account')} />
         <TouchableOpacity
           onPress={() => {
             signOut();
@@ -76,7 +53,10 @@ const MyPage: FunctionComponent = () => {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          <ButtonText>{i18n.t('more_label.logout')}</ButtonText>
+          <PText
+            label={i18n.t('more_label.logout')}
+            style={{ color: '#5c5b5b', textAlign: 'center' }}
+          />
         </TouchableOpacity>
       </View>
       <View
@@ -86,10 +66,15 @@ const MyPage: FunctionComponent = () => {
           borderBottomWidth: 5,
           borderBottomColor: '#F6F6F8',
         }}>
-        <LabelText>{i18n.t('account_label.account_email')}</LabelText>
-        <PText>{user.email}</PText>
-        <LabelText>{i18n.t('account_label.account_password')}</LabelText>
-
+        <PText
+          label={i18n.t('account_label.account_email')}
+          style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+        />
+        <PText label={user.email} style={{ fontSize: 15 }} />
+        <PText
+          label={i18n.t('account_label.account_password')}
+          style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+        />
         <TouchableOpacity
           onPress={() => {}}
           style={{
@@ -100,7 +85,10 @@ const MyPage: FunctionComponent = () => {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          <ButtonText>{'비밀번호 변경(임시)'}</ButtonText>
+          <PText
+            label={'비밀번호 변경(임시)'}
+            style={{ color: '#5c5b5b', textAlign: 'center' }}
+          />
         </TouchableOpacity>
       </View>
       {user.kycStatus === KycStatus.SUCCESS && (
@@ -110,11 +98,20 @@ const MyPage: FunctionComponent = () => {
             borderBottomWidth: 5,
             borderBottomColor: '#F6F6F8',
           }}>
-          <H1Text>{i18n.t('more_label.my_info')}</H1Text>
-          <LabelText>{i18n.t('more_label.name')}</LabelText>
-          <PText>{`${user.firstName} ${user.lastName}`}</PText>
-          <LabelText>{i18n.t('more_label.gender')}</LabelText>
-          <PText>{user.gender}</PText>
+          <H1Text label={i18n.t('more_label.my_info')} />
+          <PText
+            label={i18n.t('more_label.name')}
+            style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+          />
+          <PText
+            label={`${user.firstName} ${user.lastName}`}
+            style={{ fontSize: 15 }}
+          />
+          <PText
+            label={i18n.t('more_label.gender')}
+            style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+          />
+          <PText label={user.gender} style={{ fontSize: 15 }} />
         </View>
       )}
     </SafeAreaView>

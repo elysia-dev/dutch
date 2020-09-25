@@ -8,7 +8,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text } from '../../shared/components/H1Text';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
-import ValidationMessage from '../../shared/components/ValidationMessage';
 import checkPassword from '../../utiles/checkPassword';
 
 interface Props {

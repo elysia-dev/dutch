@@ -280,7 +280,10 @@ export class TakeID extends Component<Props, State> {
       return (
         <TakeIdDeniedWrapper style={{ display: 'flex' }}>
           <BackButton
-            handler={() => navigation.goBack()}
+            handler={() => {
+              this.setState({ hasPermission: hasPermission.PENDING });
+              navigation.goBack();
+            }}
             style={{ marginTop: 30, marginLeft: 20 }}
           />
           <CameraPermissionImg source={CameraPermissionPng} />

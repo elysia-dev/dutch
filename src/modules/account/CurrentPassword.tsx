@@ -1,10 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
-import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';

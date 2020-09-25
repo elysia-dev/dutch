@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { TextField } from '../../shared/components/TextField';
@@ -12,7 +11,6 @@ import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import AccountLayout from '../../shared/components/AccountLayout';
-import ValidationMessage from '../../shared/components/ValidationMessage';
 import { H1Text } from '../../shared/components/H1Text';
 
 type ParamList = {

@@ -9,6 +9,7 @@ export type AccountResponse = {
 
 export type UserResponse = {
   user: {
+    id: number;
     email: string;
     kycStatus: KycStatus;
     ethAddress: string[];

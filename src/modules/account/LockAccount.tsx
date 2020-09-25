@@ -1,21 +1,8 @@
-import React, { FunctionComponent, useState, useRef } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   View,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-  SafeAreaView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Text,
-  TextInput,
-  Button,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { useHeaderHeight, HeaderHeightContext } from '@react-navigation/stack';
-import { Header } from 'react-navigation-stack';
-import { Constants } from 'expo';
 import styled from 'styled-components/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -24,15 +11,15 @@ import LockAccountPng from './images/lockaccount.png';
 import i18n from '../../i18n/i18n';
 import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
-import AccountLayout from '../../shared/components/AccountLayoutPosition';
 
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
+import AccountLayout from '../../shared/components/AccountLayout';
 
 const LockAccountImg = styled.Image`
   width: 100%;
-  margin: 60px auto 30px auto;
   resize-mode: center;
+  margin-top: 53px;
 `;
 const ExpTimeText = styled.Text`
   color: #1c1c1c;
@@ -54,9 +41,8 @@ const LockAccount: FunctionComponent = () => {
   const [state, setState] = useState({
     code: '',
     verificationId: '',
-    isFocus: false,
+    focusing: false,
   });
-  const TextInputFocus = React.createRef();
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
@@ -105,49 +91,38 @@ const LockAccount: FunctionComponent = () => {
   };
 
   return (
-    <ScrollView
-      style={{
-        backgroundColor: 'cyan',
-        flexGrow: 1,
-        borderColor: '#F00',
-        borderWidth: 10,
-      }}>
-      <KeyboardAvoidingView
-        behavior="padding" // {Platform.OS == "ios" ? "padding" : "position"}
-        keyboardVerticalOffset={10}
-        style={{
-          height: '100%',
-          borderColor: 'blue',
-          borderWidth: 10,
-          backgroundColor: '#cfcfcf',
-        }}>
+    <AccountLayout
+      title={
+        <View>
+          {!state.focusing && <LockAccountImg source={LockAccountPng} />}
+        </View>
+      }
+      body={
         <View
           style={{
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            display: 'flex', flexDirection: 'column',
           }}>
-          <View style={{ height: 100, backgroundColor: 'yellow', flex: 1 }} />
-          <View style={{ backgroundColor: 'green', flex: 4 }}>
-            <LockAccountImg source={LockAccountPng} />
+          <View>
             <H1Text
               style={{ marginTop: 10, textAlign: 'center' }}
-              label={i18n.t('lock_account.lockdown')}
+              label={i18n.t('account.lockdown')}
             />
             <PText
               style={{ marginTop: 10, color: '#626368' }}
-              label={i18n.t('lock_account.lockdown_text')}
+              label={i18n.t('account.lockdown_text')}
             />
-            <View style={{ marginTop: 30 }} />
+            <View style={{ marginTop: 20 }} />
             <TextField
               label={i18n.t('account_label.authentication_code')}
               eventHandler={value => setState({ ...state, code: value })}
               autoFocus={true}
+              focusHandler={value => setState({ ...state, focusing: value })}
             />
             <View
-              style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}>
+              style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}
+            >
               <ExpTimeText style={{ marginLeft: 'auto' }}>
-                {i18n.t('lock_account.resending_code_mail_label')}
+                {i18n.t('account.resending_code_mail_label')}
               </ExpTimeText>
               <BorderFlatButton
                 handler={() => callResendApi()}
@@ -155,21 +130,15 @@ const LockAccount: FunctionComponent = () => {
               />
             </View>
           </View>
-          <View style={{ flex: 1 }}>
-            <SubmitButton
-              title={i18n.t('account_label.certify')}
-              handler={() => callCertifyApi()}
-              style={{
-                marginBottom: 20,
-                bottom: 0,
-                marginTop: 'auto',
-                flex: 1,
-              }}
-            />
-          </View>
         </View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+      }
+      button={
+        <SubmitButton
+          title={i18n.t('account_label.certify')}
+          handler={() => callCertifyApi()}
+        />
+      }
+    />
   );
 };
 

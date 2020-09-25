@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Modal } from '../../shared/components/Modal';
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 import AcceptedImg from './images/accepted.png';
-
 import i18n from '../../i18n/i18n';
 import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
@@ -14,15 +15,6 @@ const Accepted = styled.Image`
   width: 64px;
   height: 60px;
   margin: 10px auto;
-`;
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  font-weight: bold;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
 `;
 
 type ParamList = {
@@ -86,18 +78,16 @@ const RecoverPassword: FunctionComponent = () => {
                   textAlign: 'center',
                   marginTop: 15,
                   marginBottom: 15,
-                  marginLeft: '5%',
-                  marginRight: '5%',
-                }}>
-                {i18n.t('account.password_changed')}
-              </H1Text>
+                }}
+                label={i18n.t('account.password_changed')}
+              />
               <PText
                 style={{
                   marginBottom: 40,
                   textAlign: 'center',
-                }}>
-                {i18n.t('account.login_request')}
-              </PText>
+                }}
+                label={i18n.t('account.login_request')}
+              />
             </View>
           }
           modalHandler={() => {
