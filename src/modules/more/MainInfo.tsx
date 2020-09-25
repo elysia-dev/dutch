@@ -304,7 +304,7 @@ const MainInfo: FunctionComponent = () => {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate('More', {
-                        screen: MorePage.OwnershipHistory,
+                        screen: MorePage.Contact,
                       })
                     }>
                     <View

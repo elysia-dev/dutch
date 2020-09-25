@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   GestureResponderEvent,
+  SafeAreaView,
 } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
@@ -38,6 +39,7 @@ export class Main extends Component<Props, State> {
   }
 
   defaultUser = {
+    id: 0,
     email: '',
     kycStatus: KycStatus.NONE,
     ethAddress: [],
@@ -71,7 +73,7 @@ export class Main extends Component<Props, State> {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   }
@@ -87,6 +89,7 @@ export class Main extends Component<Props, State> {
           screen: DashboardPage.OwnershipDetail,
           params: {
             ownership: res.data,
+            ownershipId: id,
           },
         });
       })
@@ -97,7 +100,7 @@ export class Main extends Component<Props, State> {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   }
@@ -111,9 +114,7 @@ export class Main extends Component<Props, State> {
     const ownershipsList = this.state.ownerships.map((ownership, index) => (
       <Asset
         handler={() => this.callOwnershipApi(ownership.id)}
-        name={ownership.title}
-        investment={`$${ownership.value}`}
-        profit={`$${ownership.profit}`}
+        ownership={ownership}
         key={index}
       />
     ));
@@ -126,38 +127,61 @@ export class Main extends Component<Props, State> {
           top: 0,
           backgroundColor: '#FAFCFF',
         }}>
-        <View style={{ paddingTop: 90, height: '100%', padding: 20 }}>
-          <BalanceCard
-            balance={'$30.00'}
-            profit={'+ $3.18'}
-            handler={() =>
-              navigation.navigate('Dashboard', {
-                screen: DashboardPage.SummaryReport,
-              })
-            }
-          />
-          <View>{ownershipsList}</View>
-          <TouchableOpacity
-            style={{
-              width: '100%',
-              height: 50,
-              borderRadius: 5,
-              backgroundColor: '#E6ECF2',
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}
-            onPress={() => {}}>
+        <SafeAreaView>
+          <View style={{ paddingTop: 40, height: '100%', padding: 20 }}>
             <Text
               style={{
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: 25,
-                color: '#838383',
+                color: '#7A7D8D',
+                fontSize: 15,
+                textAlign: 'left',
+                marginBottom: 10,
               }}>
-              {'+'}
+              {'Welcome to ELYSIA'}
             </Text>
-          </TouchableOpacity>
-        </View>
+            <Text
+              style={{
+                color: '#1C1C1C',
+                fontWeight: 'bold',
+                fontSize: 28,
+                textAlign: 'left',
+                marginBottom: 40,
+              }}>{`Hi, ${this.state.user.firstName}${this.state.user.lastName}`}</Text>
+            <BalanceCard
+              balance={'$30.00'}
+              profit={'+ $3.18'}
+              handler={() =>
+                navigation.navigate('Dashboard', {
+                  screen: DashboardPage.SummaryReport,
+                })
+              }
+            />
+            <View>{ownershipsList}</View>
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 50,
+                borderRadius: 5,
+                backgroundColor: '#fff',
+                justifyContent: 'center',
+                alignContent: 'center',
+                shadowColor: '#00000029',
+                shadowOffset: { width: 1, height: 2 },
+                shadowOpacity: 0.7,
+                shadowRadius: 7,
+              }}
+              onPress={() => {}}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: 25,
+                  color: '#838383',
+                }}>
+                {'+'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
       </ScrollView>
     );
   }

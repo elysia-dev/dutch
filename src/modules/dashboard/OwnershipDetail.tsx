@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -14,13 +14,17 @@ const ProductInfoWrapper = styled.SafeAreaView`
 type ParamList = {
   OwnershipDetail: {
     ownership: OwnershipResponse;
+    ownershipId: number;
   };
 };
 
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
-  const { ownership } = route.params;
+  const { ownership, ownershipId } = route.params;
+  const [state, setState] = useState({
+    transactionList: [],
+  });
 
   return (
     <ProductInfoWrapper>

@@ -164,7 +164,7 @@ export class TakeID extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      hasPermission: hasPermission.PENDING,
+      hasPermission: hasPermission.FALSE,
       type: Camera.Constants.Type.back,
     };
   }
@@ -174,20 +174,64 @@ export class TakeID extends Component<Props, State> {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
         status => {
           if (!status.granted) {
-            this.setState({ hasPermission: hasPermission.FALSE });
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.FALSE,
+            });
             alert('Sorry, we need camera roll permissions to make this work!');
           } else {
-            this.setState({ hasPermission: hasPermission.TRUE });
+            this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
           }
         },
       );
     } else {
       Permissions.askAsync(Permissions.CAMERA).then(status => {
         if (!status.granted) {
-          this.setState({ hasPermission: hasPermission.FALSE });
+          this.setState({ ...this.state, hasPermission: hasPermission.FALSE });
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
-          this.setState({ hasPermission: hasPermission.TRUE });
+          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
+        }
+      });
+    }
+  }
+
+  shouldComponentUpdate() {
+    if (this.state.hasPermission === hasPermission.PENDING) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (Platform.OS === 'ios') {
+      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
+        status => {
+          if (!status.granted) {
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.FALSE,
+            });
+            alert('Sorry, we need camera roll permissions to make this work!');
+          } else {
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.TRUE,
+            });
+          }
+        },
+      );
+    } else {
+      Permissions.askAsync(Permissions.CAMERA).then(status => {
+        if (!status.granted) {
+          this.setState({
+            ...this.state,
+            hasPermission: hasPermission.FALSE,
+          });
+          alert('Sorry, we need camera roll permissions to make this work!');
+        } else {
+          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
         }
       });
     }
@@ -236,7 +280,10 @@ export class TakeID extends Component<Props, State> {
           title={
             <BackButton
               handler={() => {
-                this.setState({ hasPermission: hasPermission.PENDING });
+                this.setState({
+                  ...this.state,
+                  hasPermission: hasPermission.PENDING,
+                });
                 navigation.goBack();
               }}
             />
@@ -260,7 +307,10 @@ export class TakeID extends Component<Props, State> {
             <SubmitButton
               title={i18n.t('kyc_label.camera_access_return')}
               handler={() => {
-                this.setState({ hasPermission: hasPermission.PENDING });
+                this.setState({
+                  ...this.state,
+                  hasPermission: hasPermission.PENDING,
+                });
                 navigation.goBack();
               }}
             />

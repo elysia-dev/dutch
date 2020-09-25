@@ -1,9 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { BackButton } from '../../shared/components/BackButton';
 import { DocsResponse } from '../../types/Docs';
 import Product from '../../types/product';
+import { Transaction } from '../../types/Transaction';
 import { Map } from '../products/components/Map';
 import Documents from './components/Documents';
 import OwnershipWrappedInfo from './components/OwnershipWrappedInfo';
@@ -19,6 +20,7 @@ const ProductData: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipProduct'>>();
   const { product, docs } = route.params;
+
   return (
     <ScrollView
       style={{

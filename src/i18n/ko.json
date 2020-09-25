@@ -239,7 +239,14 @@
     "document": "문서",
     "shareholder_document": "주주증명서",
     "lease_document": "임대차계약서",
-    "stake_document": "지분증명서"
+    "stake_document": "지분증명서",
+    "ownership": "지분 구매",
+    "refund": "지분 환불",
+    "expectedProfit": "예상 이익 발생",
+    "profit": "일일 수익",
+    "close": "상품 정산",
+    "fold": "접기",
+    "transaction": "트랜잭션"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다."

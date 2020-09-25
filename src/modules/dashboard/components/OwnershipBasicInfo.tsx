@@ -13,6 +13,8 @@ import { OwnershipResponse } from '../../../types/Ownership';
 import OptionButtons from './OptionButtons';
 import { DashboardPage } from '../../../enums/pageEnum';
 import Api from '../../../api/product';
+import { Api as TransactionApi } from '../../../api/transactions';
+import { Transaction } from '../../../types/Transaction';
 
 interface Props {
   ownership: OwnershipResponse;
@@ -64,8 +66,8 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
     Api.productDocs(ownership.product.id)
       .then(res => {
         navigation.navigate(DashboardPage.ProductData, {
-          docs: res.data,
           product: ownership.product,
+          docs: res.data,
         });
       })
       .catch(e => {
@@ -104,7 +106,9 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <TouchableOpacity
-            onPress={() => callDocsApi()}
+            onPress={() => {
+              callDocsApi();
+            }}
             style={{
               width: 44,
               height: 44,
