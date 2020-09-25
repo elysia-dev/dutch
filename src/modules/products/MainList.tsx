@@ -59,18 +59,14 @@ export class MainList extends Component<Props, State> {
     const { navigation, route } = this.props;
     const { scrollY } = this.state;
     const listToShow = this.state.storyList.map((product, index) => (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Product', {
-            screen: ProductPage.ProductStory,
-            params: {
-              product,
-            },
-          })
-        }
-        key={`item-${index}`}>
-        <Item story={product} />
-      </TouchableOpacity>
+      <Item story={product} key={`item-${index}`} pressHandler={() =>
+        navigation.navigate('Product', {
+          screen: ProductPage.ProductStory,
+          params: {
+            product,
+          },
+        })
+      } />
     ));
     return (
       <View
