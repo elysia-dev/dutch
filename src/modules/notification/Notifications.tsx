@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -10,25 +10,34 @@ import NotificationStatus from '../../enums/NotificationStatus';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
+  const [refreshing, setRefreshing] = React.useState(false);
+  const navigation = useNavigation();
+
   const {
     notifications,
     unreadNotificationCount,
     setNotifications,
     setUnreadNotificationCount,
   } = useContext(NotificationContext);
-  const navigation = useNavigation();
 
   useEffect(() => {
-    Api.notification()
-      .then(res => { setNotifications(res.data); })
-      .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
-        } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
-        }
-      });
+    loadNotifications();
+  }, []);
+
+  const loadNotifications = () => Api.notification()
+    .then(res => { setNotifications(res.data); setRefreshing(false); })
+    .catch(e => {
+      if (e.response.status === 401) {
+        alert(i18n.t('account.need_login'));
+        navigation.navigate('Account');
+      } else if (e.response.status === 500) {
+        alert(i18n.t('errors.server.duplicate_email'));
+      }
+    });
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    loadNotifications();
   }, []);
 
   const readNotification = (notification: Notification) => {
@@ -114,7 +123,11 @@ const Notifications: FunctionComponent = () => {
           ],
           { useNativeDriver: true },
         )}
-        style={{ width: '100%', padding: 20 }}>
+        style={{ width: '100%', padding: 20 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {
           notifications.map((notification, index) => {
             return (
