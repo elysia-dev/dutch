@@ -29,6 +29,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     'prefer-template': 'off',
     'prefer-destructuring': 'off',
+    'function-paren-newline': 'off',
     // [
     //   2,
     //   { args: 'after-used', argsIgnorePattern: '^_' },

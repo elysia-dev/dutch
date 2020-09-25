@@ -189,7 +189,7 @@ interface Props {
 }
 
 interface State {
-  hasPermission: boolean;
+  hasPermission: hasPermission;
   type: any;
 }
 
@@ -199,12 +199,18 @@ type ParamList = {
   };
 };
 
+enum hasPermission {
+  TRUE = 'true',
+  FALSE = 'false',
+  PENDING = 'pending',
+}
+
 export class TakeID extends Component<Props, State> {
   camera: any;
   constructor(props: Props) {
     super(props);
     this.state = {
-      hasPermission: false,
+      hasPermission: hasPermission.PENDING,
       type: Camera.Constants.Type.back,
     };
   }
@@ -212,17 +218,23 @@ export class TakeID extends Component<Props, State> {
   componentDidMount() {
     if (Platform.OS === 'ios') {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        (status) => {
+        status => {
           if (!status.granted) {
+            this.setState({ hasPermission: hasPermission.FALSE });
             alert('Sorry, we need camera roll permissions to make this work!');
           } else {
-            this.setState({ hasPermission: status.granted });
+            this.setState({ hasPermission: hasPermission.TRUE });
           }
         },
       );
     } else {
-      Permissions.askAsync(Permissions.CAMERA).then((status) => {
-        this.setState({ hasPermission: status.granted });
+      Permissions.askAsync(Permissions.CAMERA).then(status => {
+        if (!status.granted) {
+          this.setState({ hasPermission: hasPermission.FALSE });
+          alert('Sorry, we need camera roll permissions to make this work!');
+        } else {
+          this.setState({ hasPermission: hasPermission.TRUE });
+        }
       });
     }
   }
@@ -245,7 +257,7 @@ export class TakeID extends Component<Props, State> {
         base64: true,
       });
       // setPath(`${photo.uri}`);
-      const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
+      // const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
       return idPhoto;
     }
   };
@@ -264,7 +276,7 @@ export class TakeID extends Component<Props, State> {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const { id_type } = route.params;
 
-    if (this.state.hasPermission === false) {
+    if (this.state.hasPermission === hasPermission.FALSE) {
       return (
         <TakeIdDeniedWrapper style={{ display: 'flex' }}>
           <BackButton
@@ -276,7 +288,10 @@ export class TakeID extends Component<Props, State> {
           <DeniedPText>{i18n.t('kyc.camera_access_denied_text')}</DeniedPText>
           <SubmitButton
             title={i18n.t('kyc_label.camera_access_return')}
-            handler={() => navigation.goBack()}
+            handler={() => {
+              this.setState({ hasPermission: hasPermission.PENDING });
+              navigation.goBack();
+            }}
             style={{ marginTop: 'auto', marginBottom: 10 }}
           />
         </TakeIdDeniedWrapper>
@@ -295,7 +310,7 @@ export class TakeID extends Component<Props, State> {
               // borderWidth: 1,
             }}
             type={this.state.type}
-            ref={(ref) => {
+            ref={ref => {
               this.camera = ref;
             }}>
             <HeaderCameraWrapper>

@@ -66,15 +66,15 @@ class SliderProductBuying extends Component<Props, State> {
 
   callApi() {
     Api.elysiaPrice()
-      .then((res) => this.setState({ elPrice: res.data.elysia.usd }))
-      .catch((e) => {
+      .then(res => this.setState({ elPrice: res.data.elysia.usd }))
+      .catch(e => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
     Api.ethereumPrice()
-      .then((res) => this.setState({ ethPrice: res.data.ethereum.usd }))
-      .catch((e) => {
+      .then(res => this.setState({ ethPrice: res.data.ethereum.usd }))
+      .catch(e => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -194,7 +194,7 @@ class SliderProductBuying extends Component<Props, State> {
             marginTop: 10,
           }}
           handler={() => {}}
-          title={i18n.t('product_label.buy_now')}
+          title={i18n.t('product_label.purchase_now')}
         />
       </View>
     );

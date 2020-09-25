@@ -4,7 +4,8 @@ import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { NotiBox } from './components/NotiBox';
-import Api, { NotificationResponse } from '../../api/notification';
+import Api from '../../api/notification';
+import { NotificationResponse } from '../../types/Notification';
 
 interface Props {
   navigation: NavigationScreenProp<any>;

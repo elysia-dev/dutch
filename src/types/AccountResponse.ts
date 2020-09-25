@@ -19,6 +19,7 @@ export type UserResponse = {
   };
   ownerships: [
     {
+      id: number;
       title: string;
       productType: string;
       value: number;

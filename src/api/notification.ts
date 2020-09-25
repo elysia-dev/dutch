@@ -1,21 +1,6 @@
-import { AxiosResponse } from "axios";
-import { authenticatedEspressoClient } from "./axiosInstances";
-import NotificationType from "../enums/NotificationType";
-
-export type NotificationResponse = {
-  id: number;
-  notificationType: NotificationType;
-  status: string;
-  data: {
-    reportId?: string;
-    ownershipId?: number;
-    productId?: number;
-    month?: number;
-    week?: number;
-    message?: string;
-  };
-  createdAt: string;
-};
+import { AxiosResponse } from 'axios';
+import { NotificationResponse } from '../types/Notification';
+import { authenticatedEspressoClient } from './axiosInstances';
 
 export default class Api {
   static notification = async (): Promise<

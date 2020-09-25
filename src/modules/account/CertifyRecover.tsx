@@ -33,11 +33,11 @@ const CertifyRecover: FunctionComponent<{}> = () => {
 
   const callResendApi: () => void = () => {
     Api.certifyEmail_recover(route.params.email, 'recoverPassword')
-      .then((res) => {
+      .then(res => {
         setState({ ...state, verificationId: res.data.verificationId });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
         } else if (e.response.status === 500) {
@@ -59,7 +59,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
         : state.verificationId,
       state.code,
     )
-      .then((res) => {
+      .then(res => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             email: route.params.email,
@@ -80,7 +80,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           );
         }
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('account.authentication_recover'));
         } else if (e.response.status === 404) {
@@ -99,9 +99,9 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           />
           <H1Text
             style={{ marginBottom: 10 }}
-            label={i18n.t('register.authentication_recover')}
+            label={i18n.t('account.authentication_recover')}
           />
-          <PText label={i18n.t('register.authentication_recover_label')} />
+          <PText label={i18n.t('account.authentication_recover_label')} />
         </>
       }
       body={
@@ -130,7 +130,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                   lineHeight: 21,
                   height: 21,
                 }}
-                label={`${i18n.t('register.expiration_time')}`}
+                label={`${i18n.t('account.expiration_time')}`}
               />
               <Timer verif={state.verificationId} />
             </View>

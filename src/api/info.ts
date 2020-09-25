@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
-import Product from "../types/product";
-import { authenticatedEspressoClient } from "./axiosInstances";
+import { AxiosResponse } from 'axios';
+import Product from '../types/product';
+import { authenticatedEspressoClient } from './axiosInstances';
 
 type TransactionResponse = {
   id: number;
@@ -11,7 +11,7 @@ type TransactionResponse = {
   totlaValue: string;
 };
 
-export type OwnershipResponse = {
+type OwnershipResponse = {
   id: number;
   userId: number;
   paymentMethod: string;
@@ -24,7 +24,7 @@ export type OwnershipResponse = {
   product: {
     id: number;
     title: string;
-    data: Product["data"];
+    data: Product['data'];
   };
 };
 

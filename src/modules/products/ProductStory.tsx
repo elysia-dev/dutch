@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useContext } from 'react';
-import { View, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, StyleSheet, Animated } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import HTMLView from 'react-native-htmlview';
@@ -17,34 +17,14 @@ const H1Text = styled.Text`
   font-weight: bold;
   z-index: 3;
 `;
-const WText = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-`;
+
 const GText = styled.Text`
   color: #4e4e4e;
   font-size: 13px;
   text-align: left;
   margin-bottom: 10px;
 `;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const Method = styled.Image`
-  width: 16px;
-  height: 16px;
-  margin-left: 14px;
-`;
+
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
   padding-top: 25px;
@@ -62,6 +42,9 @@ const ProductStory: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Story'>>();
   const { product } = route.params;
+  const [state, setState] = useState({
+    scrollY: new Animated.Value(0),
+  });
   const callApi = () => {
     Api.productInfo(product.productId)
       .then(res => {
@@ -81,9 +64,18 @@ const ProductStory: FunctionComponent = () => {
 
   return (
     <ProductInfoWrapper>
-      <ScrollView
+      <Animated.ScrollView
         scrollEnabled={true}
         scrollToOverflowEnabled={true}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: state.scrollY } },
+            },
+          ],
+          { useNativeDriver: true },
+        )}
         style={{ height: '100%', backgroundColor: '#fff' }}>
         <View
           style={{
@@ -142,13 +134,34 @@ const ProductStory: FunctionComponent = () => {
             paddingBottom: 60,
           }}>
           <HTMLView value={product.body} stylesheet={styles} />
+          <HTMLView value={product.body} stylesheet={styles} />
+          <HTMLView value={product.body} stylesheet={styles} />
+          <HTMLView value={product.body} stylesheet={styles} />
         </View>
-      </ScrollView>
-      <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-        title={i18n.t('product_label.buy')}
-        handler={() => callApi()}
-      />
+      </Animated.ScrollView>
+      <Animated.View
+        style={{
+          height: 0,
+          backgroundColor: 'transparent',
+          transform: [
+            {
+              translateY: state.scrollY.interpolate({
+                inputRange: [-1000, 0, 20, 60, 1000],
+                outputRange: [60, 60, 20, 0, 0],
+              }),
+            },
+          ],
+        }}>
+        <SubmitButton
+          style={{
+            position: 'relative',
+            top: -55,
+            marginBottom: 15,
+          }}
+          title={i18n.t('product_label.purchase')}
+          handler={() => callApi()}
+        />
+      </Animated.View>
     </ProductInfoWrapper>
   );
 };

@@ -1,94 +1,59 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
-import { View, ScrollView, Image, SafeAreaView, Platform } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { View, ScrollView, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { HeaderHeightContext } from '@react-navigation/stack';
 import styled from 'styled-components/native';
-
-import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import Product from '../../types/product';
-import UserContext from '../../contexts/UserContext';
-import LocaleType from '../../enums/LocaleType';
+import { OwnershipResponse } from '../../types/Ownership';
+import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 
-const WH1Text = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 20px;
-  text-align: left;
-`;
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  z-index: 3;
-`;
-const WText = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 12px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const Method = styled.Image`
-  width: 16px;
-  height: 16px;
-  margin-left: 14px;
-`;
 const ProductInfoWrapper = styled.SafeAreaView`
-  background-color: #3679b5;
+  background-color: #fff;
   padding-top: 25px;
 `;
 
 type ParamList = {
-  OwnershipDetail: {};
+  OwnershipDetail: {
+    ownership: OwnershipResponse;
+  };
 };
 
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
+  const { ownership } = route.params;
 
   return (
     <ProductInfoWrapper>
-      <View style={{ backgroundColor: '#FFF' }}>
-        <ScrollView scrollEnabled={true} scrollToOverflowEnabled={true}>
-          <View
+      <ScrollView
+        scrollEnabled={true}
+        scrollToOverflowEnabled={true}
+        style={{ height: '100%', backgroundColor: '#fff' }}>
+        <View
+          style={{
+            top: 0,
+            width: '100%',
+            height: 293,
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10,
+          }}>
+          <Image
+            source={{ uri: ownership.product.data.images[0] }}
             style={{
-              width: '100%',
-              height: 293,
-            }}
-          />
-          <View
-            style={{
-              backgroundColor: '#3679B5',
-              width: '100%',
-              height: 243,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
               position: 'absolute',
               top: 0,
-              zIndex: -1,
+              width: '100%',
+              height: 293,
+              resizeMode: 'cover',
             }}
           />
-
-          <BackButton handler={() => navigation.goBack()}></BackButton>
-        </ScrollView>
-      </View>
+          <View style={{ position: 'absolute', padding: 20 }}>
+            <BackButton handler={() => navigation.goBack()} />
+          </View>
+        </View>
+        <OwnershipBasicInfo ownership={ownership} />
+      </ScrollView>
     </ProductInfoWrapper>
   );
 };

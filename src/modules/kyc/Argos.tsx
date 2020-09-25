@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { SafeAreaView, ScrollView, View } from 'react-native';
 import styled from 'styled-components/native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';

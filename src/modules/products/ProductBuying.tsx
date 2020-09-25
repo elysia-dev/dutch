@@ -11,7 +11,6 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { Calculator } from './components/Calculator';
 import WrappedInfo from './components/WrappedInfo';
 import Product from '../../types/product';
 import UserContext from '../../contexts/UserContext';
@@ -21,43 +20,6 @@ import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 25px;
-  font-weight: bold;
-  margin-top: 7px;
-  margin-bottom: 6px;
-  text-align: left;
-  z-index: 3;
-`;
-const WText = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const Method = styled.Image`
-  width: 16px;
-  height: 16px;
-  margin-left: 14px;
-`;
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
   padding-top: 25px;
@@ -72,13 +34,6 @@ type ParamList = {
 };
 
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState({
-    investment: 20,
-    financial: false,
-    highlight: false,
-    abstract: false,
-  });
-
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductInfo'>>();
   const { product } = route.params;
@@ -114,11 +69,19 @@ const ProductBuying: FunctionComponent = () => {
           </View>
         </View>
         <BasicInfo product={product} />
-        {/* <Map product={product} /> */}
+        {/* <View
+          style={{
+            padding: 20,
+            borderBottomColor: '#F6F6F8',
+            borderBottomWidth: 5,
+            height: 300,
+          }}>
+          <Map product={product} />
+        </View> */}
         <WrappedInfo product={product} />
       </ScrollView>
       <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 10 }}
+        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
         handler={() => {
           navigation.navigate(ProductPage.SliderProductBuying, {
             return: product.data.expectedAnnualReturn,

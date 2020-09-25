@@ -42,7 +42,8 @@ const Login: FunctionComponent = () => {
           email: route.params.email,
           verificationId: res.data.verificationId,
           status: res.data.status,
-        }))
+        }),
+      )
       .catch(e => {
         if (e.response && e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
@@ -63,14 +64,14 @@ const Login: FunctionComponent = () => {
           console.log(res.data);
           // token local storage 저장
           if (res.data.status === 'wrong') {
-            setState({ ...state, error: res.data.counts });
+            setState({ ...state, error: res.data.counts! });
           } else if (res.data.status === 'locked') {
             navigation.navigate(AccountPage.LockAccount, {
               verificationId: res.data.verificationId,
               email: route.params.email,
             });
           } else if (res.data.status === 'success') {
-            await storeToken(res.data.token);
+            await storeToken(res.data.token!);
             await signIn();
           }
         })
@@ -109,7 +110,7 @@ const Login: FunctionComponent = () => {
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('errors.messages.password_do_not_match')} ${
+                ? ` ${i18n.t('account_errors.password_do_not_match')} ${
                     state.error
                   }/5`
                 : undefined
