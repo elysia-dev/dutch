@@ -7,8 +7,6 @@ const Title = styled.Text`
   font-size: 28px;
   font-weight: bold;
   text-align: left;
-  line-height: 28px;
-  height: 28px;
 `;
 
 export const TitleText: FunctionComponent<{

@@ -120,13 +120,6 @@ const Login: FunctionComponent = () => {
             editable={false}
             eventHandler={() => {}}
           />
-          <Text>
-            {state.error !== 0
-              ? ` ${i18n.t('account_errors.password_do_not_match')} ${
-                  state.error
-                }/5`
-              : undefined}
-          </Text>
         </>
       }
       button={

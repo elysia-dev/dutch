@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   Platform,
   Picker,
@@ -24,7 +23,6 @@ import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import { TitleText } from '../../shared/components/TitleText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import { BackButton } from '../../shared/components/BackButton';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -39,78 +37,17 @@ const ExchangeBobooImg = styled.Image`
   resize-mode: center;
   top: 3px;
 `;
-const Wrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  height: 100%;
-  background-color: #fff;
-  overflow: hidden;
-`;
-const InfoHeaderWrapper = styled.View`
-  width: 100%;
-  height: 10%;
-  flex-direction: row;
-  border-bottom-color: #f6f6f8;
-  border-bottom-width: 5px;
-  margin-bottom: 30px;
-`;
-const InfoHeaderH1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 21px;
-  height: 21px;
-  text-align: left;
-  margin: 50px 5% 0px 5%;
-`;
 const InfoHeaderSettingImg = styled.Image`
   width: 21px;
   height: 21px;
+  top: 9px;
 `;
-const InfoHeaderUserImg = styled.Image`
-  width: 20px;
-  height: 20px;
-`;
-const InfoHeaderUserName = styled.Text`
-  font-size: 14px;
-  color: #838383;
-  margin: 0 5%;
-  height: 20px;
-  line-height: 25px;
-  flex: 1;
-  //
-`;
-// const H1Text = styled.Text`
-//   color: #1c1c1c;
-//   font-weight: bold;
-//   text-align: left;
-//   margin-left: 20px;
-//   font-size: 18px;
-//   margin-top: 20px;
-//   margin-bottom: 25px;
-// `;
-// const PText = styled.Text`
-//   color: #5c5b5b;
-//   margin-bottom: 12px;
-//   font-size: 15px;
-//   line-height: 50px;
-// `;
 const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
   margin: 20px 20px;
   resize-mode: center;
 `;
-const InfoButtonTabWrapper = styled.View`
-  height: 50px;
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 15px;
-`;
-const InfoButtonInnerWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 const MainInfo: FunctionComponent = () => {
   const { user } = useContext(UserContext);
   const navigation = useNavigation();
@@ -141,6 +78,7 @@ const MainInfo: FunctionComponent = () => {
             </View>
           </>
         }
+        isScrolling={true}
         isBackbutton={false}
         body={
           <>

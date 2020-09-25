@@ -14,7 +14,12 @@ interface Props {
   title: React.ReactNode;
   body: React.ReactNode;
   isBackbutton: boolean; // 버튼이 없을때에도 title의 margin-top 부분을 동일하게 만들기 위함
+  isScrolling: boolean;
+  button?: React.ReactNode;
 }
+type Scrolling = {
+  Scrolling: boolean;
+};
 const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
@@ -25,10 +30,18 @@ const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
   ) : (
     <View style={{ flex: 1 }}>{props.children}</View>
   );
+
+const ScrollingView: FunctionComponent<Scrolling> = props => {
+  return props.Scrolling === true ? (
+    <ScrollView style={{ flex: 1 }}>{props.children}</ScrollView>
+  ) : (
+    <View style={{ flex: 1 }}>{props.children}</View>
+  );
+};
 const WrapperLayout: FunctionComponent<Props> = props => {
   return (
     <Wrapper>
-      <ScrollView>
+      <ScrollingView Scrolling={props.isScrolling}>
         <ConditionalKeyboardAvoidingView>
           <View
             style={{
@@ -39,8 +52,13 @@ const WrapperLayout: FunctionComponent<Props> = props => {
             {props.title}
           </View>
           <View style={{ marginTop: 30 }}>{props.body}</View>
+          {props.button !== undefined && (
+            <View style={{ marginTop: 'auto', marginBottom: 20 }}>
+              {props.button}
+            </View>
+          )}
         </ConditionalKeyboardAvoidingView>
-      </ScrollView>
+      </ScrollingView>
     </Wrapper>
   );
 };

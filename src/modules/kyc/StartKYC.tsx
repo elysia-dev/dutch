@@ -2,24 +2,18 @@ import React, { FunctionComponent, useState } from 'react';
 import { View, Text } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ClockPng from './images/clock.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
+import WrapperLayout from '../../shared/components/WrapperLayout';
+import { PText } from '../../shared/components/PText';
+import { TitleText } from '../../shared/components/TitleText';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: left;
-  margin: 40px 5% 6px 5%;
-`;
 const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
-  margin-right: 10px;
 `;
 const Circle = styled.Text`
   width: 26px;
@@ -37,14 +31,6 @@ const CircleWrapper = styled.View`
   margin-bottom: 50px;
   font-size: 13px;
 `;
-const CircleText = styled.Text`
-  position: absolute;
-  color: #1c1c1c;
-  font-size: 14px;
-  margin-left: 36px;
-  margin-top: 3px;
-  margin-bottom: 42px;
-`;
 const HrLine = styled.View`
   position: absolute;
   height: 175px;
@@ -53,9 +39,6 @@ const HrLine = styled.View`
   left: 12px;
   margin-left: 5%;
 `;
-const KycGuideWrapper = styled.View`
-  position: relative;
-`;
 
 export const StartKYC: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -63,68 +46,115 @@ export const StartKYC: FunctionComponent<{}> = () => {
     agree: false,
   });
   return (
-    <View
-      style={{
-        paddingTop: 40,
-        flexDirection: 'column',
-        flex: 1,
-      }}>
-      <BackButton
-        handler={() => {
-          navigation.goBack();
-        }}
-        style={{ marginLeft: '5%' }}
-      />
-      <H1Text>{i18n.t('kyc.start')}</H1Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginTop: 20,
-          marginLeft: 20,
-        }}>
-        <ClockImg
-          source={ClockPng}
-          style={{ marginTop: 2, resizeMode: 'center' }}
-        />
-        <Text>{i18n.t('kyc.start_kyc_text')}</Text>
-      </View>
-      <KycGuideWrapper style={{ marginTop: 20 }}>
-        <HrLine />
-        <CircleWrapper>
-          <Circle>1</Circle>
-          <CircleText>{i18n.t('kyc.start_step1')}</CircleText>
-        </CircleWrapper>
-        <CircleWrapper>
-          <Circle>2</Circle>
-          <CircleText>{i18n.t('kyc.start_step2')}</CircleText>
-        </CircleWrapper>
-        <CircleWrapper>
-          <Circle>3</Circle>
-          <CircleText>{i18n.t('kyc.start_step3')}</CircleText>
-        </CircleWrapper>
-      </KycGuideWrapper>
-      <View style={{ marginTop: 'auto', marginBottom: 10 }}>
-        <SubmitButton
-          title={i18n.t('kyc_label.argos_terms')}
-          handler={() =>
-            navigation.navigate(KycPage.Argos, {
-              agree: state.agree,
-              updateAgree: (input: boolean) => setState({ agree: input }),
-            })
-          }
-          variant={'WhiteTheme'}
-          style={{ marginBottom: 10 }}
-        />
-        <SubmitButton
-          title={i18n.t('kyc_label.agree_start')}
-          handler={() =>
-            state.agree === false
-              ? alert(i18n.t('kyc.argos'))
-              : navigation.navigate(KycPage.SelectID)
-          }
-          variant={state.agree === false ? 'GrayTheme' : undefined}
-        />
-      </View>
-    </View>
+    <WrapperLayout
+      title={
+        <>
+          <BackButton
+            handler={() => {
+              navigation.goBack();
+            }}
+          />
+          <TitleText label={i18n.t('kyc.start')} />
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <ClockImg
+              source={ClockPng}
+              style={{
+                marginTop: 2,
+                resizeMode: 'center',
+                height: 13,
+                width: 13,
+                marginRight: 3,
+              }}
+            />
+            <PText
+              label={i18n.t('kyc.start_text')}
+              style={{ color: '#626368' }}
+            />
+          </View>
+        </>
+      }
+      isScrolling={false}
+      isBackbutton={true}
+      body={
+        <>
+          <View style={{ marginTop: 20 }}>
+            <HrLine />
+            <CircleWrapper>
+              <Circle>1</Circle>
+              <PText
+                label={i18n.t('kyc.start_step1')}
+                style={{
+                  position: 'absolute',
+                  fontSize: 14,
+                  marginLeft: 36,
+                  marginTop: 3,
+                  marginBottom: 42,
+                }}
+              />
+            </CircleWrapper>
+            <CircleWrapper>
+              <Circle>2</Circle>
+              <PText
+                label={i18n.t('kyc.start_step2')}
+                style={{
+                  position: 'absolute',
+                  fontSize: 14,
+                  marginLeft: 36,
+                  marginTop: 3,
+                  marginBottom: 42,
+                }}
+              />
+            </CircleWrapper>
+            <CircleWrapper>
+              <Circle>3</Circle>
+              <PText
+                label={i18n.t('kyc.start_step3')}
+                style={{
+                  position: 'absolute',
+                  fontSize: 14,
+                  marginLeft: 36,
+                  marginTop: 3,
+                  marginBottom: 42,
+                }}
+              />
+            </CircleWrapper>
+          </View>
+        </>
+      }
+      button={
+        <View style={{ marginTop: 'auto', marginBottom: 10 }}>
+          <SubmitButton
+            title={i18n.t('kyc_label.argos_terms')}
+            handler={() =>
+              navigation.navigate(KycPage.Argos, {
+                agree: state.agree,
+                updateAgree: (input: boolean) => setState({ agree: input }),
+              })
+            }
+            variant={'WhiteTheme'}
+            style={{ marginBottom: 10 }}
+          />
+          <SubmitButton
+            title={i18n.t('kyc_label.agree_start')}
+            handler={() =>
+              state.agree === false
+                ? alert(i18n.t('kyc.argos'))
+                : navigation.navigate(KycPage.SelectID)
+            }
+            variant={state.agree === false ? 'GrayTheme' : undefined}
+          />
+        </View>
+      }
+    />
+    // <View
+    //   style={{
+    //     paddingTop: 40,
+    //     flexDirection: 'column',
+    //     flex: 1,
+    //   }}>
+    // </View>
   );
 };
