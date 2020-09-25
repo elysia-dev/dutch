@@ -15,16 +15,16 @@ interface Props {
   button: React.ReactNode;
 }
 
-const ConditionalKeyboardAvoidingView: FunctionComponent = props => (
+const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
       behavior={'padding'}
       style={{ flex: 1, flexDirection: 'column' }}>
       {props.children}
-    </KeyboardAvoidingView>) : (
-      <View style={{ flex: 1 }}>{props.children}</View>
-    )
-);
+    </KeyboardAvoidingView>
+  ) : (
+    <View style={{ flex: 1 }}>{props.children}</View>
+  );
 
 const AccountLayout: FunctionComponent<Props> = props => {
   return (

@@ -87,14 +87,14 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
           {title}
         </ButtonLabel>
       ) : (
-          <DuplicateUpperLabel theme={variant}>
-            {duplicateTitle}
-            <DuplicateLabel theme={variant}>
-              {'\n'}
-              {title}
-            </DuplicateLabel>
-          </DuplicateUpperLabel>
-        )}
+        <DuplicateUpperLabel theme={variant}>
+          {duplicateTitle}
+          <DuplicateLabel theme={variant}>
+            {'\n'}
+            {title}
+          </DuplicateLabel>
+        </DuplicateUpperLabel>
+      )}
     </Button>
   );
 };

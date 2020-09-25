@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { SafeAreaView, ScrollView, View } from 'react-native';
-import styled from 'styled-components/native';
+import { ScrollView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -10,63 +9,12 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 
-// const H1Text = styled.Text`
-//   color: #1c1c1c;
-//   font-weight: bold;
-//   text-align: left;
-//   font-size: 18px;
-//   margin-top: 30px;
-//   margin-bottom: 25px;
-// `;
-// const PText = styled.Text`
-//   color: #5c5b5b;
-//   margin-bottom: 10px;
-//   font-size: 15px;
-//   line-height: 30px;
-//   text-align: left;
-//   padding-bottom: 110px;
-// `;
 type ParamList = {
   Argos: {
     agree: boolean;
     updateAgree: (input: boolean) => void;
   };
 };
-// <View
-//   style={{
-//     backgroundColor: '#fff',
-//     width: '100%',
-//     paddingTop: 25,
-//   }}>
-//   <ScrollView
-//     style={{
-//       backgroundColor: '#fff',
-//       width: '100%',
-//       paddingLeft: 20,
-//       paddingRight: 20,
-//       paddingTop: 40,
-//     }}>
-//     <H1Text>{i18n.t('kyc_label.argos_terms')}</H1Text>
-//     <PText>{localeTerms}</PText>
-//   </ScrollView>
-//   <View
-//     style={{
-//       backgroundColor: '#fff',
-//       width: '100%',
-//       height: 60,
-//       position: 'absolute',
-//       bottom: 0,
-//     }}>
-//     <SubmitButton
-//       title={i18n.t('kyc_label.agree')}
-//       handler={() => {
-//         route.params.updateAgree(true);
-//         navigation.goBack();
-//       }}
-//       style={{ position: 'absolute', bottom: 20 }}
-//     />
-//   </View>
-// </View>
 export const Argos: FunctionComponent<{}> = () => {
   const { locale } = useContext(UserContext);
   const navigation = useNavigation();
@@ -85,14 +33,13 @@ export const Argos: FunctionComponent<{}> = () => {
         </ScrollView>
       }
       button={
-        <View style={{ paddingTop: 50, height: '20%' }}>
+        <View>
           <SubmitButton
             title={i18n.t('kyc_label.agree')}
             handler={() => {
               route.params.updateAgree(true);
               navigation.goBack();
             }}
-            style={{ position: 'absolute', bottom: 20 }}
           />
         </View>
       }
