@@ -13,7 +13,7 @@ import OptionsPng from '../../shared/assets/images/options.png';
 import OptionsBlackPng from '../../shared/assets/images/options_black.png';
 
 import MainInfo from '../more/MainInfo';
-import { MainList } from '../products/MainList';
+import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import NotificationContext from '../../contexts/NotificationContext';

@@ -27,7 +27,7 @@ const PText = styled.Text`
 
 interface Props {
   story: Story;
-  pressHandler: () => {};
+  activeCard: () => void;
 }
 
 const SCALE = {
@@ -58,7 +58,6 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <TouchableWithoutFeedback
-      onPress={props.pressHandler}
       onPressIn={() => { SCALE.pressInAnimation(scaleInAnimated); }}
       onPressOut={() => { SCALE.pressOutAnimation(scaleInAnimated); }}
     >
