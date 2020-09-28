@@ -53,7 +53,6 @@ const ExpendedItem: FunctionComponent<Props> = ({
   const { height: windowHeight } = Dimensions.get("window");
 
   useEffect(() => {
-    console.log(yOffset);
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 500,
@@ -115,6 +114,7 @@ const ExpendedItem: FunctionComponent<Props> = ({
             toValue: 0,
             duration: 500,
             useNativeDriver: false,
+            easing: Easing.elastic(1),
           }).start(() => deactiveStory());
         }}>
           <Image
