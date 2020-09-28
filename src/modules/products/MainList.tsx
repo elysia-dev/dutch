@@ -2,21 +2,26 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import {
   View,
   Animated,
+  StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import Api from '../../api/product';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
+import ExpendedCard from './components/ExpendedCard';
 
 interface State {
   stories: Story[];
-  scrollY: Animated.Value;
+  activeStory?: Story;
+  xOffset: number;
+  yOffset: number;
 }
 const MainList: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     stories: [],
-    scrollY: new Animated.Value(0),
+    xOffset: 0,
+    yOffset: 0,
   });
 
   const navigation = useNavigation();
@@ -44,65 +49,62 @@ const MainList: FunctionComponent = () => {
         top: 0,
         backgroundColor: '#FFF',
       }}>
-      <Animated.View
-        style={{
-          backgroundColor: '#fff',
-          shadowOffset: { width: 1, height: 1 },
-          shadowColor: '#00000033',
-          shadowOpacity: state.scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 0.5, 0.5],
-          }),
-          paddingTop: 60,
-          paddingBottom: 15,
-          paddingLeft: 20,
-          transform: [
-            {
-              translateY: state.scrollY.interpolate({
-                inputRange: [0, 15, 1000],
-                outputRange: [0, -5, -5],
-              }),
-            },
-          ],
-        }}>
-        <Animated.Text
-          style={{
-            position: 'relative',
-            left: 0,
-            width: 50,
-            color: '#1c1c1c',
-            fontSize: 28,
-            transform: [
-              {
-                scale: state.scrollY.interpolate({
-                  inputRange: [-1000, 0, 15, 1000],
-                  outputRange: [1, 1, 0.9, 0.9],
-                }),
-              },
-            ],
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}>
-          {i18n.t('product_label.product')}
-        </Animated.Text>
-      </Animated.View>
       <Animated.ScrollView
         scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: { contentOffset: { y: state.scrollY } },
-            },
-          ],
-          { useNativeDriver: true },
-        )}
         style={{ width: '100%', padding: 20, paddingTop: 0 }}>
+        <Animated.View
+          style={{
+            backgroundColor: '#fff',
+            shadowOffset: { width: 1, height: 1 },
+            shadowColor: '#00000033',
+            paddingTop: 60,
+            paddingBottom: 15,
+          }}>
+          <Animated.Text
+            style={{
+              width: 50,
+              color: '#1c1c1c',
+              fontSize: 28,
+              fontWeight: 'bold',
+              textAlign: 'center',
+            }}>
+            {i18n.t('product_label.product')}
+          </Animated.Text>
+        </Animated.View>
         {
-          state.stories.map((product, index) => (
-            <Item story={product} key={`item-${index}`} activeCard={() => { }} />
+          state.stories.map((story, index) => (
+            <Item
+              story={story}
+              key={`item-${index}`}
+              activeCard={(xOffset, yOffset) => {
+                StatusBar.setHidden(true);
+                navigation.setOptions({
+                  tabBarVisible: false,
+                });
+                setState({
+                  ...state,
+                  activeStory: story,
+                  xOffset,
+                  yOffset,
+                });
+              }}
+            />
           ))
         }
       </Animated.ScrollView>
+      {state.activeStory &&
+        <ExpendedCard
+          story={state.activeStory}
+          deactiveStory={() => {
+            StatusBar.setHidden(false);
+            navigation.setOptions({
+              tabBarVisible: true,
+            });
+            setState({ ...state, activeStory: undefined });
+          }}
+          xOffset={state.xOffset}
+          yOffset={state.yOffset}
+        />}
     </View>
   );
 };

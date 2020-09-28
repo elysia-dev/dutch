@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useContext } from 'react';
-import { Image, View } from 'react-native';
+import React, { FunctionComponent, useContext, useState } from 'react';
+import { Image, StyleProp, View, ViewProps } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 
@@ -31,7 +31,11 @@ const Main: FunctionComponent = () => {
   return (
     <Tab.Navigator
       initialRouteName="DashboardMain"
-      tabBarOptions={{ showLabel: false }}>
+      tabBarOptions={{
+        showLabel: false,
+        style: { height: 50 },
+      }}
+    >
       <Tab.Screen
         name="DashboardMain"
         component={DashBoardMain}

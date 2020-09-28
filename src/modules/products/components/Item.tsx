@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { createRef, FunctionComponent } from 'react';
 import {
   View,
   Image,
@@ -8,26 +8,13 @@ import {
 } from 'react-native';
 
 import styled from 'styled-components/native';
-import i18n from '../../../i18n/i18n';
+import { H1Text } from '../../../shared/components/H1Text';
+import { PText } from '../../../shared/components/PText';
 import { Story } from '../../../types/product';
-
-const H1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: left;
-  margin-bottom: 5px;
-  font-weight: bold;
-`;
-const PText = styled.Text`
-  font-size: 13px;
-  color: #4e4e4e;
-  text-align: left;
-  margin-bottom: 8px;
-`;
 
 interface Props {
   story: Story;
-  activeCard: () => void;
+  activeCard: (pageX: number, pageY: number) => void;
 }
 
 const SCALE = {
@@ -55,15 +42,23 @@ const SCALE = {
 
 export const Item: FunctionComponent<Props> = (props: Props) => {
   const scaleInAnimated = new Animated.Value(0);
+  const ref = createRef<Image>();
 
   return (
     <TouchableWithoutFeedback
+      onPress={() => {
+        console.log(ref.current);
+        if (ref.current) {
+          ref.current.measure((_x, _y, _width, _height, pageX, pageY) => {
+            props.activeCard(pageX, pageY);
+          });
+        }
+      }}
       onPressIn={() => { SCALE.pressInAnimation(scaleInAnimated); }}
       onPressOut={() => { SCALE.pressOutAnimation(scaleInAnimated); }}
     >
       <Animated.View
         style={{
-          width: '100%',
           height: 416,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },
@@ -82,6 +77,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           ],
         }}>
         <Image
+          ref={ref}
           source={{ uri: props.story.image }}
           style={{
             width: '100%',
@@ -91,9 +87,9 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           }}
         />
         <View
-          style={{ position: 'absolute', flexDirection: 'column', padding: 20 }}>
-          <PText>{props.story.subTitle}</PText>
-          <H1Text>{props.story.title}</H1Text>
+          style={{ position: 'absolute', flexDirection: 'column', marginTop: 20, marginLeft: 20 }}>
+          <PText label={props.story.subTitle} />
+          <H1Text label={props.story.title} style={{ marginTop: 10 }} />
         </View>
       </Animated.View>
     </TouchableWithoutFeedback>
