@@ -37,14 +37,14 @@ const ProfitText = styled.Text`
 `;
 export const Asset: FunctionComponent<Props> = (props: Props) => {
   return (
-    <TouchableOpacity onPress={props.handler}>
+    <TouchableOpacity onPress={props.handler} style={{ width: '47%' }}>
       <View
         style={{
           backgroundColor:
             props.ownership.productType === 'commercial'
               ? '#33ADCC'
               : '#30C2B8',
-          width: '47%',
+          width: '100%',
           height: 200,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },

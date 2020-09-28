@@ -71,6 +71,7 @@ const Login: FunctionComponent = () => {
           } else if (res.data.status === 'success') {
             await storeToken(res.data.token!);
             await signIn();
+            // navigation.navigate('Main');
           }
         })
         .catch(e => {

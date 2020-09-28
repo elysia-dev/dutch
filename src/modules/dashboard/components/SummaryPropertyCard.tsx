@@ -3,9 +3,10 @@ import styled from 'styled-components/native';
 
 import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
+import { SummaryReportResponse } from '../../../types/SummaryReport';
 
 interface Props {
-  balance: string;
+  summary: SummaryReportResponse['summary'];
 }
 
 const H1Text = styled.Text`
@@ -31,7 +32,7 @@ const NumText2 = styled.Text`
   font-size: 15px;
   text-align: right;
 `;
-export const SummaryPropertyCard: FunctionComponent<Props> = (props) => {
+export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
@@ -47,7 +48,9 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props) => {
         marginBottom: 20,
       }}>
       <H1Text>{'Total Balance'}</H1Text>
-      <NumText>{props.balance}</NumText>
+      <NumText>{`$ ${parseFloat(props.summary.totalBalance).toFixed(
+        2,
+      )}`}</NumText>
       <View
         style={{
           borderWidth: 1,
@@ -57,43 +60,55 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props) => {
           height: 150,
           padding: 20,
           flexDirection: 'column',
+          alignContent: 'space-between',
         }}>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignContent: 'center',
+            alignItems: 'center',
           }}>
           <PText>{i18n.t('dashboard_label.total_property')}</PText>
-          <NumText2>{'$ 30.00'}</NumText2>
+          <NumText2>{`$ ${parseFloat(
+            props.summary.totalRealEstateValue,
+          ).toFixed(2)}`}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
           <PText>{i18n.t('dashboard_label.total_interest')}</PText>
-          <NumText2>{'$ 3.58'}</NumText2>
+          <NumText2>{`$ ${parseFloat(props.summary.totalInterest).toFixed(
+            2,
+          )}`}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
           <PText>{i18n.t('dashboard_label.withdrawn_interest')}</PText>
-          <NumText2>{'$ 0.00'}</NumText2>
+          <NumText2>{`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
+            2,
+          )}`}</NumText2>
         </View>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
           <PText>{i18n.t('dashboard_label.available_interest')}</PText>
-          <NumText2>{'$ 3.58'}</NumText2>
+          <NumText2>{`$ ${parseFloat(
+            props.summary.withdrawableInterest,
+          ).toFixed(2)}`}</NumText2>
         </View>
       </View>
     </View>

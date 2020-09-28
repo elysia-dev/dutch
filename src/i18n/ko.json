@@ -246,10 +246,21 @@
     "profit": "일일 수익",
     "close": "상품 정산",
     "fold": "접기",
-    "transaction": "트랜잭션"
+    "transaction": "트랜잭션",
+    "more_transactions": "+ 더보기"
   },
   "dashboard": {
-    "ownership_error": "소유권이 없는 자산입니다."
+    "ownership_error": "소유권이 없는 자산입니다.",
+    "last_transaction": "마지막 트랜잭션 내역입니다."
+  },
+  "day": {
+    "0": "일",
+    "1": "월",
+    "2": "화",
+    "3": "수",
+    "4": "목",
+    "5": "금",
+    "6": "토"
   },
   "notification": {
     "closeOwnership": " %{name} 종료로 소유권이 만료되었습니다.",

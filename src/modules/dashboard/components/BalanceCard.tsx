@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 
 interface Props {
   balance: string;
-  profit: string;
   handler: () => void;
 }
 
@@ -20,12 +19,7 @@ const NumText = styled.Text`
   text-align: left;
   font-weight: bold;
 `;
-const NumText2 = styled.Text`
-  color: #fff;
-  font-size: 23px;
-  text-align: right;
-  font-weight: bold;
-`;
+
 export const BalanceCard: FunctionComponent<Props> = props => {
   return (
     <TouchableOpacity onPress={props.handler}>

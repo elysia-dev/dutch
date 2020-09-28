@@ -7,7 +7,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
-import Api from '../../api/question';
+import Api from '../../api/questions';
 
 const H1Text = styled.Text`
   color: #1c1c1c;

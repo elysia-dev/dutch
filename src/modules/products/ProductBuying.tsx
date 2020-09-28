@@ -69,7 +69,7 @@ const ProductBuying: FunctionComponent = () => {
           </View>
         </View>
         <BasicInfo product={product} />
-        {/* <View
+        <View
           style={{
             padding: 20,
             borderBottomColor: '#F6F6F8',
@@ -77,7 +77,7 @@ const ProductBuying: FunctionComponent = () => {
             height: 300,
           }}>
           <Map product={product} />
-        </View> */}
+        </View>
         <WrappedInfo product={product} />
       </ScrollView>
       <SubmitButton

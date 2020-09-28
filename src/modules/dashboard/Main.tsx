@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   ScrollView,
-  Image,
   TouchableOpacity,
-  GestureResponderEvent,
   SafeAreaView,
 } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
@@ -16,9 +13,11 @@ import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import Api from '../../api/account';
 import { Api as OwnershipApi } from '../../api/ownerships';
-
+import { Api as TransactionApi } from '../../api/transactions';
+import { Api as ReportApi } from '../../api/reports';
 import { UserResponse } from '../../types/AccountResponse';
 import { KycStatus } from '../../enums/KycStatus';
+import { Transaction } from '../../types/Transaction';
 
 interface Props {
   navigation: NavigationScreenProp<any>;
@@ -27,6 +26,7 @@ interface Props {
 interface State {
   user: UserResponse['user'];
   ownerships: UserResponse['ownerships'];
+  balance: string;
 }
 
 export class Main extends Component<Props, State> {
@@ -34,6 +34,7 @@ export class Main extends Component<Props, State> {
     super(props);
     this.state = {
       user: this.defaultUser,
+      balance: '',
       ownerships: [this.defaultOwnerships],
     };
   }
@@ -62,10 +63,10 @@ export class Main extends Component<Props, State> {
 
     Api.me()
       .then(res => {
-        console.log(res.data);
         this.setState({
           user: res.data.user,
           ownerships: res.data.ownerships,
+          balance: res.data.totalBalance,
         });
       })
       .catch(e => {
@@ -78,20 +79,37 @@ export class Main extends Component<Props, State> {
       });
   }
 
-  callOwnershipApi(id: number) {
+  callSummaryApi() {
     const { navigation } = this.props;
 
-    OwnershipApi.ownershipDetail(id)
+    ReportApi.getSummaryReport()
       .then(res => {
         console.log(res.data);
-
         navigation.navigate('Dashboard', {
-          screen: DashboardPage.OwnershipDetail,
+          screen: DashboardPage.SummaryReport,
           params: {
-            ownership: res.data,
-            ownershipId: id,
+            report: res.data,
           },
         });
+      })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  }
+
+  async callOwnershipApi(id: number) {
+    const { navigation } = this.props;
+    let ownership = {};
+    let transaction: Transaction[] = [];
+
+    await OwnershipApi.ownershipDetail(id)
+      .then(res => {
+        ownership = res.data;
       })
       .catch(e => {
         if (e.response.status === 400) {
@@ -103,6 +121,30 @@ export class Main extends Component<Props, State> {
           alert(i18n.t('account_errors.server'));
         }
       });
+
+    await TransactionApi.getTransaction(id, 1)
+      .then(res => {
+        transaction = res.data;
+      })
+      .catch(e => {
+        if (e.response.status === 400) {
+          alert(i18n.t('dashboard.ownership_error'));
+        } else if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+
+    navigation.navigate('Dashboard', {
+      screen: DashboardPage.OwnershipDetail,
+      params: {
+        ownership,
+        ownershipId: id,
+        transaction,
+      },
+    });
   }
 
   componentDidMount() {
@@ -113,7 +155,9 @@ export class Main extends Component<Props, State> {
     const { navigation } = this.props;
     const ownershipsList = this.state.ownerships.map((ownership, index) => (
       <Asset
-        handler={() => this.callOwnershipApi(ownership.id)}
+        handler={() => {
+          this.callOwnershipApi(ownership.id);
+        }}
         ownership={ownership}
         key={index}
       />
@@ -147,39 +191,42 @@ export class Main extends Component<Props, State> {
                 marginBottom: 40,
               }}>{`Hi, ${this.state.user.firstName}${this.state.user.lastName}`}</Text>
             <BalanceCard
-              balance={'$30.00'}
-              profit={'+ $3.18'}
-              handler={() =>
-                navigation.navigate('Dashboard', {
-                  screen: DashboardPage.SummaryReport,
-                })
-              }
+              balance={`$ ${this.state.balance}`}
+              handler={() => this.callSummaryApi()}
             />
-            <View>{ownershipsList}</View>
-            <TouchableOpacity
+            <View
               style={{
-                width: '100%',
-                height: 50,
-                borderRadius: 5,
-                backgroundColor: '#fff',
-                justifyContent: 'center',
-                alignContent: 'center',
-                shadowColor: '#00000029',
-                shadowOffset: { width: 1, height: 2 },
-                shadowOpacity: 0.7,
-                shadowRadius: 7,
-              }}
-              onPress={() => {}}>
-              <Text
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+              }}>
+              {ownershipsList}
+              <TouchableOpacity
                 style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 25,
-                  color: '#838383',
-                }}>
-                {'+'}
-              </Text>
-            </TouchableOpacity>
+                  position: 'relative',
+                  width: '47%',
+                  height: 200,
+                  borderRadius: 10,
+                  backgroundColor: '#fff',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  shadowOffset: { width: 2, height: 2 },
+                  shadowColor: '#1C1C1C4D',
+                  shadowOpacity: 0.8,
+                  shadowRadius: 7,
+                }}
+                onPress={() => {}}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 25,
+                    color: '#838383',
+                  }}>
+                  {'+'}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </SafeAreaView>
       </ScrollView>

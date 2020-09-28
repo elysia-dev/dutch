@@ -10,7 +10,7 @@ export class Api {
     page: number,
   ): Promise<AxiosResponse<Transaction[]>> => {
     return (await authenticatedEspressoClient()).get(
-      `/transactions?&ownershipId=${id}&page=${page}`,
+      `/transactions?ownershipId=${id}&page=${page}`,
     );
   };
 }

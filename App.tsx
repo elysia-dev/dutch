@@ -21,7 +21,7 @@ import Main from './src/modules/main/Main';
 import Notification from './src/types/Notification';
 import NotificationContext from './src/contexts/NotificationContext';
 
-import StorybookUI from "./storybook/index";
+import StorybookUI from './storybook/index';
 
 interface AppState {
   signedIn: boolean;
@@ -63,7 +63,7 @@ class App extends React.Component<{}, AppState> {
 
   signIn = async () => {
     await Api.me()
-      .then(async (res) => {
+      .then(async res => {
         this.setState({
           signedIn: true,
           user: res.data.user,
@@ -84,7 +84,7 @@ class App extends React.Component<{}, AppState> {
       unreadNotificationCount: this.state.unreadNotificationCount + 1,
       notifications: [notification, ...this.state.notifications],
     });
-  }
+  };
 
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
@@ -106,12 +106,15 @@ class App extends React.Component<{}, AppState> {
             value={{
               notifications: this.state.notifications,
               unreadNotificationCount: this.state.unreadNotificationCount,
-              setUnreadNotificationCount: (value) => {
-                this.setState({ unreadNotificationCount: value >= 0 ? value : 0 });
+              setUnreadNotificationCount: value => {
+                this.setState({
+                  unreadNotificationCount: value >= 0 ? value : 0,
+                });
               },
-              setNotifications: (notifications) => { this.setState({ notifications }); },
-            }}
-          >
+              setNotifications: notifications => {
+                this.setState({ notifications });
+              },
+            }}>
             <RootStack.Navigator
               headerMode="none"
               screenOptions={{
@@ -119,10 +122,7 @@ class App extends React.Component<{}, AppState> {
               }}>
               {this.state.signedIn ? (
                 <>
-                  <RootStack.Screen
-                    name={'Main'}
-                    component={Main}
-                  />
+                  <RootStack.Screen name={'Main'} component={Main} />
                   {this.state.user.kycStatus === KycStatus.NONE && (
                     <RootStack.Screen name={'Kyc'} component={Kyc} />
                   )}
@@ -131,10 +131,10 @@ class App extends React.Component<{}, AppState> {
                   <RootStack.Screen name={'Product'} component={Products} />
                 </>
               ) : (
-                  <>
-                    <RootStack.Screen name={'Account'} component={Account} />
-                  </>
-                )}
+                <>
+                  <RootStack.Screen name={'Account'} component={Account} />
+                </>
+              )}
             </RootStack.Navigator>
           </NotificationContext.Provider>
         </UserContext.Provider>

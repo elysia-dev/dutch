@@ -1,14 +1,12 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import Dash from 'react-native-dash';
 import * as Linking from 'expo-linking';
 import i18n from '../../../i18n/i18n';
 import { Transaction } from '../../../types/Transaction';
 
 interface Props {
   transaction: Transaction;
-  handler: () => void;
 }
 
 const GText = styled.Text`
@@ -16,6 +14,7 @@ const GText = styled.Text`
   font-size: 15px;
   text-align: left;
   font-weight: 300;
+  margin-bottom: 5px;
 `;
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
@@ -27,30 +26,26 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
+        paddingTop: 15,
+        paddingBottom: 15,
       }}>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignContent: 'center',
-          alignItems: 'center',
-        }}>
+      <View style={{ flexDirection: 'column' }}>
         <Text
           style={{
+            color: '#1C1C1C',
             fontSize: 15,
-            textAlign: 'right',
-            color:
-              props.transaction.transactionType === 'profit'
-                ? '#3679B5'
-                : '#1C1C1C',
+            textAlign: 'left',
+            marginBottom: 5,
           }}>
-          {`$${props.transaction.value}`}
-        </Text>
-      </View>
-      <View style={{ flexDirection: 'column' }}>
-        <Text style={{ color: '#1C1C1C', fontSize: 15, textAlign: 'left' }}>
           {i18n.t(`dashboard_label.${props.transaction.transactionType}`)}
         </Text>
-        <Text style={{ color: '#A7A7A7', fontSize: 12, textAlign: 'left' }}>
+        <Text
+          style={{
+            color: '#A7A7A7',
+            fontSize: 12,
+            textAlign: 'left',
+            marginBottom: 5,
+          }}>
           {i18n.strftime(new Date(props.transaction.createdAt), '%m.%d')}
         </Text>
         {state.show && (
@@ -80,6 +75,30 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               : i18n.t('dashboard_label.transaction')}
           </Text>
         </TouchableOpacity>
+      </View>
+
+      <View
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            fontSize: 17,
+            fontWeight: 'bold',
+            textAlign: 'right',
+            color:
+              props.transaction.transactionType === 'refund' ||
+              props.transaction.transactionType === 'close'
+                ? '#1C1C1C'
+                : '#3679B5',
+          }}>
+          {props.transaction.transactionType === 'refund' ||
+          props.transaction.transactionType === 'close'
+            ? `- $${parseFloat(props.transaction.value).toFixed(2)}`
+            : `$${parseFloat(props.transaction.value).toFixed(2)}`}
+        </Text>
       </View>
     </View>
   );

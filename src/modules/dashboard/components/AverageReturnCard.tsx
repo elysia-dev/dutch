@@ -46,7 +46,7 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         marginBottom: 20,
       }}>
       <H1Text>{'Average Return'}</H1Text>
-      <NumText>{props.return}</NumText>
+      <NumText>{`${props.return} %`}</NumText>
     </View>
   );
 };
