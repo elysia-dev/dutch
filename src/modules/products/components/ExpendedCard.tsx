@@ -176,7 +176,7 @@ const ExpendedItem: FunctionComponent<Props> = ({
       { /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
         !state.closed && state.scrollY > 50 && <SubmitButton
           style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-          title={i18n.t('product_label.buy')}
+          title={i18n.t('product_label.invest')}
           handler={() => {
             StatusBar.setHidden(false);
             navigation.navigate('Product', {
