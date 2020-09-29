@@ -12,6 +12,7 @@ import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
+import VirtualTab from '../../shared/components/VirtualTab';
 import Api from '../../api/account';
 import { Api as OwnershipApi } from '../../api/ownerships';
 import { Api as TransactionApi } from '../../api/transactions';
@@ -229,6 +230,7 @@ export class Main extends Component<Props, State> {
               </TouchableOpacity>
             </View>
           </View>
+          <VirtualTab />
         </SafeAreaView>
       </ScrollView>
     );

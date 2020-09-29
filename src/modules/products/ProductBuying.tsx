@@ -1,11 +1,9 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
   Image,
-  Text,
-  SafeAreaView,
-  Platform,
+  StatusBar,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -13,12 +11,11 @@ import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
 import Product from '../../types/product';
-import UserContext from '../../contexts/UserContext';
-import LocaleType from '../../enums/LocaleType';
-import { Map } from './components/Map';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
+import Api from '../../api/product';
+import { Map } from './components/Map';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -28,15 +25,31 @@ const ProductInfoWrapper = styled.SafeAreaView`
 `;
 
 type ParamList = {
-  ProductInfo: {
-    product: Product;
+  ProductBuying: {
+    productId: number;
   };
 };
 
+interface State {
+  product?: Product;
+}
+
 const ProductBuying: FunctionComponent = () => {
+  const [state, setState] = useState<State>({});
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ProductInfo'>>();
-  const { product } = route.params;
+  const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
+  const { productId } = route.params;
+
+  useEffect(() => {
+    Api.productInfo(productId)
+      .then(res => { setState({ ...state, product: res.data }); })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        }
+      });
+  }, []);
 
   return (
     <ProductInfoWrapper>
@@ -53,7 +66,7 @@ const ProductBuying: FunctionComponent = () => {
             borderBottomRightRadius: 10,
           }}>
           <Image
-            source={{ uri: product.data.images[0] }}
+            source={{ uri: state.product && state.product.data.images[0] }}
             style={{
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
@@ -65,10 +78,15 @@ const ProductBuying: FunctionComponent = () => {
             }}
           />
           <View style={{ position: 'absolute', padding: 20 }}>
-            <BackButton handler={() => navigation.goBack()} />
+            <BackButton
+              handler={() => {
+                StatusBar.setHidden(true);
+                navigation.goBack();
+              }}
+            />
           </View>
         </View>
-        <BasicInfo product={product} />
+        {state.product && <BasicInfo product={state.product} />}
         <View
           style={{
             padding: 20,
@@ -76,15 +94,15 @@ const ProductBuying: FunctionComponent = () => {
             borderBottomWidth: 5,
             height: 300,
           }}>
-          <Map product={product} />
+          {state.product && <Map product={state.product} />}
         </View>
-        <WrappedInfo product={product} />
+        {state.product && <WrappedInfo product={state.product} />}
       </ScrollView>
       <SubmitButton
         style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
         handler={() => {
           navigation.navigate(ProductPage.SliderProductBuying, {
-            return: product.data.expectedAnnualReturn,
+            return: state.product && state.product.data.expectedAnnualReturn,
           });
         }}
         title={i18n.t('product_label.invest')}

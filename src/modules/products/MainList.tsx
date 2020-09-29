@@ -1,45 +1,42 @@
-import React, { Component, FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import {
   View,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
   Animated,
+  StatusBar,
+  Image,
+  ScrollView,
 } from 'react-native';
-import styled from 'styled-components/native';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
+
 import i18n from '../../i18n/i18n';
-import { ProductPage } from '../../enums/pageEnum';
 import Api from '../../api/product';
 import { Item } from './components/Item';
-import Product, { Story } from '../../types/product';
-
-interface Props {
-  navigation: NavigationScreenProp<any>;
-  route: NavigationRoute;
-}
+import { Story } from '../../types/product';
+import ExpendedCard from './components/ExpendedCard';
+import VirtualTab from '../../shared/components/VirtualTab';
 
 interface State {
-  storyList: Story[];
-  scrollY: Animated.Value;
+  stories: Story[];
+  activeStory?: Story;
+  xOffset: number;
+  yOffset: number;
 }
+const MainList: FunctionComponent = () => {
+  const [state, setState] = useState<State>({
+    stories: [],
+    xOffset: 0,
+    yOffset: 0,
+  });
 
-export class MainList extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      storyList: [],
-      scrollY: new Animated.Value(0),
-    };
-  }
+  const navigation = useNavigation();
 
-  callApi() {
-    const { navigation } = this.props;
-
+  useEffect(() => {
     Api.storyList()
       .then(res => {
-        this.setState({ storyList: res.data });
-        console.log(this.state.storyList);
+        setState({ ...state, stories: res.data });
+        res.data.forEach((story) => {
+          Image.prefetch(story.image);
+        });
       })
       .catch(e => {
         if (e.response.status === 401) {
@@ -49,93 +46,80 @@ export class MainList extends Component<Props, State> {
           alert(i18n.t('errors.server.duplicate_email'));
         }
       });
-  }
+  }, []);
 
-  componentDidMount() {
-    this.callApi();
-  }
-
-  render() {
-    const { navigation, route } = this.props;
-    const { scrollY } = this.state;
-    const listToShow = this.state.storyList.map((product, index) => (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Product', {
-            screen: ProductPage.ProductStory,
-            params: {
-              product,
-            },
-          })
-        }
-        key={`item-${index}`}>
-        <Item story={product} />
-      </TouchableOpacity>
-    ));
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          top: 0,
-          backgroundColor: '#FFF',
-        }}>
+  return (
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        top: 0,
+        backgroundColor: '#FFF',
+      }}>
+      <ScrollView
+        scrollEventThrottle={16}
+        style={{ width: '100%', paddingHorizontal: 20 }}
+      >
         <Animated.View
           style={{
             backgroundColor: '#fff',
             shadowOffset: { width: 1, height: 1 },
             shadowColor: '#00000033',
-            shadowOpacity: scrollY.interpolate({
-              inputRange: [0, 15, 1000],
-              outputRange: [0, 0.5, 0.5],
-            }),
             paddingTop: 60,
             paddingBottom: 15,
-            paddingLeft: 20,
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [0, 15, 1000],
-                  outputRange: [0, -5, -5],
-                }),
-              },
-            ],
           }}>
           <Animated.Text
             style={{
-              position: 'relative',
-              left: 0,
               width: 50,
               color: '#1c1c1c',
               fontSize: 28,
-              transform: [
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [1, 1, 0.9, 0.9],
-                  }),
-                },
-              ],
               fontWeight: 'bold',
               textAlign: 'center',
             }}>
             {i18n.t('product_label.product')}
           </Animated.Text>
         </Animated.View>
-        <Animated.ScrollView
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: { contentOffset: { y: this.state.scrollY } },
-              },
-            ],
-            { useNativeDriver: true },
-          )}
-          style={{ width: '100%', padding: 20, paddingTop: 0 }}>
-          {listToShow}
-        </Animated.ScrollView>
-      </View>
-    );
-  }
-}
+        {
+          state.stories.map((story, index) => (
+            <Item
+              story={story}
+              key={`item-${index}`}
+              activateCard={(xOffset, yOffset) => {
+                StatusBar.setHidden(true);
+                navigation.setOptions({
+                  tabBarVisible: false,
+                });
+                setState({
+                  ...state,
+                  activeStory: story,
+                  xOffset,
+                  yOffset,
+                });
+              }}
+              active={
+                (state.activeStory && state.activeStory.productId === story.productId)
+                || false
+              }
+            />
+          ))
+        }
+        <VirtualTab />
+      </ScrollView>
+      {state.activeStory &&
+        <ExpendedCard
+          story={state.activeStory}
+          deactivateStory={() => {
+            StatusBar.setHidden(false);
+            navigation.setOptions({
+              tabBarVisible: true,
+            });
+            setState({ ...state, activeStory: undefined });
+          }}
+          xOffset={state.xOffset}
+          yOffset={state.yOffset}
+        />}
+    </View>
+  );
+};
+
+export default MainList;
