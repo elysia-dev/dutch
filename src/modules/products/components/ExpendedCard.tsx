@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { createRef, FunctionComponent, useEffect, useState } from 'react';
 import {
   Animated,
   Image,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
@@ -53,8 +54,13 @@ const ExpendedItem: FunctionComponent<Props> = ({
   yOffset,
 }) => {
   const [animatedValue] = useState(new Animated.Value(0));
+  const [state, setState] = useState({
+    scrollY: 0,
+    closed: false,
+  });
   const { height: windowHeight } = Dimensions.get("window");
   const navigation = useNavigation();
+  const scrollRef = createRef<ScrollView>();
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -66,9 +72,7 @@ const ExpendedItem: FunctionComponent<Props> = ({
   }, []);
 
   return (
-    <Animated.ScrollView
-      scrollEnabled={true}
-      scrollToOverflowEnabled={true}
+    <Animated.View
       style={{
         position: 'absolute',
         top: animatedValue.interpolate({
@@ -89,20 +93,53 @@ const ExpendedItem: FunctionComponent<Props> = ({
         }),
       }}
     >
-      <Animated.Image
-        source={{ uri: story.image }}
-        style={{
-          borderRadius: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [10, 0],
-          }),
-          height: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [416, 500],
-          }),
-          resizeMode: 'cover',
+      <ScrollView
+        ref={scrollRef}
+        scrollEnabled={true}
+        scrollToOverflowEnabled={true}
+        onScroll={(event) => {
+          setState({
+            ...state, scrollY: event.nativeEvent.contentOffset.y,
+          });
         }}
-      />
+      >
+        <Animated.Image
+          source={{ uri: story.image }}
+          style={{
+            borderRadius: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [10, 0],
+            }),
+            height: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [416, 500],
+            }),
+            resizeMode: 'cover',
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            flexDirection: 'column',
+            top: 20,
+            left: 20,
+          }}
+        >
+          <PText label={story.subTitle} />
+          <H1Text label={story.title} style={{ marginTop: 10 }} />
+        </View>
+        <Animated.View style={{
+          backgroundColor: '#fff',
+          paddingTop: 30,
+          paddingBottom: 60,
+          opacity: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+          }),
+        }}>
+          <HTMLView value={story.body} stylesheet={htmlStyles} />
+        </Animated.View>
+      </ScrollView>
       <Animated.View style={{
         position: 'absolute',
         top: 30,
@@ -113,14 +150,18 @@ const ExpendedItem: FunctionComponent<Props> = ({
         }),
       }}
       >
-        <TouchableOpacity onPress={() => {
-          Animated.timing(animatedValue, {
-            toValue: 0,
-            duration: 500,
-            useNativeDriver: false,
-            easing: Easing.elastic(1),
-          }).start(() => deactivateStory());
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            scrollRef.current?.scrollTo({ y: 0, animated: false });
+            setState({ ...state, closed: true });
+            Animated.timing(animatedValue, {
+              toValue: 0,
+              duration: 500,
+              useNativeDriver: false,
+              easing: Easing.elastic(1),
+            }).start(() => deactivateStory());
+          }}
+        >
           <Image
             style={{
               width: 26,
@@ -132,43 +173,23 @@ const ExpendedItem: FunctionComponent<Props> = ({
           />
         </TouchableOpacity>
       </Animated.View>
-      <View
-        style={{
-          position: 'absolute',
-          flexDirection: 'column',
-          top: 20,
-          left: 20,
-        }}
-      >
-        <PText label={story.subTitle} />
-        <H1Text label={story.title} style={{ marginTop: 10 }} />
-      </View>
-      <Animated.View style={{
-        backgroundColor: '#fff',
-        paddingTop: 30,
-        paddingBottom: 60,
-        opacity: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 1],
-        }),
-      }}>
-        <HTMLView value={story.body} stylesheet={htmlStyles} />
-      </Animated.View>
-      <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-        title={i18n.t('product_label.buy')}
-        handler={() => {
-          StatusBar.setHidden(false);
-          navigation.navigate('Product', {
-            screen: 'BuyModalStack',
-            params: {
-              screen: 'ProductBuying',
-              params: { productId: story.productId },
-            },
-          });
-        }}
-      />
-    </Animated.ScrollView>
+      { /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
+        !state.closed && state.scrollY > 50 && <SubmitButton
+          style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
+          title={i18n.t('product_label.buy')}
+          handler={() => {
+            StatusBar.setHidden(false);
+            navigation.navigate('Product', {
+              screen: 'BuyModalStack',
+              params: {
+                screen: 'ProductBuying',
+                params: { productId: story.productId },
+              },
+            });
+          }}
+        />
+      }
+    </Animated.View>
   );
 };
 
