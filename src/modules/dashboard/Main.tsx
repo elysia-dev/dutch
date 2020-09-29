@@ -12,12 +12,13 @@ import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
+import VirtualTab from '../../shared/components/VirtualTab';
 
 interface Props {
   navigation: NavigationScreenProp<any>;
   route: NavigationRoute;
 }
-interface State {}
+interface State { }
 
 export class Main extends Component<Props, State> {
   render() {
@@ -56,7 +57,7 @@ export class Main extends Component<Props, State> {
               justifyContent: 'center',
               alignContent: 'center',
             }}
-            onPress={() => {}}>
+            onPress={() => { }}>
             <Text
               style={{
                 textAlignVertical: 'center',
@@ -68,6 +69,7 @@ export class Main extends Component<Props, State> {
               {'+'}
             </Text>
           </TouchableOpacity>
+          <VirtualTab />
         </View>
       </ScrollView>
     );

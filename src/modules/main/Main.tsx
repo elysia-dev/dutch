@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { Image, StyleProp, View, ViewProps } from 'react-native';
+import { Image, View, ViewProps } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 
@@ -33,7 +33,7 @@ const Main: FunctionComponent = () => {
       initialRouteName="DashboardMain"
       tabBarOptions={{
         showLabel: false,
-        style: { height: 50 },
+        style: { height: 50, position: 'absolute', bottom: 0 },
       }}
     >
       <Tab.Screen

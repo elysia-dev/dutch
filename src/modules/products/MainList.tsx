@@ -4,6 +4,7 @@ import {
   Animated,
   StatusBar,
   Image,
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,6 +13,7 @@ import Api from '../../api/product';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
 import ExpendedCard from './components/ExpendedCard';
+import VirtualTab from '../../shared/components/VirtualTab';
 
 interface State {
   stories: Story[];
@@ -54,9 +56,10 @@ const MainList: FunctionComponent = () => {
         top: 0,
         backgroundColor: '#FFF',
       }}>
-      <Animated.ScrollView
+      <ScrollView
         scrollEventThrottle={16}
-        style={{ width: '100%', padding: 20, paddingTop: 0 }}>
+        style={{ width: '100%', paddingHorizontal: 20 }}
+      >
         <Animated.View
           style={{
             backgroundColor: '#fff',
@@ -100,7 +103,8 @@ const MainList: FunctionComponent = () => {
             />
           ))
         }
-      </Animated.ScrollView>
+        <VirtualTab />
+      </ScrollView>
       {state.activeStory &&
         <ExpendedCard
           story={state.activeStory}
