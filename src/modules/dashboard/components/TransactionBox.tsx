@@ -14,7 +14,7 @@ const GText = styled.Text`
   font-size: 15px;
   text-align: left;
   font-weight: 300;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 `;
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
@@ -69,11 +69,26 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          <Text style={{ fontSize: 10, color: '#fff', textAlign: 'center' }}>
-            {state.show
-              ? i18n.t('dashboard_label.fold')
-              : i18n.t('dashboard_label.transaction')}
-          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 10, color: '#fff', textAlign: 'center' }}>
+              {state.show
+                ? i18n.t('dashboard_label.fold')
+                : i18n.t('dashboard_label.transaction')}
+            </Text>
+            <Image
+              style={{
+                width: 5,
+                height: 3,
+                marginTop: 'auto',
+                marginBottom: 'auto',
+                marginLeft: 3,
+              }}
+              source={
+                state.show
+                  ? require('../images/whiteupbutton.png')
+                  : require('../images/whitedownbutton.png')
+              }></Image>
+          </View>
         </TouchableOpacity>
       </View>
 

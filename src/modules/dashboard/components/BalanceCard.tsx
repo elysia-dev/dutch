@@ -36,10 +36,10 @@ export const BalanceCard: FunctionComponent<Props> = props => {
           padding: 20,
           marginBottom: 25,
         }}>
-        <H1Text>{'Total Profit'}</H1Text>
+        <H1Text>{'Total Balance'}</H1Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ top: 15 }}>
-            <NumText>{props.balance}</NumText>
+            <NumText>{`$ ${parseFloat(props.balance).toFixed(2)}`}</NumText>
           </View>
           <View
             style={{

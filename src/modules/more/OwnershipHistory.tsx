@@ -5,7 +5,6 @@ import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { Api, OwnershipResponse } from '../../api/info';
 import { OwnershipItem } from './components/OwnershipItem';
 
 const H1Text = styled.Text`

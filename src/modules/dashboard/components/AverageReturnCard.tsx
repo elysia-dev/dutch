@@ -20,16 +20,7 @@ const NumText = styled.Text`
   font-weight: bold;
   margin-bottom: 18px;
 `;
-const PText = styled.Text`
-  color: #838383;
-  font-size: 15px;
-  text-align: left;
-`;
-const NumText2 = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: right;
-`;
+
 export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
@@ -46,7 +37,7 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         marginBottom: 20,
       }}>
       <H1Text>{'Average Return'}</H1Text>
-      <NumText>{`${props.return} %`}</NumText>
+      <NumText>{`${parseFloat(props.return).toFixed(2)} %`}</NumText>
     </View>
   );
 };

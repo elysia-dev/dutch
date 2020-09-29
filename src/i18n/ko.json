@@ -271,7 +271,8 @@
     "newDevice": "새로운 기기(%{device})로 로그인 되었습니다.",
     "profit": "일일 이자 $%{profit} 적립되었습니다.",
     "productNotice": "상품 관련 새로운 공지사항이 있습니다.",
-    "elysiaNotice": "새로운 공지사항이 있습니다."
+    "elysiaNotice": "새로운 공지사항이 있습니다.",
+    "saved_90days": "받은 알림은 90일동안 보관됩니다."
   },
   "notification_label": {
     "notification": "알림",

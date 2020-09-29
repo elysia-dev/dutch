@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, Animated, RefreshControl } from 'react-native';
+import { View, Animated, RefreshControl, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -148,6 +148,16 @@ const Notifications: FunctionComponent = () => {
             />
           );
         })}
+        <Text
+          style={{
+            marginTop: -20,
+            marginBottom: 50,
+            color: '#A7A7A7',
+            textAlign: 'center',
+            fontSize: 12,
+          }}>
+          {i18n.t('notification.saved_90days')}
+        </Text>
       </Animated.ScrollView>
     </View>
   );

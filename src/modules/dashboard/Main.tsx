@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { AxiosError } from 'axios';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
@@ -191,7 +192,7 @@ export class Main extends Component<Props, State> {
                 marginBottom: 40,
               }}>{`Hi, ${this.state.user.firstName}${this.state.user.lastName}`}</Text>
             <BalanceCard
-              balance={`$ ${this.state.balance}`}
+              balance={this.state.balance}
               handler={() => this.callSummaryApi()}
             />
             <View

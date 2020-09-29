@@ -14,7 +14,6 @@ import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { DateInput } from './components/DateInput';
 import { PeriodPicker } from './components/PeriodPicker';
-import { Api } from '../../api/info';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -142,7 +141,7 @@ export class TransactionHistory extends Component<Props, State> {
       this.state.withdraw,
     ];
 
-    const sortingTypesToSend = sortingTypes.filter((type) => {
+    const sortingTypesToSend = sortingTypes.filter(type => {
       return type !== '';
     });
 

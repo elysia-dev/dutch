@@ -29,10 +29,6 @@ export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'SummaryReport'>>();
   const { report } = route.params;
-  // const [state, setState] = useState({
-  //   transactions: transaction,
-  //   transactionCount: 2,
-  // });
 
   return (
     <ScrollView
@@ -44,7 +40,7 @@ export const SummaryReport: FunctionComponent<{}> = () => {
         padding: 20,
       }}>
       <BackButton
-        style={{ marginTop: 30 }}
+        style={{ marginTop: 10 }}
         handler={() => navigation.goBack()}
       />
 

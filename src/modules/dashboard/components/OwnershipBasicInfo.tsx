@@ -93,7 +93,7 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
           <GText>{ownership.product.title}</GText>
-          <H1Text>{`$ ${ownership.value}`}</H1Text>
+          <H1Text>{`$ ${parseFloat(ownership.value).toFixed(2)}`}</H1Text>
           <GText
             onPress={() => {
               Linking.openURL(
