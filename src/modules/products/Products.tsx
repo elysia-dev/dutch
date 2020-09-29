@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
-import { MainList } from './MainList';
 import { ProductPage } from '../../enums/pageEnum';
 import ProductBuying from './ProductBuying';
 import ProductStory from './ProductStory';

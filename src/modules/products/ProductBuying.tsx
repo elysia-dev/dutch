@@ -1,63 +1,21 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
   Image,
-  Text,
-  SafeAreaView,
-  Platform,
+  StatusBar,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { Calculator } from './components/Calculator';
 import WrappedInfo from './components/WrappedInfo';
 import Product from '../../types/product';
-import UserContext from '../../contexts/UserContext';
-import LocaleType from '../../enums/LocaleType';
-import { Map } from './components/Map';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
+import Api from '../../api/product';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 25px;
-  font-weight: bold;
-  margin-top: 7px;
-  margin-bottom: 6px;
-  text-align: left;
-  z-index: 3;
-`;
-const WText = styled.Text`
-  margin-top: 30px;
-  color: #fff;
-  font-size: 14px;
-  line-height: 30px;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const Method = styled.Image`
-  width: 16px;
-  height: 16px;
-  margin-left: 14px;
-`;
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
   padding-top: 25px;
@@ -66,13 +24,21 @@ const ProductInfoWrapper = styled.SafeAreaView`
 `;
 
 type ParamList = {
-  ProductInfo: {
-    product: Product;
+  ProductBuying: {
+    productId: number;
   };
 };
 
+interface State {
+  investment: number;
+  financial: boolean;
+  highlight: boolean;
+  abstract: boolean;
+  product?: Product;
+}
+
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<State>({
     investment: 20,
     financial: false,
     highlight: false,
@@ -80,8 +46,19 @@ const ProductBuying: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ProductInfo'>>();
-  const { product } = route.params;
+  const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
+  const { productId } = route.params;
+
+  useEffect(() => {
+    Api.productInfo(productId)
+      .then(res => { setState({ ...state, product: res.data }); })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        }
+      });
+  }, []);
 
   return (
     <ProductInfoWrapper>
@@ -98,7 +75,7 @@ const ProductBuying: FunctionComponent = () => {
             borderBottomRightRadius: 10,
           }}>
           <Image
-            source={{ uri: product.data.images[0] }}
+            source={{ uri: state.product && state.product.data.images[0] }}
             style={{
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
@@ -110,18 +87,23 @@ const ProductBuying: FunctionComponent = () => {
             }}
           />
           <View style={{ position: 'absolute', padding: 20 }}>
-            <BackButton handler={() => navigation.goBack()} />
+            <BackButton
+              handler={() => {
+                StatusBar.setHidden(true);
+                navigation.goBack();
+              }}
+            />
           </View>
         </View>
-        <BasicInfo product={product} />
+        {state.product && <BasicInfo product={state.product} />}
         {/* <Map product={product} /> */}
-        <WrappedInfo product={product} />
+        {state.product && <WrappedInfo product={state.product} />}
       </ScrollView>
       <SubmitButton
         style={{ position: 'absolute', bottom: 0, marginBottom: 10 }}
         handler={() => {
           navigation.navigate(ProductPage.SliderProductBuying, {
-            return: product.data.expectedAnnualReturn,
+            return: state.product && state.product.data.expectedAnnualReturn,
           });
         }}
         title={i18n.t('product_label.invest')}

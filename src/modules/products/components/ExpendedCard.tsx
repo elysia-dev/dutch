@@ -7,10 +7,14 @@ import {
   Easing,
   TouchableOpacity,
   StyleSheet,
+  StatusBar,
 } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
+import { useNavigation } from '@react-navigation/native';
+import i18n from '../../../i18n/i18n';
 import QuitIcon from '../images/quitbutton.png';
+import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
 import { PText } from '../../../shared/components/PText';
 import { H1Text } from '../../../shared/components/H1Text';
@@ -49,8 +53,8 @@ const ExpendedItem: FunctionComponent<Props> = ({
   yOffset,
 }) => {
   const [animatedValue] = useState(new Animated.Value(0));
-  // Device Height
   const { height: windowHeight } = Dimensions.get("window");
+  const navigation = useNavigation();
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -150,6 +154,20 @@ const ExpendedItem: FunctionComponent<Props> = ({
       }}>
         <HTMLView value={story.body} stylesheet={htmlStyles} />
       </Animated.View>
+      <SubmitButton
+        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
+        title={i18n.t('product_label.buy')}
+        handler={() => {
+          StatusBar.setHidden(false);
+          navigation.navigate('Product', {
+            screen: 'BuyModalStack',
+            params: {
+              screen: 'ProductBuying',
+              params: { productId: story.productId },
+            },
+          });
+        }}
+      />
     </Animated.ScrollView>
   );
 };
