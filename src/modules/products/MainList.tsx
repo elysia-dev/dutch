@@ -3,6 +3,7 @@ import {
   View,
   Animated,
   StatusBar,
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -31,6 +32,9 @@ const MainList: FunctionComponent = () => {
     Api.storyList()
       .then(res => {
         setState({ ...state, stories: res.data });
+        res.data.forEach((story) => {
+          Image.prefetch(story.image);
+        });
       })
       .catch(e => {
         if (e.response.status === 401) {
