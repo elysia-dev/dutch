@@ -23,7 +23,7 @@ type Scrolling = {
 const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
-      behavior={'position'}
+      behavior={'padding'}
       style={{ flex: 1, flexDirection: 'column' }}>
       {props.children}
     </KeyboardAvoidingView>

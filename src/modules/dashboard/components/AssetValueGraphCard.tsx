@@ -8,16 +8,20 @@ import {
   Dimensions,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { PieChart } from 'react-native-chart-kit';
+// import { PieChart } from 'react-native-chart-kit';
+import { PieChart } from 'react-native-svg-charts';
 import i18n from '../../../i18n/i18n';
+import { SummaryReportResponse } from '../../../types/SummaryReport';
 
-interface Props {}
+interface Props {
+  ownerships: SummaryReportResponse['content']['ownerships'];
+}
 
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-size: 15px;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 const data = [
   {
@@ -44,6 +48,31 @@ const data = [
 ];
 
 export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
+  // const data = [50, 10, 40, 95, 85, 91, 35, 53];
+
+  const data = props.ownerships.map((value, index) => parseFloat(value[1]));
+  console.log(data);
+
+  const color = [
+    '#3679B5',
+    '#66B8FF',
+    '#33ADCC',
+    '#30C2B8',
+    '#234F75',
+    '#3679B5',
+    '#66B8FF',
+    '#33ADCC',
+    '#30C2B8',
+    '#234F75',
+  ];
+
+  const pieData = data.map((value, index) => ({
+    value,
+    svg: {
+      fill: color[index],
+    },
+    key: `pie-${index}`,
+  }));
   return (
     <View
       style={{
@@ -59,8 +88,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
         marginBottom: 20,
       }}>
       <H1Text>{'Asset Value Graph'}</H1Text>
-
-      <PieChart
+      {/* <PieChart
         // style={{ paddingLeft: 5 }}
         paddingLeft={`${Dimensions.get('window').width * 0.2}`}
         data={data}
@@ -80,10 +108,18 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
             borderRadius: 0,
           },
         }}
+      /> */}
+      <PieChart
+        style={{ height: 200 }}
+        data={pieData}
+        outerRadius={'100%'}
+        innerRadius={'70%'}
+        padAngle={0}
       />
       <View
         style={{
           width: '100%',
+          top: 15,
           height: 140,
           borderRadius: 10,
           borderWidth: 1,

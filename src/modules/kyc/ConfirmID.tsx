@@ -1,4 +1,5 @@
 import React, { Component, FunctionComponent, Props, useState } from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -8,40 +9,23 @@ import WarningImg from '../../shared/assets/images/warning_white.png';
 import Api from '../../api/kyc';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
+import { TitleText } from '../../shared/components/TitleText';
+import { PText } from '../../shared/components/PText';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 5%;
-`;
-const PText = styled.Text`
-  font-size: 13px;
-  color: #626368;
-  text-align: left;
-  margin-left: 5%;
-  margin_bottom: 15px;
-`;
 const SelfieImg = styled.Image`
   width: 90%;
-  height: 30%;
+  height: 50%;
   justify-content: center;
   align-content: center;
   left: 5%;
-  position: relative;
-`;
-const ConfirmIdWrapper = styled.SafeAreaView`
-  padding-top: 25px;
-  flex: 1;
-  background-color: #ffffff;
+  resize-mode: stretch;
 `;
 const WarningIcon = styled.Image`
   width: 12px;
   height: 12px;
   margin: 0px 5px;
-  position: relative;
-  top: 1px;
+  top: 2px;
 `;
 const WarningWrapper = styled.View`
   background-color: #cc3743;
@@ -49,20 +33,6 @@ const WarningWrapper = styled.View`
   height: 80px;
   border-radius: 15px;
   margin: 10% auto 0px auto;
-`;
-const WarningHeaderText = styled.Text`
-  font-size: 13px;
-  font-weight: bold;
-  color: #fff;
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-bottom: 10px;
-`;
-const WarningInfoText = styled.Text`
-  font-size: 13px;
-  color: #fff;
-  line-height: 20px;
-  margin-left: 30px;
 `;
 
 type ParamList = {
@@ -102,38 +72,72 @@ export const ConfirmID: FunctionComponent<{}> = () => {
   // }
 
   return (
-    <ConfirmIdWrapper style={{ display: 'flex' }}>
-      <BackButton
-        handler={() => navigation.goBack()}
-        style={{ marginTop: 30, marginLeft: 20, marginBottom: 30 }}
-      />
-      <H1Text>{i18n.t('kyc.step1_complete')}</H1Text>
-      <PText>{i18n.t('kyc.step1_complete_text')}</PText>
-      <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
-      <WarningWrapper>
-        <WarningHeaderText>
-          <WarningIcon source={WarningImg} /> 사진이 잘 보이려면?
-        </WarningHeaderText>
-        <WarningInfoText>· 대비되는 배경위에서 촬영해주세요</WarningInfoText>
-        <WarningInfoText>· 프레임에 맞춰서 촬영해주세요</WarningInfoText>
-      </WarningWrapper>
-      <SubmitButton
-        title={i18n.t('kyc_label.shoot_again')}
-        handler={() => navigation.navigate(KycPage.TakeID)}
-        ButtonTheme={'WhiteTheme'}
-        style={{ marginTop: 'auto', marginBottom: 10 }}
-      />
-      <SubmitButton
-        title={i18n.t('kyc_label.submit')}
-        handler={async () => {
-          navigation.navigate(KycPage.TakeSelfieBefore, {
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            id_type: route.params.id_type,
-            idPhoto: route.params.idPhoto,
-          });
-        }}
-        style={{ marginBottom: 10 }}
-      />
-    </ConfirmIdWrapper>
+    <WrapperLayout
+      title={
+        <>
+          <BackButton handler={() => navigation.goBack()} />
+          <TitleText label={i18n.t('kyc.step1_complete')} />
+          <PText
+            label={i18n.t('kyc.step1_complete_text')}
+            style={{ color: '#626368', marginBottom: 15 }}
+          />
+        </>
+      }
+      isScrolling={false}
+      isBackbutton={true}
+      body={
+        <>
+          <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
+          <WarningWrapper>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 10,
+                marginBottom: 10,
+                marginLeft: 10,
+              }}>
+              <WarningIcon source={WarningImg} />
+              <PText
+                label={i18n.t('kyc.step1_tip_text_header')}
+                style={{
+                  color: '#FFF',
+                  fontWeight: 'bold',
+                  lineHeight: 20,
+                }}
+              />
+            </View>
+            <PText
+              label={i18n.t('kyc.step1_tip_case1')}
+              style={{ color: '#FFF', lineHeight: 20, marginLeft: 30 }}
+            />
+            <PText
+              label={i18n.t('kyc.step1_tip_case2')}
+              style={{ color: '#FFF', lineHeight: 20, marginLeft: 30 }}
+            />
+          </WarningWrapper>
+        </>
+      }
+      button={
+        <>
+          <SubmitButton
+            title={i18n.t('kyc_label.shoot_again')}
+            handler={() => navigation.navigate(KycPage.TakeID)}
+            variant={'WhiteTheme'}
+            style={{ marginTop: 'auto', marginBottom: 10 }}
+          />
+          <SubmitButton
+            title={i18n.t('kyc_label.submit')}
+            handler={async () => {
+              navigation.navigate(KycPage.TakeSelfieBefore, {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                id_type: route.params.id_type,
+                idPhoto: route.params.idPhoto,
+              });
+            }}
+            style={{ marginBottom: 10 }}
+          />
+        </>
+      }
+    />
   );
 };

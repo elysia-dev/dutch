@@ -51,14 +51,7 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
     ];
 
   return (
-    <View
-      style={{
-        padding: 20,
-        borderBottomColor: '#F6F6F8',
-        borderBottomWidth: 5,
-        height: 300,
-      }}>
-      {/* <H1Text>{i18n.t("product_label.address")}</H1Text> */}
+    <View>
       <H1Text>{i18n.t('product_label.address')}</H1Text>
       <View
         style={{

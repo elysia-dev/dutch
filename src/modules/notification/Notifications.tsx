@@ -1,9 +1,14 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { View, Animated, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
-import Api from '../../api/notification';
+import Api from '../../api/notifications';
 import NotificationContext from '../../contexts/NotificationContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
@@ -25,16 +30,20 @@ const Notifications: FunctionComponent = () => {
     loadNotifications();
   }, []);
 
-  const loadNotifications = () => Api.notification()
-    .then(res => { setNotifications(res.data); setRefreshing(false); })
-    .catch(e => {
-      if (e.response.status === 401) {
-        alert(i18n.t('account.need_login'));
-        navigation.navigate('Account');
-      } else if (e.response.status === 500) {
-        alert(i18n.t('errors.server.duplicate_email'));
-      }
-    });
+  const loadNotifications = () =>
+    Api.notification()
+      .then(res => {
+        setNotifications(res.data);
+        setRefreshing(false);
+      })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('errors.server.duplicate_email'));
+        }
+      });
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -46,18 +55,21 @@ const Notifications: FunctionComponent = () => {
 
     Api.read(notification.id)
       .then(() => {
-        setNotifications(notifications.map((n) => {
-          if (n.id === notification.id) {
-            return {
-              ...n,
-              status: NotificationStatus.READ,
-            };
-          } else {
-            return n;
-          }
-        }));
+        setNotifications(
+          notifications.map(n => {
+            if (n.id === notification.id) {
+              return {
+                ...n,
+                status: NotificationStatus.READ,
+              };
+            } else {
+              return n;
+            }
+          }),
+        );
         setUnreadNotificationCount(unreadNotificationCount - 1);
-      }).catch((e) => {
+      })
+      .catch(e => {
         if (e.response.status === 500) {
           alert(i18n.t('errors.server.duplicate_email'));
         }
@@ -127,19 +139,16 @@ const Notifications: FunctionComponent = () => {
         style={{ width: '100%', padding: 20 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {
-          notifications.map((notification, index) => {
-            return (
-              <NotiBox
-                notification={notification}
-                key={index}
-                readNotification={readNotification}
-              />
-            );
-          })
-        }
+        }>
+        {notifications.map((notification, index) => {
+          return (
+            <NotiBox
+              notification={notification}
+              key={index}
+              readNotification={readNotification}
+            />
+          );
+        })}
         <VirtualTab />
       </Animated.ScrollView>
     </View>

@@ -14,6 +14,7 @@ import { TitleText } from '../../shared/components/TitleText';
 const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
+  resize-mode: center;
 `;
 const Circle = styled.Text`
   width: 26px;
@@ -125,7 +126,7 @@ export const StartKYC: FunctionComponent<{}> = () => {
         </>
       }
       button={
-        <View style={{ marginTop: 'auto', marginBottom: 10 }}>
+        <View>
           <SubmitButton
             title={i18n.t('kyc_label.argos_terms')}
             handler={() =>

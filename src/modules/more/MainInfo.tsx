@@ -96,6 +96,7 @@ const MainInfo: FunctionComponent = () => {
                     shadowOpacity: 0.8,
                     shadowRadius: 6,
                     height: 70,
+                    elevation: 6,
                   }}
                   duplicateTitle={i18n.t('more_label.need_kyc_duplicate_label')}
                   title={i18n.t('more_label.need_kyc')}
@@ -110,6 +111,7 @@ const MainInfo: FunctionComponent = () => {
                     shadowOpacity: 0.8,
                     shadowRadius: 6,
                     height: 70,
+                    elevation: 6,
                   }}
                   duplicateTitle={i18n.t(
                     'more_label.proceed_kyc_duplicate_label',
@@ -129,6 +131,7 @@ const MainInfo: FunctionComponent = () => {
                     shadowOpacity: 0.8,
                     shadowRadius: 6,
                     height: 70,
+                    elevation: 6,
                   }}
                   duplicateTitle={i18n.t(
                     'more_label.approved_kyc_duplicate_label',
@@ -301,7 +304,7 @@ const MainInfo: FunctionComponent = () => {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate('More', {
-                        screen: MorePage.OwnershipHistory,
+                        screen: MorePage.Contact,
                       })
                     }>
                     <View

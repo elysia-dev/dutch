@@ -31,11 +31,11 @@ const CertifyRecover: FunctionComponent<{}> = () => {
 
   const callResendApi: () => void = () => {
     Api.certifyEmail_recover(route.params.email, 'recoverPassword')
-      .then((res) => {
+      .then(res => {
         setState({ ...state, verificationId: res.data.verificationId });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
         } else if (e.response.status === 500) {
@@ -57,7 +57,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
         : state.verificationId,
       state.code,
     )
-      .then((res) => {
+      .then(res => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             email: route.params.email,
@@ -78,7 +78,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           );
         }
       })
-      .catch((e) => {
+      .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('account.authentication_recover'));
         } else if (e.response.status === 404) {

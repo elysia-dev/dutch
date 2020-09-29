@@ -38,7 +38,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
       .then(res => {
         setState({
           ...state,
-          verificationId: res.data.verificationId,
+          verificationId: res.data.verificationId!,
         });
         alert(i18n.t('account.resend_verification'));
       })

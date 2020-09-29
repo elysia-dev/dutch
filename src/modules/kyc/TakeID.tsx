@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { Component } from 'react';
-import { TouchableOpacity, Platform, SafeAreaView } from 'react-native';
+import { TouchableOpacity, Platform, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,43 +8,20 @@ import * as MediaLibrary from 'expo-media-library';
 
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { RouteProp } from '@react-navigation/native';
-
 import styled from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
-
 import ReversePng from './images/reverse.png';
 import RecordPng from './images/recordbutton.png';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-
 import { KycPage } from '../../enums/pageEnum';
 import CameraPermissionPng from './images/cameraPermission.png';
 import { Photo } from '../../types/Photo';
+import WrapperLayout from '../../shared/components/WrapperLayout';
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
 
-const HeaderText = styled.Text`
-  position: absolute;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: left;
-  margin-top: 27px;
-  margin-left: 13%;
-`;
-const H1Text = styled.Text`
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 30px;
-  font-size: 20px;
-  font-weight: bold;
-`;
-const PText = styled.Text`
-  color: #fff;
-  font-size: 15px;
-  text-align: center;
-  margin-top: 13px;
-`;
 const ButtonImg = styled.Image`
   width: 47px;
   height: 47px;
@@ -72,10 +49,6 @@ const BottomButtonWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin: 30px;
-`;
-const HeaderTextWrapper = styled.View`
-  position: relative;
-  flex: 1;
 `;
 const CameraFocusWrapper = styled.View`
   flex: 1;
@@ -159,28 +132,9 @@ const CameraInnerRightBottomLine = styled.View`
   top: 90%;
   left: 89%;
 `;
-const TakeIdDeniedWrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  flex: 1;
-  background-color: #ffffff;
-`;
 const CameraPermissionImg = styled.Image`
   width: 209px;
   margin: 20% auto 15px auto;
-`;
-const DeniedH1Text = styled.Text`
-  font-size: 20px;
-  color: #1c1c1c;
-  text-align: center;
-  margin: 28px auto 0 auto;
-  font-weight: bold;
-`;
-const DeniedPText = styled.Text`
-  font-size: 13px;
-  color: #626368;
-  text-align: center;
-  margin: 10px auto 16px auto;
-  width: 90%;
 `;
 
 interface Props {
@@ -189,7 +143,7 @@ interface Props {
 }
 
 interface State {
-  hasPermission: boolean;
+  hasPermission: hasPermission;
   type: any;
 }
 
@@ -199,12 +153,18 @@ type ParamList = {
   };
 };
 
+enum hasPermission {
+  TRUE = 'true',
+  FALSE = 'false',
+  PENDING = 'pending',
+}
+
 export class TakeID extends Component<Props, State> {
   camera: any;
   constructor(props: Props) {
     super(props);
     this.state = {
-      hasPermission: false,
+      hasPermission: hasPermission.FALSE,
       type: Camera.Constants.Type.back,
     };
   }
@@ -212,17 +172,67 @@ export class TakeID extends Component<Props, State> {
   componentDidMount() {
     if (Platform.OS === 'ios') {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        (status) => {
+        status => {
           if (!status.granted) {
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.FALSE,
+            });
             alert('Sorry, we need camera roll permissions to make this work!');
           } else {
-            this.setState({ hasPermission: status.granted });
+            this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
           }
         },
       );
     } else {
-      Permissions.askAsync(Permissions.CAMERA).then((status) => {
-        this.setState({ hasPermission: status.granted });
+      Permissions.askAsync(Permissions.CAMERA).then(status => {
+        if (!status.granted) {
+          this.setState({ ...this.state, hasPermission: hasPermission.FALSE });
+          alert('Sorry, we need camera roll permissions to make this work!');
+        } else {
+          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
+        }
+      });
+    }
+  }
+
+  shouldComponentUpdate() {
+    if (this.state.hasPermission === hasPermission.PENDING) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (Platform.OS === 'ios') {
+      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
+        status => {
+          if (!status.granted) {
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.FALSE,
+            });
+            alert('Sorry, we need camera roll permissions to make this work!');
+          } else {
+            this.setState({
+              ...this.state,
+              hasPermission: hasPermission.TRUE,
+            });
+          }
+        },
+      );
+    } else {
+      Permissions.askAsync(Permissions.CAMERA).then(status => {
+        if (!status.granted) {
+          this.setState({
+            ...this.state,
+            hasPermission: hasPermission.FALSE,
+          });
+          alert('Sorry, we need camera roll permissions to make this work!');
+        } else {
+          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
+        }
       });
     }
   }
@@ -245,7 +255,7 @@ export class TakeID extends Component<Props, State> {
         base64: true,
       });
       // setPath(`${photo.uri}`);
-      const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
+      // const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
       return idPhoto;
     }
   };
@@ -264,22 +274,48 @@ export class TakeID extends Component<Props, State> {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const { id_type } = route.params;
 
-    if (this.state.hasPermission === false) {
+    if (this.state.hasPermission === hasPermission.FALSE) {
       return (
-        <TakeIdDeniedWrapper style={{ display: 'flex' }}>
-          <BackButton
-            handler={() => navigation.goBack()}
-            style={{ marginTop: 30, marginLeft: 20 }}
-          />
-          <CameraPermissionImg source={CameraPermissionPng} />
-          <DeniedH1Text>{i18n.t('kyc.camera_access_denied')}</DeniedH1Text>
-          <DeniedPText>{i18n.t('kyc.camera_access_denied_text')}</DeniedPText>
-          <SubmitButton
-            title={i18n.t('kyc_label.camera_access_return')}
-            handler={() => navigation.goBack()}
-            style={{ marginTop: 'auto', marginBottom: 10 }}
-          />
-        </TakeIdDeniedWrapper>
+        <WrapperLayout
+          title={
+            <BackButton
+              handler={() => {
+                this.setState({
+                  ...this.state,
+                  hasPermission: hasPermission.PENDING,
+                });
+                navigation.goBack();
+              }}
+            />
+          }
+          isBackbutton={true}
+          isScrolling={false}
+          body={
+            <>
+              <CameraPermissionImg source={CameraPermissionPng} />
+              <H1Text
+                label={i18n.t('kyc.camera_access_denied')}
+                style={{ textAlign: 'center', marginTop: 28 }}
+              />
+              <PText
+                label={i18n.t('kyc.camera_access_denied_text')}
+                style={{ textAlign: 'center', marginTop: 10, color: '#626368' }}
+              />
+            </>
+          }
+          button={
+            <SubmitButton
+              title={i18n.t('kyc_label.camera_access_return')}
+              handler={() => {
+                this.setState({
+                  ...this.state,
+                  hasPermission: hasPermission.PENDING,
+                });
+                navigation.goBack();
+              }}
+            />
+          }
+        />
       );
     } else {
       return (
@@ -295,18 +331,25 @@ export class TakeID extends Component<Props, State> {
               // borderWidth: 1,
             }}
             type={this.state.type}
-            ref={(ref) => {
+            ref={ref => {
               this.camera = ref;
             }}>
             <HeaderCameraWrapper>
-              <HeaderTextWrapper>
+              <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
                 <BackButton
                   handler={() => navigation.goBack()}
                   isWhite={true}
-                  style={{ marginTop: 30, marginLeft: 20 }}
                 />
-                <HeaderText>{i18n.t(`kyc_label.${id_type}`)}</HeaderText>
-              </HeaderTextWrapper>
+                <H1Text
+                  label={i18n.t(`kyc_label.${id_type}`)}
+                  style={{
+                    color: '#FFF',
+                    fontSize: 18,
+                    flex: 1,
+                    marginTop: 15,
+                  }}
+                />
+              </View>
             </HeaderCameraWrapper>
             <CameraFocusWrapper>
               <CameraFocusLeft />
@@ -321,8 +364,19 @@ export class TakeID extends Component<Props, State> {
               <CameraFocusRight />
             </CameraFocusWrapper>
             <BottomCameraWrapper>
-              <H1Text>{i18n.t('kyc.take_ID')}</H1Text>
-              <PText>{i18n.t('kyc.take_ID_text')}</PText>
+              <H1Text
+                label={i18n.t('kyc.take_ID')}
+                style={{ color: '#FFF', marginTop: 30, textAlign: 'center' }}
+              />
+              <PText
+                label={i18n.t('kyc.take_ID_text')}
+                style={{
+                  color: '#FFF',
+                  marginTop: 13,
+                  textAlign: 'center',
+                  fontSize: 15,
+                }}
+              />
               <BottomButtonWrapper>
                 <TouchableOpacity
                   style={{

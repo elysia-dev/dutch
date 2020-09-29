@@ -1,56 +1,95 @@
-import React, { FunctionComponent } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
+import Dash from 'react-native-dash';
 
-interface props {
-  name: string;
-  investment: string;
-  profit: string;
+interface Props {
+  ownership: {
+    id: number;
+    title: string;
+    productType: string;
+    value: number;
+    profit: number;
+  };
+
+  handler: () => void;
 }
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
+const TitleText = styled.Text`
+  flex: 2;
+  color: #fff;
   font-size: 15px;
-  text-align: right;
-  margin-bottom: 15px;
+  text-align: left;
 `;
 
 const NumText = styled.Text`
-  font-size: 15px;
+  color: #fff;
+  font-size: 30px;
   font-weight: bold;
-  text-align: right;
+  text-align: left;
+  margin-bottom: 10px;
 `;
-export const Asset: FunctionComponent<props> = (props) => {
+const ProfitText = styled.Text`
+  margin-top: 10px;
+  color: #fff;
+  font-size: 18px;
+  text-align: left;
+`;
+export const Asset: FunctionComponent<Props> = (props: Props) => {
   return (
-    <View
-      style={{
-        flex: 4,
-        backgroundColor: "#fff",
-        height: 120,
-        borderRadius: 10,
-        shadowOffset: { width: 2, height: 2 },
-        shadowColor: "#3679B540",
-        shadowOpacity: 0.8,
-        shadowRadius: 5,
-        padding: 20,
-        marginBottom: 25,
-      }}
-    >
-      <TouchableOpacity>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ paddingTop: 10 }}>
-            <Image
-              style={{ resizeMode: "center", width: 50, height: 50 }}
-              source={require("../images/type.png")}
-            />
-          </View>
-          <View style={{ flexDirection: "column" }}>
-            <H1Text>{props.name}</H1Text>
-            <NumText>{props.investment}</NumText>
-            <NumText style={{ color: "#3679B5" }}>{props.profit}</NumText>
-          </View>
+    <TouchableOpacity onPress={props.handler} style={{ width: '47%' }}>
+      <View
+        style={{
+          backgroundColor:
+            props.ownership.productType === 'commercial'
+              ? '#33ADCC'
+              : '#30C2B8',
+          width: '100%',
+          height: 200,
+          borderRadius: 10,
+          shadowOffset: { width: 2, height: 2 },
+          shadowColor: '#1C1C1C4D',
+          shadowOpacity: 0.8,
+          shadowRadius: 7,
+          padding: 15,
+          paddingTop: 23,
+          marginBottom: 25,
+          flexDirection: 'column',
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignContent: 'center',
+            alignItems: 'center',
+            marginBottom: 20,
+          }}>
+          <Image
+            style={{ flex: 1, resizeMode: 'center', width: 40, height: 40 }}
+            source={
+              props.ownership.productType === 'commercial'
+                ? require('../images/commercial.png')
+                : require('../images/residential.png')
+            }
+          />
+          <TitleText>{props.ownership.title}</TitleText>
         </View>
-      </TouchableOpacity>
-    </View>
+        <NumText>{`$ ${parseFloat(`${props.ownership.value}`).toFixed(
+          2,
+        )}`}</NumText>
+        <Dash
+          dashGap={4}
+          dashLength={2}
+          dashThickness={2}
+          dashColor={'rgba(255, 255, 255, 0.6)'}
+          style={{ width: '100%', height: 1 }}
+          dashStyle={{
+            borderRadius: 100,
+            overflow: 'hidden',
+          }}></Dash>
+        <ProfitText>{`$ ${parseFloat(`${props.ownership.profit}`).toFixed(
+          2,
+        )}`}</ProfitText>
+      </View>
+    </TouchableOpacity>
   );
 };

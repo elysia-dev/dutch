@@ -1,6 +1,6 @@
-import NotificationStatus from "../enums/NotificationStatus";
-import NotificationType from "../enums/NotificationType";
-import NotificationData from "./NotificationData";
+import NotificationStatus from '../enums/NotificationStatus';
+import NotificationType from '../enums/NotificationType';
+import NotificationData from './NotificationData';
 
 type Notification = {
   id: number;
@@ -9,6 +9,6 @@ type Notification = {
   status: NotificationStatus;
   data: NotificationData;
   createdAt: Date;
-}
+};
 
 export default Notification;

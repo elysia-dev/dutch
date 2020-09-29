@@ -41,4 +41,7 @@ export enum MorePage {
 export enum DashboardPage {
   Main = 'Main',
   SummaryReport = 'SummaryReport',
+  OwnershipDetail = 'OwnershipDetail',
+  ProductData = 'ProductData',
+  ProductNotice = 'ProductNotice',
 }

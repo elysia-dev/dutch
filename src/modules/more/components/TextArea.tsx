@@ -28,14 +28,16 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
         onChangeText={props.eventHandler}
         maxLength={1000}
         style={{
+          backgroundColor: '#F6F6F8',
           borderColor: state.focus ? '#3679B5' : '#00000040',
           borderRadius: 10,
           borderWidth: 1,
           width: '100%',
-          height: 300,
+          height: 150,
           fontSize: 14,
           padding: 10,
         }}
+        scrollEnabled={true}
         textAlignVertical={'top'}
         multiline={true}
         onFocus={() => setState({ focus: true })}

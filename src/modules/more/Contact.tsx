@@ -7,6 +7,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
+import Api from '../../api/questions';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -34,6 +35,23 @@ const Contact: FunctionComponent = () => {
     contents: '',
   });
 
+  const callApi = () => {
+    Api.sendQuestion(state.contents)
+      .then(res => {
+        alert(i18n.t('more.question_submitted'));
+        setState({ ...state, contents: '' });
+        navigation.goBack();
+      })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('errors.server.duplicate_email'));
+        }
+      });
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -42,12 +60,12 @@ const Contact: FunctionComponent = () => {
         backgroundColor: '#fff',
       }}>
       <ScrollView>
-        <View style={{ padding: 20 }}>
+        <View style={{ padding: 20, paddingTop: 0 }}>
           <BackButton
             handler={() => {
               navigation.goBack();
             }}
-            style={{ marginTop: 20, marginBottom: 35 }}
+            style={{ marginTop: 10, marginBottom: 10 }}
           />
           <H1Text>{i18n.t('more_label.contact')}</H1Text>
           <PText>{i18n.t('more.contact_text')}</PText>
@@ -82,8 +100,12 @@ const Contact: FunctionComponent = () => {
               }}>{`${state.contents.length}/1000`}</Text>
           </View>
         </View>
-        <SubmitButton title={i18n.t('kyc_label.submit')} handler={() => {}} />
       </ScrollView>
+      <SubmitButton
+        style={{ marginBottom: 15, position: 'absolute', bottom: 0 }}
+        title={i18n.t('kyc_label.submit')}
+        handler={() => callApi()}
+      />
     </SafeAreaView>
   );
 };

@@ -1,10 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import styled from 'styled-components/native';
 
-interface props {
+interface Props {
   balance: string;
-  profit: string;
   handler: () => void;
 }
 
@@ -20,59 +19,50 @@ const NumText = styled.Text`
   text-align: left;
   font-weight: bold;
 `;
-const NumText2 = styled.Text`
-  color: #fff;
-  font-size: 23px;
-  text-align: right;
-  font-weight: bold;
-`;
-export const BalanceCard: FunctionComponent<props> = (props) => {
+
+export const BalanceCard: FunctionComponent<Props> = props => {
   return (
     <TouchableOpacity onPress={props.handler}>
       <View
         style={{
-          backgroundColor: "#3679B5",
-          width: "100%",
+          backgroundColor: '#3679B5',
+          width: '100%',
           height: 200,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },
-          shadowColor: "#3679B54D",
+          shadowColor: '#3679B54D',
           shadowOpacity: 0.8,
           shadowRadius: 6,
           padding: 20,
           marginBottom: 25,
-        }}
-      >
-        <H1Text>{"Total Balance"}</H1Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "column" }}>
-            <View
-              style={{
-                borderBottomWidth: 1,
-                borderBottomColor: "#fff",
-                borderStyle: "dashed",
-                paddingBottom: 3,
-                marginBottom: 3,
-              }}
-            >
-              <NumText>{props.balance}</NumText>
-            </View>
-
-            <NumText2>{props.profit}</NumText2>
+        }}>
+        <H1Text>{'Total Profit'}</H1Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ top: 15 }}>
+            <NumText>{props.balance}</NumText>
           </View>
           <View
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: '#fff',
               width: 60,
               height: 60,
               borderRadius: 30,
               shadowOffset: { width: 0, height: 3 },
-              shadowColor: "#00000029",
+              shadowColor: '#1C1C1C4D',
               shadowOpacity: 0.8,
               shadowRadius: 6,
-            }}
-          >
-            {/* 나중에 이미지 넣기 */}
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
+            <Image
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                width: 25,
+                height: 25,
+                resizeMode: 'center',
+              }}
+              source={require('../images/chart.png')}></Image>
           </View>
         </View>
       </View>

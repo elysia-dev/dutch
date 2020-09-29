@@ -15,6 +15,7 @@ import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
 import Api from '../../api/product';
+import { Map } from './components/Map';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -30,21 +31,11 @@ type ParamList = {
 };
 
 interface State {
-  investment: number;
-  financial: boolean;
-  highlight: boolean;
-  abstract: boolean;
   product?: Product;
 }
 
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState<State>({
-    investment: 20,
-    financial: false,
-    highlight: false,
-    abstract: false,
-  });
-
+  const [state, setState] = useState<State>({});
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
@@ -96,11 +87,19 @@ const ProductBuying: FunctionComponent = () => {
           </View>
         </View>
         {state.product && <BasicInfo product={state.product} />}
-        {/* <Map product={product} /> */}
+        <View
+          style={{
+            padding: 20,
+            borderBottomColor: '#F6F6F8',
+            borderBottomWidth: 5,
+            height: 300,
+          }}>
+          {state.product && <Map product={state.product} />}
+        </View>
         {state.product && <WrappedInfo product={state.product} />}
       </ScrollView>
       <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 10 }}
+        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
         handler={() => {
           navigation.navigate(ProductPage.SliderProductBuying, {
             return: state.product && state.product.data.expectedAnnualReturn,

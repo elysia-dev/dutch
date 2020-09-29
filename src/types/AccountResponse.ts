@@ -18,8 +18,10 @@ export type UserResponse = {
     lastName: string;
     language: string;
   };
+  totalBalance: string;
   ownerships: [
     {
+      id: number;
       title: string;
       productType: string;
       value: number;
