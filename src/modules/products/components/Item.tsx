@@ -3,7 +3,6 @@ import {
   View,
   Image,
   Animated,
-  Easing,
   TouchableWithoutFeedback,
 } from 'react-native';
 
