@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useContext } from 'react';
-import { Image, View } from 'react-native';
+import React, { FunctionComponent, useContext, useState } from 'react';
+import { Image, View, ViewProps } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 
@@ -13,7 +13,7 @@ import OptionsPng from '../../shared/assets/images/options.png';
 import OptionsBlackPng from '../../shared/assets/images/options_black.png';
 
 import MainInfo from '../more/MainInfo';
-import { MainList } from '../products/MainList';
+import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import NotificationContext from '../../contexts/NotificationContext';
@@ -31,7 +31,11 @@ const Main: FunctionComponent = () => {
   return (
     <Tab.Navigator
       initialRouteName="DashboardMain"
-      tabBarOptions={{ showLabel: false }}>
+      tabBarOptions={{
+        showLabel: false,
+        style: { height: 50, position: 'absolute', bottom: 0 },
+      }}
+    >
       <Tab.Screen
         name="DashboardMain"
         component={DashBoardMain}

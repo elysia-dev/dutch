@@ -12,6 +12,7 @@ import Api from '../../api/notifications';
 import NotificationContext from '../../contexts/NotificationContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
+import VirtualTab from '../../shared/components/VirtualTab';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -148,6 +149,7 @@ const Notifications: FunctionComponent = () => {
             />
           );
         })}
+        <VirtualTab />
       </Animated.ScrollView>
     </View>
   );
