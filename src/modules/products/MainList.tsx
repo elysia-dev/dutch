@@ -5,6 +5,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 import i18n from '../../i18n/i18n';
 import Api from '../../api/product';
 import { Item } from './components/Item';
@@ -76,7 +77,7 @@ const MainList: FunctionComponent = () => {
             <Item
               story={story}
               key={`item-${index}`}
-              activeCard={(xOffset, yOffset) => {
+              activateCard={(xOffset, yOffset) => {
                 StatusBar.setHidden(true);
                 navigation.setOptions({
                   tabBarVisible: false,
@@ -88,6 +89,10 @@ const MainList: FunctionComponent = () => {
                   yOffset,
                 });
               }}
+              active={
+                (state.activeStory && state.activeStory.productId === story.productId)
+                || false
+              }
             />
           ))
         }
@@ -95,7 +100,7 @@ const MainList: FunctionComponent = () => {
       {state.activeStory &&
         <ExpendedCard
           story={state.activeStory}
-          deactiveStory={() => {
+          deactivateStory={() => {
             StatusBar.setHidden(false);
             navigation.setOptions({
               tabBarVisible: true,

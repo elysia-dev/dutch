@@ -17,7 +17,7 @@ import { H1Text } from '../../../shared/components/H1Text';
 
 interface Props {
   story: Story;
-  deactiveStory: () => void;
+  deactivateStory: () => void;
   xOffset: number;
   yOffset: number;
 }
@@ -40,11 +40,11 @@ const htmlStyles = StyleSheet.create({
   },
 });
 
-const ELEMENT_HEIGHT = 395;
+const ELEMENT_HEIGHT = 416;
 
 const ExpendedItem: FunctionComponent<Props> = ({
   story,
-  deactiveStory,
+  deactivateStory,
   xOffset,
   yOffset,
 }) => {
@@ -94,7 +94,7 @@ const ExpendedItem: FunctionComponent<Props> = ({
           }),
           height: animatedValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [395, 500],
+            outputRange: [416, 500],
           }),
           resizeMode: 'cover',
         }}
@@ -115,7 +115,7 @@ const ExpendedItem: FunctionComponent<Props> = ({
             duration: 500,
             useNativeDriver: false,
             easing: Easing.elastic(1),
-          }).start(() => deactiveStory());
+          }).start(() => deactivateStory());
         }}>
           <Image
             style={{
