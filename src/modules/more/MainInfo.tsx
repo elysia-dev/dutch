@@ -243,7 +243,12 @@ const MainInfo: FunctionComponent = () => {
                     height: 50,
                     marginTop: 10,
                   }}>
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('More', {
+                        screen: MorePage.ElysiaNotice,
+                      })
+                    }>
                     <View
                       style={{
                         flexDirection: 'row',

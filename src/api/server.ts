@@ -202,6 +202,12 @@ export default class Server {
     );
   };
 
+  elysiaPost = async (): Promise<AxiosResponse<PostResponse[]>> => {
+    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+      '/posts/elysia',
+    );
+  };
+
   productDocs = async (id: number): Promise<AxiosResponse<DocsResponse>> => {
     return (await authenticatedEspressoClient(this.signOutHandler)).get(
       `/products/docs?productId=${id}`,

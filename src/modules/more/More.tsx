@@ -5,7 +5,7 @@ import MainInfo from './MainInfo';
 import MyPage from './Mypage';
 import Contact from './Contact';
 import Transactions from './Transactions';
-import Filter from './Filter';
+import ElysiaNotice from './ElysiaNotice';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,7 @@ export const More = () => {
       <Stack.Screen name={MorePage.MyPage} component={MyPage} />
       <Stack.Screen name={MorePage.Contact} component={Contact} />
       <Stack.Screen name={MorePage.Transactions} component={Transactions} />
+      <Stack.Screen name={MorePage.ElysiaNotice} component={ElysiaNotice} />
     </Stack.Navigator>
   );
 };

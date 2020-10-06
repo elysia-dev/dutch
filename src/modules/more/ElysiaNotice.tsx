@@ -1,16 +1,17 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
+import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
-
-type ParamList = {
-  ProductNotice: {
-    posts: PostResponse[];
-  };
-};
+import { Notice } from '../dashboard/ProductNotice';
 
 const GText = styled.Text`
   margin-top: 10px;
@@ -25,55 +26,34 @@ const PText = styled.Text`
   color: #1c1c1c;
   font-size: 15px;
 `;
-
-export interface Props {
-  post: PostResponse;
+interface State {
+  full: boolean;
+  postList: PostResponse[];
 }
 
-export const Notice: FunctionComponent<Props> = props => {
-  const [state, setState] = useState({
-    content: false,
-  });
-  return (
-    <TouchableOpacity
-      onPress={() => setState({ ...state, content: !state.content })}>
-      <View
-        style={{
-          paddingVertical: 5,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <GText>
-          {i18n.strftime(new Date(props.post.createdAt), '%Y-%m-%d')}
-        </GText>
-        <PText>{props.post.title}</PText>
-      </View>
-      {state.content && (
-        <View>
-          <Text
-            style={{
-              color: '#A7A7A7',
-              marginTop: 0,
-              marginBottom: 10,
-              fontSize: 15,
-            }}>
-            {props.post.body}
-          </Text>
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-};
-
-const ProductNotice: FunctionComponent = () => {
+const ElysiaNotice: FunctionComponent = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ProductNotice'>>();
-  const { posts } = route.params;
-  const [state, setState] = useState({
+  const [state, setState] = useState<State>({
     full: false,
+    postList: [],
   });
+  const { Server } = useContext(RootContext);
 
-  const fullPostsList = posts.map((post, index) => (
+  const loadElysiaNotice = () => {
+    Server.elysiaPost()
+      .then(res => setState({ ...state, postList: res.data }))
+      .catch(e => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  useEffect(() => {
+    loadElysiaNotice();
+  }, []);
+
+  const fullPostsList = state.postList.map((post, index) => (
     <Notice post={post} key={index} />
   ));
 
@@ -98,7 +78,7 @@ const ProductNotice: FunctionComponent = () => {
             fontSize: 28,
             fontWeight: 'bold',
           }}>
-          {'Notice'}
+          {'Elysia Notice'}
         </Text>
         <View
           style={{
@@ -146,4 +126,4 @@ const ProductNotice: FunctionComponent = () => {
   );
 };
 
-export default ProductNotice;
+export default ElysiaNotice;
