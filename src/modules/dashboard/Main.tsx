@@ -182,7 +182,7 @@ export class Main extends Component<Props, State> {
                 textAlign: 'left',
                 marginBottom: 10,
               }}>
-              {'Welcome to ELYSIA'}
+              {i18n.t('welcome')}
             </Text>
             <Text
               style={{
@@ -191,7 +191,12 @@ export class Main extends Component<Props, State> {
                 fontSize: 28,
                 textAlign: 'left',
                 marginBottom: 40,
-              }}>{`Hi, ${this.state.user.firstName}${this.state.user.lastName}`}</Text>
+              }}>
+              {i18n.t('greeting', {
+                firstName: this.state.user.firstName,
+                lastName: this.state.user.lastName,
+              })}
+            </Text>
             <BalanceCard
               balance={this.state.balance}
               handler={() => this.callSummaryApi()}
@@ -217,7 +222,7 @@ export class Main extends Component<Props, State> {
                   shadowOpacity: 0.8,
                   shadowRadius: 7,
                 }}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <Text
                   style={{
                     textAlign: 'center',
