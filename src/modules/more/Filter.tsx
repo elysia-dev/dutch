@@ -19,8 +19,8 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { TypePicker } from './components/TypePicker';
 import { ProductPicker } from './components/ProductPicker';
-import { Api } from '../../api/transactions';
 import { DateInput } from './components/DateInput';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -70,9 +70,11 @@ const Button: FunctionComponent<ButtonProps> = props => {
 };
 
 const Filter: FunctionComponent<Props> = (props: Props) => {
+  const { Server } = useContext(RootContext);
+
   // 서버 풀받고 체크하기
   const filterTransactions = () => {
-    Api.getTransactionHistory(
+    Server.getTransactionHistory(
       props.filter.page,
       props.filter.start,
       props.filter.end,

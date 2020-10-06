@@ -9,9 +9,7 @@ import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
 import { Account } from './src/modules/account/Account';
 
-import UserContext from './src/contexts/UserContext';
 import { KycStatus } from './src/enums/KycStatus';
-import Api from './src/api/account';
 import LocaleType from './src/enums/LocaleType';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
@@ -19,9 +17,10 @@ import pusherClient from './src/api/pusherClient';
 import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
 import Notification from './src/types/Notification';
-import NotificationContext from './src/contexts/NotificationContext';
 
 import StorybookUI from './storybook/index';
+import RootContext from './src/contexts/RootContext';
+import Server from './src/api/server';
 
 interface AppState {
   signedIn: boolean;
@@ -57,12 +56,19 @@ class App extends React.Component<{}, AppState> {
     this.state = defaultState;
   }
 
+  signOut = async () => {
+    await AsyncStorage.removeItem('@token');
+    this.setState(defaultState);
+  };
+  authServer = new Server(this.signOut);
+
   async componentDidMount() {
     await this.signIn();
   }
 
   signIn = async () => {
-    await Api.me()
+    await this.authServer
+      .me()
       .then(async res => {
         this.setState({
           signedIn: true,
@@ -86,58 +92,50 @@ class App extends React.Component<{}, AppState> {
     });
   };
 
-  signOut = async () => {
-    await AsyncStorage.removeItem('@token');
-    this.setState(defaultState);
-  };
-
   render() {
     const RootStack = createStackNavigator();
 
     return (
       <NavigationContainer>
-        <UserContext.Provider
+        <RootContext.Provider
           value={{
             ...this.state,
             signIn: this.signIn,
             signOut: this.signOut,
+            notifications: this.state.notifications,
+            unreadNotificationCount: this.state.unreadNotificationCount,
+            setUnreadNotificationCount: (value: number) => {
+              this.setState({
+                unreadNotificationCount: value >= 0 ? value : 0,
+              });
+            },
+            setNotifications: (notifications: Notification[]) => {
+              this.setState({ notifications });
+            },
+            Server: this.authServer,
           }}>
-          <NotificationContext.Provider
-            value={{
-              notifications: this.state.notifications,
-              unreadNotificationCount: this.state.unreadNotificationCount,
-              setUnreadNotificationCount: value => {
-                this.setState({
-                  unreadNotificationCount: value >= 0 ? value : 0,
-                });
-              },
-              setNotifications: notifications => {
-                this.setState({ notifications });
-              },
+          <RootStack.Navigator
+            headerMode="none"
+            screenOptions={{
+              gestureEnabled: false,
             }}>
-            <RootStack.Navigator
-              headerMode="none"
-              screenOptions={{
-                gestureEnabled: false,
-              }}>
-              {this.state.signedIn ? (
-                <>
-                  <RootStack.Screen name={'Main'} component={Main} />
-                  {this.state.user.kycStatus === KycStatus.NONE && (
-                    <RootStack.Screen name={'Kyc'} component={Kyc} />
-                  )}
-                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-                  <RootStack.Screen name={'More'} component={More} />
-                  <RootStack.Screen name={'Product'} component={Products} />
-                </>
-              ) : (
-                <>
-                  <RootStack.Screen name={'Account'} component={Account} />
-                </>
-              )}
-            </RootStack.Navigator>
-          </NotificationContext.Provider>
-        </UserContext.Provider>
+            {this.state.signedIn ? (
+              <>
+                <RootStack.Screen name={'Main'} component={Main} />
+                {this.state.user.kycStatus === KycStatus.NONE && (
+                  <RootStack.Screen name={'Kyc'} component={Kyc} />
+                )}
+                <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+                <RootStack.Screen name={'More'} component={More} />
+                <RootStack.Screen name={'Product'} component={Products} />
+              </>
+            ) : (
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
+          </RootStack.Navigator>
+        </RootContext.Provider>
       </NavigationContainer>
     );
   }

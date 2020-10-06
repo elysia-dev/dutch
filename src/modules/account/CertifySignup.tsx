@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
@@ -6,12 +6,12 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { Timer } from './components/Timer';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
+import RootContext from '../../contexts/RootContext';
 
 interface Props {
   existence: string;
@@ -30,11 +30,12 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
     code: '',
     verificationId: '',
   });
+  const { Server } = useContext(RootContext);
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'CertifySignup'>>();
 
   const callResendApi = (): void => {
-    Api.initializeEmail(route.params.email)
+    Server.initializeEmail(route.params.email)
       .then(res => {
         setState({
           ...state,
@@ -52,7 +53,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
       alert(i18n.t('account.authentication_recover'));
       return;
     }
-    Api.certifyEmail(
+    Server.certifyEmail(
       state.verificationId === ''
         ? route.params.verificationId
         : state.verificationId,
@@ -110,7 +111,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
             label={i18n.t('account_label.account_email')}
             editable={false}
             value={route.params.email}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
           />
           <TextField
             label={i18n.t('account_label.authentication_code')}

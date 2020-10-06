@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useEffect, useReducer } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 import {
   SafeAreaView,
   View,
@@ -14,11 +19,11 @@ import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PText } from '../../shared/components/PText';
 import Filter from './Filter';
-import { Api } from '../../api/transactions';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/useReducer';
 import { H1Text } from '../../shared/components/H1Text';
+import RootContext from '../../contexts/RootContext';
 
 export interface State {
   page: number;
@@ -45,6 +50,7 @@ export const initialState = {
 const Transactions: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { Server } = useContext(RootContext);
 
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
@@ -53,7 +59,7 @@ const Transactions: FunctionComponent = () => {
   );
 
   const loadTransactions = () => {
-    Api.getTransactionHistory(
+    Server.getTransactionHistory(
       state.page,
       state.start,
       state.end,

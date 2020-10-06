@@ -2,6 +2,7 @@ import React, {
   Component,
   FunctionComponent,
   useCallback,
+  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -18,7 +19,7 @@ import styled from 'styled-components/native';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
-import Api from '../../../api/product';
+import RootContext from '../../../contexts/RootContext';
 
 const InputHeaderText = styled.Text`
   color: #a7a7a7;
@@ -33,7 +34,7 @@ interface Props {
 }
 
 export const ProductPicker: FunctionComponent<Props> = props => {
-  // 서버 연결되면 useEffect 사용해서 상품 리스트 받아오기!
+  const { Server } = useContext(RootContext);
   const [state, setState] = useState({
     iosList: [{ label: '전체', value: '0', key: 0 }],
     andList: [
@@ -42,7 +43,7 @@ export const ProductPicker: FunctionComponent<Props> = props => {
   });
 
   const loadProducts = useCallback(() => {
-    Api.getAllProductIds()
+    Server.getAllProductIds()
       .then(res => {
         setState({
           ...state,
@@ -100,7 +101,6 @@ export const ProductPicker: FunctionComponent<Props> = props => {
               type: 'CHANGE_PRODUCT',
               value: parseInt(value, 10),
             });
-            console.log(props.filter.productId);
           }}
           items={state.iosList}
           style={pickerSelectStyles}
