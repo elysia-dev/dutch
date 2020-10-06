@@ -37,4 +37,9 @@ type Product = {
   };
 };
 
+export type ProductId = {
+  productId: number;
+  title: string;
+};
+
 export default Product;

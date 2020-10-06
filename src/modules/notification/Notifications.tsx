@@ -41,7 +41,7 @@ const Notifications: FunctionComponent = () => {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
 
@@ -71,7 +71,7 @@ const Notifications: FunctionComponent = () => {
       })
       .catch(e => {
         if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };

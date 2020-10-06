@@ -26,6 +26,45 @@ const PText = styled.Text`
   font-size: 15px;
 `;
 
+interface Props {
+  post: PostResponse;
+}
+
+const Notice: FunctionComponent<Props> = props => {
+  const [state, setState] = useState({
+    content: false,
+  });
+  return (
+    <TouchableOpacity
+      onPress={() => setState({ ...state, content: !state.content })}>
+      <View
+        style={{
+          paddingVertical: 5,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <GText>
+          {i18n.strftime(new Date(props.post.createdAt), '%Y-%m-%d')}
+        </GText>
+        <PText>{props.post.title}</PText>
+      </View>
+      {state.content && (
+        <View>
+          <Text
+            style={{
+              color: '#A7A7A7',
+              marginTop: 0,
+              marginBottom: 10,
+              fontSize: 15,
+            }}>
+            {props.post.body}
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
+
 const ProductNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductNotice'>>();
@@ -35,12 +74,7 @@ const ProductNotice: FunctionComponent = () => {
   });
 
   const fullPostsList = posts.map((post, index) => (
-    <View
-      style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-      key={index}>
-      <GText>{i18n.strftime(new Date(post.createdAt), '%Y-%m-%d')}</GText>
-      <PText>{post.title}</PText>
-    </View>
+    <Notice post={post} key={index} />
   ));
 
   const previewPostsList = fullPostsList.slice(0, 5);

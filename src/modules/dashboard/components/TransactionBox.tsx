@@ -9,13 +9,6 @@ interface Props {
   transaction: Transaction;
 }
 
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-  font-weight: 300;
-  margin-bottom: 8px;
-`;
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
     show: false,
@@ -49,15 +42,21 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
           {i18n.strftime(new Date(props.transaction.createdAt), '%m.%d')}
         </Text>
         {state.show && (
-          <GText
+          <Text
             onPress={() => {
               Linking.openURL(
-                `https://etherscan.io/token/${props.transaction.address}`,
+                `https://etherscan.io/token/${props.transaction.hash}`,
               );
             }}
-            style={{ fontSize: 12, textDecorationLine: 'underline' }}>
-            {props.transaction.address}
-          </GText>
+            style={{
+              fontSize: 12,
+              textDecorationLine: 'underline',
+              color: '#626368',
+              textAlign: 'left',
+              marginBottom: 8,
+            }}>
+            {props.transaction.hash}
+          </Text>
         )}
         <TouchableOpacity
           onPress={() => setState({ ...state, show: !state.show })}

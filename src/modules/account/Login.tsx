@@ -59,7 +59,6 @@ const Login: FunctionComponent = () => {
     } else {
       Api.login(route.params.email, state.password)
         .then(async res => {
-          console.log(res.data);
           // token local storage 저장
           if (res.data.status === 'wrong') {
             setState({ ...state, error: res.data.counts! });
