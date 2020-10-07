@@ -82,7 +82,10 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
       />
       <H1Text>{i18n.t('kyc.step2_complete')}</H1Text>
       <PText>{i18n.t('kyc.step2_complete_text')}</PText>
-      <SelfieImg source={{ uri: route.params.selfie.uri }} />
+      <SelfieImg
+        source={{ uri: route.params.selfie.uri }}
+        style={{ resizeMode: 'cover' }}
+      />
       <SubmitButton
         title={i18n.t('kyc_label.shoot_again')}
         handler={() => navigation.navigate(KycPage.TakeSelfie)}

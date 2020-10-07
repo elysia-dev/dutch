@@ -144,7 +144,7 @@ const CameraPermissionImg = styled.Image`
 
 interface State {
   hasPermission: boolean;
-  type: any;
+  type: typeof Camera.Constants.Type;
 }
 
 type ParamList = {
@@ -154,7 +154,6 @@ type ParamList = {
 };
 
 const TakeID: FunctionComponent<{}> = () => {
-  // let cameraRef = useRef();
   let camera: any;
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'TakeID'>>();
@@ -197,7 +196,6 @@ const TakeID: FunctionComponent<{}> = () => {
   };
 
   const takePicture = async (): Promise<Photo | undefined> => {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     if (camera) {
       const idPhoto = await camera.takePictureAsync({
         quality: 1,
@@ -271,8 +269,6 @@ const TakeID: FunctionComponent<{}> = () => {
             position: 'relative',
             top: 0,
             height: '100%',
-            // borderColor: "black",
-            // borderWidth: 1,
           }}
           type={state.type}
           ref={ref => {

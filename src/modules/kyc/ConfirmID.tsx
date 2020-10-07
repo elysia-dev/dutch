@@ -87,7 +87,10 @@ const ConfirmID: FunctionComponent<{}> = () => {
       isBackbutton={true}
       body={
         <>
-          <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
+          <SelfieImg
+            source={{ uri: route.params.idPhoto.uri }}
+            style={{ resizeMode: 'cover' }}
+          />
           <WarningWrapper>
             <View
               style={{
