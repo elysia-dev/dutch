@@ -36,6 +36,7 @@ export enum MorePage {
   OwnershipHistory = 'OwnershipHistory',
   TransactionHistory = 'TransactionHistory',
   Contact = 'Contact',
+  Faq = 'Faq',
 }
 
 export enum DashboardPage {

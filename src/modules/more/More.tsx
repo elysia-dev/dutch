@@ -1,11 +1,12 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { MorePage } from "../../enums/pageEnum";
-import MainInfo from "./MainInfo";
-import MyPage from "./Mypage";
-import { OwnershipHistory } from "./OwnershipHistory";
-import { TransactionHistory } from "./TransactionHistory";
-import Contact from "./Contact";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { MorePage } from '../../enums/pageEnum';
+import MainInfo from './MainInfo';
+import MyPage from './Mypage';
+import { OwnershipHistory } from './OwnershipHistory';
+import { TransactionHistory } from './TransactionHistory';
+import Contact from './Contact';
+import Faq from './Faq';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export const More = () => {
         name={MorePage.TransactionHistory}
         component={TransactionHistory}
       />
+      <Stack.Screen name={MorePage.Faq} component={Faq} />
       <Stack.Screen name={MorePage.Contact} component={Contact} />
     </Stack.Navigator>
   );
