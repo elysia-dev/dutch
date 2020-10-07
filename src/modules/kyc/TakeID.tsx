@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { Component } from 'react';
+import React, {
+  Component,
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { TouchableOpacity, Platform, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
 import ReversePng from './images/reverse.png';
@@ -137,13 +142,8 @@ const CameraPermissionImg = styled.Image`
   margin: 20% auto 15px auto;
 `;
 
-interface Props {
-  navigation: NavigationScreenProp<any>;
-  route: RouteProp<ParamList, 'TakeID'>;
-}
-
 interface State {
-  hasPermission: hasPermission;
+  hasPermission: boolean;
   type: any;
 }
 
@@ -153,103 +153,53 @@ type ParamList = {
   };
 };
 
-enum hasPermission {
-  TRUE = 'true',
-  FALSE = 'false',
-  PENDING = 'pending',
-}
+const TakeID: FunctionComponent<{}> = () => {
+  // let cameraRef = useRef();
+  let camera: any;
+  const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, 'TakeID'>>();
+  const { id_type } = route.params;
+  const [state, setState] = useState<State>({
+    hasPermission: false,
+    type: Camera.Constants.Type.back,
+  });
 
-export class TakeID extends Component<Props, State> {
-  camera: any;
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasPermission: hasPermission.FALSE,
-      type: Camera.Constants.Type.back,
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     if (Platform.OS === 'ios') {
       Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
         status => {
           if (!status.granted) {
-            this.setState({
-              ...this.state,
-              hasPermission: hasPermission.FALSE,
-            });
             alert('Sorry, we need camera roll permissions to make this work!');
           } else {
-            this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
+            setState({ ...state, hasPermission: true });
           }
         },
       );
     } else {
       Permissions.askAsync(Permissions.CAMERA).then(status => {
         if (!status.granted) {
-          this.setState({ ...this.state, hasPermission: hasPermission.FALSE });
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
-          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
+          setState({ ...state, hasPermission: true });
         }
       });
     }
-  }
+  }, []);
 
-  shouldComponentUpdate() {
-    if (this.state.hasPermission === hasPermission.PENDING) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (Platform.OS === 'ios') {
-      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        status => {
-          if (!status.granted) {
-            this.setState({
-              ...this.state,
-              hasPermission: hasPermission.FALSE,
-            });
-            alert('Sorry, we need camera roll permissions to make this work!');
-          } else {
-            this.setState({
-              ...this.state,
-              hasPermission: hasPermission.TRUE,
-            });
-          }
-        },
-      );
-    } else {
-      Permissions.askAsync(Permissions.CAMERA).then(status => {
-        if (!status.granted) {
-          this.setState({
-            ...this.state,
-            hasPermission: hasPermission.FALSE,
-          });
-          alert('Sorry, we need camera roll permissions to make this work!');
-        } else {
-          this.setState({ ...this.state, hasPermission: hasPermission.TRUE });
-        }
-      });
-    }
-  }
-
-  reverseCamera = () => {
-    this.setState({
+  const reverseCamera = () => {
+    setState({
+      ...state,
       type:
-        this.state.type === Camera.Constants.Type.back
+        state.type === Camera.Constants.Type.back
           ? Camera.Constants.Type.front
           : Camera.Constants.Type.back,
     });
   };
 
-  takePicture = async (): Promise<Photo | undefined> => {
+  const takePicture = async (): Promise<Photo | undefined> => {
     // eslint-disable-next-line @typescript-eslint/camelcase
-    if (this.camera) {
-      const idPhoto = await this.camera.takePictureAsync({
+    if (camera) {
+      const idPhoto = await camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
@@ -260,7 +210,7 @@ export class TakeID extends Component<Props, State> {
     }
   };
 
-  pickImage = async () => {
+  const pickImage = async () => {
     const selfieAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
@@ -269,161 +219,153 @@ export class TakeID extends Component<Props, State> {
     return selfieAlbum;
   };
 
-  render() {
-    const { route, navigation } = this.props;
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    const { id_type } = route.params;
-
-    if (this.state.hasPermission === hasPermission.FALSE) {
-      return (
-        <WrapperLayout
-          title={
-            <BackButton
-              handler={() => {
-                this.setState({
-                  ...this.state,
-                  hasPermission: hasPermission.PENDING,
-                });
-                navigation.goBack();
-              }}
-            />
-          }
-          isBackbutton={true}
-          isScrolling={false}
-          body={
-            <>
-              <CameraPermissionImg source={CameraPermissionPng} />
-              <H1Text
-                label={i18n.t('kyc.camera_access_denied')}
-                style={{ textAlign: 'center', marginTop: 28 }}
-              />
-              <PText
-                label={i18n.t('kyc.camera_access_denied_text')}
-                style={{ textAlign: 'center', marginTop: 10, color: '#626368' }}
-              />
-            </>
-          }
-          button={
-            <SubmitButton
-              title={i18n.t('kyc_label.camera_access_return')}
-              handler={() => {
-                this.setState({
-                  ...this.state,
-                  hasPermission: hasPermission.PENDING,
-                });
-                navigation.goBack();
-              }}
-            />
-          }
-        />
-      );
-    } else {
-      return (
-        <TakeIdWrapper>
-          <Camera
-            style={{
-              flex: 1,
-              width: '100%',
-              position: 'relative',
-              top: 0,
-              height: '100%',
-              // borderColor: "black",
-              // borderWidth: 1,
+  if (!state.hasPermission) {
+    return (
+      <WrapperLayout
+        title={
+          <BackButton
+            handler={() => {
+              setState({
+                ...state,
+              });
+              navigation.goBack();
             }}
-            type={this.state.type}
-            ref={ref => {
-              this.camera = ref;
-            }}>
-            <HeaderCameraWrapper>
-              <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
-                <BackButton
-                  handler={() => navigation.goBack()}
-                  isWhite={true}
-                />
-                <H1Text
-                  label={i18n.t(`kyc_label.${id_type}`)}
-                  style={{
-                    color: '#FFF',
-                    fontSize: 18,
-                    flex: 1,
-                    marginTop: 15,
-                  }}
-                />
-              </View>
-            </HeaderCameraWrapper>
-            <CameraFocusWrapper>
-              <CameraFocusLeft />
-              <CameraInnerLeftTopLine />
-              <CameraInnerRightTopLine />
-              <CameraInnerLeftBottomLine />
-              <CameraInnerRightBottomLine />
-              <CameraFocus>
-                <CameraInnerWLine />
-                <CameraInnerDLine />
-              </CameraFocus>
-              <CameraFocusRight />
-            </CameraFocusWrapper>
-            <BottomCameraWrapper>
+          />
+        }
+        isBackbutton={true}
+        isScrolling={false}
+        body={
+          <>
+            <CameraPermissionImg source={CameraPermissionPng} />
+            <H1Text
+              label={i18n.t('kyc.camera_access_denied')}
+              style={{ textAlign: 'center', marginTop: 28 }}
+            />
+            <PText
+              label={i18n.t('kyc.camera_access_denied_text')}
+              style={{ textAlign: 'center', marginTop: 10, color: '#626368' }}
+            />
+          </>
+        }
+        button={
+          <SubmitButton
+            title={i18n.t('kyc_label.camera_access_return')}
+            handler={() => {
+              setState({
+                ...state,
+                hasPermission: false,
+              });
+              navigation.goBack();
+            }}
+          />
+        }
+      />
+    );
+  } else {
+    return (
+      <TakeIdWrapper>
+        <Camera
+          style={{
+            flex: 1,
+            width: '100%',
+            position: 'relative',
+            top: 0,
+            height: '100%',
+            // borderColor: "black",
+            // borderWidth: 1,
+          }}
+          type={state.type}
+          ref={ref => {
+            camera = ref;
+          }}>
+          <HeaderCameraWrapper>
+            <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
+              <BackButton handler={() => navigation.goBack()} isWhite={true} />
               <H1Text
-                label={i18n.t('kyc.take_ID')}
-                style={{ color: '#FFF', marginTop: 30, textAlign: 'center' }}
-              />
-              <PText
-                label={i18n.t('kyc.take_ID_text')}
+                label={i18n.t(`kyc_label.${id_type}`)}
                 style={{
                   color: '#FFF',
-                  marginTop: 13,
-                  textAlign: 'center',
-                  fontSize: 15,
+                  fontSize: 18,
+                  flex: 1,
+                  marginTop: 15,
                 }}
               />
-              <BottomButtonWrapper>
-                <TouchableOpacity
-                  style={{
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                  }}
-                  onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmID, {
-                      idPhoto: await this.pickImage(),
-                      id_type,
-                      // photoId_hash: photoId_hash,
-                    });
-                  }}>
-                  <Ionicons
-                    name="ios-photos"
-                    style={{ color: '#fff', fontSize: 40 }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    flex: 0.1,
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                  }}
-                  onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmID, {
-                      id_type,
-                      idPhoto: await this.takePicture(),
-                    });
-                  }}>
-                  <ButtonImg source={RecordPng} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    flex: 0.1,
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                  }}
-                  onPress={this.reverseCamera}>
-                  <ButtonImg source={ReversePng} />
-                </TouchableOpacity>
-              </BottomButtonWrapper>
-            </BottomCameraWrapper>
-          </Camera>
-        </TakeIdWrapper>
-      );
-    }
+            </View>
+          </HeaderCameraWrapper>
+          <CameraFocusWrapper>
+            <CameraFocusLeft />
+            <CameraInnerLeftTopLine />
+            <CameraInnerRightTopLine />
+            <CameraInnerLeftBottomLine />
+            <CameraInnerRightBottomLine />
+            <CameraFocus>
+              <CameraInnerWLine />
+              <CameraInnerDLine />
+            </CameraFocus>
+            <CameraFocusRight />
+          </CameraFocusWrapper>
+          <BottomCameraWrapper>
+            <H1Text
+              label={i18n.t('kyc.take_ID')}
+              style={{ color: '#FFF', marginTop: 30, textAlign: 'center' }}
+            />
+            <PText
+              label={i18n.t('kyc.take_ID_text')}
+              style={{
+                color: '#FFF',
+                marginTop: 13,
+                textAlign: 'center',
+                fontSize: 15,
+              }}
+            />
+            <BottomButtonWrapper>
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                  backgroundColor: 'transparent',
+                }}
+                onPress={async () => {
+                  navigation.navigate(KycPage.ConfirmID, {
+                    idPhoto: await pickImage(),
+                    id_type,
+                    // photoId_hash: photoId_hash,
+                  });
+                }}>
+                <Ionicons
+                  name="ios-photos"
+                  style={{ color: '#fff', fontSize: 40 }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
+                onPress={async () => {
+                  navigation.navigate(KycPage.ConfirmID, {
+                    id_type,
+                    idPhoto: await takePicture(),
+                  });
+                }}>
+                <ButtonImg source={RecordPng} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
+                onPress={reverseCamera}>
+                <ButtonImg source={ReversePng} />
+              </TouchableOpacity>
+            </BottomButtonWrapper>
+          </BottomCameraWrapper>
+        </Camera>
+      </TakeIdWrapper>
+    );
   }
-}
+};
+
+export default TakeID;

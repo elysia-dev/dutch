@@ -70,7 +70,7 @@ type ParamList = {
   };
 };
 
-export class TakeSelfie extends Component<Props, State> {
+class TakeSelfie extends Component<Props, State> {
   camera: any;
   constructor(props: Props) {
     super(props);
@@ -137,7 +137,7 @@ export class TakeSelfie extends Component<Props, State> {
           <Camera
             style={{ flex: 1, width: '100%', height: 700 }}
             type={this.state.type}
-            ref={(ref) => {
+            ref={ref => {
               this.camera = ref;
             }}>
             <HeaderCameraWrapper>
@@ -212,3 +212,4 @@ export class TakeSelfie extends Component<Props, State> {
     }
   }
 }
+export default TakeSelfie;

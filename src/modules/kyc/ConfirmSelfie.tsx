@@ -47,7 +47,7 @@ type ParamList = {
   };
 };
 
-export const ConfirmSelfie: FunctionComponent<{}> = () => {
+const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmSelfie'>>();
 
@@ -103,3 +103,4 @@ export const ConfirmSelfie: FunctionComponent<{}> = () => {
     </ConfirmSelfieWrapper>
   );
 };
+export default ConfirmSelfie;

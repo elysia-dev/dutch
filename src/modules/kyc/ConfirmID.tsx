@@ -42,7 +42,7 @@ type ParamList = {
   };
 };
 
-export const ConfirmID: FunctionComponent<{}> = () => {
+const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
 
@@ -141,3 +141,4 @@ export const ConfirmID: FunctionComponent<{}> = () => {
     />
   );
 };
+export default ConfirmID;

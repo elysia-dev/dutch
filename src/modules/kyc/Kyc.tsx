@@ -1,15 +1,14 @@
-import React, { FunctionComponent } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { StartKYC } from "./StartKYC";
-import { SelectID } from "./SelectID";
-import { TakeID } from "./TakeID";
-import { ConfirmID } from "./ConfirmID";
-import { PersonalDataInput } from "./PersonalDataInput";
-import { TakeSelfieBefore } from "./TakeSelfieBefore";
-import { TakeSelfie } from "./TakeSelfie";
-import { ConfirmSelfie } from "./ConfirmSelfie";
-import { KycPage } from "../../enums/pageEnum";
-import { Argos } from "./Argos";
+import React, { FunctionComponent } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import StartKYC from './StartKYC';
+import SelectID from './SelectID';
+import TakeID from './TakeID';
+import ConfirmID from './ConfirmID';
+import PersonalDataInput from './PersonalDataInput';
+import TakeSelfieBefore from './TakeSelfieBefore';
+import TakeSelfie from './TakeSelfie';
+import ConfirmSelfie from './ConfirmSelfie';
+import { KycPage } from '../../enums/pageEnum';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +16,6 @@ export const Kyc: FunctionComponent<{}> = () => {
   return (
     <Stack.Navigator initialRouteName={KycPage.StartKYC} headerMode="none">
       <Stack.Screen name={KycPage.StartKYC} component={StartKYC} />
-      <Stack.Screen name={KycPage.Argos} component={Argos} />
       <Stack.Screen name={KycPage.SelectID} component={SelectID} />
       <Stack.Screen name={KycPage.TakeID} component={TakeID} />
       <Stack.Screen name={KycPage.ConfirmID} component={ConfirmID} />
