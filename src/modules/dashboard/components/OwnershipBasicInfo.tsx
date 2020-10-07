@@ -1,6 +1,8 @@
 import React, {
+  Children,
   FunctionComponent,
   ReactChild,
+  ReactChildren,
   ReactElement,
   ReactNode,
   useContext,
@@ -17,6 +19,7 @@ import RootContext from '../../../contexts/RootContext';
 
 interface Props {
   ownership: OwnershipResponse;
+  children: ReactChild;
 }
 
 const H1Text = styled.Text`
@@ -210,7 +213,7 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
           )}`}</ValueText>
         </View>
       </View>
-      <OptionButtons />
+      {props.children}
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import React, {
   FunctionComponent,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -8,6 +9,7 @@ import { View, Image, Text } from 'react-native';
 import styled from 'styled-components/native';
 import RootContext from '../../../contexts/RootContext';
 import i18n from '../../../i18n/i18n';
+import { CoinPriceResponse } from '../../../types/CoinPrice';
 
 const DesView = styled.View`
   flex: 1;
@@ -51,22 +53,14 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
     ethPrice: 0,
   });
 
-  const loadEl = () => {
-    Server.elysiaPrice()
-      .then((res: { data: { elysia: { usd: number } } }) => {
-        setState({ ...state, elPrice: res.data.elysia.usd });
-      })
-      .catch((e: { response: { status: number } }) => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
-  };
-
-  const loadEth = () => {
-    Server.ethereumPrice()
-      .then((res: { data: { ethereum: { usd: number } } }) => {
-        setState({ ...state, ethPrice: res.data.ethereum.usd });
+  const loadCoinExchange = () => {
+    Server.coinPrice()
+      .then(res => {
+        setState({
+          ...state,
+          elPrice: res.data.elysia.usd,
+          ethPrice: res.data.ethereum.usd,
+        });
       })
       .catch((e: { response: { status: number } }) => {
         if (e.response.status === 500) {
@@ -76,8 +70,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
   };
 
   useEffect(() => {
-    loadEl();
-    loadEth();
+    loadCoinExchange();
   }, []);
   return (
     <View
