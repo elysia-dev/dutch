@@ -36,7 +36,7 @@ const BText = styled.Text`
 `;
 
 interface Props {
-  return: string;
+  return?: string;
   tokenCount: number;
   type: string;
 }
@@ -80,55 +80,74 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
         position: 'relative',
         top: -20,
         width: '100%',
-        height: '35%',
+        height: props.type === "refund" ? "20%" : '35%',
         backgroundColor: '#F6F6F8',
         borderWidth: 2,
         borderColor: '#F1F1F1',
         borderRadius: 10,
         padding: 15,
+        marginVertical: props.type === "refund" && "7.5%",
       }}>
-      <DesView>
-        <GText>{i18n.t('product_label.investment')}</GText>
-        <PText>{`$${parseFloat(`${5.0 * props.tokenCount}`).toFixed(
-          2,
-        )}`}</PText>
-      </DesView>
-      <DesView>
-        <GText>{i18n.t('product_label.el_price')}</GText>
-        <PText>{`EL ${parseFloat(
-          `${(5.0 * props.tokenCount) / state.elPrice}`,
-        ).toFixed(2)}`}</PText>
-      </DesView>
-      <DesView>
-        <GText>{i18n.t('product_label.eth_price')}</GText>
-        <PText>{`ETH ${parseFloat(
-          `${(5 * props.tokenCount) / state.ethPrice}`,
-        ).toFixed(2)}`}</PText>
-      </DesView>
-      <View
-        style={{
-          flex: 1,
-          alignContent: 'center',
-          justifyContent: 'center',
-        }}>
+      {props.type === "refund" ?
+      <>
+        <DesView>
+          <GText>{i18n.t('product_label.recovery')}</GText>
+          <PText>{`$${parseFloat(`${5.0 * props.tokenCount}`).toFixed(
+            2,
+          )}`}</PText>
+        </DesView>
+        <DesView>
+          <GText>{i18n.t('product_label.expected_el_price')}</GText>
+          <BText>{`EL ${parseFloat(
+            `${(5.0 * props.tokenCount) / state.elPrice}`,
+          ).toFixed(2)}`}</BText>
+        </DesView>
+      </> :
+      <>
+        <DesView>
+          <GText>{i18n.t('product_label.investment')}</GText>
+          <PText>{`$${parseFloat(`${5.0 * props.tokenCount}`).toFixed(
+            2,
+          )}`}</PText>
+        </DesView>
+        <DesView>
+          <GText>{i18n.t('product_label.el_price')}</GText>
+          <PText>{`EL ${parseFloat(
+            `${(5.0 * props.tokenCount) / state.elPrice}`,
+          ).toFixed(2)}`}</PText>
+        </DesView>
+        <DesView>
+          <GText>{i18n.t('product_label.eth_price')}</GText>
+          <PText>{`ETH ${parseFloat(
+            `${(5 * props.tokenCount) / state.ethPrice}`,
+          ).toFixed(2)}`}</PText>
+        </DesView>
         <View
           style={{
-            width: '100%',
-            height: 0,
-            borderWidth: 1,
-            borderColor: '#F1F1F1',
-          }}></View>
-      </View>
-      <DesView>
-        <GText style={{ color: '#1C1C1C' }}>
-          {props.type === 'buy'
-            ? i18n.t('product_label.expected_return')
-            : i18n.t('product_label.expected_refund')}
-        </GText>
-        <BText>{`$${parseFloat(
-          `${0.01 * parseInt(props.return, 10) * 5 * props.tokenCount}`,
-        ).toFixed(2)}`}</BText>
-      </DesView>
+            flex: 1,
+            alignContent: 'center',
+            justifyContent: 'center',
+          }}>
+          <View
+            style={{
+              width: '100%',
+              height: 0,
+              borderWidth: 1,
+              borderColor: '#F1F1F1',
+            }}></View>
+        </View>
+        <DesView>
+          <GText style={{ color: '#1C1C1C' }}>
+            {props.type === 'buy'
+              ? i18n.t('product_label.expected_return')
+              : i18n.t('product_label.expected_refund')}
+          </GText>
+          <BText>{`$${parseFloat(
+            `${0.01 * parseInt(props.return!, 10) * 5 * props.tokenCount}`,
+          ).toFixed(2)}`}</BText>
+        </DesView>
+      </>
+      }
     </View>
   );
 };

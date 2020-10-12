@@ -14,7 +14,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
 
 interface Props {
-  return: string;
   modalHandler: () => void;
 }
 
@@ -60,10 +59,8 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
           setTokenCount(token);
         }}
         tokenCount={tokenCount}
-        return={props.return}
       />
       <ExchangedValue
-        return={props.return}
         tokenCount={tokenCount}
         type={'refund'}
       />

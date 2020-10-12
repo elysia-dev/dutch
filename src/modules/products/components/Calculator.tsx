@@ -8,7 +8,7 @@ import Product from '../../../types/product';
 interface Props {
   countHandler: (value: number) => void;
   tokenCount: number;
-  return: string;
+  return?: string;
   type?: string;
 }
 

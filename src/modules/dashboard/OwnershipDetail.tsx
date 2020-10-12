@@ -19,6 +19,7 @@ import RootContext from '../../contexts/RootContext';
 import { OptionButton } from '../kyc/components/OptionButton';
 import OwnershipRefund from './OwnershipRefund';
 import OptionButtons from './components/OptionButtons';
+import SliderProductBuying from '../products/SliderProductBuying';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -41,7 +42,8 @@ const OwnershipDetail: FunctionComponent = () => {
   const [state, setState] = useState({
     transactions: transaction,
     transactionCount: 2,
-    modalVisible: false,
+    refundModalVisible: false,
+    purchaseModalVisible: false,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
@@ -106,7 +108,10 @@ const OwnershipDetail: FunctionComponent = () => {
             <OptionButtons
               productId={ownership.product.id}
               refundHandler={() =>
-                setState({ ...state, modalVisible: !state.modalVisible })
+                setState({ ...state, refundModalVisible: !state.refundModalVisible })
+              }
+              purchaseHandler={() =>
+                setState({ ...state, purchaseModalVisible: !state.purchaseModalVisible })
               }
             />
           }
@@ -136,7 +141,7 @@ const OwnershipDetail: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {state.modalVisible && (
+      {(state.purchaseModalVisible || state.refundModalVisible) && (
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.5)',
@@ -148,12 +153,23 @@ const OwnershipDetail: FunctionComponent = () => {
       <Modal
         transparent={true}
         animationType={'slide'}
-        visible={state.modalVisible}>
+        visible={state.refundModalVisible}>
         <OwnershipRefund
           return={
             ownership.product ? ownership.product.data.expectedAnnualReturn : ''
           }
-          modalHandler={() => setState({ ...state, modalVisible: false })}
+          modalHandler={() => setState({ ...state, refundModalVisible: false })}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.purchaseModalVisible}>
+        <SliderProductBuying
+          return={
+            ownership.product ? ownership.product.data.expectedAnnualReturn : ''
+          }
+          modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
         />
       </Modal>
     </ProductInfoWrapper>

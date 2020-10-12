@@ -6,6 +6,7 @@ import i18n from '../../../i18n/i18n';
 
 interface Props {
   refundHandler: () => void;
+  purchaseHandler: () => void;
   productId: number;
 }
 
@@ -20,12 +21,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
         justifyContent: 'space-between',
       }}>
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('Product', {
-            screen: ProductPage.ProductBuying,
-            params: { productId: props.productId },
-          })
-        }
+        onPress={props.purchaseHandler}
         style={{
           backgroundColor: '#fff',
           width: 100,
