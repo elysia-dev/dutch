@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useReducer,
-} from 'react';
+import React, { FunctionComponent, useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,29 +7,21 @@ import {
   Image,
   Modal,
   Platform,
+  Picker,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PText } from '../../shared/components/PText';
-import Filter from './Filter';
+import Filter from './components/Filter';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from '../dashboard/components/TransactionBox';
-import { reducer } from '../../hooks/useReducer';
+import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text } from '../../shared/components/H1Text';
+import { ProductPicker } from './components/ProductPicker';
 import RootContext from '../../contexts/RootContext';
 
-export interface State {
-  page: number;
-  start: string;
-  end: string;
-  period: string;
-  type: string;
-  modal: boolean;
-  productId: number;
-  transactions: Transaction[];
-}
 
 export const initialState = {
   page: 1,
@@ -50,13 +37,46 @@ export const initialState = {
 const Transactions: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { Server } = useContext(RootContext);
+  const [productState, setState] = useState({
+    iosList: [{ label: '전체', value: '0', key: 0 }],
+    andList: [
+      <Picker.Item key={0} label={i18n.t('more_label.type_')} value={'0'} />,
+    ],
+  });
 
+  const { Server } = useContext(RootContext);
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
       <TransactionBox transaction={transaction} key={index} />
     ),
   );
+
+    const filterTransactions = () => {
+      Server.getTransactionHistory(
+        state.page,
+        state.start,
+        state.end,
+        state.type,
+        state.period,
+        state.productId,
+      )
+        .then(res => {
+          if (res.data.length === 0 && state.page > 1) {
+            return alert(i18n.t('dashboard.last_transaction'));
+          }
+          dispatch({
+            type: 'UPDATE_TRANSACTIONS',
+            transactions: res.data,
+          });
+        })
+        .catch(e => {
+          if (e.response.status === 401) {
+            alert(i18n.t('account.need_login'));
+          } else if (e.response.status === 500) {
+            alert(i18n.t('account_errors.server'));
+          }
+        });
+    };
 
   const loadTransactions = () => {
     Server.getTransactionHistory(
@@ -72,8 +92,8 @@ const Transactions: FunctionComponent = () => {
           return alert(i18n.t('dashboard.last_transaction'));
         }
         dispatch({
-          type: 'UPDATE_LIST',
-          value: state.transactions.concat(res.data),
+          type: 'ADD_TRANSACTIONS',
+          transactions: state.transactions.concat(res.data),
         });
       })
       .catch(e => {
@@ -84,6 +104,38 @@ const Transactions: FunctionComponent = () => {
         }
       });
   };
+
+  const loadProducts = useCallback(() => {
+    Server.getAllProductIds()
+      .then(res => {
+        setState({
+          ...productState,
+          iosList: productState.iosList.concat(
+            res.data.map((product, index) => ({
+              label: product.title,
+              value: `${product.productId}`,
+              key: index + 1,
+            })),
+          ),
+          andList: productState.andList.concat(
+            res.data.map((product, index) => (
+              <Picker.Item
+                key={index + 1}
+                label={product.title}
+                value={`${product.productId}`}
+              />
+            )),
+          ),
+        });
+      })
+      .catch(e => {
+        if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  }, []);
 
   useEffect(() => {
     loadTransactions();
@@ -115,13 +167,13 @@ const Transactions: FunctionComponent = () => {
           label={'TRANSACTIONS'}
         />
         <TouchableOpacity
-          onPress={() => dispatch({ type: 'MODAL_CONTROL', value: true })}
+          onPress={() => dispatch({ type: 'MODAL_CONTROL', modal: true })}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
           <PText
             style={{ color: '#838383' }}
             label={`${i18n.t(`more_label.${state.period}_day`)} · ${i18n.t(
               `more_label.type_${state.type}`,
-            )} · 최신순`}></PText>
+            )} · ${i18n.t('more_label.latest')}`}></PText>
           <Image
             source={require('./images/graydownbutton.png')}
             style={{
@@ -172,10 +224,7 @@ const Transactions: FunctionComponent = () => {
             {historyList}
             <TouchableOpacity
               onPress={() => {
-                dispatch({
-                  type: 'UPDATE_PAGE',
-                  value: state.page + 1,
-                });
+                dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
                 loadTransactions();
               }}
               style={{
@@ -211,7 +260,15 @@ const Transactions: FunctionComponent = () => {
           }}></View>
       )}
       <Modal transparent={true} animationType={'slide'} visible={state.modal}>
-        <Filter dispatch={dispatch} filter={state} />
+        <Filter children={ <ProductPicker
+        loadProducts={() => loadProducts()}
+        productList={productState}
+          style={{ marginBottom: 30 }}
+          dispatch={dispatch}
+          filter={state}
+        />
+        }
+        dispatch={dispatch} filter={state} filterTransactions={() => filterTransactions()}/>
       </Modal>
     </SafeAreaView>
   );
