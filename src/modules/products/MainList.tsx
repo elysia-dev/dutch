@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
-import ExpendedCard from './components/ExpendedCard';
+import ExpandedCard from './components/ExpandedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
 import RootContext from '../../contexts/RootContext';
 
@@ -103,7 +103,7 @@ const MainList: FunctionComponent = () => {
         <VirtualTab />
       </ScrollView>
       {state.activeStory && (
-        <ExpendedCard
+        <ExpandedCard
           story={state.activeStory}
           deactivateStory={() => {
             StatusBar.setHidden(false);

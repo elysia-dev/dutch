@@ -47,7 +47,7 @@ const htmlStyles = StyleSheet.create({
 
 const ELEMENT_HEIGHT = 416;
 
-const ExpendedItem: FunctionComponent<Props> = ({
+const ExpandedItem: FunctionComponent<Props> = ({
   story,
   deactivateStory,
   xOffset,
@@ -180,11 +180,8 @@ const ExpendedItem: FunctionComponent<Props> = ({
           handler={() => {
             StatusBar.setHidden(false);
             navigation.navigate('Product', {
-              screen: 'BuyModalStack',
-              params: {
                 screen: 'ProductBuying',
                 params: { productId: story.productId },
-              },
             });
           }}
         />
@@ -193,4 +190,4 @@ const ExpendedItem: FunctionComponent<Props> = ({
   );
 };
 
-export default ExpendedItem;
+export default ExpandedItem;
