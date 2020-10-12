@@ -1,4 +1,5 @@
 import { KycStatus } from '../enums/KycStatus';
+import LocaleType from '../enums/LocaleType';
 
 export type AccountResponse = {
   verificationId?: string;
@@ -12,11 +13,11 @@ export type UserResponse = {
     id: number;
     email: string;
     kycStatus: KycStatus;
-    ethAddress: string[];
+    ethAddresses: string[];
     gender: string;
     firstName: string;
     lastName: string;
-    language: string;
+    language: LocaleType;
   };
   totalBalance: string;
   ownerships: [
