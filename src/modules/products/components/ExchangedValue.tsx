@@ -86,7 +86,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
         borderColor: '#F1F1F1',
         borderRadius: 10,
         padding: 15,
-        marginVertical: props.type === "refund" && "7.5%",
+        marginVertical: props.type === "refund" ? "7.5%" : "0%",
       }}>
       {props.type === "refund" ?
       <>
