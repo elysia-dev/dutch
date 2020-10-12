@@ -46,7 +46,7 @@ type ParamList = {
   };
 };
 
-export const TakeSelfieBefore: FunctionComponent<{}> = () => {
+const TakeSelfieBefore: FunctionComponent<{}> = () => {
   const [state, setState] = useState({
     modalVisible: false,
   });
@@ -157,3 +157,4 @@ export const TakeSelfieBefore: FunctionComponent<{}> = () => {
     // </TakeSelfieBeforeWrapper>
   );
 };
+export default TakeSelfieBefore;

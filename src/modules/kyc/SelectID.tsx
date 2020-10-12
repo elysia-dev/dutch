@@ -33,7 +33,7 @@ const Checked = styled.Image`
   margin-right: 15px;
 `;
 
-export const SelectID: FunctionComponent<{}> = props => {
+const SelectID: FunctionComponent<{}> = props => {
   const [state, setState] = useState({
     idType: '',
   });
@@ -143,3 +143,4 @@ export const SelectID: FunctionComponent<{}> = props => {
     />
   );
 };
+export default SelectID;

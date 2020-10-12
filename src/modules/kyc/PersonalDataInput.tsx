@@ -70,7 +70,7 @@ type ParamList = {
   };
 };
 
-export const PersonalDataInput: FunctionComponent<{}> = (props) => {
+const PersonalDataInput: FunctionComponent<{}> = props => {
   const [state, setState] = useState({
     gender: '',
     firstName: '',
@@ -113,10 +113,10 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
         route.params.photoId_hash,
         route.params.selfie_hash,
       )
-        .then((res) => {
+        .then(res => {
           setModalVisible(true);
         })
-        .catch((e) => {
+        .catch(e => {
           if (e.response.status === 404) {
             alert(i18n.t('kyc.submit_error'));
             navigation.navigate('Main', { screen: 'MoreMain' });
@@ -232,3 +232,4 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
     </PersonalDataInputWrapper>
   );
 };
+export default PersonalDataInput;
