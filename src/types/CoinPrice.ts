@@ -1,10 +1,7 @@
-export type elysiaPriceResponse = {
+export type CoinPriceResponse = {
   elysia: {
     usd: number;
   };
-};
-
-export type ethereumPriceResponse = {
   ethereum: {
     usd: number;
   };

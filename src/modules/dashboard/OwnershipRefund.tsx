@@ -9,23 +9,18 @@ import React, {
 import { View, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
-import { Calculator } from './components/Calculator';
+import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import ExchangedValue from './components/ExchangedValue';
+import ExchangedValue from '../products/components/ExchangedValue';
 
 interface Props {
   return: string;
   modalHandler: () => void;
 }
 
-interface State {
-  tokenCount: number;
-}
 
-const SliderProductBuying: FunctionComponent<Props> = props => {
-  const [state, setState] = useState<State>({
-    tokenCount: 10,
-  });
+const OwnershipRefund: FunctionComponent<Props> = props => {
+  const [tokenCount, setTokenCount] = useState(10);
 
   return (
     <View
@@ -60,16 +55,17 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
         />
       </TouchableOpacity>
       <Calculator
+        type={'refund'}
         countHandler={(token: number) => {
-          setState({ ...state, tokenCount: token });
+          setTokenCount(token);
         }}
-        tokenCount={state.tokenCount}
+        tokenCount={tokenCount}
         return={props.return}
       />
       <ExchangedValue
         return={props.return}
-        tokenCount={state.tokenCount}
-        type={'buy'}
+        tokenCount={tokenCount}
+        type={'refund'}
       />
       <SubmitButton
         style={{
@@ -82,10 +78,10 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
           marginTop: 10,
         }}
         handler={() => {}}
-        title={i18n.t('product_label.purchase_now')}
+        title={i18n.t('product_label.refund')}
       />
     </View>
   );
 };
 
-export default SliderProductBuying;
+export default OwnershipRefund;
