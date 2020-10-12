@@ -51,6 +51,8 @@ const defaultState = {
 };
 
 class App extends React.Component<{}, AppState> {
+  token!: string | null;
+  authServer!: Server;
   constructor(props: {}) {
     super(props);
     this.state = defaultState;
@@ -60,9 +62,10 @@ class App extends React.Component<{}, AppState> {
     await AsyncStorage.removeItem('@token');
     this.setState(defaultState);
   };
-  authServer = new Server(this.signOut);
 
   async componentDidMount() {
+    const token = await AsyncStorage.getItem('@token');
+    this.authServer = new Server(this.signOut, token !== null ? token : '');
     await this.signIn();
   }
 
@@ -102,8 +105,6 @@ class App extends React.Component<{}, AppState> {
             ...this.state,
             signIn: this.signIn,
             signOut: this.signOut,
-            notifications: this.state.notifications,
-            unreadNotificationCount: this.state.unreadNotificationCount,
             setUnreadNotificationCount: (value: number) => {
               this.setState({
                 unreadNotificationCount: value >= 0 ? value : 0,

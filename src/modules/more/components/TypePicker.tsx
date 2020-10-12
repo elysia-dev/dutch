@@ -25,12 +25,6 @@ interface Props {
   style?: StyleProp<ViewStyle>;
 }
 
-interface Placeholder {
-  label: string;
-  value: string;
-  color: string;
-}
-
 export const TypePicker: FunctionComponent<Props> = props => {
   const TypesListIos = [
     { label: i18n.t('more_label.type_'), value: '', key: 0 },
@@ -83,8 +77,8 @@ export const TypePicker: FunctionComponent<Props> = props => {
             selectedValue={props.filter.type}
             onValueChange={value =>
               props.dispatch({
-                type: 'CHANGE_TYPE',
-                value,
+                type: 'UPDATE_TYPE',
+                transactionType: value,
               })
             }>
             {TypesListAnd}
@@ -94,8 +88,8 @@ export const TypePicker: FunctionComponent<Props> = props => {
         <RNPickerSelect
           onValueChange={value =>
             props.dispatch({
-              type: 'CHANGE_TYPE',
-              value,
+              type: 'UPDATE_TYPE',
+              transactionType: value,
             })
           }
           items={TypesListIos}

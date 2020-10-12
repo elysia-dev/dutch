@@ -104,12 +104,14 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             textAlign: 'right',
             color:
               props.transaction.transactionType === 'refund' ||
-              props.transaction.transactionType === 'close'
+              props.transaction.transactionType === 'close' ||
+              props.transaction.transactionType === 'profit'
                 ? '#1C1C1C'
                 : '#3679B5',
           }}>
           {props.transaction.transactionType === 'refund' ||
-          props.transaction.transactionType === 'close'
+          props.transaction.transactionType === 'close' ||
+          props.transaction.transactionType === 'profit'
             ? `- $${parseFloat(props.transaction.value).toFixed(2)}`
             : `$${parseFloat(props.transaction.value).toFixed(2)}`}
         </Text>

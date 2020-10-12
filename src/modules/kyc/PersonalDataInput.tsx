@@ -70,7 +70,8 @@ type ParamList = {
   };
 };
 
-export const PersonalDataInput: FunctionComponent<{}> = props => {
+
+const PersonalDataInput: FunctionComponent<{}> = props => {
   const [state, setState] = useState({
     gender: '',
     firstName: '',
@@ -233,3 +234,4 @@ export const PersonalDataInput: FunctionComponent<{}> = props => {
     </PersonalDataInputWrapper>
   );
 };
+export default PersonalDataInput;

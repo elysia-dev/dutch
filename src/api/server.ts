@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import AsyncStorage from '@react-native-community/async-storage';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosStatic } from 'axios';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
@@ -11,17 +11,19 @@ import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
 import { SummaryReportResponse } from '../types/SummaryReport';
 import { CoinPriceResponse } from '../types/CoinPrice';
-
-type KycResponse = {};
-
-type PhotoResponse = {
-  filehash: string;
-};
+import { KycResponse, PhotoResponse } from '../types/Kyc';
 
 export default class Server {
+  token: string;
+  authenticatedEspressoClient: AxiosInstance;
   signOutHandler: () => void;
-  constructor(signOutHandler: () => void) {
+  constructor(signOutHandler: () => void, token: string) {
     this.signOutHandler = signOutHandler;
+    this.token = token;
+    this.authenticatedEspressoClient = authenticatedEspressoClient(
+      this.signOutHandler,
+      this.token,
+    );
   }
 
   initializeEmail = async (
@@ -83,19 +85,14 @@ export default class Server {
     password: string,
     currentPassword: string,
   ): Promise<AxiosResponse<AccountResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).put(
-      `/users`,
-      {
-        password,
-        currentPassword,
-      },
-    );
+    return this.authenticatedEspressoClient.put(`/users`, {
+      password,
+      currentPassword,
+    });
   };
 
   me = async (): Promise<AxiosResponse<UserResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      '/auth/me',
-    );
+    return this.authenticatedEspressoClient.get('/auth/me');
   };
 
   logout = async () => {
@@ -111,22 +108,16 @@ export default class Server {
     photo: string,
     idType: string,
   ): Promise<AxiosResponse<PhotoResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).post(
-      '/kyc/photoid',
-      {
-        photoidImage: photo, // base64 string,
-        id_type: idType,
-      },
-    );
+    return this.authenticatedEspressoClient.post('/kyc/photoid', {
+      photoidImage: photo, // base64 string,
+      id_type: idType,
+    });
   };
 
   selfie = async (photo: string): Promise<AxiosResponse<PhotoResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).post(
-      '/kyc/photoid',
-      {
-        selfieImage: photo, // base64 string,
-      },
-    );
+    return this.authenticatedEspressoClient.post('/kyc/photoid', {
+      selfieImage: photo, // base64 string,
+    });
   };
 
   submission = async (
@@ -139,49 +130,36 @@ export default class Server {
     photoid_res: string,
     selfie_res: string,
   ): Promise<AxiosResponse<KycResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).post(
-      '/kyc/selfie',
-      {
-        first_name,
-        last_name,
-        nationality,
-        date_of_birth,
-        gender,
-        id_type,
-        photoid_res,
-        selfie_res,
-      },
-    );
+    return this.authenticatedEspressoClient.post('/kyc/selfie', {
+      first_name,
+      last_name,
+      nationality,
+      date_of_birth,
+      gender,
+      id_type,
+      photoid_res,
+      selfie_res,
+    });
   };
   notification = async (): Promise<AxiosResponse<Notification[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      `/notifications`,
-    );
+    return this.authenticatedEspressoClient.get(`/notifications`);
   };
 
   read = async (id: number): Promise<AxiosResponse<void>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).put(
-      `/notifications/${id}`,
-    );
+    return this.authenticatedEspressoClient.put(`/notifications/${id}`);
   };
 
   ownershipDetail = async (
     id: number,
   ): Promise<AxiosResponse<OwnershipResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      `/ownerships/${id}`,
-    );
+    return this.authenticatedEspressoClient.get(`/ownerships/${id}`);
   };
   storyList = async (): Promise<AxiosResponse<Story[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      '/products/stories',
-    );
+    return this.authenticatedEspressoClient.get('/products/stories');
   };
 
   productInfo = async (id: number): Promise<AxiosResponse<Product>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      `/products?productId=${id}`,
-    );
+    return this.authenticatedEspressoClient.get(`/products?productId=${id}`);
   };
 
   coinPrice = async (): Promise<AxiosResponse<CoinPriceResponse>> => {
@@ -203,39 +181,32 @@ export default class Server {
   };
 
   productDocs = async (id: number): Promise<AxiosResponse<DocsResponse>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+    return this.authenticatedEspressoClient.get(
       `/products/docs?productId=${id}`,
     );
   };
 
   getAllProductIds = async (): Promise<AxiosResponse<ProductId[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      '/products/ids',
-    );
+    return this.authenticatedEspressoClient.get('/products/ids');
   };
 
   sendQuestion = async (content: string): Promise<AxiosResponse> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).post(
-      '/questions',
-      {
-        content,
-      },
-    );
+    return this.authenticatedEspressoClient.post('/questions', {
+      content,
+    });
   };
 
   getSummaryReport = async (): Promise<
     AxiosResponse<SummaryReportResponse>
   > => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
-      '/reports/summary',
-    );
+    return this.authenticatedEspressoClient.get('/reports/summary');
   };
 
   getTransaction = async (
     id: number,
     page: number,
   ): Promise<AxiosResponse<Transaction[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+    return this.authenticatedEspressoClient.get(
       `/transactions?ownershipId=${id}&page=${page}`,
     );
   };
@@ -248,7 +219,7 @@ export default class Server {
     period: string,
     productId: number,
   ): Promise<AxiosResponse<Transaction[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+    return this.authenticatedEspressoClient.get(
       `/transactions/history?productId=${productId}&start=${start}&end=${end}&period=${period}&type=${type}&page=${page}`,
     );
   };

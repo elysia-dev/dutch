@@ -1,4 +1,6 @@
 {
+  "welcome": "엘리시아에 오신 것을 환영합니다.",
+  "greeting": "안녕하세요. %{lastName}%{firstName}님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "check_email": "이메일 주소를 확인해주세요.",
@@ -176,12 +178,13 @@
     "expected_refund": "예상 지분회수금"
   },
   "more_label": {
+    "more": "더 보기",
     "need_kyc": "KYC 인증이 필요합니다.",
     "proceed_kyc": "KYC 인증이 진행중입니다.",
     "approved_kyc": "KYC 인증이 완료되었습니다.",
     "need_kyc_duplicate_label": "투자 시작을 위해",
-    "proceed_kyc_duplicate_label": "(임시)pending 메세지",
-    "approved_kyc_duplicate_label": "(임시)approved 메세지",
+    "proceed_kyc_duplicate_label": "pending",
+    "approved_kyc_duplicate_label": "approved",
     "confirm": "확인하기",
     "investment_history": "투자내역",
     "transaction_history": "내 트랜젝션",
@@ -228,7 +231,8 @@
     "type_refund": "소유권 처분",
     "type_close": "소유권 만료",
     "type_expectedProfit": "이익 누적",
-    "type_profit": "이익 출금"
+    "type_profit": "이익 출금",
+    "latest": "최신순"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
@@ -239,6 +243,10 @@
     "invalid_date": "올바르지 않은 기간입니다. 기간을 확인해주세요."
   },
   "dashboard_label": {
+    "total_balance": "총액",
+    "average_return": "평균 수익률",
+    "asset_graph": "자산 그래프",
+    "asset_value_graph": "자산 비율 그래프",
     "asset_report": "자산 내역",
     "total_property": "총 부동산 자산가치",
     "total_interest": "누적 이자수익",
@@ -255,8 +263,8 @@
     "stake_document": "지분증명서",
     "ownership": "지분 구매",
     "refund": "지분 환불",
-    "expectedProfit": "예상 이익 발생",
-    "profit": "일일 수익",
+    "expectedProfit": "이익 누적",
+    "profit": "이익 출금",
     "close": "상품 정산",
     "fold": "접기",
     "transaction": "트랜잭션",

@@ -149,8 +149,8 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           color: '#1C1C1C',
           textAlign: 'right',
         }}>{`${parseFloat(
-        `${(100 * parseFloat(value[1])) / totalValue}}`,
-      ).toFixed(2)} %`}</Text>
+          `${(100 * parseFloat(value[1])) / totalValue}}`,
+        ).toFixed(2)} %`}</Text>
     </View>
   ));
   return (
@@ -172,7 +172,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <H1Text>{'Asset Value Graph'}</H1Text>
+        <H1Text>{i18n.t('dashboard_label.asset_value_graph')}</H1Text>
         <View
           style={{
             flexDirection: 'row',

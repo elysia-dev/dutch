@@ -7,6 +7,7 @@ import Contact from './Contact';
 import Transactions from './Transactions';
 import ElysiaNotice from './ElysiaNotice';
 
+
 const Stack = createStackNavigator();
 
 export const More = () => {

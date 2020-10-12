@@ -36,7 +36,7 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         padding: 20,
         marginBottom: 20,
       }}>
-      <H1Text>{'Average Return'}</H1Text>
+      <H1Text>{i18n.t('dashboard_label.average_return')}</H1Text>
       <NumText>{`${parseFloat(props.return).toFixed(2)} %`}</NumText>
     </View>
   );
