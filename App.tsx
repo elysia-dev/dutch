@@ -31,6 +31,8 @@ interface AppState {
     lastName: string;
     kycStatus: KycStatus;
     gender: string;
+    language: LocaleType;
+    ethAddresses: string[];
   };
   unreadNotificationCount: number;
   notifications: Notification[];
@@ -45,6 +47,8 @@ const defaultState = {
     lastName: '',
     gender: '',
     kycStatus: KycStatus.NONE,
+    language: LocaleType.KO,
+    ethAddresses: [],
   },
   unreadNotificationCount: 0,
   notifications: [],
@@ -131,10 +135,10 @@ class App extends React.Component<{}, AppState> {
                 <RootStack.Screen name={'Product'} component={Products} />
               </>
             ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+                <>
+                  <RootStack.Screen name={'Account'} component={Account} />
+                </>
+              )}
           </RootStack.Navigator>
         </RootContext.Provider>
       </NavigationContainer>
