@@ -71,12 +71,11 @@ const ResetPassword: FunctionComponent = () => {
                 ? setState({ ...state, step: 1 })
                 : navigation.goBack();
             }}
-            style={{ marginTop: 201, marginBottom: 20 }}
           />
           <View>
-            <Text>{i18n.t('account_label.change_password')}</Text>
+            <H1Text label={i18n.t('account_label.change_password')}/>
             <H1Text
-              style={{ marginBottom: 15, marginTop: 60 }}
+              style={{ marginBottom: 15, marginTop: 0 }}
               label={
                 state.step === 1
                   ? i18n.t('account.insert_new_password')
@@ -109,7 +108,7 @@ const ResetPassword: FunctionComponent = () => {
           />
           {state.password === route.params.currentPassword && (
             <PText
-              style={{ textAlign: 'center', marginTop: 20, marginBottom: 13 }}
+              style={{ textAlign: 'left', marginTop: -10, marginBottom: 15 }}
               label={i18n.t('account.reset_current_same')}
             />
           )}

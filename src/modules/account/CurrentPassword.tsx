@@ -34,10 +34,14 @@ const CurrentPassword: FunctionComponent = () => {
       button={
         <SubmitButton
           title={i18n.t('account_label.continue')}
-          handler={() =>
+          handler={() => {
+              if (state.password === "") {
+              return (alert(i18n.t('more.invalid_password')));
+            }
             navigation.navigate(AccountPage.ResetPassword, {
               currentPassword: state.password,
-            })
+            });
+          }
           }
         />
       }

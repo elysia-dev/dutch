@@ -241,7 +241,8 @@
     "contact_text": "아래 문의사항을 작성 후 제출해주세요.",
     "elysia_contact": "엘리시아에 문의 남기기",
     "question_submitted": "문의사항이 성공적으로 제출되었습니다. 빠른 시일 내에 이메일로 답변해드릴게요.",
-    "invalid_date": "올바르지 않은 기간입니다. 기간을 확인해주세요."
+    "invalid_date": "올바르지 않은 기간입니다. 기간을 확인해주세요.",
+    "invalid_password": "현재 비밀번호를 입력해주세요."
   },
   "dashboard_label": {
     "total_balance": "총액",
