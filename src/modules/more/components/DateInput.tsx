@@ -1,65 +1,63 @@
-import React, { Component, FunctionComponent, useState } from "react";
+import React, { Component, FunctionComponent, useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TextInput as RNTextInput,
   Image,
-} from "react-native";
-import DatePicker from "react-native-datepicker";
-import i18n from "../../../i18n/i18n";
+} from 'react-native';
+import DatePicker from 'react-native-datepicker';
+import i18n from '../../../i18n/i18n';
 
-interface props {
+interface Props {
   date: string;
-  minDate?: string;
-  maxDate?: string;
-  eventHandler: (input: string) => void;
+  eventHandler: (date: string) => void;
 }
 
-interface state {
+interface State {
   date: string;
 }
 
-export class DateInput extends Component<props, state> {
-  constructor(props: props) {
+export class DateInput extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
-    this.state = { date: "" };
+    this.state = { date: '' };
   }
   currentTime = new Date();
 
   render() {
     return (
-      <View>
+      <View style={{ width: '45%' }}>
         <DatePicker
-          style={{ width: "100%", height: 35 }}
+          style={{ width: '100%', height: 40 }}
           date={this.props.date}
-          onDateChange={(date) => {
+          onDateChange={date => {
             this.props.eventHandler(date);
           }}
           mode="date"
           androidMode="spinner"
-          placeholder={i18n.strftime(this.currentTime, "%Y-%m-%d")}
+          placeholder={i18n.strftime(this.currentTime, '%Y-%m-%d')}
           format="YYYY-MM-DD"
-          minDate={this.props.minDate ? this.props.minDate : "2000-01-01"}
-          maxDate={this.props.maxDate ? this.props.maxDate : this.currentTime}
+          minDate={'2000-01-01'}
+          maxDate={this.currentTime}
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
-          iconSource={require("../images/calender.png")}
           customStyles={{
             btnTextConfirm: {
-              color: "#3679B5",
+              color: '#3679B5',
             },
             dateIcon: {
-              width: 13.75,
-              height: 12.5,
-              opacity: 1,
-              position: "relative",
-              marginLeft: "-20%",
+              width: 0,
+              height: 0,
+              opacity: 0,
+              position: 'relative',
             },
             dateInput: {
+              marginLeft: 'auto',
+              marginRight: 'auto',
               borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "#D0D8DF",
+              borderWidth: 0,
+              borderColor: '#D0D8DF',
             },
           }}
         />

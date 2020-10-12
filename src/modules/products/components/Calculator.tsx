@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import Slider from 'react-native-slider';
-
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
@@ -10,6 +9,7 @@ interface Props {
   countHandler: (value: number) => void;
   tokenCount: number;
   return: string;
+  type?: string;
 }
 
 const H1Text = styled.Text`
@@ -26,6 +26,7 @@ const CountText = styled.Text`
   font-size: 25px;
   text-align: left;
   font-weight: bold;
+  margin-left: -4px;
 `;
 const CountButton = styled.TouchableOpacity`
   width: 54px;
@@ -47,7 +48,9 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           fontSize: 15,
           marginBottom: 10,
         }}>
-        {i18n.t('product_label.token_count')}
+        {props.type === 'refund'
+          ? i18n.t('product_label.refund_token_count')
+          : i18n.t('product_label.token_count')}
       </Text>
       <View style={{ flexDirection: 'row', alignContent: 'center' }}>
         <CountText> {Math.round(props.tokenCount)}</CountText>

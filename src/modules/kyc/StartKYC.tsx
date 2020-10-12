@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
@@ -10,6 +10,7 @@ import { KycPage } from '../../enums/pageEnum';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { PText } from '../../shared/components/PText';
 import { TitleText } from '../../shared/components/TitleText';
+import { Argos } from './Argos';
 
 const ClockImg = styled.Image`
   width: 13px;
@@ -41,10 +42,11 @@ const HrLine = styled.View`
   margin-left: 5%;
 `;
 
-export const StartKYC: FunctionComponent<{}> = () => {
+const StartKYC: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState({
     agree: false,
+    modalVisible: false,
   });
   return (
     <WrapperLayout
@@ -122,6 +124,16 @@ export const StartKYC: FunctionComponent<{}> = () => {
                 }}
               />
             </CircleWrapper>
+            <Modal
+              transparent={true}
+              animationType={'slide'}
+              visible={state.modalVisible}>
+              <Argos
+                updateAgree={() =>
+                  setState({ ...state, modalVisible: false, agree: true })
+                }
+              />
+            </Modal>
           </View>
         </>
       }
@@ -129,12 +141,7 @@ export const StartKYC: FunctionComponent<{}> = () => {
         <View>
           <SubmitButton
             title={i18n.t('kyc_label.argos_terms')}
-            handler={() =>
-              navigation.navigate(KycPage.Argos, {
-                agree: state.agree,
-                updateAgree: (input: boolean) => setState({ agree: input }),
-              })
-            }
+            handler={() => setState({ ...state, modalVisible: true })}
             variant={'WhiteTheme'}
             style={{ marginBottom: 10 }}
           />
@@ -159,3 +166,4 @@ export const StartKYC: FunctionComponent<{}> = () => {
     // </View>
   );
 };
+export default StartKYC;

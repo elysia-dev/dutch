@@ -7,9 +7,9 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { FlatButton } from '../../shared/components/FlatButton';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
+// import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { H1Text } from '../../shared/components/H1Text';
 
@@ -27,14 +27,14 @@ const Login: FunctionComponent = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
-  const { signIn } = useContext(UserContext);
+  const { signIn, Server } = useContext(RootContext);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);
   };
 
   const callRecoverApi = () => {
-    Api.certifyEmail_recover(route.params.email, 'recoverPassword')
+    Server.certifyEmail_recover(route.params.email, 'recoverPassword')
       .then(res =>
         navigation.navigate(AccountPage.CertifyRecover, {
           email: route.params.email,
@@ -57,9 +57,8 @@ const Login: FunctionComponent = () => {
     } else if (state.password.length < 8) {
       alert(i18n.t('account_errors.password_too_short'));
     } else {
-      Api.login(route.params.email, state.password)
+      Server.login(route.params.email, state.password)
         .then(async res => {
-          console.log(res.data);
           // token local storage 저장
           if (res.data.status === 'wrong') {
             setState({ ...state, error: res.data.counts! });

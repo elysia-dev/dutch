@@ -1,5 +1,12 @@
-import React, { FunctionComponent, useState } from 'react';
-import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native';
+import React, { FunctionComponent, useContext, useState } from 'react';
+import {
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Text,
+  Modal,
+} from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { BackButton } from '../../shared/components/BackButton';
@@ -8,7 +15,10 @@ import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
 import i18n from '../../i18n/i18n';
-import { Api } from '../../api/transactions';
+import RootContext from '../../contexts/RootContext';
+import { OptionButton } from '../kyc/components/OptionButton';
+import OwnershipRefund from './OwnershipRefund';
+import OptionButtons from './components/OptionButtons';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -26,17 +36,19 @@ type ParamList = {
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
+  const { Server } = useContext(RootContext);
   const { ownership, ownershipId, transaction } = route.params;
   const [state, setState] = useState({
     transactions: transaction,
     transactionCount: 2,
+    modalVisible: false,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
   ));
 
   const callTransactionApi = () => {
-    Api.getTransaction(ownershipId, state.transactionCount)
+    Server.getTransaction(ownershipId, state.transactionCount)
       .then(res => {
         if (res.data.length === 0) {
           alert(i18n.t('dashboard.last_transaction'));
@@ -88,7 +100,17 @@ const OwnershipDetail: FunctionComponent = () => {
             <BackButton handler={() => navigation.goBack()} />
           </View>
         </View>
-        <OwnershipBasicInfo ownership={ownership} />
+        <OwnershipBasicInfo
+          ownership={ownership}
+          children={
+            <OptionButtons
+              productId={ownership.product.id}
+              refundHandler={() =>
+                setState({ ...state, modalVisible: !state.modalVisible })
+              }
+            />
+          }
+        />
         <View style={{ padding: 20 }}>
           {transactionList}
           <TouchableOpacity
@@ -114,6 +136,26 @@ const OwnershipDetail: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      {state.modalVisible && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.modalVisible}>
+        <OwnershipRefund
+          return={
+            ownership.product ? ownership.product.data.expectedAnnualReturn : ''
+          }
+          modalHandler={() => setState({ ...state, modalVisible: false })}
+        />
+      </Modal>
     </ProductInfoWrapper>
   );
 };

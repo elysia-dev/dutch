@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import { View, ScrollView, Image, StyleSheet, Animated } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -8,7 +13,7 @@ import i18n from '../../i18n/i18n';
 import { Story } from '../../types/product';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
-import Api from '../../api/product';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -42,17 +47,18 @@ const ProductStory: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Story'>>();
   const { product } = route.params;
+  const { Server } = useContext(RootContext);
+
   const [state, setState] = useState({
     scrollY: new Animated.Value(0),
+    product: {},
   });
+
   const callApi = () => {
-    Api.productInfo(product.productId)
+    Server.productInfo(product.productId)
       .then(res => {
-        navigation.navigate('BuyModalStack', {
-          screen: ProductPage.ProductBuying,
-          params: { product: res.data },
-        });
-        console.log(res.data);
+        setState({ ...state, product: res.data });
+        return true;
       })
       .catch(e => {
         if (e.response.status === 401) {
@@ -61,6 +67,10 @@ const ProductStory: FunctionComponent = () => {
         }
       });
   };
+
+  useEffect(() => {
+    callApi();
+  }, []);
 
   return (
     <ProductInfoWrapper>
@@ -159,7 +169,11 @@ const ProductStory: FunctionComponent = () => {
             marginBottom: 15,
           }}
           title={i18n.t('product_label.purchase')}
-          handler={() => callApi()}
+          handler={() => {
+            navigation.navigate(ProductPage.ProductBuying, {
+              product: state.product,
+            });
+          }}
         />
       </Animated.View>
     </ProductInfoWrapper>

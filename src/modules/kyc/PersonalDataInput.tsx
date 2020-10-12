@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, ScrollView, SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import { BackButton } from '../../shared/components/BackButton';
 import { NationInput } from './components/NationInput';
 import { DateInput } from './components/DateInput';
 import { ShortOptionButton } from './components/ShortOptionButton';
-import Api from '../../api/kyc';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -70,7 +70,8 @@ type ParamList = {
   };
 };
 
-export const PersonalDataInput: FunctionComponent<{}> = (props) => {
+
+const PersonalDataInput: FunctionComponent<{}> = props => {
   const [state, setState] = useState({
     gender: '',
     firstName: '',
@@ -82,6 +83,7 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'PersonalDataInput'>>();
+  const { Server } = useContext(RootContext);
 
   const setModalVisible = (visible: boolean) => {
     setState({ ...state, modalVisible: visible });
@@ -103,7 +105,7 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
     } else if (state.birthday === '' || state.nationality === '') {
       alert(i18n.t('kyc.alert_data'));
     } else {
-      Api.submission(
+      Server.submission(
         state.firstName,
         state.lastName,
         state.nationality,
@@ -113,10 +115,10 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
         route.params.photoId_hash,
         route.params.selfie_hash,
       )
-        .then((res) => {
+        .then(res => {
           setModalVisible(true);
         })
-        .catch((e) => {
+        .catch(e => {
           if (e.response.status === 404) {
             alert(i18n.t('kyc.submit_error'));
             navigation.navigate('Main', { screen: 'MoreMain' });
@@ -232,3 +234,4 @@ export const PersonalDataInput: FunctionComponent<{}> = (props) => {
     </PersonalDataInputWrapper>
   );
 };
+export default PersonalDataInput;

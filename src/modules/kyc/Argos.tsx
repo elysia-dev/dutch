@@ -3,23 +3,19 @@ import { ScrollView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 
-type ParamList = {
-  Argos: {
-    agree: boolean;
-    updateAgree: (input: boolean) => void;
-  };
-};
-export const Argos: FunctionComponent<{}> = () => {
+
+interface Props {
+  updateAgree: () => void;
+}
+export const Argos: FunctionComponent<Props> = (props: Props) => {
   const { locale } = useContext(UserContext);
-  const navigation = useNavigation();
   const localeTerms = terms[locale === LocaleType.KO ? locale : LocaleType.EN];
-  const route = useRoute<RouteProp<ParamList, 'Argos'>>();
 
   return (
     <WrapperLayout
@@ -36,10 +32,7 @@ export const Argos: FunctionComponent<{}> = () => {
         <View>
           <SubmitButton
             title={i18n.t('kyc_label.agree')}
-            handler={() => {
-              route.params.updateAgree(true);
-              navigation.goBack();
-            }}
+            handler={props.updateAgree}
           />
         </View>
       }

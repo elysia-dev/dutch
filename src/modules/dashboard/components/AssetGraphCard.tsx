@@ -126,7 +126,7 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
         paddingHorizontal: 15,
         marginBottom: 20,
       }}>
-      <H1Text>{'Asset Graph'}</H1Text>
+      <H1Text>{i18n.t('dashboard_label.asset_graph')}</H1Text>
       <View
         style={{
           height: 200,

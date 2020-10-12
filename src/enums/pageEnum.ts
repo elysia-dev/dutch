@@ -33,10 +33,12 @@ export enum AccountPage {
 export enum MorePage {
   MainInfo = 'MainInfo',
   MyPage = 'MyPage',
-  OwnershipHistory = 'OwnershipHistory',
-  TransactionHistory = 'TransactionHistory',
   Contact = 'Contact',
   Faq = 'Faq',
+  Transactions = 'Transactions',
+  Filter = 'Filter',
+  ElysiaNotice = 'ElysiaNotice',
+
 }
 
 export enum DashboardPage {

@@ -1,4 +1,6 @@
 {
+  "welcome": "Welcome to ELYSIA",
+  "greeting": "Hi, %{firstName} ${lastName}",
   "account": {
     "insert_account_email": "请输入您的邮箱地址。",
     "check_email": "请检查您的邮箱地址。",
@@ -164,6 +166,7 @@
     "abstract": "概要"
   },
   "more_label": {
+    "more": "MORE",
     "need_kyc_label": "请进行KYC认证。",
     "need_kyc": "您需要进行KYC认证。",
     "proceed_kyc": "KYC认证正在进行中。",
@@ -192,9 +195,9 @@
     "all": "全部",
     "deposit": "充值",
     "withdraw": "体现",
-    "1_month": "1个月",
-    "3_months": "3个月",
-    "6_months": "6个月",
+    "1_day": "1个月",
+    "3_day": "3个月",
+    "6_day": "6个月",
     "1_year": "1年",
     "term": "期间",
     "last_investments": "历史投资明细",
@@ -213,6 +216,10 @@
     "elysia_contact": "直接联系爱立厦"
   },
   "dashboard_label": {
+    "total_balance": "Total Balance",
+    "average_return": "Average Return",
+    "asset_graph": "Asset Graph",
+    "asset_value_graph": "Asset Value Graph",
     "asset_report": "资产明细",
     "total_property": "房地产资产总值",
     "total_interest": "累计利息收入",

@@ -24,6 +24,8 @@
         "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY"
       },
       "infoPlist": {
+        "NSPhotoLibraryAddUsageDescription": "Give Expo experiences permission to save photos.",
+        "NSCameraUsageDescription": "This app uses the camera for kyc certifications.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         }

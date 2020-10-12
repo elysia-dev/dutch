@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,13 +13,14 @@ import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
-import Api from '../../api/account';
-import { Api as OwnershipApi } from '../../api/ownerships';
-import { Api as TransactionApi } from '../../api/transactions';
-import { Api as ReportApi } from '../../api/reports';
+// import Api from '../../api/account';
+// import { Api as OwnershipApi } from '../../api/ownerships';
+// import { Api as TransactionApi } from '../../api/transactions';
+// import { Api as ReportApi } from '../../api/reports';
 import { UserResponse } from '../../types/AccountResponse';
 import { KycStatus } from '../../enums/KycStatus';
 import { Transaction } from '../../types/Transaction';
+import RootContext from '../../contexts/RootContext';
 
 interface Props {
   navigation: NavigationScreenProp<any>;
@@ -40,6 +41,8 @@ export class Main extends Component<Props, State> {
       ownerships: [this.defaultOwnerships],
     };
   }
+  static contextType = RootContext;
+  root = this.context;
 
   defaultUser = {
     id: 0,
@@ -63,15 +66,17 @@ export class Main extends Component<Props, State> {
   callApi() {
     const { navigation } = this.props;
 
-    Api.me()
-      .then(res => {
-        this.setState({
-          user: res.data.user,
-          ownerships: res.data.ownerships,
-          balance: res.data.totalBalance,
-        });
-      })
-      .catch(e => {
+    this.root.Server.me()
+      .then(
+        (res: { data: { user: any; ownerships: any; totalBalance: any } }) => {
+          this.setState({
+            user: res.data.user,
+            ownerships: res.data.ownerships,
+            balance: res.data.totalBalance,
+          });
+        },
+      )
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 401) {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
@@ -84,8 +89,8 @@ export class Main extends Component<Props, State> {
   callSummaryApi() {
     const { navigation } = this.props;
 
-    ReportApi.getSummaryReport()
-      .then(res => {
+    this.root.Server.getSummaryReport()
+      .then((res: { data: any }) => {
         console.log(res.data);
         navigation.navigate('Dashboard', {
           screen: DashboardPage.SummaryReport,
@@ -94,7 +99,7 @@ export class Main extends Component<Props, State> {
           },
         });
       })
-      .catch(e => {
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 401) {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
@@ -109,11 +114,11 @@ export class Main extends Component<Props, State> {
     let ownership = {};
     let transaction: Transaction[] = [];
 
-    await OwnershipApi.ownershipDetail(id)
-      .then(res => {
+    await this.root.Server.ownershipDetail(id)
+      .then((res: { data: {} }) => {
         ownership = res.data;
       })
-      .catch(e => {
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 400) {
           alert(i18n.t('dashboard.ownership_error'));
         } else if (e.response.status === 401) {
@@ -124,11 +129,11 @@ export class Main extends Component<Props, State> {
         }
       });
 
-    await TransactionApi.getTransaction(id, 1)
-      .then(res => {
+    await this.root.Server.getTransaction(id, 1)
+      .then((res: { data: Transaction[] }) => {
         transaction = res.data;
       })
-      .catch(e => {
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 400) {
           alert(i18n.t('dashboard.ownership_error'));
         } else if (e.response.status === 401) {
@@ -150,10 +155,12 @@ export class Main extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.root = this.context;
     this.callApi();
   }
 
   render() {
+    this.root = this.context;
     const { navigation } = this.props;
     const ownershipsList = this.state.ownerships.map((ownership, index) => (
       <Asset
@@ -182,7 +189,7 @@ export class Main extends Component<Props, State> {
                 textAlign: 'left',
                 marginBottom: 10,
               }}>
-              {'Welcome to ELYSIA'}
+              {i18n.t('welcome')}
             </Text>
             <Text
               style={{
@@ -191,7 +198,12 @@ export class Main extends Component<Props, State> {
                 fontSize: 28,
                 textAlign: 'left',
                 marginBottom: 40,
-              }}>{`Hi, ${this.state.user.firstName}${this.state.user.lastName}`}</Text>
+              }}>
+              {i18n.t('greeting', {
+                firstName: this.state.user.firstName,
+                lastName: this.state.user.lastName,
+              })}
+            </Text>
             <BalanceCard
               balance={this.state.balance}
               handler={() => this.callSummaryApi()}
@@ -217,7 +229,7 @@ export class Main extends Component<Props, State> {
                   shadowOpacity: 0.8,
                   shadowRadius: 7,
                 }}
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -236,3 +248,5 @@ export class Main extends Component<Props, State> {
     );
   }
 }
+
+Main.contextType = RootContext;

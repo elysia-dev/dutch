@@ -1,7 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
-import {
-  View,
-} from 'react-native';
+import React, { FunctionComponent, useContext, useState } from 'react';
+import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { TextField } from '../../shared/components/TextField';
@@ -9,12 +7,12 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import LockAccountPng from './images/lockaccount.png';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import AccountLayout from '../../shared/components/AccountLayout';
+import RootContext from '../../contexts/RootContext';
 
 const LockAccountImg = styled.Image`
   width: 100%;
@@ -46,9 +44,10 @@ const LockAccount: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
+  const { Server } = useContext(RootContext);
 
   const callResendApi = () => {
-    Api.certifyEmail_recover(route.params.email, 'recoverAccount')
+    Server.certifyEmail_recover(route.params.email, 'recoverAccount')
       .then(res => {
         setState({ ...state, verificationId: res.data.verificationId! });
         alert(i18n.t('account.resend_verification'));
@@ -61,7 +60,7 @@ const LockAccount: FunctionComponent = () => {
       alert(i18n.t('account.authentication_recover'));
       return;
     }
-    Api.certifyEmail(
+    Server.certifyEmail(
       state.verificationId || route.params.verificationId,
       state.code,
     )
@@ -100,7 +99,8 @@ const LockAccount: FunctionComponent = () => {
       body={
         <View
           style={{
-            display: 'flex', flexDirection: 'column',
+            display: 'flex',
+            flexDirection: 'column',
           }}>
           <View>
             <H1Text
@@ -119,8 +119,7 @@ const LockAccount: FunctionComponent = () => {
               focusHandler={value => setState({ ...state, focusing: value })}
             />
             <View
-              style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}
-            >
+              style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}>
               <ExpTimeText style={{ marginLeft: 'auto' }}>
                 {i18n.t('account.resending_code_mail_label')}
               </ExpTimeText>
