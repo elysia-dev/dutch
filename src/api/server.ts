@@ -6,12 +6,13 @@ import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
 axios.defaults.baseURL = 'http://localhost:3000';
 import Product, { ProductId, Story } from '../types/product';
-import { elysiaPriceResponse, ethereumPriceResponse } from '../types/CoinPrice';
 import { PostResponse } from '../types/PostResponse';
 import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
 import { SummaryReportResponse } from '../types/SummaryReport';
+import { CoinPriceResponse } from '../types/CoinPrice';
 import { KycResponse, PhotoResponse } from '../types/Kyc';
+
 export default class Server {
   token: string;
   authenticatedEspressoClient: AxiosInstance;
@@ -161,20 +162,22 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/products?productId=${id}`);
   };
 
-  elysiaPrice = async (): Promise<AxiosResponse<elysiaPriceResponse>> => {
+  coinPrice = async (): Promise<AxiosResponse<CoinPriceResponse>> => {
     return axios.get(
-      'https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd',
-    );
-  };
-
-  ethereumPrice = async (): Promise<AxiosResponse<ethereumPriceResponse>> => {
-    return axios.get(
-      'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
+      'https://api.coingecko.com/api/v3/simple/price?ids=elysia,ethereum&vs_currencies=usd',
     );
   };
 
   productPost = async (id: number): Promise<AxiosResponse<PostResponse[]>> => {
-    return this.authenticatedEspressoClient.get(`/posts/products?id=${id}`);
+    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+      `/posts/products?id=${id}`,
+    );
+  };
+
+  elysiaPost = async (): Promise<AxiosResponse<PostResponse[]>> => {
+    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+      '/posts/elysia',
+    );
   };
 
   productDocs = async (id: number): Promise<AxiosResponse<DocsResponse>> => {

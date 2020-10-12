@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import { View, ScrollView, Image, StatusBar } from 'react-native';
+import { View, ScrollView, Image, StatusBar, Modal } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -16,6 +16,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
 import { Map } from './components/Map';
 import RootContext from '../../contexts/RootContext';
+import SliderProductBuying from './SliderProductBuying';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -32,10 +33,13 @@ type ParamList = {
 
 interface State {
   product?: Product;
+  modalVisible: boolean;
 }
 
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState<State>({});
+  const [state, setState] = useState<State>({
+    modalVisible: false,
+  });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
@@ -47,9 +51,8 @@ const ProductBuying: FunctionComponent = () => {
         setState({ ...state, product: res.data });
       })
       .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
         }
       });
   }, []);
@@ -104,12 +107,28 @@ const ProductBuying: FunctionComponent = () => {
       <SubmitButton
         style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
         handler={() => {
-          navigation.navigate(ProductPage.SliderProductBuying, {
-            return: state.product && state.product.data.expectedAnnualReturn,
-          });
+          setState({ ...state, modalVisible: true });
         }}
         title={i18n.t('product_label.invest')}
       />
+      {state.modalVisible && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.modalVisible}>
+        <SliderProductBuying
+          return={state.product ? state.product.data.expectedAnnualReturn : ''}
+          modalHandler={() => setState({ ...state, modalVisible: false })}
+        />
+      </Modal>
     </ProductInfoWrapper>
   );
 };

@@ -36,7 +36,7 @@ export enum MorePage {
   Contact = 'Contact',
   Transactions = 'Transactions',
   Filter = 'Filter',
-  TransactionsModalStack = 'TransactionsModalStack',
+  ElysiaNotice = 'ElysiaNotice',
 }
 
 export enum DashboardPage {

@@ -157,7 +157,6 @@
     "return_method": "지급수단",
     "return_calculator": "예상 수익률 계산기",
     "investment": "투자금",
-    "expected_return": "예상 수익금(연)",
     "more_info": "자세히",
     "invest": "구매하기",
     "address": "주소",
@@ -169,10 +168,14 @@
     "product_info": "상품 정보",
     "abstract": "요약",
     "purchase": "지분 구매하기",
+    "refund": "지분 회수하기",
     "purchase_now": "바로 구매하기",
+    "refund_token_count": "회수할 부동산 토큰 수",
     "token_count": "부동산 토큰 수",
     "el_price": "EL (환산)",
-    "eth_price": "ETH (환산)"
+    "eth_price": "ETH (환산)",
+    "expected_return": "예상 수익금(연)",
+    "expected_refund": "예상 지분회수금"
   },
   "more_label": {
     "more": "더 보기",

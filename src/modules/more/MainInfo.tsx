@@ -307,7 +307,6 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-
                   <PText
                     label={i18n.t('more_label.notice')}
                     style={{ lineHeight: 50, fontSize: 15 }}

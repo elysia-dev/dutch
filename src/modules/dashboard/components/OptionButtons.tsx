@@ -1,9 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { ProductPage } from '../../../enums/pageEnum';
 import i18n from '../../../i18n/i18n';
 
-const OptionButtons: FunctionComponent<{}> = () => {
+interface Props {
+  refundHandler: () => void;
+  productId: number;
+}
+
+const OptionButtons: FunctionComponent<Props> = (props: Props) => {
   const navigation = useNavigation();
 
   return (
@@ -14,7 +20,12 @@ const OptionButtons: FunctionComponent<{}> = () => {
         justifyContent: 'space-between',
       }}>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={() =>
+          navigation.navigate('Product', {
+            screen: ProductPage.ProductBuying,
+            params: { productId: props.productId },
+          })
+        }
         style={{
           backgroundColor: '#fff',
           width: 100,
@@ -41,7 +52,7 @@ const OptionButtons: FunctionComponent<{}> = () => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={props.refundHandler}
         style={{
           backgroundColor: '#fff',
 
