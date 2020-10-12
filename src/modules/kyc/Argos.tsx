@@ -9,17 +9,13 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 
-type ParamList = {
-  Argos: {
-    agree: boolean;
-    updateAgree: (input: boolean) => void;
-  };
-};
-export const Argos: FunctionComponent<{}> = () => {
-  const { locale } = useContext(RootContext);
-  const navigation = useNavigation();
+
+interface Props {
+  updateAgree: () => void;
+}
+export const Argos: FunctionComponent<Props> = (props: Props) => {
+  const { locale } = useContext(UserContext);
   const localeTerms = terms[locale === LocaleType.KO ? locale : LocaleType.EN];
-  const route = useRoute<RouteProp<ParamList, 'Argos'>>();
 
   return (
     <WrapperLayout
@@ -36,10 +32,7 @@ export const Argos: FunctionComponent<{}> = () => {
         <View>
           <SubmitButton
             title={i18n.t('kyc_label.agree')}
-            handler={() => {
-              route.params.updateAgree(true);
-              navigation.goBack();
-            }}
+            handler={props.updateAgree}
           />
         </View>
       }

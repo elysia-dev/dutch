@@ -47,7 +47,9 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
         padding: 20,
         marginBottom: 20,
       }}>
-      <H1Text>{'Total Balance'}</H1Text>
+      <H1Text>
+        {i18n.t('dashboard_label.total_balance')}
+      </H1Text>
       <NumText>{`$ ${parseFloat(props.summary.totalBalance).toFixed(
         2,
       )}`}</NumText>

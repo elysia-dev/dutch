@@ -48,7 +48,7 @@ type ParamList = {
   };
 };
 
-export const ConfirmID: FunctionComponent<{}> = () => {
+const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
   const { Server } = useContext(RootContext);
@@ -94,7 +94,10 @@ export const ConfirmID: FunctionComponent<{}> = () => {
       isBackbutton={true}
       body={
         <>
-          <SelfieImg source={{ uri: route.params.idPhoto.uri }} />
+          <SelfieImg
+            source={{ uri: route.params.idPhoto.uri }}
+            style={{ resizeMode: 'cover' }}
+          />
           <WarningWrapper>
             <View
               style={{
@@ -148,3 +151,4 @@ export const ConfirmID: FunctionComponent<{}> = () => {
     />
   );
 };
+export default ConfirmID;

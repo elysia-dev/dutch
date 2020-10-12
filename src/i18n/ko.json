@@ -1,4 +1,6 @@
 {
+  "welcome": "엘리시아에 오신 것을 환영합니다.",
+  "greeting": "안녕하세요. %{lastName}%{firstName}님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "check_email": "이메일 주소를 확인해주세요.",
@@ -173,12 +175,13 @@
     "eth_price": "ETH (환산)"
   },
   "more_label": {
+    "more": "더 보기",
     "need_kyc": "KYC 인증이 필요합니다.",
     "proceed_kyc": "KYC 인증이 진행중입니다.",
     "approved_kyc": "KYC 인증이 완료되었습니다.",
     "need_kyc_duplicate_label": "투자 시작을 위해",
-    "proceed_kyc_duplicate_label": "(임시)pending 메세지",
-    "approved_kyc_duplicate_label": "(임시)approved 메세지",
+    "proceed_kyc_duplicate_label": "pending",
+    "approved_kyc_duplicate_label": "approved",
     "confirm": "확인하기",
     "investment_history": "투자내역",
     "transaction_history": "내 트랜젝션",
@@ -237,6 +240,10 @@
     "invalid_date": "올바르지 않은 기간입니다. 기간을 확인해주세요."
   },
   "dashboard_label": {
+    "total_balance": "총액",
+    "average_return": "평균 수익률",
+    "asset_graph": "자산 그래프",
+    "asset_value_graph": "자산 비율 그래프",
     "asset_report": "자산 내역",
     "total_property": "총 부동산 자산가치",
     "total_interest": "누적 이자수익",

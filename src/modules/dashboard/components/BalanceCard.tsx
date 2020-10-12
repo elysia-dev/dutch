@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
 
 interface Props {
   balance: string;
@@ -36,7 +37,9 @@ export const BalanceCard: FunctionComponent<Props> = props => {
           padding: 20,
           marginBottom: 25,
         }}>
-        <H1Text>{'Total Balance'}</H1Text>
+        <H1Text>
+          {i18n.t('dashboard_label.total_balance')}
+        </H1Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ top: 15 }}>
             <NumText>{`$ ${parseFloat(props.balance).toFixed(2)}`}</NumText>
