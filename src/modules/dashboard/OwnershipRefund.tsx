@@ -18,14 +18,9 @@ interface Props {
   modalHandler: () => void;
 }
 
-interface State {
-  tokenCount: number;
-}
 
 const OwnershipRefund: FunctionComponent<Props> = props => {
-  const [state, setState] = useState<State>({
-    tokenCount: 10,
-  });
+  const [tokenCount, setTokenCount] = useState(10);
 
   return (
     <View
@@ -62,14 +57,14 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
       <Calculator
         type={'refund'}
         countHandler={(token: number) => {
-          setState({ ...state, tokenCount: token });
+          setTokenCount(token);
         }}
-        tokenCount={state.tokenCount}
+        tokenCount={tokenCount}
         return={props.return}
       />
       <ExchangedValue
         return={props.return}
-        tokenCount={state.tokenCount}
+        tokenCount={tokenCount}
         type={'refund'}
       />
       <SubmitButton

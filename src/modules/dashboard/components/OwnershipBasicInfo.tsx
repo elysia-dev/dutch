@@ -17,10 +17,6 @@ import OptionButtons from './OptionButtons';
 import { DashboardPage } from '../../../enums/pageEnum';
 import RootContext from '../../../contexts/RootContext';
 
-interface Props {
-  ownership: OwnershipResponse;
-  children: ReactChild;
-}
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -45,7 +41,9 @@ const ValueText = styled.Text`
   font-weight: bold;
 `;
 
-const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
+type props = React.PropsWithChildren<{ownership: OwnershipResponse}>;
+
+const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
   const { Server } = useContext(RootContext);
