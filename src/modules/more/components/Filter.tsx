@@ -1,11 +1,8 @@
 import React, {
+  Children,
   FunctionComponent,
-  useContext,
-  useReducer,
-  useState,
 } from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   Image,
@@ -14,13 +11,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
-import { SubmitButton } from '../../shared/components/SubmitButton';
-import i18n from '../../i18n/i18n';
-import { TypePicker } from './components/TypePicker';
-import { ProductPicker } from './components/ProductPicker';
-import { Api } from '../../api/transactions';
-import { DateInput } from './components/DateInput';
+import { SubmitButton } from '../../../shared/components/SubmitButton';
+import i18n from '../../../i18n/i18n';
+import { TypePicker } from './TypePicker';
+import { DateInput } from './DateInput';
+import { State } from '../../../hooks/reducers/TransactionFilterReducer';
+
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -29,19 +25,18 @@ const H1Text = styled.Text`
   margin-bottom: 10px;
 `;
 
-interface ButtonProps {
+type ButtonProps = {
   title: string;
   style?: StyleProp<ViewStyle>;
   handler?: () => void;
   on: boolean;
 }
 
-interface Props {
-  dispatch: React.Dispatch<any>;
-  filter: any;
-}
+type props = React.PropsWithChildren<{dispatch: React.Dispatch<any>;
+  filter: State;
+  filterTransactions: () => void;}>;
 
-const Button: FunctionComponent<ButtonProps> = props => {
+const Button: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
   return (
     <View style={props.style}>
       <TouchableOpacity
@@ -69,32 +64,7 @@ const Button: FunctionComponent<ButtonProps> = props => {
   );
 };
 
-const Filter: FunctionComponent<Props> = (props: Props) => {
-  // 서버 풀받고 체크하기
-  const filterTransactions = () => {
-    Api.getTransactionHistory(
-      props.filter.page,
-      props.filter.start,
-      props.filter.end,
-      props.filter.type,
-      props.filter.period,
-      props.filter.productId,
-    )
-      .then(res => {
-        props.dispatch({
-          type: 'FILTER_LIST',
-          value: res.data,
-        });
-      })
-      .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
-  };
-
+const Filter: FunctionComponent<props> = (props: props) => {
   return (
     <View
       style={{
@@ -115,14 +85,14 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
           marginRight: 'auto',
           marginBottom: 40,
         }}
-        onPress={() => props.dispatch({ type: 'MODAL_CONTROL', value: false })}>
+        onPress={() => props.dispatch({ type: 'MODAL_CONTROL', modal: false })}>
         <Image
           style={{
             width: '100%',
             height: '100%',
             resizeMode: 'center',
           }}
-          source={require('./images/bluedownarrow.png')}
+          source={require('../images/bluedownarrow.png')}
         />
       </TouchableOpacity>
       <View style={{ width: '100%', position: 'relative', top: -10 }}>
@@ -139,9 +109,9 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
             style={{ width: '31%' }}
             title={i18n.t('more_label.30_day')}
             handler={() => {
-              props.dispatch({ type: 'CHANGE_PERIOD', value: '30' });
-              props.dispatch({ type: 'CHANGE_STARTDATE', value: '' });
-              props.dispatch({ type: 'CHANGE_ENDDATE', value: '' });
+              props.dispatch({ type: 'UPDATE_PERIOD', period: '30' });
+              props.dispatch({ type: 'UPDATE_STARTDATE', start: '' });
+              props.dispatch({ type: 'UPDATE_ENDDATE', end: '' });
             }}
           />
           <Button
@@ -149,16 +119,16 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
             style={{ width: '31%' }}
             title={i18n.t('more_label.90_day')}
             handler={() => {
-              props.dispatch({ type: 'CHANGE_PERIOD', value: '90' });
-              props.dispatch({ type: 'CHANGE_STARTDATE', value: '' });
-              props.dispatch({ type: 'CHANGE_ENDDATE', value: '' });
+              props.dispatch({ type: 'UPDATE_PERIOD', period: '90' });
+              props.dispatch({ type: 'UPDATE_STARTDATE', start: '' });
+              props.dispatch({ type: 'UPDATE_ENDDATE', end: '' });
             }}
           />
           <Button
             on={props.filter.period === ''}
             style={{ width: '31%' }}
             title={i18n.t('more_label._day')}
-            handler={() => props.dispatch({ type: 'CHANGE_PERIOD', value: '' })}
+            handler={() => props.dispatch({ type: 'UPDATE_PERIOD', period: '' })}
           />
         </View>
         {!props.filter.period && (
@@ -176,7 +146,7 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
             <DateInput
               date={props.filter.start}
               eventHandler={(date: string) =>
-                props.dispatch({ type: 'CHANGE_STARTDATE', value: date })
+                props.dispatch({ type: 'UPDATE_STARTDATE', start: date })
               }
             />
             <Text style={{ textAlign: 'center', alignItems: 'center' }}>
@@ -185,7 +155,7 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
             <DateInput
               date={props.filter.end}
               eventHandler={(date: string) =>
-                props.dispatch({ type: 'CHANGE_ENDDATE', value: date })
+                props.dispatch({ type: 'UPDATE_ENDDATE', end: date })
               }
             />
           </View>
@@ -197,11 +167,7 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
           filter={props.filter}
         />
         <H1Text>{i18n.t('more_label.product')}</H1Text>
-        <ProductPicker
-          style={{ marginBottom: 30 }}
-          dispatch={props.dispatch}
-          filter={props.filter}
-        />
+       {props.children}
       </View>
       <SubmitButton
         style={{
@@ -217,10 +183,9 @@ const Filter: FunctionComponent<Props> = (props: Props) => {
           if (new Date(props.filter.start) > new Date(props.filter.end)) {
             return alert(i18n.t('more.invalid_date'));
           }
-
-          props.dispatch({ type: 'UPDATE_PAGE', value: 1 });
-          filterTransactions();
-          props.dispatch({ type: 'MODAL_CONTROL', value: false });
+          props.dispatch({ type: 'UPDATE_PAGE', page: 1 });
+          props.filterTransactions();
+          props.dispatch({ type: 'MODAL_CONTROL', modal: false });
         }}
       />
     </View>

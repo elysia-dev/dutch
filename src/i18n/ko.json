@@ -225,7 +225,8 @@
     "type_refund": "소유권 처분",
     "type_close": "소유권 만료",
     "type_expectedProfit": "이익 누적",
-    "type_profit": "이익 출금"
+    "type_profit": "이익 출금",
+    "latest": "최신순"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",

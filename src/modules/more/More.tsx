@@ -5,7 +5,7 @@ import MainInfo from './MainInfo';
 import MyPage from './Mypage';
 import Contact from './Contact';
 import Transactions from './Transactions';
-import Filter from './Filter';
+import Filter from './components/Filter';
 
 const Stack = createStackNavigator();
 
