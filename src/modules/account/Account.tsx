@@ -35,10 +35,6 @@ export const Account: FunctionComponent = () => {
         component={CurrentPassword}
       />
       <Stack.Screen
-        name={AccountPage.ResetPassword}
-        component={ResetPassword}
-      />
-      <Stack.Screen
         name={AccountPage.RecoverPassword}
         component={RecoverPassword}
       />

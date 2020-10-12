@@ -6,12 +6,18 @@ import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
-import Api from '../../api/account';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
+
+const InfoArrowImg = styled.Image`
+  width: 5px;
+  height: 8px;
+  margin: 20px 20px;
+  resize-mode: center;
+`;
 
 const MyPage: FunctionComponent = () => {
   const { user, signOut } = useContext(RootContext);
@@ -62,7 +68,7 @@ const MyPage: FunctionComponent = () => {
       <View
         style={{
           paddingLeft: '5%',
-          paddingBottom: 20,
+          // paddingBottom: 20,
           borderBottomWidth: 5,
           borderBottomColor: '#F6F6F8',
         }}>
@@ -71,25 +77,28 @@ const MyPage: FunctionComponent = () => {
           style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
         />
         <PText label={user.email} style={{ fontSize: 15 }} />
-        <PText
-          label={i18n.t('account_label.account_password')}
-          style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
-        />
-        <TouchableOpacity
-          onPress={() => {}}
+        <View
           style={{
-            backgroundColor: '#E6ECF2',
-            borderRadius: 5,
-            width: 120,
-            height: 25,
-            justifyContent: 'center',
-            alignContent: 'center',
+            height: 50,
+            marginTop: 10,
           }}>
-          <PText
-            label={'비밀번호 변경(임시)'}
-            style={{ color: '#5c5b5b', textAlign: 'center' }}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('More', { screen: AccountPage.CurrentPassword })}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <PText
+                label={i18n.t('more_label.reset_password')}
+                style={{ lineHeight: 50, fontSize: 15 }}
+              />
+              <InfoArrowImg
+                source={require('./images/next_gray.png')}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
       {user.kycStatus === KycStatus.SUCCESS && (
         <View
