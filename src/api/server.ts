@@ -169,13 +169,13 @@ export default class Server {
   };
 
   productPost = async (id: number): Promise<AxiosResponse<PostResponse[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+    return this.authenticatedEspressoClient.get(
       `/posts/products?id=${id}`,
     );
   };
 
   elysiaPost = async (): Promise<AxiosResponse<PostResponse[]>> => {
-    return (await authenticatedEspressoClient(this.signOutHandler)).get(
+    return this.authenticatedEspressoClient.get(
       '/posts/elysia',
     );
   };

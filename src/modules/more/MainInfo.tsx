@@ -52,7 +52,7 @@ const InfoArrowImg = styled.Image`
 `;
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
-  const { user } = useContext(UserContext);
+  const { user } = useContext(RootContext);
   const navigation = useNavigation();
 
   return (
@@ -201,11 +201,9 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.OwnershipHistory,
-                  })
-                }>
+                onPress={() => navigation.navigate('More', {
+                  screen: MorePage.Transactions,
+                })}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -227,11 +225,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.TransactionHistory,
-                  })
-                }>
+                onPress={() => {}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -297,11 +291,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.OwnershipHistory,
-                  })
-                }>
+                onPress={() => {}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -326,7 +316,7 @@ const MainInfo: FunctionComponent = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
-                    screen: MorePage.TransactionHistory,
+                    screen: MorePage.Faq,
                   })
                 }>
                 <View
@@ -376,11 +366,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.OwnershipHistory,
-                  })
-                }>
+                onPress={() => {}}>
                 <View
                   style={{
                     flexDirection: 'row',

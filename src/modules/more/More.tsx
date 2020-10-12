@@ -5,7 +5,6 @@ import MainInfo from './MainInfo';
 import MyPage from './Mypage';
 import Contact from './Contact';
 import Faq from './Faq';
-import Contact from './Contact';
 import Transactions from './Transactions';
 import ElysiaNotice from './ElysiaNotice';
 
