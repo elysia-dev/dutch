@@ -3,11 +3,12 @@ import { ScrollView, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
+
 
 interface Props {
   updateAgree: () => void;

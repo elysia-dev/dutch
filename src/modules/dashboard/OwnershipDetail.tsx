@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -8,7 +8,7 @@ import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
 import i18n from '../../i18n/i18n';
-import { Api } from '../../api/transactions';
+import RootContext from '../../contexts/RootContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -26,6 +26,7 @@ type ParamList = {
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
+  const { Server } = useContext(RootContext);
   const { ownership, ownershipId, transaction } = route.params;
   const [state, setState] = useState({
     transactions: transaction,
@@ -36,7 +37,7 @@ const OwnershipDetail: FunctionComponent = () => {
   ));
 
   const callTransactionApi = () => {
-    Api.getTransaction(ownershipId, state.transactionCount)
+    Server.getTransaction(ownershipId, state.transactionCount)
       .then(res => {
         if (res.data.length === 0) {
           alert(i18n.t('dashboard.last_transaction'));

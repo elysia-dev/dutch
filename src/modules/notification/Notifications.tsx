@@ -8,8 +8,7 @@ import { View, Animated, RefreshControl, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
-import Api from '../../api/notifications';
-import NotificationContext from '../../contexts/NotificationContext';
+import RootContext from '../../contexts/RootContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
@@ -18,20 +17,21 @@ const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
   const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
 
   const {
     notifications,
     unreadNotificationCount,
     setNotifications,
     setUnreadNotificationCount,
-  } = useContext(NotificationContext);
+  } = useContext(RootContext);
 
   useEffect(() => {
     loadNotifications();
   }, []);
 
   const loadNotifications = () =>
-    Api.notification()
+    Server.notification()
       .then(res => {
         setNotifications(res.data);
         setRefreshing(false);
@@ -41,7 +41,7 @@ const Notifications: FunctionComponent = () => {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
 
@@ -53,7 +53,7 @@ const Notifications: FunctionComponent = () => {
   const readNotification = (notification: Notification) => {
     if (notification.status === NotificationStatus.READ) return;
 
-    Api.read(notification.id)
+    Server.read(notification.id)
       .then(() => {
         setNotifications(
           notifications.map(n => {
@@ -71,7 +71,7 @@ const Notifications: FunctionComponent = () => {
       })
       .catch(e => {
         if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };

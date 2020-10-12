@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
-import UserContext from '../../../contexts/UserContext';
+import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 
 const H1Text = styled.Text`
@@ -49,7 +49,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { locale } = useContext(UserContext);
+  const { locale } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription =

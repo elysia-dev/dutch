@@ -33,9 +33,10 @@ export enum AccountPage {
 export enum MorePage {
   MainInfo = 'MainInfo',
   MyPage = 'MyPage',
-  OwnershipHistory = 'OwnershipHistory',
-  TransactionHistory = 'TransactionHistory',
   Contact = 'Contact',
+  Transactions = 'Transactions',
+  Filter = 'Filter',
+  TransactionsModalStack = 'TransactionsModalStack',
 }
 
 export enum DashboardPage {

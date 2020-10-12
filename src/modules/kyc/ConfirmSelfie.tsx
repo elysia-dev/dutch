@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { Component, FunctionComponent, Props } from 'react';
+import React, { Component, FunctionComponent, Props, useContext } from 'react';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-
-import Api from '../../api/kyc';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -50,12 +49,13 @@ type ParamList = {
 const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmSelfie'>>();
+  const { Server } = useContext(RootContext);
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
   // callKycApi() {
   //   const { route, navigation } = this.props;
   //   const { photoId_hash, selfie, id_type, photoId } = route.params;
-  //   Api.selfie(selfie.base64)
+  //   Server.selfie(selfie.base64)
   //     .then((res) => {
   //       navigation.navigate(KycPage.PersonalDataInput, {
   //         selfie_hash: res.data.filehash,

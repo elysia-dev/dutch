@@ -8,7 +8,7 @@ import i18n from '../../i18n/i18n';
 import { Story } from '../../types/product';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
-import Api from '../../api/product';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -42,17 +42,18 @@ const ProductStory: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Story'>>();
   const { product } = route.params;
+  const { Server } = useContext(RootContext);
+
   const [state, setState] = useState({
     scrollY: new Animated.Value(0),
   });
   const callApi = () => {
-    Api.productInfo(product.productId)
+    Server.productInfo(product.productId)
       .then(res => {
         navigation.navigate('BuyModalStack', {
           screen: ProductPage.ProductBuying,
           params: { product: res.data },
         });
-        console.log(res.data);
       })
       .catch(e => {
         if (e.response.status === 401) {

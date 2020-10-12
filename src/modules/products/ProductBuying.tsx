@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  StatusBar,
-} from 'react-native';
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
+import { View, ScrollView, Image, StatusBar } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -14,8 +14,8 @@ import Product from '../../types/product';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
-import Api from '../../api/product';
 import { Map } from './components/Map';
+import RootContext from '../../contexts/RootContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -39,10 +39,13 @@ const ProductBuying: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
+  const { Server } = useContext(RootContext);
 
   useEffect(() => {
-    Api.productInfo(productId)
-      .then(res => { setState({ ...state, product: res.data }); })
+    Server.productInfo(productId)
+      .then(res => {
+        setState({ ...state, product: res.data });
+      })
       .catch(e => {
         if (e.response.status === 401) {
           alert(i18n.t('account.need_login'));

@@ -24,15 +24,15 @@ export const PeriodPicker: FunctionComponent<Props> = (props: Props) => {
       value: '0',
     },
     {
-      label: i18n.t('more_label.1_month'),
+      label: i18n.t('more_label.1_day'),
       value: '30',
     },
     {
-      label: i18n.t('more_label.3_months'),
+      label: i18n.t('more_label.3_day'),
       value: '90',
     },
     {
-      label: i18n.t('more_label.6_months'),
+      label: i18n.t('more_label.6_day'),
       value: '180',
     },
     {
@@ -43,9 +43,9 @@ export const PeriodPicker: FunctionComponent<Props> = (props: Props) => {
 
   const TermListAnd = [
     <Picker.Item label={i18n.t('more_label.all')} value="0" key={0} />,
-    <Picker.Item label={i18n.t('more_label.1_month')} value="30" key={1} />,
-    <Picker.Item label={i18n.t('more_label.3_months')} value="90" key={2} />,
-    <Picker.Item label={i18n.t('more_label.6_months')} value="180" key={3} />,
+    <Picker.Item label={i18n.t('more_label.1_day')} value="30" key={1} />,
+    <Picker.Item label={i18n.t('more_label.3_day')} value="90" key={2} />,
+    <Picker.Item label={i18n.t('more_label.6_day')} value="180" key={3} />,
     <Picker.Item label={i18n.t('more_label.1_year')} value="365" key={4} />,
   ];
 
@@ -91,7 +91,7 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     borderWidth: 1,
-    borderColor: '#d0d8df',
+    borderColor: '#D0D8DF',
     borderRadius: 5,
     color: '#1C1C1C',
   },
@@ -104,7 +104,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 5,
     textAlign: 'center',
     borderWidth: 1,
-    borderColor: '#d0d8df',
+    borderColor: '#D0D8DF',
     borderRadius: 5,
     color: '#1C1C1C',
   },

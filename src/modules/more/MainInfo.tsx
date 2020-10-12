@@ -17,7 +17,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import LocaleType from '../../enums/LocaleType';
@@ -307,6 +307,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
+
                   <PText
                     label={i18n.t('more_label.notice')}
                     style={{ lineHeight: 50, fontSize: 15 }}

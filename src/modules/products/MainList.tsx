@@ -1,19 +1,17 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
-import {
-  View,
-  Animated,
-  StatusBar,
-  Image,
-  ScrollView,
-} from 'react-native';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { View, Animated, StatusBar, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import i18n from '../../i18n/i18n';
-import Api from '../../api/product';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
 import ExpendedCard from './components/ExpendedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
+import RootContext from '../../contexts/RootContext';
 
 interface State {
   stories: Story[];
@@ -29,12 +27,13 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
 
   useEffect(() => {
-    Api.storyList()
+    Server.storyList()
       .then(res => {
         setState({ ...state, stories: res.data });
-        res.data.forEach((story) => {
+        res.data.forEach(story => {
           Image.prefetch(story.image);
         });
       })
@@ -43,7 +42,7 @@ const MainList: FunctionComponent = () => {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   }, []);
@@ -58,8 +57,7 @@ const MainList: FunctionComponent = () => {
       }}>
       <ScrollView
         scrollEventThrottle={16}
-        style={{ width: '100%', paddingHorizontal: 20 }}
-      >
+        style={{ width: '100%', paddingHorizontal: 20 }}>
         <Animated.View
           style={{
             backgroundColor: '#fff',
@@ -79,33 +77,32 @@ const MainList: FunctionComponent = () => {
             {i18n.t('product_label.product')}
           </Animated.Text>
         </Animated.View>
-        {
-          state.stories.map((story, index) => (
-            <Item
-              story={story}
-              key={`item-${index}`}
-              activateCard={(xOffset, yOffset) => {
-                StatusBar.setHidden(true);
-                navigation.setOptions({
-                  tabBarVisible: false,
-                });
-                setState({
-                  ...state,
-                  activeStory: story,
-                  xOffset,
-                  yOffset,
-                });
-              }}
-              active={
-                (state.activeStory && state.activeStory.productId === story.productId)
-                || false
-              }
-            />
-          ))
-        }
+        {state.stories.map((story, index) => (
+          <Item
+            story={story}
+            key={`item-${index}`}
+            activateCard={(xOffset, yOffset) => {
+              StatusBar.setHidden(true);
+              navigation.setOptions({
+                tabBarVisible: false,
+              });
+              setState({
+                ...state,
+                activeStory: story,
+                xOffset,
+                yOffset,
+              });
+            }}
+            active={
+              (state.activeStory &&
+                state.activeStory.productId === story.productId) ||
+              false
+            }
+          />
+        ))}
         <VirtualTab />
       </ScrollView>
-      {state.activeStory &&
+      {state.activeStory && (
         <ExpendedCard
           story={state.activeStory}
           deactivateStory={() => {
@@ -117,7 +114,8 @@ const MainList: FunctionComponent = () => {
           }}
           xOffset={state.xOffset}
           yOffset={state.yOffset}
-        />}
+        />
+      )}
     </View>
   );
 };

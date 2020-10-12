@@ -3,6 +3,7 @@ import React, {
   ReactChild,
   ReactElement,
   ReactNode,
+  useContext,
 } from 'react';
 import { View, TouchableOpacity, Image, Text } from 'react-native';
 import styled from 'styled-components/native';
@@ -12,9 +13,7 @@ import i18n from '../../../i18n/i18n';
 import { OwnershipResponse } from '../../../types/Ownership';
 import OptionButtons from './OptionButtons';
 import { DashboardPage } from '../../../enums/pageEnum';
-import Api from '../../../api/product';
-import { Api as TransactionApi } from '../../../api/transactions';
-import { Transaction } from '../../../types/Transaction';
+import RootContext from '../../../contexts/RootContext';
 
 interface Props {
   ownership: OwnershipResponse;
@@ -46,9 +45,10 @@ const ValueText = styled.Text`
 const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
+  const { Server } = useContext(RootContext);
 
   const callPostApi = () => {
-    Api.productPost(ownership.product.id)
+    Server.productPost(ownership.product.id)
       .then(res => {
         navigation.navigate(DashboardPage.ProductNotice, { posts: res.data });
       })
@@ -57,13 +57,13 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };
 
   const callDocsApi = () => {
-    Api.productDocs(ownership.product.id)
+    Server.productDocs(ownership.product.id)
       .then(res => {
         navigation.navigate(DashboardPage.ProductData, {
           product: ownership.product,
@@ -75,7 +75,7 @@ const OwnershipBasicInfo: FunctionComponent<Props> = (props: Props) => {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
         } else if (e.response.status === 500) {
-          alert(i18n.t('errors.server.duplicate_email'));
+          alert(i18n.t('account_errors.server'));
         }
       });
   };

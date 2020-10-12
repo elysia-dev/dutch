@@ -15,7 +15,7 @@ import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import Api from '../../api/product';
+import RootContext from '../../contexts/RootContext';
 
 const DesView = styled.View`
   flex: 1;
@@ -63,18 +63,24 @@ class SliderProductBuying extends Component<Props, State> {
     super(props);
     this.state = { tokenCount: 10, elPrice: 0, ethPrice: 0 };
   }
+  static contextType = RootContext;
+  root = this.context;
 
   callApi() {
-    Api.elysiaPrice()
-      .then(res => this.setState({ elPrice: res.data.elysia.usd }))
-      .catch(e => {
+    this.root.Server.elysiaPrice()
+      .then((res: { data: { elysia: { usd: any } } }) =>
+        this.setState({ elPrice: res.data.elysia.usd }),
+      )
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
-    Api.ethereumPrice()
-      .then(res => this.setState({ ethPrice: res.data.ethereum.usd }))
-      .catch(e => {
+    this.root.Server.ethereumPrice()
+      .then((res: { data: { ethereum: { usd: any } } }) =>
+        this.setState({ ethPrice: res.data.ethereum.usd }),
+      )
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -82,9 +88,13 @@ class SliderProductBuying extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.root = this.context;
+
     this.callApi();
   }
   render() {
+    this.root = this.context;
+
     const { route, navigation } = this.props;
     return (
       <View
@@ -200,5 +210,6 @@ class SliderProductBuying extends Component<Props, State> {
     );
   }
 }
+SliderProductBuying.contextType = RootContext;
 
 export default SliderProductBuying;

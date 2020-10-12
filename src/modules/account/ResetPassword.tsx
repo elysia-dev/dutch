@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
@@ -7,8 +7,8 @@ import { H1Text } from '../../shared/components/H1Text';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
 import AccountLayout from '../../shared/components/AccountLayout';
+import RootContext from '../../contexts/RootContext';
 
 type ParamList = {
   ResetPassword: {
@@ -25,6 +25,7 @@ const ResetPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ResetPassword'>>();
+  const { Server } = useContext(RootContext);
 
   const callChangeApi = () => {
     if (state.password !== state.passwordConfirmation) {
@@ -34,7 +35,7 @@ const ResetPassword: FunctionComponent = () => {
     } else if (state.password === route.params.currentPassword) {
       alert(i18n.t('account.reset_current_same'));
     } else {
-      Api.resetPassword(state.password, route.params.currentPassword)
+      Server.resetPassword(state.password, route.params.currentPassword)
         .then(res => {
           // info페이지로 다시 돌아가게 해야함 !!
           if (res.data.status === 'success') {
@@ -102,7 +103,7 @@ const ResetPassword: FunctionComponent = () => {
             eventHandler={
               state.step === 1
                 ? (input: string) => setState({ ...state, password: input })
-                : () => { }
+                : () => {}
             }
             secure={true}
           />
@@ -115,7 +116,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -135,11 +136,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-              <SubmitButton
-                title={i18n.t('account_label.change')}
-                handler={() => callChangeApi()}
-              />
-            )}
+            <SubmitButton
+              title={i18n.t('account_label.change')}
+              handler={() => callChangeApi()}
+            />
+          )}
         </>
       }
     />

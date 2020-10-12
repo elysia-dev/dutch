@@ -1,7 +1,8 @@
 export type Transaction = {
   id: number;
+  ownershipId?: number;
   value: string;
-  address: string;
+  hash: string;
   transactionType: string;
   createdAt: string;
 };

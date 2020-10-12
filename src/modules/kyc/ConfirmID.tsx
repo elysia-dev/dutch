@@ -1,4 +1,10 @@
-import React, { Component, FunctionComponent, Props, useState } from 'react';
+import React, {
+  Component,
+  FunctionComponent,
+  Props,
+  useContext,
+  useState,
+} from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -6,12 +12,12 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import WarningImg from '../../shared/assets/images/warning_white.png';
-import Api from '../../api/kyc';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import RootContext from '../../contexts/RootContext';
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -45,12 +51,13 @@ type ParamList = {
 const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
+  const { Server } = useContext(RootContext);
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
   // const callKycApi = () => {
   //   const { route, navigation } = this.props;
   //   const { id_type, idPhoto } = route.params;
-  //   Api.photoId(
+  //   Server.photoId(
   //     idPhoto.base64,
   //     id_type === "passport" ? "passport" : "government_id"
   //   )
