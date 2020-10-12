@@ -1,14 +1,15 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text } from '../../shared/components/H1Text';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
+// import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
+import RootContext from '../../contexts/RootContext';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -18,6 +19,7 @@ const InitializeEmail: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
 
   const callEmailApi = () => {
     if (!state.email) {
@@ -25,7 +27,7 @@ const InitializeEmail: FunctionComponent = () => {
       return;
     }
 
-    Api.initializeEmail(state.email)
+    Server.initializeEmail(state.email)
       .then(res => {
         navigation.navigate(
           res.data.status === 'exist'

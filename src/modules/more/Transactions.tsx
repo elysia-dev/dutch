@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useReducer, useState } from 'react';
+import React, { FunctionComponent, useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -15,13 +15,12 @@ import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PText } from '../../shared/components/PText';
 import Filter from './components/Filter';
-import { Api as TransactionApi } from '../../api/transactions';
-import Api from '../../api/product';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text } from '../../shared/components/H1Text';
 import { ProductPicker } from './components/ProductPicker';
+import RootContext from '../../contexts/RootContext';
 
 
 export const initialState = {
@@ -45,6 +44,7 @@ const Transactions: FunctionComponent = () => {
     ],
   });
 
+  const { Server } = useContext(RootContext);
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
       <TransactionBox transaction={transaction} key={index} />
@@ -52,7 +52,7 @@ const Transactions: FunctionComponent = () => {
   );
 
     const filterTransactions = () => {
-      TransactionApi.getTransactionHistory(
+      Server.getTransactionHistory(
         state.page,
         state.start,
         state.end,
@@ -79,7 +79,7 @@ const Transactions: FunctionComponent = () => {
     };
 
   const loadTransactions = () => {
-    TransactionApi.getTransactionHistory(
+    Server.getTransactionHistory(
       state.page,
       state.start,
       state.end,
@@ -106,7 +106,7 @@ const Transactions: FunctionComponent = () => {
   };
 
   const loadProducts = useCallback(() => {
-    Api.getAllProductIds()
+    Server.getAllProductIds()
       .then(res => {
         setState({
           ...productState,

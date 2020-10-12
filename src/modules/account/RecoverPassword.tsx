@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -7,9 +7,9 @@ import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import AcceptedImg from './images/accepted.png';
 import i18n from '../../i18n/i18n';
-import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
+import RootContext from '../../contexts/RootContext';
 
 const Accepted = styled.Image`
   width: 64px;
@@ -31,9 +31,10 @@ const RecoverPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'RecoverPassword'>>();
+  const { Server } = useContext(RootContext);
 
   const callChangeApi = (password: string) => {
-    Api.recoverPassword(route.params.verificationId, password)
+    Server.recoverPassword(route.params.verificationId, password)
       .then(() => {
         setState({ modalVisible: true });
       })

@@ -7,7 +7,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
-import Api from '../../api/questions';
+import RootContext from '../../contexts/RootContext';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -31,12 +31,14 @@ const LabelText = styled.Text`
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
+
   const [state, setState] = useState({
     contents: '',
   });
 
   const callApi = () => {
-    Api.sendQuestion(state.contents)
+    Server.sendQuestion(state.contents)
       .then(res => {
         alert(i18n.t('more.question_submitted'));
         setState({ ...state, contents: '' });

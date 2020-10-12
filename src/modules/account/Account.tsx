@@ -1,23 +1,22 @@
-import React, { FunctionComponent } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import InitializeEmail from "./InitializeEmail";
-import Signup from "./Signup";
-import Login from "./Login";
-import LockAccount from "./LockAccount";
-import CurrentPassword from "./CurrentPassword";
-import ResetPassword from "./ResetPassword";
-import RecoverPassword from "./RecoverPassword";
-import CertifySignup from "./CertifySignup";
-import { AccountPage } from "../../enums/pageEnum";
-import CertifyRecover from "./CertifyRecover";
+import React, { FunctionComponent } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import InitializeEmail from './InitializeEmail';
+import Signup from './Signup';
+import Login from './Login';
+import LockAccount from './LockAccount';
+import CurrentPassword from './CurrentPassword';
+import ResetPassword from './ResetPassword';
+import RecoverPassword from './RecoverPassword';
+import CertifySignup from './CertifySignup';
+import { AccountPage } from '../../enums/pageEnum';
+import CertifyRecover from './CertifyRecover';
 
 const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
   return (
     <Stack.Navigator
       initialRouteName={AccountPage.InitializeEmail}
-      headerMode="none"
-    >
+      headerMode="none">
       <Stack.Screen
         name={AccountPage.InitializeEmail}
         component={InitializeEmail}

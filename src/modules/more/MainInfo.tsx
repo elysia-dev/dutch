@@ -15,7 +15,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import LocaleType from '../../enums/LocaleType';
@@ -49,7 +49,7 @@ const InfoArrowImg = styled.Image`
   resize-mode: center;
 `;
 const MainInfo: FunctionComponent = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(RootContext);
   const navigation = useNavigation();
 
   return (

@@ -1,13 +1,17 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { View, Animated, StatusBar, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import i18n from '../../i18n/i18n';
-import Api from '../../api/product';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
 import ExpendedCard from './components/ExpendedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
+import RootContext from '../../contexts/RootContext';
 
 interface State {
   stories: Story[];
@@ -23,9 +27,10 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
 
   useEffect(() => {
-    Api.storyList()
+    Server.storyList()
       .then(res => {
         setState({ ...state, stories: res.data });
         res.data.forEach(story => {

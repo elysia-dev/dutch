@@ -12,7 +12,7 @@ import latlon from '../latlon';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import ProductInfo from '../ProductBuying';
-import UserContext from '../../../contexts/UserContext';
+import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 
 const H1Text = styled.Text`
@@ -43,7 +43,7 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
     latitude: parseFloat(props.product.data.latitude),
     longitude: parseFloat(props.product.data.longitude),
   };
-  const { locale } = useContext(UserContext);
+  const { locale } = useContext(RootContext);
   const product = props.product;
   const productDescription =
     product.data.descriptions[

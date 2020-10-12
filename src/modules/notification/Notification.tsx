@@ -4,8 +4,9 @@ import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
-import Api from '../../api/notifications';
 import NotificationResponse from '../../types/Notification';
+import Server from '../../api/server';
+import RootContext from '../../contexts/RootContext';
 
 interface Props {
   navigation: NavigationScreenProp<any>;
@@ -21,13 +22,16 @@ export class Notification extends Component<Props, State> {
     super(props);
     this.state = { notificationList: [], scrollY: new Animated.Value(0) };
   }
+  static contextType = RootContext;
+  root = this.context;
 
   callApi() {
     const { navigation } = this.props;
-
-    Api.notification()
-      .then(res => this.setState({ notificationList: res.data }))
-      .catch(e => {
+    this.root.Server.notification()
+      .then((res: { data: any }) =>
+        this.setState({ notificationList: res.data }),
+      )
+      .catch((e: { response: { status: number } }) => {
         if (e.response.status === 401) {
           alert(i18n.t('account.need_login'));
           navigation.navigate('Account');
@@ -37,11 +41,12 @@ export class Notification extends Component<Props, State> {
       });
   }
   componentDidMount() {
+    this.root = this.context;
     this.callApi();
   }
 
   render() {
-    const { navigation } = this.props;
+    this.root = this.context;
     const { scrollY } = this.state;
     const listToShow = this.state.notificationList.map(
       (notification, index) => (
@@ -116,3 +121,4 @@ export class Notification extends Component<Props, State> {
     );
   }
 }
+Notification.contextType = RootContext;

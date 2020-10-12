@@ -1,13 +1,10 @@
 import React, {
-  Component,
   FunctionComponent,
-  useCallback,
   useEffect,
   useState,
 } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Picker,
   Platform,

@@ -9,12 +9,12 @@ import { KycStatus } from '../../enums/KycStatus';
 import Api from '../../api/account';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
-import UserContext from '../../contexts/UserContext';
+import RootContext from '../../contexts/RootContext';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 
 const MyPage: FunctionComponent = () => {
-  const { user, signOut } = useContext(UserContext);
+  const { user, signOut } = useContext(RootContext);
   const navigation = useNavigation();
 
   return (
