@@ -68,12 +68,13 @@ class App extends React.Component<{}, AppState> {
   };
 
   async componentDidMount() {
-    const token = await AsyncStorage.getItem('@token');
-    this.authServer = new Server(this.signOut, token !== null ? token : '');
     await this.signIn();
   }
 
   signIn = async () => {
+    const token = await AsyncStorage.getItem('@token');
+    this.authServer = new Server(this.signOut, token !== null ? token : '');
+
     await this.authServer
       .me()
       .then(async res => {
