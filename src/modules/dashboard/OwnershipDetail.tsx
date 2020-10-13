@@ -155,9 +155,6 @@ const OwnershipDetail: FunctionComponent = () => {
         animationType={'slide'}
         visible={state.refundModalVisible}>
         <OwnershipRefund
-          return={
-            ownership.product ? ownership.product.data.expectedAnnualReturn : ''
-          }
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
         />
       </Modal>

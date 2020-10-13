@@ -10,6 +10,10 @@ export type SummaryReportResponse = {
     averageAnnualReturn: string;
   };
   content: {
+    day0: {
+      dailyProfits: string;
+      dailyValue: string;
+    };
     day1: {
       dailyProfits: string;
       dailyValue: string;
@@ -31,10 +35,6 @@ export type SummaryReportResponse = {
       dailyValue: string;
     };
     day6: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day7: {
       dailyProfits: string;
       dailyValue: string;
     };
