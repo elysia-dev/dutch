@@ -24,6 +24,7 @@ export const authenticatedEspressoClient = (
       if (e.response.status === 401) {
         autoSignOutHandler();
       }
+      return Promise.reject(e);
     },
   );
   return axiosInstance;
