@@ -108,7 +108,10 @@ const OwnershipDetail: FunctionComponent = () => {
       });
   };
 
-  useEffect(() => { callTransactionApi(); callOwnershipApi(ownershipId); }, []);
+  useEffect(() => {
+    callTransactionApi(); callOwnershipApi(ownershipId);
+    return () => { };
+  }, [ownershipId]);
 
   return (
     <ProductInfoWrapper>
