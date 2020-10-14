@@ -22,7 +22,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
         paddingTop: 15,
         paddingBottom: 15,
       }}>
-      <View style={{ flexDirection: 'column' }}>
+      <View style={{ flex: 3, flexDirection: 'column' }}>
         <Text
           style={{
             color: '#1C1C1C',
@@ -92,7 +92,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
       </View>
 
       <View
-        style={{
+        style={{ flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
           alignItems: 'center',
