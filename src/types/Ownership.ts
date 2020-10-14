@@ -6,4 +6,7 @@ export type OwnershipResponse = {
   availableProfit: string;
   stake: string;
   product: Product;
+  isLegacy: boolean;
+  legacyPaymentMethod: string;
+  legacyRefundStatus: string;
 };

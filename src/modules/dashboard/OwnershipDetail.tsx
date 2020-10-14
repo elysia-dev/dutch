@@ -16,10 +16,12 @@ import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
-import { OptionButton } from '../kyc/components/OptionButton';
 import OwnershipRefund from './OwnershipRefund';
 import OptionButtons from './components/OptionButtons';
+import LegacyOptionButtons from './components/LegacyOptionButtons';
 import SliderProductBuying from '../products/SliderProductBuying';
+import LegacyOwnershipRefund from './LagacyOwnershipRefund';
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -43,7 +45,9 @@ const OwnershipDetail: FunctionComponent = () => {
     transactions: transaction,
     transactionCount: 2,
     refundModalVisible: false,
+    legacyRefundModalVisible: false,
     purchaseModalVisible: false,
+    ownership,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
@@ -72,6 +76,31 @@ const OwnershipDetail: FunctionComponent = () => {
         }
       });
   };
+
+  const callLegacyRefundApi = () => {
+    Server.ownershipLegacyRefund(ownershipId)
+      .then(() => {
+        setState({
+          ...state,
+          ownership: {
+            ...state.ownership,
+            legacyRefundStatus: LegacyRefundStatus.PENDING,
+          },
+          legacyRefundModalVisible: false,
+        });
+      })
+      .catch(e => {
+        if (e.response.status === 404) {
+          alert(i18n.t('dashboard.ownership_error'));
+        } else if (e.response.status === 401) {
+          alert(i18n.t('account.need_login'));
+          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
   return (
     <ProductInfoWrapper>
       <ScrollView
@@ -104,18 +133,27 @@ const OwnershipDetail: FunctionComponent = () => {
         </View>
         <OwnershipBasicInfo
           ownership={ownership}
-          children={
-            <OptionButtons
-              productId={ownership.product.id}
-              refundHandler={() =>
-                setState({ ...state, refundModalVisible: !state.refundModalVisible })
-              }
-              purchaseHandler={() =>
-                setState({ ...state, purchaseModalVisible: !state.purchaseModalVisible })
-              }
-            />
+        >
+          {
+            ownership.isLegacy ?
+              <LegacyOptionButtons
+                ownership={state.ownership}
+                refundHandler={() => {
+                  setState({ ...state, legacyRefundModalVisible: !state.legacyRefundModalVisible });
+                }}
+              /> :
+              (<OptionButtons
+                productId={ownership.product.id}
+                refundHandler={() =>
+                  setState({ ...state, refundModalVisible: !state.refundModalVisible })
+                }
+                purchaseHandler={() =>
+                  setState({ ...state, purchaseModalVisible: !state.purchaseModalVisible })
+                }
+              />
+              )
           }
-        />
+        </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           {transactionList}
           <TouchableOpacity
@@ -141,15 +179,17 @@ const OwnershipDetail: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {(state.purchaseModalVisible || state.refundModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}></View>
-      )}
+      {(state.purchaseModalVisible ||
+        state.refundModalVisible ||
+        state.legacyRefundModalVisible) && (
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
       <Modal
         transparent={true}
         animationType={'slide'}
@@ -167,6 +207,15 @@ const OwnershipDetail: FunctionComponent = () => {
             ownership.product ? ownership.product.data.expectedAnnualReturn : ''
           }
           modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.legacyRefundModalVisible}>
+        <LegacyOwnershipRefund
+          modalHandler={() => setState({ ...state, legacyRefundModalVisible: false })}
+          submitHandler={() => callLegacyRefundApi()}
         />
       </Modal>
     </ProductInfoWrapper>
