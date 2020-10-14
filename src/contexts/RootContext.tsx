@@ -19,6 +19,7 @@ type RootContextType = {
   };
   signIn: () => void;
   signOut: () => void;
+  autoSignOut: () => void;
   unreadNotificationCount: number;
   notifications: Notification[];
   setUnreadNotificationCount: (value: number) => void;
@@ -40,6 +41,7 @@ const RootContext = createContext<RootContextType>({
   },
   signIn: async () => { },
   signOut: async () => { },
+  autoSignOut: async () => { },
   notifications: [] as Notification[],
   unreadNotificationCount: 0,
   setUnreadNotificationCount: (value: number) => { },

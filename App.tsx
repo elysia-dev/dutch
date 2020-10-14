@@ -69,6 +69,11 @@ class App extends React.Component<{}, AppState> {
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
     this.setState(defaultState);
+  };
+
+  autoSignOut = async () => {
+    await AsyncStorage.removeItem('@token');
+    this.setState(defaultState);
     this.navigationRef.current.navigate('Account', { screen: AccountPage.ExpiredAccount });
   };
 
@@ -79,7 +84,7 @@ class App extends React.Component<{}, AppState> {
 
   signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
-    this.authServer = new Server(this.signOut, token !== null ? token : '');
+    this.authServer = new Server(this.autoSignOut, token !== null ? token : '');
     await this.authServer
       .me()
       .then(async res => {
@@ -115,6 +120,7 @@ class App extends React.Component<{}, AppState> {
             ...this.state,
             signIn: this.signIn,
             signOut: this.signOut,
+            autoSignOut: this.autoSignOut,
             setUnreadNotificationCount: (value: number) => {
               this.setState({
                 unreadNotificationCount: value >= 0 ? value : 0,
