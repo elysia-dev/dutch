@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 
 import { NavigationContainer, NavigationProp } from '@react-navigation/native';
@@ -70,7 +69,6 @@ class App extends React.Component<{}, AppState> {
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
     this.setState(defaultState);
-    console.log(this.navigationRef.current);
     this.navigationRef.current.navigate('Account', { screen: AccountPage.ExpiredAccount });
   };
 
