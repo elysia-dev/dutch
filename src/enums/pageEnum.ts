@@ -37,6 +37,7 @@ export enum MorePage {
   TransactionHistory = 'TransactionHistory',
   Contact = 'Contact',
   Faq = 'Faq',
+  Setting = 'Setting',
 }
 
 export enum DashboardPage {
