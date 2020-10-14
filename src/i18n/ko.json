@@ -32,7 +32,9 @@
     "lockdown": "계정이 잠겼습니다!",
     "lockdown_text": "로그인 시도 5회 실패로 인해 보호조치 되었어요. 이메일 주소로 전송된 인증코드를 입력 해주세요.",
     "resending_code_mail_label": "혹시 메일이 오지 않았나요?",
-    "resending_code_mail_link": "다시 전송하기"
+    "resending_code_mail_link": "다시 전송하기",
+    "expired_logout": "장시간 이용이 없어서\n안전한 투자 보호를 위해\n로그아웃 되었습니다.",
+    "login_again": "로그인 하기"
   },
   "account_errors": {
     "wrong_email": "잘못된 이메일 형식이에요.",

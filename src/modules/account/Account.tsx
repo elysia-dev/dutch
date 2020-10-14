@@ -10,6 +10,7 @@ import RecoverPassword from './RecoverPassword';
 import CertifySignup from './CertifySignup';
 import { AccountPage } from '../../enums/pageEnum';
 import CertifyRecover from './CertifyRecover';
+import ExpiredAccount from './ExpiredAccount';
 
 const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
@@ -45,6 +46,10 @@ export const Account: FunctionComponent = () => {
       <Stack.Screen
         name={AccountPage.CertifyRecover}
         component={CertifyRecover}
+      />
+      <Stack.Screen
+        name={AccountPage.ExpiredAccount}
+        component={ExpiredAccount}
       />
     </Stack.Navigator>
   );
