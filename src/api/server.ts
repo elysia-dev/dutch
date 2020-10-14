@@ -16,12 +16,12 @@ import { KycResponse, PhotoResponse } from '../types/Kyc';
 export default class Server {
   token: string;
   authenticatedEspressoClient: AxiosInstance;
-  signOutHandler: () => void;
-  constructor(signOutHandler: () => void, token: string) {
-    this.signOutHandler = signOutHandler;
+  autoSignOutHandler: () => void;
+  constructor(autoSignOutHandler: () => void, token: string) {
+    this.autoSignOutHandler = autoSignOutHandler;
     this.token = token;
     this.authenticatedEspressoClient = authenticatedEspressoClient(
-      this.signOutHandler,
+      this.autoSignOutHandler,
       this.token,
     );
   }

@@ -28,6 +28,7 @@ export enum AccountPage {
   ResetPassword = 'ResetPassword',
   CertifySignup = 'CertifySignup',
   CertifyRecover = 'CertifyRecover',
+  ExpiredAccount = 'ExpiredAccount'
 }
 
 export enum MorePage {

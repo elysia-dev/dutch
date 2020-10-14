@@ -1,6 +1,7 @@
 import React from 'react';
+import i18n from 'i18n-js';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -21,6 +22,7 @@ import Notification from './src/types/Notification';
 import StorybookUI from './storybook/index';
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
+import { AccountPage } from './src/enums/pageEnum';
 
 interface AppState {
   signedIn: boolean;
@@ -62,18 +64,27 @@ class App extends React.Component<{}, AppState> {
     this.state = defaultState;
   }
 
+  navigationRef = React.createRef<NavigationContainerRef>();
+
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
     this.setState(defaultState);
   };
 
+  autoSignOut = async () => {
+    await AsyncStorage.removeItem('@token');
+    this.setState(defaultState);
+    this.navigationRef.current?.navigate('Account', { screen: AccountPage.ExpiredAccount });
+  };
+
   async componentDidMount() {
     await this.signIn();
+    if (!this.state.locale) i18n.locale = this.state.locale;
   }
 
   signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
-    this.authServer = new Server(this.signOut, token !== null ? token : '');
+    this.authServer = new Server(this.autoSignOut, token !== null ? token : '');
     await this.authServer
       .me()
       .then(async res => {
@@ -103,12 +114,13 @@ class App extends React.Component<{}, AppState> {
     const RootStack = createStackNavigator();
 
     return (
-      <NavigationContainer>
+      <NavigationContainer ref={this.navigationRef}>
         <RootContext.Provider
           value={{
             ...this.state,
             signIn: this.signIn,
             signOut: this.signOut,
+            autoSignOut: this.autoSignOut,
             setUnreadNotificationCount: (value: number) => {
               this.setState({
                 unreadNotificationCount: value >= 0 ? value : 0,

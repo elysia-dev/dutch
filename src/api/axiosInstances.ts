@@ -8,7 +8,7 @@ export const baseURL = `http://${(manifest.debuggerHost || 'localhost')
   .shift()}:3000`;
 
 export const authenticatedEspressoClient = (
-  signOutHandler: () => void,
+  autoSignOutHandler: () => void,
   token: string,
 ) => {
   const axiosInstance = axios.create({
@@ -22,7 +22,7 @@ export const authenticatedEspressoClient = (
     },
     e => {
       if (e.response.status === 401) {
-        signOutHandler();
+        autoSignOutHandler();
       }
     },
   );
