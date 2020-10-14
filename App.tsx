@@ -1,7 +1,7 @@
 import React from 'react';
 import i18n from 'i18n-js';
 
-import { NavigationContainer, NavigationProp } from '@react-navigation/native';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -64,7 +64,7 @@ class App extends React.Component<{}, AppState> {
     this.state = defaultState;
   }
 
-  navigationRef: React.RefObject<any> = React.createRef();
+  navigationRef = React.createRef<NavigationContainerRef>();
 
   signOut = async () => {
     await AsyncStorage.removeItem('@token');
@@ -74,7 +74,7 @@ class App extends React.Component<{}, AppState> {
   autoSignOut = async () => {
     await AsyncStorage.removeItem('@token');
     this.setState(defaultState);
-    this.navigationRef.current.navigate('Account', { screen: AccountPage.ExpiredAccount });
+    this.navigationRef.current?.navigate('Account', { screen: AccountPage.ExpiredAccount });
   };
 
   async componentDidMount() {
