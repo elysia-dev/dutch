@@ -41,7 +41,7 @@ const ValueText = styled.Text`
   font-weight: bold;
 `;
 
-type props = React.PropsWithChildren<{ownership: OwnershipResponse}>;
+type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
@@ -93,17 +93,21 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
-          <GText>{ownership.product.title}</GText>
+          <GText>{`${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ""}`}</GText>
           <H1Text>{`$ ${parseFloat(ownership.value).toFixed(2)}`}</H1Text>
-          <GText
-            onPress={() => {
-              Linking.openURL(
-                `https://etherscan.io/token/${ownership.product.contractAddress}`,
-              );
-            }}
-            style={{ fontSize: 12, textDecorationLine: 'underline' }}>
-            {ownership.product.contractAddress}
-          </GText>
+          {
+            !ownership.isLegacy &&
+            <GText
+              onPress={() => {
+                Linking.openURL(
+                  `https://etherscan.io/token/${ownership.product.contractAddress}`,
+                );
+              }}
+              style={{ fontSize: 12, textDecorationLine: 'underline' }}>
+              {ownership.product.contractAddress}
+            </GText>
+
+          }
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <TouchableOpacity
@@ -198,18 +202,21 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             2,
           )}`}</ValueText>
         </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <GText>{i18n.t('dashboard_label.available_interest')}</GText>
-          <ValueText>{`$ ${parseFloat(ownership.availableProfit).toFixed(
-            2,
-          )}`}</ValueText>
-        </View>
+        {
+          !ownership.isLegacy &&
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <GText>{i18n.t('dashboard_label.available_interest')}</GText>
+            <ValueText>{`$ ${parseFloat(ownership.availableProfit).toFixed(
+              2,
+            )}`}</ValueText>
+          </View>
+        }
       </View>
       {props.children}
     </View>
