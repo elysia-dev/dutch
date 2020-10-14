@@ -1,10 +1,11 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { Component, FunctionComponent } from 'react';
+import React, { Component, FunctionComponent, useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
 import styled from 'styled-components/native';
+import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { SummaryReportResponse } from '../../types/SummaryReport';
+import { defaultSummaryReportResponse, SummaryReportResponse } from '../../types/SummaryReport';
 import { AssetGraphCard } from './components/AssetGraphCard';
 import { AssetValueGraphCard } from './components/AssetValueGraphCard';
 import { AverageReturnCard } from './components/AverageReturnCard';
@@ -19,16 +20,24 @@ const H1Text = styled.Text`
   margin-bottom: 30px;
 `;
 
-type ParamList = {
-  SummaryReport: {
-    report: SummaryReportResponse;
-  };
-};
-
 export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'SummaryReport'>>();
-  const { report } = route.params;
+  const { Server } = useContext(RootContext);
+  const [report, setReport] = useState(defaultSummaryReportResponse);
+
+  const callSummaryApi = () => {
+    Server.getSummaryReport()
+      .then((res) => {
+        setReport(res.data);
+      })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  useEffect(() => { callSummaryApi(); }, []);
 
   return (
     <ScrollView

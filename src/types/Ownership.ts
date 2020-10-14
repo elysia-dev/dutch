@@ -1,4 +1,4 @@
-import Product from './product';
+import Product, { defaultProduct } from './Product';
 
 export type OwnershipResponse = {
   value: string;
@@ -9,4 +9,15 @@ export type OwnershipResponse = {
   isLegacy: boolean;
   legacyPaymentMethod: string;
   legacyRefundStatus: string;
+};
+
+export const defaultOwnershipResponse = {
+  value: '',
+  expectProfit: '',
+  availableProfit: '',
+  stake: '',
+  product: defaultProduct,
+  isLegacy: false,
+  legacyPaymentMethod: '',
+  legacyRefundStatus: '',
 };

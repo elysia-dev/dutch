@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -10,7 +10,7 @@ import {
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { BackButton } from '../../shared/components/BackButton';
-import { OwnershipResponse } from '../../types/Ownership';
+import { defaultOwnershipResponse, OwnershipResponse } from '../../types/Ownership';
 import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
@@ -30,9 +30,7 @@ const ProductInfoWrapper = styled.SafeAreaView`
 
 type ParamList = {
   OwnershipDetail: {
-    ownership: OwnershipResponse;
     ownershipId: number;
-    transaction: Transaction[];
   };
 };
 
@@ -40,14 +38,14 @@ const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
   const { Server } = useContext(RootContext);
-  const { ownership, ownershipId, transaction } = route.params;
+  const { ownershipId } = route.params;
   const [state, setState] = useState({
-    transactions: transaction,
-    transactionCount: 2,
+    ownership: defaultOwnershipResponse,
+    transactions: [] as Transaction[],
+    transactionCount: 1,
     refundModalVisible: false,
     legacyRefundModalVisible: false,
     purchaseModalVisible: false,
-    ownership,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
@@ -56,21 +54,33 @@ const OwnershipDetail: FunctionComponent = () => {
   const callTransactionApi = () => {
     Server.getTransaction(ownershipId, state.transactionCount)
       .then(res => {
-        if (res.data.length === 0) {
+        if (res.data.length === 0 && state.transactionCount > 1) {
           alert(i18n.t('dashboard.last_transaction'));
+        } else {
+          setState({
+            ...state,
+            transactions: state.transactions.concat(res.data),
+            transactionCount: state.transactionCount + 1,
+          });
         }
-        setState({
-          ...state,
-          transactions: state.transactions.concat(res.data),
-          transactionCount: state.transactionCount + 1,
-        });
       })
       .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('dashboard.ownership_error'));
-        } else if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  const callOwnershipApi = async (id: number) => {
+    Server.ownershipDetail(id)
+      .then((res) => {
+        setState({ ...state, ownership: res.data });
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t('dashboard.ownership_error'));
         } else if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -92,14 +102,13 @@ const OwnershipDetail: FunctionComponent = () => {
       .catch(e => {
         if (e.response.status === 404) {
           alert(i18n.t('dashboard.ownership_error'));
-        } else if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
         } else if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
   };
+
+  useEffect(() => { callTransactionApi(); callOwnershipApi(ownershipId); }, []);
 
   return (
     <ProductInfoWrapper>
@@ -116,7 +125,7 @@ const OwnershipDetail: FunctionComponent = () => {
             borderBottomRightRadius: 10,
           }}>
           <Image
-            source={{ uri: ownership.product.data.images[0] }}
+            source={{ uri: state.ownership.product.data.images[0] }}
             style={{
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,
@@ -132,10 +141,10 @@ const OwnershipDetail: FunctionComponent = () => {
           </View>
         </View>
         <OwnershipBasicInfo
-          ownership={ownership}
+          ownership={state.ownership}
         >
           {
-            ownership.isLegacy ?
+            state.ownership.isLegacy ?
               <LegacyOptionButtons
                 ownership={state.ownership}
                 refundHandler={() => {
@@ -143,7 +152,7 @@ const OwnershipDetail: FunctionComponent = () => {
                 }}
               /> :
               (<OptionButtons
-                productId={ownership.product.id}
+                productId={state.ownership.product.id}
                 refundHandler={() =>
                   setState({ ...state, refundModalVisible: !state.refundModalVisible })
                 }
@@ -204,7 +213,7 @@ const OwnershipDetail: FunctionComponent = () => {
         visible={state.purchaseModalVisible}>
         <SliderProductBuying
           return={
-            ownership.product ? ownership.product.data.expectedAnnualReturn : ''
+            state.ownership.product ? state.ownership.product.data.expectedAnnualReturn : ''
           }
           modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
         />

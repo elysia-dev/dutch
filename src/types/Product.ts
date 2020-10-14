@@ -1,4 +1,4 @@
-import ProductDescription from './ProductDescription';
+import ProductDescription, { defaultProductDescription } from './ProductDescription';
 import LocaleType from '../enums/LocaleType';
 
 export type Story = {
@@ -40,6 +40,34 @@ type Product = {
 export type ProductId = {
   productId: number;
   title: string;
+};
+
+export const defaultProduct = {
+  id: 0,
+  title: '',
+  contractAddress: '',
+  totalValue: 0,
+  data: {
+    type: '',
+    languages: [] as LocaleType[],
+    images: [] as string[],
+    buildingCompletionDate: '',
+    expectedAnnualReturn: '',
+    returnOnRent: '',
+    returnOnSale: '',
+    pricePerToken: '',
+    propertyPrice: '',
+    netDeposit: '',
+    netRentPerYear: '',
+    bankLoan: '',
+    latitude: '',
+    longitude: '',
+    descriptions: {
+      en: defaultProductDescription,
+      ko: defaultProductDescription,
+      ch: defaultProductDescription,
+    },
+  },
 };
 
 export default Product;

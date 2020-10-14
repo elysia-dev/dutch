@@ -1,5 +1,5 @@
 export type SummaryReportResponse = {
-  id: number;
+  id: 0;
   type: string;
   summary: {
     totalBalance: string;
@@ -40,4 +40,48 @@ export type SummaryReportResponse = {
     };
     ownerships: [];
   };
+};
+
+export const defaultSummaryReportResponse = {
+  id: 0,
+  type: '',
+  summary: {
+    totalBalance: '0',
+    totalRealEstateValue: '0',
+    totalInterest: '0',
+    withdrawnInterest: '0',
+    withdrawableInterest: '0',
+    averageAnnualReturn: '0',
+  },
+  content: {
+    day0: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day1: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day2: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day3: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day4: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day5: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    day6: {
+      dailyProfits: '0',
+      dailyValue: '0',
+    },
+    ownerships: [],
+  },
 };
