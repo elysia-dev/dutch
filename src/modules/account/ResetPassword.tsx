@@ -50,8 +50,6 @@ const ResetPassword: FunctionComponent = () => {
         .catch(e => {
           if (e.response.status === 400) {
             alert(i18n.t('account.reset_error'));
-          } else if (e.response.status === 401) {
-            alert(i18n.t('account.recover_verification_error'));
           } else if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
           }
@@ -73,7 +71,7 @@ const ResetPassword: FunctionComponent = () => {
             }}
           />
           <View>
-            <H1Text label={i18n.t('account_label.change_password')}/>
+            <H1Text label={i18n.t('account_label.change_password')} />
             <H1Text
               style={{ marginBottom: 15, marginTop: 0 }}
               label={
@@ -102,7 +100,7 @@ const ResetPassword: FunctionComponent = () => {
             eventHandler={
               state.step === 1
                 ? (input: string) => setState({ ...state, password: input })
-                : () => {}
+                : () => { }
             }
             secure={true}
           />
@@ -115,7 +113,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -135,11 +133,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-            <SubmitButton
-              title={i18n.t('account_label.change')}
-              handler={() => callChangeApi()}
-            />
-          )}
+              <SubmitButton
+                title={i18n.t('account_label.change')}
+                handler={() => callChangeApi()}
+              />
+            )}
         </>
       }
     />
