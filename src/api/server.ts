@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import AsyncStorage from '@react-native-community/async-storage';
-import axios, { AxiosInstance, AxiosResponse, AxiosStatic } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
@@ -154,6 +154,13 @@ export default class Server {
   ): Promise<AxiosResponse<OwnershipResponse>> => {
     return this.authenticatedEspressoClient.get(`/ownerships/${id}`);
   };
+
+  ownershipLegacyRefund = async (
+    id: number,
+  ): Promise<AxiosResponse<void>> => {
+    return this.authenticatedEspressoClient.post(`/ownerships/${id}/legacyRefund`);
+  };
+
   storyList = async (): Promise<AxiosResponse<Story[]>> => {
     return this.authenticatedEspressoClient.get('/products/stories');
   };
