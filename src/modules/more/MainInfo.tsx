@@ -20,6 +20,7 @@ import { MorePage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
+import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import LocaleType from '../../enums/LocaleType';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
@@ -31,6 +32,24 @@ const ExchangeBithumbImg = styled.Image`
   flex: 1;
   height: 60px;
   resize-mode: center;
+`;
+const KycNoneButton = styled.TouchableOpacity`
+  color: #1c1c1c;
+  width: 90%;
+  margin: 5px auto;
+  height: 70px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: solid 1.5px #3679b5;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  z-index: 5;
+`;
+const KycNoneButtonImg = styled.Image`
+  height: 67px;
+  z-index: 0;
+  margin-left: auto;
 `;
 const ExchangeBobooImg = styled.Image`
   width: 40%;
@@ -112,7 +131,7 @@ const MainInfo: FunctionComponent = () => {
         <TouchableOpacity
           style={{ marginLeft: 'auto' }}
           onPress={() => {
-            navigation.navigate('More', { screen: MorePage.MyPage });
+            navigation.navigate('More', { screen: MorePage.Setting });
           }}>
           <InfoHeaderSettingImg
             source={require('./images/setting.png')}
