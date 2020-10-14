@@ -279,7 +279,8 @@
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
-    "last_transaction": "마지막 트랜잭션 내역입니다."
+    "last_transaction": "마지막 트랜잭션 내역입니다.",
+    "no_ownership": "투자 내역이 없습니다.\n지금 엘리시아와 함께 투자를 시작해 보세요."
   },
   "day": {
     "0": "일",
