@@ -25,12 +25,31 @@ import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import { TitleText } from '../../shared/components/TitleText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
   flex: 1;
   height: 60px;
   resize-mode: center;
+`;
+const KycNoneButton = styled.TouchableOpacity`
+  color: #1c1c1c;
+  width: 90%;
+  margin: 5px auto;
+  height: 70px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: solid 1.5px #3679b5;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  z-index: 5;
+`;
+const KycNoneButtonImg = styled.Image`
+  height: 67px;
+  z-index: 0;
+  margin-left: auto;
 `;
 const ExchangeBobooImg = styled.Image`
   width: 40%;
@@ -137,7 +156,9 @@ const MainInfo: FunctionComponent = () => {
             height: 350,
           }}>
           {user.kycStatus === KycStatus.NONE && (
-            <SubmitButton
+            <View>
+            <KycNoneButton
+              onPress={() => navigation.navigate('Kyc')}
               style={{
                 shadowOffset: { width: 2, height: 1 },
                 shadowColor: '#00000064',
@@ -145,12 +166,29 @@ const MainInfo: FunctionComponent = () => {
                 shadowRadius: 6,
                 height: 70,
                 elevation: 6,
-              }}
-              duplicateTitle={i18n.t('more_label.need_kyc_duplicate_label')}
-              title={i18n.t('more_label.need_kyc')}
-              handler={() => navigation.navigate('Kyc')}
-            />
-          )}
+              }}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  textAlign: 'left',
+                  marginLeft: '6%',
+                  paddingTop: 12,
+                }}>
+                {i18n.t('more_label.need_kyc_duplicate_label')}
+                <Text
+                  style={{
+                    fontSize: 15,
+                    textAlign: 'left',
+                    fontWeight: 'bold',
+                  }}>
+                  {'\n'}
+                  {i18n.t('more_label.need_kyc')}
+                </Text>
+              </Text>
+              <KycNoneButtonImg source={kycNoneButtonPng} />
+            </KycNoneButton>
+          </View>
+        )}
           {user.kycStatus === KycStatus.PENDING && (
             <SubmitButton
               style={{
@@ -381,63 +419,6 @@ const MainInfo: FunctionComponent = () => {
                   />
                 </View>
               </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <View
-            style={{
-              marginLeft: '5%',
-              marginRight: '5%',
-              paddingTop: 25,
-              paddingBottom: 15,
-            }}>
-            <H1Text
-              label={i18n.t('more_label.app_setting')}
-              style={{ marginBottom: 15 }}
-            />
-            <H1Text
-              style={{ fontSize: 16, marginTop: 10 }}
-              label={i18n.t('more_label.language')}
-            />
-            <View
-              style={{
-                borderColor: '#d6d6d8',
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderRadius: 5,
-                height: 50,
-                marginBottom: 20,
-                marginTop: 10,
-              }}>
-              {Platform.OS === 'android' ? (
-                <Picker style={{}}>
-                  <Picker.Item label="한국어" value="ko" />
-                  <Picker.Item label="English" value="en" />
-                  <Picker.Item label="简体中文" value="zh-hans" />
-                </Picker>
-              ) : (
-                  <RNPickerSelect
-                    style={pickerSelectStyles}
-                    onValueChange={async (value: LocaleType) => {
-                      await AsyncStorage.setItem('@locale', value);
-                    }}
-                    items={[
-                      { label: '한국어', value: LocaleType.KO },
-                      { label: 'English', value: LocaleType.EN },
-                      { label: '简体中文', value: LocaleType.CH },
-                    ]}
-                    placeholder={{
-                      label: 'Select your app language',
-                      value: '',
-                      color: '#1C1C1C',
-                    }}
-                  />
-                )}
             </View>
           </View>
         </View>
