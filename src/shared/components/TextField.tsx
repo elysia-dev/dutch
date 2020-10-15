@@ -8,7 +8,7 @@ interface Props {
   value?: string;
   editable?: boolean;
   onFocused?: boolean;
-  autocapitalize?: "none" | "sentences" | "words" | "characters" | undefined;
+  autocapitalize?: 'none' | 'sentences' | 'words' | 'characters' | undefined;
   eventHandler: (text: string) => void;
   secure?: boolean;
   autoFocus?: boolean;
@@ -44,9 +44,12 @@ const HelperLabel = styled.Text`
   font-size: 12px;
   color: #1c1c1c;
 `;
-export const TextField: FunctionComponent<Props> = (
-  { onFocused = false, autocapitalize = 'none', focusHandler = () => { }, ...props },
-) => {
+export const TextField: FunctionComponent<Props> = ({
+  onFocused = false,
+  autocapitalize = 'none',
+  focusHandler = () => {},
+  ...props
+}) => {
   const [focusing, setFocus] = useState(onFocused);
   // const [VaildationImage, setVaildationImage] = useState(props.helperIcon);
 
@@ -59,8 +62,8 @@ export const TextField: FunctionComponent<Props> = (
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-                ? '#2C6190'
-                : '#A7A7A7',
+              ? '#3679B5'
+              : '#A7A7A7',
         }}>
         {props.label}
       </LabelText>
@@ -71,8 +74,8 @@ export const TextField: FunctionComponent<Props> = (
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-                ? '#2C6190'
-                : '#A7A7A7',
+              ? '#3679B5'
+              : '#A7A7A7',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
         }}
@@ -83,9 +86,15 @@ export const TextField: FunctionComponent<Props> = (
         secureTextEntry={props.secure}
         maxLength={30}
         autoCapitalize={autocapitalize}
-        onBlur={() => { setFocus(false); focusHandler(false); }}
+        onBlur={() => {
+          setFocus(false);
+          focusHandler(false);
+        }}
         placeholder={props.placeHolder}
-        onFocus={() => { setFocus(true); focusHandler(true); }}
+        onFocus={() => {
+          setFocus(true);
+          focusHandler(true);
+        }}
       />
       {props.helperText !== undefined && (
         <HelperWrapper>
