@@ -5,11 +5,12 @@ import MainInfo from './MainInfo';
 import MyPage from './Mypage';
 import Contact from './Contact';
 import Faq from './Faq';
+import Setting from './Setting';
 import Transactions from './Transactions';
 import ElysiaNotice from './ElysiaNotice';
 import ResetPassword from '../account/ResetPassword';
 import CurrentPassword from '../account/CurrentPassword';
-
+import Setting from './Setting';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export const More = () => {
       <Stack.Screen name={MorePage.Contact} component={Contact} />
       <Stack.Screen name={MorePage.Transactions} component={Transactions} />
       <Stack.Screen name={MorePage.ElysiaNotice} component={ElysiaNotice} />
+      <Stack.Screen name={MorePage.Setting} component={Setting} />
       <Stack.Screen
         name={AccountPage.CurrentPassword}
         component={CurrentPassword}
@@ -30,6 +32,7 @@ export const More = () => {
         name={AccountPage.ResetPassword}
         component={ResetPassword}
       />
+      <Stack.Screen name={MorePage.Setting} component={Setting} />
     </Stack.Navigator>
   );
 };

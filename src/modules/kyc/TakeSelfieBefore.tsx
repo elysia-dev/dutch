@@ -54,107 +54,139 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
   const route = useRoute<RouteProp<ParamList, 'TakeSelfieBefore'>>();
 
   return (
-    <WrapperLayout
-      isBackbutton={true}
-      isScrolling={false}
-      title={
-        <>
-          <BackButton handler={() => navigation.navigate(KycPage.ConfirmID)} />
-          <H1Text
-            label={i18n.t('kyc.step2')}
-            style={{ marginTop: 40, marginBottom: 6 }}
-          />
-          <PText
-            label={i18n.t('kyc.step2_text')}
-            style={{ marginBottom: 23, color: '#626368' }}
-          />
-        </>
-      }
-      body={
-        <>
-          <Container>
-            <Selfie source={SelfieBeforePng} />
-          </Container>
-          <View style={{ marginLeft: '5%' }}>
-            <View style={{ flexDirection: 'row', marginBottom: 26 }}>
-              <InformationCircle />
-              <PText
-                label={i18n.t('kyc.step2_desc1')}
-                style={{ fontSize: 15, lineHeight: 15 }}
-              />
+    <>
+      <WrapperLayout
+        backButtonHandler={() => navigation.navigate(KycPage.ConfirmID)}
+        isScrolling={false}
+        title={i18n.t('kyc.step2')
+        }
+        subTitle={<PText
+          label={i18n.t('kyc.step2_text')}
+          style={{ color: '#626368', marginBottom: 15 }}
+        />}
+        body={
+          <>
+            <Container>
+              <Selfie source={SelfieBeforePng} />
+            </Container>
+            <View style={{ marginLeft: '5%', marginRight: '5%' }}>
+              <View style={{ flexDirection: 'row', marginBottom: 26 }}>
+                <InformationCircle />
+                <PText
+                  label={i18n.t('kyc.step2_desc1')}
+                  style={{ fontSize: 15, lineHeight: 15 }}
+                />
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <InformationCircle />
+                <PText
+                  label={i18n.t('kyc.step2_desc2')}
+                  style={{ fontSize: 15, lineHeight: 15 }}
+                />
+              </View>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <InformationCircle />
-              <PText
-                label={i18n.t('kyc.step2_desc2')}
-                style={{ fontSize: 15, lineHeight: 15 }}
-              />
-            </View>
-          </View>
+          </>
+        }
+        button={
+          <SubmitButton
+            title={i18n.t('kyc_label.shoot')}
+            handler={() => setState({ modalVisible: true })}
+          />
+        }
+      />
+      {state.modalVisible === true && (
+        <>
+          <View
+            style={{
+              top: 20,
+              position: 'absolute',
+              height: '100%',
+              width: '100%',
+              zIndex: 999,
+              backgroundColor: '#000000',
+              opacity: 0.6,
+            }}
+          />
+          <Modal
+            child={
+              <View>
+                <H1Text
+                  style={{ textAlign: 'center', marginBottom: 10 }}
+                  label={i18n.t('kyc.take_selfie_before_title')}
+                />
+                <PText
+                  style={{
+                    textAlign: 'center',
+                    marginBottom: 10,
+                    color: '#626368',
+                  }}
+                  label={i18n.t('kyc.decline_warning')}
+                />
+                <View
+                  style={{
+                    backgroundColor: '#F1F1F1',
+                    borderRadius: 10,
+                    width: '100%',
+                    padding: 18,
+                    marginBottom: 32,
+                  }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <InformationCircle />
+                    <PText
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                      label={i18n.t('kyc.decline_case1')}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <InformationCircle />
+                    <PText
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                      label={i18n.t('kyc.decline_case2')}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <InformationCircle />
+                    <PText
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                      label={i18n.t('kyc.decline_case3')}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <InformationCircle />
+                    <PText
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                      label={i18n.t('kyc.decline_case4')}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <InformationCircle />
+                    <PText
+                      style={{ fontSize: 14, lineHeight: 14 }}
+                      label={i18n.t('kyc.decline_case5')}
+                    />
+                  </View>
+                </View>
+                <SubmitButton
+                  title={i18n.t('kyc.accepted_shoot')}
+                  handler={() => {
+                    setState({ modalVisible: false });
+                    navigation.navigate(KycPage.TakeSelfie, {
+                      id_type: route.params.id_type,
+                      // photoId_hash: photoId_hash,
+                      idPhoto: route.params.idPhoto,
+                    });
+                  }}
+                  style={{ width: '100%', right: '5%' }}
+                />
+              </View>
+            }
+            modalHandler={() => {
+              setState({ modalVisible: false });
+            }}
+            visible={state.modalVisible}></Modal>
         </>
-      }
-      button={
-        <SubmitButton
-          title={i18n.t('kyc_label.shoot')}
-          handler={() => setState({ modalVisible: true })}
-          style={{ marginBottom: 10 }}
-        />
-      }
-    />
-    // <TakeSelfieBeforeWrapper>
-    //   {state.modalVisible === true && (
-    //     <Modal
-    //       child={
-    //         <View>
-    //           <H1Text style={{ textAlign: 'center' }}>
-    //             {i18n.t('kyc.take_selfie_before_title')}
-    //           </H1Text>
-    //           <PText style={{ textAlign: 'center', marginBottom: 10 }}>
-    //             {i18n.t('kyc.decline_warning')}
-    //           </PText>
-    //           <View
-    //             style={{
-    //               backgroundColor: '#F1F1F1',
-    //               borderRadius: 10,
-    //               width: '100%',
-    //               padding: 15,
-    //               marginBottom: 10,
-    //             }}>
-    //             <PText style={{ marginBottom: 5 }}>
-    //               {i18n.t('kyc.decline_case1')}
-    //             </PText>
-    //             <PText style={{ marginBottom: 5 }}>
-    //               {i18n.t('kyc.decline_case2')}
-    //             </PText>
-    //             <PText style={{ marginBottom: 5 }}>
-    //               {i18n.t('kyc.decline_case3')}
-    //             </PText>
-    //             <PText style={{ marginBottom: 5 }}>
-    //               {i18n.t('kyc.decline_case4')}
-    //             </PText>
-    //             <PText style={{ marginBottom: 5 }}>
-    //               {i18n.t('kyc.decline_case5')}
-    //             </PText>
-    //           </View>
-    //           <SubmitButton
-    //             title={i18n.t('kyc.accepted_shoot')}
-    //             handler={() => {
-    //               setState({ modalVisible: false });
-    //               navigation.navigate(KycPage.TakeSelfie, {
-    //                 id_type: route.params.id_type,
-    //                 // photoId_hash: photoId_hash,
-    //                 idPhoto: route.params.idPhoto,
-    //               });
-    //             }}
-    //           />
-    //         </View>
-    //       }
-    //       modalHandler={() => {
-    //         setState({ modalVisible: false });
-    //       }}
-    //       visible={state.modalVisible}></Modal>
-    //   )}
-    // </TakeSelfieBeforeWrapper>
+      )}
+    </>
   );
 };
 export default TakeSelfieBefore;

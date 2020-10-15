@@ -1,33 +1,15 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
+import { PText } from '../../shared/components/PText';
+import { TitleText } from '../../shared/components/TitleText';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-weight: bold;
-  font-size: 28px;
-  text-align: left;
-  margin-bottom: 10px;
-`;
-const PText = styled.Text`
-  color: #5c5b5b;
-  font-size: 12px;
-  text-align: left;
-  margin-bottom: 30px;
-`;
-const LabelText = styled.Text`
-  color: #1c1c1c;
-  font-size: 14px;
-  text-align: left;
-  margin-bottom: 25px;
-`;
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -52,28 +34,26 @@ const Contact: FunctionComponent = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#fff',
-      }}>
-      <ScrollView>
-        <View style={{ padding: 20, paddingTop: 0 }}>
-          <BackButton
-            handler={() => {
-              navigation.goBack();
-            }}
-            style={{ marginTop: 10, marginBottom: 10 }}
-          />
-          <H1Text>{i18n.t('more_label.contact')}</H1Text>
-          <PText>{i18n.t('more.contact_text')}</PText>
+    <WrapperLayout
+      isScrolling={false}
+      backButtonHandler={() => {
+        navigation.goBack();
+      }}
+      subTitle={<PText
+        label={i18n.t('more.contact_text')}
+        style={{ marginBottom: 10, color: '#5c5b5b' }}
+      />}
+      title={i18n.t('more_label.contact')}
+      body={
+        <>
           <View
             style={{
+              marginLeft: '5%',
+              marginRight: '5%',
               paddingLeft: 15,
               paddingRight: 15,
-              paddingTop: 30,
-              paddingBottom: 30,
+              paddingTop: 15,
+              paddingBottom: 15,
               borderRadius: 10,
               backgroundColor: '#fff',
               shadowOffset: { width: 0, height: 2 },
@@ -81,10 +61,14 @@ const Contact: FunctionComponent = () => {
               shadowOpacity: 0.8,
               shadowRadius: 6,
               marginBottom: 30,
+              elevation: 6,
+              zIndex: 1,
             }}>
             {/* <LabelText>{i18n.t("more.elysia_contact")}</LabelText> */}
-            <LabelText>{'Contact'}</LabelText>
-
+            <PText
+              label={'Contact'}
+              style={{ fontSize: 14, marginBottom: 25 }}
+            />
             <TextArea
               eventHandler={(input: string) =>
                 setState({ ...state, contents: input })
@@ -98,14 +82,16 @@ const Contact: FunctionComponent = () => {
                 marginTop: 2,
               }}>{`${state.contents.length}/1000`}</Text>
           </View>
-        </View>
-      </ScrollView>
-      <SubmitButton
-        style={{ marginBottom: 15, position: 'absolute', bottom: 0 }}
-        title={i18n.t('kyc_label.submit')}
-        handler={() => callApi()}
-      />
-    </SafeAreaView>
+        </>
+      }
+      button={
+        <SubmitButton
+          style={{ zIndex: 999 }}
+          title={i18n.t('kyc_label.submit')}
+          handler={() => callApi()}
+        />
+      }
+    />
   );
 };
 

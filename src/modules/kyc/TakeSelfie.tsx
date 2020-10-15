@@ -22,18 +22,27 @@ import RecordPng from './images/recordbutton.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
 import { Photo } from '../../types/Photo';
+import WrapperLayout from '../../shared/components/WrapperLayout';
+import { H1Text } from '../../shared/components/H1Text';
+import { PText } from '../../shared/components/PText';
+import CameraPermissionPng from './images/cameraPermission.png';
+import { SubmitButton } from '../../shared/components/SubmitButton';
 
 const ButtonImg = styled.Image`
   width: 47px;
   height: 47px;
 `;
-
-const PText = styled.Text`
-  color: #fff;
-  font-size: 15px;
-  text-align: center;
-  margin-top: 13px;
+const CameraPermissionImg = styled.Image`
+  width: 209px;
+  margin: 20% auto 15px auto;
 `;
+
+// const PText = styled.Text`
+//   color: #fff;
+//   font-size: 15px;
+//   text-align: center;
+//   margin-top: 13px;
+// `;
 const TakeSelfieWrapper = styled.View`
   flex: 1;
   background-color: #000000;
@@ -137,7 +146,36 @@ const TakeSelfie: FunctionComponent<{}> = () => {
   };
 
   if (state.hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <WrapperLayout
+        title={' '}
+        backButtonHandler={() => {
+          navigation.goBack();
+        }}
+        isScrolling={false}
+        body={
+          <>
+            <CameraPermissionImg source={CameraPermissionPng} />
+            <H1Text
+              label={i18n.t('kyc.camera_access_denied')}
+              style={{ textAlign: 'center', marginTop: 28 }}
+            />
+            <PText
+              label={i18n.t('kyc.camera_access_denied_text')}
+              style={{ textAlign: 'center', marginTop: 10, color: '#626368' }}
+            />
+          </>
+        }
+        button={
+          <SubmitButton
+            title={i18n.t('kyc_label.camera_access_return')}
+            handler={() => {
+              navigation.goBack();
+            }}
+          />
+        }
+      />
+    );
   } else {
     return (
       <TakeSelfieWrapper>
@@ -163,7 +201,10 @@ const TakeSelfie: FunctionComponent<{}> = () => {
               flexDirection: 'column',
               top: 220,
             }}>
-            <PText>{i18n.t('kyc.step2_text')}</PText>
+            <PText
+                label={i18n.t('kyc.step2_text')}
+                style={{ fontSize: 15, color: '#FFF', textAlign: 'center' }}
+              />
           </View>
           <BottomCameraWrapper>
             <BottomButtonWrapper>

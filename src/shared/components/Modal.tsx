@@ -18,7 +18,7 @@ const ModalView = styled.View`
   box-shadow: 0px 2px 2px #000;
 `;
 const ModalBtnWrapper = styled.View`
-  width: 80%;
+  width: 90%;
 `;
 const ModalButton = styled.TouchableHighlight`
   border-radius: 20px;

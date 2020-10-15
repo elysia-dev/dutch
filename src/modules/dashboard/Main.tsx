@@ -7,7 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
@@ -43,6 +43,8 @@ export const Main: FunctionComponent = () => {
   const { Server } = useContext(RootContext);
   const [state, setState] = useState({ user: defaultUser, ownerships: [defaultOwnerships], balance: '0' });
 
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
 
   const callApi = () => {
     Server.me()
@@ -80,6 +82,7 @@ export const Main: FunctionComponent = () => {
 
   return (
     <ScrollView
+      ref={ref}
       style={{
         width: '100%',
         height: '100%',
