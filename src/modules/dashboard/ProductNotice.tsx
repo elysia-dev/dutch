@@ -1,14 +1,16 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
+import RootContext from '../../contexts/RootContext';
+import { DashboardPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
 
 type ParamList = {
   ProductNotice: {
-    posts: PostResponse[];
+    productId: number;
   };
 };
 
@@ -68,16 +70,32 @@ export const Notice: FunctionComponent<Props> = props => {
 const ProductNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductNotice'>>();
-  const { posts } = route.params;
+  const { productId } = route.params;
+  const { Server } = useContext(RootContext);
   const [state, setState] = useState({
     full: false,
+    posts: [] as PostResponse[],
   });
 
-  const fullPostsList = posts.map((post, index) => (
+  const fullPostsList = state.posts.map((post, index) => (
     <Notice post={post} key={index} />
   ));
 
   const previewPostsList = fullPostsList.slice(0, 5);
+
+  const callPostApi = () => {
+    Server.productPost(productId)
+      .then(res => {
+        setState({ ...state, posts: res.data });
+      })
+      .catch(e => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  useEffect(() => { callPostApi(); }, []);
 
   return (
     <ScrollView

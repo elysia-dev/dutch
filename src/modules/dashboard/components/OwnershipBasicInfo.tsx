@@ -46,40 +46,6 @@ type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
-  const { Server } = useContext(RootContext);
-
-  const callPostApi = () => {
-    Server.productPost(ownership.product.id)
-      .then(res => {
-        navigation.navigate(DashboardPage.ProductNotice, { posts: res.data });
-      })
-      .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
-  };
-
-  const callDocsApi = () => {
-    Server.productDocs(ownership.product.id)
-      .then(res => {
-        navigation.navigate(DashboardPage.ProductData, {
-          product: ownership.product,
-          docs: res.data,
-        });
-      })
-      .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
-  };
 
   return (
     <View
@@ -112,7 +78,9 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <TouchableOpacity
             onPress={() => {
-              callDocsApi();
+              navigation.navigate(DashboardPage.ProductData, {
+                product: ownership.product,
+              });
             }}
             style={{
               width: 44,
@@ -139,7 +107,9 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => callPostApi()}
+            onPress={() =>
+              navigation.navigate(DashboardPage.ProductNotice, { productId: ownership.product.id })
+            }
             style={{
               marginLeft: 10,
               width: 44,

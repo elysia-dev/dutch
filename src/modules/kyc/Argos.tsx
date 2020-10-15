@@ -14,7 +14,7 @@ interface Props {
   updateAgree: () => void;
 }
 export const Argos: FunctionComponent<Props> = (props: Props) => {
-  const { locale } = useContext(UserContext);
+  const { locale } = useContext(RootContext);
   const localeTerms = terms[locale === LocaleType.KO ? locale : LocaleType.EN];
 
   return (

@@ -3,3 +3,9 @@ export type DocsResponse = {
   leaseContract: string;
   stakeCertificate: string;
 };
+
+export const defaultDocsResponse = {
+  shareholderCertificate: '',
+  leaseContract: '',
+  stakeCertificate: '',
+};

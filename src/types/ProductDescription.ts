@@ -16,4 +16,22 @@ type ProductDescription = {
   summary: string;
 };
 
+export const defaultProductDescription = {
+  currencyUnit: '',
+  monthlyRentIncomeDistributionCycle: '',
+  address: '',
+  lockupPeriod: '',
+  expectedSaleDate: '',
+  propertyType: '',
+  ground: '',
+  underground: '',
+  bedroom: '',
+  bathroom: '',
+  airConditioning: '',
+  heating: '',
+  securityFacilities: '',
+  totalParkingAvailable: '',
+  summary: '',
+};
+
 export default ProductDescription;

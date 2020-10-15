@@ -11,7 +11,6 @@ import NotificationBlackPng from '../../shared/assets/images/notification_black.
 import NotificationPng from '../../shared/assets/images/notification.png';
 import OptionsPng from '../../shared/assets/images/options.png';
 import OptionsBlackPng from '../../shared/assets/images/options_black.png';
-
 import MainInfo from '../more/MainInfo';
 import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
@@ -62,7 +61,6 @@ const Main: FunctionComponent = () => {
         name="Notificati onMain"
         component={Notifications}
         options={{
-          // tabBarBadge: this.state.unreadNotificationCount,
           tabBarLabel: '',
           tabBarIcon: ({ focused }) => (
             <View>

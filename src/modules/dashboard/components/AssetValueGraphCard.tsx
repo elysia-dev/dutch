@@ -53,7 +53,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
   const data = props.ownerships.map((value, index) => parseFloat(value[1]));
   const totalValue = data.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;
-  });
+  }, 0);
 
   const color = [
     '#3679B5',
@@ -205,24 +205,32 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <PieChart
-        style={{ height: 200 }}
-        data={pieData}
-        outerRadius={'100%'}
-        innerRadius={'70%'}
-        padAngle={0}
-      />
-      <View
-        style={{
-          width: '100%',
-          top: 20,
-          padding: 20,
-          borderRadius: 10,
-          borderWidth: 1,
-          borderColor: '#F1F1F1',
-        }}>
-        {state.profit ? assetProfitLabel : assetPercentLabel}
-      </View>
+      {!totalValue ?
+        <>
+          <Image source={require('../images/noownership.png')} style={{ width: "85%", height: 200, resizeMode: 'center' }} />
+          <Text style={{ marginTop: 20, textAlign: 'center', color: '#1C1C1C', fontSize: 15 }}>{i18n.t('dashboard.no_ownership')}</Text>
+        </> : (
+          <>
+            <PieChart
+              style={{ height: 200 }}
+              data={pieData}
+              outerRadius={'100%'}
+              innerRadius={'70%'}
+              padAngle={0}
+            />
+            <View
+              style={{
+                width: '100%',
+                top: 20,
+                padding: 20,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#F1F1F1',
+              }}>
+              {state.profit ? assetProfitLabel : assetPercentLabel}
+            </View>
+          </>
+        )}
     </View>
   );
 };

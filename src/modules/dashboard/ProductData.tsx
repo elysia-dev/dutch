@@ -1,8 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
+import RootContext from '../../contexts/RootContext';
+import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { DocsResponse } from '../../types/Docs';
+import { defaultDocsResponse } from '../../types/Docs';
 import Product from '../../types/product';
 import { Transaction } from '../../types/Transaction';
 import { Map } from '../products/components/Map';
@@ -12,14 +14,29 @@ import OwnershipWrappedInfo from './components/OwnershipWrappedInfo';
 type ParamList = {
   OwnershipProduct: {
     product: Product;
-    docs: DocsResponse;
   };
 };
 
 const ProductData: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipProduct'>>();
-  const { product, docs } = route.params;
+  const { product } = route.params;
+  const [docs, setDocs] = useState(defaultDocsResponse);
+  const { Server } = useContext(RootContext);
+
+  const callDocsApi = () => {
+    Server.productDocs(product.id)
+      .then(res => {
+        setDocs(res.data);
+      })
+      .catch(e => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  useEffect(() => { callDocsApi(); }, []);
 
   return (
     <ScrollView

@@ -31,11 +31,8 @@ export class Notification extends Component<Props, State> {
       .then((res: { data: any }) =>
         this.setState({ notificationList: res.data }),
       )
-      .catch((e: { response: { status: number } }) => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-          navigation.navigate('Account');
-        } else if (e.response.status === 500) {
+      .catch((e) => {
+        if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });

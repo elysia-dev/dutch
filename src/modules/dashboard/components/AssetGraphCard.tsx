@@ -71,13 +71,13 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
     .map((day, index) => day.value)
     .reduce((min, current) => {
       return Math.min(min, current);
-    });
+    }, 0);
 
   const maxProfit = profit
     .map((day, index) => day.value)
     .reduce((max, current) => {
       return Math.max(max, current);
-    });
+    }, 0);
 
   const value = [
     parseFloat(props.content.day0.dailyValue),
@@ -91,11 +91,11 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
 
   const minValue = value.reduce((min, currentValue) => {
     return Math.min(min, currentValue);
-  });
+  }, 0);
 
   const maxValue = value.reduce((max, currentValue) => {
     return Math.max(max, currentValue);
-  });
+  }, 0);
 
   const Decorator = ({ x, y }) => {
     return value.map((value: number, index: number) => (

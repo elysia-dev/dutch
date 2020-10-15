@@ -51,32 +51,30 @@ const Transactions: FunctionComponent = () => {
     ),
   );
 
-    const filterTransactions = () => {
-      Server.getTransactionHistory(
-        state.page,
-        state.start,
-        state.end,
-        state.type,
-        state.period,
-        state.productId,
-      )
-        .then(res => {
-          if (res.data.length === 0 && state.page > 1) {
-            return alert(i18n.t('dashboard.last_transaction'));
-          }
-          dispatch({
-            type: 'UPDATE_TRANSACTIONS',
-            transactions: res.data,
-          });
-        })
-        .catch(e => {
-          if (e.response.status === 401) {
-            alert(i18n.t('account.need_login'));
-          } else if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
-          }
+  const filterTransactions = () => {
+    Server.getTransactionHistory(
+      state.page,
+      state.start,
+      state.end,
+      state.type,
+      state.period,
+      state.productId,
+    )
+      .then(res => {
+        if (res.data.length === 0 && state.page > 1) {
+          return alert(i18n.t('dashboard.last_transaction'));
+        }
+        dispatch({
+          type: 'UPDATE_TRANSACTIONS',
+          transactions: res.data,
         });
-    };
+      })
+      .catch(e => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
 
   const loadTransactions = () => {
     Server.getTransactionHistory(
@@ -97,9 +95,7 @@ const Transactions: FunctionComponent = () => {
         });
       })
       .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-        } else if (e.response.status === 500) {
+        if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
@@ -129,9 +125,7 @@ const Transactions: FunctionComponent = () => {
         });
       })
       .catch(e => {
-        if (e.response.status === 401) {
-          alert(i18n.t('account.need_login'));
-        } else if (e.response.status === 500) {
+        if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
@@ -220,35 +214,35 @@ const Transactions: FunctionComponent = () => {
             </Text>
           </View>
         ) : (
-          <>
-            {historyList}
-            <TouchableOpacity
-              onPress={() => {
-                dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
-                loadTransactions();
-              }}
-              style={{
-                width: '100%',
-                height: 50,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: '#A7A7A7',
-                justifyContent: 'center',
-                alignContent: 'center',
-                marginTop: 15,
-                marginBottom: 40,
-              }}>
-              <Text
+            <>
+              {historyList}
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
+                  loadTransactions();
+                }}
                 style={{
-                  color: '#4E4E4E',
-                  fontSize: 17,
-                  textAlign: 'center',
+                  width: '100%',
+                  height: 50,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: '#A7A7A7',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginTop: 15,
+                  marginBottom: 40,
                 }}>
-                {i18n.t('dashboard_label.more_transactions')}
-              </Text>
-            </TouchableOpacity>
-          </>
-        )}
+                <Text
+                  style={{
+                    color: '#4E4E4E',
+                    fontSize: 17,
+                    textAlign: 'center',
+                  }}>
+                  {i18n.t('dashboard_label.more_transactions')}
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
       </ScrollView>
       {state.modal && (
         <View
@@ -260,15 +254,15 @@ const Transactions: FunctionComponent = () => {
           }}></View>
       )}
       <Modal transparent={true} animationType={'slide'} visible={state.modal}>
-        <Filter children={ <ProductPicker
-        loadProducts={() => loadProducts()}
-        productList={productState}
+        <Filter children={<ProductPicker
+          loadProducts={() => loadProducts()}
+          productList={productState}
           style={{ marginBottom: 30 }}
           dispatch={dispatch}
           filter={state}
         />
         }
-        dispatch={dispatch} filter={state} filterTransactions={() => filterTransactions()}/>
+          dispatch={dispatch} filter={state} filterTransactions={() => filterTransactions()} />
       </Modal>
     </SafeAreaView>
   );
