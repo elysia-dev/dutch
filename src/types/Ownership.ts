@@ -12,10 +12,10 @@ export type OwnershipResponse = {
 };
 
 export const defaultOwnershipResponse = {
-  value: '',
-  expectProfit: '',
-  availableProfit: '',
-  stake: '',
+  value: '0',
+  expectProfit: '0',
+  availableProfit: '0',
+  stake: '0',
   product: defaultProduct,
   isLegacy: false,
   legacyPaymentMethod: '',
