@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import {
   Platform,
   KeyboardAvoidingView,
+  GestureResponderEvent,
   View,
   Animated,
   Text,
@@ -19,9 +20,9 @@ const Wrapper = styled.SafeAreaView`
 
 interface Props {
   title: string;
-  subTitle?: any;
+  subTitle?: React.ReactNode;
   body: React.ReactNode;
-  backButtonHandler?: any;
+  backButtonHandler?: (event: GestureResponderEvent) => void;
   isScrolling: boolean;
   button?: React.ReactNode;
 }
