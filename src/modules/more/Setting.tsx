@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { View, Picker, StyleSheet, Switch, Platform } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
@@ -12,12 +12,14 @@ import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
+import RootContext from '../../contexts/RootContext';
 
 interface Props {
   resetHandler: () => void;
 }
 
 const Setting: FunctionComponent<Props> = (props: Props) => {
+  const { changeLanguage } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: false,
@@ -33,9 +35,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       },
     );
   };
+
   useEffect(
     initializeState,
-  []);
+    []);
 
   const activityToggleButton = () => {
     setState({ ...state, hasPermission: !state.hasPermission });
@@ -146,25 +149,30 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   onValueChange={(itemValue) => {
                     changeI18n(itemValue);
                     setState({ ...state, selectedValue: i18n.currentLocale() });
+                    changeLanguage(i18n.currentLocale() as LocaleType);
                   }}
-                  >
+                >
                   {TermListAnd}
                 </Picker>
               ) : (
-                <RNPickerSelect
-                  style={pickerSelectStyles}
-                  onClose={() => setState({ ...state, selectedValue: i18n.currentLocale() })}
-                  onValueChange={(itemValue) => {
-                    changeI18n(itemValue);
-                  }}
-                  items={TermListIos}
-                  placeholder={{
-                    label: 'Select your app language',
-                    value: '',
-                    color: '#1C1C1C',
-                  }}
-                />
-              )}
+                  <RNPickerSelect
+                    style={pickerSelectStyles}
+                    onClose={() => {
+                      setState({ ...state, selectedValue: i18n.currentLocale() });
+                      changeLanguage(i18n.currentLocale() as LocaleType);
+                    }
+                    }
+                    onValueChange={(itemValue) => {
+                      changeI18n(itemValue);
+                    }}
+                    items={TermListIos}
+                    placeholder={{
+                      label: 'Select your app language',
+                      value: '',
+                      color: '#1C1C1C',
+                    }}
+                  />
+                )}
             </View>
           </View>
         </>

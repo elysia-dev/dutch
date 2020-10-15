@@ -36,6 +36,7 @@ interface AppState {
     language: LocaleType;
     ethAddresses: string[];
   };
+  changeLanguage: () => void;
   unreadNotificationCount: number;
   notifications: Notification[];
 }
@@ -52,6 +53,7 @@ const defaultState = {
     language: LocaleType.KO,
     ethAddresses: [],
   },
+  changeLanguage: () => { },
   unreadNotificationCount: 0,
   notifications: [],
 };
@@ -118,6 +120,7 @@ class App extends React.Component<{}, AppState> {
         <RootContext.Provider
           value={{
             ...this.state,
+            changeLanguage: (input) => { this.setState({ ...this.state, locale: input }); },
             signIn: this.signIn,
             signOut: this.signOut,
             autoSignOut: this.autoSignOut,
