@@ -20,12 +20,12 @@ import { MorePage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
+import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import LocaleType from '../../enums/LocaleType';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
 import { TitleText } from '../../shared/components/TitleText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -154,41 +154,42 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
             height: 350,
+            marginTop: 30,
           }}>
           {user.kycStatus === KycStatus.NONE && (
             <View>
-            <KycNoneButton
-              onPress={() => navigation.navigate('Kyc')}
-              style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-                height: 70,
-                elevation: 6,
-              }}>
-              <Text
+              <KycNoneButton
+                onPress={() => navigation.navigate('Kyc')}
                 style={{
-                  fontSize: 13,
-                  textAlign: 'left',
-                  marginLeft: '6%',
-                  paddingTop: 12,
+                  shadowOffset: { width: 2, height: 1 },
+                  shadowColor: '#00000064',
+                  shadowOpacity: 0.8,
+                  shadowRadius: 6,
+                  height: 70,
+                  elevation: 6,
                 }}>
-                {i18n.t('more_label.need_kyc_duplicate_label')}
                 <Text
                   style={{
-                    fontSize: 15,
+                    fontSize: 13,
                     textAlign: 'left',
-                    fontWeight: 'bold',
+                    marginLeft: '6%',
+                    paddingTop: 12,
                   }}>
-                  {'\n'}
-                  {i18n.t('more_label.need_kyc')}
+                  {i18n.t('more_label.need_kyc_duplicate_label')}
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      textAlign: 'left',
+                      fontWeight: 'bold',
+                    }}>
+                    {'\n'}
+                    {i18n.t('more_label.need_kyc')}
+                  </Text>
                 </Text>
-              </Text>
-              <KycNoneButtonImg source={kycNoneButtonPng} />
-            </KycNoneButton>
-          </View>
-        )}
+                <KycNoneButtonImg source={kycNoneButtonPng} />
+              </KycNoneButton>
+            </View>
+          )}
           {user.kycStatus === KycStatus.PENDING && (
             <SubmitButton
               style={{
