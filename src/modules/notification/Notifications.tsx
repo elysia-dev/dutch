@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { View, Animated, RefreshControl, Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
 import RootContext from '../../contexts/RootContext';
@@ -17,6 +17,10 @@ const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
   const navigation = useNavigation();
+
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
+
   const { Server } = useContext(RootContext);
 
   const {
@@ -124,6 +128,7 @@ const Notifications: FunctionComponent = () => {
         </Animated.Text>
       </Animated.View>
       <Animated.ScrollView
+        ref={ref}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [

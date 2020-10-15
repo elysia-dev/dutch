@@ -10,7 +10,7 @@ import {
   Animated,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import AsyncStorage from '@react-native-community/async-storage';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -73,6 +73,8 @@ const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const { user } = useContext(RootContext);
   const navigation = useNavigation();
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
 
   return (
     <View
@@ -139,6 +141,7 @@ const MainInfo: FunctionComponent = () => {
         </TouchableOpacity>
       </Animated.View>
       <Animated.ScrollView
+        ref={ref}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [
@@ -264,7 +267,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -330,7 +333,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -405,7 +408,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',

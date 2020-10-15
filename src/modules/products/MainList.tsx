@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { View, Animated, StatusBar, Image, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
@@ -28,6 +28,9 @@ const MainList: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const { Server } = useContext(RootContext);
+
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
 
   useEffect(() => {
     Server.storyList()
@@ -53,6 +56,7 @@ const MainList: FunctionComponent = () => {
         backgroundColor: '#FFF',
       }}>
       <ScrollView
+        ref={ref}
         scrollEventThrottle={16}
         style={{ width: '100%', paddingHorizontal: 20 }}>
         <Animated.View
