@@ -39,7 +39,6 @@ export enum MorePage {
   Transactions = 'Transactions',
   Filter = 'Filter',
   ElysiaNotice = 'ElysiaNotice',
-
   Setting = 'Setting',
 }
 
