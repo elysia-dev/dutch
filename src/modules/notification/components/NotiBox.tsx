@@ -1,10 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
+import { DashboardPage } from '../../../enums/pageEnum';
 
 interface Props {
   notification: Notification;
@@ -51,6 +53,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   };
   const status = props.notification.status;
   const data = props.notification.data;
+  const navigation = useNavigation();
 
   return (
     <View
@@ -60,7 +63,13 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         height: 120,
       }}>
       <TouchableOpacity
-        onPress={() => props.readNotification(props.notification)}>
+        onPress={() => {
+          props.readNotification(props.notification);
+          if (type === NotificationType.PRODUCT_NOTICE) {
+            navigation.navigate('Dashboard', { screen: DashboardPage.ProductNotice, params: { productId: data.productId } });
+          }
+        }
+        }>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
             <Image
@@ -111,20 +120,18 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               alignContent: 'center',
               justifyContent: 'center',
             }}>
-            {!(
-              type === NotificationType.PROFIT ||
-              type === NotificationType.SUCCESS_KYC ||
-              type === NotificationType.NEW_DEVICE
-            ) && (
-              <Image
-                style={{ resizeMode: 'center', width: 6, height: 9 }}
-                source={images[9][status === 'read' ? 0 : 1]}
-              />
-            )}
+            {
+              type === NotificationType.PRODUCT_NOTICE
+              && (
+                <Image
+                  style={{ resizeMode: 'center', width: 6, height: 9 }}
+                  source={images[9][status === 'read' ? 0 : 1]}
+                />
+              )}
           </View>
         </View>
       </TouchableOpacity>
-    </View>
+    </View >
   );
 };
 
