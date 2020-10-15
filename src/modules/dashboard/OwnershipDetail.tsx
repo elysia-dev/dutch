@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useContext, useEffect, useState } from 'react';
 import {
   View,
   ScrollView,
@@ -7,7 +7,7 @@ import {
   Text,
   Modal,
 } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { defaultOwnershipResponse, OwnershipResponse } from '../../types/Ownership';
@@ -73,20 +73,6 @@ const OwnershipDetail: FunctionComponent = () => {
       });
   };
 
-  const callOwnershipApi = async (id: number) => {
-    Server.ownershipDetail(id)
-      .then((res) => {
-        setState({ ...state, ownership: res.data });
-      })
-      .catch((e) => {
-        if (e.response.status === 400) {
-          alert(i18n.t('dashboard.ownership_error'));
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
-  };
-
   const callLegacyRefundApi = () => {
     Server.ownershipLegacyRefund(ownershipId)
       .then(() => {
@@ -108,9 +94,28 @@ const OwnershipDetail: FunctionComponent = () => {
       });
   };
 
+  const loadOwnership = async () => {
+    try {
+      const transactions = await Server.getTransaction(ownershipId, state.transactionCount);
+      const ownership = await Server.ownershipDetail(ownershipId);
+      setState({
+        ...state,
+        transactions: transactions.data,
+        transactionCount: state.transactionCount + 1,
+        ownership: ownership.data,
+      });
+    } catch (e) {
+      if (e.response.status === 400) {
+        alert(i18n.t('dashboard.ownership_error'));
+      } else if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+      }
+    }
+  };
+
+
   useEffect(() => {
-    callTransactionApi(); callOwnershipApi(ownershipId);
-    return () => { };
+    loadOwnership();
   }, [ownershipId]);
 
   return (
