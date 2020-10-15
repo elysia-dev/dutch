@@ -146,8 +146,8 @@ const MainInfo: FunctionComponent = () => {
                 height: 70,
                 elevation: 6,
               }}
-              duplicateTitle={i18n.t('more_label.need_kyc_duplicate_label')}
-              title={i18n.t('more_label.need_kyc')}
+              duplicateTitle={i18n.t('more_label.none_kyc_duplicate_label')}
+              title={i18n.t('more_label.none_kyc')}
               handler={() => navigation.navigate('Kyc')}
             />
           )}
@@ -162,9 +162,9 @@ const MainInfo: FunctionComponent = () => {
                 elevation: 6,
               }}
               duplicateTitle={i18n.t(
-                'more_label.proceed_kyc_duplicate_label',
+                'more_label.pending_kyc_duplicate_label',
               )}
-              title={i18n.t('more_label.proceed_kyc')}
+              title={i18n.t('more_label.pending_kyc')}
               handler={() => {
                 alert(i18n.t('more.kyc_proceeding_wait'));
               }}
@@ -182,9 +182,9 @@ const MainInfo: FunctionComponent = () => {
                 elevation: 6,
               }}
               duplicateTitle={i18n.t(
-                'more_label.approved_kyc_duplicate_label',
+                'more_label.success_kyc_duplicate_label',
               )}
-              title={i18n.t('more_label.approved_kyc')}
+              title={i18n.t('more_label.success_kyc')}
               handler={() => { }}
               variant={'GrayTheme'}
             />
@@ -225,7 +225,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -291,7 +291,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -366,7 +366,7 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => {}}>
+                onPress={() => { }}>
                 <View
                   style={{
                     flexDirection: 'row',
