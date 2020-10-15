@@ -48,4 +48,5 @@ export enum DashboardPage {
   OwnershipDetail = 'OwnershipDetail',
   ProductData = 'ProductData',
   ProductNotice = 'ProductNotice',
+  PreparingInvestment = 'PreparingInvestment'
 }
