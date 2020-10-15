@@ -9,8 +9,7 @@ import Transactions from './Transactions';
 import ElysiaNotice from './ElysiaNotice';
 import ResetPassword from '../account/ResetPassword';
 import CurrentPassword from '../account/CurrentPassword';
-
-// import Setting from './Setting';
+import Setting from './Setting';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +30,7 @@ export const More = () => {
         name={AccountPage.ResetPassword}
         component={ResetPassword}
       />
-      {/* <Stack.Screen name={MorePage.Setting} component={Setting} /> */}
+      <Stack.Screen name={MorePage.Setting} component={Setting} />
     </Stack.Navigator>
   );
 };

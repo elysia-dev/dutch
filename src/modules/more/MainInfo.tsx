@@ -131,7 +131,7 @@ const MainInfo: FunctionComponent = () => {
         <TouchableOpacity
           style={{ marginLeft: 'auto' }}
           onPress={() => {
-            navigation.navigate('More', { screen: MorePage.MyPage });
+            navigation.navigate('More', { screen: MorePage.Setting });
           }}>
           <InfoHeaderSettingImg
             source={require('./images/setting.png')}
