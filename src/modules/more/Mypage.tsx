@@ -11,6 +11,8 @@ import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import { H1Text } from '../../shared/components/H1Text';
 import { PText } from '../../shared/components/PText';
+import { TitleText } from '../../shared/components/TitleText';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const InfoArrowImg = styled.Image`
   width: 5px;

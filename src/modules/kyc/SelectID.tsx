@@ -48,18 +48,13 @@ const SelectID: FunctionComponent<{}> = props => {
 
   return (
     <WrapperLayout
-      title={
-        <>
-          <BackButton handler={() => navigation.goBack()} />
-          <TitleText label={i18n.t('kyc.step1')} />
-          <PText
-            label={i18n.t('kyc.step1_text')}
-            style={{ color: '#626368', marginBottom: 42 }}
-          />
-        </>
-      }
+      backButtonHandler={() => navigation.goBack()}
+      title={i18n.t('kyc.step1')}
+      subTitle={<PText
+        label={i18n.t('kyc.step1_text')}
+        style={{ color: '#626368', marginBottom: 42 }}
+      />}
       isScrolling={false}
-      isBackbutton={true}
       body={
         <>
           <OptionButton

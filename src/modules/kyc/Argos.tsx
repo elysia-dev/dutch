@@ -6,7 +6,6 @@ import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 
 
@@ -19,9 +18,8 @@ export const Argos: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <WrapperLayout
-      title={<TitleText label={i18n.t('kyc_label.argos_terms')} />}
       isScrolling={false}
-      isBackbutton={false}
+      title={i18n.t('kyc_label.argos_terms')}
       body={
         <ScrollView
           style={{ marginLeft: '5%', marginRight: '5%', height: '70%' }}>

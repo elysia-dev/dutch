@@ -1,7 +1,14 @@
-import React, { FunctionComponent, PropsWithRef } from 'react';
-import { Platform, KeyboardAvoidingView, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import React, { FunctionComponent, useState } from 'react';
+import {
+  Platform,
+  KeyboardAvoidingView,
+  View,
+  Animated,
+  Text,
+} from 'react-native';
+import { AnyStyledComponent } from 'styled-components';
 import styled from 'styled-components/native';
+import { BackButton } from './BackButton';
 
 const Wrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
@@ -11,9 +18,10 @@ const Wrapper = styled.SafeAreaView`
 `;
 
 interface Props {
-  title: React.ReactNode;
+  title: string;
+  subTitle?: any;
   body: React.ReactNode;
-  isBackbutton: boolean; // 버튼이 없을때에도 title의 margin-top 부분을 동일하게 만들기 위함
+  backButtonHandler?: any;
   isScrolling: boolean;
   button?: React.ReactNode;
 }
@@ -31,27 +39,99 @@ const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
     <View style={{ flex: 1 }}>{props.children}</View>
   );
 
-const ScrollingView: FunctionComponent<Scrolling> = props => {
-  return props.Scrolling === true ? (
-    <ScrollView style={{ flex: 1 }}>{props.children}</ScrollView>
-  ) : (
-    <View style={{ flex: 1 }}>{props.children}</View>
-  );
-};
 const WrapperLayout: FunctionComponent<Props> = props => {
+  const [scrollY] = useState(new Animated.Value(0));
+  const ScrollingView: FunctionComponent<Scrolling> = props => {
+    return props.Scrolling === true ? (
+      <Animated.ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: { y: scrollY },
+              },
+            },
+          ],
+          { useNativeDriver: true },
+        )}
+        style={{ flex: 1 }}>
+        {props.children}
+      </Animated.ScrollView>
+    ) : (
+      <View style={{ flex: 1 }}>{props.children}</View>
+    );
+  };
   return (
     <Wrapper>
-      <ScrollingView Scrolling={props.isScrolling}>
-        <ConditionalKeyboardAvoidingView>
-          <View
+      <Animated.View
+        style={{
+          marginLeft: '5%',
+          marginRight: '5%',
+          marginTop: props.backButtonHandler !== undefined ? 0 : 68,
+        }}>
+        {props.backButtonHandler !== undefined && (
+          <BackButton handler={props.backButtonHandler} />
+        )}
+        <Animated.View
+          style={{
+            transform: [
+              {
+                translateX: scrollY.interpolate({
+                  inputRange: [-1000, 0, 50, 1000],
+                  outputRange: [0, 0, 30, 30],
+                }),
+              },
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [-1000, 0, 50, 1000],
+                  outputRange: [0, 0, -57, -57],
+                }),
+              },
+            ],
+          }}>
+          <Animated.Text
             style={{
-              marginLeft: '5%',
-              marginRight: '5%',
-              marginTop: props.isBackbutton === false ? 68 : 0,
+              position: 'absolute',
+              fontSize: 25,
+              fontWeight: 'bold',
+              transform: [
+                {
+                  scale: scrollY.interpolate({
+                    inputRange: [-1000, 0, 50, 1000],
+                    outputRange: [1, 1, 0.8, 0.8],
+                  }),
+                },
+              ],
             }}>
             {props.title}
-          </View>
-          <View style={{ marginTop: 30 }}>{props.body}</View>
+          </Animated.Text>
+          <Animated.Text
+            style={{
+              position: 'absolute',
+              top: 40,
+              transform: [
+                {
+                  translateX: scrollY.interpolate({
+                    inputRange: [-1000, 0, 50, 1000],
+                    outputRange: [0, 0, -30, -30],
+                  }),
+                },
+                {
+                  translateY: scrollY.interpolate({
+                    inputRange: [-1000, 0, 50, 1000],
+                    outputRange: [0, 0, 0, 0],
+                  }),
+                },
+              ],
+            }}>
+            {props.subTitle}
+          </Animated.Text>
+        </Animated.View>
+      </Animated.View>
+      <ScrollingView Scrolling={props.isScrolling}>
+        <ConditionalKeyboardAvoidingView>
+          <View style={{ marginTop: 60 }}>{props.body}</View>
           {props.button !== undefined && (
             <View style={{ marginTop: 'auto', marginBottom: 20 }}>
               {props.button}

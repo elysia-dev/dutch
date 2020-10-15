@@ -50,37 +50,29 @@ const StartKYC: FunctionComponent<{}> = () => {
   });
   return (
     <WrapperLayout
-      title={
+      backButtonHandler={() => {
+        navigation.goBack();
+      }}
+      title={i18n.t('kyc.start')}
+      subTitle={
         <>
-          <BackButton
-            handler={() => {
-              navigation.goBack();
+          <ClockImg
+            source={ClockPng}
+            style={{
+              marginTop: 2,
+              resizeMode: 'center',
+              height: 13,
+              width: 13,
+              marginRight: 3,
             }}
           />
-          <TitleText label={i18n.t('kyc.start')} />
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <ClockImg
-              source={ClockPng}
-              style={{
-                marginTop: 2,
-                resizeMode: 'center',
-                height: 13,
-                width: 13,
-                marginRight: 3,
-              }}
-            />
-            <PText
-              label={i18n.t('kyc.start_text')}
-              style={{ color: '#626368' }}
-            />
-          </View>
+          <PText
+            label={i18n.t('kyc.start_text')}
+            style={{ color: '#626368' }}
+          />
         </>
       }
-      isScrolling={false}
-      isBackbutton={true}
+      isScrolling={true}
       body={
         <>
           <View style={{ marginTop: 20 }}>
@@ -138,7 +130,7 @@ const StartKYC: FunctionComponent<{}> = () => {
         </>
       }
       button={
-        <View>
+        <>
           <SubmitButton
             title={i18n.t('kyc_label.argos_terms')}
             handler={() => setState({ ...state, modalVisible: true })}
@@ -154,16 +146,9 @@ const StartKYC: FunctionComponent<{}> = () => {
             }
             variant={state.agree === false ? 'GrayTheme' : undefined}
           />
-        </View>
+        </>
       }
     />
-    // <View
-    //   style={{
-    //     paddingTop: 40,
-    //     flexDirection: 'column',
-    //     flex: 1,
-    //   }}>
-    // </View>
   );
 };
 export default StartKYC;

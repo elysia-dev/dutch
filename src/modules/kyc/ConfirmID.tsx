@@ -36,7 +36,7 @@ const WarningIcon = styled.Image`
 const WarningWrapper = styled.View`
   background-color: #cc3743;
   width: 80%;
-  height: 80px;
+  height: 90px;
   border-radius: 15px;
   margin: 10% auto 0px auto;
 `;
@@ -80,18 +80,15 @@ const ConfirmID: FunctionComponent<{}> = () => {
 
   return (
     <WrapperLayout
-      title={
-        <>
-          <BackButton handler={() => navigation.goBack()} />
-          <TitleText label={i18n.t('kyc.step1_complete')} />
-          <PText
-            label={i18n.t('kyc.step1_complete_text')}
-            style={{ color: '#626368', marginBottom: 15 }}
-          />
-        </>
+      backButtonHandler={() => navigation.goBack()}
+      title={i18n.t('kyc.step1_complete')}
+      subTitle={
+      <PText
+        label={i18n.t('kyc.step1_complete_text')}
+        style={{ color: '#626368', marginBottom: 15 }}
+      />
       }
       isScrolling={false}
-      isBackbutton={true}
       body={
         <>
           <SelfieImg
@@ -144,7 +141,6 @@ const ConfirmID: FunctionComponent<{}> = () => {
                 idPhoto: route.params.idPhoto,
               });
             }}
-            style={{ marginBottom: 10 }}
           />
         </>
       }

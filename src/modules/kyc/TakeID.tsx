@@ -220,17 +220,13 @@ const TakeID: FunctionComponent<{}> = () => {
   if (!state.hasPermission) {
     return (
       <WrapperLayout
-        title={
-          <BackButton
-            handler={() => {
-              setState({
-                ...state,
-              });
-              navigation.goBack();
-            }}
-          />
-        }
-        isBackbutton={true}
+        title={" "}
+        backButtonHandler={() => {
+          setState({
+            ...state,
+          });
+          navigation.goBack();
+        }}
         isScrolling={false}
         body={
           <>
