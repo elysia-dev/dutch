@@ -64,8 +64,6 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   const changeI18n = async (value: string) => {
     i18n.locale = value;
     await AsyncStorage.setItem('i18nLanguage', value);
-
-    setState({ ...state, selectedValue: i18n.currentLocale() });
   };
   const TermListIos = [
     {
@@ -147,6 +145,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   selectedValue={state.selectedValue}
                   onValueChange={(itemValue) => {
                     changeI18n(itemValue);
+                    setState({ ...state, selectedValue: i18n.currentLocale() });
                   }}
                   >
                   {TermListAnd}
@@ -154,9 +153,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               ) : (
                 <RNPickerSelect
                   style={pickerSelectStyles}
-                  value={state.selectedValue}
-                  onClose={props.resetHandler}
-                  onValueChange={changeI18n}
+                  onClose={() => setState({ ...state, selectedValue: i18n.currentLocale() })}
+                  onValueChange={(itemValue) => {
+                    changeI18n(itemValue);
+                  }}
                   items={TermListIos}
                   placeholder={{
                     label: 'Select your app language',
