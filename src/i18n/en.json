@@ -1,0 +1,85 @@
+{
+  "checking_account": {
+    "insert_account_email": "Enter your email."
+  },
+  "register": {
+    "authentication_signup": "Verify your email",
+    "authentication_recover": "Enter the verification code",
+    "authentication_signup_label": "The verification code was sent to the email for signup.\nAfter checking your email, proceed with authentication",
+    "authentication_recover_label": "The verification code was sent to the email for recovering password \nAfter checking your email, proceed with authentication",
+    "expiration_time": "Valid time"
+  },
+  "account_check": {
+    "insert_password": "Enter your password.",
+    "recover_password": "Chage your password.",
+    "forget_password_link": "Forgot your password?",
+    "password_confirm": "Enter it once more",
+    "password_changed": "Password changed",
+    "login_request": "Sign in with the changed password"
+  },
+  "lock_account": {
+    "lockdown": "Your account is locked!",
+    "lockdown_text": "Your account has been protected after 5 failed login attempts..\nEnter the verification code sent to your account email address.",
+    "resending_code_mail_label": "Didn't you ever receive an email?",
+    "resending_code_mail_link": "Resend"
+  },
+  "errors": {
+    "messages:": {
+      "wrong_email": "Wrong email format",
+      "password_do_not_match": "The passwords do not match..",
+      "authentication_code_do_not_match": "The authentication code does not match.",
+      "password_too_short": "Password must be at least '%{password_minimum_length}' digits.",
+      "simple_password": "Password must include both English and number",
+      "incorrect_password_warning": "If 5 times fail, your account will be locked\nAdditional authentication is required."
+    }
+  },
+  "account_label": {
+    "account_email": "Email",
+    "account_password": "Password",
+    "account_password_confirm": "Confirm password",
+    "authentication_code": "Authentication code",
+    "continue": "Continue",
+    "login": "Login",
+    "signup": "Signup",
+    "certify": "Crrtify",
+    "resend": "Resend",
+    "resend_2": "Resend",
+    "change": "Change"
+  },
+  "kyc_label": {
+    "argos_terms": "View Argos Terms and Conditions",
+    "agree_start": "Agree and get started",
+    "shoot": "Taking a picture",
+    "passport": "Passport",
+    "drivers_license": "Drivers license",
+    "id_card": "ID card",
+    "personal_data": "Personal data",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "nationality": "Nationality",
+    "birthday": "Birthday",
+    "gender": "Gender",
+    "complete_input": "Submit",
+    "shoot_again": "Take a picture again",
+    "submit": "Submit",
+    "male": "Male",
+    "female": "Female"
+  },
+  "kyc": {
+    "start_kyc": "KYC verification",
+    "start_kyc_text": "It will take about 2 minutes.",
+    "start_kyc_step1": "Take a picture of your ID",
+    "start_kyc_step2": "Entering personal information",
+    "start_kyc_step3": "Taking a selfie with your ID card",
+    "kyc_step1": "1. Choosing an ID",
+    "kyc_step1_text": "It should be taken with the ID you chose in the next step.",
+    "kyc_step2": "2. Enter personal information",
+    "kyc_step2_text": "Enter your personal information correctly",
+    "kyc_step3": "3. Taking a selfie",
+    "kyc_step3_text": "Self-authentication photos must be clearly taken without blurring or compositing",
+    "kyc_step3_desc1": "Take a selfie with the ID taken in step 2",
+    "kyc_step3_desc2": "The contents of step 2 and the contents of the ID must be the same.",
+    "kyc_step3_complete": "3. Self-taking completed",
+    "kyc_step3_complete_text": "Was the selfie picture clearly taken without blurring or compositing?"
+  }
+}
