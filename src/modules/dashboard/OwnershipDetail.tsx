@@ -220,8 +220,10 @@ const OwnershipDetail: FunctionComponent = () => {
         animationType={'slide'}
         visible={state.purchaseModalVisible}>
         <SliderProductBuying
+          productId={state.ownership.product ? state.ownership.product.id : 0}
+          tokenName={state.ownership.product ? state.ownership.product.tokenName : ""}
           return={
-            state.ownership.product ? state.ownership.product.data.expectedAnnualReturn : ''
+            state.ownership.product ? state.ownership.product.expectedAnnualReturn : ""
           }
           modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
         />

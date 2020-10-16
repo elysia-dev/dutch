@@ -125,7 +125,9 @@ const ProductBuying: FunctionComponent = () => {
         animationType={'slide'}
         visible={state.modalVisible}>
         <SliderProductBuying
-          return={state.product ? state.product.data.expectedAnnualReturn : ''}
+          productId={productId}
+          tokenName={state.product ? state.product.tokenName : ""}
+          return={state.product ? state.product.expectedAnnualReturn : ''}
           modalHandler={() => setState({ ...state, modalVisible: false })}
         />
       </Modal>
