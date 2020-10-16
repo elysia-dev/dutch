@@ -60,7 +60,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
           <GText>{`${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ""}`}</GText>
-          <H1Text>{`$ ${parseFloat(ownership.value).toFixed(2)}`}</H1Text>
+          <H1Text>{`$ ${(parseFloat(ownership.value) * (ownership.product.usdPricePerToken)).toFixed(2)}`}</H1Text>
           {
             !ownership.isLegacy &&
             <GText
