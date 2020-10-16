@@ -64,7 +64,7 @@ interface SubmitButtonProps {
   title: string;
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
-  variant?: string; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
+  variant?: 'WhiteTheme' | 'GrayTheme' | ''; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
@@ -87,14 +87,14 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
           {title}
         </ButtonLabel>
       ) : (
-        <DuplicateUpperLabel theme={variant}>
-          {duplicateTitle}
-          <DuplicateLabel theme={variant}>
-            {'\n'}
-            {title}
-          </DuplicateLabel>
-        </DuplicateUpperLabel>
-      )}
+          <DuplicateUpperLabel theme={variant}>
+            {duplicateTitle}
+            <DuplicateLabel theme={variant}>
+              {'\n'}
+              {title}
+            </DuplicateLabel>
+          </DuplicateUpperLabel>
+        )}
     </Button>
   );
 };
