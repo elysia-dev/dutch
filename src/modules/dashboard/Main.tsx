@@ -111,9 +111,6 @@ export const Main: FunctionComponent = () => {
           {(user.kycStatus !== KycStatus.SUCCESS || user.ethAddresses === null) &&
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
               screen: DashboardPage.PreparingInvestment,
-              params: {
-                kycStatus: user.kycStatus, ethAddresses: user.ethAddresses,
-              },
             })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
               <Image style={{ width: '100%', height: 416, resizeMode: 'center', alignSelf: "center", borderRadius: 10 }} source={require('./images/promotion.png')} />
               <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
@@ -123,9 +120,6 @@ export const Main: FunctionComponent = () => {
             <>
               <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
                 screen: DashboardPage.PreparingInvestment,
-                params: {
-                  kycStatus: user.kycStatus, ethAddresses: user.ethAddresses,
-                },
               })} style={{ marginBottom: 25, width: "100%", height: 100, backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
                 <Image style={{ width: 80, height: 90, resizeMode: 'cover', position: 'absolute', right: 10, top: 5 }} source={require('./images/promotion.png')} />
                 <Text style={{ position: "absolute", top: 25, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>

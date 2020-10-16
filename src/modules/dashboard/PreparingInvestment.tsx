@@ -14,14 +14,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import { KycPage } from '../../enums/pageEnum';
 import { Kyc } from '../kyc/Kyc';
 import i18n from '../../i18n/i18n';
-
-type ParamList = {
-    PreparingInvestment: {
-        kycStatus: KycStatus;
-        ethAddresses: string[];
-    };
-};
-
+import RootContext from '../../contexts/RootContext';
 
 type ButtonProps = {
     title: string;
@@ -42,8 +35,7 @@ const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 
 const PreparingInvestment: FunctionComponent = () => {
     const navigation = useNavigation();
-    const route = useRoute<RouteProp<ParamList, 'PreparingInvestment'>>();
-    const { kycStatus, ethAddresses } = route.params;
+    const { kycStatus, ethAddresses } = useContext(RootContext).user;
 
     return (
         <View style={{ backgroundColor: "#fff", width: '100%', height: "100%", padding: 20 }}>
