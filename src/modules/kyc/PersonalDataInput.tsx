@@ -13,7 +13,6 @@ import { NationInput } from './components/NationInput';
 import { DateInput } from './components/DateInput';
 import { ShortOptionButton } from './components/ShortOptionButton';
 import RootContext from '../../contexts/RootContext';
-import Api from '../../api/kyc';
 import { TitleText } from '../../shared/components/TitleText';
 import { PText } from '../../shared/components/PText';
 import { H1Text } from '../../shared/components/H1Text';

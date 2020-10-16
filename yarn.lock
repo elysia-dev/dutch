@@ -12945,6 +12945,16 @@ react-native-color-picker@^0.4.0:
     prop-types "^15.5.10"
     tinycolor2 "^1.4.1"
 
+react-native-confetti-cannon@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-confetti-cannon/-/react-native-confetti-cannon-1.5.1.tgz#c4f15b8ccb2823fb4785d6896743865be6df58a4"
+  integrity sha512-4yjnIqMsPFiiicVkICGVZqC+ZZiXmryQ4wxHSRbRtaYv4QuK/IWccXXA/wJq72kiefuh41cakG1HVEu8AgflQQ==
+
+react-native-confetti@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-confetti/-/react-native-confetti-0.1.0.tgz#9ec93c07f845de5ebeaed700043fd5218792b6f1"
+  integrity sha512-+cXJvnPXKc0i/eTQcuzcjrlfIxmn/xFw4UyuVKQOWNK6BfWABvO6Ms6Zp6ivF1E8Vxt2vJkzJlNyoBvMh9FxKA==
+
 react-native-dash@^0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/react-native-dash/-/react-native-dash-0.0.11.tgz#cf1b0108e4660217cf0300b872231a5cadb9c4a8"

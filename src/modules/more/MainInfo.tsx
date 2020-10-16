@@ -204,9 +204,9 @@ const MainInfo: FunctionComponent = () => {
                 elevation: 6,
               }}
               duplicateTitle={i18n.t(
-                'more_label.proceed_kyc_duplicate_label',
+                'more_label.pending_kyc_duplicate_label',
               )}
-              title={i18n.t('more_label.proceed_kyc')}
+              title={i18n.t('more_label.pending_kyc')}
               handler={() => {
                 alert(i18n.t('more.kyc_proceeding_wait'));
               }}
@@ -224,9 +224,9 @@ const MainInfo: FunctionComponent = () => {
                 elevation: 6,
               }}
               duplicateTitle={i18n.t(
-                'more_label.approved_kyc_duplicate_label',
+                'more_label.success_kyc_duplicate_label',
               )}
-              title={i18n.t('more_label.approved_kyc')}
+              title={i18n.t('more_label.success_kyc')}
               handler={() => { }}
               variant={'GrayTheme'}
             />

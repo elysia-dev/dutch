@@ -89,9 +89,9 @@ class App extends React.Component<{}, AppState> {
     await this.authServer
       .me()
       .then(async res => {
-        if (res.data.user.language !== this.state.locale) {
-          i18n.locale = res.data.user.language;
-        }
+        // if (res.data.user.language !== this.state.locale) {
+        i18n.locale = res.data.user.language;
+        // }
         this.setState({
           signedIn: true,
           user: res.data.user,

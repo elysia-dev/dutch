@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
@@ -13,9 +14,7 @@ import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
 import { DashboardPage, ProductPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
-import { UserResponse } from '../../types/AccountResponse';
 import { KycStatus } from '../../enums/KycStatus';
-import { Transaction } from '../../types/Transaction';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 
@@ -24,7 +23,7 @@ export const Main: FunctionComponent = () => {
     id: 0,
     email: '',
     kycStatus: KycStatus.NONE,
-    ethAddresses: [""],
+    ethAddresses: [] as string[],
     gender: '',
     firstName: '',
     lastName: '',
@@ -42,9 +41,12 @@ export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
   const { Server } = useContext(RootContext);
   const [state, setState] = useState({ user: defaultUser, ownerships: [defaultOwnerships], balance: '0' });
+  const { user, ownerships } = state;
+
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
+
 
   const callApi = () => {
     Server.me()
@@ -108,53 +110,84 @@ export const Main: FunctionComponent = () => {
               textAlign: 'left',
               marginBottom: 40,
             }}>
-            {i18n.t('greeting', {
+            {(user.firstName && user.lastName) ? i18n.t('greeting', {
               firstName: state.user.firstName,
               lastName: state.user.lastName,
-            })}
+            }) : i18n.t('greeting_new')}
           </Text>
-          <BalanceCard
-            balance={state.balance}
-            handler={() => navigation.navigate('Dashboard', {
-              screen: DashboardPage.SummaryReport,
-            })}
-          />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-            }}>
-            {ownershipsList}
-            <TouchableOpacity
-              style={{
-                position: 'relative',
-                width: '47%',
-                height: 200,
-                borderRadius: 10,
-                backgroundColor: '#fff',
-                justifyContent: 'center',
-                alignContent: 'center',
-                shadowOffset: { width: 2, height: 2 },
-                shadowColor: '#1C1C1C4D',
-                shadowOpacity: 0.8,
-                shadowRadius: 7,
-              }}
-              onPress={() => navigation.navigate('ProductsMain')}>
-              <Text
+          {(user.kycStatus !== KycStatus.SUCCESS || user.ethAddresses === null) &&
+            <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
+              screen: DashboardPage.PreparingInvestment,
+            })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+              <Image style={{ width: '100%', height: 416, resizeMode: 'center', alignSelf: "center", borderRadius: 10 }} source={require('./images/promotion.png')} />
+              <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
+              <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.get_EL')}</Text>
+            </TouchableOpacity>}
+          {(user.kycStatus === KycStatus.SUCCESS && ownerships.length === 0) &&
+            <>
+              <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
+                screen: DashboardPage.PreparingInvestment,
+              })} style={{ marginBottom: 25, width: "100%", height: 100, backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+                <Image style={{ width: 80, height: 90, resizeMode: 'cover', position: 'absolute', right: 10, top: 5 }} source={require('./images/promotion.png')} />
+                <Text style={{ position: "absolute", top: 25, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
+                <Text style={{ position: "absolute", top: 45, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.get_EL')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+                <Image source={require('./images/investmentguide.png')} style={{ width: "100%", height: 416, resizeMode: 'stretch', borderRadius: 10 }} />
+                <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.with_elysia')}</Text>
+                <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.investment_guide')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('ProductsMain')} style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+                <Image source={require('./images/newinvestment.png')} style={{ width: "100%", height: 250, resizeMode: 'stretch', borderRadius: 10 }} />
+                <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.right_now')}</Text>
+                <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#fff" }}>{i18n.t('dashboard.invest_first_asset')}</Text>
+              </TouchableOpacity>
+            </>}
+          {ownerships.length > 0 &&
+            <>
+              <BalanceCard
+                balance={state.balance}
+                handler={() => navigation.navigate('Dashboard', {
+                  screen: DashboardPage.SummaryReport,
+                })}
+              />
+              <View
                 style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 25,
-                  color: '#838383',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
                 }}>
-                {'+'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+                {ownershipsList}
+                <TouchableOpacity
+                  style={{
+                    position: 'relative',
+                    width: '47%',
+                    height: 200,
+                    borderRadius: 10,
+                    backgroundColor: '#fff',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    shadowOffset: { width: 2, height: 2 },
+                    shadowColor: '#1C1C1C4D',
+                    shadowOpacity: 0.8,
+                    shadowRadius: 7,
+                  }}
+                  onPress={() => navigation.navigate('ProductsMain')}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      fontSize: 25,
+                      color: '#838383',
+                    }}>
+                    {'+'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>}
         </View>
         <VirtualTab />
       </SafeAreaView>
-    </ScrollView>
+    </ScrollView >
   );
 };

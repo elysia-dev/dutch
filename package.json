@@ -59,6 +59,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-chart-kit": "^6.6.1",
     "react-native-charts-wrapper": "^0.5.7",
+    "react-native-confetti": "^0.1.0",
+    "react-native-confetti-cannon": "^1.5.1",
     "react-native-dash": "^0.0.11",
     "react-native-date-picker": "^3.1.0",
     "react-native-datepicker": "^1.7.2",
