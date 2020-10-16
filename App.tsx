@@ -112,7 +112,6 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     const RootStack = createStackNavigator();
-    console.log(this.state);
 
     return (
       <NavigationContainer ref={this.navigationRef}>
