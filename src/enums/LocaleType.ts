@@ -1,7 +1,7 @@
 enum LocaleType {
   EN = 'en',
   KO = 'ko',
-  CH = 'ch',
+  CH = 'zhHans',
 }
 
 export default LocaleType;
