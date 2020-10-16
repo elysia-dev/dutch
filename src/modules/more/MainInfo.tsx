@@ -430,7 +430,7 @@ const MainInfo: FunctionComponent = () => {
             paddingRight: '5%',
             fontSize: 10,
           }}>
-          Ver demo sprint3
+          v1.0.0
             </Text>
         <View
           style={{
