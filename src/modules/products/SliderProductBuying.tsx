@@ -8,12 +8,17 @@ import React, {
 } from 'react';
 import { View, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from './components/ExchangedValue';
+import { ProductPage } from '../../enums/pageEnum';
+import RootContext from '../../contexts/RootContext';
 
 interface Props {
+  productId: number;
+  tokenName: string;
   return: string;
   modalHandler: () => void;
 }
@@ -23,9 +28,26 @@ interface State {
 }
 
 const SliderProductBuying: FunctionComponent<Props> = props => {
+  const navigation = useNavigation();
+  const { Server } = useContext(RootContext);
   const [state, setState] = useState<State>({
     tokenCount: 10,
   });
+
+  const callApi = () => {
+    Server.requestTransaction(props.productId, state.tokenCount, "buying").then(
+      res => navigation.navigate(
+        ProductPage.PaymentSelection, {
+        id: res.data.id, expectedAnnualReturn: props.return, tokenName: props.tokenName, tokenCount: state.tokenCount, type: "buying",
+      }),
+    ).catch(e => {
+      if (e.response.status === 400) {
+        alert(i18n.t('product.transaction_error'));
+      } else if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+      }
+    });
+  };
 
   return (
     <View
@@ -81,7 +103,10 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
           marginRight: 'auto',
           marginTop: 10,
         }}
-        handler={() => {}}
+        handler={() => {
+          callApi();
+          props.modalHandler();
+        }}
         title={i18n.t('product_label.purchase_now')}
       />
     </View>
