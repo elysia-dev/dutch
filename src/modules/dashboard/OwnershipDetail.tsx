@@ -22,6 +22,8 @@ import LegacyOptionButtons from './components/LegacyOptionButtons';
 import SliderProductBuying from '../products/SliderProductBuying';
 import LegacyOwnershipRefund from './LagacyOwnershipRefund';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import { defaultProduct } from '../../types/Product';
+import { DashboardPage } from '../../enums/pageEnum';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -167,6 +169,9 @@ const OwnershipDetail: FunctionComponent = () => {
                 purchaseHandler={() =>
                   setState({ ...state, purchaseModalVisible: !state.purchaseModalVisible })
                 }
+                interestHandler={() =>
+                  navigation.navigate(DashboardPage.InterestWithdraw,
+                    { ownership: state.ownership })}
               />
               )
           }
@@ -220,11 +225,8 @@ const OwnershipDetail: FunctionComponent = () => {
         animationType={'slide'}
         visible={state.purchaseModalVisible}>
         <SliderProductBuying
-          productId={state.ownership.product ? state.ownership.product.id : 0}
-          tokenName={state.ownership.product ? state.ownership.product.tokenName : ""}
-          return={
-            state.ownership.product ? state.ownership.product.expectedAnnualReturn : ""
-          }
+          from={"ownershipDetail"}
+          product={state.ownership.product ? state.ownership.product : defaultProduct}
           modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
         />
       </Modal>

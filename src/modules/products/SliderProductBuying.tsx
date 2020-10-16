@@ -15,12 +15,12 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from './components/ExchangedValue';
 import { ProductPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
+import Product from '../../types/Product';
 
 interface Props {
-  productId: number;
-  tokenName: string;
-  return: string;
+  product: Product;
   modalHandler: () => void;
+  from?: string;
 }
 
 interface State {
@@ -35,11 +35,18 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
   });
 
   const callApi = () => {
-    Server.requestTransaction(props.productId, state.tokenCount, "buying").then(
-      res => navigation.navigate(
-        ProductPage.PaymentSelection, {
-        id: res.data.id, expectedAnnualReturn: props.return, tokenName: props.tokenName, tokenCount: state.tokenCount, type: "buying",
-      }),
+    Server.requestTransaction(props.product.id, state.tokenCount, "buying").then(
+      res => props.from === "ownershipDetail" ?
+        navigation.navigate(
+          "Product", {
+          screen: ProductPage.PaymentSelection,
+          params: {
+            id: res.data.id, product: props.product, tokenCount: state.tokenCount, type: "buying",
+          },
+        }) : navigation.navigate(
+          ProductPage.PaymentSelection, {
+          id: res.data.id, product: props.product, tokenCount: state.tokenCount, type: "buying",
+        }),
     ).catch(e => {
       if (e.response.status === 400) {
         alert(i18n.t('product.transaction_error'));
@@ -86,10 +93,10 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
           setState({ ...state, tokenCount: token });
         }}
         tokenCount={state.tokenCount}
-        return={props.return}
+        return={props.product.expectedAnnualReturn}
       />
       <ExchangedValue
-        return={props.return}
+        return={props.product.expectedAnnualReturn}
         tokenCount={state.tokenCount}
         type={'buy'}
       />
