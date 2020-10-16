@@ -230,4 +230,10 @@ export default class Server {
       `/transactions/history?productId=${productId}&start=${start}&end=${end}&period=${period}&type=${type}&page=${page}`,
     );
   };
+
+  resetLanguage = async (language: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.put(
+      '/users/language', { language },
+    );
+  };
 }

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { View, Picker, StyleSheet, Switch, Platform } from 'react-native';
+import { View, Picker, StyleSheet, Switch, Platform, Text } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Setting: FunctionComponent<Props> = (props: Props) => {
-  const { changeLanguage } = useContext(RootContext);
+  const { changeLanguage, Server } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: false,
@@ -66,7 +66,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   };
   const changeI18n = async (value: string) => {
     i18n.locale = value;
-    await AsyncStorage.setItem('i18nLanguage', value);
+    // await AsyncStorage.setItem('i18nLanguage', value);
   };
   const TermListIos = [
     {
@@ -146,9 +146,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               {Platform.OS === 'android' ? (
                 <Picker
                   selectedValue={state.selectedValue}
-                  onValueChange={(itemValue) => {
+                  onValueChange={async (itemValue) => {
                     changeI18n(itemValue);
                     setState({ ...state, selectedValue: i18n.currentLocale() });
+                    await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
                     changeLanguage(i18n.currentLocale() as LocaleType);
                   }}
                 >
@@ -157,8 +158,8 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               ) : (
                   <RNPickerSelect
                     style={pickerSelectStyles}
-                    onClose={() => {
-                      setState({ ...state, selectedValue: i18n.currentLocale() });
+                    onClose={async () => {
+                      await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
                       changeLanguage(i18n.currentLocale() as LocaleType);
                     }
                     }
