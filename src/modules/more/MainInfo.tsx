@@ -333,29 +333,6 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => { }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <PText
-                    label={i18n.t('more_label.notice')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
                     screen: MorePage.Faq,
