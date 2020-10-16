@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { View, Animated, StatusBar, Image, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { Story } from '../../types/product';
@@ -27,11 +27,15 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server, locale } = useContext(RootContext);
+
+  const ref = React.useRef(null);
+  useScrollToTop(ref);
 
   useEffect(() => {
     Server.storyList()
       .then(res => {
+        console.log(res.data);
         setState({ ...state, stories: res.data });
         res.data.forEach(story => {
           Image.prefetch(story.image);
@@ -42,7 +46,7 @@ const MainList: FunctionComponent = () => {
           alert(i18n.t('account_errors.server'));
         }
       });
-  }, []);
+  }, [locale]);
 
   return (
     <View
@@ -53,6 +57,7 @@ const MainList: FunctionComponent = () => {
         backgroundColor: '#FFF',
       }}>
       <ScrollView
+        ref={ref}
         scrollEventThrottle={16}
         style={{ width: '100%', paddingHorizontal: 20 }}>
         <Animated.View
@@ -65,11 +70,11 @@ const MainList: FunctionComponent = () => {
           }}>
           <Animated.Text
             style={{
-              width: 50,
+              width: '100%',
               color: '#1c1c1c',
               fontSize: 28,
               fontWeight: 'bold',
-              textAlign: 'center',
+              textAlign: 'left',
             }}>
             {i18n.t('product_label.product')}
           </Animated.Text>

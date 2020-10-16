@@ -4,11 +4,11 @@ import LocaleType from "../enums/LocaleType";
 const currentLocale = () => {
   if (i18n.currentLocale() === "ko-KR") {
     return LocaleType.KO;
-  } else if (i18n.currentLocale() === "zh-CN") {
+  } else if (i18n.currentLocale() === "zhHans") {
     return LocaleType.CH;
   } else {
     return LocaleType.EN;
   }
 };
 
-export default currentLocale
+export default currentLocale;

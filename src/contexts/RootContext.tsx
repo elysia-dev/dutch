@@ -17,6 +17,7 @@ type RootContextType = {
     language: LocaleType;
     ethAddresses: string[];
   };
+  changeLanguage: (input: LocaleType) => void;
   signIn: () => void;
   signOut: () => void;
   autoSignOut: () => void;
@@ -39,6 +40,7 @@ const RootContext = createContext<RootContextType>({
     ethAddresses: [],
     language: LocaleType.KO,
   },
+  changeLanguage: () => { },
   signIn: async () => { },
   signOut: async () => { },
   autoSignOut: async () => { },

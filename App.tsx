@@ -36,6 +36,7 @@ interface AppState {
     language: LocaleType;
     ethAddresses: string[];
   };
+  changeLanguage: () => void;
   unreadNotificationCount: number;
   notifications: Notification[];
 }
@@ -52,6 +53,7 @@ const defaultState = {
     language: LocaleType.KO,
     ethAddresses: [],
   },
+  changeLanguage: () => { },
   unreadNotificationCount: 0,
   notifications: [],
 };
@@ -79,7 +81,6 @@ class App extends React.Component<{}, AppState> {
 
   async componentDidMount() {
     await this.signIn();
-    if (!this.state.locale) i18n.locale = this.state.locale;
   }
 
   signIn = async () => {
@@ -88,12 +89,14 @@ class App extends React.Component<{}, AppState> {
     await this.authServer
       .me()
       .then(async res => {
+        // if (res.data.user.language !== this.state.locale) {
+        i18n.locale = res.data.user.language;
+        // }
         this.setState({
           signedIn: true,
           user: res.data.user,
           unreadNotificationCount: res.data.unreadNotificationCount,
         });
-
         const pusher = await pusherClient();
         const channel = pusher.subscribe(userChannel(res.data.user.id));
         channel.bind('notification', this.handleNotification);
@@ -112,12 +115,12 @@ class App extends React.Component<{}, AppState> {
 
   render() {
     const RootStack = createStackNavigator();
-
     return (
       <NavigationContainer ref={this.navigationRef}>
         <RootContext.Provider
           value={{
             ...this.state,
+            changeLanguage: (input) => { this.setState({ ...this.state, locale: input }); },
             signIn: this.signIn,
             signOut: this.signOut,
             autoSignOut: this.autoSignOut,

@@ -8,40 +8,22 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
+import { PText } from '../../shared/components/PText';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: left;
-  margin-top: 40px;
-  margin-left: 5%;
-  margin-bottom: 6px;
-`;
-const PText = styled.Text`
-  color: #626368;
-  font-size: 13px;
-  margin: 0px 5%;
-  margin-bottom: 42px;
-`;
 const SelfieImg = styled.Image`
   width: 90%;
-  height: 30%;
+  height: 60%;
   justify-content: center;
   align-content: center;
   left: 5%;
-  position: relative;
-`;
-const ConfirmSelfieWrapper = styled.SafeAreaView`
-  padding-top: 25px;
-  flex: 1;
-  background-color: #ffffff;
+  resize-mode: stretch;
 `;
 
 type ParamList = {
   ConfirmSelfie: {
     selfie: any;
-    photoId: any;
+    idPhoto: any;
     id_type: string;
   };
 };
@@ -75,35 +57,38 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
   // }
 
   return (
-    <ConfirmSelfieWrapper style={{ display: 'flex' }}>
-      <BackButton
-        handler={() => navigation.navigate(KycPage.TakeSelfie)}
-        style={{ marginTop: 30, marginLeft: 20 }}
-      />
-      <H1Text>{i18n.t('kyc.step2_complete')}</H1Text>
-      <PText>{i18n.t('kyc.step2_complete_text')}</PText>
-      <SelfieImg
-        source={{ uri: route.params.selfie.uri }}
-        style={{ resizeMode: 'cover' }}
-      />
-      <SubmitButton
-        title={i18n.t('kyc_label.shoot_again')}
-        handler={() => navigation.navigate(KycPage.TakeSelfie)}
-        ButtonTheme={'WhiteTheme'}
-        style={{ marginTop: 'auto', marginBottom: 10 }}
-      />
-      <SubmitButton
-        title={i18n.t('kyc_label.submit')}
-        handler={() => {
-          // 일단 API 호출하지 않고 화면만 넘김
-          navigation.navigate(KycPage.PersonalDataInput, {
-            id_type: route.params.id_type,
-            photoId: route.params.photoId,
-          });
-        }}
-        style={{ marginBottom: 10 }}
-      />
-    </ConfirmSelfieWrapper>
+    <WrapperLayout
+      isScrolling={false}
+      backButtonHandler={() => navigation.navigate(KycPage.TakeSelfie)}
+      title={i18n.t('kyc.step2_complete')}
+      subTitle={
+          <PText
+            label={i18n.t('kyc.step2_complete_text')}
+            style={{ color: '#626368', marginBottom: 15 }}
+          />
+      }
+      body={<SelfieImg source={{ uri: route.params.selfie.uri }} />}
+      button={
+        <>
+          <SubmitButton
+            title={i18n.t('kyc_label.shoot_again')}
+            handler={() => navigation.navigate(KycPage.TakeSelfie)}
+            variant={'WhiteTheme'}
+            style={{ marginTop: 'auto', marginBottom: 10 }}
+          />
+          <SubmitButton
+            title={i18n.t('kyc_label.submit')}
+            handler={() => {
+              // 일단 API 호출하지 않고 화면만 넘김
+              navigation.navigate(KycPage.PersonalDataInput, {
+                id_type: route.params.id_type,
+                idPhoto: route.params.idPhoto,
+              });
+            }}
+          />
+        </>
+      }
+    />
   );
 };
 export default ConfirmSelfie;

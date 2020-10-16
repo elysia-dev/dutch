@@ -203,7 +203,7 @@
     "service_terms": "서비스 이용약관",
     "my_info": "내 정보",
     "logout": "로그아웃",
-    "app_setting": "앱설정",
+    "app_setting": "앱 설정",
     "name": "이름",
     "gender": "성별",
     "nationality": "국가",
@@ -236,7 +236,8 @@
     "type_close": "소유권 만료",
     "type_expectedProfit": "이익 누적",
     "type_profit": "이익 출금",
-    "latest": "최신순"
+    "latest": "최신순",
+    "push_notice": "푸시 알림"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
