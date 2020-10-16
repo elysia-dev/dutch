@@ -27,7 +27,7 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server, locale } = useContext(RootContext);
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -35,6 +35,7 @@ const MainList: FunctionComponent = () => {
   useEffect(() => {
     Server.storyList()
       .then(res => {
+        console.log(res.data);
         setState({ ...state, stories: res.data });
         res.data.forEach(story => {
           Image.prefetch(story.image);
@@ -45,7 +46,7 @@ const MainList: FunctionComponent = () => {
           alert(i18n.t('account_errors.server'));
         }
       });
-  }, []);
+  }, [locale]);
 
   return (
     <View
@@ -69,11 +70,11 @@ const MainList: FunctionComponent = () => {
           }}>
           <Animated.Text
             style={{
-              width: 50,
+              width: '100%',
               color: '#1c1c1c',
               fontSize: 28,
               fontWeight: 'bold',
-              textAlign: 'center',
+              textAlign: 'left',
             }}>
             {i18n.t('product_label.product')}
           </Animated.Text>
