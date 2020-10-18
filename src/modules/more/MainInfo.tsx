@@ -267,7 +267,9 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => { }}>
+                onPress={() => navigation.navigate('More', {
+                  screen: MorePage.RegisterEthAddress,
+                })}>
                 <View
                   style={{
                     flexDirection: 'row',

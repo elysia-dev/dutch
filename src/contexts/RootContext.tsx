@@ -25,6 +25,7 @@ type RootContextType = {
   notifications: Notification[];
   setUnreadNotificationCount: (value: number) => void;
   setNotifications: (notifications: Notification[]) => void;
+  setEthAddress: (address: string) => void;
   Server: Server;
 }
 
@@ -48,6 +49,7 @@ const RootContext = createContext<RootContextType>({
   unreadNotificationCount: 0,
   setUnreadNotificationCount: (value: number) => { },
   setNotifications: (notifications: Notification[]) => { },
+  setEthAddress: (address: string) => { },
   Server: new Server(() => { }, ''),
 });
 

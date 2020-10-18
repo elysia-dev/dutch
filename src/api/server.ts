@@ -236,4 +236,10 @@ export default class Server {
       '/users/language', { language },
     );
   };
+
+  registerAddress = async (ethAddress: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.put(
+      '/users/ethAddresses', { ethAddress },
+    );
+  }
 }

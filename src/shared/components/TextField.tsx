@@ -47,7 +47,7 @@ const HelperLabel = styled.Text`
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
   autocapitalize = 'none',
-  focusHandler = () => {},
+  focusHandler = () => { },
   ...props
 }) => {
   const [focusing, setFocus] = useState(onFocused);
@@ -62,8 +62,8 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-              ? '#3679B5'
-              : '#A7A7A7',
+                ? '#3679B5'
+                : '#A7A7A7',
         }}>
         {props.label}
       </LabelText>
@@ -74,8 +74,8 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-              ? '#3679B5'
-              : '#A7A7A7',
+                ? '#3679B5'
+                : '#A7A7A7',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
         }}
@@ -84,7 +84,7 @@ export const TextField: FunctionComponent<Props> = ({
         onChangeText={props.eventHandler}
         enablesReturnKeyAutomatically={true}
         secureTextEntry={props.secure}
-        maxLength={30}
+        maxLength={50}
         autoCapitalize={autocapitalize}
         onBlur={() => {
           setFocus(false);

@@ -10,6 +10,7 @@ import Transactions from './Transactions';
 import ElysiaNotice from './ElysiaNotice';
 import ResetPassword from '../account/ResetPassword';
 import CurrentPassword from '../account/CurrentPassword';
+import RegisterEthAddress from './RegisterEthAddress';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,10 @@ export const More = () => {
       <Stack.Screen
         name={AccountPage.ResetPassword}
         component={ResetPassword}
+      />
+      <Stack.Screen
+        name={MorePage.RegisterEthAddress}
+        component={RegisterEthAddress}
       />
     </Stack.Navigator>
   );
