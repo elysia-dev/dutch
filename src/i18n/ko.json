@@ -127,7 +127,10 @@
   "product": {
     "transaction_error": "구매할 수 없는 상품입니다.",
     "transaction_ready": "트랜잭션 준비가 완료되었습니다.",
-    "select_metamask": "사용할 메타마스크 환경을 선택해주세요."
+    "select_metamask": "사용할 메타마스크 환경을 선택해주세요.",
+    "link_will_be_sent": "결제 링크가 이메일로 전달됩니다.",
+    "send_purchase_link": "결제 링크가 이메일로 전달되었습니다.\n메타마스크가 설치되어있는 브라우저에서 해당 링크로 이동해주세요.",
+    "email_restriction": "메일 발송은 30초 당 1회로 제한됩니다.\n30초 뒤에 다시 시도해주세요."
   },
   "product_financial": {
     "expected_annual_return": "예상 연 수익률",
