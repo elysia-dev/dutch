@@ -4,8 +4,9 @@ import styled from 'styled-components/native';
 
 const PTitle = styled.Text`
   color: #1c1c1c;
-  font-size: 13px;
+  font-size: 15px;
   text-align: left;
+  font-family: 'Roboto_400Regular';
 `;
 
 export const PText: FunctionComponent<{

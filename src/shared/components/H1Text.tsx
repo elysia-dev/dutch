@@ -4,9 +4,9 @@ import styled from 'styled-components/native';
 
 const H1Title = styled.Text`
   color: #1c1c1c;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 28px;
   text-align: left;
+  font-family: 'Roboto_700Bold';
 `;
 
 export const H1Text: FunctionComponent<{

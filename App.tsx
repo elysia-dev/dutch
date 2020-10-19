@@ -5,11 +5,13 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AppLoading } from 'expo';
+
+/* eslint-disable @typescript-eslint/camelcase */
 import {
   useFonts,
-  Roboto_300Light as Roboto300,
-  Roboto_400Regular as Roboto400,
-  Roboto_700Bold as Roboto700,
+  Roboto_300Light,
+  Roboto_400Regular,
+  Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
 import { Kyc } from './src/modules/kyc/Kyc';
@@ -74,10 +76,11 @@ const App = () => {
 
   const navigationRef = React.createRef<NavigationContainerRef>();
 
+  /* eslint-disable @typescript-eslint/camelcase */
   const [fontsLoaded] = useFonts({
-    Roboto300,
-    Roboto400,
-    Roboto700,
+    Roboto_300Light,
+    Roboto_400Regular,
+    Roboto_700Bold,
   });
 
   const signOut = async () => {
