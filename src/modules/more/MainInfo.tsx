@@ -171,24 +171,25 @@ const MainInfo: FunctionComponent = () => {
                   height: 70,
                   elevation: 6,
                 }}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    textAlign: 'left',
-                    marginLeft: '6%',
-                    paddingTop: 12,
-                  }}>
-                  {i18n.t('more_label.need_kyc_duplicate_label')}
+                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: 13,
                       textAlign: 'left',
-                      fontWeight: 'bold',
+
                     }}>
-                    {'\n'}
-                    {i18n.t('more_label.need_kyc')}
+                    {i18n.t('more_label.need_kyc_duplicate_label')}
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        textAlign: 'left',
+                        fontWeight: 'bold',
+                      }}>
+                      {'\n'}
+                      {i18n.t('more_label.need_kyc')}
+                    </Text>
                   </Text>
-                </Text>
+                </View>
                 <KycNoneButtonImg source={kycNoneButtonPng} />
               </KycNoneButton>
             </View>
