@@ -249,7 +249,8 @@
     "type_expectedProfit": "이익 누적",
     "type_profit": "이익 출금",
     "latest": "최신순",
-    "push_notice": "푸시 알림"
+    "push_notice": "푸시 알림",
+    "notification_setting": "알림 설정"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
