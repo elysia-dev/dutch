@@ -83,11 +83,19 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     },
   ];
 
+  // eslint-disable-next-line no-nested-ternary
+  const currentTermNum = i18n.currentLocale() === LocaleType.KO ?
+    0 : i18n.currentLocale() === LocaleType.EN ? 1 : 2;
+
+  const currentTermListIos = [TermListIos[currentTermNum]]
+    .concat(TermListIos.filter(term => term.value !== i18n.currentLocale()));
+
   const TermListAnd = [
     <Picker.Item label={"한국어"} value="ko" key={0} />,
     <Picker.Item label={"English"} value="en" key={1} />,
     <Picker.Item label={"简体中文"} value="zhHans" key={2} />,
   ];
+
   return (
     <WrapperLayout
       isScrolling={true}
@@ -166,12 +174,14 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     onValueChange={(itemValue) => {
                       changeI18n(itemValue);
                     }}
-                    items={TermListIos}
-                    placeholder={{
-                      label: 'Select your app language',
-                      value: '',
-                      color: '#1C1C1C',
-                    }}
+                    items={currentTermListIos}
+                    placeholder={{}}
+
+                  // placeholder={{
+                  //   label: i18n.currentLocale(),
+                  //   value: '',
+                  //   color: '#1C1C1C',
+                  // }}
                   />
                 )}
             </View>
@@ -189,6 +199,7 @@ const pickerSelectStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
+    borderRadius: 5,
     fontSize: 16,
     color: '#1C1C1C',
     justifyContent: 'center',
@@ -199,6 +210,7 @@ const pickerSelectStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
+    borderRadius: 5,
     fontSize: 16,
     color: '#1C1C1C',
     justifyContent: 'center',
