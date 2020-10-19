@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import Slider from 'react-native-slider';
+import Slider from '@react-native-community/slider';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
@@ -64,28 +64,8 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           minimumTrackTintColor={'#3679B5'}
           maximumTrackTintColor={'#E9EBEF'}
           thumbTintColor={'#fff'}
-          thumbStyle={{
-            borderColor: '#FFFFFF',
-            borderWidth: 2,
-            shadowColor: '#00000029',
-            shadowOpacity: 0.6,
-            shadowOffset: { width: 2, height: 1 },
-            shadowRadius: 2,
-          }}
-          trackStyle={{
-            backgroundColor: '#E9EBEF',
-            height: 8,
-            borderWidth: 1,
-            borderColor: '#D0D8DF',
-            borderRadius: 4,
-            shadowColor: '#00000029',
-            shadowOpacity: 0.6,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 6,
-            width: '100%',
-          }}
-          thumbTouchSize={{ width: 20, height: 20 }}
           value={props.tokenCount}
+          step={1}
           onValueChange={props.countHandler}></Slider>
       </View>
       <View
