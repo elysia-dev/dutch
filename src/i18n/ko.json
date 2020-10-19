@@ -283,7 +283,10 @@
     "fold": "접기",
     "transaction": "트랜잭션",
     "more_transactions": "+ 더보기",
-    "interest_withdraw": "이자수익 출금"
+    "interest_withdraw": "이자수익 출금",
+    "token_amount": "보유 토큰 수",
+    "expected_profit": "예상 수익금",
+    "withdraw": "출금하기"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
