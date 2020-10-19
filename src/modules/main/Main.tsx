@@ -58,7 +58,7 @@ const Main: FunctionComponent = () => {
         }}
       />
       <Tab.Screen
-        name="Notificati onMain"
+        name="NotificationMain"
         component={Notifications}
         options={{
           tabBarLabel: '',

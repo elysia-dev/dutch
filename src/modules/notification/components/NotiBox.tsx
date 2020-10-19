@@ -73,7 +73,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
             <Image
-              style={{ resizeMode: 'center', width: 13, height: 17 }}
+              style={{ resizeMode: 'center', width: typeId() === 2 ? 15 : 13, height: typeId() === 2 ? 18.5 : 17, left: typeId() === 2 ? -1 : 0 }}
               source={images[typeId()][status === 'read' ? 0 : 1]}
             />
           </View>
