@@ -67,31 +67,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             {product.contractAddress}
           </GText>
         </View>
-        <TouchableOpacity
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: 22,
-            shadowOffset: { width: 1, height: 2 },
-            shadowColor: '#00000033',
-            shadowOpacity: 0.8,
-            shadowRadius: 3,
-            justifyContent: 'center',
-            alignContent: 'center',
-            backgroundColor: '#fff',
-          }}>
-          <Image
-            style={{
-              width: 24,
-              height: 24,
-              position: 'absolute',
-              top: 10,
-              left: 10,
-              resizeMode: 'center',
-            }}
-            source={require('../images/youtube.png')}
-          />
-        </TouchableOpacity>
+
       </View>
       <View
         style={{
