@@ -1,25 +1,19 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
-import { View, ScrollView, SafeAreaView, Text, Image } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
-import Server from '../../../api/server';
-import RootContext from '../../../contexts/RootContext';
-import i18n from '../../../i18n/i18n';
-import { H1Text } from '../../../shared/components/H1Text';
 import Product from '../../../types/Product';
-
 
 const GrayBox = styled.View`
 display: flex;
 flex-direction:column;
-align-content: space-between; 
-width: 100%; 
+align-content: space-between;
+width: 100%;
 height: 90px;
-padding: 10px; 
-border-radius: 10px; 
+padding: 10px;
+border-radius: 10px;
 background-color: #F6F6F8;
 border-width:1px;
-border-color: #E5E5E5; 
+border-color: #E5E5E5;
 margin-left: auto;
 margin-right:auto;
 `;
@@ -56,33 +50,32 @@ align-items: center;
 `;
 
 type Props = {
-    product: Product;
-    elInterest: string;
+  product: Product;
+  elInterest: string;
 }
 
 const InterestSummary: FunctionComponent<Props> = (props: Props) => {
-    return (
-        <View style={{ paddingTop: 20 }}>
-            <GrayBox>
-                <WhiteBox>
-                    <TextWrapper>
-                        <GrayText style={{ flex: 1, textAlign: 'left' }} > FROM </GrayText>
-                        <GrayText style={{ flex: 1 }}> TO </GrayText>
-                        <GrayText style={{ flex: 3, textAlign: 'right' }}> VALUE </GrayText>
-                    </TextWrapper>
-                    <View style={{ flex: 1 }}>
-                        <View style={{ position: 'relative', top: '50%', width: "100%", height: 1, backgroundColor: "#E5E5E5" }}></View>
-                    </View>
-                    <TextWrapper>
-                        <BlackText style={{ flex: 1, textAlign: 'left' }}> ELYSIA </BlackText>
-                        <BlackText style={{ flex: 1 }}> YOU </BlackText>
-                        <BlackText style={{ flex: 3, textAlign: "right" }}> EL {props.elInterest} </BlackText>
-                    </TextWrapper>
-                </WhiteBox>
-            </GrayBox>
-        </View>
-
-    );
+  return (
+    <View style={{ paddingTop: 20 }}>
+      <GrayBox>
+        <WhiteBox>
+          <TextWrapper>
+            <GrayText style={{ flex: 1, textAlign: 'left' }} > FROM </GrayText>
+            <GrayText style={{ flex: 1 }}> TO </GrayText>
+            <GrayText style={{ flex: 3, textAlign: 'right' }}> VALUE </GrayText>
+          </TextWrapper>
+          <View style={{ flex: 1 }}>
+            <View style={{ position: 'relative', top: '50%', width: "100%", height: 1, backgroundColor: "#E5E5E5" }}></View>
+          </View>
+          <TextWrapper>
+            <BlackText style={{ flex: 1, textAlign: 'left' }}> ELYSIA </BlackText>
+            <BlackText style={{ flex: 1 }}> YOU </BlackText>
+            <BlackText style={{ flex: 3, textAlign: "right" }}> EL {props.elInterest} </BlackText>
+          </TextWrapper>
+        </WhiteBox>
+      </GrayBox>
+    </View>
+  );
 };
 
 export default InterestSummary;
