@@ -18,6 +18,7 @@ export type UserResponse = {
     firstName: string;
     lastName: string;
     language: LocaleType;
+    nationality: string;
   };
   totalBalance: string;
   ownerships: [

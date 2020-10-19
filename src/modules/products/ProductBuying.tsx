@@ -17,6 +17,7 @@ import { ProductPage } from '../../enums/pageEnum';
 import { Map } from './components/Map';
 import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
+import { KycStatus } from '../../enums/KycStatus';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -43,7 +44,12 @@ const ProductBuying: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
-  const { Server } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
+  const shortNationality = user.nationality.split(", ")[1];
+  const purchasability =
+    (user.kycStatus === KycStatus.SUCCESS
+      && user.ethAddresses?.length > 0
+      && !(state.product?.restrictedCountries.includes(shortNationality)));
 
   useEffect(() => {
     Server.productInfo(productId)
@@ -105,11 +111,16 @@ const ProductBuying: FunctionComponent = () => {
         {state.product && <WrappedInfo product={state.product} />}
       </ScrollView>
       <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
+        style={{ position: 'absolute', bottom: 0, marginBottom: 15, backgroundColor: purchasability ? "#3679B5" : "#D0D8DF" }}
         handler={() => {
-          setState({ ...state, modalVisible: true });
+          if (!purchasability) {
+            if (state.product?.restrictedCountries.includes(shortNationality)) {
+              return (alert(i18n.t('product.restricted_country')));
+            }
+            return (alert(i18n.t('product.non_purchasable')));
+          } else { setState({ ...state, modalVisible: true }); }
         }}
-        title={i18n.t('product_label.invest')}
+        title={purchasability ? i18n.t('product_label.invest') : i18n.t('product_label.non_purchasable')}
       />
       {state.modalVisible && (
         <View

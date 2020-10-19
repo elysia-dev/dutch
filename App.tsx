@@ -35,6 +35,7 @@ interface AppState {
     gender: string;
     language: LocaleType;
     ethAddresses: string[];
+    nationality: string;
   };
   changeLanguage: () => void;
   unreadNotificationCount: number;
@@ -52,6 +53,7 @@ const defaultState = {
     kycStatus: KycStatus.NONE,
     language: LocaleType.KO,
     ethAddresses: [],
+    nationality: "South Korea, KOR",
   },
   changeLanguage: () => { },
   unreadNotificationCount: 0,

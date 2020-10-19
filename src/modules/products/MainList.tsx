@@ -35,7 +35,6 @@ const MainList: FunctionComponent = () => {
   useEffect(() => {
     Server.storyList()
       .then(res => {
-        console.log(res.data);
         setState({ ...state, stories: res.data });
         res.data.forEach(story => {
           Image.prefetch(story.image);

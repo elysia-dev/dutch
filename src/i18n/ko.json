@@ -135,7 +135,9 @@
     "select_metamask": "사용할 메타마스크 환경을 선택해주세요.",
     "link_will_be_sent": "결제 링크가 이메일로 전달됩니다.",
     "send_purchase_link": "결제 링크가 이메일로 전달되었습니다.\n메타마스크가 설치되어있는 브라우저에서 해당 링크로 이동해주세요.",
-    "email_restriction": "메일 발송은 30초 당 1회로 제한됩니다.\n30초 뒤에 다시 시도해주세요."
+    "email_restriction": "메일 발송은 30초 당 1회로 제한됩니다.\n30초 뒤에 다시 시도해주세요.",
+    "non_purchasable": "구매가 불가능한 상품입니다.\nKYC 인증과 이더리움 지갑 주소를 확인해주세요.",
+    "restricted_country": "현재 국가에서는 구매하실 수 없습니다."
   },
   "product_financial": {
     "expected_annual_return": "예상 연 수익률",
@@ -192,7 +194,9 @@
     "expected_el_price": "예상 회수 EL(환산)",
     "eth_price": "ETH (환산)",
     "property_type": "상품분류",
-    "recovery": "회수금"
+    "recovery": "회수금",
+    "non_purchasable": "구매 불가",
+    "view_details": "상품 상세보기"
   },
   "more_label": {
     "more": "더 보기",

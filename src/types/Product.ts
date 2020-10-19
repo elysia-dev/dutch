@@ -39,6 +39,7 @@ type Product = {
       zhHans: ProductDescription;
     };
   };
+  restrictedCountries: string[];
 };
 
 export type ProductId = {
@@ -76,6 +77,7 @@ export const defaultProduct = {
       zhHans: defaultProductDescription,
     },
   },
+  restrictedCountries: [""],
 };
 
 export default Product;

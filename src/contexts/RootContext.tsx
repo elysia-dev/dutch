@@ -16,6 +16,7 @@ type RootContextType = {
     gender: string;
     language: LocaleType;
     ethAddresses: string[];
+    nationality: string;
   };
   changeLanguage: (input: LocaleType) => void;
   signIn: () => void;
@@ -40,6 +41,7 @@ const RootContext = createContext<RootContextType>({
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
     language: LocaleType.KO,
+    nationality: "South Korea, KOR",
   },
   changeLanguage: () => { },
   signIn: async () => { },
