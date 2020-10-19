@@ -279,7 +279,7 @@ const TakeID: FunctionComponent<{}> = () => {
                   color: '#FFF',
                   fontSize: 18,
                   flex: 1,
-                  marginTop: 15,
+                  marginTop: Platform.OS === "ios" ? 20 : 15,
                 }}
               />
             </View>
