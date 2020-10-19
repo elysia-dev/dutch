@@ -39,7 +39,7 @@ export enum MorePage {
   Transactions = 'Transactions',
   Filter = 'Filter',
   ElysiaNotice = 'ElysiaNotice',
-  Setting = 'Setting',
+  Setting = 'Setting'
 }
 
 export enum DashboardPage {
@@ -48,5 +48,6 @@ export enum DashboardPage {
   OwnershipDetail = 'OwnershipDetail',
   ProductData = 'ProductData',
   ProductNotice = 'ProductNotice',
-  PreparingInvestment = 'PreparingInvestment'
+  PreparingInvestment = 'PreparingInvestment',
+  InvestmentGuide = 'InvestmentGuide'
 }

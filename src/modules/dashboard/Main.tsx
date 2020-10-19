@@ -132,7 +132,9 @@ export const Main: FunctionComponent = () => {
                 <Text style={{ position: "absolute", top: 25, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
                 <Text style={{ position: "absolute", top: 45, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.get_EL')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+              <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
+                 screen: DashboardPage.InvestmentGuide,
+              })} style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
                 <Image source={require('./images/investmentguide.png')} style={{ width: "100%", height: 416, resizeMode: 'stretch', borderRadius: 10 }} />
                 <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.with_elysia')}</Text>
                 <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.investment_guide')}</Text>
