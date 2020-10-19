@@ -218,6 +218,7 @@ const OwnershipDetail: FunctionComponent = () => {
         visible={state.refundModalVisible}>
         <OwnershipRefund
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
+          ownership={state.ownership}
         />
       </Modal>
       <Modal

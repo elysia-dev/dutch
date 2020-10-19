@@ -12,14 +12,15 @@ import i18n from '../../i18n/i18n';
 import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
+import { OwnershipResponse } from '../../types/Ownership';
 
 interface Props {
   modalHandler: () => void;
+  ownership: OwnershipResponse;
 }
 
-
 const OwnershipRefund: FunctionComponent<Props> = props => {
-  const [tokenCount, setTokenCount] = useState(10);
+  const [tokenCount, setTokenCount] = useState(1);
 
   return (
     <View
@@ -59,6 +60,7 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
           setTokenCount(token);
         }}
         tokenCount={tokenCount}
+        max={props.ownership.tokenValue}
       />
       <ExchangedValue
         tokenCount={tokenCount}
@@ -74,7 +76,7 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
           marginRight: 'auto',
           marginTop: 10,
         }}
-        handler={() => {}}
+        handler={() => { }}
         title={i18n.t('product_label.refund')}
       />
     </View>

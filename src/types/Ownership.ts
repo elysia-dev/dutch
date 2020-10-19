@@ -2,6 +2,7 @@ import Product, { defaultProduct } from './Product';
 
 export type OwnershipResponse = {
   value: string;
+  tokenValue: number;
   expectProfit: string;
   availableProfit: string;
   stake: string;
@@ -13,6 +14,7 @@ export type OwnershipResponse = {
 
 export const defaultOwnershipResponse = {
   value: '0',
+  tokenValue: 0,
   expectProfit: '0',
   availableProfit: '0',
   stake: '0',

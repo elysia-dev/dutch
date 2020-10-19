@@ -1,15 +1,15 @@
 import React, { FunctionComponent } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
-import Product from '../../../types/product';
 
 interface Props {
   countHandler: (value: number) => void;
   tokenCount: number;
   return?: string;
   type?: string;
+  max: number;
 }
 
 const H1Text = styled.Text`
@@ -60,7 +60,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
       <View style={{ marginTop: 10, width: '100%' }}>
         <Slider
           minimumValue={0}
-          maximumValue={500}
+          maximumValue={props.max}
           minimumTrackTintColor={'#3679B5'}
           maximumTrackTintColor={'#E9EBEF'}
           thumbTintColor={'#fff'}
@@ -71,8 +71,6 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
       <View
         style={{
           flexDirection: 'row',
-          width: '60%',
-          justifyContent: 'space-between',
           marginTop: 10,
         }}>
         <CountButton
@@ -89,34 +87,40 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
             {'01 T'}
           </Text>
         </CountButton>
-        <CountButton
-          onPress={() => props.countHandler(10)}
-          style={{
-            borderColor: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
-          }}>
-          <Text
+        {
+          props.max >= 10 && <CountButton
+            onPress={() => props.countHandler(10)}
             style={{
-              color: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
-              fontSize: 15,
-              textAlign: 'center',
+              borderColor: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+              marginLeft: 10,
             }}>
-            {'10 T'}
-          </Text>
-        </CountButton>
-        <CountButton
-          onPress={() => props.countHandler(100)}
-          style={{
-            borderColor: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
-          }}>
-          <Text
+            <Text
+              style={{
+                color: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+                fontSize: 15,
+                textAlign: 'center',
+              }}>
+              {'10 T'}
+            </Text>
+          </CountButton>
+        }
+        {
+          props.max >= 100 && <CountButton
+            onPress={() => props.countHandler(100)}
             style={{
-              color: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
-              fontSize: 15,
-              textAlign: 'center',
+              borderColor: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+              marginLeft: 10,
             }}>
-            {'100 T'}
-          </Text>
-        </CountButton>
+            <Text
+              style={{
+                color: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+                fontSize: 15,
+                textAlign: 'center',
+              }}>
+              {'100 T'}
+            </Text>
+          </CountButton>
+        }
       </View>
     </View>
   );

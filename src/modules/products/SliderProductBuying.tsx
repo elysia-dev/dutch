@@ -94,6 +94,7 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
         }}
         tokenCount={state.tokenCount}
         return={props.product.expectedAnnualReturn}
+        max={parseInt(props.product.presentValue, 10)}
       />
       <ExchangedValue
         return={props.product.expectedAnnualReturn}
