@@ -6,3 +6,9 @@ export type CoinPriceResponse = {
     usd: number;
   };
 };
+
+export type ELPriceResponse = {
+  elysia: {
+    usd: number;
+  };
+};

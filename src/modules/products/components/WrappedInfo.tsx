@@ -54,7 +54,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription =
     product.data.descriptions[
-      product.data.languages.includes(locale) ? locale : LocaleType.EN
+    product.data.languages.includes(locale) ? locale : LocaleType.EN
     ];
 
   return (
@@ -98,7 +98,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 <GText>
                   {i18n.t('product_financial.expected_annual_return')}
                 </GText>
-                <PText>{`${props.product.data.expectedAnnualReturn}%`}</PText>
+                <PText>{`${props.product.expectedAnnualReturn}%`}</PText>
               </DesView>
               <DesView>
                 <GText>{i18n.t('product_financial.return_rent')}</GText>

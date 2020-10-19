@@ -10,7 +10,7 @@ import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
-import Product from '../../types/product';
+import Product, { defaultProduct } from '../../types/Product';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
@@ -125,7 +125,7 @@ const ProductBuying: FunctionComponent = () => {
         animationType={'slide'}
         visible={state.modalVisible}>
         <SliderProductBuying
-          return={state.product ? state.product.data.expectedAnnualReturn : ''}
+          product={state.product ? state.product : defaultProduct}
           modalHandler={() => setState({ ...state, modalVisible: false })}
         />
       </Modal>

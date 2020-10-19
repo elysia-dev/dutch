@@ -10,8 +10,9 @@ import { PostResponse } from '../types/PostResponse';
 import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
 import { SummaryReportResponse } from '../types/SummaryReport';
-import { CoinPriceResponse } from '../types/CoinPrice';
+import { CoinPriceResponse, ELPriceResponse } from '../types/CoinPrice';
 import { KycResponse, PhotoResponse } from '../types/Kyc';
+import { TransactionRequestResponse } from '../types/TransactionRequest';
 
 export default class Server {
   token: string;
@@ -234,6 +235,26 @@ export default class Server {
   resetLanguage = async (language: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.put(
       '/users/language', { language },
+    );
+  };
+
+  requestTransaction = async (productId: number, amount: number, type: string):
+    Promise<AxiosResponse<TransactionRequestResponse>> => {
+    return this.authenticatedEspressoClient.post(
+      '/transactionRequests', { productId, amount, type },
+    );
+  };
+
+  sendEmailForTransaction = async (id: string):
+    Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.get(
+      `/transactionRequests/${id}/sendEmail`,
+    );
+  };
+
+  getELPrice = async (): Promise<AxiosResponse<ELPriceResponse>> => {
+    return axios.get(
+      'https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd',
     );
   };
 

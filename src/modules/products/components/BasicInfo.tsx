@@ -40,7 +40,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription =
     product.data.descriptions[
-      product.data.languages.includes(locale) ? locale : LocaleType.EN
+    product.data.languages.includes(locale) ? locale : LocaleType.EN
     ];
   // TODO : Add null guard languages & descrptions
   return (
@@ -131,7 +131,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           <GText style={{ textAlign: 'center' }}>
             {i18n.t('product_label.expected_annual_rate')}
           </GText>
-          <ValueText>{`${product.data.expectedAnnualReturn}%`}</ValueText>
+          <ValueText>{`${product.expectedAnnualReturn}%`}</ValueText>
         </View>
         <View
           style={{

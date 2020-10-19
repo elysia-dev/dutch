@@ -7,6 +7,7 @@ import i18n from '../../../i18n/i18n';
 interface Props {
   refundHandler: () => void;
   purchaseHandler: () => void;
+  interestHandler: () => void;
   productId: number;
 }
 
@@ -76,7 +77,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {}}
+        onPress={props.interestHandler}
         style={{
           backgroundColor: '#fff',
 

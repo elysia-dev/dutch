@@ -13,7 +13,11 @@ type Product = {
   id: number;
   title: string;
   contractAddress: string;
-  totalValue: number;
+  totalValue: string;
+  expectedAnnualReturn: string;
+  presentValue: string;
+  tokenName: string;
+  usdPricePerToken: number;
   data: {
     type: string;
     languages: LocaleType[];
@@ -32,7 +36,7 @@ type Product = {
     descriptions: {
       en: ProductDescription;
       ko: ProductDescription;
-      ch: ProductDescription;
+      zhHans: ProductDescription;
     };
   };
 };
@@ -46,7 +50,11 @@ export const defaultProduct = {
   id: 0,
   title: '',
   contractAddress: '',
-  totalValue: 0,
+  totalValue: '0',
+  expectedAnnualReturn: '0',
+  presentValue: '0',
+  tokenName: '',
+  usdPricePerToken: 0,
   data: {
     type: '',
     languages: [] as LocaleType[],
@@ -60,12 +68,12 @@ export const defaultProduct = {
     netDeposit: '',
     netRentPerYear: '',
     bankLoan: '',
-    latitude: '',
-    longitude: '',
+    latitude: '0',
+    longitude: '0',
     descriptions: {
       en: defaultProductDescription,
       ko: defaultProductDescription,
-      ch: defaultProductDescription,
+      zhHans: defaultProductDescription,
     },
   },
 };
