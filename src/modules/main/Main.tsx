@@ -72,12 +72,12 @@ const Main: FunctionComponent = () => {
                 <View
                   style={{
                     position: 'absolute',
-                    top: -3,
-                    left: 23,
-                    width: 6,
-                    height: 6,
-                    borderRadius: 3,
-                    backgroundColor: '#3679B5',
+                    top: -2,
+                    left: 22,
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: '#FC5C4F',
                   }}></View>
               )}
             </View>
