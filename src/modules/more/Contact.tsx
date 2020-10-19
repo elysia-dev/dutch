@@ -17,14 +17,21 @@ const Contact: FunctionComponent = () => {
 
   const [state, setState] = useState({
     contents: '',
+    contactRestriction: false,
   });
 
   const callApi = () => {
+    if (state.contactRestriction) { return (alert(i18n.t('more.contact_restriction'))); }
     Server.sendQuestion(state.contents)
       .then(res => {
         alert(i18n.t('more.question_submitted'));
-        setState({ ...state, contents: '' });
-        navigation.goBack();
+        setState({ ...state, contactRestriction: true, contents: '' });
+        // navigation.goBack();
+        setTimeout(() => {
+          setState({
+            ...state, contactRestriction: false,
+          });
+        }, 60000);
       })
       .catch(e => {
         if (e.response.status === 500) {
@@ -48,6 +55,7 @@ const Contact: FunctionComponent = () => {
         <>
           <View
             style={{
+              marginTop: 30,
               marginLeft: '5%',
               marginRight: '5%',
               paddingLeft: 15,
@@ -86,7 +94,7 @@ const Contact: FunctionComponent = () => {
       }
       button={
         <SubmitButton
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 999, backgroundColor: state.contactRestriction ? "#D0D8DF" : "#3679B5" }}
           title={i18n.t('kyc_label.submit')}
           handler={() => callApi()}
         />
