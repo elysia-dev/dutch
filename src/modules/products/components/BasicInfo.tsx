@@ -56,7 +56,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
           <GText>{product.title}</GText>
-          <H1Text>{`${product.totalValue} ELA1 Token`}</H1Text>
+          <H1Text>{`${product.totalValue} ${product.tokenName} Token`}</H1Text>
           <GText
             onPress={() => {
               Linking.openURL(
