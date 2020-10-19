@@ -1,11 +1,5 @@
 import React, {
-  Children,
   FunctionComponent,
-  ReactChild,
-  ReactChildren,
-  ReactElement,
-  ReactNode,
-  useContext,
 } from 'react';
 import { View, TouchableOpacity, Image, Text } from 'react-native';
 import styled from 'styled-components/native';
@@ -13,20 +7,9 @@ import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import { OwnershipResponse } from '../../../types/Ownership';
-import OptionButtons from './OptionButtons';
 import { DashboardPage } from '../../../enums/pageEnum';
-import RootContext from '../../../contexts/RootContext';
+import { H1Text } from '../../../shared/components/H1Text';
 
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 25px;
-  font-weight: bold;
-  margin-top: 7px;
-  margin-bottom: 6px;
-  text-align: left;
-  z-index: 3;
-`;
 const GText = styled.Text`
   color: #626368;
   font-size: 15px;
@@ -53,14 +36,14 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
         backgroundColor: '#fff',
         padding: 20,
         width: '100%',
-        height: 420,
+        height: ownership.isLegacy ? 300 : 420,
         borderBottomColor: '#F6F6F8',
         borderBottomWidth: 5,
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
           <GText>{`${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ""}`}</GText>
-          <H1Text>{`$ ${(parseFloat(ownership.value) * (ownership.product.usdPricePerToken)).toFixed(2)}`}</H1Text>
+          <H1Text label={`$ ${parseFloat(ownership.value).toFixed(2)}`} />
           {
             !ownership.isLegacy &&
             <GText
@@ -72,7 +55,6 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               style={{ fontSize: 12, textDecorationLine: 'underline' }}>
               {ownership.product.contractAddress}
             </GText>
-
           }
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
@@ -139,7 +121,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
       </View>
       <View
         style={{
-          marginTop: 45,
+          marginTop: ownership.isLegacy ? 10 : 45,
           width: '100%',
           height: 120,
           padding: 20,

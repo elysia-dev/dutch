@@ -257,4 +257,10 @@ export default class Server {
       'https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd',
     );
   };
+
+  registerAddress = async (ethAddress: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.put(
+      '/users/ethAddresses', { ethAddress },
+    );
+  }
 }

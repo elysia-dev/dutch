@@ -15,7 +15,7 @@ const Faq: FunctionComponent = () => {
       ? setState({ selectNumber: arrayNum })
       : setState({ selectNumber: 0 });
   };
-  const ItemListing = Array(10)
+  const ItemListing = Array(3)
     .fill(0)
     .map((_x, index) => {
       return (

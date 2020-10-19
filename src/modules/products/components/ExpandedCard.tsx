@@ -57,6 +57,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
   const [state, setState] = useState({
     scrollY: 0,
     closed: false,
+    scrollEnabled: true,
   });
   const { height: windowHeight } = Dimensions.get("window");
   const navigation = useNavigation();
@@ -95,7 +96,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
     >
       <ScrollView
         ref={scrollRef}
-        scrollEnabled={true}
+        scrollEnabled={state.scrollEnabled}
+        showsVerticalScrollIndicator={state.scrollEnabled}
         scrollToOverflowEnabled={true}
         onScroll={(event) => {
           setState({
@@ -153,7 +155,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         <TouchableOpacity
           onPress={() => {
             scrollRef.current?.scrollTo({ y: 0, animated: false });
-            setState({ ...state, closed: true });
+            setState({ ...state, closed: true, scrollEnabled: false });
             Animated.timing(animatedValue, {
               toValue: 0,
               duration: 500,
@@ -180,8 +182,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
           handler={() => {
             StatusBar.setHidden(false);
             navigation.navigate('Product', {
-                screen: 'ProductBuying',
-                params: { productId: story.productId },
+              screen: 'ProductBuying',
+              params: { productId: story.productId },
             });
           }}
         />

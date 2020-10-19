@@ -267,7 +267,9 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => { }}>
+                onPress={() => navigation.navigate('More', {
+                  screen: MorePage.RegisterEthAddress,
+                })}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -327,29 +329,6 @@ const MainInfo: FunctionComponent = () => {
               label={i18n.t('more_label.service_center')}
               style={{ marginBottom: 15 }}
             />
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() => { }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <PText
-                    label={i18n.t('more_label.notice')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-
             <View
               style={{
                 height: 50,
@@ -453,7 +432,7 @@ const MainInfo: FunctionComponent = () => {
             paddingRight: '5%',
             fontSize: 10,
           }}>
-          Ver demo sprint3
+          v1.0.0
             </Text>
         <View
           style={{

@@ -40,6 +40,7 @@ export enum MorePage {
   Filter = 'Filter',
   ElysiaNotice = 'ElysiaNotice',
   Setting = 'Setting',
+  RegisterEthAddress = 'RegisterEthAddress',
 }
 
 export enum DashboardPage {

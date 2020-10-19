@@ -132,6 +132,9 @@ class App extends React.Component<{}, AppState> {
             setNotifications: (notifications: Notification[]) => {
               this.setState({ notifications });
             },
+            setEthAddress: (address: string) => {
+              this.setState({ user: { ...this.state.user, ethAddresses: [address] } });
+            },
             Server: this.authServer,
           }}>
           <RootStack.Navigator

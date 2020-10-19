@@ -57,6 +57,7 @@ const MainList: FunctionComponent = () => {
         backgroundColor: '#FFF',
       }}>
       <ScrollView
+        scrollEnabled={!state.activeStory}
         ref={ref}
         scrollEventThrottle={16}
         style={{ width: '100%', paddingHorizontal: 20 }}>

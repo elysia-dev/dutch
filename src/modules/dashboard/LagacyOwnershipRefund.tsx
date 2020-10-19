@@ -2,7 +2,7 @@
 import React, {
   FunctionComponent,
 } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -45,6 +45,24 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
           }}
         />
       </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'column',
+          alignContent: 'space-between',
+          position: 'relative',
+          width: '100%',
+          backgroundColor: '#F6F6F8',
+          borderWidth: 2,
+          borderColor: '#F1F1F1',
+          borderRadius: 10,
+          padding: 15,
+          marginTop: 20,
+        }}
+      >
+        <Text>
+          {i18n.t('legacy.refund_notice')}
+        </Text>
+      </View>
       <SubmitButton
         style={{
           position: 'relative',
@@ -53,7 +71,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
           width: '100%',
           marginLeft: 'auto',
           marginRight: 'auto',
-          marginTop: 10,
+          marginTop: 20,
         }}
         handler={props.submitHandler}
         title={i18n.t('product_label.legacy_refund')}

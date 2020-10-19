@@ -309,5 +309,8 @@
     "productNotice": "产品公告",
     "elysiaNotice": "爱立厦公告",
     "date_format": "%m月 %m日"
+  },
+  "legacy": {
+    "refund_notice": "Refunds will be completed within 3 business days, our admissions team will contact you by email."
   }
 }
