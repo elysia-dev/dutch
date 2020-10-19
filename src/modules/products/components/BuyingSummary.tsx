@@ -65,6 +65,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
     * parseFloat(`${props.product.usdPricePerToken}`);
   const expectedElValue = expectedUsdValue / elPrice;
 
+  const expectedProfit = (
+    parseFloat(props.product.expectedAnnualReturn) * 0.01 * expectedUsdValue
+  ).toFixed(2);
+
   useEffect(() => {
     Server.getELPrice().then(res => setELPrice(res.data.elysia.usd)).catch(e =>
       alert(i18n.t('account_errors.server')));
@@ -109,7 +113,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
       </GrayBox>
       <View style={{ paddingHorizontal: 10, flexDirection: "row", justifyContent: "space-between", marginTop: 15 }}>
         <H1Text style={{ fontSize: 15 }} label={i18n.t('product_label.expected_return')}></H1Text>
-        <H1Text style={{ fontSize: 15 }} label={`$ ${props.product.expectedAnnualReturn}`}></H1Text>
+        <H1Text
+          style={{ fontSize: 15 }}
+          label={`$ ${expectedProfit}`}
+        />
       </View>
     </View>
   );
