@@ -4,6 +4,13 @@ import i18n from 'i18n-js';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import { AppLoading } from 'expo';
+import {
+  useFonts,
+  Roboto_300Light as Roboto300,
+  Roboto_400Regular as Roboto400,
+  Roboto_700Bold as Roboto700,
+} from '@expo-google-fonts/roboto';
 
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -67,6 +74,12 @@ const App = () => {
 
   const navigationRef = React.createRef<NavigationContainerRef>();
 
+  const [fontsLoaded] = useFonts({
+    Roboto300,
+    Roboto400,
+    Roboto700,
+  });
+
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
     setState(defaultState);
@@ -117,6 +130,11 @@ const App = () => {
   };
 
   const RootStack = createStackNavigator();
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <NavigationContainer ref={navigationRef}>
       <RootContext.Provider
