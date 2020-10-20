@@ -109,7 +109,7 @@ const PaymentSelection: FunctionComponent = () => {
             </View>
             {pc && <PText label={i18n.t('product.link_will_be_sent')} />}
             <SubmitButton
-                title={type === "buying" ? i18n.t('dashboard_label.ownership') : i18n.t('dashboard_label.profit')}
+                title={i18n.t('account_label.continue')}
                 // eslint-disable-next-line no-nested-ternary
                 style={{ position: 'absolute', bottom: 30, alignSelf: 'center', width: "100%", backgroundColor: mobile ? "#3679B5" : (emailRestriction ? "#D0D8DF" : "#3679B5") }}
                 handler={() => {

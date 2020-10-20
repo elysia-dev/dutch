@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import { AppLoading } from 'expo';
+
+/* eslint-disable @typescript-eslint/camelcase */
+import {
+  useFonts,
+  Roboto_300Light,
+  Roboto_400Regular,
+  Roboto_700Bold,
+} from '@expo-google-fonts/roboto';
 
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -40,6 +49,7 @@ interface AppState {
   changeLanguage: () => void;
   unreadNotificationCount: number;
   notifications: Notification[];
+  Server: Server;
 }
 
 const defaultState = {
@@ -58,113 +68,123 @@ const defaultState = {
   changeLanguage: () => { },
   unreadNotificationCount: 0,
   notifications: [],
+  Server: new Server(() => { }, ''),
 };
 
-class App extends React.Component<{}, AppState> {
-  token!: string | null;
-  authServer!: Server;
-  constructor(props: {}) {
-    super(props);
-    this.state = defaultState;
-  }
+const App = () => {
+  const [state, setState] = useState<AppState>(defaultState);
 
-  navigationRef = React.createRef<NavigationContainerRef>();
+  const navigationRef = React.createRef<NavigationContainerRef>();
 
-  signOut = async () => {
+  /* eslint-disable @typescript-eslint/camelcase */
+  const [fontsLoaded] = useFonts({
+    Roboto_300Light,
+    Roboto_400Regular,
+    Roboto_700Bold,
+  });
+
+  const signOut = async () => {
     await AsyncStorage.removeItem('@token');
-    this.setState(defaultState);
+    setState(defaultState);
   };
 
-  autoSignOut = async () => {
+  const autoSignOut = async () => {
     await AsyncStorage.removeItem('@token');
-    this.setState(defaultState);
-    this.navigationRef.current?.navigate('Account', { screen: AccountPage.ExpiredAccount });
+    setState(defaultState);
+    navigationRef.current?.navigate('Account', { screen: AccountPage.ExpiredAccount });
   };
 
-  async componentDidMount() {
-    await this.signIn();
-  }
-
-  signIn = async () => {
+  const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
-    this.authServer = new Server(this.autoSignOut, token !== null ? token : '');
-    await this.authServer
+    const authServer = new Server(autoSignOut, token !== null ? token : '');
+    await authServer
       .me()
       .then(async res => {
         // if (res.data.user.language !== this.state.locale) {
         i18n.locale = res.data.user.language;
         // }
-        this.setState({
+        setState({
+          ...state,
           signedIn: true,
           user: res.data.user,
           unreadNotificationCount: res.data.unreadNotificationCount,
+          Server: authServer,
         });
+
         const pusher = await pusherClient();
         const channel = pusher.subscribe(userChannel(res.data.user.id));
-        channel.bind('notification', this.handleNotification);
+        channel.bind('notification', handleNotification);
       })
       .catch(() => {
-        this.setState(defaultState);
+        setState(defaultState);
       });
   };
 
-  handleNotification = (notification: Notification) => {
-    this.setState({
-      unreadNotificationCount: this.state.unreadNotificationCount + 1,
-      notifications: [notification, ...this.state.notifications],
+  useEffect(() => {
+    signIn();
+  }, []);
+
+  const handleNotification = (notification: Notification) => {
+    setState({
+      ...state,
+      unreadNotificationCount: state.unreadNotificationCount + 1,
+      notifications: [notification, ...state.notifications],
     });
   };
 
-  render() {
-    const RootStack = createStackNavigator();
-    return (
-      <NavigationContainer ref={this.navigationRef}>
-        <RootContext.Provider
-          value={{
-            ...this.state,
-            changeLanguage: (input) => { this.setState({ ...this.state, locale: input }); },
-            signIn: this.signIn,
-            signOut: this.signOut,
-            autoSignOut: this.autoSignOut,
-            setUnreadNotificationCount: (value: number) => {
-              this.setState({
-                unreadNotificationCount: value >= 0 ? value : 0,
-              });
-            },
-            setNotifications: (notifications: Notification[]) => {
-              this.setState({ notifications });
-            },
-            setEthAddress: (address: string) => {
-              this.setState({ user: { ...this.state.user, ethAddresses: [address] } });
-            },
-            Server: this.authServer,
-          }}>
-          <RootStack.Navigator
-            headerMode="none"
-            screenOptions={{
-              gestureEnabled: false,
-            }}>
-            {this.state.signedIn ? (
-              <>
-                <RootStack.Screen name={'Main'} component={Main} />
-                {this.state.user.kycStatus === KycStatus.NONE && (
-                  <RootStack.Screen name={'Kyc'} component={Kyc} />
-                )}
-                <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-                <RootStack.Screen name={'More'} component={More} />
-                <RootStack.Screen name={'Product'} component={Products} />
-              </>
-            ) : (
-                <>
-                  <RootStack.Screen name={'Account'} component={Account} />
-                </>
-              )}
-          </RootStack.Navigator>
-        </RootContext.Provider>
-      </NavigationContainer>
-    );
+  const RootStack = createStackNavigator();
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
-}
+
+  return (
+    <NavigationContainer ref={navigationRef}>
+      <RootContext.Provider
+        value={{
+          ...state,
+          changeLanguage: (input) => { setState({ ...state, locale: input }); },
+          signIn,
+          signOut,
+          autoSignOut,
+          setUnreadNotificationCount: (value: number) => {
+            setState({
+              ...state,
+              unreadNotificationCount: value >= 0 ? value : 0,
+            });
+          },
+          setNotifications: (notifications: Notification[]) => {
+            setState({ ...state, notifications });
+          },
+          setEthAddress: (address: string) => {
+            setState({ ...state, user: { ...state.user, ethAddresses: [address] } });
+          },
+        }}>
+        <RootStack.Navigator
+          headerMode="none"
+          screenOptions={{
+            gestureEnabled: false,
+          }}>
+          {state.signedIn ? (
+            <>
+              <RootStack.Screen name={'Main'} component={Main} />
+              {state.user.kycStatus === KycStatus.NONE && (
+                <RootStack.Screen name={'Kyc'} component={Kyc} />
+              )}
+              <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+              <RootStack.Screen name={'More'} component={More} />
+              <RootStack.Screen name={'Product'} component={Products} />
+            </>
+          ) : (
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
+        </RootStack.Navigator>
+      </RootContext.Provider>
+    </NavigationContainer>
+  );
+};
 
 const STORY_BOOK_ENABLED = false;
 
