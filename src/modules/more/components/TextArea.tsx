@@ -6,6 +6,7 @@ import i18n from '../../../i18n/i18n';
 
 interface Props {
   eventHandler: (input: string) => void;
+  contents: string;
 }
 
 export const TextArea: FunctionComponent<Props> = (props: Props) => {
@@ -18,13 +19,14 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
       <Text
         style={{
           color: state.focus ? '#3679B5' : '#A7A7A7',
-          fontSize: 12,
+          fontSize: 15,
           textAlign: 'left',
           marginBottom: 10,
         }}>
         {i18n.t('more_label.contact_contents')}
       </Text>
       <TextInput
+        value={props.contents}
         onChangeText={props.eventHandler}
         maxLength={1000}
         style={{

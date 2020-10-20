@@ -26,9 +26,12 @@ interface Props {
   isScrolling: boolean;
   button?: React.ReactNode;
 }
+
 type Scrolling = {
   Scrolling: boolean;
+  scrollY: Animated.value;
 };
+
 const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
@@ -37,32 +40,34 @@ const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
       {props.children}
     </KeyboardAvoidingView>
   ) : (
-    <View style={{ flex: 1 }}>{props.children}</View>
-  );
+      <View style={{ flex: 1 }}>{props.children}</View>
+    );
+
+const ScrollingView: FunctionComponent<Scrolling> = props => {
+  return props.Scrolling === true ? (
+    <Animated.ScrollView
+      scrollEventThrottle={16}
+      onScroll={Animated.event(
+        [
+          {
+            nativeEvent: {
+              contentOffset: { y: props.scrollY },
+            },
+          },
+        ],
+        { useNativeDriver: true },
+      )}
+      style={{ flex: 1 }}>
+      {props.children}
+    </Animated.ScrollView>
+  ) : (
+      <View style={{ flex: 1 }}>{props.children}</View>
+    );
+};
 
 const WrapperLayout: FunctionComponent<Props> = props => {
   const [scrollY] = useState(new Animated.Value(0));
-  const ScrollingView: FunctionComponent<Scrolling> = props => {
-    return props.Scrolling === true ? (
-      <Animated.ScrollView
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: { y: scrollY },
-              },
-            },
-          ],
-          { useNativeDriver: true },
-        )}
-        style={{ flex: 1 }}>
-        {props.children}
-      </Animated.ScrollView>
-    ) : (
-      <View style={{ flex: 1 }}>{props.children}</View>
-    );
-  };
+
   return (
     <Wrapper>
       <Animated.View
@@ -72,7 +77,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
           marginTop: props.backButtonHandler !== undefined ? 0 : 68,
         }}>
         {props.backButtonHandler !== undefined && (
-          <BackButton handler={props.backButtonHandler} />
+          <BackButton handler={props.backButtonHandler} style={{ width: 30 }} />
         )}
         <Animated.View
           style={{
@@ -130,7 +135,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
           </Animated.Text>
         </Animated.View>
       </Animated.View>
-      <ScrollingView Scrolling={props.isScrolling}>
+      <ScrollingView Scrolling={props.isScrolling} scrollY={scrollY}>
         <ConditionalKeyboardAvoidingView>
           <View style={{ marginTop: 60 }}>{props.body}</View>
           {props.button !== undefined && (

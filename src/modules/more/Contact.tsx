@@ -78,6 +78,7 @@ const Contact: FunctionComponent = () => {
               style={{ fontSize: 14, marginBottom: 25 }}
             />
             <TextArea
+              contents={state.contents}
               eventHandler={(input: string) =>
                 setState({ ...state, contents: input })
               }
