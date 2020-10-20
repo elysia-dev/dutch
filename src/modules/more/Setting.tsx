@@ -117,6 +117,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                alignContent: 'center',
                 paddingTop: 20,
                 paddingBottom: 20,
                 marginBottom: 30,
@@ -124,9 +125,8 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               <PText
                 label={i18n.t('more_label.push_notice')}
                 style={{
+                  alignSelf: 'center',
                   color: '#1C1C1C',
-                  marginTop: 15,
-                  marginBottom: 5,
                   fontSize: 15,
                 }}
               />
@@ -136,6 +136,9 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={activityToggleButton}
                 value={state.hasPermission}
+                style={{
+                  alignSelf: 'center',
+                }}
               />
             </View>
             <H1Text label={i18n.t('more_label.language')} />
