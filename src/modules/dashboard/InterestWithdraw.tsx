@@ -85,7 +85,7 @@ const InterestWithdraw: FunctionComponent = () => {
           <PText label={`EL ${elInterest}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
         </TextWrapper>
       </View>
-      <SubmitButton title={i18n.t('dashboard_label.withdraw')} handler={() => { callApi(); }} style={{ position: 'absolute', bottom: 30, width: "100%", alignSelf: 'center' }}></SubmitButton>
+      <SubmitButton title={i18n.t('account_label.continue')} handler={() => { callApi(); }} style={{ position: 'absolute', bottom: 30, width: "100%", alignSelf: 'center' }}></SubmitButton>
     </View>
   );
 };

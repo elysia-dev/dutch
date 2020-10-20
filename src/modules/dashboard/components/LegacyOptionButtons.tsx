@@ -27,7 +27,7 @@ const LegacyOptionButtons: FunctionComponent<Props> = (props: Props) => {
         handler={props.refundHandler}
         title={
           props.ownership.legacyRefundStatus === LegacyRefundStatus.NONE ?
-            i18n.t('dashboard_label.withdraw_stake')
+            i18n.t('dashboard_label.withdraw_stake_legacy')
             :
             i18n.t('dashboard_label.withdraw_stake_pending')
         }

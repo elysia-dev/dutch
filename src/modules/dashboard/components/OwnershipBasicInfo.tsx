@@ -139,6 +139,16 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
+          <GText>{i18n.t('dashboard_label.token_amount')}</GText>
+          <ValueText>{ownership.tokenValue}</ValueText>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
           <GText>{i18n.t('dashboard_label.stake')}</GText>
           <ValueText>{`${parseFloat(ownership.stake).toFixed(2)}%`}</ValueText>
         </View>
