@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, Animated, RefreshControl, Text } from 'react-native';
+import { View, Animated, RefreshControl, Text, Platform } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -88,6 +88,10 @@ const Notifications: FunctionComponent = () => {
       <Animated.View
         style={{
           backgroundColor: '#fff',
+          elevation: scrollY.interpolate({
+            inputRange: [0, 15, 1000],
+            outputRange: [0, 5, 5],
+          }),
           shadowOffset: { width: 1, height: 1 },
           shadowColor: '#00000033',
           shadowOpacity: scrollY.interpolate({
@@ -110,10 +114,20 @@ const Notifications: FunctionComponent = () => {
           style={{
             position: 'relative',
             left: 0,
-            width: 50,
+            paddingLeft: 0,
+            width: "100%",
             color: '#1c1c1c',
             fontSize: 28,
             transform: [
+              {
+                translateX: scrollY.interpolate({
+                  inputRange: [-1000, 0, 15, 1000],
+                  outputRange: [0, 0, -20, -20],
+                }),
+              },
+              {
+                translateY: 0,
+              },
               {
                 scale: scrollY.interpolate({
                   inputRange: [-1000, 0, 15, 1000],
@@ -122,7 +136,9 @@ const Notifications: FunctionComponent = () => {
               },
             ],
             fontWeight: 'bold',
-            textAlign: 'center',
+            textAlign: 'left',
+            justifyContent: "flex-start",
+            alignSelf: 'flex-start',
           }}>
           {i18n.t('notification_label.notification')}
         </Animated.Text>

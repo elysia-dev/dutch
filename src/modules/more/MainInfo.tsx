@@ -89,6 +89,10 @@ const MainInfo: FunctionComponent = () => {
         style={{
           flexDirection: 'row',
           backgroundColor: '#fff',
+          elevation: scrollY.interpolate({
+            inputRange: [0, 15, 1000],
+            outputRange: [0, 5, 5],
+          }),
           shadowOffset: { width: 1, height: 1 },
           shadowColor: '#00000033',
           shadowOpacity: scrollY.interpolate({
