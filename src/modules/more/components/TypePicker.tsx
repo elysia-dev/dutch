@@ -85,18 +85,19 @@ export const TypePicker: FunctionComponent<Props> = props => {
           </Picker>
         </View>
       ) : (
-        <RNPickerSelect
-          onValueChange={value =>
-            props.dispatch({
-              type: 'UPDATE_TYPE',
-              transactionType: value,
-            })
-          }
-          items={TypesListIos}
-          style={pickerSelectStyles}
-          placeholder={{}}
-        />
-      )}
+          <RNPickerSelect
+            onValueChange={value =>
+              props.dispatch({
+                type: 'UPDATE_TYPE',
+                transactionType: value,
+              })
+            }
+            value={props.filter.type}
+            items={TypesListIos}
+            style={pickerSelectStyles}
+            placeholder={{}}
+          />
+        )}
     </View>
   );
 };

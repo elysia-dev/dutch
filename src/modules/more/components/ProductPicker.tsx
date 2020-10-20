@@ -40,7 +40,7 @@ export const ProductPicker: FunctionComponent<Props> = props => {
         <View style={pickerSelectStyles.inputAndroid}>
           <Picker
             // mode="dropdown"
-            selectedValue={props.filter.type}
+            selectedValue={`${props.filter.productId}`}
             onValueChange={(value: string) =>
               props.dispatch({
                 type: 'UPDATE_PRODUCT',
@@ -51,18 +51,19 @@ export const ProductPicker: FunctionComponent<Props> = props => {
           </Picker>
         </View>
       ) : (
-        <RNPickerSelect
-          onValueChange={(value: string) => {
-            props.dispatch({
-              type: 'UPDATE_PRODUCT',
-              value: parseInt(value, 10),
-            });
-          }}
-          items={props.productList.iosList}
-          style={pickerSelectStyles}
-          placeholder={{}}
-        />
-      )}
+          <RNPickerSelect
+            onValueChange={(value: string) => {
+              props.dispatch({
+                type: 'UPDATE_PRODUCT',
+                productId: parseInt(value, 10),
+              });
+            }}
+            value={`${props.filter.productId}`}
+            items={props.productList.iosList}
+            style={pickerSelectStyles}
+            placeholder={{}}
+          />
+        )}
     </View>
   );
 };

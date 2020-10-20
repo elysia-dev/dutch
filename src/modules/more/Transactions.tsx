@@ -53,7 +53,7 @@ const Transactions: FunctionComponent = () => {
 
   const filterTransactions = () => {
     Server.getTransactionHistory(
-      state.page,
+      1,
       state.start,
       state.end,
       state.type,
@@ -61,13 +61,11 @@ const Transactions: FunctionComponent = () => {
       state.productId,
     )
       .then(res => {
-        if (res.data.length === 0 && state.page > 1) {
-          return alert(i18n.t('dashboard.last_transaction'));
-        }
         dispatch({
           type: 'UPDATE_TRANSACTIONS',
           transactions: res.data,
         });
+        dispatch({ type: 'UPDATE_PAGE', page: 1 });
       })
       .catch(e => {
         if (e.response.status === 500) {
@@ -89,9 +87,10 @@ const Transactions: FunctionComponent = () => {
         if (res.data.length === 0 && state.page > 1) {
           return alert(i18n.t('dashboard.last_transaction'));
         }
+        dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
         dispatch({
           type: 'ADD_TRANSACTIONS',
-          transactions: state.transactions.concat(res.data),
+          transactions: res.data,
         });
       })
       .catch(e => {
@@ -218,7 +217,6 @@ const Transactions: FunctionComponent = () => {
               {historyList}
               <TouchableOpacity
                 onPress={() => {
-                  dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
                   loadTransactions();
                 }}
                 style={{

@@ -32,9 +32,11 @@ type ButtonProps = {
   on: boolean;
 }
 
-type props = React.PropsWithChildren<{dispatch: React.Dispatch<any>;
+type props = React.PropsWithChildren<{
+  dispatch: React.Dispatch<any>;
   filter: State;
-  filterTransactions: () => void;}>;
+  filterTransactions: () => void;
+}>;
 
 const Button: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
   return (
@@ -167,7 +169,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
           filter={props.filter}
         />
         <H1Text>{i18n.t('more_label.product')}</H1Text>
-       {props.children}
+        {props.children}
       </View>
       <SubmitButton
         style={{
@@ -183,7 +185,6 @@ const Filter: FunctionComponent<props> = (props: props) => {
           if (new Date(props.filter.start) > new Date(props.filter.end)) {
             return alert(i18n.t('more.invalid_date'));
           }
-          props.dispatch({ type: 'UPDATE_PAGE', page: 1 });
           props.filterTransactions();
           props.dispatch({ type: 'MODAL_CONTROL', modal: false });
         }}
