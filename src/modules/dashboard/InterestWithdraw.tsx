@@ -74,7 +74,7 @@ const InterestWithdraw: FunctionComponent = () => {
       }}>
         <TextWrapper>
           <PText label={i18n.t('dashboard_label.token_amount')} style={{ color: "#838383", fontSize: 15 }} />
-          <PText label={`${ownership.value} ${ownership.product.tokenName} Token`} style={{ color: "#1C1C1C", fontSize: 15 }} />
+          <PText label={`${ownership.product.tokenName} ${ownership.tokenValue}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
         </TextWrapper>
         <TextWrapper>
           <PText label={`${i18n.t('dashboard_label.expected_profit')}(USD)`} style={{ color: "#838383", fontSize: 15 }} />
