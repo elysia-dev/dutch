@@ -217,12 +217,7 @@ const MainInfo: FunctionComponent = () => {
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
                 height: 70,
-                elevation: 6,
               }}
               duplicateTitle={i18n.t(
                 'more_label.success_kyc_duplicate_label',
