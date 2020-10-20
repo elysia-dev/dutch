@@ -1,6 +1,6 @@
 {
   "welcome": "엘리시아에 오신 것을 환영합니다.",
-  "greeting": "안녕하세요. %{lastName}%{firstName}님",
+  "greeting": "안녕하세요. %{lastName} %{firstName}님",
   "greeting_new": "안녕하세요. 방문자님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
@@ -260,7 +260,6 @@
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
     "no_transaction": "해당기간 내 거래내역이 없습니다.",
     "contact_text": "아래 문의사항을 작성 후 제출해주세요.",
-    "elysia_contact": "엘리시아에 문의 남기기",
     "question_submitted": "문의사항이 성공적으로 제출되었습니다. 빠른 시일 내에 이메일로 답변해드릴게요.",
     "invalid_date": "올바르지 않은 기간입니다. 기간을 확인해주세요.",
     "invalid_password": "현재 비밀번호를 입력해주세요.",
