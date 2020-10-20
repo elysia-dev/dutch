@@ -14,7 +14,7 @@ export const H1Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <H1Title style={style}>{label}</H1Title>;
+  return <H1Title style={style} allowFontScaling={false}>{label}</H1Title>;
 };
 
 const H2Title = styled.Text`
@@ -29,7 +29,7 @@ export const H2Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <H2Title style={style}>{label}</H2Title>;
+  return <H2Title style={style} allowFontScaling={false}>{label}</H2Title>;
 };
 
 const P1Title = styled.Text`
@@ -44,7 +44,7 @@ export const P1Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <P1Title style={style}>{label}</P1Title>;
+  return <P1Title style={style} allowFontScaling={false}>{label}</P1Title>;
 };
 
 const H3Title = styled.Text`
@@ -59,7 +59,7 @@ export const H3Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <H3Title style={style}>{label}</H3Title>;
+  return <H3Title style={style} allowFontScaling={false}>{label}</H3Title>;
 };
 
 const P2Title = styled.Text`
@@ -74,7 +74,7 @@ export const P2Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <P2Title style={style}>{label}</P2Title>;
+  return <P2Title style={style} allowFontScaling={false}>{label}</P2Title>;
 };
 
 const P3Title = styled.Text`
@@ -89,7 +89,7 @@ export const P3Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <P3Title style={style}>{label}</P3Title>;
+  return <P3Title style={style} allowFontScaling={false}>{label}</P3Title>;
 };
 
 const P4Title = styled.Text`
@@ -104,5 +104,5 @@ export const P4Text: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <P4Title style={style}>{label}</P4Title>;
+  return <P4Title style={style} allowFontScaling={false}>{label}</P4Title>;
 };
