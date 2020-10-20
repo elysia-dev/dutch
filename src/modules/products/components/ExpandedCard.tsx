@@ -1,4 +1,4 @@
-import React, { createRef, FunctionComponent, useEffect, useState } from 'react';
+import React, { createRef, FunctionComponent, useContext, useEffect, useState } from 'react';
 import {
   Animated,
   Image,
@@ -14,11 +14,12 @@ import HTMLView from 'react-native-htmlview';
 
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
-import QuitIcon from '../images/quitbutton.png';
+import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
 import { PText } from '../../../shared/components/PText';
 import { H1Text } from '../../../shared/components/H1Text';
+import RootContext from '../../../contexts/RootContext';
 
 interface Props {
   story: Story;
@@ -96,9 +97,9 @@ const ExpandedItem: FunctionComponent<Props> = ({
     >
       <ScrollView
         ref={scrollRef}
+        contentOffset={{ x: 0, y: 0 }}
         scrollEnabled={state.scrollEnabled}
         showsVerticalScrollIndicator={state.scrollEnabled}
-        scrollToOverflowEnabled={true}
         onScroll={(event) => {
           setState({
             ...state, scrollY: event.nativeEvent.contentOffset.y,
@@ -164,10 +165,14 @@ const ExpandedItem: FunctionComponent<Props> = ({
             }).start(() => deactivateStory());
           }}
         >
+          <View style={{
+            width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(28,28,28,0.3)',
+          }} />
           <Image
             style={{
-              width: 26,
-              height: 26,
+              position: 'absolute',
+              width: 32,
+              height: 32,
               resizeMode: 'center',
               opacity: 0.8,
             }}
@@ -178,7 +183,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
       { /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
         !state.closed && state.scrollY > 50 && <SubmitButton
           style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-          title={i18n.t('product_label.invest')}
+          title={i18n.t('product_label.view_details')}
           handler={() => {
             StatusBar.setHidden(false);
             navigation.navigate('Product', {
@@ -188,7 +193,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
           }}
         />
       }
-    </Animated.View>
+    </Animated.View >
   );
 };
 
