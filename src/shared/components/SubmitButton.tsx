@@ -9,11 +9,11 @@ type ButtonProps = {
 const handleThemeType = (variant: string) => {
   switch (variant) {
     case 'WhiteTheme':
-      return 'border: 1px solid #3679B5; background-color: #FFFFFF;';
+      return 'border: 1px solid #3679B5; background-color: #FFFFFF; height: 40px;';
     case 'GrayTheme':
-      return 'border: 0px solid #FFFFFF; background-color: #AAAAAA;';
+      return 'border: 0px solid #FFFFFF; background-color: #AAAAAA; height: 50px;';
     default:
-      return 'border: 0px solid #FFFFFF; background-color:#3679B5;';
+      return 'border: 0px solid #FFFFFF; background-color:#3679B5; height: 50px;';
   }
 };
 const handleThemeWrapperType = (variant: string) => {
@@ -31,7 +31,6 @@ const Button = styled.TouchableOpacity`
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
-  height: 40px;
   border-radius: 5px;
   justify-content: center;
   align-content: center;
@@ -45,6 +44,8 @@ const ButtonLabel = styled.Text`
 
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
+  font-weight: ${(props: ButtonProps) =>
+    props.theme === 'GrayTheme' ? '200' : 'bold'};
 `;
 const DuplicateUpperLabel = styled.Text`
   font-size: 14px;

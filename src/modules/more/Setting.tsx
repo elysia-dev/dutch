@@ -50,11 +50,9 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     }
   };
   const enablePushNotificationsAsync = async () => {
-    const { status } = await Permissions.askAsync(
-      Permissions.NOTIFICATIONS, Permissions.CAMERA, Permissions.CAMERA_ROLL, Permissions.LOCATION);
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (status === 'granted') {
       await AsyncStorage.setItem('pushNotificationPermission', "granted");
-      alert('d');
     } else {
       alert('Sorry, we need notification permissions to make this work!');
       setState({ ...state, hasPermission: false });
@@ -114,7 +112,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               borderBottomColor: '#F6F6F8',
               top: 22,
             }}>
-            <H1Text label={'알림 설정'} />
+            <H1Text label={i18n.t('more_label.notification_setting')} />
             <View
               style={{
                 flexDirection: 'row',

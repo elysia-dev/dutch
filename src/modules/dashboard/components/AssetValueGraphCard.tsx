@@ -68,6 +68,18 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
     '#30C2B8',
     '#234F75',
     '#335CCC',
+    '#3679B5',
+    '#66B8FF',
+    '#33ADCC',
+    '#30C2B8',
+    '#234F75',
+    '#335CCC',
+    '#3679B5',
+    '#66B8FF',
+    '#33ADCC',
+    '#30C2B8',
+    '#234F75',
+    '#335CCC',
   ];
 
   const pieData = data.map((value, index) => ({

@@ -115,7 +115,7 @@ export const Main: FunctionComponent = () => {
               lastName: state.user.lastName,
             }) : i18n.t('greeting_new')}
           </Text>
-          {(user.kycStatus !== KycStatus.SUCCESS || user.ethAddresses === null) &&
+          {(user.kycStatus !== KycStatus.SUCCESS || !(user.ethAddresses?.length > 0)) &&
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
               screen: DashboardPage.PreparingInvestment,
             })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
@@ -123,8 +123,10 @@ export const Main: FunctionComponent = () => {
               <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
               <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.get_EL')}</Text>
             </TouchableOpacity>}
-          {(user.kycStatus === KycStatus.SUCCESS && ownerships.length === 0) &&
-            <>
+          {(user.kycStatus === KycStatus.SUCCESS
+            && user.ethAddresses?.length > 0
+            && ownerships.length === 0)
+            && <>
               <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
                 screen: DashboardPage.PreparingInvestment,
               })} style={{ marginBottom: 25, width: "100%", height: 100, backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
