@@ -10,7 +10,7 @@ import {
 import DatePicker from "react-native-datepicker";
 import styled from "styled-components/native";
 
-interface props {
+interface Props {
   type: string;
   eventHandler: (input: string) => void;
   birthday: string;
@@ -18,7 +18,7 @@ interface props {
 }
 
 const InputHeaderText = styled.Text`
-  color: #a7a7a7;
+  color: #A7A7A7;
   font-size: 12px;
   text-align: left;
 `;
@@ -28,14 +28,14 @@ const InputTextForm = styled.TextInput`
   border-bottom-color: #a7a7a7;
 `;
 
-export const DateInput: FunctionComponent<props> = (props) => {
+export const DateInput: FunctionComponent<Props> = (props) => {
   const currentDate = new Date();
 
   return (
     <View style={props.style}>
       <InputHeaderText>{props.type}</InputHeaderText>
       <DatePicker
-        style={{ width: "90%" }}
+        style={{ width: "100%", height: 40 }}
         date={props.birthday}
         onDateChange={props.eventHandler}
         mode="date"

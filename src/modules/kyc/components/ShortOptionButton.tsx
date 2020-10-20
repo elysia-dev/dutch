@@ -3,9 +3,9 @@ import styled from "styled-components/native";
 
 const OptionBtn = styled.TouchableOpacity`
   color: #000;
-  width: 40%;
+  width: 47%;
   margin: 0 auto;
-  height: 40px;
+  height: 45px;
   background-color: #fff;
   border-radius: 5px;
   border: solid 1px #d0d8df;
@@ -16,9 +16,9 @@ const OptionBtn = styled.TouchableOpacity`
 `;
 const CheckedOptionBtn = styled.TouchableOpacity`
   color: #000;
-  width: 40%;
+  width: 47%;
   margin: 0 auto;
-  height: 40px;
+  height: 45px;
   background-color: #fff;
   border-radius: 5px;
   border: solid 1px #3679b5;
@@ -33,6 +33,7 @@ const OptionBtnText = styled.Text`
   text-align: center;
   line-height: 40px;
   z-index: 5;
+  align-self:center;
 `;
 const CheckedOptionBtnText = styled.Text`
   color: #1c1c1c;
@@ -40,6 +41,7 @@ const CheckedOptionBtnText = styled.Text`
   text-align: center;
   line-height: 40px;
   z-index: 5;
+  align-self:center;
 `;
 const InputHeaderText = styled.Text`
   color: #a7a7a7;

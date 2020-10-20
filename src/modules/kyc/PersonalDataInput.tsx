@@ -32,12 +32,15 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 //   text-align: left;
 // `;
 const InputHeaderText = styled.Text`
-  color: #a7a7a7;
+  color: #A7A7A7;
   font-size: 12px;
   text-align: left;
 `;
 const IdImg = styled.Image`
-  height: 45%;
+  margin-top:10px;
+  width: 100%;
+  height: 200px;
+  resize-mode: cover;
 `;
 const ConfirmImg = styled.Image`
   width: 150px;
@@ -120,89 +123,89 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
       body={
         <ScrollView
           style={{
-            marginLeft: '5%',
-            marginRight: '5%',
-            height: '70%',
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            height: '100%',
             flexDirection: 'column',
             flexGrow: 1,
           }}>
-          <View style={{ flex: 1 }}>
-            <IdImg source={{ uri: route.params.idPhoto.uri }} />
-            <H1Text
-              label={i18n.t('kyc_label.personal_data')}
-              style={{ marginTop: 40, marginBottom: 6 }}
+
+          <IdImg source={{ uri: route.params.idPhoto.uri }} />
+          <H1Text
+            label={i18n.t('kyc_label.personal_data')}
+            style={{ marginTop: 40, marginBottom: 6 }}
+          />
+          <TextField
+            label={i18n.t('kyc_label.last_name')}
+            eventHandler={(input: string) => {
+              setState({ ...state, lastName: input });
+            }}
+            style={{
+              marginTop: 20,
+            }}
+          />
+          <TextField
+            label={i18n.t('kyc_label.first_name')}
+            eventHandler={(input: string) => {
+              setState({ ...state, firstName: input });
+            }}
+            style={{
+              marginTop: 20,
+            }}
+          />
+          <NationInput
+            type={i18n.t('kyc_label.nationality')}
+            eventHandler={setNationality}
+            nationality={state.nationality}
+            style={{
+              marginTop: 20,
+            }}
+          />
+          <DateInput
+            type={i18n.t('kyc_label.birthday')}
+            eventHandler={setBirthday}
+            birthday={state.birthday}
+            style={{
+              marginTop: 20,
+              width: "100%",
+              height: 40,
+            }}
+          />
+          <InputHeaderText style={{ marginTop: 30 }}>
+            {i18n.t('kyc_label.gender')}
+          </InputHeaderText>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 100,
+              marginTop: 20,
+            }}>
+            <ShortOptionButton
+              check={state.gender === 'male' ? 'checked' : ''}
+              title={i18n.t('kyc_label.male')}
+              handler={() =>
+                setState({
+                  ...state,
+                  gender: state.gender === 'male' ? '' : 'male',
+                })
+              }
             />
-            <TextField
-              label={i18n.t('kyc_label.last_name')}
-              eventHandler={(input: string) => {
-                setState({ ...state, lastName: input });
-              }}
-              style={{
-                marginTop: 20,
-              }}
+            <ShortOptionButton
+              check={state.gender === 'female' ? 'checked' : ''}
+              title={i18n.t('kyc_label.female')}
+              handler={() =>
+                setState({
+                  ...state,
+                  gender: state.gender === 'female' ? '' : 'female',
+                })
+              }
             />
-            <TextField
-              label={i18n.t('kyc_label.first_name')}
-              eventHandler={(input: string) => {
-                setState({ ...state, firstName: input });
-              }}
-              style={{
-                marginTop: 20,
-              }}
-            />
-            <NationInput
-              type={i18n.t('kyc_label.nationality')}
-              eventHandler={setNationality}
-              nationality={state.nationality}
-              style={{
-                marginTop: 20,
-              }}
-            />
-            <DateInput
-              type={i18n.t('kyc_label.birthday')}
-              eventHandler={setBirthday}
-              birthday={state.birthday}
-              style={{
-                marginTop: 20,
-              }}
-            />
-            <InputHeaderText style={{ marginTop: 20 }}>
-              {i18n.t('kyc_label.gender')}
-            </InputHeaderText>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                marginBottom: 80,
-                marginTop: 10,
-              }}>
-              <ShortOptionButton
-                check={state.gender === 'male' ? 'checked' : ''}
-                title={i18n.t('kyc_label.male')}
-                handler={() =>
-                  setState({
-                    ...state,
-                    gender: state.gender === 'male' ? '' : 'male',
-                  })
-                }
-              />
-              <ShortOptionButton
-                check={state.gender === 'female' ? 'checked' : ''}
-                title={i18n.t('kyc_label.female')}
-                handler={() =>
-                  setState({
-                    ...state,
-                    gender: state.gender === 'female' ? '' : 'female',
-                  })
-                }
-              />
-            </View>
           </View>
-          <View style={{ padding: 100 }} />
-        </ScrollView>
+        </ScrollView >
       }
       button={
-        <SubmitButton
+        < SubmitButton
           title={i18n.t('kyc_label.complete_input')}
           handler={() => setModalVisible(true)}
         />

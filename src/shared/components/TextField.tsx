@@ -75,7 +75,7 @@ export const TextField: FunctionComponent<Props> = ({
               ? '#C91725'
               : focusing === true
                 ? '#3679B5'
-                : '#A7A7A7',
+                : '#D0D8DF',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
         }}

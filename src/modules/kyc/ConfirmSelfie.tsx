@@ -13,11 +13,11 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const SelfieImg = styled.Image`
   width: 90%;
-  height: 60%;
+  height: 80%;
   justify-content: center;
   align-content: center;
   left: 5%;
-  resize-mode: stretch;
+  resize-mode: cover;
 `;
 
 type ParamList = {
@@ -62,10 +62,10 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
       backButtonHandler={() => navigation.navigate(KycPage.TakeSelfie)}
       title={i18n.t('kyc.step2_complete')}
       subTitle={
-          <PText
-            label={i18n.t('kyc.step2_complete_text')}
-            style={{ color: '#626368', marginBottom: 15 }}
-          />
+        <PText
+          label={i18n.t('kyc.step2_complete_text')}
+          style={{ color: '#626368', marginBottom: 15 }}
+        />
       }
       body={<SelfieImg source={{ uri: route.params.selfie.uri }} />}
       button={
