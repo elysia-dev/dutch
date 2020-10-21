@@ -1,11 +1,7 @@
-import axios, { AxiosInstance } from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
-import Constants from 'expo-constants';
-const { manifest } = Constants;
+import axios from 'axios';
+import getEnvironment from '../utiles/getEnvironment';
 
-export const baseURL = `http://${(manifest.debuggerHost || 'localhost')
-  .split(':')
-  .shift()}:3000`;
+const baseURL = getEnvironment().apiUrl;
 
 export const authenticatedEspressoClient = (
   autoSignOutHandler: () => void,
