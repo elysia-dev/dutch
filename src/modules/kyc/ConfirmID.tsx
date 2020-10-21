@@ -83,17 +83,17 @@ const ConfirmID: FunctionComponent<{}> = () => {
       backButtonHandler={() => navigation.goBack()}
       title={i18n.t('kyc.step1_complete')}
       subTitle={
-      <PText
-        label={i18n.t('kyc.step1_complete_text')}
-        style={{ color: '#626368', marginBottom: 15 }}
-      />
+        <PText
+          label={i18n.t('kyc.step1_complete_text')}
+          style={{ color: '#626368', marginBottom: 15 }}
+        />
       }
       isScrolling={false}
       body={
         <>
           <SelfieImg
             source={{ uri: route.params.idPhoto.uri }}
-            style={{ resizeMode: 'cover' }}
+            style={{ resizeMode: 'cover', marginTop: 20 }}
           />
           <WarningWrapper>
             <View

@@ -91,27 +91,16 @@ const TakeSelfie: FunctionComponent<{}> = () => {
   });
 
   useEffect(() => {
-    if (Platform.OS === 'ios') {
-      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        status => {
-          if (!status.granted) {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          } else {
-            setState({ ...state, hasPermission: true });
-          }
-        },
-      );
-    } else {
-      Permissions.askAsync(Permissions.CAMERA).then(status => {
+    Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
+      status => {
         if (!status.granted) {
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
           setState({ ...state, hasPermission: true });
         }
-      });
-    }
+      },
+    );
   }, []);
-  // 셀피 이전 신분증 촬영에서 카메라 승인 받으면 다시 승인 받을 필요 없지 않나? -> storybook에 한해 살리기
 
   const reverseCamera = () => {
     setState({
@@ -130,8 +119,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
         exif: true,
         base64: true,
       });
-      // const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
-      // 웹에서 불가. 나중에 살리기
+      const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
       return selfie;
     }
   };
@@ -202,9 +190,9 @@ const TakeSelfie: FunctionComponent<{}> = () => {
               top: 220,
             }}>
             <PText
-                label={i18n.t('kyc.step2_text')}
-                style={{ fontSize: 15, color: '#FFF', textAlign: 'center' }}
-              />
+              label={i18n.t('kyc.step2_text')}
+              style={{ fontSize: 15, color: '#FFF', textAlign: 'center' }}
+            />
           </View>
           <BottomCameraWrapper>
             <BottomButtonWrapper>

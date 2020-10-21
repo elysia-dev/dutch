@@ -164,25 +164,15 @@ const TakeID: FunctionComponent<{}> = () => {
   });
 
   useEffect(() => {
-    if (Platform.OS === 'ios') {
-      Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-        status => {
-          if (!status.granted) {
-            alert('Sorry, we need camera roll permissions to make this work!');
-          } else {
-            setState({ ...state, hasPermission: true });
-          }
-        },
-      );
-    } else {
-      Permissions.askAsync(Permissions.CAMERA).then(status => {
+    Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
+      status => {
         if (!status.granted) {
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
           setState({ ...state, hasPermission: true });
         }
-      });
-    }
+      },
+    );
   }, []);
 
   const reverseCamera = () => {
@@ -202,8 +192,7 @@ const TakeID: FunctionComponent<{}> = () => {
         exif: true,
         base64: true,
       });
-      // setPath(`${photo.uri}`);
-      // const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
+      const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
       return idPhoto;
     }
   };

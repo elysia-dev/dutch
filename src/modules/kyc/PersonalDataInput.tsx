@@ -84,153 +84,148 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
   };
 
   const callKycApi = () => {
-    if (state.gender === '') {
-      alert(i18n.t('kyc.alert_data'));
-    } else if (state.firstName === '' || state.lastName === '') {
-      alert(i18n.t('kyc.alert_data'));
-    } else if (state.birthday === '' || state.nationality === '') {
+    if (state.gender === '' || state.firstName === '' || state.lastName === '' || state.birthday === '' || state.nationality === '') {
       alert(i18n.t('kyc.alert_data'));
     } else {
-      Server.submission(
-        state.firstName,
-        state.lastName,
-        state.nationality,
-        state.birthday,
-        state.gender,
-        route.params.id_type === 'passport' ? 'passport' : 'government_id',
-        route.params.photoId_hash,
-        route.params.selfie_hash,
-      )
-        .then(res => {
-          setModalVisible(true);
-        })
-        .catch(e => {
-          if (e.response.status === 404) {
-            alert(i18n.t('kyc.submit_error'));
-            navigation.navigate('Main', { screen: 'MoreMain' });
-          } else if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
-          }
-        });
+      // Server.submission(
+      //   state.firstName,
+      //   state.lastName,
+      //   state.nationality,
+      //   state.birthday,
+      //   state.gender,
+      //   route.params.id_type === 'passport' ? 'passport' : 'government_id',
+      //   route.params.photoId_hash,
+      //   route.params.selfie_hash,
+      // )
+      //   .then(res => {
+      //     setModalVisible(true);
+      //   })
+      //   .catch(e => {
+      //     if (e.response.status === 404) {
+      //       alert(i18n.t('kyc.submit_error'));
+      //       navigation.navigate('Main', { screen: 'MoreMain' });
+      //     } else if (e.response.status === 500) {
+      //       alert(i18n.t('account_errors.server'));
+      //     }
+      //   });
     }
   };
   return (
-    <WrapperLayout
-      isScrolling={false}
-      backButtonHandler={() => navigation.goBack()}
-      title={i18n.t('kyc.step3')}
-      subTitle={<PText label={i18n.t('kyc.step3_text')} />}
-      body={
-        <ScrollView
-          style={{
-            paddingLeft: '5%',
-            paddingRight: '5%',
-            height: '100%',
-            flexDirection: 'column',
-            flexGrow: 1,
-          }}>
-
-          <IdImg source={{ uri: route.params.idPhoto.uri }} />
-          <H1Text
-            label={i18n.t('kyc_label.personal_data')}
-            style={{ marginTop: 40, marginBottom: 6 }}
-          />
-          <TextField
-            label={i18n.t('kyc_label.last_name')}
-            eventHandler={(input: string) => {
-              setState({ ...state, lastName: input });
-            }}
+    <>
+      <WrapperLayout
+        isScrolling={false}
+        backButtonHandler={() => navigation.goBack()}
+        title={i18n.t('kyc.step3')}
+        subTitle={<PText label={i18n.t('kyc.step3_text')} />}
+        body={
+          <ScrollView
             style={{
-              marginTop: 20,
-            }}
-          />
-          <TextField
-            label={i18n.t('kyc_label.first_name')}
-            eventHandler={(input: string) => {
-              setState({ ...state, firstName: input });
-            }}
-            style={{
-              marginTop: 20,
-            }}
-          />
-          <NationInput
-            type={i18n.t('kyc_label.nationality')}
-            eventHandler={setNationality}
-            nationality={state.nationality}
-            style={{
-              marginTop: 20,
-            }}
-          />
-          <DateInput
-            type={i18n.t('kyc_label.birthday')}
-            eventHandler={setBirthday}
-            birthday={state.birthday}
-            style={{
-              marginTop: 20,
-              width: "100%",
-              height: 40,
-            }}
-          />
-          <InputHeaderText style={{ marginTop: 30 }}>
-            {i18n.t('kyc_label.gender')}
-          </InputHeaderText>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 100,
-              marginTop: 20,
+              paddingLeft: '5%',
+              paddingRight: '5%',
+              height: '100%',
+              flexDirection: 'column',
+              flexGrow: 1,
             }}>
-            <ShortOptionButton
-              check={state.gender === 'male' ? 'checked' : ''}
-              title={i18n.t('kyc_label.male')}
-              handler={() =>
-                setState({
-                  ...state,
-                  gender: state.gender === 'male' ? '' : 'male',
-                })
-              }
-            />
-            <ShortOptionButton
-              check={state.gender === 'female' ? 'checked' : ''}
-              title={i18n.t('kyc_label.female')}
-              handler={() =>
-                setState({
-                  ...state,
-                  gender: state.gender === 'female' ? '' : 'female',
-                })
-              }
-            />
-          </View>
-        </ScrollView >
-      }
-      button={
-        < SubmitButton
-          title={i18n.t('kyc_label.complete_input')}
-          handler={() => setModalVisible(true)}
-        />
-      }
-    />
-    // <PersonalDataInputWrapper>
-    //   <ScrollViewWrapper>
 
-    //     {state.modalVisible === true && (
-    //       <Modal
-    //         child={
-    //           <View>
-    //             <ConfirmImg source={KycSubmitPng} />
-    //             <H1Text>{i18n.t('kyc.submit')}</H1Text>
-    //             <PText>{i18n.t('kyc.submit_text')}</PText>
-    //           </View>
-    //         }
-    //         visible={state.modalVisible}
-    //         modalHandler={() => {
-    //           setModalVisible(false);
-    //           navigation.navigate('Main', { screen: 'MoreMain' });
-    //         }}></Modal>
-    //     )}
-    //   </ScrollViewWrapper>
-    // </PersonalDataInputWrapper>
+            <IdImg source={{ uri: route.params.idPhoto.uri }} />
+            <H1Text
+              label={i18n.t('kyc_label.personal_data')}
+              style={{ marginTop: 40, marginBottom: 6 }}
+            />
+            <TextField
+              label={i18n.t('kyc_label.last_name')}
+              eventHandler={(input: string) => {
+                setState({ ...state, lastName: input });
+              }}
+              style={{
+                marginTop: 20,
+              }}
+            />
+            <TextField
+              label={i18n.t('kyc_label.first_name')}
+              eventHandler={(input: string) => {
+                setState({ ...state, firstName: input });
+              }}
+              style={{
+                marginTop: 20,
+              }}
+            />
+            <NationInput
+              type={i18n.t('kyc_label.nationality')}
+              eventHandler={setNationality}
+              nationality={state.nationality}
+              style={{
+                marginTop: 20,
+              }}
+            />
+            <DateInput
+              type={i18n.t('kyc_label.birthday')}
+              eventHandler={setBirthday}
+              birthday={state.birthday}
+              style={{
+                marginTop: 20,
+                width: "100%",
+                height: 40,
+              }}
+            />
+            <InputHeaderText style={{ marginTop: 30 }}>
+              {i18n.t('kyc_label.gender')}
+            </InputHeaderText>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 100,
+                marginTop: 20,
+              }}>
+              <ShortOptionButton
+                check={state.gender === 'male' ? 'checked' : ''}
+                title={i18n.t('kyc_label.male')}
+                handler={() =>
+                  setState({
+                    ...state,
+                    gender: state.gender === 'male' ? '' : 'male',
+                  })
+                }
+              />
+              <ShortOptionButton
+                check={state.gender === 'female' ? 'checked' : ''}
+                title={i18n.t('kyc_label.female')}
+                handler={() =>
+                  setState({
+                    ...state,
+                    gender: state.gender === 'female' ? '' : 'female',
+                  })
+                }
+              />
+            </View>
+          </ScrollView >
+        }
+        button={
+          <SubmitButton
+            title={i18n.t('kyc_label.complete_input')}
+            handler={() => callKycApi()}
+          />
+        }
+      />
+
+      {state.modalVisible === true && (
+        <Modal
+          child={
+            <View style={{ alignItems: 'center' }}>
+              <ConfirmImg source={KycSubmitPng} />
+              <H1Text label={i18n.t('kyc.submit')} style={{ marginTop: 10, textAlign: 'center' }} />
+              <PText label={i18n.t('kyc.submit_text')} style={{ marginTop: 10, textAlign: 'center' }} />
+            </View>
+          }
+          visible={state.modalVisible}
+          modalHandler={() => {
+            setModalVisible(false);
+            navigation.navigate('Main', { screen: 'MoreMain' });
+          }}></Modal>
+      )}
+
+    </>
   );
 };
 export default PersonalDataInput;
