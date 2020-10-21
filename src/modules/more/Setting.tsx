@@ -151,6 +151,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 height: 50,
                 marginBottom: 20,
                 marginTop: 10,
+                paddingHorizontal: 15,
               }}>
               {Platform.OS === 'android' ? (
                 <Picker
@@ -177,12 +178,6 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     }}
                     items={currentTermListIos}
                     placeholder={{}}
-
-                  // placeholder={{
-                  //   label: i18n.currentLocale(),
-                  //   value: '',
-                  //   color: '#1C1C1C',
-                  // }}
                   />
                 )}
             </View>
