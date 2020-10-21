@@ -30,7 +30,10 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 //   text-align: left;
 // `;
 const IdImg = styled.Image`
-  height: 45%;
+  margin-top:10px;
+  width: 100%;
+  height: 200px;
+  resize-mode: cover;
 `;
 const ConfirmImg = styled.Image`
   width: 150px;
@@ -113,9 +116,9 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
       body={
         <View
           style={{
-            marginLeft: '5%',
-            marginRight: '5%',
-            height: '70%',
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            height: '100%',
             flexDirection: 'column',
             flexGrow: 1,
           }}>
@@ -149,16 +152,17 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
               nationality={state.nationality}
               style={{
                 marginTop: 20,
-              }}
-            />
-            <DateInput
-              type={i18n.t('kyc_label.birthday')}
-              eventHandler={setBirthday}
-              birthday={state.birthday}
-              style={{
-                marginTop: 20,
-              }}
-            />
+              }}/>
+              <DateInput
+                type={i18n.t('kyc_label.birthday')}
+                eventHandler={setBirthday}
+                birthday={state.birthday}
+                style={{
+                  marginTop: 20,
+                  width: "100%",
+                  height: 40,
+                }}
+              />
             <P3Text
               style={{ marginTop: 20 }}
               label={i18n.t('kyc_label.gender')}
@@ -202,9 +206,9 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
         />
       }
     />
+
     // <PersonalDataInputWrapper>
     //   <ScrollViewWrapper>
-
     //     {state.modalVisible === true && (
     //       <Modal
     //         child={

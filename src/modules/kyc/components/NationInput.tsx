@@ -16,7 +16,7 @@ import nations from './argos.json';
 
 
 const InputHeaderText = styled.Text`
-  color: #a7a7a7;
+  color: #A7A7A7;
   font-size: 12px;
   text-align: left;
   font-family: 'Roboto_400Regular';
@@ -58,20 +58,22 @@ export const NationInput: FunctionComponent<Props> = (props) => {
         {props.type}
       </InputHeaderText>
       {Platform.OS === 'android' ? (
-        <Picker
-          // mode="dropdown"
-          selectedValue={props.nationality}
-          onValueChange={props.eventHandler}>
-          {NationListAnd}
-        </Picker>
+        <View style={pickerSelectStyles.inputAndroid}>
+          <Picker
+            // mode="dropdown"
+            selectedValue={props.nationality}
+            onValueChange={props.eventHandler}>
+            {NationListAnd}
+          </Picker>
+        </View>
       ) : (
-        <RNPickerSelect
-          onValueChange={props.eventHandler}
-          items={NationListIos}
-          style={pickerSelectStyles}
-          placeholder={placeholder}
-        />
-      )}
+          <RNPickerSelect
+            onValueChange={props.eventHandler}
+            items={NationListIos}
+            style={pickerSelectStyles}
+            placeholder={placeholder}
+          />
+        )}
     </View>
   );
 };
@@ -81,13 +83,15 @@ const pickerSelectStyles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 14,
     paddingVertical: 12,
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
+    height: 45,
     borderWidth: 1,
     borderColor: '#d0d8df',
     borderRadius: 5,
     color: '#1C1C1C',
     paddingRight: 30,
     fontFamily: 'Roboto_400Regular',
+    textAlign: 'center',
   },
   inputAndroid: {
     backgroundColor: '#fff',
@@ -100,5 +104,6 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#1C1C1C',
     paddingRight: 30,
     fontFamily: 'Roboto_400Regular',
+    textAlign: 'center',
   },
 });

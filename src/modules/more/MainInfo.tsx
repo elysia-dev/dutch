@@ -13,22 +13,35 @@ import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Linking from 'expo-linking';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
+import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import LocaleType from '../../enums/LocaleType';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
+
 const ExchangeBithumbImg = styled.Image`
-  width: 40%;
-  flex: 1;
+  width: 100%;
   height: 60px;
-  resize-mode: center;
+  resize-mode: contain;
+`;
+const ExchangeBithumbGlobalImg = styled.Image`
+  width: 100%;
+  height: 60px;
+  resize-mode: contain;
+`;
+const ExchangeBobooImg = styled.Image`
+  width: 100%;
+  height: 60px;
+  resize-mode: contain;
+  top: 3px;
 `;
 const KycNoneButton = styled.TouchableOpacity`
   color: #1c1c1c;
@@ -47,13 +60,6 @@ const KycNoneButtonImg = styled.Image`
   height: 67px;
   z-index: 0;
   margin-left: auto;
-`;
-const ExchangeBobooImg = styled.Image`
-  width: 40%;
-  flex: 1;
-  height: 60px;
-  resize-mode: center;
-  top: 3px;
 `;
 const InfoHeaderSettingImg = styled.Image`
   marginTop: 5px;
@@ -86,6 +92,10 @@ const MainInfo: FunctionComponent = () => {
         style={{
           flexDirection: 'row',
           backgroundColor: '#fff',
+          elevation: scrollY.interpolate({
+            inputRange: [0, 15, 1000],
+            outputRange: [0, 5, 5],
+          }),
           shadowOffset: { width: 1, height: 1 },
           shadowColor: '#00000033',
           shadowOpacity: scrollY.interpolate({
@@ -215,12 +225,7 @@ const MainInfo: FunctionComponent = () => {
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
                 height: 70,
-                elevation: 6,
               }}
               duplicateTitle={i18n.t(
                 'more_label.success_kyc_duplicate_label',
@@ -420,9 +425,19 @@ const MainInfo: FunctionComponent = () => {
               fontSize: 18,
             }}
           />
-          <View style={{ flexDirection: 'row', marginBottom: 30 }}>
-            <ExchangeBithumbImg source={ExchangeBithumbPng} />
-            <ExchangeBobooImg source={ExchangebobooPng} />
+          <View style={{ flexDirection: 'row', marginBottom: 30, paddingHorizontal: "3%" }}>
+            <TouchableOpacity style={{ width: "33%" }} onPress={() => Linking.openURL('https://www.bithumb.com')} >
+              <ExchangeBithumbImg source={ExchangeBithumbPng} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ width: "33%" }} onPress={() => Linking.openURL('https://www.bithumb.pro/en-us')} >
+              <ExchangeBithumbGlobalImg source={ExchangeBithumbGlobalPng} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{
+              width: "33%", paddingHorizontal: 5,
+            }} onPress={() => Linking.openURL('https://www.boboo.com')} >
+              <ExchangeBobooImg source={ExchangebobooPng} />
+            </TouchableOpacity>
+
           </View>
         </View>
         <P4Text

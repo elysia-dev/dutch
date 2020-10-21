@@ -72,12 +72,12 @@ const Contact: FunctionComponent = () => {
               elevation: 6,
               zIndex: 1,
             }}>
-            {/* <LabelText>{i18n.t("more.elysia_contact")}</LabelText> */}
             <PText
               label={'Contact'}
               style={{ fontSize: 14, marginBottom: 25 }}
             />
             <TextArea
+              contents={state.contents}
               eventHandler={(input: string) =>
                 setState({ ...state, contents: input })
               }

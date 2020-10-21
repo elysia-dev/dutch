@@ -59,6 +59,7 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
         countHandler={(token: number) => {
           setTokenCount(token);
         }}
+        tokenName={props.ownership.product.tokenName}
         tokenCount={tokenCount}
         max={props.ownership.tokenValue}
       />

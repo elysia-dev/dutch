@@ -18,7 +18,7 @@ interface Props {
 }
 
 const InputHeaderText = styled.Text`
-  color: #a7a7a7;
+  color: #A7A7A7;
   font-size: 12px;
   text-align: left;
   font-family: 'Roboto_400Regular';
@@ -36,7 +36,7 @@ export const DateInput: FunctionComponent<Props> = (props) => {
     <View style={props.style}>
       <InputHeaderText allowFontScaling={false}>{props.type}</InputHeaderText>
       <DatePicker
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: 40 }}
         date={props.birthday}
         onDateChange={props.eventHandler}
         mode="date"

@@ -9,7 +9,7 @@ type ButtonProps = {
 const handleThemeType = (variant: string) => {
   switch (variant) {
     case 'WhiteTheme':
-      return 'border: 1px solid #3679B5; background-color: #FFFFFF; height: 40px;';
+      return 'border: 1px solid #3679B5; background-color: #FFFFFF; height: 50px;';
     case 'GrayTheme':
       return 'border: 0px solid #FFFFFF; background-color: #AAAAAA; height: 50px;';
     default:

@@ -6,6 +6,7 @@ import i18n from '../../../i18n/i18n';
 
 interface Props {
   countHandler: (value: number) => void;
+  tokenName: string;
   tokenCount: number;
   return?: string;
   type?: string;
@@ -54,7 +55,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
       </Text>
       <View style={{ flexDirection: 'row', alignContent: 'center' }}>
         <CountText> {Math.round(props.tokenCount)}</CountText>
-        <H1Text>{'ELA1 Token'}</H1Text>
+        <H1Text>{`${props.tokenName} Token`}</H1Text>
       </View>
 
       <View style={{ marginTop: 10, width: '100%' }}>
