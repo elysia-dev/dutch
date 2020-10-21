@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to Elysia",
-  "greeting": "Hi, %{lastName} %{firstName}님",
+  "greeting": "Hi, %{lastName} %{firstName}",
   "greeting_new": "Hi, Customer",
   "account": {
     "insert_account_email": "Enter your email.",
