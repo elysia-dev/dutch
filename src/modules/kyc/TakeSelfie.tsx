@@ -14,6 +14,7 @@ import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { Ionicons } from '@expo/vector-icons';
 
 import { BackButton } from '../../shared/components/BackButton';
@@ -69,6 +70,7 @@ type ParamList = {
   TakeSelfie: {
     id_type: string;
     idPhoto: any;
+    photoId_hash: string;
   };
 };
 
@@ -76,7 +78,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
   let camera: any;
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'TakeSelfie'>>();
-  const { id_type, idPhoto } = route.params;
+  const { id_type, idPhoto, photoId_hash } = route.params;
   const [state, setState] = useState<State>({
     hasPermission: false,
     type: Camera.Constants.Type.back,
@@ -104,15 +106,20 @@ const TakeSelfie: FunctionComponent<{}> = () => {
     });
   };
 
-  const takePicture = async (): Promise<Photo | undefined> => {
+  const takePicture = async (): Promise<ImageManipulator.ImageResult | undefined> => {
     if (camera) {
       const selfie = await camera.takePictureAsync({
         quality: 1,
         exif: true,
         base64: true,
       });
+      const compressedSelfie = await ImageManipulator.manipulateAsync(
+        selfie.uri,
+        [{ resize: { width: 800 } }],
+        { compress: 1, format: ImageManipulator.SaveFormat.PNG, base64: true },
+      );
       const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
-      return selfie;
+      return compressedSelfie;
     }
   };
 
@@ -219,7 +226,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
                   navigation.navigate(KycPage.ConfirmSelfie, {
                     selfie: await takePicture(),
                     id_type,
-                    // photoId_hash: photoId_hash,
+                    photoId_hash,
                     idPhoto,
                   });
                 }}>

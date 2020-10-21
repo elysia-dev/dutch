@@ -27,9 +27,9 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   });
   const initializeState = () => {
     setState({ ...state, selectedValue: i18n.currentLocale() });
-    AsyncStorage.getItem('pushNotificationPermission').then(
-      result => {
-        if (result && result === "granted") {
+    Permissions.getAsync(Permissions.NOTIFICATIONS).then(
+      status => {
+        if (status.granted) {
           setState({ ...state, hasPermission: true });
         }
       },
@@ -50,7 +50,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     }
   };
   const enablePushNotificationsAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     if (status === 'granted') {
       await AsyncStorage.setItem('pushNotificationPermission', "granted");
     } else {

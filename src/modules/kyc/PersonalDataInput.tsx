@@ -80,27 +80,27 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
     if (state.gender === '' || state.firstName === '' || state.lastName === '' || state.birthday === '' || state.nationality === '') {
       alert(i18n.t('kyc.alert_data'));
     } else {
-      // Server.submission(
-      //   state.firstName,
-      //   state.lastName,
-      //   state.nationality,
-      //   state.birthday,
-      //   state.gender,
-      //   route.params.id_type === 'passport' ? 'passport' : 'government_id',
-      //   route.params.photoId_hash,
-      //   route.params.selfie_hash,
-      // )
-      //   .then(res => {
-      //     setModalVisible(true);
-      //   })
-      //   .catch(e => {
-      //     if (e.response.status === 404) {
-      //       alert(i18n.t('kyc.submit_error'));
-      //       navigation.navigate('Main', { screen: 'MoreMain' });
-      //     } else if (e.response.status === 500) {
-      //       alert(i18n.t('account_errors.server'));
-      //     }
-      //   });
+      Server.submission(
+        state.firstName,
+        state.lastName,
+        state.nationality,
+        state.birthday,
+        state.gender,
+        route.params.id_type === 'passport' ? 'passport' : 'government_id',
+        route.params.photoId_hash,
+        route.params.selfie_hash,
+      )
+        .then(res => {
+          setModalVisible(true);
+        })
+        .catch(e => {
+          if (e.response.status === 404) {
+            alert(i18n.t('kyc.submit_error'));
+            navigation.navigate('Main', { screen: 'MoreMain' });
+          } else if (e.response.status === 500) {
+            alert(i18n.t('account_errors.server'));
+          }
+        });
     }
   };
   return (
@@ -198,7 +198,7 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
       button={
         <SubmitButton
           title={i18n.t('kyc_label.complete_input')}
-          handler={() => setModalVisible(true)}
+          handler={() => callKycApi()}
         />
       }
     />

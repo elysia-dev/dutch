@@ -11,6 +11,9 @@ import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
+import * as Linking from 'expo-linking';
+import * as ImageManipulator from 'expo-image-manipulator';
+
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -184,25 +187,34 @@ const TakeID: FunctionComponent<{}> = () => {
     });
   };
 
-  const takePicture = async (): Promise<Photo | undefined> => {
+  const takePicture = async (): Promise<ImageManipulator.ImageResult | undefined> => {
     if (camera) {
       const idPhoto = await camera.takePictureAsync({
-        quality: 1,
+        quality: 0,
         exif: true,
         base64: true,
       });
+      const compressedIdPhoto = await ImageManipulator.manipulateAsync(
+        idPhoto.uri,
+        [{ resize: { width: 800 } }],
+        { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
+      );
       const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
-      return idPhoto;
+      // 압축본의 저장이 필수는 아닌데 사진 크기 보려고 저장했습니다
+      const compressedAsset = await MediaLibrary.createAssetAsync(`${compressedIdPhoto.uri}`);
+
+      return compressedIdPhoto;
     }
   };
 
   const pickImage = async () => {
-    const selfieAlbum = await ImagePicker.launchImageLibraryAsync({
+    const idAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
+      quality: 0,
       base64: true,
     });
-    return selfieAlbum;
+
+    return idAlbum;
   };
 
   if (!state.hasPermission) {
@@ -233,6 +245,8 @@ const TakeID: FunctionComponent<{}> = () => {
           <SubmitButton
             title={i18n.t('kyc_label.camera_access_return')}
             handler={() => {
+              if (Platform.OS === 'ios') Linking.openURL('App-Prefs:root');
+
               setState({
                 ...state,
                 hasPermission: false,

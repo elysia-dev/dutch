@@ -22,6 +22,7 @@ const SelfieImg = styled.Image`
 
 type ParamList = {
   ConfirmSelfie: {
+    photoId_hash: string;
     selfie: any;
     idPhoto: any;
     id_type: string;
@@ -33,28 +34,26 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
   const route = useRoute<RouteProp<ParamList, 'ConfirmSelfie'>>();
   const { Server } = useContext(RootContext);
 
-  // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
-  // callKycApi() {
-  //   const { route, navigation } = this.props;
-  //   const { photoId_hash, selfie, id_type, photoId } = route.params;
-  //   Server.selfie(selfie.base64)
-  //     .then((res) => {
-  //       navigation.navigate(KycPage.PersonalDataInput, {
-  //         selfie_hash: res.data.filehash,
-  //         id_type: route.params.id_type,
-  //         photoId_hash: photoId_hash,
-  //         photoId: route.params.photoId,
-  //       });
-  //     })
-  //     .catch((e) => {
-  //       if (e.response.status === 404) {
-  //         alert(i18n.t("kyc.submit_error"));
-  // navigation.navigate("Main", { screen: "MoreMain" });
-  //       } else if (e.response.status === 500) {
-  //         alert(i18n.t("account_errors.server"));
-  //       }
-  //     });
-  // }
+  const callKycApi = () => {
+    const { photoId_hash, selfie, id_type, idPhoto } = route.params;
+    Server.selfie(selfie.base64)
+      .then((res) => {
+        navigation.navigate(KycPage.PersonalDataInput, {
+          selfie_hash: res.data.filehash,
+          id_type,
+          photoId_hash,
+          idPhoto,
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 404) {
+          alert(i18n.t("kyc.submit_error"));
+          navigation.navigate("Main", { screen: "MoreMain" });
+        } else if (e.response.status === 500) {
+          alert(i18n.t("account_errors.server"));
+        }
+      });
+  };
 
   return (
     <WrapperLayout
@@ -79,11 +78,7 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
           <SubmitButton
             title={i18n.t('kyc_label.submit')}
             handler={() => {
-              // 일단 API 호출하지 않고 화면만 넘김
-              navigation.navigate(KycPage.PersonalDataInput, {
-                id_type: route.params.id_type,
-                idPhoto: route.params.idPhoto,
-              });
+              callKycApi();
             }}
           />
         </>

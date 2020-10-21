@@ -38,6 +38,7 @@ const InformationCircle = styled.View`
 
 type ParamList = {
   TakeSelfieBefore: {
+    photoId_hash: string;
     id_type: string;
     idPhoto: any;
   };
@@ -49,6 +50,8 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'TakeSelfieBefore'>>();
+  const { photoId_hash, id_type, idPhoto } = route.params;
+
 
   return (
     <>
@@ -168,9 +171,9 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
                   handler={() => {
                     setState({ modalVisible: false });
                     navigation.navigate(KycPage.TakeSelfie, {
-                      id_type: route.params.id_type,
-                      // photoId_hash: photoId_hash,
-                      idPhoto: route.params.idPhoto,
+                      id_type,
+                      photoId_hash,
+                      idPhoto,
                     });
                   }}
                   style={{ width: '100%', right: '5%' }}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import React, {
   Component,
   FunctionComponent,
@@ -53,29 +54,28 @@ const ConfirmID: FunctionComponent<{}> = () => {
   const { Server } = useContext(RootContext);
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
-  // const callKycApi = () => {
-  //   const { route, navigation } = this.props;
-  //   const { id_type, idPhoto } = route.params;
-  //   Server.photoId(
-  //     idPhoto.base64,
-  //     id_type === "passport" ? "passport" : "government_id"
-  //   )
-  //     .then((res) => {
-  //       navigation.navigate(KycPage.TakeSelfieBefore, {
-  //         photoId_hash: res.data.filehash,
-  //         id_type: id_type,
-  //         photoId: idPhoto,
-  //       });
-  //     })
-  //     .catch((e) => {
-  //       if (e.response.status === 404) {
-  //         alert(i18n.t("kyc.submit_error"));
-  // navigation.navigate("Main", { screen: "MoreMain" });
-  //       } else if (e.response.status === 500) {
-  //         alert(i18n.t("account_errors.server"));
-  //       }
-  //     });
-  // }
+  const callKycApi = () => {
+    const { id_type, idPhoto } = route.params;
+    Server.photoId(
+      idPhoto.base64,
+      id_type === "passport" ? "passport" : "government_id",
+    )
+      .then((res) => {
+        navigation.navigate(KycPage.TakeSelfieBefore, {
+          photoId_hash: res.data.filehash,
+          id_type,
+          photoId: idPhoto,
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 404) {
+          alert(i18n.t("kyc.submit_error"));
+          navigation.navigate("Main", { screen: "MoreMain" });
+        } else if (e.response.status === 500) {
+          alert(i18n.t("account_errors.server"));
+        }
+      });
+  };
 
   return (
     <WrapperLayout
@@ -134,11 +134,7 @@ const ConfirmID: FunctionComponent<{}> = () => {
           <SubmitButton
             title={i18n.t('kyc_label.submit')}
             handler={async () => {
-              navigation.navigate(KycPage.TakeSelfieBefore, {
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                id_type: route.params.id_type,
-                idPhoto: route.params.idPhoto,
-              });
+              callKycApi();
             }}
           />
         </>

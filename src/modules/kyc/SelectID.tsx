@@ -67,8 +67,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'passport' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                <View />
-              )
+                  <View />
+                )
             }
             selected={state.idType === 'passport' ? 'selected' : ''}
           />
@@ -88,8 +88,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'drivers_license' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                <View />
-              )
+                  <View />
+                )
             }
             selected={state.idType === 'drivers_license' ? 'selected' : ''}
           />
@@ -109,8 +109,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'government_id' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                <View />
-              )
+                  <View />
+                )
             }
             selected={state.idType === 'government_id' ? 'selected' : ''}
           />
