@@ -49,7 +49,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         backgroundColor: '#fff',
         padding: 20,
         width: '100%',
-        height: 280,
         borderBottomColor: '#F6F6F8',
         borderBottomWidth: 5,
       }}>
@@ -73,7 +72,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         style={{
           marginTop: 45,
           width: '100%',
-          height: 110,
           paddingTop: 10,
           paddingBottom: 10,
           backgroundColor: '#F6F6F8',
