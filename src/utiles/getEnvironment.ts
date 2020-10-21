@@ -9,7 +9,7 @@ type Environment = {
 }
 
 function getEnvironment(): Environment {
-  const releaseChannel = Constants.manifest.releaseChannel;
+  const releaseChannel = manifest && manifest.releaseChannel;
 
   if (releaseChannel && releaseChannel.indexOf('prod') !== -1) { // matches prod-v1, prod-v2, prod-v3
     return {
@@ -31,7 +31,8 @@ function getEnvironment(): Environment {
 
   return {
     envName: "DEVELOPMENT",
-    apiUrl: `http://${(manifest.debuggerHost || 'localhost').split(':').shift()}:3000`,
+    // apiUrl: `http://${(manifest.debuggerHost || 'localhost').split(':').shift()}:3000`,
+    apiUrl: "https://staging-api.elysia.land",
     pusherAppKey: 'f8163691d5d47ddcfed7',
     dappUrl: "localhost:5000",
   };
