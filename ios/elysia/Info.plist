@@ -33,6 +33,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>This app uses the camera for kyc certifications.</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>library</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
