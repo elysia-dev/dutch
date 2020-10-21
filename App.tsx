@@ -100,9 +100,7 @@ const App = () => {
     await authServer
       .me()
       .then(async res => {
-        // if (res.data.user.language !== this.state.locale) {
         i18n.locale = res.data.user.language;
-        // }
         setState({
           ...state,
           signedIn: true,
@@ -162,9 +160,7 @@ const App = () => {
         }}>
         <RootStack.Navigator
           headerMode="none"
-          screenOptions={{
-            gestureEnabled: false,
-          }}>
+        >
           {state.signedIn ? (
             <>
               <RootStack.Screen name={'Main'} component={Main} />
