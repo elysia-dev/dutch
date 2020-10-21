@@ -38,7 +38,7 @@ const Transactions: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [productState, setState] = useState({
-    iosList: [{ label: '전체', value: '0', key: 0 }],
+    iosList: [{ label: i18n.t('more_label.type_'), value: '0', key: 0 }],
     andList: [
       <Picker.Item key={0} label={i18n.t('more_label.type_')} value={'0'} />,
     ],

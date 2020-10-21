@@ -188,7 +188,7 @@ const MainInfo: FunctionComponent = () => {
                       textAlign: 'left',
 
                     }}>
-                    {i18n.t('more_label.need_kyc_duplicate_label')}
+                    {i18n.t('more_label.none_kyc_duplicate_label')}
                     <Text
                       style={{
                         fontSize: 15,
@@ -196,7 +196,7 @@ const MainInfo: FunctionComponent = () => {
                         fontWeight: 'bold',
                       }}>
                       {'\n'}
-                      {i18n.t('more_label.need_kyc')}
+                      {i18n.t('more_label.none_kyc')}
                     </Text>
                   </Text>
                 </View>
