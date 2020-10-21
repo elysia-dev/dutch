@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "test",
-    "slug": "test",
+    "name": "elysia",
+    "slug": "elysia",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +13,9 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "notification": {
+      "icon": "https://elysia-public.s3.ap-northeast-2.amazonaws.com/pushicon.png",
+      "iosDisplayInForeground": true
     },
     "ios": {
       "supportsTablet": true,
@@ -38,6 +38,7 @@
           "apiKey": "AIzaSyCQhD0kqPwCwbylYI5t8ovgCd-7kQuo2DI"
         }
       }
-    }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
