@@ -1,13 +1,13 @@
 import Pusher from 'pusher-js/react-native';
 import AsyncStorage from "@react-native-community/async-storage";
-import { baseURL } from "./axiosInstances";
+import getEnvironment from '../utiles/getEnvironment';
 
 const pusherClient = async () => {
   const token = await AsyncStorage.getItem("@token");
 
-  return new Pusher('f8163691d5d47ddcfed7', {
+  return new Pusher(getEnvironment().pusherAppKey, {
     cluster: 'ap3',
-    authEndpoint: `${baseURL}/pusher/auth`,
+    authEndpoint: `${getEnvironment().apiUrl}/pusher/auth`,
     auth: {
       headers: { authorization: token },
     },
