@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { Image, View, ViewProps } from 'react-native';
+import { Image, View, ViewProps, Text } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 
@@ -28,80 +29,84 @@ const Main: FunctionComponent = () => {
   const { unreadNotificationCount } = useContext(RootContext);
 
   return (
-    <Tab.Navigator
-      initialRouteName="DashboardMain"
-      tabBarOptions={{
-        showLabel: false,
-        style: { height: 50, position: 'absolute', bottom: 0 },
-      }}>
-      <Tab.Screen
-        name="DashboardMain"
-        component={DashBoardMain}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              source={focused ? DashboardBlackPng : DashboardPng}
-              style={{ width: 30, height: 30 }}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="ProductsMain"
-        component={MainList}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
-            <Icon source={focused ? ProductBlackPng : ProductPng} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="NotificationMain"
-        component={Notifications}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
-            <View>
+    <SafeAreaView style={{ flex: 1 }} forceInset={{ bottom: 'always', top: 'never' }} >
+      <Tab.Navigator
+        initialRouteName="DashboardMain"
+        tabBarOptions={{
+          showLabel: false,
+          style: { height: 50, position: 'absolute', bottom: 0 },
+        }}>
+        <Tab.Screen
+          name="DashboardMain"
+          component={DashBoardMain}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
               <Icon
-                source={focused ? NotificationBlackPng : NotificationPng}
-                style={{ resizeMode: 'contain' }}
+                source={focused ? DashboardBlackPng : DashboardPng}
+                style={{ width: 30, height: 30, position: 'absolute', top: 9 }}
               />
-              {unreadNotificationCount > 0 && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -2,
-                    left: 22,
-                    width: 8,
-                    height: 8,
-                    borderRadius: 4,
-                    backgroundColor: '#FC5C4F',
-                  }}></View>
-              )}
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="MoreMain"
-        component={MainInfo}
-        options={{
-          tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={{
-                resizeMode: 'center',
-                height: 25,
-                width: 25,
-              }}
-              source={focused ? OptionsBlackPng : OptionsPng}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="ProductsMain"
+          component={MainList}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
+              <Icon source={focused ? ProductBlackPng : ProductPng} style={{ position: 'absolute', top: 11 }}/>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="NotificationMain"
+          component={Notifications}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
+              <View style={{ flex: 1 }}>
+                <Icon
+                  source={focused ? NotificationBlackPng : NotificationPng}
+                  style={{ position: 'absolute', top: 11, right: -20, resizeMode: "contain" }}
+                />
+                {unreadNotificationCount > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 7,
+                      left: 15,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#FC5C4F',
+                    }} />
+                )}
+              </View>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="MoreMain"
+          component={MainInfo}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                style={{
+                  resizeMode: 'center',
+                  height: 25,
+                  width: 25,
+                  position: 'absolute',
+                  top: 12,
+                }}
+                source={focused ? OptionsBlackPng : OptionsPng}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 
