@@ -24,8 +24,7 @@ import { KycPage } from '../../enums/pageEnum';
 import CameraPermissionPng from './images/cameraPermission.png';
 import { Photo } from '../../types/Photo';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text } from '../../shared/components/Texts';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -139,7 +138,7 @@ const CameraInnerRightBottomLine = styled.View`
 `;
 const CameraPermissionImg = styled.Image`
   width: 209px;
-  margin: 20% auto 15px auto;
+  margin: 6% auto 15px auto;
 `;
 
 interface State {
@@ -224,7 +223,7 @@ const TakeID: FunctionComponent<{}> = () => {
               label={i18n.t('kyc.camera_access_denied')}
               style={{ textAlign: 'center', marginTop: 28 }}
             />
-            <PText
+            <P1Text
               label={i18n.t('kyc.camera_access_denied_text')}
               style={{ textAlign: 'center', marginTop: 10, color: '#626368' }}
             />
@@ -288,9 +287,9 @@ const TakeID: FunctionComponent<{}> = () => {
           <BottomCameraWrapper>
             <H1Text
               label={i18n.t('kyc.take_ID')}
-              style={{ color: '#FFF', marginTop: 30, textAlign: 'center' }}
+              style={{ color: '#FFF', marginTop: 30, textAlign: 'center', fontSize: 20 }}
             />
-            <PText
+            <P1Text
               label={i18n.t('kyc.take_ID_text')}
               style={{
                 color: '#FFF',

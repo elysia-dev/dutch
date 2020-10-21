@@ -14,8 +14,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import WarningImg from '../../shared/assets/images/warning_white.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import { TitleText } from '../../shared/components/TitleText';
-import { PText } from '../../shared/components/PText';
+import { H3Text, P3Text, SubTitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
 
@@ -31,7 +30,7 @@ const WarningIcon = styled.Image`
   width: 12px;
   height: 12px;
   margin: 0px 5px;
-  top: 2px;
+  top: 5px;
 `;
 const WarningWrapper = styled.View`
   background-color: #cc3743;
@@ -83,7 +82,7 @@ const ConfirmID: FunctionComponent<{}> = () => {
       backButtonHandler={() => navigation.goBack()}
       title={i18n.t('kyc.step1_complete')}
       subTitle={
-        <PText
+        <SubTitleText
           label={i18n.t('kyc.step1_complete_text')}
           style={{ color: '#626368', marginBottom: 15 }}
         />
@@ -100,26 +99,26 @@ const ConfirmID: FunctionComponent<{}> = () => {
               style={{
                 flexDirection: 'row',
                 marginTop: 10,
-                marginBottom: 10,
+                marginBottom: 5,
                 marginLeft: 10,
               }}>
               <WarningIcon source={WarningImg} />
-              <PText
+              <H3Text
                 label={i18n.t('kyc.step1_tip_text_header')}
                 style={{
                   color: '#FFF',
-                  fontWeight: 'bold',
-                  lineHeight: 20,
+                  lineHeight: 23,
+                  fontSize: 13,
                 }}
               />
             </View>
-            <PText
+            <P3Text
               label={i18n.t('kyc.step1_tip_case1')}
-              style={{ color: '#FFF', lineHeight: 20, marginLeft: 30 }}
+              style={{ color: '#FFF', marginLeft: 30, fontSize: 13 }}
             />
-            <PText
+            <P3Text
               label={i18n.t('kyc.step1_tip_case2')}
-              style={{ color: '#FFF', lineHeight: 20, marginLeft: 30 }}
+              style={{ color: '#FFF', lineHeight: 18, marginLeft: 30, fontSize: 13 }}
             />
           </WarningWrapper>
         </>

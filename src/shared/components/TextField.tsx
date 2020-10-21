@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 import WarningImg from '../assets/images/warning.png';
+import { P3Text } from './Texts';
 
 interface Props {
   label: string;
@@ -19,11 +20,6 @@ interface Props {
   focusHandler?: (value: boolean) => void;
 }
 
-const LabelText = styled.Text`
-  color: #a7a7a7;
-  font-size: 12px;
-  text-align: left;
-`;
 const TextInput = styled.TextInput`
   width: 100%;
   height: 30px;
@@ -38,11 +34,8 @@ const HelperIcon = styled.Image`
   margin-top: 1px;
   width: 12px;
   height: 12px;
+  resize-mode: center;
   margin-right: 2px;
-`;
-const HelperLabel = styled.Text`
-  font-size: 12px;
-  color: #1c1c1c;
 `;
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
@@ -55,8 +48,7 @@ export const TextField: FunctionComponent<Props> = ({
 
   return (
     <View style={props.style}>
-      <LabelText
-        style={{
+      <P3Text label={props.label} style={{
           color:
             // eslint-disable-next-line no-nested-ternary
             props.helperText !== undefined
@@ -64,9 +56,8 @@ export const TextField: FunctionComponent<Props> = ({
               : focusing === true
                 ? '#3679B5'
                 : '#A7A7A7',
-        }}>
-        {props.label}
-      </LabelText>
+                fontFamily: 'Roboto_400Regular',
+        }} />
       <TextInput
         style={{
           borderBottomColor:
@@ -78,7 +69,9 @@ export const TextField: FunctionComponent<Props> = ({
                 : '#D0D8DF',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
+          fontFamily: 'Roboto_400Regular',
         }}
+        allowFontScaling={false}
         defaultValue={props.value}
         editable={props.editable}
         onChangeText={props.eventHandler}
@@ -98,7 +91,11 @@ export const TextField: FunctionComponent<Props> = ({
       />
       {props.helperText !== undefined && (
         <HelperWrapper>
-          <HelperLabel>{props.helperText}</HelperLabel>
+          <P3Text label={props.helperText} style={{
+            fontSize: 12,
+            color: "#1c1c1c",
+            lineHeight: 15,
+            }} />
           {(() => {
             switch (props.helperIcon) {
               case 'Error':

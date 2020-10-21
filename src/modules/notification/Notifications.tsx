@@ -12,6 +12,7 @@ import RootContext from '../../contexts/RootContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
+import { P3Text } from '../../shared/components/Texts';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -82,7 +83,7 @@ const Notifications: FunctionComponent = () => {
       style={{
         width: '100%',
         height: '100%',
-        top: 0,
+        top: 25,
         backgroundColor: '#FFF',
       }}>
       <Animated.View
@@ -98,19 +99,20 @@ const Notifications: FunctionComponent = () => {
             inputRange: [0, 15, 1000],
             outputRange: [0, 0.5, 0.5],
           }),
-          paddingTop: 60,
-          paddingBottom: 15,
+          paddingTop: 68,
+          paddingBottom: 8,
           paddingLeft: 20,
           transform: [
             {
               translateY: scrollY.interpolate({
-                inputRange: [0, 15, 1000],
-                outputRange: [0, -5, -5],
+                inputRange: [0, 50, 1000],
+                outputRange: [0, -15, -15],
               }),
             },
           ],
         }}>
         <Animated.Text
+          allowFontScaling={false}
           style={{
             position: 'relative',
             left: 0,
@@ -135,7 +137,7 @@ const Notifications: FunctionComponent = () => {
                 }),
               },
             ],
-            fontWeight: 'bold',
+            fontFamily: 'Roboto_700Bold',
             textAlign: 'left',
             justifyContent: "flex-start",
             alignSelf: 'flex-start',
@@ -167,16 +169,14 @@ const Notifications: FunctionComponent = () => {
             />
           );
         })}
-        <Text
+        <P3Text
           style={{
             marginTop: -20,
-            marginBottom: 50,
-            color: '#A7A7A7',
+            marginBottom: 75,
             textAlign: 'center',
-            fontSize: 12,
-          }}>
-          {i18n.t('notification.saved_90days')}
-        </Text>
+          }}
+          label={i18n.t('notification.saved_90days')}
+        />
         <VirtualTab />
       </Animated.ScrollView>
     </View>

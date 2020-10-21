@@ -4,16 +4,12 @@ import { Text, View, SafeAreaView, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
-
-import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import SelfieBeforePng from './images/selfiebefore.png';
 import { KycPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { Modal } from '../../shared/components/Modal';
-import { TitleText } from '../../shared/components/TitleText';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text, P3Text, SubTitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const Container = styled.View`
@@ -37,6 +33,7 @@ const InformationCircle = styled.View`
   background-color: #3679b5;
   border-radius: 10px;
   margin-right: 10px;
+  top: 2px;
 `;
 
 type ParamList = {
@@ -60,7 +57,7 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
         isScrolling={false}
         title={i18n.t('kyc.step2')
         }
-        subTitle={<PText
+        subTitle={<SubTitleText
           label={i18n.t('kyc.step2_text')}
           style={{ color: '#626368', marginBottom: 15 }}
         />}
@@ -70,18 +67,18 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
               <Selfie source={SelfieBeforePng} />
             </Container>
             <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-              <View style={{ flexDirection: 'row', marginBottom: 26 }}>
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
                 <InformationCircle />
-                <PText
+                <P1Text
                   label={i18n.t('kyc.step2_desc1')}
-                  style={{ fontSize: 15, lineHeight: 15 }}
+                  style={{ fontSize: 13, lineHeight: 15 }}
                 />
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <InformationCircle />
-                <PText
+                <P1Text
                   label={i18n.t('kyc.step2_desc2')}
-                  style={{ fontSize: 15, lineHeight: 15 }}
+                  style={{ fontSize: 13, lineHeight: 15 }}
                 />
               </View>
             </View>
@@ -98,7 +95,7 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
         <>
           <View
             style={{
-              top: 20,
+              top: 25,
               position: 'absolute',
               height: '100%',
               width: '100%',
@@ -114,7 +111,7 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
                   style={{ textAlign: 'center', marginBottom: 10 }}
                   label={i18n.t('kyc.take_selfie_before_title')}
                 />
-                <PText
+                <P3Text
                   style={{
                     textAlign: 'center',
                     marginBottom: 10,
@@ -132,36 +129,36 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
                   }}>
                   <View style={{ flexDirection: 'row' }}>
                     <InformationCircle />
-                    <PText
-                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                    <P1Text
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 15 }}
                       label={i18n.t('kyc.decline_case1')}
                     />
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <InformationCircle />
-                    <PText
-                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                    <P1Text
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 15 }}
                       label={i18n.t('kyc.decline_case2')}
                     />
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <InformationCircle />
-                    <PText
-                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                    <P1Text
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 15 }}
                       label={i18n.t('kyc.decline_case3')}
                     />
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <InformationCircle />
-                    <PText
-                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 14 }}
+                    <P1Text
+                      style={{ marginBottom: 18, fontSize: 14, lineHeight: 15 }}
                       label={i18n.t('kyc.decline_case4')}
                     />
                   </View>
                   <View style={{ flexDirection: 'row' }}>
                     <InformationCircle />
-                    <PText
-                      style={{ fontSize: 14, lineHeight: 14 }}
+                    <P1Text
+                      style={{ fontSize: 14, lineHeight: 15 }}
                       label={i18n.t('kyc.decline_case5')}
                     />
                   </View>

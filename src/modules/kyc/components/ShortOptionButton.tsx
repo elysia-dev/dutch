@@ -3,26 +3,24 @@ import styled from "styled-components/native";
 
 const OptionBtn = styled.TouchableOpacity`
   color: #000;
-  width: 47%;
+  width: 48%;
   margin: 0 auto;
   height: 45px;
   background-color: #fff;
   border-radius: 5px;
   border: solid 1px #d0d8df;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   align-content: center;
 `;
 const CheckedOptionBtn = styled.TouchableOpacity`
   color: #000;
-  width: 47%;
+  width: 48%;
   margin: 0 auto;
   height: 45px;
   background-color: #fff;
   border-radius: 5px;
   border: solid 1px #3679b5;
-  display: flex;
   flex-direction: row;
   justify-content: center;
   align-content: center;
@@ -59,13 +57,13 @@ export const ShortOptionButton: FunctionComponent<{
   if (check === "checked") {
     return (
       <CheckedOptionBtn onPress={handler}>
-        <CheckedOptionBtnText>{title}</CheckedOptionBtnText>
+        <CheckedOptionBtnText allowFontScaling={false}>{title}</CheckedOptionBtnText>
       </CheckedOptionBtn>
     );
   } else {
     return (
       <OptionBtn onPress={handler}>
-        <OptionBtnText>{title}</OptionBtnText>
+        <OptionBtnText allowFontScaling={false}>{title}</OptionBtnText>
       </OptionBtn>
     );
   }

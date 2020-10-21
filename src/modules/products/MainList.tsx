@@ -65,16 +65,17 @@ const MainList: FunctionComponent = () => {
             backgroundColor: '#fff',
             shadowOffset: { width: 1, height: 1 },
             shadowColor: '#00000033',
-            paddingTop: 60,
+            paddingTop: 93,
             paddingBottom: 15,
           }}>
           <Animated.Text
+            allowFontScaling={false}
             style={{
               width: '100%',
               color: '#1c1c1c',
               fontSize: 28,
-              fontWeight: 'bold',
               textAlign: 'left',
+              fontFamily: "Roboto_700Bold",
             }}>
             {i18n.t('product_label.product')}
           </Animated.Text>

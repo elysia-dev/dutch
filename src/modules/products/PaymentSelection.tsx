@@ -13,6 +13,7 @@ import BuyingSummary from './components/BuyingSummary';
 import InterestSummary from './components/InterestSummary';
 import RootContext from '../../contexts/RootContext';
 import { PText } from '../../shared/components/PText';
+import getEnvironment from '../../utiles/getEnvironment';
 
 
 type ParamList = {
@@ -66,7 +67,7 @@ const PaymentSelection: FunctionComponent = () => {
     const linkMetamask = () => {
         if (mobile) {
             Linking.openURL(
-                `https://metamask.app.link/dapp/dapp-staging.elysia.land/request/${id}`);
+                `https://metamask.app.link/dapp/${getEnvironment().dappUrl}/request/${id}`);
         } else if (pc) {
             if (emailRestriction) { return (alert(i18n.t('product.email_restriction'))); }
             Server.sendEmailForTransaction(`${id}`)

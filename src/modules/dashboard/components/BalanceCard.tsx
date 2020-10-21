@@ -1,25 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import i18n from '../../../i18n/i18n';
+import { P1Text, H1Text } from '../../../shared/components/Texts';
 
 interface Props {
   balance: string;
   handler: () => void;
 }
-
-const H1Text = styled.Text`
-  color: #fff;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 30px;
-`;
-const NumText = styled.Text`
-  color: #fff;
-  font-size: 35px;
-  text-align: left;
-  font-weight: bold;
-`;
 
 export const BalanceCard: FunctionComponent<Props> = props => {
   return (
@@ -36,13 +23,25 @@ export const BalanceCard: FunctionComponent<Props> = props => {
           shadowRadius: 6,
           padding: 20,
           marginBottom: 25,
+          elevation: 6,
         }}>
-        <H1Text>
-          {i18n.t('dashboard_label.total_balance')}
-        </H1Text>
+        <P1Text
+          label={i18n.t('dashboard_label.total_balance')}
+          style={{
+            color: "#F6F6F8",
+            marginBottom: 30,
+          }}
+        />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ top: 15 }}>
-            <NumText>{`$ ${parseFloat(props.balance).toFixed(2)}`}</NumText>
+            <H1Text
+              label={`$ ${parseFloat(props.balance).toFixed(2)}`}
+              style={{
+                color: "#FFFFFF",
+                fontSize: 40,
+                bottom: 11,
+              }}
+            />
           </View>
           <View
             style={{
@@ -56,6 +55,7 @@ export const BalanceCard: FunctionComponent<Props> = props => {
               shadowRadius: 6,
               justifyContent: 'center',
               alignContent: 'center',
+              elevation: 6,
             }}>
             <Image
               style={{

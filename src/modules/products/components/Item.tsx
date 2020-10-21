@@ -6,8 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import { H1Text } from '../../../shared/components/H1Text';
-import { PText } from '../../../shared/components/PText';
+import { H1Text, P1Text } from '../../../shared/components/Texts';
 import { Story } from '../../../types/product';
 
 interface Props {
@@ -53,8 +52,8 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
         />
         <View
           style={{ position: 'absolute', flexDirection: 'column', marginTop: 20, marginLeft: 20 }}>
-          <PText label={props.story.subTitle} />
-          <H1Text label={props.story.title} style={{ marginTop: 10 }} />
+          <P1Text label={props.story.subTitle} style={{ fontSize: 13 }} />
+          <H1Text label={props.story.title} style={{ marginTop: 10, fontSize: 25 }} />
         </View>
       </Animated.View>
     </TouchableWithoutFeedback>

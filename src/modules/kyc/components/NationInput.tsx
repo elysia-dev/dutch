@@ -19,6 +19,7 @@ const InputHeaderText = styled.Text`
   color: #A7A7A7;
   font-size: 12px;
   text-align: left;
+  font-family: 'Roboto_400Regular';
 `;
 
 interface Props {
@@ -53,7 +54,7 @@ export const NationInput: FunctionComponent<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <InputHeaderText style={{ marginBottom: 10 }}>
+      <InputHeaderText style={{ marginBottom: 10 }} allowFontScaling={false}>
         {props.type}
       </InputHeaderText>
       {Platform.OS === 'android' ? (
@@ -89,6 +90,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 5,
     color: '#1C1C1C',
     paddingRight: 30,
+    fontFamily: 'Roboto_400Regular',
     textAlign: 'center',
   },
   inputAndroid: {
@@ -101,6 +103,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 5,
     color: '#1C1C1C',
     paddingRight: 30,
+    fontFamily: 'Roboto_400Regular',
     textAlign: 'center',
   },
 });

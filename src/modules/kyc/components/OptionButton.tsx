@@ -7,6 +7,8 @@ import {
   Text,
 } from "react-native";
 import styled from "styled-components/native";
+import { P1Text } from '../../../shared/components/Texts';
+
 
 interface ButtonProps {
   checking: string;
@@ -26,14 +28,6 @@ const OptionBtn = styled.TouchableOpacity`
   justify-content: center;
   align-content: center;
 `;
-const OptionBtnText = styled.Text`
-  color: #1c1c1c;
-  font-size: 14px;
-  text-align: center;
-  line-height: 40px;
-  z-index: 5;
-  align-self: center;
-`;
 const OptionBtnChecked = styled.View`
   flex-direction: row;
   margin-left: auto;
@@ -52,7 +46,14 @@ export const OptionButton: FunctionComponent<Props> = (props: Props) => {
     <View>
       <OptionBtn onPress={props.handler} checking={props.selected ? props.selected : ""}>
         {props.child}
-        <OptionBtnText>{props.title}</OptionBtnText>
+        <P1Text
+          label={props.title}
+          style={{
+            fontSize: 14,
+            textAlign: "center",
+            lineHeight: 40,
+            alignSelf: "center",
+          }}/>
         <OptionBtnChecked>{props.checked}</OptionBtnChecked>
       </OptionBtn>
     </View>

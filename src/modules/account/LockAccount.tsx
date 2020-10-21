@@ -9,8 +9,7 @@ import LockAccountPng from './images/lockaccount.png';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import RootContext from '../../contexts/RootContext';
 
@@ -18,13 +17,6 @@ const LockAccountImg = styled.Image`
   width: 100%;
   resize-mode: center;
   margin-top: 53px;
-`;
-const ExpTimeText = styled.Text`
-  color: #1c1c1c;
-  font-size: 13px;
-  margin-right: 2%;
-  line-height: 21px;
-  height: 21px;
 `;
 
 type ParamList = {
@@ -107,7 +99,7 @@ const LockAccount: FunctionComponent = () => {
               style={{ marginTop: 10, textAlign: 'center' }}
               label={i18n.t('account.lockdown')}
             />
-            <PText
+            <P1Text
               style={{ marginTop: 10, color: '#626368' }}
               label={i18n.t('account.lockdown_text')}
             />
@@ -120,9 +112,15 @@ const LockAccount: FunctionComponent = () => {
             />
             <View
               style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}>
-              <ExpTimeText style={{ marginLeft: 'auto' }}>
-                {i18n.t('account.resending_code_mail_label')}
-              </ExpTimeText>
+              <P3Text style={{
+                marginLeft: 'auto',
+                color: "#1c1c1c",
+                fontSize: 13,
+                marginRight: "2%",
+                lineHeight: 21,
+                height: 21,
+              }}
+              label={i18n.t('account.resending_code_mail_label')}/>
               <BorderFlatButton
                 handler={() => callResendApi()}
                 title={i18n.t('account_label.resend_2')}

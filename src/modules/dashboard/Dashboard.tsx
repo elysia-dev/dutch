@@ -8,6 +8,7 @@ import ProductData from './ProductData';
 import ProductNotice from './ProductNotice';
 import PreparingInvestment from './PreparingInvestment';
 import InterestWithdraw from './InterestWithdraw';
+import InvestmentGuide from './InvestmentGuide';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ export const Dashboard = () => {
         name={DashboardPage.ProductNotice}
         component={ProductNotice}
       />
+      <Stack.Screen name={DashboardPage.InvestmentGuide} component={InvestmentGuide} />
       <Stack.Screen
         name={DashboardPage.PreparingInvestment}
         component={PreparingInvestment}

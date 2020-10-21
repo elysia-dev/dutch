@@ -21,6 +21,7 @@ const InputHeaderText = styled.Text`
   color: #A7A7A7;
   font-size: 12px;
   text-align: left;
+  font-family: 'Roboto_400Regular';
 `;
 const InputTextForm = styled.TextInput`
   height: 25px;
@@ -33,7 +34,7 @@ export const DateInput: FunctionComponent<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <InputHeaderText>{props.type}</InputHeaderText>
+      <InputHeaderText allowFontScaling={false}>{props.type}</InputHeaderText>
       <DatePicker
         style={{ width: "100%", height: 40 }}
         date={props.birthday}
@@ -41,6 +42,7 @@ export const DateInput: FunctionComponent<Props> = (props) => {
         mode="date"
         androidMode="spinner"
         placeholder="select date"
+        allowFontScaling={false}
         format="YYYY-MM-DD"
         minDate="1900-01-01"
         maxDate={currentDate}
@@ -49,6 +51,7 @@ export const DateInput: FunctionComponent<Props> = (props) => {
         customStyles={{
           btnTextConfirm: {
             color: "#3679B5",
+            fontFamily: "Roboto_400Regular",
           },
           dateIcon: {
             opacity: 0,

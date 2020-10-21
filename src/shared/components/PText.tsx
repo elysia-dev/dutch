@@ -7,6 +7,7 @@ const PTitle = styled.Text`
   font-size: 15px;
   text-align: left;
   font-family: 'Roboto_400Regular';
+  line-height: 15px;
 `;
 
 export const PText: FunctionComponent<{

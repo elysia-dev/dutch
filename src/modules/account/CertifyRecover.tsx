@@ -9,8 +9,7 @@ import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { Timer } from './components/Timer';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import RootContext from '../../contexts/RootContext';
 
 type ParamList = {
@@ -100,7 +99,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
             style={{ marginBottom: 10 }}
             label={i18n.t('account.authentication_recover')}
           />
-          <PText label={i18n.t('account.authentication_recover_label')} />
+          <P1Text label={i18n.t('account.authentication_recover_label')} />
         </>
       }
       body={
@@ -123,11 +122,12 @@ const CertifyRecover: FunctionComponent<{}> = () => {
               handler={() => callResendApi()}
             />
             <View style={{ flexDirection: 'row', width: '100%' }}>
-              <PText
+              <P3Text
                 style={{
                   marginLeft: 'auto',
                   lineHeight: 21,
                   height: 21,
+                  color: "#1c1c1c",
                 }}
                 label={`${i18n.t('account.expiration_time')}`}
               />

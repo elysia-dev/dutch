@@ -17,9 +17,7 @@ import i18n from '../../../i18n/i18n';
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
-import { PText } from '../../../shared/components/PText';
-import { H1Text } from '../../../shared/components/H1Text';
-import RootContext from '../../../contexts/RootContext';
+import { P1Text, H1Text } from '../../../shared/components/Texts';
 
 interface Props {
   story: Story;
@@ -30,7 +28,6 @@ interface Props {
 
 const htmlStyles = StyleSheet.create({
   h2: {
-    fontWeight: 'bold',
     textAlign: 'left',
     lineHeight: 20,
     marginLeft: 10,
@@ -45,6 +42,12 @@ const htmlStyles = StyleSheet.create({
     marginRight: 10,
   },
 });
+const defaultTextProps = {
+  style: {
+    fontSize: 14,
+  },
+  allowFontScaling: false,
+};
 
 const ELEMENT_HEIGHT = 416;
 
@@ -72,7 +75,6 @@ const ExpandedItem: FunctionComponent<Props> = ({
       easing: Easing.elastic(1),
     }).start();
   }, []);
-
   return (
     <Animated.View
       style={{
@@ -128,7 +130,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             left: 20,
           }}
         >
-          <PText label={story.subTitle} />
+          <P1Text label={story.subTitle} />
           <H1Text label={story.title} style={{ marginTop: 10 }} />
         </View>
         <Animated.View style={{
@@ -140,7 +142,9 @@ const ExpandedItem: FunctionComponent<Props> = ({
             outputRange: [0, 1],
           }),
         }}>
-          <HTMLView value={story.body} stylesheet={htmlStyles} />
+          <HTMLView value={story.body} stylesheet={htmlStyles}
+            textComponentProps={defaultTextProps}
+            />
         </Animated.View>
       </ScrollView>
       <Animated.View style={{

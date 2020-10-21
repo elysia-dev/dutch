@@ -1,12 +1,9 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-
-import { BackButton } from '../../shared/components/BackButton';
+import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { OptionButton } from './components/OptionButton';
-
 import CheckedPng from './images/checked.png';
 import PassportPng from './images/passport.png';
 import DriverPng from './images/driver.png';
@@ -15,11 +12,9 @@ import CheckedPassportPng from './images/checkedpassport.png';
 import CheckedDriverPng from './images/checkeddriver.png';
 import CheckedIDCardPng from './images/checkedidcard.png';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import { PText } from '../../shared/components/PText';
-import { TitleText } from '../../shared/components/TitleText';
-
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
+import { SubTitleText } from '../../shared/components/Texts';
 
 const IDImg = styled.Image`
   width: 28px;
@@ -50,13 +45,14 @@ const SelectID: FunctionComponent<{}> = props => {
     <WrapperLayout
       backButtonHandler={() => navigation.goBack()}
       title={i18n.t('kyc.step1')}
-      subTitle={<PText
+      subTitle={<SubTitleText
         label={i18n.t('kyc.step1_text')}
-        style={{ color: '#626368', marginBottom: 42 }}
+        style={{ color: '#626368', marginBottom: 42, fontSize: 15 }}
       />}
       isScrolling={false}
       body={
         <>
+          <View style={{ marginTop: 20 }} />
           <OptionButton
             title={i18n.t('kyc_label.passport')}
             handler={() => setID('passport')}

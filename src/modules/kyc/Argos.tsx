@@ -6,7 +6,7 @@ import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import { PText } from '../../shared/components/PText';
+import { P1Text } from '../../shared/components/Texts';
 
 
 interface Props {
@@ -18,28 +18,23 @@ export const Argos: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <WrapperLayout
-      isScrolling={false}
+      isScrolling={true}
       title={i18n.t('kyc_label.argos_terms')}
       body={
-        <ScrollView
-          style={{ marginLeft: '5%', marginRight: '5%', height: '70%' }}>
-          <PText label={localeTerms} />
-        </ScrollView>
+          <P1Text label={localeTerms} style={{ marginLeft: "5%", marginRight: "5%", marginBottom: 50, lineHeight: 20 }}/>
       }
       button={
-        <View>
           <SubmitButton
             title={i18n.t('kyc_label.agree')}
             handler={props.updateAgree}
           />
-        </View>
       }
     />
   );
 };
 
 const terms = {
-  ko: `개인정보처리 및 쿠키 정책
+  ko: `개인정보처리 및 쿠키 정책\n
   1. 개요
   아르고스 솔루션을 제공하는 주식회사 풀스택(이하 ‘회사’)는 귀하의 개인 정보를 보호하고 존중합니다. 우리는 모든 직원, 서비스 제공 및 제휴사가 이러한 의무를 준수하도록 보장하기 위해 동등하게 노력합니다. 또한 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보보호법 및 관계 법령의 개인정보보호규정 등을 준수합니다. 본 ‘개인정보처리방침’은 회사가 제공하는 모든 제품, 서비스, 콘텐츠, 기술 등에 적용됩니다. 개인데이터에 대한 처리에 대한 당사의 견해와 관행을 이해하기 위해 다음을 주의 깊게 읽으십시오.
   \n2. 수집하는 개인정보 항목

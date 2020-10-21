@@ -19,7 +19,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.modori.elysia",
+      "bundleIdentifier": "land.elysia",
       "config": {
         "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY"
       },
@@ -32,7 +32,7 @@
       }
     },
     "android": {
-      "package": "com.modori.elysia",
+      "package": "land.elysia",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCQhD0kqPwCwbylYI5t8ovgCd-7kQuo2DI"

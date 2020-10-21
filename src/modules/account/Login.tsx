@@ -11,7 +11,7 @@ import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import AccountLayout from '../../shared/components/AccountLayout';
-import { H1Text } from '../../shared/components/H1Text';
+import { TitleText } from '../../shared/components/Texts';
 
 type ParamList = {
   Login: {
@@ -95,7 +95,7 @@ const Login: FunctionComponent = () => {
               navigation.goBack();
             }}
           />
-          <H1Text label={i18n.t('account.insert_password')} />
+          <TitleText label={i18n.t('account.insert_password')} />
         </>
       }
       body={
@@ -128,7 +128,6 @@ const Login: FunctionComponent = () => {
           <SubmitButton
             title={i18n.t('account_label.login')}
             handler={() => callLoginApi()}
-            variant={'WithFlat'}
           />
           <View style={{ height: 15 }} />
           <FlatButton

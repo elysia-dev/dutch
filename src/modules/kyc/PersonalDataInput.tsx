@@ -13,9 +13,7 @@ import { NationInput } from './components/NationInput';
 import { DateInput } from './components/DateInput';
 import { ShortOptionButton } from './components/ShortOptionButton';
 import RootContext from '../../contexts/RootContext';
-import { TitleText } from '../../shared/components/TitleText';
-import { PText } from '../../shared/components/PText';
-import { H1Text } from '../../shared/components/H1Text';
+import { P3Text, H1Text, SubTitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 // const H1Text = styled.Text`
@@ -31,11 +29,6 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 //   color: #626368;
 //   text-align: left;
 // `;
-const InputHeaderText = styled.Text`
-  color: #A7A7A7;
-  font-size: 12px;
-  text-align: left;
-`;
 const IdImg = styled.Image`
   margin-top:10px;
   width: 100%;
@@ -111,26 +104,25 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
     }
   };
   return (
-    <>
-      <WrapperLayout
-        isScrolling={false}
-        backButtonHandler={() => navigation.goBack()}
-        title={i18n.t('kyc.step3')}
-        subTitle={<PText label={i18n.t('kyc.step3_text')} />}
-        body={
-          <ScrollView
-            style={{
-              paddingLeft: '5%',
-              paddingRight: '5%',
-              height: '100%',
-              flexDirection: 'column',
-              flexGrow: 1,
-            }}>
-
+    <WrapperLayout
+      isScrolling={true}
+      backButtonHandler={() => navigation.goBack()}
+      title={i18n.t('kyc.step3')}
+      subTitle={<SubTitleText label={i18n.t('kyc.step3_text')} />}
+      body={
+        <View
+          style={{
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            height: '100%',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}>
+          <View style={{ flex: 1 }}>
             <IdImg source={{ uri: route.params.idPhoto.uri }} />
             <H1Text
               label={i18n.t('kyc_label.personal_data')}
-              style={{ marginTop: 40, marginBottom: 6 }}
+              style={{ marginTop: 40, marginBottom: 6, fontSize: 20 }}
             />
             <TextField
               label={i18n.t('kyc_label.last_name')}
@@ -156,8 +148,7 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
               nationality={state.nationality}
               style={{
                 marginTop: 20,
-              }}
-            />
+              }} />
             <DateInput
               type={i18n.t('kyc_label.birthday')}
               eventHandler={setBirthday}
@@ -168,15 +159,16 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
                 height: 40,
               }}
             />
-            <InputHeaderText style={{ marginTop: 30 }}>
-              {i18n.t('kyc_label.gender')}
-            </InputHeaderText>
+            <P3Text
+              style={{ marginTop: 20 }}
+              label={i18n.t('kyc_label.gender')}
+            />
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginBottom: 100,
-                marginTop: 20,
+                marginBottom: 20,
+                marginTop: 10,
               }}>
               <ShortOptionButton
                 check={state.gender === 'male' ? 'checked' : ''}
@@ -199,33 +191,37 @@ const PersonalDataInput: FunctionComponent<{}> = props => {
                 }
               />
             </View>
-          </ScrollView >
-        }
-        button={
-          <SubmitButton
-            title={i18n.t('kyc_label.complete_input')}
-            handler={() => callKycApi()}
-          />
-        }
-      />
+          </View>
+          <View style={{ padding: 130 }} />
+        </View>
+      }
+      button={
+        <SubmitButton
+          title={i18n.t('kyc_label.complete_input')}
+          handler={() => setModalVisible(true)}
+        />
+      }
+    />
 
-      {state.modalVisible === true && (
-        <Modal
-          child={
-            <View style={{ alignItems: 'center' }}>
-              <ConfirmImg source={KycSubmitPng} />
-              <H1Text label={i18n.t('kyc.submit')} style={{ marginTop: 10, textAlign: 'center' }} />
-              <PText label={i18n.t('kyc.submit_text')} style={{ marginTop: 10, textAlign: 'center' }} />
-            </View>
-          }
-          visible={state.modalVisible}
-          modalHandler={() => {
-            setModalVisible(false);
-            navigation.navigate('Main', { screen: 'MoreMain' });
-          }}></Modal>
-      )}
-
-    </>
+    // <PersonalDataInputWrapper>
+    //   <ScrollViewWrapper>
+    //     {state.modalVisible === true && (
+    //       <Modal
+    //         child={
+    //           <View>
+    //             <ConfirmImg source={KycSubmitPng} />
+    //             <H1Text label={i18n.t('kyc.submit')} />
+    //             <P1Text label={i18n.t('kyc.submit_text')} />
+    //           </View>
+    //         }
+    //         visible={state.modalVisible}
+    //         modalHandler={() => {
+    //           setModalVisible(false);
+    //           navigation.navigate('Main', { screen: 'MoreMain' });
+    //         }}></Modal>
+    //     )}
+    //   </ScrollViewWrapper>
+    // </PersonalDataInputWrapper>
   );
 };
 export default PersonalDataInput;
