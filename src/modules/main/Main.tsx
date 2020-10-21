@@ -29,7 +29,7 @@ const Main: FunctionComponent = () => {
   const { unreadNotificationCount } = useContext(RootContext);
 
   return (
-    <SafeAreaView style={{ flex: 1 }} forceInset={{ bottom: 'always', top: 'never' }} >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }} forceInset={{ bottom: 'always', top: 'never' }} >
       <Tab.Navigator
         initialRouteName="DashboardMain"
         tabBarOptions={{
@@ -68,14 +68,14 @@ const Main: FunctionComponent = () => {
               <View style={{ flex: 1 }}>
                 <Icon
                   source={focused ? NotificationBlackPng : NotificationPng}
-                  style={{ position: 'absolute', top: 11, right: -20, resizeMode: "contain" }}
+                  style={{ position: 'absolute', top: 11, right: -13, resizeMode: "contain" }}
                 />
                 {unreadNotificationCount > 0 && (
                   <View
                     style={{
                       position: 'absolute',
-                      top: 7,
-                      left: 15,
+                      top: 8,
+                      left: 9,
                       width: 8,
                       height: 8,
                       borderRadius: 4,
