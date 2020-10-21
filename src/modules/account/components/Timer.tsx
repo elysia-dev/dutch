@@ -9,6 +9,7 @@ const ExpTimeText = styled.Text`
   line-height: 21px;
   height: 21px;
   text-align: center;
+  font-family: 'Roboto_400Regular';
 `;
 
 interface Props {
@@ -69,9 +70,9 @@ export class Timer extends Component<Props, State> {
           width: 50,
         }}>
         {this.state.minutes === 0 && this.state.seconds === 0 ? (
-          <ExpTimeText>{i18n.t('account.expired_time')}</ExpTimeText>
+          <ExpTimeText allowFontScaling={false}>{i18n.t('account.expired_time')}</ExpTimeText>
         ) : (
-            <ExpTimeText>
+            <ExpTimeText allowFontScaling={false}>
               {this.state.minutes}:
               {this.state.seconds < 10
                 ? `0${this.state.seconds}`

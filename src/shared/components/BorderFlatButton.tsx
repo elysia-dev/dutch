@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { GestureResponderEvent } from "react-native";
 import styled from "styled-components/native";
+import { P3Text } from './Texts';
 
 const WhiteBtn = styled.TouchableOpacity`
   border-radius: 5px;
@@ -11,12 +12,6 @@ const WhiteBtn = styled.TouchableOpacity`
   height: 21px;
   padding: 3px 21px;
 `;
-const WhiteBtnText = styled.Text`
-  color: #000;
-  font-size: 12px;
-  text-align: center;
-  line-height: 15px;
-`;
 
 const FlatBorderButton: FunctionComponent<{
   title: string;
@@ -24,7 +19,11 @@ const FlatBorderButton: FunctionComponent<{
 }> = ({ title, handler }) => {
   return (
     <WhiteBtn onPress={handler}>
-      <WhiteBtnText>{title}</WhiteBtnText>
+      <P3Text label={title} style={{
+        color: "#1c1c1c",
+        textAlign: "center",
+        lineHeight: 15,
+      }} />
     </WhiteBtn>
   );
 };

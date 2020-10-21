@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
 import Dash from 'react-native-dash';
+import { H1Text, P1Text } from '../../../shared/components/Texts';
 
 interface Props {
   ownership: {
@@ -15,26 +15,6 @@ interface Props {
   handler: () => void;
 }
 
-const TitleText = styled.Text`
-  flex: 2;
-  color: #fff;
-  font-size: 15px;
-  text-align: left;
-`;
-
-const NumText = styled.Text`
-  color: #fff;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: 10px;
-`;
-const ProfitText = styled.Text`
-  margin-top: 10px;
-  color: #fff;
-  font-size: 18px;
-  text-align: left;
-`;
 export const Asset: FunctionComponent<Props> = (props: Props) => {
   return (
     <TouchableOpacity onPress={props.handler} style={{ width: '47%' }}>
@@ -55,6 +35,7 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           paddingTop: 23,
           marginBottom: 25,
           flexDirection: 'column',
+          elevation: 6,
         }}>
         <View
           style={{
@@ -71,11 +52,16 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
                 : require('../images/residential.png')
             }
           />
-          <TitleText>{props.ownership.title}</TitleText>
+          <P1Text label={props.ownership.title} style={{ flex: 2, color: "#fff", bottom: 1 }} />
         </View>
-        <NumText>{`$ ${parseFloat(`${props.ownership.value}`).toFixed(
-          2,
-        )}`}</NumText>
+        <H1Text
+          style={{
+            flex: 2,
+            color: "#fff",
+            fontSize: 30,
+            marginBottom: 10,
+          }}
+          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`}/>
         <Dash
           dashGap={4}
           dashLength={2}
@@ -86,9 +72,14 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             borderRadius: 100,
             overflow: 'hidden',
           }}></Dash>
-        <ProfitText>{`$ ${parseFloat(`${props.ownership.profit}`).toFixed(
-          2,
-        )}`}</ProfitText>
+        <P1Text
+          label={`$ ${parseFloat(`${props.ownership.profit}`).toFixed(2)}`}
+          style={{
+            flex: 2,
+            marginTop: 10,
+            color: "#fff",
+            fontSize: 18,
+          }}/>
       </View>
     </TouchableOpacity>
   );

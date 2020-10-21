@@ -7,6 +7,7 @@ const H1Title = styled.Text`
   font-size: 28px;
   text-align: left;
   font-family: 'Roboto_700Bold';
+  line-height: 28px;
 `;
 
 export const H1Text: FunctionComponent<{

@@ -17,6 +17,7 @@ import VirtualTab from '../../shared/components/VirtualTab';
 import { KycStatus } from '../../enums/KycStatus';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
+import { H2Text, P1Text, P3Text, H1Text } from '../../shared/components/Texts';
 
 export const Main: FunctionComponent = () => {
   const defaultUser = {
@@ -92,36 +93,29 @@ export const Main: FunctionComponent = () => {
         backgroundColor: '#FAFCFF',
       }}>
       <SafeAreaView>
-        <View style={{ paddingTop: 40, height: '100%', padding: 20 }}>
-          <Text
+        <View style={{ paddingTop: 65, height: '100%', padding: 20 }}>
+          <P1Text
             style={{
               color: '#7A7D8D',
               fontSize: 15,
               textAlign: 'left',
-              marginBottom: 10,
-            }}>
-            {i18n.t('welcome')}
-          </Text>
-          <Text
-            style={{
-              color: '#1C1C1C',
-              fontWeight: 'bold',
-              fontSize: 28,
-              textAlign: 'left',
-              marginBottom: 40,
-            }}>
-            {(user.firstName && user.lastName) ? i18n.t('greeting', {
+              lineHeight: 23,
+              marginBottom: 5,
+            }}
+            label={i18n.t('welcome')} />
+          <H1Text
+            style={{ marginBottom: 40 }}
+            label={(user.firstName && user.lastName) ? i18n.t('greeting', {
               firstName: state.user.firstName,
               lastName: state.user.lastName,
-            }) : i18n.t('greeting_new')}
-          </Text>
+            }) : i18n.t('greeting_new')} />
           {(user.kycStatus !== KycStatus.SUCCESS || !(user.ethAddresses?.length > 0)) &&
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
               screen: DashboardPage.PreparingInvestment,
-            })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8 }}>
+            })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8, elevation: 6 }}>
               <Image style={{ width: '100%', height: 416, resizeMode: 'center', alignSelf: "center", borderRadius: 10 }} source={require('./images/promotion.png')} />
-              <Text style={{ position: "absolute", top: 30, left: 25, fontSize: 15, color: "#1C1C1C" }}>{i18n.t('dashboard.connect_wallet')}</Text>
-              <Text style={{ position: "absolute", top: 50, left: 25, fontWeight: 'bold', fontSize: 25, color: "#1C1C1C" }}>{i18n.t('dashboard.get_EL')}</Text>
+              <P1Text style={{ position: "absolute", top: 30, left: 25 }} label={i18n.t('dashboard.connect_wallet')} />
+              <H2Text style={{ position: "absolute", top: 50, left: 25 }} label={i18n.t('dashboard.get_EL')} />
             </TouchableOpacity>}
           {(user.kycStatus === KycStatus.SUCCESS
             && user.ethAddresses?.length > 0
@@ -173,12 +167,13 @@ export const Main: FunctionComponent = () => {
                     shadowColor: '#1C1C1C4D',
                     shadowOpacity: 0.8,
                     shadowRadius: 7,
+                    elevation: 6,
                   }}
                   onPress={() => navigation.navigate('ProductsMain')}>
                   <Text
                     style={{
                       textAlign: 'center',
-                      fontWeight: 'bold',
+                      fontFamily: 'Roboto_700Bold',
                       fontSize: 25,
                       color: '#838383',
                     }}>

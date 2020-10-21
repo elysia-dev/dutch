@@ -1,11 +1,10 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { H1Text } from '../../shared/components/H1Text';
+import { TitleText } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkPassword from '../../utiles/checkPassword';
@@ -47,7 +46,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                 : navigation.goBack();
             }}
           />
-          <H1Text label={state.step === 1 ? props.message1 : props.message2} />
+          <TitleText label={state.step === 1 ? props.message1 : props.message2} />
         </>
       }
       body={

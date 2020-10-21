@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { H1Text } from '../../shared/components/H1Text';
+import { TitleText } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 // import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
@@ -51,7 +50,7 @@ const InitializeEmail: FunctionComponent = () => {
   return (
     <AccountLayout
       title={
-        <H1Text
+        <TitleText
           style={{ paddingTop: 53 }}
           label={i18n.t('account.insert_account_email')}
         />

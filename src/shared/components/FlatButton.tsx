@@ -1,24 +1,22 @@
 import React, { FunctionComponent } from "react";
 import {
   GestureResponderEvent,
+  TouchableOpacity,
 } from "react-native";
-import styled from "styled-components/native";
-
-const WhiteBtn = styled.TouchableOpacity`
-`;
-const WhiteBtnText = styled.Text`
-  color: #000;
-  font-size: 12px;
-  text-align: center;
-`;
+import { P3Text } from './Texts';
 
 export const FlatButton: FunctionComponent<{
   title: string;
   handler: (event: GestureResponderEvent) => void;
 }> = ({ title, handler }) => {
   return (
-    <WhiteBtn onPress={handler}>
-      <WhiteBtnText>{title}</WhiteBtnText>
-    </WhiteBtn>
+    <TouchableOpacity onPress={handler}>
+      <P3Text label={title} style={{
+        color: "#1c1c1c",
+        fontSize: 13,
+        lineHeight: 13,
+        textAlign: "center",
+      }}/>
+    </TouchableOpacity>
   );
 };

@@ -7,23 +7,12 @@ import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
 import { DashboardPage } from '../../../enums/pageEnum';
+import { P3Text, P1Text } from '../../../shared/components/Texts';
 
 interface Props {
   notification: Notification;
   readNotification: (notification: Notification) => void;
 }
-
-const TypeDateText = styled.Text`
-  font-size: 13px;
-  text-align: left;
-  margin-bottom: 6px;
-`;
-const TitleText = styled.Text`
-  font-size: 15px;
-  text-align: left;
-
-  margin-bottom: 6px;
-`;
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const type = props.notification.notificationType;
@@ -78,41 +67,49 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             />
           </View>
           <View style={{ flex: 10, flexDirection: 'column' }}>
-            <TypeDateText
-              style={{ color: status === 'read' ? '#A7A7A7' : '#4e4e4e' }}>
-              {i18n.t(`notification_label.${type}`)}
-            </TypeDateText>
-            <TitleText
+            <P3Text
+              style={{
+                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                fontSize: 13,
+                marginBottom: 6,
+                }}
+              label={i18n.t(`notification_label.${type}`)}
+            />
+            <P1Text
               style={{
                 color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
-                fontWeight: status === 'read' ? 'normal' : 'bold',
-              }}>
-              {i18n.t(`notification.${type}`, {
+                fontFamily: status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
+                marginBottom: 6,
+              }}
+              label={i18n.t(`notification.${type}`, {
                 month: data.month,
                 week: data.week,
                 device: data.message,
                 profit: data.message,
               })}
-            </TitleText>
+            />
             {type === NotificationType.FAIL_KYC && (
-              <Text
+              <P1Text
                 style={{
                   fontSize: 13,
                   textAlign: 'left',
-
                   marginBottom: 6,
                   color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
-                }}>
-                {`- ${data.message}`}
-              </Text>
+                }}
+                label={`- ${data.message}`}
+              />
             )}
-            <TypeDateText
-              style={{ color: status === 'read' ? '#A7A7A7' : '#4e4e4e' }}>
-              {i18n.strftime(
+            <P3Text
+              style={{
+                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                fontSize: 13,
+                marginBottom: 6,
+              }}
+              label={i18n.strftime(
                 new Date(props.notification.createdAt),
                 i18n.t('notification_label.date_format'),
               )}
-            </TypeDateText>
+            />
           </View>
           <View
             style={{

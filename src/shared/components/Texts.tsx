@@ -37,6 +37,7 @@ const P1Title = styled.Text`
   font-size: 15px;
   text-align: left;
   font-family: 'Roboto_400Regular';
+  line-height: 20px;
 `;
 
 export const P1Text: FunctionComponent<{
@@ -105,4 +106,37 @@ export const P4Text: FunctionComponent<{
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
   return <P4Title style={style} allowFontScaling={false}>{label}</P4Title>;
+};
+
+
+const Title = styled.Text`
+  color: #1c1c1c;
+  font-size: 25px;
+  text-align: left;
+  font-family: 'Roboto_700Bold';
+  line-height: 28px;
+`;
+
+export const TitleText: FunctionComponent<{
+  label: string;
+  style?: StyleProp<TextStyle>;
+  // handler: (event: GestureResponderEvent) => void;
+}> = ({ label, style }) => {
+  return <Title style={style} allowFontScaling={false}>{label}</Title>;
+};
+
+const SubTitle = styled.Text`
+  color: #626368;
+  font-size: 15px;
+  text-align: left;
+  font-family: 'Roboto_400Regular';
+  line-height: 20px;
+`;
+
+export const SubTitleText: FunctionComponent<{
+  label: string;
+  style?: StyleProp<TextStyle>;
+  // handler: (event: GestureResponderEvent) => void;
+}> = ({ label, style }) => {
+  return <SubTitle style={style} allowFontScaling={false}>{label}</SubTitle>;
 };

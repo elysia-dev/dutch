@@ -19,6 +19,7 @@ const InputHeaderText = styled.Text`
   color: #a7a7a7;
   font-size: 12px;
   text-align: left;
+  font-family: 'Roboto_400Regular';
 `;
 
 interface Props {
@@ -34,7 +35,7 @@ interface Placeholder {
   color: string;
 }
 
-export const NationInput: FunctionComponent<props> = (props) => {
+export const NationInput: FunctionComponent<Props> = (props) => {
   const NationListIos = nations.map((nation, Key) => ({
     label: nation.Nationality,
     value: nation.Argos,
@@ -45,7 +46,7 @@ export const NationInput: FunctionComponent<props> = (props) => {
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
   ));
 
-  const placeholder: placeholder = {
+  const placeholder: Placeholder = {
     label: 'Select your nationality',
     value: '',
     color: '#1C1C1C',
@@ -53,7 +54,7 @@ export const NationInput: FunctionComponent<props> = (props) => {
 
   return (
     <View style={props.style}>
-      <InputHeaderText style={{ marginBottom: 10 }}>
+      <InputHeaderText style={{ marginBottom: 10 }} allowFontScaling={false}>
         {props.type}
       </InputHeaderText>
       {Platform.OS === 'android' ? (
@@ -86,6 +87,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 5,
     color: '#1C1C1C',
     paddingRight: 30,
+    fontFamily: 'Roboto_400Regular',
   },
   inputAndroid: {
     backgroundColor: '#fff',
@@ -97,5 +99,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 5,
     color: '#1C1C1C',
     paddingRight: 30,
+    fontFamily: 'Roboto_400Regular',
   },
 });

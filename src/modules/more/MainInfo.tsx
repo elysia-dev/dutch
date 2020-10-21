@@ -22,10 +22,7 @@ import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import LocaleType from '../../enums/LocaleType';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
-import { TitleText } from '../../shared/components/TitleText';
-import WrapperLayout from '../../shared/components/WrapperLayout';
+import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
 const ExchangeBithumbImg = styled.Image`
   width: 40%;
@@ -81,7 +78,7 @@ const MainInfo: FunctionComponent = () => {
       style={{
         width: '100%',
         height: '100%',
-        top: 0,
+        top: 25,
         backgroundColor: '#FFF',
       }}
     >
@@ -95,7 +92,7 @@ const MainInfo: FunctionComponent = () => {
             inputRange: [0, 15, 1000],
             outputRange: [0, 0.5, 0.5],
           }),
-          paddingTop: 60,
+          paddingTop: 68,
           paddingBottom: 15,
           paddingLeft: 20,
           paddingRight: 20,
@@ -111,9 +108,8 @@ const MainInfo: FunctionComponent = () => {
       >
         <View>
           <Animated.Text
+            allowFontScaling={false}
             style={{
-              position: 'relative',
-              left: 0,
               color: '#1c1c1c',
               fontSize: 28,
               transform: [
@@ -124,8 +120,8 @@ const MainInfo: FunctionComponent = () => {
                   }),
                 },
               ],
-              fontWeight: 'bold',
-              textAlign: 'center',
+              textAlign: 'left',
+              fontFamily: 'Roboto_700Bold',
             }}>
             {i18n.t('more_label.more')}
           </Animated.Text>
@@ -173,17 +169,19 @@ const MainInfo: FunctionComponent = () => {
                 }}>
                 <View style={{ alignSelf: "center", marginLeft: '6%' }}>
                   <Text
+                    allowFontScaling={false}
                     style={{
                       fontSize: 13,
                       textAlign: 'left',
-
+                      fontFamily: 'Roboto_400Regular',
                     }}>
                     {i18n.t('more_label.need_kyc_duplicate_label')}
                     <Text
+                      allowFontScaling={false}
                       style={{
                         fontSize: 15,
                         textAlign: 'left',
-                        fontWeight: 'bold',
+                        fontFamily: 'Roboto_700Bold',
                       }}>
                       {'\n'}
                       {i18n.t('more_label.need_kyc')}
@@ -234,9 +232,9 @@ const MainInfo: FunctionComponent = () => {
           )}
           <View
             style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 38 }}>
-            <H1Text
+            <H3Text
               label={i18n.t('more_label.my_info')}
-              style={{ marginBottom: 15 }}
+              style={{ marginBottom: 15, fontSize: 18 }}
             />
             <View
               style={{
@@ -252,7 +250,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.transaction_history')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -276,7 +274,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.wallet_connect')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -302,7 +300,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.my_account')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -326,9 +324,9 @@ const MainInfo: FunctionComponent = () => {
               paddingTop: 25,
               paddingBottom: 15,
             }}>
-            <H1Text
+            <H3Text
               label={i18n.t('more_label.service_center')}
-              style={{ marginBottom: 15 }}
+              style={{ marginBottom: 15, fontSize: 18 }}
             />
             <View
               style={{
@@ -346,7 +344,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.faq')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -372,7 +370,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.contact')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -394,7 +392,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <PText
+                  <P1Text
                     label={i18n.t('more_label.service_terms')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -411,7 +409,7 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
           }}>
-          <H1Text
+          <H3Text
             label={i18n.t('more_label.el_exchange')}
             style={{
               marginTop: 10,
@@ -419,6 +417,7 @@ const MainInfo: FunctionComponent = () => {
               marginRight: '5%',
               paddingTop: 25,
               paddingBottom: 45,
+              fontSize: 18,
             }}
           />
           <View style={{ flexDirection: 'row', marginBottom: 30 }}>
@@ -426,15 +425,16 @@ const MainInfo: FunctionComponent = () => {
             <ExchangeBobooImg source={ExchangebobooPng} />
           </View>
         </View>
-        <Text
+        <P4Text
           style={{
             backgroundColor: '#F6F6F8',
             textAlign: 'right',
             paddingRight: '5%',
             fontSize: 10,
-          }}>
-          v1.0.0
-            </Text>
+            color: '#1c1c1c',
+          }}
+          label={'v1.0.0'}
+        />
         <View
           style={{
             height: 100,
@@ -447,25 +447,3 @@ const MainInfo: FunctionComponent = () => {
 };
 
 export default MainInfo;
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-    textAlign: 'center',
-  },
-  inputAndroid: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-});

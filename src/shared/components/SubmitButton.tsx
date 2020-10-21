@@ -38,14 +38,14 @@ const Button = styled.TouchableOpacity`
   ${(props: ButtonProps) => handleThemeType(props.theme)};
 `;
 const ButtonLabel = styled.Text`
-  font-size: 14px;
+  font-size: ${(props: ButtonProps) =>
+    props.theme === 'WhiteTheme' ? '14px' : '16px'};
   text-align: center;
   line-height: 40px;
-
+  font-family: ${(props: ButtonProps) =>
+    props.theme === 'GrayTheme' ? 'Roboto_400Regular' : 'Roboto_700Bold'};
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-weight: ${(props: ButtonProps) =>
-    props.theme === 'GrayTheme' ? '200' : 'bold'};
 `;
 const DuplicateUpperLabel = styled.Text`
   font-size: 14px;
@@ -53,6 +53,7 @@ const DuplicateUpperLabel = styled.Text`
   margin-left: 6%;
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
+  font-family: 'Roboto_400Regular';
 `;
 const DuplicateLabel = styled.Text`
   font-size: 16px;
@@ -60,6 +61,7 @@ const DuplicateLabel = styled.Text`
   text-align: left;
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
+  font-family: 'Roboto_400Regular';
 `;
 interface SubmitButtonProps {
   title: string;
@@ -84,13 +86,13 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   return (
     <Button onPress={handler} theme={variant} disabled={disabled} style={style}>
       {duplicateTitle === undefined ? (
-        <ButtonLabel theme={variant} style={textStyle}>
+        <ButtonLabel theme={variant} style={textStyle} allowFontScaling={false}>
           {title}
         </ButtonLabel>
       ) : (
-          <DuplicateUpperLabel theme={variant}>
+          <DuplicateUpperLabel theme={variant} allowFontScaling={false}>
             {duplicateTitle}
-            <DuplicateLabel theme={variant}>
+            <DuplicateLabel theme={variant} allowFontScaling={false}>
               {'\n'}
               {title}
             </DuplicateLabel>

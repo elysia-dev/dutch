@@ -3,8 +3,7 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Modal } from '../../shared/components/Modal';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { TitleText, P1Text } from '../../shared/components/Texts';
 import AcceptedImg from './images/accepted.png';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
@@ -12,8 +11,8 @@ import PasswordForm from './PasswordForm';
 import RootContext from '../../contexts/RootContext';
 
 const Accepted = styled.Image`
-  width: 64px;
-  height: 60px;
+  width: 140px;
+  height: 140px;
   margin: 10px auto;
 `;
 
@@ -74,7 +73,7 @@ const RecoverPassword: FunctionComponent = () => {
           child={
             <View>
               <Accepted source={AcceptedImg} />
-              <H1Text
+              <TitleText
                 style={{
                   textAlign: 'center',
                   marginTop: 15,
@@ -82,7 +81,7 @@ const RecoverPassword: FunctionComponent = () => {
                 }}
                 label={i18n.t('account.password_changed')}
               />
-              <PText
+              <P1Text
                 style={{
                   marginBottom: 40,
                   textAlign: 'center',
