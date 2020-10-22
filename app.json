@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
+      "backgroundColor": "#3679b5",
       "image": "./assets/splash.png",
       "resizeMode": "cover"
     },
@@ -18,10 +19,11 @@
       "iosDisplayInForeground": true
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "land.elysia",
       "config": {
-        "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY"
+        "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY",
+        "usesNonExemptEncryption": false
       },
       "infoPlist": {
         "NSPhotoLibraryAddUsageDescription": "Give Expo experiences permission to save photos.",
