@@ -41,10 +41,10 @@ export const ProductPicker: FunctionComponent<Props> = props => {
           <Picker
             // mode="dropdown"
             selectedValue={`${props.filter.productId}`}
-            onValueChange={(value: string) =>
+            onValueChange={(value) =>
               props.dispatch({
                 type: 'UPDATE_PRODUCT',
-                productId: parseInt(value, 10),
+                productId: parseInt(value.toString(), 10),
               })
             }>
             {props.productList.andList}

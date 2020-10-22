@@ -3,12 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Picker,
   Platform,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import styled from 'styled-components/native';
+import { Picker } from '@react-native-community/picker';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
@@ -62,7 +62,9 @@ export const NationInput: FunctionComponent<Props> = (props) => {
           <Picker
             // mode="dropdown"
             selectedValue={props.nationality}
-            onValueChange={props.eventHandler}>
+            onValueChange={(itemValue, itenIndex) => {
+              props.eventHandler(itemValue.toString())
+            }}>
             {NationListAnd}
           </Picker>
         </View>

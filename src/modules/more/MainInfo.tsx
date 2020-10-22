@@ -3,7 +3,6 @@ import {
   View,
   TouchableOpacity,
   Platform,
-  Picker,
   StyleSheet,
   Text,
   ScrollView,
@@ -223,14 +222,14 @@ const MainInfo: FunctionComponent = () => {
                   position: "absolute",
                   textAlign: "center",
                   lineHeight: 80,
-                  }}/>
+                }} />
               <KycPendingButton
                 style={{
                   backgroundColor: "#000000D0",
                   position: "absolute",
                   zIndex: 10,
                   marginLeft: "5%",
-                }}/>
+                }} />
               <KycPendingButton>
                 <View style={{ alignSelf: "center", marginLeft: '6%' }}>
                   <Text
@@ -253,10 +252,10 @@ const MainInfo: FunctionComponent = () => {
                     </Text>
                   </Text>
                 </View>
-              <KycNoneButtonImg source={kycNoneButtonPng} />
-            </KycPendingButton>
-          </View>
-        )}
+                <KycNoneButtonImg source={kycNoneButtonPng} />
+              </KycPendingButton>
+            </View>
+          )}
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{
