@@ -25,7 +25,6 @@ const AnswerWrapper = styled.View`
 const ArrowImg = styled.Image`
   width: 10px;
   height: 6px;
-  top: 10px;
 `;
 
 export const FaqItem: FunctionComponent<Props> = (props: Props) => {
@@ -39,13 +38,18 @@ export const FaqItem: FunctionComponent<Props> = (props: Props) => {
   };
   return (
     <View>
-      <QuestionWrapper onPress={props.handler}>
+      <QuestionWrapper onPress={props.handler} style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: "center",
+          }}>
         <H3Text
           label={ZeroFill(props.faqId.toString())}
           style={{
             flex: 1,
             fontSize: 15,
-            color: '#3679B5',
+            color: props.faqId <= 3 ?
+              '#3679B5' : "1c1c1c",
           }}
         />
         <H3Text label={props.question} style={{ flex: 10, fontSize: 15 }} />
