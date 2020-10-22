@@ -31,7 +31,8 @@
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         }
-      }
+      },
+      "buildNumber": "1.0.1"
     },
     "android": {
       "package": "land.elysia",
