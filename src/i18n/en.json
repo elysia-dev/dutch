@@ -336,14 +336,22 @@
   },
   "FAQ": {
     "question": [
-      "What are the payment methods?",
-      "Are there any investment restrictions?",
-      "How is the return on investment distributed?"
+      "What can I do with this app?",
+      "What is a reserve and how is it distributed?",
+      "How do I exchange real estate tokens and ELs?",
+      "kyc has been rejected. What should I do next?",
+      "Why do I need kyc?",
+      "What is the Ethereum wallet address and how can I get it?",
+      "Why register an Ethereum wallet address?"
     ],
     "answer": [
-      "At Elysia, you can only pay with EL (Elysia) tokens.",
-      "Due to legislation and regulations that may affect the services and functions we provide, residents of Singapore and Korea cannot participate in most products.\nIn addition, countries sanctioned by the FATF (Financial Action Task Force) participate. List of FATF sanctioned countries: Bahamas, Botswana, Cambodia, Democratic People's Republic of Korea (DPRK), Ethiopia, Ghana, Iran, Pakistan, Panama, Sri Lanka, Syria, Trinidad and Tobago, Tunisia, Yemen",
-      "Rental income can be checked daily through the app, and rental income can be received when executing a contract or recovering shares. In the case of sales income, you must own a stake at the time of sale to receive it."
+      "You can register or exchange spot-based ERC20 tokens. After identification is completed, you can receive points based on the tokens you hold.",
+      "This is an additional reward token proportional to the period of holding the token. The accumulation is calculated from the moment you hold the token. The quantity may be different for each token, so please check the contract.",
+      "On the main screen, you can check the types of tokens you have, and you can select and enter the tokens you want to exchange. You can exchange as many as you want by pressing the'Cancel Exchange' button on the page.",
+      "You can check the reason for rejection of KYC in the notification message. Please check the reason and request KYC again.",
+      "Each individual token exchange is the responsibility of each person, but since the distribution of revenue is based on the linked assets for each token, accurate identification is required.",
+      "This is the address of the wallet that can exchange Ethereum or ERC tokens. It can be created in various services such as Metamask (https://metamask.io/) or MyEtherWallet (https://www.myetherwallet.com/). How to Create Please refer to each service description.",
+      "This app provides only the information of each token and provides only the convenience of exchange, and the actual exchange is a decentralized service that takes place in each individual wallet. Therefore, in order to use this app, you need a personal wallet address to perform the actual exchange."
     ]
   },
   "legacy": {

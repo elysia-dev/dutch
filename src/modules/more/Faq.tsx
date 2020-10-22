@@ -15,11 +15,12 @@ const Faq: FunctionComponent = () => {
       ? setState({ selectNumber: arrayNum })
       : setState({ selectNumber: 0 });
   };
-  const ItemListing = Array(3)
+  const ItemListing = Array(7)
     .fill(0)
     .map((_x, index) => {
       return (
         <FaqItem
+          key={`FAQ_${index}`}
           faqId={index + 1}
           handler={() => setQuestionNumber(index)}
           question={i18n.t('FAQ.question.' + index)}
