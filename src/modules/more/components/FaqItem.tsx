@@ -48,11 +48,11 @@ export const FaqItem: FunctionComponent<Props> = (props: Props) => {
           style={{
             flex: 1,
             fontSize: 15,
-            color: props.faqId <= 3 ?
-              '#3679B5' : "1c1c1c",
+            color: (props.faqId <= 3) ?
+              '#3679B5' : "#1c1c1c",
           }}
         />
-        <H3Text label={props.question} style={{ flex: 10, fontSize: 15 }} />
+        <H3Text label={props.question} style={{ flex: 10, fontSize: 15, padding: "5%", width: "90%" }} />
         <ArrowImg source={props.isSelected ? UpperArrowPng : lowerArrowPng} />
       </QuestionWrapper>
       {props.isSelected && (
