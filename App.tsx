@@ -5,6 +5,7 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AppLoading } from 'expo';
+import * as Sentry from 'sentry-expo';
 
 /* eslint-disable @typescript-eslint/camelcase */
 import {
@@ -28,12 +29,17 @@ import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
 import Notification from './src/types/Notification';
 
-import StorybookUI from './storybook/index';
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
 import disablePushNotificationsAsync from './src/utiles/disableNotificationsAsync';
 import enablePushNotifications from './src/utiles/enableNotifications';
+
+Sentry.init({
+  dsn: 'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
+  enableInExpoDevelopment: true,
+  debug: true,
+});
 
 interface AppState {
   signedIn: boolean;
@@ -148,7 +154,9 @@ const App = () => {
       <RootContext.Provider
         value={{
           ...state,
-          changeLanguage: (input) => { setState({ ...state, locale: input }); },
+          changeLanguage: (input) => {
+            setState({ ...state, locale: input });
+          },
           signIn,
           signOut,
           autoSignOut,
@@ -189,9 +197,5 @@ const App = () => {
   );
 };
 
-const STORY_BOOK_ENABLED = false;
-
-const AppContainer = () =>
-  __DEV__ && STORY_BOOK_ENABLED ? <StorybookUI /> : <App />;
 
 export default AppContainer;

@@ -5,11 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "backgroundColor": "#3679b5",
-      "image": "./assets/splash.png",
-      "resizeMode": "cover"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -26,13 +21,13 @@
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
-        "NSPhotoLibraryAddUsageDescription": "Give Expo experiences permission to save photos.",
+        "NSPhotoLibraryAddUsageDescription": "Give permission to save photos.",
         "NSCameraUsageDescription": "This app uses the camera for kyc certifications.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "package": "land.elysia",
@@ -42,6 +37,19 @@
         }
       }
     },
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "modori",
+            "project": "elysia",
+            "authToken": "2789d9171b0945e78c5fd93502b6d8d918eabb238d7f456ca07fce34c03dd9cf"
+          }
+        }
+      ]
+    },
+    "scheme": "elysia-app"
   }
 }
