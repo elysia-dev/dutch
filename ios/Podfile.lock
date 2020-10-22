@@ -134,6 +134,7 @@ PODS:
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
+  - PushNotifications (3.0.4)
   - RCTRequired (0.63.3)
   - RCTTypeSafety (0.63.3):
     - FBLazyVector (= 0.63.3)
@@ -306,6 +307,9 @@ PODS:
     - React
   - react-native-netinfo (5.9.7):
     - React-Core
+  - react-native-pusher-push-notifications (2.4.0):
+    - PushNotifications (>= 2.1.2)
+    - React
   - react-native-safe-area-context (3.1.4):
     - React
   - react-native-slider (3.0.3):
@@ -473,6 +477,7 @@ DEPENDENCIES:
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-pusher-push-notifications (from `../node_modules/react-native-pusher-push-notifications`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
@@ -524,6 +529,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - OpenSSL-Universal
+    - PushNotifications
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -603,6 +609,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-pusher-push-notifications:
+    :path: "../node_modules/react-native-pusher-push-notifications"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -715,6 +723,7 @@ SPEC CHECKSUMS:
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
+  PushNotifications: 6e3d148e5e129af9d4a9279b288c934f9a7f9066
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
   RCTTypeSafety: edf4b618033c2f1c5b7bc3d90d8e085ed95ba2ab
   React: f36e90f3ceb976546e97df3403e37d226f79d0e3
@@ -728,6 +737,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: 7b03feaea96db983f1de449e9d6d1dea4fa61010
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-netinfo: 250dc0ca126512f618a8a2ca6a936577e1f66586
+  react-native-pusher-push-notifications: 2ed16a965a4ade4d2e51ecc632b47a7f41e7f7c6
   react-native-safe-area-context: eb91fe1fb3f7b87d9c30a7f0808407d8569d539d
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-viewpager: a7b438ca32c57b2614ece2a123e7fe116f743131

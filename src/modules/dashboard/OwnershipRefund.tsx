@@ -77,7 +77,7 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
           marginRight: 'auto',
           marginTop: 10,
         }}
-        handler={() => { }}
+        handler={() => { alert(i18n.t('legacy.refund_notice')); }}
         title={i18n.t('product_label.refund')}
       />
     </View>

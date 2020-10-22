@@ -144,7 +144,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         }}>
           <HTMLView value={story.body} stylesheet={htmlStyles}
             textComponentProps={defaultTextProps}
-            />
+          />
         </Animated.View>
       </ScrollView>
       <Animated.View style={{
