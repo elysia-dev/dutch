@@ -16,14 +16,7 @@ import i18n from '../../../i18n/i18n';
 import { TypePicker } from './TypePicker';
 import { DateInput } from './DateInput';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
-
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 16px;
-  text-align: left;
-  margin-bottom: 10px;
-`;
+import { H3Text, P1Text } from '../../../shared/components/Texts';
 
 type ButtonProps = {
   title: string;
@@ -52,15 +45,13 @@ const Button: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
           borderWidth: 1,
           borderColor: props.on ? '#3679B5' : '#D0D8DF',
         }}>
-        <Text
+        <P1Text
           style={{
             color: props.on ? '#1C1C1C' : '#A7A7A7',
             fontSize: 13,
             textAlign: 'center',
-            fontWeight: props.on ? 'bold' : 'normal',
-          }}>
-          {props.title}
-        </Text>
+            fontFamily: props.on ? 'Roboto_700Bold' : 'Roboto_400Regular',
+          }} label={props.title}/>
       </TouchableOpacity>
     </View>
   );
@@ -75,7 +66,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
         padding: 15,
         position: 'absolute',
         width: '100%',
-        height: '70%',
+        height: '78%',
         bottom: 0,
         backgroundColor: '#fff',
       }}>
@@ -98,7 +89,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
         />
       </TouchableOpacity>
       <View style={{ width: '100%', position: 'relative', top: -10 }}>
-        <H1Text>{i18n.t('more_label.period')}</H1Text>
+        <H3Text label={i18n.t('more_label.period')} style={{ fontSize: 16, marginBottom: 10 }} />
         <View
           style={{
             flexDirection: 'row',
@@ -151,7 +142,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                 props.dispatch({ type: 'UPDATE_STARTDATE', start: date })
               }
             />
-            <Text style={{ textAlign: 'center', alignItems: 'center' }}>
+            <Text allowFontScaling={false} style={{ textAlign: 'center', alignItems: 'center' }}>
               {'-'}
             </Text>
             <DateInput
@@ -162,13 +153,13 @@ const Filter: FunctionComponent<props> = (props: props) => {
             />
           </View>
         )}
-        <H1Text style={{ marginTop: 30 }}>{i18n.t('more_label.types')}</H1Text>
+        <H3Text style={{ marginTop: 30, fontSize: 16, marginBottom: 10 }} label={i18n.t('more_label.types')} />
         <TypePicker
           style={{ marginBottom: 30 }}
           dispatch={props.dispatch}
           filter={props.filter}
         />
-        <H1Text>{i18n.t('more_label.product')}</H1Text>
+        <H3Text style={{ fontSize: 16, marginBottom: 10 }} label={i18n.t('more_label.product')} />
         {props.children}
       </View>
       <SubmitButton

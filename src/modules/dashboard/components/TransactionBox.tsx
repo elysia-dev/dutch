@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import i18n from '../../../i18n/i18n';
 import { Transaction } from '../../../types/Transaction';
+import { P1Text, P3Text, P4Text, H3Text } from '../../../shared/components/Texts';
 
 interface Props {
   transaction: Transaction;
@@ -23,26 +24,24 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
         paddingBottom: 15,
       }}>
       <View style={{ flex: 3, flexDirection: 'column' }}>
-        <Text
+        <P1Text
           style={{
-            color: '#1C1C1C',
-            fontSize: 15,
-            textAlign: 'left',
             marginBottom: 5,
-          }}>
-          {i18n.t(`dashboard_label.${props.transaction.transactionType}`)}
-        </Text>
-        <Text
+          }}
+          label={i18n.t(`dashboard_label.${props.transaction.transactionType}`)}
+        />
+        <P3Text
           style={{
             color: '#A7A7A7',
             fontSize: 12,
             textAlign: 'left',
             marginBottom: 5,
-          }}>
-          {i18n.strftime(new Date(props.transaction.createdAt), '%m.%d')}
-        </Text>
+          }}
+          label={i18n.strftime(new Date(props.transaction.createdAt), '%m.%d')}
+        />
         {state.show && (
           <Text
+            allowFontScaling={false}
             onPress={() => {
               Linking.openURL(
                 `https://etherscan.io/token/${props.transaction.hash}`,
@@ -69,11 +68,10 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             alignContent: 'center',
           }}>
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 10, color: '#fff', textAlign: 'center' }}>
-              {state.show
+            <P4Text style={{ color: '#fff', textAlign: 'center' }}
+              label={state.show
                 ? i18n.t('dashboard_label.fold')
-                : i18n.t('dashboard_label.transaction')}
-            </Text>
+                : i18n.t('dashboard_label.transaction')} />
             <Image
               style={{
                 width: 5,
@@ -95,12 +93,10 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
         style={{ flex: 1,
           justifyContent: 'center',
           alignContent: 'center',
-          alignItems: 'center',
         }}>
-        <Text
+        <H3Text
           style={{
             fontSize: 17,
-            fontWeight: 'bold',
             textAlign: 'right',
             color:
               props.transaction.transactionType === 'refund' ||
@@ -108,13 +104,13 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               props.transaction.transactionType === 'profit'
                 ? '#1C1C1C'
                 : '#3679B5',
-          }}>
+          }}
+          label=
           {props.transaction.transactionType === 'refund' ||
           props.transaction.transactionType === 'close' ||
           props.transaction.transactionType === 'profit'
             ? `- $${parseFloat(props.transaction.value).toFixed(2)}`
-            : `$${parseFloat(props.transaction.value).toFixed(2)}`}
-        </Text>
+            : `$${parseFloat(props.transaction.value).toFixed(2)}`} />
       </View>
     </View>
   );

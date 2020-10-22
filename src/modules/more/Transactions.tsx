@@ -230,10 +230,12 @@ const Transactions: FunctionComponent = () => {
                   marginBottom: 40,
                 }}>
                 <Text
+                  allowFontScaling={false}
                   style={{
                     color: '#4E4E4E',
                     fontSize: 17,
                     textAlign: 'center',
+                    fontFamily: 'Roboto_400Regular',
                   }}>
                   {i18n.t('dashboard_label.more_transactions')}
                 </Text>
