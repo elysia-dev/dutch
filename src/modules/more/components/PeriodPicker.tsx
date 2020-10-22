@@ -1,7 +1,6 @@
 import React, { Component, FunctionComponent } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import styled from 'styled-components/native';
-import RNPickerSelect from 'react-native-picker-select';
 import { Picker } from '@react-native-community/picker';
 
 import i18n from '../../../i18n/i18n';
@@ -58,28 +57,17 @@ export const PeriodPicker: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <View>
-      {Platform.OS === 'android' ? (
-        <Picker
-          // mode="dropdown"
-          selectedValue={props.period}
-          onValueChange={(itemValue, _itemIndex) => {
-            props.eventHandler(itemValue.toString());
-            props.resetHandler();
-          }}
-        >
-          {TermListAnd}
-        </Picker>
-      ) : (
-          <RNPickerSelect
-            onClose={props.resetHandler}
-            value={props.period}
-            onValueChange={props.eventHandler}
-            items={TermListIos}
-            style={pickerSelectStyles}
-            placeholder={placeholder}
-          />
-        )
-      }
+      <Picker
+        accessibilityLabel={'period'}
+        // mode="dropdown"
+        selectedValue={props.period}
+        onValueChange={(itemValue, _itemIndex) => {
+          props.eventHandler(itemValue.toString());
+          props.resetHandler();
+        }}
+      >
+        {TermListAnd}
+      </Picker>
     </View >
   );
 };

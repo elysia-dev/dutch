@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import styled from 'styled-components/native';
-import RNPickerSelect, { Item } from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
 
@@ -70,34 +69,21 @@ export const TypePicker: FunctionComponent<Props> = props => {
 
   return (
     <View style={props.style}>
-      {Platform.OS === 'android' ? (
-        <View style={pickerSelectStyles.inputAndroid}>
-          <Picker
-            // mode="dropdown"
-            selectedValue={props.filter.type}
-            onValueChange={value =>
-              props.dispatch({
-                type: 'UPDATE_TYPE',
-                transactionType: value,
-              })
-            }>
-            {TypesListAnd}
-          </Picker>
-        </View>
-      ) : (
-          <RNPickerSelect
-            onValueChange={value =>
-              props.dispatch({
-                type: 'UPDATE_TYPE',
-                transactionType: value,
-              })
-            }
-            value={props.filter.type}
-            items={TypesListIos}
-            style={pickerSelectStyles}
-            placeholder={{}}
-          />
-        )}
+      <View style={pickerSelectStyles.inputAndroid}>
+        <Picker
+          accessibilityLabel={'type'}
+          mode="dialog"
+          selectedValue={props.filter.type}
+          onValueChange={value =>
+            props.dispatch({
+              type: 'UPDATE_TYPE',
+              transactionType: value,
+            })
+          }
+        >
+          {TypesListAnd}
+        </Picker>
+      </View>
     </View>
   );
 };

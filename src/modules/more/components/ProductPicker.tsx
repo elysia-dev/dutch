@@ -11,7 +11,6 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import RNPickerSelect, { Item } from 'react-native-picker-select';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
 
 interface Props {
@@ -36,34 +35,20 @@ export const ProductPicker: FunctionComponent<Props> = props => {
 
   return (
     <View style={props.style}>
-      {Platform.OS === 'android' ? (
-        <View style={pickerSelectStyles.inputAndroid}>
-          <Picker
-            // mode="dropdown"
-            selectedValue={`${props.filter.productId}`}
-            onValueChange={(value) =>
-              props.dispatch({
-                type: 'UPDATE_PRODUCT',
-                productId: parseInt(value.toString(), 10),
-              })
-            }>
-            {props.productList.andList}
-          </Picker>
-        </View>
-      ) : (
-          <RNPickerSelect
-            onValueChange={(value: string) => {
-              props.dispatch({
-                type: 'UPDATE_PRODUCT',
-                productId: parseInt(value, 10),
-              });
-            }}
-            value={`${props.filter.productId}`}
-            items={props.productList.iosList}
-            style={pickerSelectStyles}
-            placeholder={{}}
-          />
-        )}
+      <View style={pickerSelectStyles.inputAndroid}>
+        <Picker
+          // mode="dropdown"
+          accessibilityLabel={'product'}
+          selectedValue={`${props.filter.productId}`}
+          onValueChange={(value) =>
+            props.dispatch({
+              type: 'UPDATE_PRODUCT',
+              productId: parseInt(value.toString(), 10),
+            })
+          }>
+          {props.productList.andList}
+        </Picker>
+      </View>
     </View>
   );
 };

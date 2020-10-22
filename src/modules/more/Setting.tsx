@@ -3,7 +3,6 @@ import { View, StyleSheet, Switch, Platform } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-community/async-storage';
-import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { H1Text, P1Text, H3Text } from '../../shared/components/Texts';
@@ -143,54 +142,28 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               style={{
                 paddingLeft: '5%',
                 fontSize: 18,
-                marginBottom: 24,
               }} />
             <View style={{
               marginLeft: '5%',
               marginRight: '5%',
-              marginBottom: 10,
             }}>
-              <View
+              <Picker
                 style={{
-                  borderColor: '#d6d6d8',
-                  borderWidth: 1,
-                  borderStyle: 'solid',
-                  borderRadius: 5,
-                  height: 50,
-                  marginBottom: 20,
-                  marginTop: 10,
-                  paddingHorizontal: 15,
-                }}>
-                {Platform.OS === 'android' ? (
-                  <Picker
-                    selectedValue={state.selectedValue}
-                    onValueChange={async (itemValue) => {
-                      changeI18n(itemValue.toString());
-                      setState({ ...state, selectedValue: i18n.currentLocale() });
-                      await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
-                      changeLanguage(i18n.currentLocale() as LocaleType);
-                    }}
-                  >
-                    <Picker.Item label={"한국어"} value="ko" key={0} />
-                    <Picker.Item label={"English"} value="en" key={1} />
-                    {/* <Picker.Item label={"简体中文"} value="zhHans" key={2} /> */}
-                  </Picker>
-                ) : (
-                    <RNPickerSelect
-                      style={pickerSelectStyles}
-                      onClose={async () => {
-                        await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
-                        changeLanguage(i18n.currentLocale() as LocaleType);
-                      }
-                      }
-                      onValueChange={(itemValue) => {
-                        changeI18n(itemValue);
-                      }}
-                      items={currentTermListIos}
-                      placeholder={{}}
-                    />
-                  )}
-              </View>
+                  height: 200
+                }}
+                accessibilityLabel={'settings'}
+                selectedValue={state.selectedValue}
+                onValueChange={async (itemValue) => {
+                  changeI18n(itemValue.toString());
+                  setState({ ...state, selectedValue: i18n.currentLocale() });
+                  await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
+                  changeLanguage(i18n.currentLocale() as LocaleType);
+                }}
+              >
+                <Picker.Item label={"한국어"} value="ko" key={0} />
+                <Picker.Item label={"English"} value="en" key={1} />
+                <Picker.Item label={"简体中文"} value="zhHans" key={2} />
+              </Picker>
             </View>
             <View
               style={{

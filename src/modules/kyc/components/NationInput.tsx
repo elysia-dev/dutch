@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import { Picker } from '@react-native-community/picker';
-import RNPickerSelect, { Item } from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
 import nations from './argos.json';
@@ -57,25 +56,17 @@ export const NationInput: FunctionComponent<Props> = (props) => {
       <InputHeaderText style={{ marginBottom: 10 }} allowFontScaling={false}>
         {props.type}
       </InputHeaderText>
-      {Platform.OS === 'android' ? (
-        <View style={pickerSelectStyles.inputAndroid}>
-          <Picker
-            // mode="dropdown"
-            selectedValue={props.nationality}
-            onValueChange={(itemValue, itenIndex) => {
-              props.eventHandler(itemValue.toString())
-            }}>
-            {NationListAnd}
-          </Picker>
-        </View>
-      ) : (
-          <RNPickerSelect
-            onValueChange={props.eventHandler}
-            items={NationListIos}
-            style={pickerSelectStyles}
-            placeholder={placeholder}
-          />
-        )}
+      <View style={pickerSelectStyles.inputAndroid}>
+        <Picker
+          // mode="dropdown"
+          accessibilityLabel={'nationalinput'}
+          selectedValue={props.nationality}
+          onValueChange={(itemValue, itenIndex) => {
+            props.eventHandler(itemValue.toString())
+          }}>
+          {NationListAnd}
+        </Picker>
+      </View>
     </View>
   );
 };

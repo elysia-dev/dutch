@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import RNPickerSelect, { Item } from 'react-native-picker-select';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Linking from 'expo-linking';
 import { SubmitButton } from '../../shared/components/SubmitButton';
