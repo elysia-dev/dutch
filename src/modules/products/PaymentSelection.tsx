@@ -67,7 +67,7 @@ const PaymentSelection: FunctionComponent = () => {
     const linkMetamask = () => {
         if (mobile) {
             Linking.openURL(
-                `https://metamask.app.link/dapp/${getEnvironment().dappUrl}/request/${id}`);
+                `https://metamask.app.link/dapp/${getEnvironment().dappUrl}/requests/${id}`);
         } else if (pc) {
             if (emailRestriction) { return (alert(i18n.t('product.email_restriction'))); }
             Server.sendEmailForTransaction(`${id}`)

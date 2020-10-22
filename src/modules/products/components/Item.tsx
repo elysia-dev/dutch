@@ -55,8 +55,8 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
         />
         <View
           style={{ position: 'absolute', flexDirection: 'column', marginTop: 20, marginLeft: 20 }}>
-          <P1Text label={props.story.subTitle} style={{ fontSize: 13 }} />
-          <H1Text label={props.story.title} style={{ marginTop: 10, fontSize: 25 }} />
+          <P1Text label={props.story.subTitle} />
+          <H1Text label={props.story.title} style={{ marginTop: 10 }} />
         </View>
       </Animated.View>
     </TouchableWithoutFeedback>
