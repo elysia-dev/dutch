@@ -6,13 +6,13 @@ import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { H1Text } from '../../shared/components/H1Text';
+import { H1Text, P1Text } from '../../shared/components/Texts';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import Product from '../../types/Product';
 import BuyingSummary from './components/BuyingSummary';
 import InterestSummary from './components/InterestSummary';
 import RootContext from '../../contexts/RootContext';
-import { PText } from '../../shared/components/PText';
+
 import getEnvironment from '../../utiles/getEnvironment';
 
 
@@ -108,7 +108,7 @@ const PaymentSelection: FunctionComponent = () => {
                 <MetaMaskButton title={'MetaMask Mobile'} type={"mobile"} selected={mobile} modeHandler={() => setState({ ...state, mobile: true, pc: false })} />
                 <MetaMaskButton title={'MetaMask PC'} type={"pc"} selected={pc} modeHandler={() => setState({ ...state, mobile: false, pc: true })} />
             </View>
-            {pc && <PText label={i18n.t('product.link_will_be_sent')} />}
+            {pc && <P1Text label={i18n.t('product.link_will_be_sent')} />}
             <SubmitButton
                 title={i18n.t('account_label.continue')}
                 // eslint-disable-next-line no-nested-ternary

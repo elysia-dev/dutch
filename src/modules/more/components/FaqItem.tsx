@@ -2,8 +2,8 @@ import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
 
 import styled from 'styled-components/native';
-import { H1Text } from '../../../shared/components/H1Text';
-import { PText } from '../../../shared/components/PText';
+import { H1Text, P1Text } from '../../../shared/components/Texts';
+
 import UpperArrowPng from '../images/upperArrow.png';
 import lowerArrowPng from '../images/lowerArrow.png';
 
@@ -49,12 +49,12 @@ export const FaqItem: FunctionComponent<Props> = (props: Props) => {
             color: '#3679B5',
           }}
         />
-        <PText label={props.question} style={{ flex: 10, fontSize: 15 }} />
+        <P1Text label={props.question} style={{ flex: 10, fontSize: 15 }} />
         <ArrowImg source={props.isSelected ? UpperArrowPng : lowerArrowPng} />
       </QuestionWrapper>
       {props.isSelected && (
         <AnswerWrapper>
-          <PText label={props.answer} style={{ fontSize: 13 }} />
+          <P1Text label={props.answer} style={{ fontSize: 13 }} />
         </AnswerWrapper>
       )}
     </View>

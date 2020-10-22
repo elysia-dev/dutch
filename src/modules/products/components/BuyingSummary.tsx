@@ -3,7 +3,7 @@ import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
 import RootContext from '../../../contexts/RootContext';
 import i18n from '../../../i18n/i18n';
-import { H1Text } from '../../../shared/components/H1Text';
+import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
 
 const GrayBox = styled.View`

@@ -3,7 +3,7 @@ import { isAddress } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from 'react-native';
 import i18n from '../../i18n/i18n';
-import { H1Text } from '../../shared/components/H1Text';
+import { H1Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextField } from '../../shared/components/TextField';

@@ -8,8 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import i18n from '../../i18n/i18n';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text } from '../../shared/components/Texts';
+
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
@@ -122,7 +122,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 paddingBottom: 20,
                 marginBottom: 30,
               }}>
-              <PText
+              <P1Text
                 label={i18n.t('more_label.push_notice')}
                 style={{
                   alignSelf: 'center',

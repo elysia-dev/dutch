@@ -5,7 +5,7 @@ import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import AccountLayout from '../../shared/components/AccountLayout';
-import { H1Text } from '../../shared/components/H1Text';
+import { H1Text } from '../../shared/components/Texts';
 
 const ExpiredAccount: FunctionComponent = () => {
   const navigation = useNavigation();

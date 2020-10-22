@@ -8,8 +8,7 @@ import {
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text } from '../../shared/components/Texts';
 import { KycStatus } from '../../enums/KycStatus';
 import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
@@ -62,7 +61,7 @@ const PreparingInvestment: FunctionComponent = () => {
         />
       }
       <H1Text label={i18n.t('dashboard.prepare_investment')}></H1Text>
-      <PText label={i18n.t('dashboard.need_kyc_wallet')} style={{ marginTop: 10 }}></PText>
+      <P1Text label={i18n.t('dashboard.need_kyc_wallet')} style={{ marginTop: 10 }}></P1Text>
       <View style={{ marginTop: 30, width: "100%" }}>
         <StatusButton
           title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}

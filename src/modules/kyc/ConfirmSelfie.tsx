@@ -8,7 +8,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import { PText } from '../../shared/components/PText';
+import { P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const SelfieImg = styled.Image`
@@ -61,7 +61,7 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
       backButtonHandler={() => navigation.navigate(KycPage.TakeSelfie)}
       title={i18n.t('kyc.step2_complete')}
       subTitle={
-        <PText
+        <P1Text
           label={i18n.t('kyc.step2_complete_text')}
           style={{ color: '#626368', marginBottom: 15 }}
         />

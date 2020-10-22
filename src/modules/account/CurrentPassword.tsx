@@ -6,7 +6,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
-import { H1Text } from '../../shared/components/H1Text';
+import { H1Text } from '../../shared/components/Texts';
 
 const CurrentPassword: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -35,7 +35,7 @@ const CurrentPassword: FunctionComponent = () => {
         <SubmitButton
           title={i18n.t('account_label.continue')}
           handler={() => {
-              if (state.password === "") {
+            if (state.password === "") {
               return (alert(i18n.t('more.invalid_password')));
             }
             navigation.navigate(AccountPage.ResetPassword, {

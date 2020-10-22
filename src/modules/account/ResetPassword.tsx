@@ -2,8 +2,8 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
-import { PText } from '../../shared/components/PText';
-import { H1Text } from '../../shared/components/H1Text';
+import { P1Text, H1Text } from '../../shared/components/Texts';
+
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -105,7 +105,7 @@ const ResetPassword: FunctionComponent = () => {
             secure={true}
           />
           {state.password === route.params.currentPassword && (
-            <PText
+            <P1Text
               style={{ textAlign: 'left', marginTop: -10, marginBottom: 15 }}
               label={i18n.t('account.reset_current_same')}
             />

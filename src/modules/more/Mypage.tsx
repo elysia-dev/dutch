@@ -9,8 +9,8 @@ import { KycStatus } from '../../enums/KycStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text } from '../../shared/components/Texts';
+
 import { TitleText } from '../../shared/components/TitleText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
@@ -46,7 +46,6 @@ const MyPage: FunctionComponent = () => {
           paddingLeft: '5%',
           paddingRight: '5%',
           paddingBottom: 0,
-          height: 50,
         }}>
         <H1Text label={i18n.t('more_label.my_account')} />
         <TouchableOpacity
@@ -61,7 +60,7 @@ const MyPage: FunctionComponent = () => {
             justifyContent: 'center',
             alignContent: 'center',
           }}>
-          <PText
+          <P1Text
             label={i18n.t('more_label.logout')}
             style={{ color: '#5c5b5b', textAlign: 'center' }}
           />
@@ -74,11 +73,11 @@ const MyPage: FunctionComponent = () => {
           borderBottomWidth: 5,
           borderBottomColor: '#F6F6F8',
         }}>
-        <PText
+        <P1Text
           label={i18n.t('account_label.account_email')}
           style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
         />
-        <PText label={user.email} style={{ fontSize: 15 }} />
+        <P1Text label={user.email} style={{ fontSize: 15 }} />
         <View
           style={{
             height: 50,
@@ -91,7 +90,7 @@ const MyPage: FunctionComponent = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <PText
+              <P1Text
                 label={i18n.t('more_label.reset_password')}
                 style={{ lineHeight: 50, fontSize: 15 }}
               />
@@ -110,19 +109,19 @@ const MyPage: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
           }}>
           <H1Text label={i18n.t('more_label.my_info')} />
-          <PText
+          <P1Text
             label={i18n.t('more_label.name')}
             style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
           />
-          <PText
+          <P1Text
             label={`${user.firstName} ${user.lastName}`}
             style={{ fontSize: 15 }}
           />
-          <PText
+          <P1Text
             label={i18n.t('more_label.gender')}
             style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
           />
-          <PText label={user.gender} style={{ fontSize: 15 }} />
+          <P1Text label={user.gender} style={{ fontSize: 15 }} />
         </View>
       )}
     </SafeAreaView>

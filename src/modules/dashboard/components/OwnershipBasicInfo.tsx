@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import { OwnershipResponse } from '../../../types/Ownership';
 import { DashboardPage } from '../../../enums/pageEnum';
-import { H1Text } from '../../../shared/components/H1Text';
+import { H1Text } from '../../../shared/components/Texts';
 
 const GText = styled.Text`
   color: #626368;

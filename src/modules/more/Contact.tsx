@@ -6,7 +6,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
-import { PText } from '../../shared/components/PText';
+import { P1Text } from '../../shared/components/Texts';
 import { TitleText } from '../../shared/components/TitleText';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
@@ -46,7 +46,7 @@ const Contact: FunctionComponent = () => {
       backButtonHandler={() => {
         navigation.goBack();
       }}
-      subTitle={<PText
+      subTitle={<P1Text
         label={i18n.t('more.contact_text')}
         style={{ marginBottom: 10, color: '#5c5b5b' }}
       />}
@@ -72,7 +72,7 @@ const Contact: FunctionComponent = () => {
               elevation: 6,
               zIndex: 1,
             }}>
-            <PText
+            <P1Text
               label={'Contact'}
               style={{ fontSize: 14, marginBottom: 25 }}
             />

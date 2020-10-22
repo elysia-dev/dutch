@@ -13,12 +13,12 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { PText } from '../../shared/components/PText';
+import { P1Text, H1Text } from '../../shared/components/Texts';
 import Filter from './components/Filter';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
-import { H1Text } from '../../shared/components/H1Text';
+
 import { ProductPicker } from './components/ProductPicker';
 import RootContext from '../../contexts/RootContext';
 
@@ -162,11 +162,11 @@ const Transactions: FunctionComponent = () => {
         <TouchableOpacity
           onPress={() => dispatch({ type: 'MODAL_CONTROL', modal: true })}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <PText
+          <P1Text
             style={{ color: '#838383' }}
             label={`${i18n.t(`more_label.${state.period}_day`)} · ${i18n.t(
               `more_label.type_${state.type}`,
-            )} · ${i18n.t('more_label.latest')}`}></PText>
+            )} · ${i18n.t('more_label.latest')}`}></P1Text>
           <Image
             source={require('./images/graydownbutton.png')}
             style={{

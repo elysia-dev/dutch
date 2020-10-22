@@ -6,8 +6,8 @@ import RootContext from '../../contexts/RootContext';
 import { ProductPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { H1Text } from '../../shared/components/H1Text';
-import { PText } from '../../shared/components/PText';
+import { H1Text, P1Text } from '../../shared/components/Texts';
+
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { OwnershipResponse } from '../../types/Ownership';
 
@@ -73,16 +73,16 @@ const InterestWithdraw: FunctionComponent = () => {
         borderColor: "#E5E5E5",
       }}>
         <TextWrapper>
-          <PText label={i18n.t('dashboard_label.token_amount')} style={{ color: "#838383", fontSize: 15 }} />
-          <PText label={`${ownership.product.tokenName} ${ownership.tokenValue}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
+          <P1Text label={i18n.t('dashboard_label.token_amount')} style={{ color: "#838383", fontSize: 15 }} />
+          <P1Text label={`${ownership.product.tokenName} ${ownership.tokenValue}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
         </TextWrapper>
         <TextWrapper>
-          <PText label={`${i18n.t('dashboard_label.expected_profit')}(USD)`} style={{ color: "#838383", fontSize: 15 }} />
-          <PText label={`$ ${ownership.availableProfit}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
+          <P1Text label={`${i18n.t('dashboard_label.expected_profit')}(USD)`} style={{ color: "#838383", fontSize: 15 }} />
+          <P1Text label={`$ ${ownership.availableProfit}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
         </TextWrapper>
         <TextWrapper>
-          <PText label={`${i18n.t('dashboard_label.expected_profit')}(EL)`} style={{ color: "#838383", fontSize: 15 }} />
-          <PText label={`EL ${elInterest}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
+          <P1Text label={`${i18n.t('dashboard_label.expected_profit')}(EL)`} style={{ color: "#838383", fontSize: 15 }} />
+          <P1Text label={`EL ${elInterest}`} style={{ color: "#1C1C1C", fontSize: 15 }} />
         </TextWrapper>
       </View>
       <SubmitButton title={i18n.t('account_label.continue')} handler={() => { callApi(); }} style={{ position: 'absolute', bottom: 30, width: "100%", alignSelf: 'center' }}></SubmitButton>
