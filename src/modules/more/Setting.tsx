@@ -68,10 +68,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       label: "English",
       value: 'en',
     },
-    // {
-    //   label: "简体中文",
-    //   value: 'zhHans',
-    // },
+    {
+      label: "简体中文",
+      value: 'zhHans',
+    },
   ];
 
   // eslint-disable-next-line no-nested-ternary
