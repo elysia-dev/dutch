@@ -13982,6 +13982,11 @@ react-native-picker-select@^8.0.0:
     "@react-native-community/picker" "1.6.0"
     lodash.isequal "^4.5.0"
 
+react-native-pusher-push-notifications@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-pusher-push-notifications/-/react-native-pusher-push-notifications-2.4.0.tgz#2b5dabea8f70d518091c0faa6936382cd03deb6a"
+  integrity sha512-y+Q1C+QP0qjCesJLGAwEmjtbedF+XlW+5qUMcA10xWzL/I26ZwL1aueq9z8UYhqyzErPmd0vm+a8ezYBPVSafg==
+
 react-native-reanimated@~1.13.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.1.tgz#c370c32cc4d447ae896cb029bb9c6a2f7608c5b4"

@@ -1,71 +1,64 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, Switch, Platform, Text } from 'react-native';
+import { View, StyleSheet, Switch, Platform } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import * as Permissions from 'expo-permissions';
-import { Notifications } from 'expo';
+import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-community/async-storage';
-import RNPickerSelect, { Item } from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 import i18n from '../../i18n/i18n';
 import { H1Text, P1Text, H3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
+import disablePushNotificationsAsync from '../../utiles/disableNotificationsAsync';
+import enablePushNotificationsAsync from '../../utiles/enableNotificationsAsync';
 
 interface Props {
   resetHandler: () => void;
 }
 
 const Setting: FunctionComponent<Props> = (props: Props) => {
-  const { changeLanguage, Server } = useContext(RootContext);
+  const { changeLanguage, Server, user } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: false,
     selectedValue: '',
   });
+
   const initializeState = () => {
     setState({ ...state, selectedValue: i18n.currentLocale() });
-    Permissions.getAsync(Permissions.NOTIFICATIONS).then(
-      status => {
-        if (status.granted) {
+
+    Notifications.getPermissionsAsync().then((settings) => {
+      AsyncStorage.getItem('pushNotificationPermission').then((permission) => {
+        if (
+          settings.granted
+          || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+        ) {
           setState({ ...state, hasPermission: true });
         }
-      },
-    );
+      });
+    });
   };
 
-  useEffect(
-    initializeState,
-    []);
+  useEffect(initializeState, []);
 
-  const activityToggleButton = () => {
+  const activityToggleButton = async () => {
     setState({ ...state, hasPermission: !state.hasPermission });
 
     if (!state.hasPermission) {
-      enablePushNotificationsAsync();
+      const res = await enablePushNotificationsAsync(user.email);
+      setState({ ...state, hasPermission: res });
     } else {
-      disablePushNotificationsAsync();
-    }
-  };
-  const enablePushNotificationsAsync = async () => {
-    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    if (status === 'granted') {
-      await AsyncStorage.setItem('pushNotificationPermission', "granted");
-    } else {
-      alert('Sorry, we need notification permissions to make this work!');
+      await disablePushNotificationsAsync(user.email);
       setState({ ...state, hasPermission: false });
-      disablePushNotificationsAsync();
     }
   };
-  const disablePushNotificationsAsync = async () => {
-    await AsyncStorage.setItem('pushNotificationPermission', "denied");
-  };
+
   const changeI18n = async (value: string) => {
     i18n.locale = value;
     // await AsyncStorage.setItem('i18nLanguage', value);
   };
+
   const TermListIos = [
     {
       label: "한국어",
@@ -110,7 +103,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 paddingLeft: '5%',
                 paddingRight: '5%',
                 fontSize: 18,
-              }}/>
+              }} />
             <View
               style={{
                 paddingTop: 30,
@@ -149,7 +142,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 paddingLeft: '5%',
                 fontSize: 18,
                 marginBottom: 24,
-              }}/>
+              }} />
             <View style={{
               marginLeft: '5%',
               marginRight: '5%',
@@ -194,15 +187,15 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                       items={currentTermListIos}
                       placeholder={{}}
                     />
-                )}
+                  )}
               </View>
             </View>
             <View
-                style={{
-                  height: 500,
-                  backgroundColor: '#F6F6F8',
-                }}
-              />
+              style={{
+                height: 500,
+                backgroundColor: '#F6F6F8',
+              }}
+            />
           </View>
         </>
       }

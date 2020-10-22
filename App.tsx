@@ -32,6 +32,8 @@ import StorybookUI from './storybook/index';
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
+import disablePushNotificationsAsync from './src/utiles/disableNotificationsAsync';
+import enablePushNotificationsAsync from './src/utiles/enableNotificationsAsync';
 
 interface AppState {
   signedIn: boolean;
@@ -85,6 +87,7 @@ const App = () => {
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
+    await disablePushNotificationsAsync(state.user.email);
     setState(defaultState);
   };
 
@@ -112,8 +115,12 @@ const App = () => {
         const pusher = await pusherClient();
         const channel = pusher.subscribe(userChannel(res.data.user.id));
         channel.bind('notification', handleNotification);
+        enablePushNotificationsAsync(res.data.user.email);
       })
       .catch(() => {
+        if (state.user?.email) {
+          disablePushNotificationsAsync(state.user?.email);
+        }
         setState(defaultState);
       });
   };
