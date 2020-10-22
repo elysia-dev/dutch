@@ -98,6 +98,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
       }}
     >
       <ScrollView
+        scrollEventThrottle={16}
         ref={scrollRef}
         contentOffset={{ x: 0, y: 0 }}
         scrollEnabled={state.scrollEnabled}

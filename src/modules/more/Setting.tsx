@@ -34,7 +34,9 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
           settings.granted
           || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
         ) {
-          setState({ ...state, hasPermission: true });
+          AsyncStorage.getItem('pushNotificationPermission').then((res) => {
+            setState({ ...state, hasPermission: res === 'granted' });
+          })
         }
       });
     });

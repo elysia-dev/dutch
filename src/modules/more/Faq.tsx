@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
-import WrapperLayout from '../../shared/components/WrapperLayout';
+import WrapperLayoutAvoidingKeyboard from '../../shared/components/WrapperLayoutAvoidingKeyboard';
 import { FaqItem } from './components/FaqItem';
 
 const Faq: FunctionComponent = () => {
@@ -30,7 +30,7 @@ const Faq: FunctionComponent = () => {
       );
     });
   return (
-    <WrapperLayout
+    <WrapperLayoutAvoidingKeyboard
       isScrolling={true}
       backButtonHandler={() => {
         navigation.goBack();

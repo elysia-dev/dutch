@@ -39,21 +39,24 @@ export const FaqItem: FunctionComponent<Props> = (props: Props) => {
   return (
     <View>
       <QuestionWrapper onPress={props.handler} style={{
-          justifyContent: 'center',
-          alignContent: 'center',
-          alignItems: "center",
-          }}>
+        display: "flex",
+        width: '100%',
+        justifyContent: 'space-between',
+      }}>
         <H3Text
           label={ZeroFill(props.faqId.toString())}
           style={{
-            flex: 1,
             fontSize: 15,
             color: (props.faqId <= 3) ?
               '#3679B5' : "#1c1c1c",
           }}
         />
-        <H3Text label={props.question} style={{ flex: 10, fontSize: 15, padding: "5%", width: "90%" }} />
-        <ArrowImg source={props.isSelected ? UpperArrowPng : lowerArrowPng} />
+        <View style={{ flex: 1, marginLeft: 5, marginRight: 10, marginTop: 1 }}>
+          <H3Text label={props.question} style={{ fontSize: 12, flexShrink: 1 }} />
+        </View>
+        <View style={{ marginLeft: 'auto', marginTop: 5 }}>
+          <ArrowImg source={props.isSelected ? UpperArrowPng : lowerArrowPng} />
+        </View>
       </QuestionWrapper>
       {props.isSelected && (
         <AnswerWrapper>
