@@ -5,6 +5,8 @@ import {
   GestureResponderEvent,
   View,
   Animated,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
@@ -67,103 +69,106 @@ const WrapperLayout: FunctionComponent<Props> = props => {
   const [scrollY] = useState(new Animated.Value(0));
 
   return (
-    <Wrapper>
-      <Animated.View
-        style={{
-          marginLeft: '5%',
-          marginRight: '5%',
-          marginTop: props.backButtonHandler !== undefined ? 0 : 68,
-        }}>
-        {props.backButtonHandler !== undefined && (
-          <BackButton handler={props.backButtonHandler} style={{ width: 30 }} />
-        )}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Wrapper>
         <Animated.View
-          style={[
-            props.backButtonHandler !== undefined ? {
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 30, 30],
-                  }),
-                },
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -57, -57],
-                  }),
-                },
-              ],
-            } : {
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -17, -17],
-                  }),
-                },
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -57, -57],
-                  }),
-                },
-              ],
-             }]}>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'absolute',
-              fontSize: 25,
-              fontFamily: 'Roboto_700Bold',
-              transform: [
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [1, 1, 0.8, 0.8],
-                  }),
-                },
-              ],
-            }}>
-            {props.title}
-          </Animated.Text>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'absolute',
-              top: 40,
-              fontFamily: 'Roboto_400Regular',
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -30, -30],
-                  }),
-                },
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 0, 0],
-                  }),
-                },
-              ],
-            }}>
-            {props.subTitle}
-          </Animated.Text>
-        </Animated.View>
-      </Animated.View>
-      {props.subTitle !== undefined && (<View style={{ marginBottom: 30 }} />)}
-      <ScrollingView Scrolling={props.isScrolling} scrollY={scrollY}>
-        <ConditionalKeyboardAvoidingView>
-          <View style={{ marginTop: 60 }}>{props.body}</View>
-          {props.button !== undefined && (
-            <View style={{ marginTop: 'auto', marginBottom: 20 }}>
-              {props.button}
-            </View>
+          style={{
+            marginLeft: '5%',
+            marginRight: '5%',
+            marginTop: props.backButtonHandler !== undefined ? 0 : 68,
+          }}>
+          {props.backButtonHandler !== undefined && (
+            <BackButton handler={props.backButtonHandler} style={{ width: 30 }} />
           )}
-        </ConditionalKeyboardAvoidingView>
-      </ScrollingView>
-    </Wrapper>
+          <Animated.View
+            style={[
+              props.backButtonHandler !== undefined ? {
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, 30, 30],
+                    }),
+                  },
+                  {
+                    translateY: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, -57, -57],
+                    }),
+                  },
+                ],
+              } : {
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -17, -17],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                }]}>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                fontSize: 25,
+                fontFamily: 'Roboto_700Bold',
+                transform: [
+                  {
+                    scale: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [1, 1, 0.8, 0.8],
+                    }),
+                  },
+                ],
+              }}>
+              {props.title}
+            </Animated.Text>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                top: 40,
+                fontFamily: 'Roboto_400Regular',
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, -30, -30],
+                    }),
+                  },
+                  {
+                    translateY: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, 0, 0],
+                    }),
+                  },
+                ],
+              }}>
+              {props.subTitle}
+            </Animated.Text>
+          </Animated.View>
+        </Animated.View>
+        {props.subTitle !== undefined && (<View style={{ marginBottom: 30 }} />)}
+        <ScrollingView Scrolling={props.isScrolling} scrollY={scrollY}>
+          <ConditionalKeyboardAvoidingView>
+            <View style={{ marginTop: 60 }}>{props.body}</View>
+            {props.button !== undefined && (
+              <View style={{ marginTop: 'auto', marginBottom: 20 }}>
+                {props.button}
+              </View>
+            )}
+          </ConditionalKeyboardAvoidingView>
+        </ScrollingView>
+      </Wrapper>
+    </TouchableWithoutFeedback>
   );
 };
+
 export default WrapperLayout;

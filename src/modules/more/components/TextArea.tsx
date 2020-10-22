@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { SafeAreaView, View, Text, TextInput } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import i18n from '../../../i18n/i18n';
 
@@ -43,7 +42,8 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
         textAlignVertical={'top'}
         multiline={true}
         onFocus={() => setState({ focus: true })}
-        onBlur={() => setState({ focus: false })}></TextInput>
+        onBlur={() => setState({ focus: false })}
+      />
     </View>
   );
 };
