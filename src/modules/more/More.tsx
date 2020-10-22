@@ -11,6 +11,8 @@ import ElysiaNotice from './ElysiaNotice';
 import ResetPassword from '../account/ResetPassword';
 import CurrentPassword from '../account/CurrentPassword';
 import RegisterEthAddress from './RegisterEthAddress';
+import TermsOfUse from './TermsOfUse';
+import PrivacyPolicy from './PrivacyPolicy';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +26,8 @@ export const More = () => {
       <Stack.Screen name={MorePage.Transactions} component={Transactions} />
       <Stack.Screen name={MorePage.ElysiaNotice} component={ElysiaNotice} />
       <Stack.Screen name={MorePage.Setting} component={Setting} />
+      <Stack.Screen name={MorePage.TermsOfUse} component={TermsOfUse} />
+      <Stack.Screen name={MorePage.PrivacyPolicy} component={PrivacyPolicy} />
       <Stack.Screen
         name={AccountPage.CurrentPassword}
         component={CurrentPassword}

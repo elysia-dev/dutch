@@ -41,6 +41,8 @@ export enum MorePage {
   ElysiaNotice = 'ElysiaNotice',
   Setting = 'Setting',
   RegisterEthAddress = 'RegisterEthAddress',
+  TermsOfUse = 'TermsOfUse',
+  PrivacyPolicy = 'PrivacyPolicy',
 }
 
 export enum DashboardPage {

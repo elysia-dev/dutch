@@ -391,7 +391,11 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => { }}>
+                onPress={() =>
+                  navigation.navigate('More', {
+                    screen: MorePage.TermsOfUse,
+                  })
+                }>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -399,6 +403,32 @@ const MainInfo: FunctionComponent = () => {
                   }}>
                   <P1Text
                     label={i18n.t('more_label.service_terms')}
+                    style={{ lineHeight: 50, fontSize: 15 }}
+                  />
+                  <InfoArrowImg
+                    source={require('./images/next_gray.png')}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                height: 50,
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('More', {
+                    screen: MorePage.PrivacyPolicy,
+                  })
+                }>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <P1Text
+                    label={i18n.t('more_label.privacy_policy')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
                   <InfoArrowImg
