@@ -6,11 +6,11 @@ import React, {
 import {
   StyleSheet,
   View,
-  Picker,
   Platform,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
 

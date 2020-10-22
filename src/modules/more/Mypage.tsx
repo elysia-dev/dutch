@@ -9,9 +9,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import { H1Text, P1Text } from '../../shared/components/Texts';
-
-import { TitleText } from '../../shared/components/TitleText';
+import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const InfoArrowImg = styled.Image`
@@ -47,7 +45,7 @@ const MyPage: FunctionComponent = () => {
           paddingRight: '5%',
           paddingBottom: 0,
         }}>
-        <H1Text label={i18n.t('more_label.my_account')} />
+        <TitleText label={i18n.t('more_label.my_account')} />
         <TouchableOpacity
           onPress={() => {
             signOut();

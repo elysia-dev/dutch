@@ -7,6 +7,7 @@ import { DashboardPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
+import { TitleText, P1Text, P3Text } from '../../shared/components/Texts';
 
 type ParamList = {
   ProductNotice: {
@@ -14,19 +15,6 @@ type ParamList = {
   };
 };
 
-const GText = styled.Text`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-`;
-const PText = styled.Text`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #1c1c1c;
-  font-size: 15px;
-`;
 
 export interface Props {
   post: PostResponse;
@@ -45,22 +33,31 @@ export const Notice: FunctionComponent<Props> = props => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <GText>
-          {i18n.strftime(new Date(props.post.createdAt), '%Y-%m-%d')}
-        </GText>
-        <PText>{props.post.title}</PText>
+        <P1Text
+          label={i18n.strftime(new Date(props.post.createdAt), '%Y-%m-%d')}
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            color: "#626368",
+          }} />
+        <P1Text
+          label={props.post.title}
+          style={{
+              marginTop: 10,
+              marginBottom: 10,
+            }}/>
       </View>
       {state.content && (
         <View>
-          <Text
+          <P3Text
             style={{
               color: '#A7A7A7',
               marginTop: 0,
               marginBottom: 10,
               fontSize: 15,
-            }}>
-            {props.post.body}
-          </Text>
+            }}
+            label={props.post.body}
+          />
         </View>
       )}
     </TouchableOpacity>
@@ -104,20 +101,14 @@ const ProductNotice: FunctionComponent = () => {
         width: '100%',
         height: '100%',
       }}>
-      <View style={{ padding: 15 }}>
+      <View style={{ padding: "5%" }}>
         <BackButton
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <Text
-          style={{
-            color: '#1C1C1C',
-            textAlign: 'left',
-            fontSize: 28,
-            fontWeight: 'bold',
-          }}>
-          {'Notice'}
-        </Text>
+        <TitleText
+          label={'Notice'}
+        />
         <View
           style={{
             marginTop: 40,
@@ -130,7 +121,12 @@ const ProductNotice: FunctionComponent = () => {
             shadowOffset: { width: 1, height: 1 },
             shadowOpacity: 0.6,
           }}>
-          <PText>{'Notice'}</PText>
+          <P1Text
+            label={'Notice'}
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+            }}/>
           <View
             style={{
               marginTop: 10,

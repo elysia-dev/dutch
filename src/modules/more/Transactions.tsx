@@ -7,18 +7,17 @@ import {
   Image,
   Modal,
   Platform,
-  Picker,
 } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { P1Text, H1Text } from '../../shared/components/Texts';
 import Filter from './components/Filter';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
-
+import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
 import RootContext from '../../contexts/RootContext';
 
@@ -155,8 +154,8 @@ const Transactions: FunctionComponent = () => {
           }}
           style={{ marginTop: 10, marginBottom: 10 }}
         />
-        <H1Text
-          style={{ fontSize: 28, fontWeight: 'bold', marginBottom: 25 }}
+        <TitleText
+          style={{ fontSize: 28, marginBottom: 25 }}
           label={'TRANSACTIONS'}
         />
         <TouchableOpacity
@@ -166,7 +165,7 @@ const Transactions: FunctionComponent = () => {
             style={{ color: '#838383' }}
             label={`${i18n.t(`more_label.${state.period}_day`)} · ${i18n.t(
               `more_label.type_${state.type}`,
-            )} · ${i18n.t('more_label.latest')}`}></P1Text>
+            )} · ${i18n.t('more_label.latest')}`} />
           <Image
             source={require('./images/graydownbutton.png')}
             style={{
@@ -201,16 +200,16 @@ const Transactions: FunctionComponent = () => {
               }}
               source={require('./images/warning.png')}
             />
-            <Text
+            <P1Text
               style={{
                 marginTop: 20,
                 marginBottom: 50,
                 color: '#A7A7A7',
                 textAlign: 'center',
                 fontSize: 15,
-              }}>
-              {i18n.t('more.no_transaction')}
-            </Text>
+              }}
+              label={i18n.t('more.no_transaction')}
+            />
           </View>
         ) : (
             <>

@@ -31,6 +31,9 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
       <Animated.View
         style={{
           height: 416,
+          elevation: 3,
+          marginLeft: 3,
+          marginRight: 3,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },
           shadowColor: '#00000033',

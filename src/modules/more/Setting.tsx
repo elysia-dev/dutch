@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { View, Picker, StyleSheet, Switch, Platform, Text } from 'react-native';
+import { View, StyleSheet, Switch, Platform, Text } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import * as Permissions from 'expo-permissions';
 import { Notifications } from 'expo';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -8,8 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import i18n from '../../i18n/i18n';
-import { H1Text, P1Text } from '../../shared/components/Texts';
-
+import { H1Text, P1Text, H3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
@@ -75,10 +75,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       label: "English",
       value: 'en',
     },
-    {
-      label: "简体中文",
-      value: 'zhHans',
-    },
+    // {
+    //   label: "简体中文",
+    //   value: 'zhHans',
+    // },
   ];
 
   // eslint-disable-next-line no-nested-ternary
@@ -88,15 +88,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   const currentTermListIos = [TermListIos[currentTermNum]]
     .concat(TermListIos.filter(term => term.value !== i18n.currentLocale()));
 
-  const TermListAnd = [
-    <Picker.Item label={"한국어"} value="ko" key={0} />,
-    <Picker.Item label={"English"} value="en" key={1} />,
-    <Picker.Item label={"简体中文"} value="zhHans" key={2} />,
-  ];
 
   return (
     <WrapperLayout
-      isScrolling={true}
+      isScrolling={false}
       backButtonHandler={() => {
         navigation.goBack();
       }}
@@ -105,82 +100,109 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
         <>
           <View
             style={{
-              paddingLeft: '5%',
-              paddingRight: '5%',
               paddingBottom: 20,
               borderBottomWidth: 5,
               borderBottomColor: '#F6F6F8',
               top: 22,
             }}>
-            <H1Text label={i18n.t('more_label.notification_setting')} />
+            <H3Text label={i18n.t('more_label.notification_setting')}
+              style={{
+                paddingLeft: '5%',
+                paddingRight: '5%',
+                fontSize: 18,
+              }}/>
             <View
               style={{
+                paddingTop: 30,
+                paddingBottom: 20,
+                marginBottom: 30,
+                borderBottomWidth: 5,
+                borderBottomColor: '#F6F6F8',
+              }}>
+              <View style={{
+                paddingLeft: '5%',
+                paddingRight: '5%',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignContent: 'center',
-                paddingTop: 20,
-                paddingBottom: 20,
-                marginBottom: 30,
               }}>
-              <P1Text
-                label={i18n.t('more_label.push_notice')}
-                style={{
-                  alignSelf: 'center',
-                  color: '#1C1C1C',
-                  fontSize: 15,
-                }}
-              />
-              <Switch
-                trackColor={{ false: '#767577', true: '#3679B5' }}
-                thumbColor={state.hasPermission ? '#FFFFFF' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={activityToggleButton}
-                value={state.hasPermission}
-                style={{
-                  alignSelf: 'center',
-                }}
-              />
-            </View>
-            <H1Text label={i18n.t('more_label.language')} />
-            <View
-              style={{
-                borderColor: '#d6d6d8',
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderRadius: 5,
-                height: 50,
-                marginBottom: 20,
-                marginTop: 10,
-                paddingHorizontal: 15,
-              }}>
-              {Platform.OS === 'android' ? (
-                <Picker
-                  selectedValue={state.selectedValue}
-                  onValueChange={async (itemValue) => {
-                    changeI18n(itemValue);
-                    setState({ ...state, selectedValue: i18n.currentLocale() });
-                    await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
-                    changeLanguage(i18n.currentLocale() as LocaleType);
+                <P1Text
+                  label={i18n.t('more_label.push_notice')}
+                  style={{
+                    alignSelf: 'center',
                   }}
-                >
-                  {TermListAnd}
-                </Picker>
-              ) : (
-                  <RNPickerSelect
-                    style={pickerSelectStyles}
-                    onClose={async () => {
+                />
+                <Switch
+                  trackColor={{ false: '#767577', true: '#3679B5' }}
+                  thumbColor={state.hasPermission ? '#FFFFFF' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={activityToggleButton}
+                  value={state.hasPermission}
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                />
+              </View>
+            </View>
+            <H3Text label={i18n.t('more_label.language')}
+              style={{
+                paddingLeft: '5%',
+                fontSize: 18,
+                marginBottom: 24,
+              }}/>
+            <View style={{
+              marginLeft: '5%',
+              marginRight: '5%',
+              marginBottom: 10,
+            }}>
+              <View
+                style={{
+                  borderColor: '#d6d6d8',
+                  borderWidth: 1,
+                  borderStyle: 'solid',
+                  borderRadius: 5,
+                  height: 50,
+                  marginBottom: 20,
+                  marginTop: 10,
+                  paddingHorizontal: 15,
+                }}>
+                {Platform.OS === 'android' ? (
+                  <Picker
+                    selectedValue={state.selectedValue}
+                    onValueChange={async (itemValue) => {
+                      changeI18n(itemValue.toString());
+                      setState({ ...state, selectedValue: i18n.currentLocale() });
                       await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
                       changeLanguage(i18n.currentLocale() as LocaleType);
-                    }
-                    }
-                    onValueChange={(itemValue) => {
-                      changeI18n(itemValue);
                     }}
-                    items={currentTermListIos}
-                    placeholder={{}}
-                  />
+                  >
+                    <Picker.Item label={"한국어"} value="ko" key={0} />
+                    <Picker.Item label={"English"} value="en" key={1} />
+                    {/* <Picker.Item label={"简体中文"} value="zhHans" key={2} /> */}
+                  </Picker>
+                ) : (
+                    <RNPickerSelect
+                      style={pickerSelectStyles}
+                      onClose={async () => {
+                        await Server.resetLanguage(i18n.currentLocale()).catch(e => { alert(i18n.t('account_errors.server')); });
+                        changeLanguage(i18n.currentLocale() as LocaleType);
+                      }
+                      }
+                      onValueChange={(itemValue) => {
+                        changeI18n(itemValue);
+                      }}
+                      items={currentTermListIos}
+                      placeholder={{}}
+                    />
                 )}
+              </View>
             </View>
+            <View
+                style={{
+                  height: 500,
+                  backgroundColor: '#F6F6F8',
+                }}
+              />
           </View>
         </>
       }

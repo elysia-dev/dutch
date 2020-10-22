@@ -83,7 +83,7 @@ const Notifications: FunctionComponent = () => {
       style={{
         width: '100%',
         height: '100%',
-        top: 25,
+        top: 0,
         backgroundColor: '#FFF',
       }}>
       <Animated.View
@@ -99,7 +99,7 @@ const Notifications: FunctionComponent = () => {
             inputRange: [0, 15, 1000],
             outputRange: [0, 0.5, 0.5],
           }),
-          paddingTop: 68,
+          paddingTop: 93,
           paddingBottom: 8,
           paddingLeft: 20,
           transform: [

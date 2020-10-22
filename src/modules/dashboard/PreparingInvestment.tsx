@@ -8,7 +8,7 @@ import {
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { H1Text, P1Text } from '../../shared/components/Texts';
+import { SubTitleText, P1Text, TitleText } from '../../shared/components/Texts';
 import { KycStatus } from '../../enums/KycStatus';
 import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
@@ -36,7 +36,14 @@ const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         borderColor: props.color ? "#3679B5" : "#D0D8DF",
       }}
     >
-      <Text style={{ color: props.color ? "#1C1C1C" : "#A7A7A7", fontSize: 15, fontWeight: props.color ? "bold" : "normal", alignItems: 'center' }}>{props.title}</Text>
+      <Text
+        allowFontScaling={false}
+        style={{
+          color: props.color ? "#1C1C1C" : "#A7A7A7",
+          fontSize: 15,
+          fontFamily: props.color ? "Roboto_700Bold" : "Roboto_400Regular",
+          alignItems: 'center',
+          }}>{props.title}</Text>
     </TouchableOpacity >
   );
 };
@@ -60,8 +67,8 @@ const PreparingInvestment: FunctionComponent = () => {
           fadeOut={true}
         />
       }
-      <H1Text label={i18n.t('dashboard.prepare_investment')}></H1Text>
-      <P1Text label={i18n.t('dashboard.need_kyc_wallet')} style={{ marginTop: 10 }}></P1Text>
+      <TitleText label={i18n.t('dashboard.prepare_investment')} />
+      <SubTitleText label={i18n.t('dashboard.need_kyc_wallet')} style={{ marginTop: 10 }} />
       <View style={{ marginTop: 30, width: "100%" }}>
         <StatusButton
           title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}

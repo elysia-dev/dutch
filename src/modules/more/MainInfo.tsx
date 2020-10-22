@@ -56,6 +56,16 @@ const KycNoneButton = styled.TouchableOpacity`
   align-content: center;
   z-index: 5;
 `;
+const KycPendingButton = styled.View`
+  color: #1c1c1c;
+  width: 90%;
+  margin: 5px auto;
+  height: 70px;
+  border-radius: 5px;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+`;
 const KycNoneButtonImg = styled.Image`
   height: 67px;
   z-index: 0;
@@ -84,7 +94,7 @@ const MainInfo: FunctionComponent = () => {
       style={{
         width: '100%',
         height: '100%',
-        top: 25,
+        top: 0,
         backgroundColor: '#FFF',
       }}
     >
@@ -102,10 +112,10 @@ const MainInfo: FunctionComponent = () => {
             inputRange: [0, 15, 1000],
             outputRange: [0, 0.5, 0.5],
           }),
-          paddingTop: 68,
+          paddingTop: 93,
           paddingBottom: 15,
-          paddingLeft: 20,
-          paddingRight: 20,
+          paddingLeft: "5%",
+          paddingRight: "5%",
           transform: [
             {
               translateY: scrollY.interpolate({
@@ -203,25 +213,50 @@ const MainInfo: FunctionComponent = () => {
             </View>
           )}
           {user.kycStatus === KycStatus.PENDING && (
-            <SubmitButton
-              style={{
-                shadowOffset: { width: 2, height: 1 },
-                shadowColor: '#00000064',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-                height: 70,
-                elevation: 6,
-              }}
-              duplicateTitle={i18n.t(
-                'more_label.pending_kyc_duplicate_label',
-              )}
-              title={i18n.t('more_label.pending_kyc')}
-              handler={() => {
-                alert(i18n.t('more.kyc_proceeding_wait'));
-              }}
-              variant={'GrayTheme'}
-            />
-          )}
+            <View>
+              <H3Text
+                label={i18n.t('more_label.pending_kyc')}
+                style={{
+                  color: "#FFF",
+                  zIndex: 11,
+                  width: "100%",
+                  position: "absolute",
+                  textAlign: "center",
+                  lineHeight: 80,
+                  }}/>
+              <KycPendingButton
+                style={{
+                  backgroundColor: "#000000D0",
+                  position: "absolute",
+                  zIndex: 10,
+                  marginLeft: "5%",
+                }}/>
+              <KycPendingButton>
+                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontSize: 13,
+                      textAlign: 'left',
+                      fontFamily: 'Roboto_400Regular',
+                    }}>
+                    {i18n.t('more_label.none_kyc_duplicate_label')}
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        fontSize: 15,
+                        textAlign: 'left',
+                        fontFamily: 'Roboto_700Bold',
+                      }}>
+                      {'\n'}
+                      {i18n.t('more_label.none_kyc')}
+                    </Text>
+                  </Text>
+                </View>
+              <KycNoneButtonImg source={kycNoneButtonPng} />
+            </KycPendingButton>
+          </View>
+        )}
           {user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{

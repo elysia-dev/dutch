@@ -2,8 +2,7 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
-import { P1Text, H1Text } from '../../shared/components/Texts';
-
+import { H3Text, TitleText } from '../../shared/components/Texts';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -71,8 +70,8 @@ const ResetPassword: FunctionComponent = () => {
             }}
           />
           <View>
-            <H1Text label={i18n.t('account_label.change_password')} />
-            <H1Text
+            <TitleText label={i18n.t('account_label.change_password')} />
+            <H3Text
               style={{ marginBottom: 15, marginTop: 0 }}
               label={
                 state.step === 1
@@ -86,15 +85,35 @@ const ResetPassword: FunctionComponent = () => {
       body={
         <>
           {state.step === 2 && (
-            <TextField
-              label={i18n.t('account_label.account_password_confirm')}
-              eventHandler={(input: string): void =>
-                setState({ ...state, passwordConfirmation: input })
-              }
-              secure={true}
-            />
+            <>
+              <TextField
+                label={i18n.t('account_label.account_password_confirm')}
+                eventHandler={(input: string): void =>
+                  setState({ ...state, passwordConfirmation: input })
+                }
+                secure={true}
+                helperText={
+                  state.password !== state.passwordConfirmation
+                    ? i18n.t('account_errors.password_do_not_match')
+                    : undefined
+                }
+                helperIcon={
+                  state.password !== state.passwordConfirmation
+                    ? 'Error'
+                    : undefined
+                }
+              />
+              <TextField
+                label={i18n.t('account_label.new_password')}
+                value={state.password}
+                eventHandler={() => {}}
+                editable={false}
+                secure={true}
+              />
+            </>
           )}
-          <TextField
+          {state.step === 1 && (
+            <TextField
             label={i18n.t('account_label.new_password')}
             editable={state.step === 1}
             eventHandler={
@@ -103,12 +122,13 @@ const ResetPassword: FunctionComponent = () => {
                 : () => { }
             }
             secure={true}
+            helperText={
+              state.password === route.params.currentPassword
+                ? ` ${i18n.t('account.reset_current_same')} `
+                : undefined
+            }
+            helperIcon={state.password === route.params.currentPassword ? 'Error' : undefined}
           />
-          {state.password === route.params.currentPassword && (
-            <P1Text
-              style={{ textAlign: 'left', marginTop: -10, marginBottom: 15 }}
-              label={i18n.t('account.reset_current_same')}
-            />
           )}
           <TextField
             label={i18n.t('account_label.current_password')}
@@ -124,6 +144,10 @@ const ResetPassword: FunctionComponent = () => {
           {state.step === 1 ? (
             <SubmitButton
               title={i18n.t('account_label.continue')}
+              disabled={
+                state.password === route.params.currentPassword
+              }
+              variant={state.password === route.params.currentPassword ? "GrayTheme" : ""}
               handler={() => {
                 if (state.password === '') {
                   alert(i18n.t('account.insert_password'));

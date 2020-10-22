@@ -3,11 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Picker,
   Platform,
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { Picker } from '@react-native-community/picker';
 import styled from 'styled-components/native';
 import RNPickerSelect, { Item } from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';

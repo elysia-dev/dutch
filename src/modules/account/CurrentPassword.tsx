@@ -6,7 +6,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
-import { H1Text } from '../../shared/components/Texts';
+import { TitleText, H3Text } from '../../shared/components/Texts';
 
 const CurrentPassword: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -20,8 +20,8 @@ const CurrentPassword: FunctionComponent = () => {
       title={
         <>
           <BackButton handler={() => navigation.goBack()} />
-          <H1Text label={i18n.t('account_label.change_password')} />
-          <H1Text label={i18n.t('account.insert_current_password')} />
+          <TitleText label={i18n.t('account_label.change_password')} />
+          <H3Text label={i18n.t('account.insert_current_password')} />
         </>
       }
       body={

@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { SafeAreaView, View, TextInput } from 'react-native';
+import { P1Text } from '../../../shared/components/Texts';
 
 import i18n from '../../../i18n/i18n';
 
@@ -15,19 +16,20 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <View>
-      <Text
+      <P1Text
         style={{
           color: state.focus ? '#3679B5' : '#A7A7A7',
           fontSize: 15,
           textAlign: 'left',
-          marginBottom: 10,
-        }}>
-        {i18n.t('more_label.contact_contents')}
-      </Text>
+          marginBottom: 15,
+        }}
+        label={i18n.t('more_label.contact_contents')}
+      />
       <TextInput
         value={props.contents}
         onChangeText={props.eventHandler}
         maxLength={1000}
+        allowFontScaling={false}
         style={{
           backgroundColor: '#F6F6F8',
           borderColor: state.focus ? '#3679B5' : '#00000040',
@@ -37,6 +39,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
           height: 150,
           fontSize: 14,
           padding: 10,
+          fontFamily: 'Roboto_400Regular',
         }}
         scrollEnabled={true}
         textAlignVertical={'top'}

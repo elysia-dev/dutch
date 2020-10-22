@@ -14,7 +14,7 @@ export const FlatButton: FunctionComponent<{
       <P3Text label={title} style={{
         color: "#1c1c1c",
         fontSize: 13,
-        lineHeight: 13,
+        lineHeight: 15,
         textAlign: "center",
       }}/>
     </TouchableOpacity>

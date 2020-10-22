@@ -4,10 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import { BackButton } from '../../shared/components/BackButton';
 import { TextArea } from './components/TextArea';
-import { P1Text } from '../../shared/components/Texts';
-import { TitleText } from '../../shared/components/TitleText';
+import { SubTitleText, P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
 
@@ -46,7 +44,7 @@ const Contact: FunctionComponent = () => {
       backButtonHandler={() => {
         navigation.goBack();
       }}
-      subTitle={<P1Text
+      subTitle={<SubTitleText
         label={i18n.t('more.contact_text')}
         style={{ marginBottom: 10, color: '#5c5b5b' }}
       />}
@@ -72,23 +70,19 @@ const Contact: FunctionComponent = () => {
               elevation: 6,
               zIndex: 1,
             }}>
-            <P1Text
-              label={'Contact'}
-              style={{ fontSize: 14, marginBottom: 25 }}
-            />
             <TextArea
               contents={state.contents}
               eventHandler={(input: string) =>
                 setState({ ...state, contents: input })
               }
             />
-            <Text
+            <P1Text
               style={{
                 color: '#A7A7A7',
                 fontSize: 12,
                 textAlign: 'right',
                 marginTop: 2,
-              }}>{`${state.contents.length}/1000`}</Text>
+              }} label={`${state.contents.length}/1000`} />
           </View>
         </>
       }
