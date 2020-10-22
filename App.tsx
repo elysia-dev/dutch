@@ -197,5 +197,4 @@ const App = () => {
   );
 };
 
-
-export default AppContainer;
+export default App;
