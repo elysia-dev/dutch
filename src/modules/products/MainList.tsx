@@ -58,7 +58,6 @@ const MainList: FunctionComponent = () => {
       <ScrollView
         scrollEnabled={!state.activeStory}
         ref={ref}
-        scrollEventThrottle={16}
         style={{ width: '100%', paddingHorizontal: 20 }}>
         <Animated.View
           style={{
