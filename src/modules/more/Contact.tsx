@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
+import { View, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { TextArea } from './components/TextArea';
@@ -50,7 +50,7 @@ const Contact: FunctionComponent = () => {
       />}
       title={i18n.t('more_label.contact')}
       body={
-        <>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View
             style={{
               marginTop: 30,
@@ -84,7 +84,7 @@ const Contact: FunctionComponent = () => {
                 marginTop: 2,
               }} label={`${state.contents.length}/1000`} />
           </View>
-        </>
+        </TouchableWithoutFeedback>
       }
       button={
         <SubmitButton
