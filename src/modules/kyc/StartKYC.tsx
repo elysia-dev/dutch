@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { View, Modal } from 'react-native';
+import { View, Modal, Text } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -14,15 +14,18 @@ const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
 `;
-const Circle = styled.Text`
+const Circle = styled.View`
   width: 26px;
   height: 26px;
   background-color: #3679b5;
   border-radius: 13px;
-  color: #fff;
+`;
+const CircleText = styled.Text`
+  width: 26px;
   line-height: 26px;
   text-align: center;
   font-family: 'Roboto_400Regular';
+  color: #fff;
 `;
 const CircleWrapper = styled.View`
   margin-left: 5%;
@@ -57,7 +60,6 @@ const StartKYC: FunctionComponent<{}> = () => {
             source={ClockPng}
             style={{
               marginTop: -1,
-              resizeMode: 'center',
               height: 15,
               width: 15,
             }}
@@ -74,7 +76,9 @@ const StartKYC: FunctionComponent<{}> = () => {
           <View style={{ marginTop: 20 }}>
             <HrLine />
             <CircleWrapper>
-              <Circle allowFontScaling={false}>1</Circle>
+              <Circle>
+                <CircleText allowFontScaling={false}>{1}</CircleText>
+              </Circle>
               <P1Text
                 label={i18n.t('kyc.start_step1')}
                 style={{
@@ -88,7 +92,9 @@ const StartKYC: FunctionComponent<{}> = () => {
               />
             </CircleWrapper>
             <CircleWrapper>
-              <Circle allowFontScaling={false}>2</Circle>
+              <Circle>
+                <CircleText allowFontScaling={false}>{2}</CircleText>
+              </Circle>
               <P1Text
                 label={i18n.t('kyc.start_step2')}
                 style={{
@@ -102,7 +108,9 @@ const StartKYC: FunctionComponent<{}> = () => {
               />
             </CircleWrapper>
             <CircleWrapper>
-              <Circle allowFontScaling={false}>3</Circle>
+              <Circle>
+                <CircleText allowFontScaling={false}>{3}</CircleText>
+              </Circle>
               <P1Text
                 label={i18n.t('kyc.start_step3')}
                 style={{

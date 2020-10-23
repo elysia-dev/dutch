@@ -133,9 +133,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'center',
+                        width: 60,
+                        height: 60,
                       }}
                     />
                   </TouchableOpacity>
@@ -168,9 +167,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'center',
+                        width: 60,
+                        height: 60,
                       }}
                     />
                   </TouchableOpacity>
@@ -203,9 +201,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'center',
+                        width: 60,
+                        height: 60,
                       }}
                     />
                   </TouchableOpacity>

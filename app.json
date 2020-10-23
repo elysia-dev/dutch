@@ -8,6 +8,10 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#3679B5"
+    },
     "assetBundlePatterns": ["**/*"],
     "notification": {
       "icon": "https://elysia-public.s3.ap-northeast-2.amazonaws.com/pushicon.png",

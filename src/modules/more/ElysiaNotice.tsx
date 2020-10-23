@@ -111,7 +111,6 @@ const ElysiaNotice: FunctionComponent = () => {
                   marginRight: 'auto',
                   width: 30,
                   height: 15,
-                  resizeMode: 'center',
                 },
                 {
                   transform: [{ rotate: state.full ? '180deg' : '0deg' }],

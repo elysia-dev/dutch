@@ -69,9 +69,6 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
         }}
       >
         <Image
-          style={{
-            resizeMode: "center",
-          }}
           source={QuitIcon}
         />
       </TouchableOpacity>

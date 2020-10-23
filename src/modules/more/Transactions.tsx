@@ -172,7 +172,6 @@ const Transactions: FunctionComponent = () => {
               marginLeft: 5,
               width: 8,
               height: 4,
-              resizeMode: 'center',
             }}
           />
         </TouchableOpacity>

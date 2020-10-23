@@ -124,7 +124,7 @@ export const Main: FunctionComponent = () => {
               <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
                 screen: DashboardPage.PreparingInvestment,
               })} style={{ marginBottom: 25, width: "100%", height: 100, backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8, elevation: 8 }}>
-                <Image style={{ width: 80, height: 90, resizeMode: 'cover', position: 'absolute', right: 10, top: 5 }} source={require('./images/promotion.png')} />
+                <Image style={{ width: 80, height: 90, position: 'absolute', right: 10, top: 5 }} source={require('./images/promotion.png')} />
                 <P1Text style={{ position: "absolute", top: 25, left: 25 }} label={i18n.t('dashboard.connect_wallet')} />
                 <H2Text style={{ position: "absolute", top: 45, left: 25 }} label={i18n.t('dashboard.get_EL')} />
               </TouchableOpacity>

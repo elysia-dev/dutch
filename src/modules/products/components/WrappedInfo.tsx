@@ -79,9 +79,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 source={require('../images/downbutton.png')}
                 style={[
                   {
-                    width: 20,
-                    height: 17,
-                    resizeMode: 'center',
+                    marginTop: 14,
                   },
                   {
                     transform: [
@@ -157,9 +155,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 source={require('../images/downbutton.png')}
                 style={[
                   {
-                    width: 20,
-                    height: 17,
-                    resizeMode: 'center',
+                    marginTop: 14,
                   },
                   {
                     transform: [
@@ -239,9 +235,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 source={require('../images/downbutton.png')}
                 style={[
                   {
-                    width: 20,
-                    height: 17,
-                    resizeMode: 'center',
+                    marginTop: 14,
                   },
                   {
                     transform: [{ rotate: state.abstract ? '180deg' : '0deg' }],

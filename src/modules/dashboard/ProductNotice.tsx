@@ -43,9 +43,9 @@ export const Notice: FunctionComponent<Props> = props => {
         <P1Text
           label={props.post.title}
           style={{
-              marginTop: 10,
-              marginBottom: 10,
-            }}/>
+            marginTop: 10,
+            marginBottom: 10,
+          }} />
       </View>
       {state.content && (
         <View>
@@ -126,7 +126,7 @@ const ProductNotice: FunctionComponent = () => {
             style={{
               marginTop: 10,
               marginBottom: 10,
-            }}/>
+            }} />
           <View
             style={{
               marginTop: 10,
@@ -145,7 +145,6 @@ const ProductNotice: FunctionComponent = () => {
                   marginRight: 'auto',
                   width: 30,
                   height: 15,
-                  resizeMode: 'center',
                 },
                 {
                   transform: [{ rotate: state.full ? '180deg' : '0deg' }],

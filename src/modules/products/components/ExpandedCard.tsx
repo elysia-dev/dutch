@@ -178,7 +178,6 @@ const ExpandedItem: FunctionComponent<Props> = ({
               position: 'absolute',
               width: 32,
               height: 32,
-              resizeMode: 'center',
               opacity: 0.8,
             }}
             source={QuitIcon}

@@ -6,7 +6,7 @@ import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
-import { P2Text, H2Text, H3Text } from '../../../shared/components/Texts';
+import { P1Text, P2Text, H2Text, H3Text } from '../../../shared/components/Texts';
 
 interface Props {
   product: Product;
@@ -65,7 +65,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             {product.contractAddress}
           </GText>
         </View>
-
       </View>
       <View
         style={{
@@ -96,12 +95,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               marginRight: 'auto',
               width: 27,
               height: 27,
-              resizeMode: 'center',
               marginBottom: 6,
             }}
             source={require('../images/expectedreturn.png')}
           />
-          <H2Text
+          <P1Text
             style={{
               marginTop: 7,
               marginBottom: 6,
@@ -132,12 +130,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               marginRight: 'auto',
               width: 27,
               height: 27,
-              resizeMode: 'center',
               marginBottom: 6,
             }}
             source={require('../images/building1.png')}
           />
-          <H2Text
+          <P1Text
             style={{
               marginTop: 7,
               marginBottom: 6,
@@ -167,12 +164,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               marginRight: 'auto',
               width: 27,
               height: 27,
-              resizeMode: 'center',
               marginBottom: 6,
             }}
             source={require('../images/returncycle.png')}
           />
-          <H2Text
+          <P1Text
             style={{
               marginTop: 7,
               marginBottom: 6,

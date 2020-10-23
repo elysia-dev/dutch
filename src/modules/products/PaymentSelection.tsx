@@ -44,9 +44,9 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
     return (
         <TouchableOpacity onPress={props.modeHandler}
             style={{ width: "100%", height: 50, borderRadius: 5, borderWidth: 1, borderColor: props.selected ? "#3679B5" : "#D0D8DF", padding: 15, flexDirection: "row", marginBottom: 15 }}>
-            <Image style={{ flex: 1, alignSelf: 'center', resizeMode: 'center' }} source={buttonImage(props.type, props.selected)}></Image>
+            <Image style={{ flex: 1, alignSelf: 'center' }} source={buttonImage(props.type, props.selected)}></Image>
             <Text style={{ flex: 5, fontSize: 14, paddingLeft: 10, fontWeight: props.selected ? "bold" : "normal", color: "#1C1C1C", alignSelf: 'center' }}>{props.title}</Text>
-            {props.selected && <Image style={{ flex: 0.5, alignSelf: 'center', resizeMode: 'center' }} source={require('./images/bluebuttoncheck.png')}></Image>}
+            {props.selected && <Image style={{ flex: 0.5, alignSelf: 'center' }} source={require('./images/bluebuttoncheck.png')}></Image>}
         </TouchableOpacity>);
 };
 
@@ -91,7 +91,7 @@ const PaymentSelection: FunctionComponent = () => {
     const QuitButton: FunctionComponent = () => {
         return (
             <TouchableOpacity style={{ width: 40, height: 40, marginTop: 10, marginRight: -10 }} onPress={() => { navigation.navigate('Main', { screen: "DashboardMain" }); }}>
-                <Image style={{ width: "100%", height: "100%", resizeMode: 'center' }} source={require('./images/quitbuttonblack.png')}></Image>
+                <Image style={{ width: 40, height: 40 }} source={require('./images/quitbuttonblack.png')}></Image>
             </TouchableOpacity>);
     };
 
