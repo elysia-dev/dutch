@@ -192,9 +192,8 @@ const Transactions: FunctionComponent = () => {
             }}>
             <Image
               style={{
-                width: 50,
-                height: 50,
-                resizeMode: 'center',
+                width: 100,
+                height: 100,
                 marginLeft: 'auto',
                 marginRight: 'auto',
               }}
