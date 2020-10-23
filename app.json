@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "elysia",
-    "slug": "elysia",
+    "name": "Elysia",
+    "slug": "Elysia app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,7 +31,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.0.2"
+      "buildNumber": "1.0.3"
     },
     "android": {
       "package": "land.elysia",
