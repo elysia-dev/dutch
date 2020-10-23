@@ -13,7 +13,6 @@ import { Argos } from './Argos';
 const ClockImg = styled.Image`
   width: 13px;
   height: 13px;
-  resize-mode: center;
 `;
 const Circle = styled.Text`
   width: 26px;
@@ -54,19 +53,19 @@ const StartKYC: FunctionComponent<{}> = () => {
       title={i18n.t('kyc.start')}
       subTitle={
         <>
-            <ClockImg
-              source={ClockPng}
-              style={{
-                marginTop: -1,
-                resizeMode: 'center',
-                height: 15,
-                width: 15,
-              }}
-            />
-            <SubTitleText
-              label={' ' + i18n.t('kyc.start_text')}
-              style={{ color: '#626368' }}
-            />
+          <ClockImg
+            source={ClockPng}
+            style={{
+              marginTop: -1,
+              resizeMode: 'center',
+              height: 15,
+              width: 15,
+            }}
+          />
+          <SubTitleText
+            label={' ' + i18n.t('kyc.start_text')}
+            style={{ color: '#626368' }}
+          />
         </>
       }
       isScrolling={false}
