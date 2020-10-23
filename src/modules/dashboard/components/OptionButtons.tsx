@@ -39,7 +39,6 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           style={{
             width: 45,
             height: 45,
-            resizeMode: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
@@ -52,7 +51,6 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
         onPress={props.refundHandler}
         style={{
           backgroundColor: '#fff',
-
           width: 100,
           height: 95,
           borderRadius: 10,
@@ -67,7 +65,6 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           style={{
             width: 45,
             height: 45,
-            resizeMode: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
@@ -80,7 +77,6 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
         onPress={props.interestHandler}
         style={{
           backgroundColor: '#fff',
-
           width: 100,
           height: 95,
           borderRadius: 10,
@@ -95,7 +91,6 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           style={{
             width: 45,
             height: 45,
-            resizeMode: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
           }}

@@ -45,7 +45,7 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             marginBottom: 20,
           }}>
           <Image
-            style={{ flex: 1, resizeMode: 'center', width: 40, height: 40 }}
+            style={{ width: 40, height: 40 }}
             source={
               props.ownership.productType === 'commercial'
                 ? require('../images/commercial.png')
@@ -61,7 +61,7 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             fontSize: 30,
             marginBottom: 10,
           }}
-          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`}/>
+          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`} />
         <Dash
           dashGap={4}
           dashLength={2}
@@ -79,7 +79,7 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             marginTop: 10,
             color: "#fff",
             fontSize: 18,
-          }}/>
+          }} />
       </View>
     </TouchableOpacity>
   );

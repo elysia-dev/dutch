@@ -83,7 +83,6 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 position: 'absolute',
                 top: 10,
                 left: 10,
-                resizeMode: 'center',
               }}
               source={require('../images/productInfo.png')}
             />
@@ -112,7 +111,6 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 position: 'absolute',
                 top: 10,
                 left: 10,
-                resizeMode: 'center',
               }}
               source={require('../images/productNotice.png')}
             />
