@@ -32,10 +32,13 @@ type ParamList = {
   };
 };
 
+interface State {
+  modalVisible: boolean;
+  product?: Product;
+}
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState({
+  const [state, setState] = useState<State>({
     modalVisible: false,
-    product: defaultProduct,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
@@ -57,7 +60,7 @@ const ProductBuying: FunctionComponent = () => {
           alert(i18n.t('account_errors.server'));
         }
       });
-  }, []);
+  }, [user.language]);
 
   return (
     <ProductInfoWrapper>
