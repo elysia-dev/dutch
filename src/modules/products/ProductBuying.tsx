@@ -32,20 +32,16 @@ type ParamList = {
   };
 };
 
-interface State {
-  product?: Product;
-  modalVisible: boolean;
-}
-
 const ProductBuying: FunctionComponent = () => {
-  const [state, setState] = useState<State>({
+  const [state, setState] = useState({
     modalVisible: false,
+    product: defaultProduct,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const { Server, user } = useContext(RootContext);
-  const shortNationality = user.nationality.split(", ")[1];
+  const shortNationality = user.nationality ? user.nationality.split(", ")[1] : "";
   const purchasability =
     (user.kycStatus === KycStatus.SUCCESS
       && user.ethAddresses?.length > 0

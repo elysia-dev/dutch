@@ -176,9 +176,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
           <Image
             style={{
               position: 'absolute',
-              width: 32,
-              height: 32,
-              resizeMode: 'center',
+              width: 16,
+              height: 16,
+              top: 8,
+              left: 8,
               opacity: 0.8,
             }}
             source={QuitIcon}
