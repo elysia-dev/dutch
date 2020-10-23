@@ -19,6 +19,8 @@ import Notifications from '../notification/Notifications';
 import RootContext from '../../contexts/RootContext';
 
 const Icon = styled.Image`
+  position: absolute;
+  top: 8;
   width: 26px;
   height: 26px;
 `;
@@ -29,12 +31,19 @@ const Main: FunctionComponent = () => {
   const { unreadNotificationCount } = useContext(RootContext);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }} forceInset={{ bottom: 'always', top: 'never' }} >
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#FFF" }}
+      forceInset={{ top: 'never', bottom: 'always' }}
+    >
       <Tab.Navigator
         initialRouteName="DashboardMain"
         tabBarOptions={{
           showLabel: false,
-          style: { height: 50, position: 'absolute', bottom: 0 },
+          style: {
+            height: 50,
+            position: 'absolute',
+            bottom: 0,
+          },
         }}>
         <Tab.Screen
           name="DashboardMain"
@@ -44,7 +53,10 @@ const Main: FunctionComponent = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 source={focused ? DashboardBlackPng : DashboardPng}
-                style={{ width: 30, height: 30 }}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
               />
             ),
           }}
@@ -57,7 +69,10 @@ const Main: FunctionComponent = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 source={focused ? ProductBlackPng : ProductPng}
-                style={{ width: 30, height: 30 }}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
               />
             ),
           }}
@@ -98,8 +113,10 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Image
+              <Icon
                 style={{
+                  top: 20,
+                  height: 5,
                   width: 25,
                 }}
                 source={focused ? OptionsBlackPng : OptionsPng}
