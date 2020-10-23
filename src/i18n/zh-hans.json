@@ -308,7 +308,19 @@
     "no_wallet": "没有连接任何钱包。",
     "wallet_connected": "成功连接钱包。",
     "event_guide_EL": "活动结束后，EL代币将被存入相应钱包地址中。",
-    "complete_prepare": "准备完毕。"
+    "complete_prepare": "准备完毕。",
+    "investment_guide_header": [
+      "存放EL令牌",
+      "选择产品和数量",
+      "使用经过验证的钱包创建交易",
+      "股权所有权已完成！"
+    ],
+    "investment_guide_text": [
+      "从上市交易所购买EL后，\n请将EL存入您的身份验证钱包地址！",
+      "选择完所需的产品后，\n请选择要投资的房地产代币数量！",
+      "请使用Metamask进行交易！",
+      "利润是根据拥有的房地产令牌产生的。"
+    ]
   },
   "day": {
     "0": "周日",

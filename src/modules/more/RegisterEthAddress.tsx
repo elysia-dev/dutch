@@ -9,6 +9,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
+import LocaleType from '../../enums/LocaleType';
 
 interface Props {
   resetHandler: () => void;
@@ -17,12 +18,14 @@ interface Props {
 type State = {
   address: string;
   error: number;
+  localeTerms?: string;
 }
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     address: "",
     error: 0,
+    localeTerms: "",
   });
 
   const navigation = useNavigation();
@@ -31,7 +34,20 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     Server,
     setEthAddress,
     user,
+    locale,
   } = useContext(RootContext);
+
+  switch (locale) {
+    case LocaleType.KO:
+      state.localeTerms = terms[LocaleType.KO];
+      break;
+    case LocaleType.CH:
+      state.localeTerms = terms[LocaleType.CH];
+      break;
+    default:
+      state.localeTerms = terms[LocaleType.EN];
+      break;
+  }
 
   const callApi = () => {
     Server.registerAddress(state.address).then(() => {
@@ -72,7 +88,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             }}
             placeHolder="0x"
           />
-          <P3Text label={terms.ko} style={{ marginTop: 30 }}/>
+          <P3Text label={state.localeTerms} style={{ marginTop: 30 }}/>
           </>)
       }
       button={
@@ -113,6 +129,28 @@ ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이�
 필수 확인 사항
 - 이더리움 지갑 주소인가요?
 - 본인이 프라이빗 키를 정확히 알고 있는 주소인가요?`,
+en: `Please enter only the Ethereum wallet address where you know the exact private key of the address.
+(e.g. metamask my wallet address)
+
+When entering the wallet address of the centralization platform, you may not have permission for these tokens after exchanging them.
+(The wallet on the centralization platform means the wallet address for deposit provided by the centralization exchange, centralization wallet service, etc.)
+
+I'd like to remind you once again that you are solely responsible for entering the wrong address.
+
+Required Checkpoints
+- Is this Ethereum's address?
+- Do you know the exact private key?`,
+zhHans: `请仅输入您知道该地址正确私钥的以太坊钱包地址。
+（例如，Metamask中的钱包地址）
+
+输入集中式平台的钱包地址时，令牌交换后，您可能无法获得相应令牌的权限。
+（集中平台的钱包是指通过集中交易所，集中式钱包服务等提供的存款的钱包地址。）
+
+我们想再次提醒您，您应自行负责输入错误的地址。
+
+必需的检查点
+-这是一个以太坊钱包地址吗？
+-您正确知道私钥的地址吗？`,
 };
 
 export default RegisterEthAddress;

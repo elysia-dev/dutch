@@ -308,7 +308,19 @@
     "no_wallet": "There are no wallets connected.",
     "wallet_connected": "Wallet connection is complete.",
     "event_guide_EL": "EL will be deposited to the address after the event period ends",
-    "complete_prepare": "Please be ready."
+    "complete_prepare": "Please be ready.",
+    "investment_guide_header": [
+      "Depositing EL tokens",
+      "Select product & quantity",
+      "Create a transaction with an authenticated wallet",
+      "Stake ownership complete!"
+    ],
+    "investment_guide_text": [
+      "After purchasing EL from a listed exchange, \nplease deposit EL to your authentication wallet address!",
+      "After selecting the product you like,\nPlease select the number of real estate tokens to invest!",
+      "Please make a transaction using Metamask!",
+      "Profits are generated based on real estate tokens owned."
+    ]
   },
   "day": {
     "0": "Sun",
