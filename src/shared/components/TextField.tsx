@@ -34,7 +34,6 @@ const HelperIcon = styled.Image`
   margin-top: 1px;
   width: 12px;
   height: 12px;
-  resize-mode: center;
   margin-right: 2px;
 `;
 export const TextField: FunctionComponent<Props> = ({
@@ -49,15 +48,15 @@ export const TextField: FunctionComponent<Props> = ({
   return (
     <View style={props.style}>
       <P3Text label={props.label} style={{
-          color:
-            // eslint-disable-next-line no-nested-ternary
-            props.helperText !== undefined
-              ? '#C91725'
-              : focusing === true
-                ? '#3679B5'
-                : '#A7A7A7',
-                fontFamily: 'Roboto_400Regular',
-        }} />
+        color:
+          // eslint-disable-next-line no-nested-ternary
+          props.helperText !== undefined
+            ? '#C91725'
+            : focusing === true
+              ? '#3679B5'
+              : '#A7A7A7',
+        fontFamily: 'Roboto_400Regular',
+      }} />
       <TextInput
         style={{
           borderBottomColor:
@@ -95,7 +94,7 @@ export const TextField: FunctionComponent<Props> = ({
             fontSize: 12,
             color: "#1c1c1c",
             lineHeight: 15,
-            }} />
+          }} />
           {(() => {
             switch (props.helperIcon) {
               case 'Error':

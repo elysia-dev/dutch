@@ -44,7 +44,7 @@ const Main: FunctionComponent = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 source={focused ? DashboardBlackPng : DashboardPng}
-                style={{ width: 30, height: 30, position: 'absolute', top: 9 }}
+                style={{ width: 30, height: 30 }}
               />
             ),
           }}
@@ -55,7 +55,10 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon source={focused ? ProductBlackPng : ProductPng} style={{ position: 'absolute', top: 11 }}/>
+              <Icon
+                source={focused ? ProductBlackPng : ProductPng}
+                style={{ width: 30, height: 30 }}
+              />
             ),
           }}
         />
@@ -65,24 +68,27 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <View style={{ flex: 1 }}>
+              <>
                 <Icon
                   source={focused ? NotificationBlackPng : NotificationPng}
-                  style={{ position: 'absolute', top: 11, right: -13, resizeMode: "contain" }}
+                  style={{
+                    height: 30,
+                    width: 25,
+                  }}
                 />
                 {unreadNotificationCount > 0 && (
                   <View
                     style={{
                       position: 'absolute',
-                      top: 8,
-                      left: 9,
+                      top: 10,
+                      right: 30,
                       width: 8,
                       height: 8,
                       borderRadius: 4,
                       backgroundColor: '#FC5C4F',
                     }} />
                 )}
-              </View>
+              </>
             ),
           }}
         />
@@ -94,11 +100,7 @@ const Main: FunctionComponent = () => {
             tabBarIcon: ({ focused }) => (
               <Image
                 style={{
-                  resizeMode: 'center',
-                  height: 25,
                   width: 25,
-                  position: 'absolute',
-                  top: 12,
                 }}
                 source={focused ? OptionsBlackPng : OptionsPng}
               />

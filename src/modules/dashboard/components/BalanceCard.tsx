@@ -63,7 +63,6 @@ export const BalanceCard: FunctionComponent<Props> = props => {
                 marginRight: 'auto',
                 width: 25,
                 height: 25,
-                resizeMode: 'center',
               }}
               source={require('../images/chart.png')}></Image>
           </View>

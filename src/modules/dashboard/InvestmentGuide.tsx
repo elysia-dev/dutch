@@ -13,7 +13,6 @@ import i18n from '../../i18n/i18n';
 
 const GuideImage = styled.Image`
   width: 90%;
-  resize-mode: center;
   margin: 10% 5% 30px 5%;
   position: absolute;
 `;
@@ -56,30 +55,28 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
     .map((_x, index) => {
       return (
         <TouchableOpacity onPress={() => { viewPager.current?.setPage(index); }}>
-          <Circle style={[state === index ? styles.enableCircle : styles.disableCircle]}/>
+          <Circle style={[state === index ? styles.enableCircle : styles.disableCircle]} />
         </TouchableOpacity>
       );
     });
   return (
     <View style={{ flex: 1, backgroundColor: "#FFF", paddingTop: 55 }}>
       <TouchableOpacity
-          onPress={() => { navigation.goBack(); }}
-          style={{
+        onPress={() => { navigation.goBack(); }}
+        style={{
           marginLeft: "auto",
-          marginRight: "5%" }}
-        >
-          <Image
-            style={{
-              resizeMode: "center",
-            }}
-            source={QuitIcon}
-          />
-        </TouchableOpacity>
+          marginRight: "5%",
+        }}
+      >
+        <Image
+          source={QuitIcon}
+        />
+      </TouchableOpacity>
       <ViewPager style={styles.viewPager} initialPage={0} ref={viewPager}
         onPageSelected={e => {
           setState(e.nativeEvent.position);
         }}
-        >
+      >
         {ItemListing}
       </ViewPager>
       <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', bottom: "20%" }}>

@@ -41,7 +41,6 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
             height: 30,
             marginLeft: 'auto',
             marginRight: 'auto',
-            resizeMode: 'center',
           }}
         />
       </TouchableOpacity>

@@ -69,9 +69,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               source={require('../images/downbutton.png')}
               style={[
                 {
-                  width: 20,
-                  height: 17,
-                  resizeMode: 'center',
+                  marginTop: 8
                 },
                 {
                   transform: [{ rotate: state.financial ? '180deg' : '0deg' }],
@@ -148,9 +146,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               source={require('../images/downbutton.png')}
               style={[
                 {
-                  width: 20,
-                  height: 17,
-                  resizeMode: 'center',
+                  marginTop: 8
                 },
                 {
                   transform: [{ rotate: state.abstract ? '180deg' : '0deg' }],

@@ -93,7 +93,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
           </TextWrapper>
         </WhiteBox>
         <View style={{ width: 30, height: 21, marginLeft: 'auto', marginRight: 'auto', padding: 7 }}>
-          <Image style={{ width: "100%", height: "100%", resizeMode: 'center', marginLeft: 'auto', marginRight: 'auto' }} source={require('../images/downbutton.png')} />
+          <Image style={{ width: 30, height: 21, marginLeft: 'auto', marginRight: 'auto' }} source={require('../images/downbutton.png')} />
         </View>
         <WhiteBox>
           <TextWrapper>

@@ -82,9 +82,8 @@ const Filter: FunctionComponent<props> = (props: props) => {
         onPress={() => props.dispatch({ type: 'MODAL_CONTROL', modal: false })}>
         <Image
           style={{
-            width: '100%',
-            height: '100%',
-            resizeMode: 'center',
+            width: 30,
+            height: 30,
           }}
           source={require('../images/bluedownarrow.png')}
         />

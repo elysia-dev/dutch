@@ -172,7 +172,6 @@ const Transactions: FunctionComponent = () => {
               marginLeft: 5,
               width: 8,
               height: 4,
-              resizeMode: 'center',
             }}
           />
         </TouchableOpacity>
@@ -192,9 +191,8 @@ const Transactions: FunctionComponent = () => {
             }}>
             <Image
               style={{
-                width: 50,
-                height: 50,
-                resizeMode: 'center',
+                width: 100,
+                height: 100,
                 marginLeft: 'auto',
                 marginRight: 'auto',
               }}

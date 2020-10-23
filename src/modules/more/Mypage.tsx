@@ -16,7 +16,6 @@ const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
   margin: 20px 20px;
-  resize-mode: center;
 `;
 
 const MyPage: FunctionComponent = () => {

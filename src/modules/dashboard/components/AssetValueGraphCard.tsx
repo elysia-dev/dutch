@@ -200,7 +200,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
                   ? require('../images/dollorblackbutton.png')
                   : require('../images/dollorgraybutton.png')
               }
-              style={{ width: '100%', height: '100%', resizeMode: 'center' }}
+              style={{ width: 50, height: 50 }}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -212,7 +212,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
                   ? require('../images/percentgraybutton.png')
                   : require('../images/percentblackbutton.png')
               }
-              style={{ width: '100%', height: '100%', resizeMode: 'center' }}
+              style={{ width: 50, height: 50 }}
             />
           </TouchableOpacity>
         </View>
