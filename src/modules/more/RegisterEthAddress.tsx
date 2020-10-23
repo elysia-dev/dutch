@@ -34,10 +34,9 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     Server,
     setEthAddress,
     user,
-    locale,
   } = useContext(RootContext);
 
-  switch (locale) {
+  switch (user.language) {
     case LocaleType.KO:
       state.localeTerms = terms[LocaleType.KO];
       break;
@@ -78,17 +77,17 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         hasAddress ?
           <P1Text label={user.ethAddresses[0]} />
           : (<>
-          <TextField
-            label={i18n.t('account_label.ethaddress')}
-            eventHandler={(input: string) => {
-              setState({
-                address: input,
-                error: isAddress(input) ? 0 : 1,
-              });
-            }}
-            placeHolder="0x"
-          />
-          <P3Text label={state.localeTerms} style={{ marginTop: 30 }}/>
+            <TextField
+              label={i18n.t('account_label.ethaddress')}
+              eventHandler={(input: string) => {
+                setState({
+                  address: input,
+                  error: isAddress(input) ? 0 : 1,
+                });
+              }}
+              placeHolder="0x"
+            />
+            <P3Text label={state.localeTerms} style={{ marginTop: 30 }} />
           </>)
       }
       button={
@@ -118,7 +117,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
 };
 
 const terms = {
-ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이더리움 지갑 주소만 입력해주시기 바랍니다.
+  ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이더리움 지갑 주소만 입력해주시기 바랍니다.
 (예를 들어, 메타마스크 내 지갑 주소)
 
 중앙화 플랫폼의 지갑 주소 입력 시 토큰 교환 후 해당 토큰들의 권한을 갖지 못할 수 있습니다. 
@@ -129,7 +128,7 @@ ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이�
 필수 확인 사항
 - 이더리움 지갑 주소인가요?
 - 본인이 프라이빗 키를 정확히 알고 있는 주소인가요?`,
-en: `Please enter only the Ethereum wallet address where you know the exact private key of the address.
+  en: `Please enter only the Ethereum wallet address where you know the exact private key of the address.
 (e.g. metamask my wallet address)
 
 When entering the wallet address of the centralization platform, you may not have permission for these tokens after exchanging them.
@@ -140,7 +139,7 @@ I'd like to remind you once again that you are solely responsible for entering t
 Required Checkpoints
 - Is this Ethereum's address?
 - Do you know the exact private key?`,
-zhHans: `请仅输入您知道该地址正确私钥的以太坊钱包地址。
+  zhHans: `请仅输入您知道该地址正确私钥的以太坊钱包地址。
 （例如，Metamask中的钱包地址）
 
 输入集中式平台的钱包地址时，令牌交换后，您可能无法获得相应令牌的权限。
