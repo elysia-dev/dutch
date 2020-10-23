@@ -7,7 +7,6 @@ import Notification from '../types/Notification';
 
 type RootContextType = {
   signedIn: boolean;
-  locale: LocaleType;
   user: {
     email: string;
     firstName: string;
@@ -32,7 +31,6 @@ type RootContextType = {
 
 const RootContext = createContext<RootContextType>({
   signedIn: false,
-  locale: LocaleType.KO,
   user: {
     email: '',
     firstName: '',
@@ -40,7 +38,7 @@ const RootContext = createContext<RootContextType>({
     gender: '',
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
-    language: LocaleType.KO,
+    language: LocaleType.EN,
     nationality: "South Korea, KOR",
   },
   changeLanguage: () => { },

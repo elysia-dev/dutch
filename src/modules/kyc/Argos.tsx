@@ -13,21 +13,21 @@ interface Props {
   updateAgree: () => void;
 }
 export const Argos: FunctionComponent<Props> = (props: Props) => {
-  const { locale } = useContext(RootContext);
-  const localeTerms = terms[locale === LocaleType.KO ? locale : LocaleType.EN];
+  const { user } = useContext(RootContext);
+  const localeTerms = terms[user.language === LocaleType.KO ? user.language : LocaleType.EN];
 
   return (
     <WrapperLayout
       isScrolling={true}
       title={i18n.t('kyc_label.argos_terms')}
       body={
-          <P1Text label={localeTerms} style={{ marginLeft: "5%", marginRight: "5%", marginBottom: 50, lineHeight: 20 }}/>
+        <P1Text label={localeTerms} style={{ marginLeft: "5%", marginRight: "5%", marginBottom: 50, lineHeight: 20 }} />
       }
       button={
-          <SubmitButton
-            title={i18n.t('kyc_label.agree')}
-            handler={props.updateAgree}
-          />
+        <SubmitButton
+          title={i18n.t('kyc_label.agree')}
+          handler={props.updateAgree}
+        />
       }
     />
   );

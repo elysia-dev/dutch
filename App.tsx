@@ -43,7 +43,6 @@ Sentry.init({
 
 interface AppState {
   signedIn: boolean;
-  locale: LocaleType;
   user: {
     email: string;
     firstName: string;
@@ -155,7 +154,7 @@ const App = () => {
         value={{
           ...state,
           changeLanguage: (input) => {
-            setState({ ...state, locale: input });
+            setState({ ...state, user: { ...state.user, language: input } });
           },
           signIn,
           signOut,
@@ -193,7 +192,7 @@ const App = () => {
             )}
         </RootStack.Navigator>
       </RootContext.Provider>
-    </NavigationContainer>
+    </NavigationContainer >
   );
 };
 

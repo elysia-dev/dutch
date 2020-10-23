@@ -13,7 +13,7 @@ type ParamList = {
 };
 
 const Signup: FunctionComponent = () => {
-  const { signIn, locale } = useContext(RootContext);
+  const { signIn, user } = useContext(RootContext);
   const route = useRoute<RouteProp<ParamList, 'Signup'>>();
   const { Server } = useContext(RootContext);
 
@@ -25,7 +25,7 @@ const Signup: FunctionComponent = () => {
     if (password.length < 8) {
       alert(i18n.t('account_errors.password_too_short'));
     } else {
-      Server.signup(route.params.verificationId, password, locale)
+      Server.signup(route.params.verificationId, password, user.language)
         .then(async res => {
           if (res.data.status === 'success') {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -35,7 +35,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
         ) {
           AsyncStorage.getItem('pushNotificationPermission').then((res) => {
             setState({ ...state, hasPermission: res === 'granted' });
-          })
+          });
         }
       });
     });
@@ -149,7 +149,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
             }}>
               <Picker
                 style={{
-                  height: 200
+                  height: 200,
                 }}
                 accessibilityLabel={'settings'}
                 selectedValue={state.selectedValue}

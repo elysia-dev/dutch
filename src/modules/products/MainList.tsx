@@ -27,7 +27,7 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { Server, locale } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -45,7 +45,7 @@ const MainList: FunctionComponent = () => {
           alert(i18n.t('account_errors.server'));
         }
       });
-  }, [locale]);
+  }, [user.language]);
 
   return (
     <View

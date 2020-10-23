@@ -27,13 +27,11 @@ const ValueText = styled.Text`
 `;
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { locale } = useContext(RootContext);
+  const { user } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription =
-    product.data.descriptions[
-    product.data.languages.includes(locale) ? locale : LocaleType.EN
-    ];
+    product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
   return (
     <View

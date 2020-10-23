@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
-import LocaleType from '../../../enums/LocaleType';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -43,13 +42,12 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { locale } = useContext(RootContext);
+  const { user } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription =
-    product.data.descriptions[
-    product.data.languages.includes(locale) ? locale : LocaleType.EN
-    ];
+    product.data.descriptions[user.language];
+  // TODO : Add null guard languages & descrptions
 
   return (
     <View style={{ width: '100%', paddingBottom: 0 }}>
@@ -69,7 +67,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               source={require('../images/downbutton.png')}
               style={[
                 {
-                  marginTop: 8
+                  marginTop: 8,
                 },
                 {
                   transform: [{ rotate: state.financial ? '180deg' : '0deg' }],
@@ -146,7 +144,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               source={require('../images/downbutton.png')}
               style={[
                 {
-                  marginTop: 8
+                  marginTop: 8,
                 },
                 {
                   transform: [{ rotate: state.abstract ? '180deg' : '0deg' }],
