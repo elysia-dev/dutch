@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import NotificationType from '../../../enums/NotificationType';
@@ -40,6 +39,9 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         return 0;
     }
   };
+  const width = [15, 15, 20, 15, 15, 15, 15, 15, 15, 15];
+  const height = [17, 17, 18.5, 17, 17, 17, 17, 17, 17, 17];
+  const left = [0, 0, -1, 0, 0, 0, 0, 0, 0, 0];
   const status = props.notification.status;
   const data = props.notification.data;
   const navigation = useNavigation();
@@ -62,7 +64,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
             <Image
-              style={{ resizeMode: 'center', width: typeId() === 2 ? 15 : 13, height: typeId() === 2 ? 18.5 : 17, left: typeId() === 2 ? -1 : 0 }}
+              style={{
+                width: 20,
+                height: 20,
+                marginTop: -3,
+              }}
               source={images[typeId()][status === 'read' ? 0 : 1]}
             />
           </View>
@@ -72,7 +78,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
                 fontSize: 13,
                 marginBottom: 6,
-                }}
+              }}
               label={i18n.t(`notification_label.${type}`)}
             />
             <P1Text
@@ -121,7 +127,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               type === NotificationType.PRODUCT_NOTICE
               && (
                 <Image
-                  style={{ resizeMode: 'center', width: 6, height: 9 }}
+                  style={{ width: 6, height: 9 }}
                   source={images[9][status === 'read' ? 0 : 1]}
                 />
               )}

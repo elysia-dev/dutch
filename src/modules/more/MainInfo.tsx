@@ -78,7 +78,6 @@ const InfoArrowImg = styled.Image`
   width: 5px;
   height: 8px;
   margin: 20px 20px;
-  resize-mode: center;
 `;
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));

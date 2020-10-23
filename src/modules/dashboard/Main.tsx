@@ -113,7 +113,7 @@ export const Main: FunctionComponent = () => {
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
               screen: DashboardPage.PreparingInvestment,
             })} style={{ marginBottom: 25, width: "100%", borderRadius: 10, backgroundColor: "#fff", shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8, elevation: 6 }}>
-              <Image style={{ width: '100%', height: 416, resizeMode: 'center', alignSelf: "center", borderRadius: 10 }} source={require('./images/promotion.png')} />
+              <Image style={{ width: '100%', height: 416, alignSelf: "center", borderRadius: 10 }} source={require('./images/promotion.png')} />
               <P1Text style={{ position: "absolute", top: 30, left: 25 }} label={i18n.t('dashboard.connect_wallet')} />
               <H2Text style={{ position: "absolute", top: 50, left: 25 }} label={i18n.t('dashboard.get_EL')} />
             </TouchableOpacity>}
@@ -129,14 +129,14 @@ export const Main: FunctionComponent = () => {
                 <H2Text style={{ position: "absolute", top: 45, left: 25 }} label={i18n.t('dashboard.get_EL')} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {
-                 screen: DashboardPage.InvestmentGuide,
+                screen: DashboardPage.InvestmentGuide,
               })} style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8, elevation: 8 }}>
-                <Image source={require('./images/investmentguide.png')} style={{ width: "100%", height: 416, resizeMode: 'stretch', borderRadius: 10 }} />
+                <Image source={require('./images/investmentguide.png')} style={{ width: "100%", height: 416, borderRadius: 10 }} />
                 <P1Text style={{ position: "absolute", top: 30, left: 25 }} label={i18n.t('dashboard.with_elysia')} />
                 <H2Text style={{ position: "absolute", top: 50, left: 25 }} label={i18n.t('dashboard.investment_guide')} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate('ProductsMain')} style={{ marginBottom: 25, width: "100%", backgroundColor: "#fff", borderRadius: 10, shadowColor: '#3679B540', shadowOffset: { width: 1, height: 1 }, shadowOpacity: 0.8, shadowRadius: 8, elevation: 8 }}>
-                <Image source={require('./images/newinvestment.png')} style={{ width: "100%", height: 250, resizeMode: 'stretch', borderRadius: 10 }} />
+                <Image source={require('./images/newinvestment.png')} style={{ width: "100%", height: 250, borderRadius: 10 }} />
                 <P1Text style={{ position: "absolute", top: 30, left: 25 }} label={i18n.t('dashboard.right_now')} />
                 <H2Text style={{ position: "absolute", top: 50, left: 25, color: "#FFF" }} label={i18n.t('dashboard.invest_first_asset')} />
               </TouchableOpacity>
