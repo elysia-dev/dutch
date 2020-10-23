@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { isAddress } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
-import { Text } from 'react-native';
 import i18n from '../../i18n/i18n';
 import { P1Text, TitleText, P3Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
@@ -9,7 +8,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
-import LocaleType from '../../enums/LocaleType';
 
 interface Props {
   resetHandler: () => void;
@@ -25,7 +23,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     address: "",
     error: 0,
-    localeTerms: "",
   });
 
   const navigation = useNavigation();
@@ -35,18 +32,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     setEthAddress,
     user,
   } = useContext(RootContext);
-
-  switch (user.language) {
-    case LocaleType.KO:
-      state.localeTerms = terms[LocaleType.KO];
-      break;
-    case LocaleType.CH:
-      state.localeTerms = terms[LocaleType.CH];
-      break;
-    default:
-      state.localeTerms = terms[LocaleType.EN];
-      break;
-  }
 
   const callApi = () => {
     Server.registerAddress(state.address).then(() => {
@@ -87,7 +72,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               }}
               placeHolder="0x"
             />
-            <P3Text label={state.localeTerms} style={{ marginTop: 30 }} />
+            <P3Text label={terms[user.language]} style={{ marginTop: 30 }} />
           </>)
       }
       button={
@@ -120,7 +105,7 @@ const terms = {
   ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이더리움 지갑 주소만 입력해주시기 바랍니다.
 (예를 들어, 메타마스크 내 지갑 주소)
 
-중앙화 플랫폼의 지갑 주소 입력 시 토큰 교환 후 해당 토큰들의 권한을 갖지 못할 수 있습니다. 
+중앙화 플랫폼의 지갑 주소 입력 시 토큰 교환 후 해당 토큰들의 권한을 갖지 못할 수 있습니다.
 (중앙화 플랫폼의 지갑이란, 중앙화 거래소, 중앙화 지갑 서비스 등에서 제공하는 입금용 지갑 주소 등을 의미합니다.)
 
 잘못된 주소 입력으로 인한 책임은 전적으로 사용자 본인에게 있음을 한 번 더 알려 드립니다.
