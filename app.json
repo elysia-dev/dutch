@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner" "devmodori",
     "name": "Elysia",
     "slug": "ElysiaApp",
     "version": "1.0.0",
