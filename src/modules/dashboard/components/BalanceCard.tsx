@@ -10,7 +10,7 @@ interface Props {
 
 export const BalanceCard: FunctionComponent<Props> = props => {
   return (
-    <TouchableOpacity onPress={props.handler}>
+    <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
       <View
         style={{
           backgroundColor: '#3679B5',
@@ -23,7 +23,6 @@ export const BalanceCard: FunctionComponent<Props> = props => {
           shadowRadius: 6,
           padding: 20,
           marginBottom: 25,
-          elevation: 6,
         }}>
         <P1Text
           label={i18n.t('dashboard_label.total_balance')}
@@ -55,7 +54,6 @@ export const BalanceCard: FunctionComponent<Props> = props => {
               shadowRadius: 6,
               justifyContent: 'center',
               alignContent: 'center',
-              elevation: 6,
             }}>
             <Image
               style={{

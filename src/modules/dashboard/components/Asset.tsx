@@ -17,7 +17,7 @@ interface Props {
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
   return (
-    <TouchableOpacity onPress={props.handler} style={{ width: '47%' }}>
+    <TouchableOpacity onPress={props.handler} style={{ width: '47%', elevation: 6 }}>
       <View
         style={{
           backgroundColor:
@@ -35,7 +35,6 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           paddingTop: 23,
           marginBottom: 25,
           flexDirection: 'column',
-          elevation: 6,
         }}>
         <View
           style={{
