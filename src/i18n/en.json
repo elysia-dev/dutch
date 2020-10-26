@@ -339,7 +339,8 @@
     "failKyc": "KYC has been rejected.",
     "profit": "Daily reserves of $%{profit} have been applied.",
     "productNotice": "There is a new announcement regarding the token.",
-    "saved_90days": "Notifications received are kept for 90 days."
+    "saved_90days": "Notifications received are kept for 90 days.",
+    "no_notification": "No notifications received."
   },
   "notification_label": {
     "notification": "Notification",

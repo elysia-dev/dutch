@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, Animated, RefreshControl, Text, Platform } from 'react-native';
+import { View, Animated, RefreshControl, Text, Platform, Image } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -12,7 +12,7 @@ import RootContext from '../../contexts/RootContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
-import { P3Text } from '../../shared/components/Texts';
+import { P1Text, P3Text } from '../../shared/components/Texts';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -160,23 +160,43 @@ const Notifications: FunctionComponent = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        {notifications.map((notification, index) => {
-          return (
-            <NotiBox
-              notification={notification}
-              key={index}
-              readNotification={readNotification}
+        {notifications.length === 0 ?
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              paddingTop: '45%',
+            }}>
+            <P1Text
+              style={{
+                marginTop: 20,
+                marginBottom: 50,
+                color: '#A7A7A7',
+                textAlign: 'center',
+                fontSize: 15,
+              }}
+              label={i18n.t('notification.no_notification')}
             />
-          );
-        })}
-        <P3Text
-          style={{
-            marginTop: -20,
-            marginBottom: 75,
-            textAlign: 'center',
-          }}
-          label={i18n.t('notification.saved_90days')}
-        />
+          </View> : <>
+            {notifications.map((notification, index) => {
+              return (
+                <NotiBox
+                  notification={notification}
+                  key={index}
+                  readNotification={readNotification}
+                />
+              );
+            })}
+            <P3Text
+              style={{
+                marginTop: 20,
+                marginBottom: 75,
+                textAlign: 'center',
+              }}
+              label={i18n.t('notification.saved_90days')}
+            />
+          </>
+        }
         <VirtualTab />
       </Animated.ScrollView>
     </View>
