@@ -40,16 +40,6 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
 
       <View style={{ marginTop: 10, width: '100%' }}>
         <Slider
-          style={{
-            elevation: 6,
-            shadowOpacity: 0.3,
-            shadowOffset: {
-              width: 0,
-              height: 0,
-            },
-            borderWidth: 1,
-            borderColor: "#000",
-          }}
           minimumValue={0}
           maximumValue={props.max}
           minimumTrackTintColor={'#3679B5'}
