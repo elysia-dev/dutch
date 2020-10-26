@@ -169,8 +169,9 @@ const MainInfo: FunctionComponent = () => {
           style={{
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-            height: 350,
+            // height: 350,
             marginTop: 30,
+            paddingBottom: 10,
           }}>
           {user.kycStatus === KycStatus.NONE && (
             <View>
@@ -307,7 +308,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            <View
+            {!(user.ethAddresses?.length > 0) && <View
               style={{
                 height: 50,
                 marginTop: 10,
@@ -345,6 +346,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
+            }
             <View
               style={{
                 height: 50,

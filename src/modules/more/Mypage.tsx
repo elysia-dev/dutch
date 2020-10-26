@@ -9,7 +9,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
+import { H1Text, H2Text, P1Text, TitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const InfoArrowImg = styled.Image`
@@ -98,27 +98,44 @@ const MyPage: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {user.kycStatus === KycStatus.SUCCESS && (
+      {(user.kycStatus === KycStatus.SUCCESS || user.ethAddresses?.length > 0) && (
         <View
           style={{
             padding: '5%',
             borderBottomWidth: 5,
             borderBottomColor: '#F6F6F8',
           }}>
-          <H1Text label={i18n.t('more_label.my_info')} />
-          <P1Text
-            label={i18n.t('more_label.name')}
-            style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
-          />
-          <P1Text
-            label={`${user.firstName} ${user.lastName}`}
-            style={{ fontSize: 15 }}
-          />
-          <P1Text
-            label={i18n.t('more_label.gender')}
-            style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
-          />
-          <P1Text label={user.gender} style={{ fontSize: 15 }} />
+          <H2Text label={i18n.t('more_label.my_info')} />
+          {user.kycStatus === KycStatus.SUCCESS &&
+            <>
+              <P1Text
+                label={i18n.t('more_label.name')}
+                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+              />
+              <P1Text
+                label={`${user.firstName} ${user.lastName}`}
+                style={{ fontSize: 15 }}
+              />
+              <P1Text
+                label={i18n.t('more_label.gender')}
+                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+              />
+              <P1Text label={user.gender} style={{ fontSize: 15 }} />
+            </>
+          }
+          {user.ethAddresses?.length > 0 &&
+            <>
+              <P1Text
+                label={i18n.t('account_label.ethaddress')}
+                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+              />
+              <P1Text
+                label={`${user.ethAddresses[0]}`}
+                style={{ fontSize: 15 }}
+              />
+            </>
+          }
+
         </View>
       )}
     </SafeAreaView>
