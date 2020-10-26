@@ -71,8 +71,8 @@ const InterestSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText style={{ flex: 1, textAlign: 'left' }}> ELYSIA </BlackText>
             <BlackText style={{ flex: 1 }}> YOU </BlackText>
             <View style={{ flexDirection: "row", flex: 3, justifyContent: "flex-end" }}>
-              <BlackText style={{ fontWeight: 'bold', textAlign: "right" }}>EL</BlackText>
-              <BlackText style={{ textAlign: "right" }}> {props.elInterest} </BlackText>
+              <BlackText style={{ textAlign: "right" }}>EL</BlackText>
+              <BlackText style={{ fontWeight: 'bold', textAlign: "right" }}> {props.elInterest} </BlackText>
             </View>
           </TextWrapper>
         </WhiteBox>
