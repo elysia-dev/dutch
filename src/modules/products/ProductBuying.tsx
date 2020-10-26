@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import { View, ScrollView, Image, StatusBar, Modal } from 'react-native';
+import { View, ScrollView, Image, StatusBar, Modal, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -128,12 +128,15 @@ const ProductBuying: FunctionComponent = () => {
             position: 'absolute',
             width: '100%',
             height: '100%',
-          }}></View>
+          }}
+        />
       )}
       <Modal
         transparent={true}
         animationType={'slide'}
-        visible={state.modalVisible}>
+        visible={state.modalVisible}
+        onRequestClose={() => setState({ ...state, modalVisible: false })}
+        >
         <SliderProductBuying
           product={state.product ? state.product : defaultProduct}
           modalHandler={() => setState({ ...state, modalVisible: false })}
