@@ -89,7 +89,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
           <TextWrapper >
             <BlackText style={{ flex: 1, textAlign: 'left' }}> YOU </BlackText>
             <BlackText style={{ flex: 1 }}> ELYSIA </BlackText>
-            <BlackText style={{ flex: 3, textAlign: "right" }}> EL {expectedElValue.toFixed(2)} </BlackText>
+            <View style={{ flexDirection: "row", flex: 3, justifyContent: "flex-end" }}>
+              <BlackText style={{ fontWeight: 'bold', textAlign: "right" }}>EL</BlackText>
+              <BlackText style={{ textAlign: "right" }}> {expectedElValue.toFixed(2)} </BlackText>
+            </View>
           </TextWrapper>
         </WhiteBox>
         <View style={{ width: 30, height: 21, marginLeft: 'auto', marginRight: 'auto', padding: 7 }}>
@@ -107,7 +110,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
           <TextWrapper>
             <BlackText style={{ flex: 1, textAlign: 'left' }}> ELYSIA </BlackText>
             <BlackText style={{ flex: 1 }}> YOU </BlackText>
-            <BlackText style={{ flex: 3, textAlign: "right" }}>{props.product.tokenName} {props.tokenCount} </BlackText>
+            <View style={{ flexDirection: "row", flex: 3, justifyContent: "flex-end" }}>
+              <BlackText style={{ fontWeight: 'bold', textAlign: "right" }}>{props.product.tokenName}</BlackText>
+              <BlackText style={{ textAlign: "right" }}> {props.tokenCount}</BlackText>
+            </View>
           </TextWrapper>
         </WhiteBox>
       </GrayBox>

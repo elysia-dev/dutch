@@ -70,11 +70,14 @@ const InterestSummary: FunctionComponent<Props> = (props: Props) => {
           <TextWrapper>
             <BlackText style={{ flex: 1, textAlign: 'left' }}> ELYSIA </BlackText>
             <BlackText style={{ flex: 1 }}> YOU </BlackText>
-            <BlackText style={{ flex: 3, textAlign: "right" }}> EL {props.elInterest} </BlackText>
+            <View style={{ flexDirection: "row", flex: 3, justifyContent: "flex-end" }}>
+              <BlackText style={{ fontWeight: 'bold', textAlign: "right" }}>EL</BlackText>
+              <BlackText style={{ textAlign: "right" }}> {props.elInterest} </BlackText>
+            </View>
           </TextWrapper>
         </WhiteBox>
       </GrayBox>
-    </View>
+    </View >
   );
 };
 
