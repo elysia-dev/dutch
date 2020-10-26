@@ -29,13 +29,13 @@ interface Props {
 const htmlStyles = StyleSheet.create({
   h2: {
     textAlign: 'left',
-    lineHeight: 20,
+    lineHeight: 25,
     marginLeft: 10,
     marginRight: 10,
   },
   p: {
     fontSize: 15,
-    lineHeight: 20,
+    lineHeight: 25,
     color: '#626368',
     textAlign: 'left',
     marginLeft: 10,
