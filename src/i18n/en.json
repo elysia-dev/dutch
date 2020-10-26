@@ -195,7 +195,9 @@
     "property_type": "Type",
     "recovery": "Recovery",
     "non_purchasable": "Cannot be exchanged",
-    "view_details": "View product details"
+    "view_details": "View product details",
+    "available_token": "Quantity of investable real estate tokens",
+    "minimum_el": "Minimum investment unit"
   },
   "more_label": {
     "more": "More",
