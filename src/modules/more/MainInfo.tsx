@@ -204,6 +204,16 @@ const MainInfo: FunctionComponent = () => {
                       {i18n.t('more_label.none_kyc')}
                     </Text>
                   </Text>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 9,
+                      right: -9,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#FC5C4F',
+                    }} />
                 </View>
                 <KycNoneButtonImg source={kycNoneButtonPng} />
               </KycNoneButton>
@@ -311,10 +321,24 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <P1Text
-                    label={i18n.t('more_label.wallet_connect')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
+                  <View>
+                    <P1Text
+                      label={i18n.t('more_label.wallet_connect')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    {!(user.ethAddresses?.length > 0) && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: -13,
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: '#FC5C4F',
+                        }} />
+                    )}
+                  </View>
                   <InfoArrowImg
                     source={require('./images/next_gray.png')}
                   />

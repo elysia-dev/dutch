@@ -17,6 +17,7 @@ import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import RootContext from '../../contexts/RootContext';
+import { KycStatus } from '../../enums/KycStatus';
 
 const Icon = styled.Image`
   width: 26px;
@@ -26,7 +27,7 @@ const Icon = styled.Image`
 const Tab = createBottomTabNavigator();
 
 const Main: FunctionComponent = () => {
-  const { unreadNotificationCount } = useContext(RootContext);
+  const { unreadNotificationCount, user } = useContext(RootContext);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#FFF" }} forceInset={{ bottom: 'always', top: 'never' }} >
@@ -98,12 +99,26 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Image
-                style={{
-                  width: 25,
-                }}
-                source={focused ? OptionsBlackPng : OptionsPng}
-              />
+              <>
+                <Image
+                  style={{
+                    width: 25,
+                  }}
+                  source={focused ? OptionsBlackPng : OptionsPng}
+                />
+                {(user.kycStatus === KycStatus.NONE || !(user.ethAddresses?.length > 0)) && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 10,
+                      right: 25,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#FC5C4F',
+                    }} />
+                )}
+              </>
             ),
           }}
         />
