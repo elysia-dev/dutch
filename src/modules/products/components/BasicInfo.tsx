@@ -65,7 +65,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             <GText
               style={{
                 fontSize: 15,
-                marginTop: 15,
+                marginTop: 18,
                 marginBottom: 6,
                 marginLeft: 7,
                 zIndex: 3,
@@ -107,20 +107,19 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           borderColor: '#F1F1F1',
           flexDirection: 'column',
         }}>
-        <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between' }}>
+        <View style={{ height: 120, flex: 1, flexDirection: 'column', alignContent: 'space-between' }}>
           <View style={{ flex: 0.5 }} />
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center" }}>
-            <P1Text label={i18n.t('product_label.available_token')} style={{ color: "#838383" }}></P1Text>
-            <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center" }}>
+            <P1Text label={i18n.t('product_label.available_token')} style={{ flex: 2.5, color: "#838383" }} />
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
               <P1Text label={`${product.presentValue}`}></P1Text>
               <P1Text label={` / ${product.totalValue}`} style={{ color: "#838383" }} />
             </View>
-
           </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center" }}>
-            <P1Text label={i18n.t('product_label.minimum_el')} style={{ color: "#838383" }}></P1Text>
+          <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center" }}>
+            <P1Text label={i18n.t('product_label.minimum_el')} style={{ color: "#838383" }} />
             <View style={{ flexDirection: 'row' }}>
-              <P1Text label={`EL ${(product.usdPricePerToken / elPrice).toFixed(2)}`}></P1Text>
+              <P1Text label={`EL ${(product.usdPricePerToken / elPrice).toFixed(2)}`} />
               <P1Text label={' ($ 5)'} style={{ color: "#838383" }} />
             </View>
           </View>
@@ -128,6 +127,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         </View>
         <View style={{
           flex: 1,
+          height: 120,
           flexDirection: 'row',
           justifyContent: 'space-between',
           borderTopColor: '#F1F1F1',
@@ -157,17 +157,17 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             <P1Text
               style={{
                 color: "#626368",
-
                 marginTop: 4,
                 zIndex: 3,
                 textAlign: 'center',
+                fontSize: user.language === LocaleType.EN ? 12 : 15,
               }}
               label={i18n.t('product_label.expected_annual_rate')} />
             <H3Text
               style={{
                 textAlign: "center",
                 marginTop: 4,
-                fontSize: 18,
+                fontSize: user.language === LocaleType.EN ? 15 : 18,
               }}
               label={`${product.expectedAnnualReturn}%`} />
           </View>
@@ -197,13 +197,14 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 color: "#626368",
                 zIndex: 3,
                 textAlign: 'center',
+                fontSize: user.language === LocaleType.EN ? 12 : 15,
               }}
               label={i18n.t('product_label.property_type')} />
             <H3Text
               style={{
                 textAlign: "center",
                 marginTop: 4,
-                fontSize: 18,
+                fontSize: user.language === LocaleType.EN ? 15 : 18,
               }}
               label={productDescription.propertyType} />
           </View>
@@ -231,13 +232,14 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 marginTop: 4,
                 zIndex: 3,
                 textAlign: 'center',
+                fontSize: user.language === LocaleType.EN ? 12 : 15,
               }}
               label={i18n.t('product_label.rent_distribution')} />
             <H3Text
               style={{
                 textAlign: "center",
                 marginTop: 4,
-                fontSize: 18,
+                fontSize: user.language === LocaleType.EN ? 15 : 18,
               }}
               label={productDescription.monthlyRentIncomeDistributionCycle} />
           </View>
