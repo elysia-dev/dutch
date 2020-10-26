@@ -53,7 +53,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           minimumValue={0}
           maximumValue={props.max}
           minimumTrackTintColor={'#3679B5'}
-          maximumTrackTintColor={'#E9EBEF'}
+          maximumTrackTintColor={'#626368'}
           thumbTintColor={'#3679B5'}
           value={props.tokenCount}
           step={1}
