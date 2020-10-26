@@ -21,7 +21,7 @@ import { KycStatus } from '../../enums/KycStatus';
 
 const Icon = styled.Image`
   position: absolute;
-  top: 8;
+  top: 8px;
   width: 26px;
   height: 26px;
 `;
