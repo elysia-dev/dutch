@@ -24,6 +24,7 @@ import LegacyOwnershipRefund from './LagacyOwnershipRefund';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { defaultProduct } from '../../types/Product';
 import { DashboardPage } from '../../enums/pageEnum';
+import { H2Text, H3Text, P1Text } from '../../shared/components/Texts';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -177,6 +178,7 @@ const OwnershipDetail: FunctionComponent = () => {
           }
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
+          <H3Text label={i18n.t('dashboard_label.transaction')} style={{ marginTop: 5, marginBottom: 20 }} />
           {transactionList}
           <TouchableOpacity
             onPress={() => callTransactionApi()}

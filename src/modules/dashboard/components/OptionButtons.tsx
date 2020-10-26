@@ -94,7 +94,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
-          source={require('../images/profitWithdraw.png')}></Image>
+          source={require('../images/withdraw_interest.png')}></Image>
         <Text style={{ fontSize: 15, color: '#1C1C1C', textAlign: 'center' }}>
           {i18n.t('dashboard_label.withdraw_profit')}
         </Text>

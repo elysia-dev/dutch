@@ -195,7 +195,9 @@
     "property_type": "분류",
     "recovery": "회수금",
     "non_purchasable": "교환 불가",
-    "view_details": "상품 상세보기"
+    "view_details": "상품 상세보기",
+    "available_token": "투자가능 부동산토큰 수량",
+    "minimum_el": "최소투자단위"
   },
   "more_label": {
     "more": "더 보기",
@@ -271,8 +273,8 @@
     "withdrawn_interest": "받은 적립금",
     "available_interest": "받을 수 있는 적립금",
     "stake": "지분률",
-    "purchase": "추가 교환",
-    "withdraw_stake": "교환 취소",
+    "purchase": "교환하기",
+    "withdraw_stake": "EL로 교환",
     "withdraw_stake_legacy": "지분 회수",
     "withdraw_stake_pending": "지분 회수 진행 중",
     "withdraw_profit": "적립금 출금",
@@ -291,7 +293,10 @@
     "more_transactions": "+ 더보기",
     "interest_withdraw": "적립금 출금",
     "token_amount": "보유 토큰 수",
-    "expected_profit": "예상 적립금"
+    "expected_profit": "예상 적립금",
+    "product_info": "상품 정보",
+    "documents": "관련 서류",
+    "notice": "공지사항"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
