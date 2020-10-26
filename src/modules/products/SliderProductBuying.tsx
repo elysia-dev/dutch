@@ -88,8 +88,11 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
         />
       </TouchableOpacity>
       <Calculator
-        countHandler={(token: number) => {
+        sliderHandler={(token: number) => {
           setState({ ...state, tokenCount: token });
+        }}
+        buttonHandler={(token: number) => {
+          setState({ ...state, tokenCount: state.tokenCount + token });
         }}
         tokenName={props.product.tokenName}
         tokenCount={state.tokenCount}

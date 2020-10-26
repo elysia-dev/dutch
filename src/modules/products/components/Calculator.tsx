@@ -5,7 +5,8 @@ import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 
 interface Props {
-  countHandler: (value: number) => void;
+  sliderHandler: (value: number) => void;
+  buttonHandler: (value: number) => void;
   tokenName: string;
   tokenCount: number;
   return?: string;
@@ -67,7 +68,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           thumbTintColor={'#fff'}
           value={props.tokenCount}
           step={1}
-          onValueChange={props.countHandler}></Slider>
+          onValueChange={props.sliderHandler}></Slider>
       </View>
       <View
         style={{
@@ -75,50 +76,50 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           marginTop: 10,
         }}>
         <CountButton
-          onPress={() => props.countHandler(1)}
+          onPress={() => props.buttonHandler(1)}
           style={{
-            borderColor: props.tokenCount === 1 ? '#3679B5' : '#D0D8DF',
+            borderColor: '#3679B5',
           }}>
           <Text
             style={{
-              color: props.tokenCount === 1 ? '#3679B5' : '#D0D8DF',
+              color: '#3679B5',
               fontSize: 15,
               textAlign: 'center',
             }}>
-            {'01 T'}
+            {'+ 01 T'}
           </Text>
         </CountButton>
         {
           props.max >= 10 && <CountButton
-            onPress={() => props.countHandler(10)}
+            onPress={() => props.buttonHandler(10)}
             style={{
-              borderColor: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+              borderColor: '#3679B5',
               marginLeft: 10,
             }}>
             <Text
               style={{
-                color: props.tokenCount === 10 ? '#3679B5' : '#D0D8DF',
+                color: '#3679B5',
                 fontSize: 15,
                 textAlign: 'center',
               }}>
-              {'10 T'}
+              {'+ 10 T'}
             </Text>
           </CountButton>
         }
         {
           props.max >= 100 && <CountButton
-            onPress={() => props.countHandler(100)}
+            onPress={() => props.buttonHandler(100)}
             style={{
-              borderColor: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+              borderColor: '#3679B5',
               marginLeft: 10,
             }}>
             <Text
               style={{
-                color: props.tokenCount === 100 ? '#3679B5' : '#D0D8DF',
+                color: '#3679B5',
                 fontSize: 15,
                 textAlign: 'center',
               }}>
-              {'100 T'}
+              {'+ 100 T'}
             </Text>
           </CountButton>
         }

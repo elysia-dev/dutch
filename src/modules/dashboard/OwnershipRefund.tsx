@@ -55,8 +55,11 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
       </TouchableOpacity>
       <Calculator
         type={'refund'}
-        countHandler={(token: number) => {
+        sliderHandler={(token: number) => {
           setTokenCount(token);
+        }}
+        buttonHandler={(token: number) => {
+          setTokenCount(tokenCount + token);
         }}
         tokenName={props.ownership.product.tokenName}
         tokenCount={tokenCount}
