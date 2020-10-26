@@ -251,7 +251,8 @@
     "type_profit": "Profit withdrawal",
     "latest": "Latest",
     "push_notice": "Push Alarm",
-    "notification_setting": "Notification settings"
+    "notification_setting": "Notification settings",
+    "connect": "Checked, connect wallet"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is in progress. We will send you a notification when the approval is complete, so please wait a bit.",
@@ -260,7 +261,13 @@
     "question_submitted": "Your inquiry has been successfully submitted. We will respond by email as soon as possible.",
     "invalid_date": "Invalid period. Please check the period.",
     "invalid_password": "Please enter your current password.",
-    "contact_restriction": "Sending inquiries is limited to one per minute. Please try again in 1 minute."
+    "contact_restriction": "Sending inquiries is limited to one per minute. Please try again in 1 minute.",
+    "check": "Please check!",
+    "check_text": "After checking the following, proceed with the wallet connection.",
+    "check_1": "The wallet address registered once cannot be changed.",
+    "check_2": "Only one wallet address can be used per user.",
+    "connected": "My wallet is connected",
+    "find_more": "You can check it in My Account in More"
   },
   "dashboard_label": {
     "total_balance": "Total amount",

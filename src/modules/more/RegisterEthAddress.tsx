@@ -1,13 +1,16 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { Children, FunctionComponent, useContext, useState } from 'react';
+import { Dimensions, Image, View } from 'react-native';
 import { isAddress } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
+import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
-import { P1Text, TitleText, P3Text } from '../../shared/components/Texts';
+import { P1Text, TitleText, P3Text, H2Text, P2Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
+import { Modal } from '../../shared/components/Modal';
 
 interface Props {
   resetHandler: () => void;
@@ -17,12 +20,24 @@ type State = {
   address: string;
   error: number;
   localeTerms?: string;
+  firstModal: boolean;
+  confirmModal: boolean;
 }
+
+const BlueCircle = styled.View`
+ width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #3679B5;
+margin-right: 10px;
+`;
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     address: "",
     error: 0,
+    firstModal: true,
+    confirmModal: false,
   });
 
   const navigation = useNavigation();
@@ -36,6 +51,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const callApi = () => {
     Server.registerAddress(state.address).then(() => {
       setEthAddress(state.address);
+      setState({ ...state, confirmModal: true });
     }).catch(() => {
       alert(i18n.t('account_errors.server'));
     });
@@ -44,60 +60,106 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const hasAddress = user.ethAddresses?.length > 0;
 
   return (
-    <AccountLayout
-      title={
-        <>
-          <BackButton handler={() => navigation.goBack()} />
-          <TitleText
-            style={{ paddingTop: 20 }}
-            label={
-              hasAddress
-                ? i18n.t('account.already_insert_ethaddress')
-                : i18n.t('account.insert_ethaddress')
-            }
-          />
-        </>
-      }
-      body={
-        hasAddress ?
-          <P1Text label={user.ethAddresses[0]} />
-          : (<>
-            <TextField
-              label={i18n.t('account_label.ethaddress')}
-              eventHandler={(input: string) => {
-                setState({
-                  address: input,
-                  error: isAddress(input) ? 0 : 1,
-                });
-              }}
-              placeHolder="0x"
+    <>
+      <AccountLayout
+        title={
+          <>
+            <BackButton handler={() => navigation.goBack()} />
+            <TitleText
+              style={{ paddingTop: 20 }}
+              label={
+                hasAddress
+                  ? i18n.t('account.already_insert_ethaddress')
+                  : i18n.t('account.insert_ethaddress')
+              }
             />
-            <P3Text label={terms[user.language]} style={{ marginTop: 30 }} />
-          </>)
-      }
-      button={
-        hasAddress
-          ? <></>
-          : <SubmitButton
-            disabled={hasAddress}
-            title={
-              state.error === 1
-                ? i18n.t('account_errors.ethaddress')
-                : i18n.t('account.submit_ethaddress')
-            }
-            handler={
-              state.error === 1
-                ? () => { }
-                : () => callApi()
-            }
-            variant={
-              state.error === 1 || hasAddress
-                ? 'GrayTheme'
-                : undefined
-            }
-          />
-      }
-    />
+          </>
+        }
+        body={
+          hasAddress ?
+            <P1Text label={user.ethAddresses[0]} />
+            : (<>
+              <TextField
+                label={i18n.t('account_label.ethaddress')}
+                eventHandler={(input: string) => {
+                  setState({
+                    ...state,
+                    address: input,
+                    error: isAddress(input) ? 0 : 1,
+                  });
+                }}
+                placeHolder="0x"
+              />
+              <P3Text label={terms[user.language]} style={{ marginTop: 30 }} />
+              <Modal visible={state.firstModal}
+                modalHandler={() => setState({ ...state, firstModal: false })}
+                child={
+                  <View style={{ width: "100%", padding: 15 }}>
+                    <H2Text label={i18n.t('more.check')} style={{ textAlign: 'center', marginBottom: 3 }} />
+                    <P3Text label={i18n.t('more.check_text')} style={{ color: "#626368", textAlign: 'center' }} />
+                    <View style={{ width: Dimensions.get("window").width * 0.9 - 40, height: 100, flexDirection: "column", padding: 15, backgroundColor: "#F6F6F8", borderRadius: 10, marginTop: 20, marginBottom: 60 }}>
+                      <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                        <BlueCircle />
+                        <P3Text label={i18n.t('more.check_1')} style={{ color: "#1C1C1C" }} />
+                      </View>
+                      <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                        <BlueCircle />
+                        <P3Text label={i18n.t('more.check_2')} style={{ color: "#1C1C1C" }} />
+                      </View>
+                    </View>
+                    <SubmitButton title={i18n.t('more_label.connect')} handler={() => setState({ ...state, firstModal: false })} style={{ width: Dimensions.get("window").width * 0.9 - 40, marginLeft: 0, marginRight: 0, alignSelf: 'center' }} />
+                  </View>
+                }
+              />
+              <Modal visible={state.confirmModal}
+                modalHandler={() => {
+                  setState({ ...state, confirmModal: false });
+                  navigation.goBack();
+                }}
+                child={
+                  <View style={{ width: "100%", padding: 15 }}>
+                    <Image source={require('./images/check.png')} style={{ marginLeft: 'auto', marginRight: 'auto' }}></Image>
+                    <H2Text label={i18n.t('more.connected')} style={{ marginTop: 10 }} />
+                    <P2Text label={i18n.t('more.find_more')} style={{ color: "#626368", textAlign: 'center', top: 5, marginBottom: 40 }} />
+                  </View>
+                }
+              />
+            </>
+            )
+        }
+        button={
+          hasAddress
+            ? <></>
+            : <SubmitButton
+              disabled={hasAddress}
+              title={
+                state.error === 1
+                  ? i18n.t('account_errors.ethaddress')
+                  : i18n.t('account.submit_ethaddress')
+              }
+              handler={
+                state.error === 1
+                  ? () => { }
+                  : () => callApi()
+              }
+              variant={
+                state.error === 1 || hasAddress
+                  ? 'GrayTheme'
+                  : undefined
+              }
+            />
+        }
+      />
+      {(state.firstModal || state.confirmModal) && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
+    </>
   );
 };
 

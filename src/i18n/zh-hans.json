@@ -251,7 +251,8 @@
     "type_profit": "取出收益",
     "latest": "最新消息",
     "push_notice": "弹窗提醒",
-    "notification_setting": "提醒设置"
+    "notification_setting": "提醒设置",
+    "connect": " 连接钱包"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -260,7 +261,13 @@
     "question_submitted": "您的问题已成功提交。，我们会尽快通过邮件与您联系。",
     "invalid_date": "无效期间，请再次确认",
     "invalid_password": "请输入现在的密码。",
-    "contact_restriction": "1分钟内只能提交1次咨询。\n 请在1分钟后再试一次"
+    "contact_restriction": "1分钟内只能提交1次咨询。\n 请在1分钟后再试一次",
+    "check": "请参考相关内容。",
+    "check_text": "请阅读下列注意事项后，连接钱包地址。",
+    "check_1": "连接钱包地址后不能变更。",
+    "check_2": "每个用户只能使用一个钱包地址。",
+    "connected": "钱包地址连接成功。",
+    "find_more": "可以在“更多”中我的账户里查看详细信息。"
   },
   "dashboard_label": {
     "total_balance": "总额",

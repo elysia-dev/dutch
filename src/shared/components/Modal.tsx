@@ -12,7 +12,6 @@ const ModalView = styled.View`
   background-color: #fff;
   border-radius: 20px;
   align-items: center;
-  box-shadow: 0px 2px 2px #000;
   elevation: 10;
   width: 90%;
 `;
@@ -41,9 +40,9 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
       <RNModal animationType="slide" transparent={true} visible={props.visible}>
         <CenteredView>
           <ModalView>
-              <ModalButton onPress={props.modalHandler}>
-                <QuitBtn source={QuitButtonImg} />
-              </ModalButton>
+            <ModalButton onPress={props.modalHandler}>
+              <QuitBtn source={QuitButtonImg} />
+            </ModalButton>
             <ModalBtnWrapper>
               {props.child}
             </ModalBtnWrapper>
