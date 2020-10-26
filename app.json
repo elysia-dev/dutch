@@ -1,5 +1,7 @@
 {
   "expo": {
+    "owner": "devmodori",
+    "privacy": "hidden",
     "name": "Elysia",
     "slug": "ElysiaApp",
     "version": "1.0.0",
@@ -31,7 +33,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "package": "land.elysia",
