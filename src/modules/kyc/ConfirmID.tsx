@@ -6,7 +6,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, Modal, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -15,9 +15,11 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import WarningImg from '../../shared/assets/images/warning_white.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import { H3Text, P3Text, SubTitleText } from '../../shared/components/Texts';
+import { H3Text, P1Text, P3Text, SubTitleText } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
+import { LoadingStatus } from '../../enums/LoadingStatus';
+
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -52,19 +54,22 @@ const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
   const { Server } = useContext(RootContext);
+  const [status, setStatus] = useState(LoadingStatus.NONE);
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
   const callKycApi = () => {
+    setStatus(LoadingStatus.PENDING);
     const { id_type, idPhoto } = route.params;
-    Server.photoId(
-      idPhoto.base64,
+    Server.kycUpload(
+      idPhoto.uri,
       id_type === "passport" ? "passport" : "government_id",
     )
       .then((res) => {
+        setStatus(LoadingStatus.SUCCESS);
         navigation.navigate(KycPage.TakeSelfieBefore, {
           photoId_hash: res.data.filehash,
           id_type,
-          photoId: idPhoto,
+          idPhoto,
         });
       })
       .catch((e) => {
@@ -73,11 +78,19 @@ const ConfirmID: FunctionComponent<{}> = () => {
           navigation.navigate("Main", { screen: "MoreMain" });
         } else if (e.response.status === 500) {
           alert(i18n.t("account_errors.server"));
-        }
+        } setStatus(LoadingStatus.NONE);
       });
   };
 
   return (
+    <>
+  {
+  <Modal visible={status === LoadingStatus.PENDING } transparent={true}>
+  <View style={{ width: "100%", height: "100%", justifyContent: "center", alignSelf: "center" }}>
+    <ActivityIndicator size="large" color="#fff"/>
+    <P1Text label={i18n.t('kyc.networking_argos')} style={{ color: "#fff", alignSelf: "center", marginTop: 10 }}/>
+  </View>
+  </Modal> }
     <WrapperLayout
       backButtonHandler={() => navigation.goBack()}
       title={i18n.t('kyc.step1_complete')}
@@ -140,6 +153,16 @@ const ConfirmID: FunctionComponent<{}> = () => {
         </>
       }
     />
+     {status === LoadingStatus.PENDING && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
+    </>
   );
 };
 export default ConfirmID;

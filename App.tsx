@@ -54,6 +54,7 @@ interface AppState {
     nationality: string;
   };
   changeLanguage: () => void;
+  setKycStatus: () => void;
   unreadNotificationCount: number;
   notifications: Notification[];
   Server: Server;
@@ -73,6 +74,7 @@ const defaultState = {
     nationality: "South Korea, KOR",
   },
   changeLanguage: () => { },
+  setKycStatus: () => { },
   unreadNotificationCount: 0,
   notifications: [],
   Server: new Server(() => { }, ''),
@@ -155,6 +157,9 @@ const App = () => {
           ...state,
           changeLanguage: (input) => {
             setState({ ...state, user: { ...state.user, language: input } });
+          },
+          setKycStatus: () => {
+            setState({ ...state, user: { ...state.user, kycStatus: KycStatus.PENDING } });
           },
           signIn,
           signOut,

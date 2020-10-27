@@ -18,6 +18,7 @@ type RootContextType = {
     nationality: string;
   };
   changeLanguage: (input: LocaleType) => void;
+  setKycStatus: () => void;
   signIn: () => void;
   signOut: () => void;
   autoSignOut: () => void;
@@ -42,6 +43,7 @@ const RootContext = createContext<RootContextType>({
     nationality: "South Korea, KOR",
   },
   changeLanguage: () => { },
+  setKycStatus: () => { },
   signIn: async () => { },
   signOut: async () => { },
   autoSignOut: async () => { },
