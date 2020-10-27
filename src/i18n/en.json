@@ -137,7 +137,11 @@
     "send_purchase_link": "The transaction link was delivered by email. Please go to the link in the browser where Metamask is installed.",
     "email_restriction": "Mail sending is limited to once per 30 seconds. Please try again after 30 seconds.",
     "non_purchasable": "Tokens that cannot be exchanged. Please check KYC verification and Ethereum wallet address.",
-    "restricted_country": "Exchange cannot be made in the current country."
+    "restricted_country": "Exchange cannot be made in the current country.",
+    "subscribed": "Reservation is complete. We will notify you of changes to the product.",
+    "subscribed_already": "This product has already been booked.",
+    "subscribe_fail": "This product is not available for reservation.",
+    "for_subscription": "The above figures are for determining product yield and are not reflected in the actual reservation. Please confirm when exchanging later!"
   },
   "product_financial": {
     "expected_annual_return": "Estimated annual accumulation rate",
@@ -197,7 +201,9 @@
     "non_purchasable": "Cannot be exchanged",
     "view_details": "View product details",
     "available_token": "Quantity of investable real estate tokens",
-    "minimum_el": "Minimum investment unit"
+    "minimum_el": "Minimum investment unit",
+    "reserve": "Subscribe and get notified",
+    "reserved": "Subscribed"
   },
   "more_label": {
     "more": "More",
@@ -300,7 +306,10 @@
     "more_transactions": "+ More",
     "interest_withdraw": "Withdrawal of reserves",
     "token_amount": "Number of tokens held",
-    "expected_profit": "Estimated reserves"
+    "expected_profit": "Estimated reserves",
+    "product_info": "Product Information",
+    "documents": "Documents",
+    "notice": "Notice"
   },
   "dashboard": {
     "ownership_error": "It is an asset without ownership.",

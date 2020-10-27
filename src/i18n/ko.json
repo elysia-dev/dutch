@@ -112,8 +112,8 @@
     "step3_text": "개인정보를 정확하게 기입해주세요.",
     "take_ID": "신분증 앞면 촬영하기",
     "take_ID_text": "신분증의 모든 모서리가 명확히 보여야합니다.",
-    "submit": "KYC 인증 제출이 완료되었어요!",
-    "submit_text": "확인 절차 진행 후 알람을 통해 결과를 안내해드릴게요.",
+    "submit": "KYC 인증 제출이\n완료되었어요!",
+    "submit_text": "확인 절차 진행 후\n알람을 통해 결과를 안내해드릴게요.",
     "alert_id": "신분증을 선택해주세요.",
     "alert_data": "개인정보를 모두 입력해주세요.",
     "submit_error": "KYC 통신 오류입니다. 담당자에게 문의 주세요.",
@@ -137,7 +137,11 @@
     "send_purchase_link": "트랜잭션 링크가 이메일로 전달되었습니다.\n메타마스크가 설치되어있는 브라우저에서 해당 링크로 이동해주세요.",
     "email_restriction": "메일 발송은 30초 당 1회로 제한됩니다.\n30초 뒤에 다시 시도해주세요.",
     "non_purchasable": "교환할 수 없는 토큰입니다.\nKYC 인증과 이더리움 지갑 주소를 확인해주세요.",
-    "restricted_country": "현재 국가에서는 교환하실 수 없습니다."
+    "restricted_country": "현재 국가에서는 교환하실 수 없습니다.",
+    "subscribed": "예약 완료했습니다. 상품에 대한 변동사항을 알림으로 보내드릴게요.",
+    "subscribed_already": "이미 예약한 상품입니다.",
+    "subscribe_fail": "예약 가능한 상품이 아닙니다.",
+    "for_subscription": "* 위 수치는 수익률 파악을 위한 수치이며, 실제 예약에 반영되지는 않습니다. 토큰 수는 추후 교환 시 확정해주세요!"
   },
   "product_financial": {
     "expected_annual_return": "예상 연 적립률",
@@ -184,7 +188,7 @@
     "product_info": "토큰 정보",
     "abstract": "요약",
     "purchase": "지분 교환하기",
-    "refund": "교환 취소하기",
+    "refund": "EL로 교환하기",
     "legacy_refund": "지분 회수 요청하기",
     "purchase_now": "바로 교환하기",
     "refund_token_count": "토큰 수",
@@ -197,7 +201,9 @@
     "non_purchasable": "교환 불가",
     "view_details": "상품 상세보기",
     "available_token": "투자가능 부동산토큰 수량",
-    "minimum_el": "최소투자단위"
+    "minimum_el": "최소투자단위",
+    "reserve": "예약하고 알림받기",
+    "reserved": "예약완료"
   },
   "more_label": {
     "more": "더 보기",
@@ -349,13 +355,11 @@
     "failKyc": "KYC가 거절되었습니다.",
     "profit": "일일 적립금 $%{profit} 적용되었습니다.",
     "productNotice": "토큰 관련 새로운 공지사항이 있습니다.",
-    "elysiaNotice": "새로운 공지사항이 있습니다.",
     "saved_90days": "받은 알림은 90일동안 보관됩니다.",
     "no_notification": "받은 알림이 없습니다."
   },
   "notification_label": {
     "notification": "알림",
-    "closeOwnership": "소유권 만료",
     "successKyc": "KYC 승인",
     "failKyc": "KYC 거절",
     "profit": "적립",

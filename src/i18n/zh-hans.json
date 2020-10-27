@@ -137,7 +137,11 @@
     "send_purchase_link": "已通过邮件发送交易链接。\n 请在设置好Metamask的浏览器里打开这个链接。",
     "email_restriction": "30秒内只能申请一次邮件发送。\n  请在30秒后再次尝试。",
     "non_purchasable": "本代币不能交易。\n 请确定是否进行了KYC认证和输入了正确的以太坊钱包地址。",
-    "restricted_country": "所在国家不能交易。"
+    "restricted_country": "所在国家不能交易。",
+    "subscribed": "预约成功。将会给您发送商品最新信息。",
+    "subscribed_already": "已经预约成功。",
+    "subscribe_fail": "现在不能预约。",
+    "for_subscription": "以上数据仅用来预测商品收益率，与实际会有偏差。请在交换房地产代币时再次确定具体信息。"
   },
   "product_financial": {
     "expected_annual_return": "预期年收益率",
@@ -197,7 +201,9 @@
     "non_purchasable": "不能交换",
     "view_details": "产品详细信息",
     "available_token": "可用的房地产代币数量",
-    "minimum_el": "最少投资额度"
+    "minimum_el": "最少投资额度",
+    "reserve": "预约且接受通知",
+    "reserved": "预约成功。"
   },
   "more_label": {
     "more": "更多",
@@ -300,7 +306,10 @@
     "more_transactions": "+ 了解更多",
     "interest_withdraw": "取出收益",
     "token_amount": "现有代币数",
-    "expected_profit": "预期收益"
+    "expected_profit": "预期收益",
+    "product_info": "商品信息",
+    "documents": "相关材料",
+    "notice": "公告"
   },
   "dashboard": {
     "ownership_error": "资产所有权出现错误。",
@@ -351,7 +360,6 @@
   },
   "notification_label": {
     "notification": "通知",
-    "closeOwnership": "所有权到期",
     "successKyc": "通过KYC",
     "failKyc": "没有通过KYC",
     "profit": "收益",
