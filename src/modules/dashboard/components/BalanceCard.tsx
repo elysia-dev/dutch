@@ -31,17 +31,15 @@ export const BalanceCard: FunctionComponent<Props> = props => {
             marginBottom: 30,
           }}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ top: 15 }}>
-            <H1Text
-              label={`$ ${parseFloat(props.balance).toFixed(2)}`}
-              style={{
-                color: "#FFFFFF",
-                fontSize: 40,
-                bottom: 11,
-              }}
-            />
-          </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: "center" }}>
+          <H1Text
+            label={`$ ${parseFloat(props.balance).toFixed(2)}`}
+            style={{
+              color: "#FFFFFF",
+              fontSize: 40,
+              alignSelf: "center",
+            }}
+          />
           <View
             style={{
               backgroundColor: '#fff',
@@ -66,6 +64,6 @@ export const BalanceCard: FunctionComponent<Props> = props => {
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 };

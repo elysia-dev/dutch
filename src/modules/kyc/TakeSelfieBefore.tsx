@@ -98,7 +98,6 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
         <>
           <View
             style={{
-              top: 25,
               position: 'absolute',
               height: '100%',
               width: '100%',

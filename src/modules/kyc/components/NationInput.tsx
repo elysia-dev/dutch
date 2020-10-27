@@ -62,7 +62,7 @@ export const NationInput: FunctionComponent<Props> = (props) => {
           accessibilityLabel={'nationalinput'}
           selectedValue={props.nationality}
           onValueChange={(itemValue, itenIndex) => {
-            props.eventHandler(itemValue.toString())
+            props.eventHandler(itemValue.toString());
           }}>
           {NationListAnd}
         </Picker>

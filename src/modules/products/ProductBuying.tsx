@@ -64,7 +64,7 @@ const ProductBuying: FunctionComponent = () => {
         return i18n.t('product_label.reserved');
       } else { return i18n.t('product_label.reserve'); }
     }
-    return i18n.t('product_label.non_purchasable');
+    // return i18n.t('product_label.non_purchasable');
   };
 
   const loadProductAndSubscription = async () => {
