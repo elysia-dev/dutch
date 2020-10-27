@@ -57,7 +57,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             <TouchableOpacity
               onPress={() => {
                 Linking.openURL(
-                  `https://etherscan.io/token/${owenership.product.contractAddress}`,
+                  `https://etherscan.io/token/${ownership.product.contractAddress}`,
                 );
               }}
               style={{

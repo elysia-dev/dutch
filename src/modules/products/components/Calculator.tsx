@@ -31,7 +31,7 @@ const CountText = styled.Text`
   margin-left: -4px;
 `;
 const CountButton = styled.TouchableOpacity`
-  width: 54px;
+  width: 55px;
   height: 26px;
   border-radius: 5px;
   border-width: 1px;
@@ -42,7 +42,7 @@ const CountButton = styled.TouchableOpacity`
 export const Calculator: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
-      style={{ width: '100%', height: '40%', position: 'relative', top: 0 }}>
+      style={{ width: '100%', height: 180, position: 'relative', top: 0 }}>
       <Text
         style={{
           color: '#1C1C1C',

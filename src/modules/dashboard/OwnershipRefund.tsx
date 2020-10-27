@@ -36,52 +36,54 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
         backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
-      <TouchableOpacity
-        style={{
-          position: 'relative',
-          top: 0,
-          width: '100%',
-        }}
-        onPress={props.modalHandler}>
-        <Image
-          source={require('./images/bluedownarrow.png')}
+      <View style={{ width: "100%", height: "100%" }}>
+        <TouchableOpacity
           style={{
+            position: 'relative',
+            top: 10,
             width: 30,
             height: 30,
+            alignSelf: 'center',
+          }}
+          onPress={props.modalHandler}>
+          <Image
+            source={require('./images/bluedownarrow.png')}
+            style={{
+              width: 30,
+              height: 30,
+            }}
+          />
+        </TouchableOpacity>
+        <Calculator
+          type={'refund'}
+          sliderHandler={(token: number) => {
+            setTokenCount(token);
+          }}
+          buttonHandler={(token: number) => {
+            setTokenCount(tokenCount + token);
+          }}
+          tokenName={props.ownership.product.tokenName}
+          tokenCount={tokenCount}
+          max={props.ownership.tokenValue}
+        />
+        <ExchangedValue
+          tokenCount={tokenCount}
+          type={'refund'}
+        />
+        <SubmitButton
+          style={{
+            position: 'absolute',
+            bottom: 15,
+            marginBottom: 10,
+            width: '100%',
             marginLeft: 'auto',
             marginRight: 'auto',
+            marginTop: 10,
           }}
+          handler={() => { alert(i18n.t('legacy.refund_notice')); }}
+          title={i18n.t('product_label.refund')}
         />
-      </TouchableOpacity>
-      <Calculator
-        type={'refund'}
-        sliderHandler={(token: number) => {
-          setTokenCount(token);
-        }}
-        buttonHandler={(token: number) => {
-          setTokenCount(tokenCount + token);
-        }}
-        tokenName={props.ownership.product.tokenName}
-        tokenCount={tokenCount}
-        max={props.ownership.tokenValue}
-      />
-      <ExchangedValue
-        tokenCount={tokenCount}
-        type={'refund'}
-      />
-      <SubmitButton
-        style={{
-          position: 'relative',
-          bottom: 0,
-          marginBottom: 10,
-          width: '100%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 10,
-        }}
-        handler={() => { alert(i18n.t('legacy.refund_notice')); }}
-        title={i18n.t('product_label.refund')}
-      />
+      </View>
     </View>
   );
 };
