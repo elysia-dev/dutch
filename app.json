@@ -4,7 +4,7 @@
     "privacy": "hidden",
     "name": "Elysia",
     "slug": "ElysiaApp",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -63,7 +63,8 @@
         "com.sec.android.provider.badge.permission.READ",
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
-      ]
+      ],
+      "versionCode": "1.0.4"
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "hooks": {

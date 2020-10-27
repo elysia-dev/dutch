@@ -536,7 +536,7 @@ const MainInfo: FunctionComponent = () => {
             fontSize: 10,
             color: '#1c1c1c',
           }}
-          label={'v1.0.2'}
+          label={'v1.0.4'}
         />
         <View
           style={{
