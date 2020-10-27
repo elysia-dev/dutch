@@ -263,4 +263,18 @@ export default class Server {
       '/users/ethAddresses', { ethAddress },
     );
   }
+
+  getProductSubscription = async (productId: number): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.get(
+      `/productSubscriptions?productId=${productId}`,
+    );
+  }
+
+  setProductSubscription = async (productId: number): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post(
+      `/productSubscriptions`, {
+      productId,
+    },
+    );
+  }
 }

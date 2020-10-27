@@ -7,6 +7,7 @@ import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import { P1Text, P2Text, H2Text, H3Text } from '../../../shared/components/Texts';
+import ProductStatus from '../../../enums/ProductStatus';
 
 interface Props {
   product: Product;
@@ -74,7 +75,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             </GText>
           </View>
         </View>
-        <TouchableOpacity
+        {product.status !== ProductStatus.SALE && <TouchableOpacity
           onPress={() => {
             Linking.openURL(
               `https://etherscan.io/token/${product.contractAddress}`,
@@ -93,7 +94,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             alignContent: 'center',
           }}>
           <P1Text label={'Token Contract'} style={{ textAlign: 'center', fontSize: 13 }} />
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
       <View
         style={{

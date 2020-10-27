@@ -16,9 +16,13 @@ import ExchangedValue from './components/ExchangedValue';
 import { ProductPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import Product from '../../types/Product';
+import ProductStatus from '../../enums/ProductStatus';
+import { P2Text, P3Text } from '../../shared/components/Texts';
 
 interface Props {
   product: Product;
+  subscribed?: boolean;
+  setSubcribed?: (input: boolean) => void;
   modalHandler: () => void;
   from?: string;
 }
@@ -33,6 +37,40 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
   const [state, setState] = useState<State>({
     tokenCount: 10,
   });
+
+  const submitButtonTitle = () => {
+    if (props.product.status === ProductStatus.SALE || props.from === "ownershipDetail") {
+      return i18n.t('product_label.purchase_now');
+    } else if (props.product.status === ProductStatus.SUBSCRIBING) {
+      if (props.subscribed) {
+        return i18n.t('product_label.reserved');
+      } else { return i18n.t('product_label.reserve'); }
+    }
+    return i18n.t('product_label.non_purchasable');
+  };
+
+  const submitButtonHandler = () => {
+    if (props.product.status === ProductStatus.SALE || props.from === "ownershipDetail") {
+      callApi();
+      props.modalHandler();
+    } else if (props.product.status === ProductStatus.SUBSCRIBING) {
+      if (!props.subscribed) { subscribeProduct(); }
+    }
+  };
+
+  const subscribeProduct = () => {
+    Server.setProductSubscription(props.product.id)
+      .then(_res => { if (props.setSubcribed !== undefined) { props.setSubcribed(true); alert(i18n.t('prodduct.subscribed')); } })
+      .catch(e => {
+        if (e.response.status === 400) {
+          alert(i18n.t('product.subscribed_already'));
+        } else if (e.response.status === 404) {
+          alert(i18n.t('product.subscribe_fail'));
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
 
   const callApi = () => {
     Server.requestTransaction(props.product.id, state.tokenCount, "buying").then(
@@ -70,56 +108,59 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
         backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
-      <TouchableOpacity
-        style={{
-          position: 'relative',
-          top: 0,
-          width: '100%',
-        }}
-        onPress={props.modalHandler}>
-        <Image
-          source={require('./images/bluedownarrow.png')}
+      <View style={{ width: "100%", height: "100%" }}>
+        <TouchableOpacity
           style={{
+            position: 'relative',
+            top: 10,
             width: 30,
             height: 30,
+            alignSelf: "center",
+          }}
+          onPress={props.modalHandler}>
+          <Image
+            source={require('./images/bluedownarrow.png')}
+            style={{
+              width: 30,
+              height: 30,
+            }}
+          />
+        </TouchableOpacity>
+        <Calculator
+          sliderHandler={(token: number) => {
+            setState({ ...state, tokenCount: token });
+          }}
+          buttonHandler={(token: number) => {
+            setState({ ...state, tokenCount: state.tokenCount + token });
+          }}
+          tokenName={props.product.tokenName}
+          tokenCount={state.tokenCount}
+          return={props.product.expectedAnnualReturn}
+          max={parseInt(props.product.presentValue, 10)}
+        />
+        <ExchangedValue
+          return={props.product.expectedAnnualReturn}
+          tokenCount={state.tokenCount}
+          type={'buy'}
+        />
+        <P3Text label={i18n.t('product.for_subscription')} />
+        <SubmitButton
+          disabled={props.subscribed}
+          style={{
+            position: 'absolute',
+            bottom: 15,
+            marginBottom: 10,
+            width: '100%',
             marginLeft: 'auto',
             marginRight: 'auto',
+            marginTop: 10,
           }}
+          handler={submitButtonHandler}
+          title={
+            submitButtonTitle()
+          }
         />
-      </TouchableOpacity>
-      <Calculator
-        sliderHandler={(token: number) => {
-          setState({ ...state, tokenCount: token });
-        }}
-        buttonHandler={(token: number) => {
-          setState({ ...state, tokenCount: state.tokenCount + token });
-        }}
-        tokenName={props.product.tokenName}
-        tokenCount={state.tokenCount}
-        return={props.product.expectedAnnualReturn}
-        max={parseInt(props.product.presentValue, 10)}
-      />
-      <ExchangedValue
-        return={props.product.expectedAnnualReturn}
-        tokenCount={state.tokenCount}
-        type={'buy'}
-      />
-      <SubmitButton
-        style={{
-          position: 'relative',
-          bottom: 0,
-          marginBottom: 10,
-          width: '100%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 10,
-        }}
-        handler={() => {
-          callApi();
-          props.modalHandler();
-        }}
-        title={i18n.t('product_label.purchase_now')}
-      />
+      </View>
     </View>
   );
 };

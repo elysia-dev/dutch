@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import { View, ScrollView, Image, StatusBar, Modal } from 'react-native';
+import { View, ScrollView, Image, StatusBar, Modal, Text } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -18,6 +18,7 @@ import { Map } from './components/Map';
 import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
+import ProductStatus from '../../enums/ProductStatus';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -34,11 +35,14 @@ type ParamList = {
 
 interface State {
   modalVisible: boolean;
+  subscribed: boolean;
   product?: Product;
 }
+
 const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     modalVisible: false,
+    subscribed: false,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
@@ -50,17 +54,47 @@ const ProductBuying: FunctionComponent = () => {
       && user.ethAddresses?.length > 0
       && !(state.product?.restrictedCountries.includes(shortNationality)));
 
-  useEffect(() => {
-    Server.productInfo(productId)
-      .then(res => {
-        setState({ ...state, product: res.data });
-      })
-      .catch(e => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
+  const submitButtonTitle = () => {
+    if (!purchasability) {
+      return i18n.t('product_label.non_purchasable');
+    } else if (state.product?.status === ProductStatus.SALE) {
+      return i18n.t('product_label.invest');
+    } else if (state.product?.status === ProductStatus.SUBSCRIBING) {
+      if (state.subscribed) {
+        return i18n.t('product_label.reserved');
+      } else { return i18n.t('product_label.reserve'); }
+    }
+    return i18n.t('product_label.non_purchasable');
+  };
+
+  const loadProductAndSubscription = async () => {
+    try {
+      const product = await Server.productInfo(productId);
+      const subscription = await Server.getProductSubscription(productId);
+      setState({
+        ...state,
+        product: product.data,
+        subscribed: subscription.status === 200,
       });
-  }, [user.language]);
+    } catch (e) {
+      if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+      } else if (e.response.status) {
+        if (e.response.status === 404) {
+          const product = await Server.productInfo(productId);
+          setState({
+            ...state,
+            product: product.data,
+            subscribed: false,
+          });
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadProductAndSubscription();
+  }, [user.language, productId]);
 
   return (
     <ProductInfoWrapper>
@@ -97,7 +131,9 @@ const ProductBuying: FunctionComponent = () => {
             />
           </View>
         </View>
-        {state.product && <BasicInfo product={state.product} />}
+        {state.product &&
+          <BasicInfo product={state.product} />
+        }
         <View
           style={{
             padding: 20,
@@ -119,7 +155,7 @@ const ProductBuying: FunctionComponent = () => {
             return (alert(i18n.t('product.non_purchasable')));
           } else { setState({ ...state, modalVisible: true }); }
         }}
-        title={purchasability ? i18n.t('product_label.invest') : i18n.t('product_label.non_purchasable')}
+        title={submitButtonTitle()}
       />
       {state.modalVisible && (
         <View
@@ -136,6 +172,8 @@ const ProductBuying: FunctionComponent = () => {
         visible={state.modalVisible}>
         <SliderProductBuying
           product={state.product ? state.product : defaultProduct}
+          subscribed={state.subscribed}
+          setSubcribed={(input: boolean) => setState({ ...state, subscribed: input })}
           modalHandler={() => setState({ ...state, modalVisible: false })}
         />
       </Modal>
