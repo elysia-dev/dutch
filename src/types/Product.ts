@@ -18,6 +18,8 @@ type Product = {
   presentValue: string;
   tokenName: string;
   usdPricePerToken: number;
+  status: string;
+  subscriptionsCount: number;
   data: {
     type: string;
     languages: LocaleType[];
@@ -56,6 +58,8 @@ export const defaultProduct = {
   presentValue: '0',
   tokenName: '',
   usdPricePerToken: 0,
+  status: 'pending',
+  subscriptionsCount: 0,
   data: {
     type: '',
     languages: [] as LocaleType[],
