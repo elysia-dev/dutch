@@ -15,11 +15,15 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import WarningImg from '../../shared/assets/images/warning_white.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import { H3Text, P1Text, P3Text, SubTitleText } from '../../shared/components/Texts';
+import {
+  H3Text,
+  P1Text,
+  P3Text,
+  SubTitleText,
+} from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
 import { LoadingStatus } from '../../enums/LoadingStatus';
-
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -62,7 +66,7 @@ const ConfirmID: FunctionComponent<{}> = () => {
     const { id_type, idPhoto } = route.params;
     Server.kycUpload(
       idPhoto.uri,
-      id_type === "passport" ? "passport" : "government_id",
+      id_type === 'passport' ? 'passport' : 'government_id',
     )
       .then((res) => {
         setStatus(LoadingStatus.SUCCESS);
@@ -74,86 +78,102 @@ const ConfirmID: FunctionComponent<{}> = () => {
       })
       .catch((e) => {
         if (e.response.status === 404) {
-          alert(i18n.t("kyc.submit_error"));
-          navigation.navigate("Main", { screen: "MoreMain" });
+          alert(i18n.t('kyc.submit_error'));
+          navigation.navigate('Main', { screen: 'MoreMain' });
         } else if (e.response.status === 500) {
-          alert(i18n.t("account_errors.server"));
-        } setStatus(LoadingStatus.NONE);
+          alert(i18n.t('account_errors.server'));
+        }
+        setStatus(LoadingStatus.NONE);
       });
   };
 
   return (
     <>
-  {
-  <Modal visible={status === LoadingStatus.PENDING } transparent={true}>
-  <View style={{ width: "100%", height: "100%", justifyContent: "center", alignSelf: "center" }}>
-    <ActivityIndicator size="large" color="#fff"/>
-    <P1Text label={i18n.t('kyc.networking_argos')} style={{ color: "#fff", alignSelf: "center", marginTop: 10 }}/>
-  </View>
-  </Modal> }
-    <WrapperLayout
-      backButtonHandler={() => navigation.goBack()}
-      title={i18n.t('kyc.step1_complete')}
-      subTitle={
-        <SubTitleText
-          label={i18n.t('kyc.step1_complete_text')}
-          style={{ color: '#626368', marginBottom: 15 }}
-        />
+      {
+        <Modal visible={status === LoadingStatus.PENDING} transparent={true}>
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}>
+            <ActivityIndicator size="large" color="#fff" />
+            <P1Text
+              label={i18n.t('kyc.networking_argos')}
+              style={{ color: '#fff', alignSelf: 'center', marginTop: 10 }}
+            />
+          </View>
+        </Modal>
       }
-      isScrolling={false}
-      body={
-        <>
-          <SelfieImg
-            source={{ uri: route.params.idPhoto.uri }}
-            style={{ resizeMode: 'cover', marginTop: 20 }}
+      <WrapperLayout
+        backButtonHandler={() => navigation.goBack()}
+        title={i18n.t('kyc.step1_complete')}
+        subTitle={
+          <SubTitleText
+            label={i18n.t('kyc.step1_complete_text')}
+            style={{ color: '#626368', marginBottom: 15 }}
           />
-          <WarningWrapper>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 10,
-                marginBottom: 5,
-                marginLeft: 10,
-              }}>
-              <WarningIcon source={WarningImg} />
-              <H3Text
-                label={i18n.t('kyc.step1_tip_text_header')}
+        }
+        isScrolling={false}
+        body={
+          <>
+            <SelfieImg
+              source={{ uri: route.params.idPhoto.uri }}
+              style={{ resizeMode: 'cover', marginTop: 20 }}
+            />
+            <WarningWrapper>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  marginBottom: 5,
+                  marginLeft: 10,
+                }}>
+                <WarningIcon source={WarningImg} />
+                <H3Text
+                  label={i18n.t('kyc.step1_tip_text_header')}
+                  style={{
+                    color: '#FFF',
+                    lineHeight: 23,
+                    fontSize: 13,
+                  }}
+                />
+              </View>
+              <P3Text
+                label={i18n.t('kyc.step1_tip_case1')}
+                style={{ color: '#FFF', marginLeft: 30, fontSize: 13 }}
+              />
+              <P3Text
+                label={i18n.t('kyc.step1_tip_case2')}
                 style={{
                   color: '#FFF',
-                  lineHeight: 23,
+                  lineHeight: 18,
+                  marginLeft: 30,
                   fontSize: 13,
                 }}
               />
-            </View>
-            <P3Text
-              label={i18n.t('kyc.step1_tip_case1')}
-              style={{ color: '#FFF', marginLeft: 30, fontSize: 13 }}
+            </WarningWrapper>
+          </>
+        }
+        button={
+          <>
+            <SubmitButton
+              title={i18n.t('kyc_label.shoot_again')}
+              handler={() => navigation.navigate(KycPage.TakeID)}
+              variant={'WhiteTheme'}
+              style={{ marginTop: 'auto', marginBottom: 10 }}
             />
-            <P3Text
-              label={i18n.t('kyc.step1_tip_case2')}
-              style={{ color: '#FFF', lineHeight: 18, marginLeft: 30, fontSize: 13 }}
+            <SubmitButton
+              title={i18n.t('kyc_label.submit')}
+              handler={async () => {
+                callKycApi();
+              }}
             />
-          </WarningWrapper>
-        </>
-      }
-      button={
-        <>
-          <SubmitButton
-            title={i18n.t('kyc_label.shoot_again')}
-            handler={() => navigation.navigate(KycPage.TakeID)}
-            variant={'WhiteTheme'}
-            style={{ marginTop: 'auto', marginBottom: 10 }}
-          />
-          <SubmitButton
-            title={i18n.t('kyc_label.submit')}
-            handler={async () => {
-              callKycApi();
-            }}
-          />
-        </>
-      }
-    />
-     {status === LoadingStatus.PENDING && (
+          </>
+        }
+      />
+      {status === LoadingStatus.PENDING && (
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.5)',

@@ -5,7 +5,14 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Text, View, TouchableOpacity, Platform } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { NavigationScreenProp } from 'react-navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -27,6 +34,7 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import CameraPermissionPng from './images/cameraPermission.png';
 import { SubmitButton } from '../../shared/components/SubmitButton';
+import { LoadingStatus } from '../../enums/LoadingStatus';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -83,10 +91,11 @@ const TakeSelfie: FunctionComponent<{}> = () => {
     hasPermission: false,
     type: Camera.Constants.Type.back,
   });
+  const [status, setStatus] = useState(LoadingStatus.NONE);
 
   useEffect(() => {
     Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-      status => {
+      (status) => {
         if (!status.granted) {
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
@@ -106,8 +115,11 @@ const TakeSelfie: FunctionComponent<{}> = () => {
     });
   };
 
-  const takePicture = async (): Promise<ImageManipulator.ImageResult | undefined> => {
+  const takePicture = async (): Promise<
+    ImageManipulator.ImageResult | undefined
+  > => {
     if (camera) {
+      setStatus(LoadingStatus.PENDING);
       const selfie = await camera.takePictureAsync({
         quality: 1,
         exif: true,
@@ -129,13 +141,19 @@ const TakeSelfie: FunctionComponent<{}> = () => {
       quality: 1,
       base64: true,
     });
-    return selfieAlbum;
+    setStatus(LoadingStatus.PENDING);
+    const compressedSelfieAlbum = await ImageManipulator.manipulateAsync(
+      !selfieAlbum.cancelled ? selfieAlbum.uri : '',
+      [{ resize: { width: 800 } }],
+      { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
+    );
+    return compressedSelfieAlbum;
   };
 
   if (state.hasPermission === false) {
     return (
       <WrapperLayout
-        title={" "}
+        title={' '}
         backButtonHandler={() => {
           setState({
             ...state,
@@ -172,79 +190,110 @@ const TakeSelfie: FunctionComponent<{}> = () => {
     );
   } else {
     return (
-      <TakeSelfieWrapper>
-        <Camera
-          style={{ flex: 1, width: '100%', height: 700 }}
-          type={state.type}
-          ref={ref => {
-            camera = ref;
-          }}>
-          <HeaderCameraWrapper>
-            <BackButton
-              handler={() => navigation.goBack()}
-              isWhite={true}
-              style={{ marginTop: 30, marginLeft: 20 }}
-            />
-          </HeaderCameraWrapper>
+      <>
+        {
+          <Modal visible={status === LoadingStatus.PENDING} transparent={true}>
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}>
+              <ActivityIndicator size="large" color="#fff" />
+              <P1Text
+                label={i18n.t('kyc.image_processing')}
+                style={{ color: '#fff', alignSelf: 'center', marginTop: 10 }}
+              />
+            </View>
+          </Modal>
+        }
+        <TakeSelfieWrapper>
+          <Camera
+            style={{ flex: 1, width: '100%', height: 700 }}
+            type={state.type}
+            ref={(ref) => {
+              camera = ref;
+            }}>
+            <HeaderCameraWrapper>
+              <BackButton
+                handler={() => navigation.goBack()}
+                isWhite={true}
+                style={{ marginTop: 30, marginLeft: 20 }}
+              />
+            </HeaderCameraWrapper>
 
+            <View
+              style={{
+                position: 'relative',
+                flex: 1,
+                backgroundColor: 'transparent',
+                flexDirection: 'column',
+                top: 220,
+              }}
+            />
+            <BottomCameraWrapper>
+              <BottomButtonWrapper>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                  }}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmSelfie, {
+                      selfie: await pickImage(),
+                      id_type,
+                      photoId_hash,
+                      idPhoto,
+                    });
+                    setStatus(LoadingStatus.SUCCESS);
+                  }}>
+                  <Ionicons
+                    name="ios-photos"
+                    style={{ color: '#fff', fontSize: 40 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 0.1,
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                  }}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmSelfie, {
+                      selfie: await takePicture(),
+                      id_type,
+                      photoId_hash,
+                      idPhoto,
+                    });
+                    setStatus(LoadingStatus.SUCCESS);
+                  }}>
+                  <ButtonImg source={RecordPng} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 0.1,
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                  }}
+                  onPress={reverseCamera}>
+                  <ButtonImg source={ReversePng} />
+                </TouchableOpacity>
+              </BottomButtonWrapper>
+            </BottomCameraWrapper>
+          </Camera>
+        </TakeSelfieWrapper>
+        {status === LoadingStatus.PENDING && (
           <View
             style={{
-              position: 'relative',
-              flex: 1,
-              backgroundColor: 'transparent',
-              flexDirection: 'column',
-              top: 220,
-            }} />
-          <BottomCameraWrapper>
-            <BottomButtonWrapper>
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                  backgroundColor: 'transparent',
-                }}
-                onPress={async () => {
-                  navigation.navigate(KycPage.ConfirmSelfie, {
-                    selfie: await pickImage(),
-                    id_type,
-                    // photoId_hash: photoId_hash,
-                    idPhoto,
-                  });
-                }}>
-                <Ionicons
-                  name="ios-photos"
-                  style={{ color: '#fff', fontSize: 40 }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={async () => {
-                  navigation.navigate(KycPage.ConfirmSelfie, {
-                    selfie: await takePicture(),
-                    id_type,
-                    photoId_hash,
-                    idPhoto,
-                  });
-                }}>
-                <ButtonImg source={RecordPng} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={reverseCamera}>
-                <ButtonImg source={ReversePng} />
-              </TouchableOpacity>
-            </BottomButtonWrapper>
-          </BottomCameraWrapper>
-        </Camera>
-      </TakeSelfieWrapper>
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
+      </>
     );
   }
 };

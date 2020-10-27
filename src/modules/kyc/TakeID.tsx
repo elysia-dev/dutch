@@ -6,14 +6,19 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { TouchableOpacity, Platform, View } from 'react-native';
+import {
+  TouchableOpacity,
+  Platform,
+  View,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as Linking from 'expo-linking';
 import * as ImageManipulator from 'expo-image-manipulator';
-
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import styled from 'styled-components/native';
@@ -28,6 +33,7 @@ import CameraPermissionPng from './images/cameraPermission.png';
 import { Photo } from '../../types/Photo';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { H1Text, P1Text } from '../../shared/components/Texts';
+import { LoadingStatus } from '../../enums/LoadingStatus';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -164,10 +170,11 @@ const TakeID: FunctionComponent<{}> = () => {
     hasPermission: false,
     type: Camera.Constants.Type.back,
   });
+  const [status, setStatus] = useState(LoadingStatus.NONE);
 
   useEffect(() => {
     Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA).then(
-      status => {
+      (status) => {
         if (!status.granted) {
           alert('Sorry, we need camera roll permissions to make this work!');
         } else {
@@ -187,7 +194,10 @@ const TakeID: FunctionComponent<{}> = () => {
     });
   };
 
-  const takePicture = async (): Promise<ImageManipulator.ImageResult | undefined> => {
+  const takePicture = async (): Promise<
+    ImageManipulator.ImageResult | undefined
+  > => {
+    setStatus(LoadingStatus.PENDING);
     if (camera) {
       const idPhoto = await camera.takePictureAsync({
         quality: 0,
@@ -199,10 +209,7 @@ const TakeID: FunctionComponent<{}> = () => {
         [{ resize: { width: 800 } }],
         { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
       );
-      const asset = await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
-      // 압축본의 저장이 필수는 아닌데 사진 크기 보려고 저장했습니다
-      const compressedAsset = await MediaLibrary.createAssetAsync(`${compressedIdPhoto.uri}`);
-
+      await MediaLibrary.createAssetAsync(`${idPhoto.uri}`);
       return compressedIdPhoto;
     }
   };
@@ -213,14 +220,19 @@ const TakeID: FunctionComponent<{}> = () => {
       quality: 0,
       base64: true,
     });
-
-    return idAlbum;
+    setStatus(LoadingStatus.PENDING);
+    const compressedIdAlbum = await ImageManipulator.manipulateAsync(
+      !idAlbum.cancelled ? idAlbum.uri : '',
+      [{ resize: { width: 800 } }],
+      { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
+    );
+    return compressedIdAlbum;
   };
 
   if (!state.hasPermission) {
     return (
       <WrapperLayout
-        title={" "}
+        title={' '}
         backButtonHandler={() => {
           setState({
             ...state,
@@ -259,105 +271,142 @@ const TakeID: FunctionComponent<{}> = () => {
     );
   } else {
     return (
-      <TakeIdWrapper>
-        <Camera
-          style={{
-            flex: 1,
-            width: '100%',
-            position: 'relative',
-            top: 0,
-            height: '100%',
-          }}
-          type={state.type}
-          ref={ref => {
-            camera = ref;
-          }}>
-          <HeaderCameraWrapper>
-            <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
-              <BackButton handler={() => navigation.goBack()} isWhite={true} />
-              <H1Text
-                label={i18n.t(`kyc_label.${id_type}`)}
-                style={{
-                  color: '#FFF',
-                  fontSize: 18,
-                  flex: 1,
-                  marginTop: Platform.OS === "ios" ? 20 : 15,
-                }}
+      <>
+        {
+          <Modal visible={status === LoadingStatus.PENDING} transparent={true}>
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}>
+              <ActivityIndicator size="large" color="#fff" />
+              <P1Text
+                label={i18n.t('kyc.image_processing')}
+                style={{ color: '#fff', alignSelf: 'center', marginTop: 10 }}
               />
             </View>
-          </HeaderCameraWrapper>
-          <CameraFocusWrapper>
-            <CameraFocusLeft />
-            <CameraInnerLeftTopLine />
-            <CameraInnerRightTopLine />
-            <CameraInnerLeftBottomLine />
-            <CameraInnerRightBottomLine />
-            <CameraFocus>
-              <CameraInnerWLine />
-              <CameraInnerDLine />
-            </CameraFocus>
-            <CameraFocusRight />
-          </CameraFocusWrapper>
-          <BottomCameraWrapper>
-            <H1Text
-              label={i18n.t('kyc.take_ID')}
-              style={{ color: '#FFF', marginTop: 30, textAlign: 'center', fontSize: 20 }}
-            />
-            <P1Text
-              label={i18n.t('kyc.take_ID_text')}
-              style={{
-                color: '#FFF',
-                marginTop: 13,
-                textAlign: 'center',
-                fontSize: 15,
-              }}
-            />
-            <BottomButtonWrapper>
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                  backgroundColor: 'transparent',
-                }}
-                onPress={async () => {
-                  navigation.navigate(KycPage.ConfirmID, {
-                    idPhoto: await pickImage(),
-                    id_type,
-                    // photoId_hash: photoId_hash,
-                  });
-                }}>
-                <Ionicons
-                  name="ios-photos"
-                  style={{ color: '#fff', fontSize: 40 }}
+          </Modal>
+        }
+        <TakeIdWrapper>
+          <Camera
+            style={{
+              flex: 1,
+              width: '100%',
+              position: 'relative',
+              top: 0,
+              height: '100%',
+            }}
+            type={state.type}
+            ref={(ref) => {
+              camera = ref;
+            }}>
+            <HeaderCameraWrapper>
+              <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
+                <BackButton
+                  handler={() => navigation.goBack()}
+                  isWhite={true}
                 />
-              </TouchableOpacity>
-              <TouchableOpacity
+                <H1Text
+                  label={i18n.t(`kyc_label.${id_type}`)}
+                  style={{
+                    color: '#FFF',
+                    fontSize: 18,
+                    flex: 1,
+                    marginTop: Platform.OS === 'ios' ? 20 : 15,
+                  }}
+                />
+              </View>
+            </HeaderCameraWrapper>
+            <CameraFocusWrapper>
+              <CameraFocusLeft />
+              <CameraInnerLeftTopLine />
+              <CameraInnerRightTopLine />
+              <CameraInnerLeftBottomLine />
+              <CameraInnerRightBottomLine />
+              <CameraFocus>
+                <CameraInnerWLine />
+                <CameraInnerDLine />
+              </CameraFocus>
+              <CameraFocusRight />
+            </CameraFocusWrapper>
+            <BottomCameraWrapper>
+              <H1Text
+                label={i18n.t('kyc.take_ID')}
                 style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
+                  color: '#FFF',
+                  marginTop: 30,
+                  textAlign: 'center',
+                  fontSize: 20,
                 }}
-                onPress={async () => {
-                  navigation.navigate(KycPage.ConfirmID, {
-                    id_type,
-                    idPhoto: await takePicture(),
-                  });
-                }}>
-                <ButtonImg source={RecordPng} />
-              </TouchableOpacity>
-              <TouchableOpacity
+              />
+              <P1Text
+                label={i18n.t('kyc.take_ID_text')}
                 style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
+                  color: '#FFF',
+                  marginTop: 13,
+                  textAlign: 'center',
+                  fontSize: 15,
                 }}
-                onPress={reverseCamera}>
-                <ButtonImg source={ReversePng} />
-              </TouchableOpacity>
-            </BottomButtonWrapper>
-          </BottomCameraWrapper>
-        </Camera>
-      </TakeIdWrapper>
+              />
+              <BottomButtonWrapper>
+                <TouchableOpacity
+                  style={{
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                  }}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmID, {
+                      idPhoto: await pickImage(),
+                      id_type,
+                    });
+                    setStatus(LoadingStatus.SUCCESS);
+                  }}>
+                  <Ionicons
+                    name="ios-photos"
+                    style={{ color: '#fff', fontSize: 40 }}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 0.1,
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                  }}
+                  onPress={async () => {
+                    navigation.navigate(KycPage.ConfirmID, {
+                      id_type,
+                      idPhoto: await takePicture(),
+                    });
+                    setStatus(LoadingStatus.SUCCESS);
+                  }}>
+                  <ButtonImg source={RecordPng} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    flex: 0.1,
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                  }}
+                  onPress={reverseCamera}>
+                  <ButtonImg source={ReversePng} />
+                </TouchableOpacity>
+              </BottomButtonWrapper>
+            </BottomCameraWrapper>
+          </Camera>
+        </TakeIdWrapper>
+        {status === LoadingStatus.PENDING && (
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
+      </>
     );
   }
 };

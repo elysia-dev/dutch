@@ -127,7 +127,9 @@
     "decline_case2": "如果您提交了没拿着身份证件的自拍照",
     "decline_case3": "如果您输入的信息与身份证件上的信息不一致",
     "decline_case4": "如果您提交的身份证件不包含照片、姓名、出生日期、国籍中的一项或多项",
-    "decline_case5": "如果您提交的身份证件没有遮挡住最后几位数字（仅适用于韩国人）"
+    "decline_case5": "如果您提交的身份证件没有遮挡住最后几位数字（仅适用于韩国人）",
+    "networking_argos": "与Argos交流。请稍等片刻。",
+    "image_processing": "图像处理正在进行中。请稍等片刻。"
   },
   "product": {
     "transaction_error": "该代币不能交易。",

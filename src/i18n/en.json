@@ -127,7 +127,9 @@
     "decline_case2": "If you submit only a selfie photo, not an ID card",
     "decline_case3": "If the information entered is different from the information on the ID card",
     "decline_case4": "In case of submitting an ID card without one or multiple items of photo, name, date of birth, nationality",
-    "decline_case5": "If you submit your social security number regardless of the last digit (Koreans only)"
+    "decline_case5": "If you submit your social security number regardless of the last digit (Koreans only)",
+    "networking_argos": "Communicating with Argos. Please wait a moment.",
+    "image_processing": "Image processing is in progress.\nPlease wait a moment."
   },
   "product": {
     "transaction_error": "Tokens that cannot be exchanged.",
