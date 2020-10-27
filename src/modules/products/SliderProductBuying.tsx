@@ -130,7 +130,11 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
             setState({ ...state, tokenCount: token });
           }}
           buttonHandler={(token: number) => {
-            setState({ ...state, tokenCount: state.tokenCount + token });
+            if (state.tokenCount < parseInt(props.product.presentValue)) {
+              setState({ ...state, tokenCount: state.tokenCount + token });
+            } else {
+              setState({ ...state, tokenCount: parseInt(props.product.presentValue, 10) });
+            }
           }}
           tokenName={props.product.tokenName}
           tokenCount={state.tokenCount}
