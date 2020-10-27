@@ -64,7 +64,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": "1.0.4"
+      "versionCode": 2
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "hooks": {
