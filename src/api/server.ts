@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import AsyncStorage from '@react-native-community/async-storage';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { Platform } from 'react-native';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
@@ -105,20 +106,18 @@ export default class Server {
     }
   };
 
-  photoId = async (
+  kycUpload = async (
     photo: string,
-    idType: string,
+    type: string,
   ): Promise<AxiosResponse<PhotoResponse>> => {
-    return this.authenticatedEspressoClient.post('/kyc/photoid', {
-      photoidImage: photo, // base64 string,
-      id_type: idType,
+    const formData = new FormData();
+    formData.append('image', {
+      uri: Platform.OS === 'android' ? photo : photo.replace('file://', ''),
+      name: "image.png",
+      type: "image/png",
     });
-  };
-
-  selfie = async (photo: string): Promise<AxiosResponse<PhotoResponse>> => {
-    return this.authenticatedEspressoClient.post('/kyc/photoid', {
-      selfieImage: photo, // base64 string,
-    });
+    formData.append('type', type);
+    return this.authenticatedEspressoClient.post('/kyc/upload', formData);
   };
 
   submission = async (
@@ -131,7 +130,7 @@ export default class Server {
     photoid_res: string,
     selfie_res: string,
   ): Promise<AxiosResponse<KycResponse>> => {
-    return this.authenticatedEspressoClient.post('/kyc/selfie', {
+    return this.authenticatedEspressoClient.post('/kyc/submission', {
       first_name,
       last_name,
       nationality,
@@ -142,6 +141,7 @@ export default class Server {
       selfie_res,
     });
   };
+
   notification = async (): Promise<AxiosResponse<Notification[]>> => {
     return this.authenticatedEspressoClient.get(`/notifications`);
   };
