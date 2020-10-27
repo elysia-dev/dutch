@@ -26,7 +26,7 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
     <View
       style={{
         backgroundColor: '#fff',
-        width: '100%',
+        width: '99%',
         height: 98,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
@@ -35,9 +35,12 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         shadowRadius: 5,
         padding: 20,
         marginBottom: 20,
+        elevation: 1,
+        marginLeft: 3,
+        marginRight: 3,
       }}>
-      <H1Text>{i18n.t('dashboard_label.average_return')}</H1Text>
-      <NumText>{`${parseFloat(props.return).toFixed(2)} %`}</NumText>
+      <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.average_return')}</H1Text>
+      <NumText allowFontScaling={false}>{`${parseFloat(props.return).toFixed(2)} %`}</NumText>
     </View>
   );
 };

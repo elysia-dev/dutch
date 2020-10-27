@@ -6,8 +6,7 @@ import React, {
   FunctionComponent,
   useEffect,
 } from 'react';
-import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Calculator } from './components/Calculator';

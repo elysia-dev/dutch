@@ -37,7 +37,7 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
     <View
       style={{
         backgroundColor: '#fff',
-        width: '100%',
+        width: '99%',
         height: 265,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
@@ -46,11 +46,14 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
         shadowRadius: 5,
         padding: 20,
         marginBottom: 20,
+        elevation: 1,
+        marginLeft: 3,
+        marginRight: 3,
       }}>
-      <H1Text>
+      <H1Text allowFontScaling={false}>
         {i18n.t('dashboard_label.total_balance')}
       </H1Text>
-      <NumText>{`$ ${parseFloat(props.summary.totalBalance).toFixed(
+      <NumText allowFontScaling={false}>{`$ ${parseFloat(props.summary.totalBalance).toFixed(
         2,
       )}`}</NumText>
       <View
@@ -71,8 +74,8 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText>{i18n.t('dashboard_label.total_property')}</PText>
-          <NumText2>{`$ ${parseFloat(
+          <PText allowFontScaling={false}>{i18n.t('dashboard_label.total_property')}</PText>
+          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(
             props.summary.totalRealEstateValue,
           ).toFixed(2)}`}</NumText2>
         </View>
@@ -83,8 +86,8 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText>{i18n.t('dashboard_label.total_interest')}</PText>
-          <NumText2>{`$ ${parseFloat(props.summary.totalInterest).toFixed(
+          <PText allowFontScaling={false}>{i18n.t('dashboard_label.total_interest')}</PText>
+          <NumText2 allowFontScaling={false} >{`$ ${parseFloat(props.summary.totalInterest).toFixed(
             2,
           )}`}</NumText2>
         </View>
@@ -95,8 +98,8 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText>{i18n.t('dashboard_label.withdrawn_interest')}</PText>
-          <NumText2>{`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
+          <PText allowFontScaling={false}>{i18n.t('dashboard_label.withdrawn_interest')}</PText>
+          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
             2,
           )}`}</NumText2>
         </View>
@@ -107,8 +110,8 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText>{i18n.t('dashboard_label.available_interest')}</PText>
-          <NumText2>{`$ ${parseFloat(
+          <PText allowFontScaling={false}>{i18n.t('dashboard_label.available_interest')}</PText>
+          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(
             props.summary.withdrawableInterest,
           ).toFixed(2)}`}</NumText2>
         </View>

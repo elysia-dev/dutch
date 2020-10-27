@@ -64,12 +64,14 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               }}
               label={`EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`} />
             <GText
+              allowFontScaling={false}
               style={{
                 fontSize: 15,
                 marginTop: 18,
                 marginBottom: 6,
                 marginLeft: 7,
                 zIndex: 3,
+                fontFamily: 'Roboto_400Regular',
               }}>
               {`($ ${parseFloat(product.totalValue) * product.usdPricePerToken})`}
             </GText>
@@ -113,7 +115,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           <View style={{ flex: 1.5, flexDirection: 'row', justifyContent: "space-between", paddingHorizontal: 10, alignItems: "center" }}>
             <P1Text label={i18n.t('product_label.available_token')} style={{ flex: 2.5, color: "#838383" }} />
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <P1Text label={`${product.presentValue}`}></P1Text>
+              <P1Text label={`${product.presentValue}`} />
               <P1Text label={` / ${product.totalValue}`} style={{ color: "#838383" }} />
             </View>
           </View>

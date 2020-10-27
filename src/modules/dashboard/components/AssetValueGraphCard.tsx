@@ -108,6 +108,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           borderRadius: 7,
         }}></View>
       <Text
+        allowFontScaling={false}
         style={{
           flex: 8,
           marginLeft: 5,
@@ -118,6 +119,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
         {value[0]}
       </Text>
       <Text
+        allowFontScaling={false}
         style={{
           flex: 8,
           fontSize: 15,
@@ -145,6 +147,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           borderRadius: 7,
         }}></View>
       <Text
+        allowFontScaling={false}
         style={{
           flex: 8,
           marginLeft: 5,
@@ -155,6 +158,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
         {value[0]}
       </Text>
       <Text
+        allowFontScaling={false}
         style={{
           flex: 8,
           fontSize: 15,
@@ -169,7 +173,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
     <View
       style={{
         backgroundColor: '#fff',
-        width: '100%',
+        width: '99%',
         borderRadius: 10,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#3679B540',
@@ -178,13 +182,16 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
         padding: 20,
         paddingBottom: 40,
         marginBottom: 50,
+        elevation: 1,
+        marginLeft: 3,
+        marginRight: 3,
       }}>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <H1Text>{i18n.t('dashboard_label.asset_value_graph')}</H1Text>
+        <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.asset_value_graph')}</H1Text>
         <View
           style={{
             flexDirection: 'row',
@@ -220,7 +227,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
       {!totalValue ?
         <>
           <Image source={require('../images/noownership.png')} style={{ width: "85%", height: 200, resizeMode: 'center' }} />
-          <Text style={{ marginTop: 20, textAlign: 'center', color: '#1C1C1C', fontSize: 15 }}>{i18n.t('dashboard.no_ownership')}</Text>
+          <Text allowFontScaling={false} style={{ marginTop: 20, textAlign: 'center', color: '#1C1C1C', fontSize: 15 }}>{i18n.t('dashboard.no_ownership')}</Text>
         </> : (
           <>
             <PieChart

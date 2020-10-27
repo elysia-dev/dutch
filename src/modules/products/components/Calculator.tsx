@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
+import { P1Text, H3Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
   sliderHandler: (value: number) => void;
@@ -14,22 +15,6 @@ interface Props {
   max: number;
 }
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  z-index: 3;
-  font-weight: bold;
-  margin-top: 5px;
-  margin-left: 5px;
-`;
-const CountText = styled.Text`
-  color: #3679b5;
-  font-size: 25px;
-  text-align: left;
-  font-weight: bold;
-  margin-left: -4px;
-`;
 const CountButton = styled.TouchableOpacity`
   width: 55px;
   height: 26px;
@@ -41,22 +26,15 @@ const CountButton = styled.TouchableOpacity`
 
 export const Calculator: FunctionComponent<Props> = (props: Props) => {
   return (
-    <View
-      style={{ width: '100%', height: 180, position: 'relative', top: 0 }}>
-      <Text
-        style={{
-          color: '#1C1C1C',
-          textAlign: 'left',
-          fontSize: 15,
-          marginBottom: 10,
-        }}>
-        {props.type === 'refund'
-          ? i18n.t('product_label.refund_token_count')
-          : i18n.t('product_label.token_count')}
-      </Text>
+    <View style={{ width: '100%', height: 180, position: 'relative', top: 0 }}>
+      <P1Text
+        label={props.type === 'refund'
+        ? i18n.t('product_label.refund_token_count')
+        : i18n.t('product_label.token_count')}
+        style={{ marginBottom: 10 }} />
       <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-        <CountText> {Math.round(props.tokenCount)}</CountText>
-        <H1Text>{`${props.tokenName} Token`}</H1Text>
+        <H2Text label={Math.round(props.tokenCount).toString()} style={{ color: "#3679b5" }} />
+        <H3Text label={`${props.tokenName} Token`} style={{ zIndex: 3, marginTop: 5, marginLeft: 5 }} />
       </View>
 
       <View style={{ marginTop: 10, width: '100%' }}>
@@ -64,8 +42,8 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
           minimumValue={0}
           maximumValue={props.max}
           minimumTrackTintColor={'#3679B5'}
-          maximumTrackTintColor={'#E9EBEF'}
-          thumbTintColor={'#fff'}
+          maximumTrackTintColor={'#626368'}
+          thumbTintColor={'#3679B5'}
           value={props.tokenCount}
           step={1}
           onValueChange={props.sliderHandler}></Slider>
@@ -81,10 +59,12 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
             borderColor: '#3679B5',
           }}>
           <Text
+            allowFontScaling={false}
             style={{
               color: '#3679B5',
-              fontSize: 15,
+              fontSize: 14,
               textAlign: 'center',
+              fontFamily: 'Roboto_400Regular',
             }}>
             {'+ 01 T'}
           </Text>
@@ -97,10 +77,12 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
               marginLeft: 10,
             }}>
             <Text
+              allowFontScaling={false}
               style={{
                 color: '#3679B5',
-                fontSize: 15,
+                fontSize: 14,
                 textAlign: 'center',
+                fontFamily: 'Roboto_400Regular',
               }}>
               {'+ 10 T'}
             </Text>
@@ -114,10 +96,12 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
               marginLeft: 10,
             }}>
             <Text
+              allowFontScaling={false}
               style={{
                 color: '#3679B5',
-                fontSize: 15,
+                fontSize: 14,
                 textAlign: 'center',
+                fontFamily: 'Roboto_400Regular',
               }}>
               {'+ 100 T'}
             </Text>

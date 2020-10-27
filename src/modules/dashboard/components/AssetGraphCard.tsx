@@ -46,6 +46,7 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
   ];
   const translatedDay = day.map((value, index) => (
     <Text
+      allowFontScaling={false}
       key={index}
       style={{ color: '#A7A7A7', fontSize: 12, textAlign: 'center' }}>
       {i18n.t(`day.${value}`)}
@@ -115,7 +116,7 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
     <View
       style={{
         backgroundColor: '#fff',
-        width: '100%',
+        width: '99%',
         height: 275,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 1 },
@@ -125,8 +126,11 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
         paddingVertical: 20,
         paddingHorizontal: 15,
         marginBottom: 20,
+        elevation: 1,
+        marginLeft: 3,
+        marginRight: 3,
       }}>
-      <H1Text>{i18n.t('dashboard_label.asset_graph')}</H1Text>
+      <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.asset_graph')}</H1Text>
       <View
         style={{
           height: 200,

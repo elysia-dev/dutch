@@ -30,8 +30,9 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
     >
       <Animated.View
         style={{
-          height: 416,
+          backgroundColor: "#fff",
           elevation: 3,
+          height: 416,
           marginLeft: 3,
           marginRight: 3,
           borderRadius: 10,

@@ -10,6 +10,7 @@ import { AssetGraphCard } from './components/AssetGraphCard';
 import { AssetValueGraphCard } from './components/AssetValueGraphCard';
 import { AverageReturnCard } from './components/AverageReturnCard';
 import { SummaryPropertyCard } from './components/SummaryPropertyCard';
+import { TitleText } from '../../shared/components/Texts';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -53,7 +54,7 @@ export const SummaryReport: FunctionComponent<{}> = () => {
         handler={() => navigation.goBack()}
       />
 
-      <H1Text>{i18n.t('dashboard_label.asset_report')}</H1Text>
+      <TitleText style={{ marginTop: 10, marginBottom: 30 }} label={i18n.t('dashboard_label.asset_report')} />
       <SummaryPropertyCard summary={report.summary} />
       <AverageReturnCard return={report.summary.averageAnnualReturn} />
       <AssetGraphCard content={report.content} />
