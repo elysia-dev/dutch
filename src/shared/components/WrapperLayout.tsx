@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 import {
   Platform,
   KeyboardAvoidingView,
@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
+import RootContext from '../../contexts/RootContext';
+import LocaleType from '../../enums/LocaleType';
 
 const Wrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
@@ -65,6 +67,8 @@ const ScrollingView: FunctionComponent<Scrolling> = props => {
 
 const WrapperLayout: FunctionComponent<Props> = props => {
   const [scrollY] = useState(new Animated.Value(0));
+  const { user } = useContext(RootContext);
+  const languageType = user.language;
 
   return (
     <Wrapper>
@@ -84,7 +88,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
                 {
                   translateX: scrollY.interpolate({
                     inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 30, 30],
+                    outputRange: [0, 0, 0, 0],
                   }),
                 },
                 {
@@ -99,7 +103,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
                   {
                     translateX: scrollY.interpolate({
                       inputRange: [-1000, 0, 50, 1000],
-                      outputRange: [0, 0, -17, -17],
+                      outputRange: [0, 0, -34, -34],
                     }),
                   },
                   {
@@ -114,7 +118,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
             allowFontScaling={false}
             style={{
               position: 'absolute',
-              fontSize: 25,
+              fontSize: languageType === LocaleType.EN ? 22 : 25,
               fontFamily: 'Roboto_700Bold',
               transform: [
                 {
@@ -137,7 +141,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
                 {
                   translateX: scrollY.interpolate({
                     inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -30, -30],
+                    outputRange: [0, 0, 0, 0],
                   }),
                 },
                 {

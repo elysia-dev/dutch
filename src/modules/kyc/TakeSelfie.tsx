@@ -144,7 +144,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
     setStatus(LoadingStatus.PENDING);
     const compressedSelfieAlbum = await ImageManipulator.manipulateAsync(
       !selfieAlbum.cancelled ? selfieAlbum.uri : '',
-      [{ resize: { width: 800 } }],
+      [{ resize: { width: 700 } }],
       { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
     );
     return compressedSelfieAlbum;

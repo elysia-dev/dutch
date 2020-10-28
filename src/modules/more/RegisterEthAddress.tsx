@@ -186,17 +186,14 @@ I'd like to remind you once again that you are solely responsible for entering t
 Required Checkpoints
 - Is this Ethereum's address?
 - Do you know the exact private key?`,
-  zhHans: `请仅输入您知道该地址正确私钥的以太坊钱包地址。
-（例如，Metamask中的钱包地址）
-
-输入集中式平台的钱包地址时，令牌交换后，您可能无法获得相应令牌的权限。
-（集中平台的钱包是指通过集中交易所，集中式钱包服务等提供的存款的钱包地址。）
-
-我们想再次提醒您，您应自行负责输入错误的地址。
-
-必需的检查点
+  zhHans: `请输入您知道正确私钥的以太坊钱包地址。
+（例如，Metamask钱包地址。）
+如果输入的是中心化平台的钱包地址，在交换代币后，您可能无法获得相应代币的所有权。
+（中心化平台的钱包是指通过中心化交易所、中心化式钱包等提供存币服务的钱包。）
+我们想再次提醒您，您需要自行承担输入错误的钱包地址而产生的损失。
+请务必再次检查以下两项：
 -这是一个以太坊钱包地址吗？
--您正确知道私钥的地址吗？`,
+-您知道该以太坊钱包地址的私钥吗？`,
 };
 
 export default RegisterEthAddress;

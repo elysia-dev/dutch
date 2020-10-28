@@ -217,13 +217,13 @@ const TakeID: FunctionComponent<{}> = () => {
   const pickImage = async () => {
     const idAlbum = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0,
+      quality: 1,
       base64: true,
     });
     setStatus(LoadingStatus.PENDING);
     const compressedIdAlbum = await ImageManipulator.manipulateAsync(
       !idAlbum.cancelled ? idAlbum.uri : '',
-      [{ resize: { width: 800 } }],
+      [{ resize: { width: 600 } }],
       { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
     );
     return compressedIdAlbum;

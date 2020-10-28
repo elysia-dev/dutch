@@ -220,6 +220,53 @@ const MainInfo: FunctionComponent = () => {
               </KycNoneButton>
             </View>
           )}
+          {user.kycStatus === KycStatus.REJECTED && (
+            <View>
+              <KycNoneButton
+                onPress={() => navigation.navigate('Kyc')}
+                style={{
+                  shadowOffset: { width: 2, height: 1 },
+                  shadowColor: '#00000064',
+                  shadowOpacity: 0.8,
+                  shadowRadius: 6,
+                  height: 70,
+                  elevation: 6,
+                }}>
+                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={{
+                      fontSize: 13,
+                      textAlign: 'left',
+                      fontFamily: 'Roboto_400Regular',
+                    }}>
+                    {i18n.t('more_label.none_kyc_duplicate_label')}
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        fontSize: 15,
+                        textAlign: 'left',
+                        fontFamily: 'Roboto_700Bold',
+                      }}>
+                      {'\n'}
+                      {i18n.t('more_label.none_kyc')}
+                    </Text>
+                  </Text>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 9,
+                      right: -9,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: '#FC5C4F',
+                    }} />
+                </View>
+                <KycNoneButtonImg source={kycNoneButtonPng} />
+              </KycNoneButton>
+            </View>
+          )}
           {user.kycStatus === KycStatus.PENDING && (
             <View>
               <H3Text
@@ -536,7 +583,7 @@ const MainInfo: FunctionComponent = () => {
             fontSize: 10,
             color: '#1c1c1c',
           }}
-          label={'v1.0.4'}
+          label={'v1.0.6'}
         />
         <View
           style={{
