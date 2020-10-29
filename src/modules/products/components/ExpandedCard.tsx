@@ -1,4 +1,4 @@
-import React, { createRef, FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, { createRef, FunctionComponent, useContext, useEffect, useState, useRef } from 'react';
 import {
   Animated,
   Image,
@@ -65,7 +65,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
   });
   const { height: windowHeight } = Dimensions.get("window");
   const navigation = useNavigation();
-  const scrollRef = createRef<ScrollView>();
+  const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -98,8 +98,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
       }}
     >
       <ScrollView
-        scrollEventThrottle={16}
         ref={scrollRef}
+        scrollEventThrottle={16}
         contentOffset={{ x: 0, y: 0 }}
         scrollEnabled={state.scrollEnabled}
         showsVerticalScrollIndicator={state.scrollEnabled}
