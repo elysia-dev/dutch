@@ -81,7 +81,8 @@ const WrapperLayout: FunctionComponent<Props> = props => {
         {props.backButtonHandler !== undefined && (
           <BackButton handler={props.backButtonHandler} style={{ width: 30 }} />
         )}
-        <Animated.View
+        {languageType === LocaleType.EN ? (
+          <Animated.View
           style={[
             props.backButtonHandler !== undefined ? {
               transform: [
@@ -118,7 +119,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
             allowFontScaling={false}
             style={{
               position: 'absolute',
-              fontSize: languageType === LocaleType.EN ? 22 : 25,
+              fontSize: 22,
               fontFamily: 'Roboto_700Bold',
               transform: [
                 {
@@ -155,6 +156,82 @@ const WrapperLayout: FunctionComponent<Props> = props => {
             {props.subTitle}
           </Animated.Text>
         </Animated.View>
+        ) : (
+          <Animated.View
+            style={[
+              props.backButtonHandler !== undefined ? {
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, 30, 30],
+                    }),
+                  },
+                  {
+                    translateY: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, -57, -57],
+                    }),
+                  },
+                ],
+              } : {
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -17, -17],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                }]}>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                fontSize: 25,
+                fontFamily: 'Roboto_700Bold',
+                transform: [
+                  {
+                    scale: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [1, 1, 0.8, 0.8],
+                    }),
+                  },
+                ],
+              }}>
+              {props.title}
+            </Animated.Text>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                top: 40,
+                fontFamily: 'Roboto_400Regular',
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, -30, -30],
+                    }),
+                  },
+                  {
+                    translateY: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [0, 0, 0, 0],
+                    }),
+                  },
+                ],
+              }}>
+              {props.subTitle}
+            </Animated.Text>
+          </Animated.View>
+        )}
       </Animated.View>
       {props.subTitle !== undefined && (<View style={{ marginBottom: 30 }} />)}
       <ScrollingView Scrolling={props.isScrolling} scrollY={scrollY}>
