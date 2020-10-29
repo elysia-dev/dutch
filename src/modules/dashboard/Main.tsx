@@ -107,7 +107,7 @@ export const Main: FunctionComponent = () => {
             style={{ marginBottom: 40 }}
             label={(user.firstName && user.lastName) ? i18n.t('greeting', {
               firstName: state.user.firstName,
-              lastName: state.user.lastName,
+              lastName: state.user.lastName === null ? '' : state.user.lastName,
             }) : i18n.t('greeting_new')} />
           {(user.kycStatus !== KycStatus.SUCCESS || !(user.ethAddresses?.length > 0)) &&
             <TouchableOpacity onPress={() => navigation.navigate('Dashboard', {

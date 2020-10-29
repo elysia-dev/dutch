@@ -113,7 +113,7 @@ const MyPage: FunctionComponent = () => {
                 style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
               />
               <P1Text
-                label={`${user.firstName} ${user.lastName}`}
+                label={`${user.firstName} ${user.lastName !== null ? (user.lastName) : ''}`}
                 style={{ fontSize: 15 }}
               />
               <P1Text

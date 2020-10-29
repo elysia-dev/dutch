@@ -183,9 +183,7 @@ const App = () => {
           {state.signedIn ? (
             <>
               <RootStack.Screen name={'Main'} component={Main} />
-              {state.user.kycStatus === KycStatus.NONE && (
-                <RootStack.Screen name={'Kyc'} component={Kyc} />
-              )}
+              <RootStack.Screen name={'Kyc'} component={Kyc} />
               <RootStack.Screen name={'Dashboard'} component={Dashboard} />
               <RootStack.Screen name={'More'} component={More} />
               <RootStack.Screen name={'Product'} component={Products} />
