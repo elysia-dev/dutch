@@ -6,8 +6,7 @@ import React, {
   FunctionComponent,
   useEffect,
 } from 'react';
-import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import i18n from '../../i18n/i18n';
 import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -39,7 +38,6 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
       <View style={{ width: "100%", height: "100%" }}>
         <TouchableOpacity
           style={{
-            position: 'relative',
             top: 10,
             width: 30,
             height: 30,

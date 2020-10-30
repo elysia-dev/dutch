@@ -217,7 +217,8 @@ const OwnershipDetail: FunctionComponent = () => {
       <Modal
         transparent={true}
         animationType={'slide'}
-        visible={state.refundModalVisible}>
+        visible={state.refundModalVisible}
+        onRequestClose={() => setState({ ...state, refundModalVisible: false })}>
         <OwnershipRefund
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
           ownership={state.ownership}
@@ -226,7 +227,8 @@ const OwnershipDetail: FunctionComponent = () => {
       <Modal
         transparent={true}
         animationType={'slide'}
-        visible={state.purchaseModalVisible}>
+        visible={state.purchaseModalVisible}
+        onRequestClose={() => setState({ ...state, purchaseModalVisible: false })}>
         <SliderProductBuying
           from={"ownershipDetail"}
           product={state.ownership.product ? state.ownership.product : defaultProduct}
@@ -236,7 +238,8 @@ const OwnershipDetail: FunctionComponent = () => {
       <Modal
         transparent={true}
         animationType={'slide'}
-        visible={state.legacyRefundModalVisible}>
+        visible={state.legacyRefundModalVisible}
+        onRequestClose={() => setState({ ...state, legacyRefundModalVisible: false })}>
         <LegacyOwnershipRefund
           modalHandler={() => setState({ ...state, legacyRefundModalVisible: false })}
           submitHandler={() => callLegacyRefundApi()}
