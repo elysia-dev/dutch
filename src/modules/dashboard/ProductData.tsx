@@ -62,7 +62,7 @@ const ProductData: FunctionComponent = () => {
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <H1Text label={'DOCUMENT'} />
+        <H1Text label={i18n.t('dashboard_label.documents')} />
         <View
           style={{
             marginTop: 40,

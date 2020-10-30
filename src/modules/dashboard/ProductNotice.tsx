@@ -1,6 +1,18 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  I18nManager,
+} from 'react-native';
 import styled from 'styled-components/native';
 import RootContext from '../../contexts/RootContext';
 import { DashboardPage } from '../../enums/pageEnum';
@@ -15,12 +27,11 @@ type ParamList = {
   };
 };
 
-
 export interface Props {
   post: PostResponse;
 }
 
-export const Notice: FunctionComponent<Props> = props => {
+export const Notice: FunctionComponent<Props> = (props) => {
   const [state, setState] = useState({
     content: false,
   });
@@ -38,14 +49,16 @@ export const Notice: FunctionComponent<Props> = props => {
           style={{
             marginTop: 10,
             marginBottom: 10,
-            color: "#626368",
-          }} />
+            color: '#626368',
+          }}
+        />
         <P1Text
           label={props.post.title}
           style={{
             marginTop: 10,
             marginBottom: 10,
-          }} />
+          }}
+        />
       </View>
       {state.content && (
         <View>
@@ -82,17 +95,19 @@ const ProductNotice: FunctionComponent = () => {
 
   const callPostApi = () => {
     Server.productPost(productId)
-      .then(res => {
+      .then((res) => {
         setState({ ...state, posts: res.data });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
   };
 
-  useEffect(() => { callPostApi(); }, []);
+  useEffect(() => {
+    callPostApi();
+  }, []);
 
   return (
     <ScrollView
@@ -101,14 +116,12 @@ const ProductNotice: FunctionComponent = () => {
         width: '100%',
         height: '100%',
       }}>
-      <View style={{ padding: "5%" }}>
+      <View style={{ padding: '5%' }}>
         <BackButton
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <TitleText
-          label={'Notice'}
-        />
+        <TitleText label={i18n.t('dashboard_label.notice')} />
         <View
           style={{
             marginTop: 40,
@@ -122,11 +135,12 @@ const ProductNotice: FunctionComponent = () => {
             shadowOpacity: 0.6,
           }}>
           <P1Text
-            label={'Notice'}
+            label={i18n.t('dashboard_label.notice')}
             style={{
               marginTop: 10,
               marginBottom: 10,
-            }} />
+            }}
+          />
           <View
             style={{
               marginTop: 10,
@@ -135,24 +149,38 @@ const ProductNotice: FunctionComponent = () => {
               height: 1,
               backgroundColor: '#CCCCCC',
             }}></View>
-          <View>{state.full ? fullPostsList : previewPostsList}</View>
-          <TouchableOpacity
-            onPress={() => setState({ ...state, full: !state.full })}>
-            <Image
-              style={[
-                {
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  width: 30,
-                  height: 15,
-                },
-                {
-                  transform: [{ rotate: state.full ? '180deg' : '0deg' }],
-                },
-              ]}
-              source={require('./images/bluedownarrow.png')}
-            />
-          </TouchableOpacity>
+          <View>
+            {state.full ? fullPostsList : previewPostsList}
+            {fullPostsList.length === 0 && (
+              <P1Text
+                label={i18n.t('dashboard.no_notice')}
+                style={{
+                  textAlign: 'center',
+                  marginVertical: 20,
+                  color: '#a7a7a7',
+                }}
+              />
+            )}
+          </View>
+          {fullPostsList.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setState({ ...state, full: !state.full })}>
+              <Image
+                style={[
+                  {
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: 30,
+                    height: 15,
+                  },
+                  {
+                    transform: [{ rotate: state.full ? '180deg' : '0deg' }],
+                  },
+                ]}
+                source={require('./images/bluedownarrow.png')}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </ScrollView>
