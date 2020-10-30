@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity, Image, Text } from 'react-native';
 import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
@@ -13,12 +13,16 @@ import {
   P1Text,
   P2Text,
 } from '../../../shared/components/Texts';
+import userChannel from '../../../utiles/userChannel';
+import RootContext from '../../../contexts/RootContext';
+import LocaleType from '../../../enums/LocaleType';
 
 type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
+  const { user } = useContext(RootContext);
 
   return (
     <>
@@ -78,7 +82,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
           style={{
             marginTop: ownership.isLegacy ? 10 : 45,
             width: '100%',
-            height: 120,
+            height: 170,
             padding: 20,
             backgroundColor: '#F6F6F8',
             borderRadius: 10,
@@ -96,14 +100,23 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             }}>
             <P1Text
               label={i18n.t('dashboard_label.stake')}
-              style={{ color: '#626368' }}
+              style={{ color: '#626368', flex: 1 }}
             />
             <P1Text
-              label={`${
+              style={{ flex: 1, textAlign: 'right' }}
+              label={
                 parseFloat(ownership.stake) < 0.01
-                  ? '< 0.01'
-                  : parseFloat(ownership.stake).toFixed(2)
-              }%`}
+                  ? `${
+                      user.language !== LocaleType.KO
+                        ? i18n.t('dashboard_label.less')
+                        : ''
+                    } 0.01% ${
+                      user.language === LocaleType.KO
+                        ? i18n.t('dashboard_label.less')
+                        : ''
+                    }`
+                  : `${parseFloat(ownership.stake).toFixed(2)}%`
+              }
             />
           </View>
           <View

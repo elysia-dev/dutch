@@ -311,7 +311,8 @@
     "expected_profit": "Expected rewards",
     "product_info": "Product Information",
     "documents": "Documents",
-    "notice": "Notice"
+    "notice": "Notice",
+    "less": "less than"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",
