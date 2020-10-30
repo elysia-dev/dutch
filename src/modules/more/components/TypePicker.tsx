@@ -12,33 +12,14 @@ import styled from 'styled-components/native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
 
-const InputHeaderText = styled.Text`
-  color: #a7a7a7;
-  font-size: 12px;
-  text-align: left;
-`;
-
 interface Props {
   dispatch: React.Dispatch<any>;
   filter: any;
   style?: StyleProp<ViewStyle>;
 }
 
-export const TypePicker: FunctionComponent<Props> = props => {
-  const TypesListIos = [
-    { label: i18n.t('more_label.type_'), value: '', key: 0 },
-    { label: i18n.t('more_label.type_ownership'), value: 'ownership', key: 1 },
-    { label: i18n.t('more_label.type_refund'), value: 'refund', key: 2 },
-    { label: i18n.t('more_label.type_close'), value: 'close', key: 3 },
-    {
-      label: i18n.t('more_label.type_expectedProfit'),
-      value: 'expectedProfit',
-      key: 4,
-    },
-    { label: i18n.t('more_label.type_profit'), value: 'profit', key: 5 },
-  ];
-
-  const TypesListAnd = [
+export const TypePicker: FunctionComponent<Props> = (props) => {
+  const TypesList = [
     <Picker.Item key={0} label={i18n.t('more_label.type_')} value={''} />,
     <Picker.Item
       key={1}
@@ -74,14 +55,13 @@ export const TypePicker: FunctionComponent<Props> = props => {
           accessibilityLabel={'type'}
           mode="dialog"
           selectedValue={props.filter.type}
-          onValueChange={value =>
+          onValueChange={(value) =>
             props.dispatch({
               type: 'UPDATE_TYPE',
               transactionType: value,
             })
-          }
-        >
-          {TypesListAnd}
+          }>
+          {TypesList}
         </Picker>
       </View>
     </View>

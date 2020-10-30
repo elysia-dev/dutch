@@ -21,19 +21,6 @@ import {
 } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
-// const H1Text = styled.Text`
-//   color: #1c1c1c;
-//   font-size: 20px;
-//   font-weight: bold;
-//   text-align: left;
-//   margin-top: 40px;
-//   margin-bottom: 6px;
-// `;
-// const PText = styled.Text`
-//   font-size: 12px;
-//   color: #626368;
-//   text-align: left;
-// `;
 const IdImg = styled.Image`
   margin-top: 10px;
   width: 100%;
