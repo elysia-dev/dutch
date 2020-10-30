@@ -125,7 +125,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           fontSize: 15,
           color: '#1C1C1C',
           textAlign: 'right',
-        }}>{`$ ${parseFloat(value[1]).toFixed(2)}`}</Text>
+        }}>{`$ ${parseFloat(value[1]).toFixed(4)}`}</Text>
     </View>
   ));
 
@@ -154,6 +154,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           fontSize: 15,
           color: '#4E4E4E',
           textAlign: 'left',
+          fontFamily: 'Roboto_400Regular',
         }}>
         {value[0]}
       </Text>
@@ -164,9 +165,10 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           fontSize: 15,
           color: '#1C1C1C',
           textAlign: 'right',
+          fontFamily: 'Roboto_400Regular',
         }}>{`${parseFloat(
-          `${(100 * parseFloat(value[1])) / totalValue}}`,
-        ).toFixed(2)} %`}</Text>
+        `${(100 * parseFloat(value[1])) / totalValue}}`,
+      ).toFixed(4)} %`}</Text>
     </View>
   ));
   return (
@@ -191,7 +193,9 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.asset_value_graph')}</H1Text>
+        <H1Text allowFontScaling={false}>
+          {i18n.t('dashboard_label.asset_value_graph')}
+        </H1Text>
         <View
           style={{
             flexDirection: 'row',
@@ -224,32 +228,45 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      {!totalValue ?
+      {!totalValue ? (
         <>
-          <Image source={require('../images/noownership.png')} style={{ width: "85%", height: 200, resizeMode: 'center' }} />
-          <Text allowFontScaling={false} style={{ marginTop: 20, textAlign: 'center', color: '#1C1C1C', fontSize: 15 }}>{i18n.t('dashboard.no_ownership')}</Text>
-        </> : (
-          <>
-            <PieChart
-              style={{ height: 200 }}
-              data={pieData}
-              outerRadius={'100%'}
-              innerRadius={'70%'}
-              padAngle={0}
-            />
-            <View
-              style={{
-                width: '100%',
-                top: 20,
-                padding: 20,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: '#F1F1F1',
-              }}>
-              {state.profit ? assetProfitLabel : assetPercentLabel}
-            </View>
-          </>
-        )}
+          <Image
+            source={require('../images/noownership.png')}
+            style={{ width: '85%', height: 200, resizeMode: 'center' }}
+          />
+          <Text
+            allowFontScaling={false}
+            style={{
+              marginTop: 20,
+              textAlign: 'center',
+              color: '#1C1C1C',
+              fontSize: 15,
+            }}>
+            {i18n.t('dashboard.no_ownership')}
+          </Text>
+        </>
+      ) : (
+        <>
+          <PieChart
+            style={{ height: 200 }}
+            data={pieData}
+            outerRadius={'100%'}
+            innerRadius={'70%'}
+            padAngle={0}
+          />
+          <View
+            style={{
+              width: '100%',
+              top: 20,
+              padding: 20,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#F1F1F1',
+            }}>
+            {state.profit ? assetProfitLabel : assetPercentLabel}
+          </View>
+        </>
+      )}
     </View>
   );
 };

@@ -19,13 +19,14 @@ const H1Text = styled.Text`
   text-align: left;
   margin-bottom: 10px;
   padding-left: 5px;
+  font-family: 'Roboto_400Regular';
 `;
 
 interface Props {
   content: SummaryReportResponse['content'];
 }
 
-export const AssetGraphCard: FunctionComponent<Props> = props => {
+export const AssetGraphCard: FunctionComponent<Props> = (props) => {
   const fill = '#E6ECF2';
   const today = new Date().getDay();
   const dayFormatter = (day: number) => {
@@ -112,12 +113,40 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
     ));
   };
 
+  const graphLegend = (color: string, text: string) => (
+    <View
+      style={{
+        flexDirection: 'row',
+        marginTop: 4,
+        marginBottom: 4,
+        alignItems: 'center',
+      }}>
+      <View
+        style={{
+          backgroundColor: color,
+          width: 14,
+          height: 14,
+          borderRadius: 7,
+        }}></View>
+      <Text
+        allowFontScaling={false}
+        style={{
+          marginLeft: 5,
+          fontSize: 15,
+          color: '#4E4E4E',
+          textAlign: 'left',
+        }}>
+        {text}
+      </Text>
+    </View>
+  );
+
   return (
     <View
       style={{
         backgroundColor: '#fff',
         width: '99%',
-        height: 275,
+        height: 390,
         borderRadius: 10,
         shadowOffset: { width: 2, height: 1 },
         shadowColor: '#3679B540',
@@ -130,7 +159,9 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
         marginLeft: 3,
         marginRight: 3,
       }}>
-      <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.asset_graph')}</H1Text>
+      <H1Text allowFontScaling={false}>
+        {i18n.t('dashboard_label.asset_graph')}
+      </H1Text>
       <View
         style={{
           height: 200,
@@ -148,7 +179,7 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
             fontSize: 10,
           }}
           numberOfTicks={3}
-          formatLabel={value => `$ ${parseInt(value, 10)}`}
+          formatLabel={(value) => `$ ${parseInt(value, 10)}`}
         />
         <View style={{ flex: 8 }}>
           <BarChart
@@ -194,7 +225,7 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
             fontSize: 10,
           }}
           numberOfTicks={3}
-          formatLabel={value => `$ ${parseInt(value, 10)}`}
+          formatLabel={(value) => `$ ${parseInt(value, 10)}`}
         />
       </View>
       <View
@@ -206,6 +237,18 @@ export const AssetGraphCard: FunctionComponent<Props> = props => {
           justifyContent: 'space-between',
         }}>
         {translatedDay}
+      </View>
+      <View
+        style={{
+          width: '100%',
+          top: 20,
+          padding: 20,
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#F1F1F1',
+        }}>
+        {graphLegend('#E6ECF2', 'Daily Rewards')}
+        {graphLegend('#0F4C81', 'Total Value')}
       </View>
     </View>
   );
