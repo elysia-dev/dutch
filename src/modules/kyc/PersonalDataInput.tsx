@@ -63,6 +63,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
     nationality: '',
     birthday: '',
     modalVisible: false,
+    submitDisabled: false,
   });
 
   const navigation = useNavigation();
@@ -70,7 +71,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
   const { Server, setKycStatus } = useContext(RootContext);
 
   const setModalVisible = (visible: boolean) => {
-    setState({ ...state, modalVisible: visible });
+    setState({ ...state, modalVisible: visible, submitDisabled: true });
   };
 
   const setNationality = (input: string) => {
@@ -237,7 +238,14 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
         button={
           <SubmitButton
             title={i18n.t('kyc_label.complete_input')}
-            handler={() => callKycApi()}
+            handler={() => {
+              setState({ ...state, submitDisabled: true });
+              callKycApi();
+            }}
+            disabled={state.submitDisabled}
+            style={{
+              backgroundColor: state.submitDisabled ? '#D0D8DF' : '#3679B5',
+            }}
           />
         }
       />
