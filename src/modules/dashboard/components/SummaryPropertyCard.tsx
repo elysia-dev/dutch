@@ -1,37 +1,14 @@
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components/native';
 
 import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
+import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
   summary: SummaryReportResponse['summary'];
 }
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 10px;
-`;
-const NumText = styled.Text`
-  color: #1c1c1c;
-  font-size: 25px;
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 18px;
-`;
-const PText = styled.Text`
-  color: #838383;
-  font-size: 15px;
-  text-align: left;
-`;
-const NumText2 = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: right;
-`;
 export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
@@ -50,12 +27,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
         marginLeft: 3,
         marginRight: 3,
       }}>
-      <H1Text allowFontScaling={false}>
-        {i18n.t('dashboard_label.total_balance')}
-      </H1Text>
-      <NumText allowFontScaling={false}>{`$ ${parseFloat(props.summary.totalBalance).toFixed(
+      <P1Text label={i18n.t('dashboard_label.total_balance')} style={{ marginBottom: 10 }} />
+      <H2Text style={{ marginBottom: 18 }} label={`$ ${parseFloat(props.summary.totalBalance).toFixed(
         2,
-      )}`}</NumText>
+      )}`}/>
       <View
         style={{
           borderWidth: 1,
@@ -74,10 +49,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText allowFontScaling={false}>{i18n.t('dashboard_label.total_property')}</PText>
-          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(
+          <P2Text label={i18n.t('dashboard_label.total_property')} />
+          <P1Text style={{ textAlign: "right" }} label={`$ ${parseFloat(
             props.summary.totalRealEstateValue,
-          ).toFixed(2)}`}</NumText2>
+          ).toFixed(2)}`} />
         </View>
         <View
           style={{
@@ -86,10 +61,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText allowFontScaling={false}>{i18n.t('dashboard_label.total_interest')}</PText>
-          <NumText2 allowFontScaling={false} >{`$ ${parseFloat(props.summary.totalInterest).toFixed(
+          <P2Text label={i18n.t('dashboard_label.total_interest')} />
+          <P1Text style={{ textAlign: "right" }} label={`$ ${parseFloat(props.summary.totalInterest).toFixed(
             2,
-          )}`}</NumText2>
+          )}`} />
         </View>
         <View
           style={{
@@ -98,10 +73,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText allowFontScaling={false}>{i18n.t('dashboard_label.withdrawn_interest')}</PText>
-          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
+          <P2Text label={i18n.t('dashboard_label.withdrawn_interest')} />
+          <P1Text style={{ textAlign: "right" }} label={`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
             2,
-          )}`}</NumText2>
+          )}`} />
         </View>
         <View
           style={{
@@ -110,10 +85,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <PText allowFontScaling={false}>{i18n.t('dashboard_label.available_interest')}</PText>
-          <NumText2 allowFontScaling={false}>{`$ ${parseFloat(
+          <P2Text label={i18n.t('dashboard_label.available_interest')} />
+          <P1Text style={{ textAlign: "right" }} label={`$ ${parseFloat(
             props.summary.withdrawableInterest,
-          ).toFixed(2)}`}</NumText2>
+          ).toFixed(2)}`} />
         </View>
       </View>
     </View>
