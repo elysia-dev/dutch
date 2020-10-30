@@ -179,7 +179,13 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
             fontSize: 10,
           }}
           numberOfTicks={3}
-          formatLabel={(value) => `$ ${parseInt(value, 10)}`}
+          formatLabel={(value: string) =>
+            `$ ${
+              `${parseInt(value, 10)}`.length > 2
+                ? parseFloat(value)
+                : parseFloat(value).toFixed(3)
+            }`
+          }
         />
         <View style={{ flex: 8 }}>
           <BarChart
@@ -217,6 +223,7 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
             flex: 1.5,
             height: 185,
             top: 15,
+            flexDirection: 'row',
           }}
           data={value}
           contentInset={{ top: 20, bottom: 10 }}
@@ -225,7 +232,13 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
             fontSize: 10,
           }}
           numberOfTicks={3}
-          formatLabel={(value) => `$ ${parseInt(value, 10)}`}
+          formatLabel={(value) =>
+            `$ ${
+              `${parseInt(value, 10)}`.length > 2
+                ? parseFloat(value)
+                : parseFloat(value).toFixed(3)
+            }`
+          }
         />
       </View>
       <View
@@ -247,8 +260,8 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
           borderWidth: 1,
           borderColor: '#F1F1F1',
         }}>
-        {graphLegend('#E6ECF2', 'Daily Rewards')}
-        {graphLegend('#0F4C81', 'Total Value')}
+        {graphLegend('#E6ECF2', i18n.t('dashboard_label.daily_reward'))}
+        {graphLegend('#0F4C81', i18n.t('dashboard_label.total_property'))}
       </View>
     </View>
   );
