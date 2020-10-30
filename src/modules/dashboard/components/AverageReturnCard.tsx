@@ -1,25 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
+import { P1Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
   return: string;
 }
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 10px;
-`;
-const NumText = styled.Text`
-  color: #1c1c1c;
-  font-size: 25px;
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 18px;
-`;
 
 export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
   return (
@@ -39,12 +25,14 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         marginLeft: 3,
         marginRight: 3,
       }}>
-      <H1Text allowFontScaling={false}>
-        {i18n.t('dashboard_label.average_return')}
-      </H1Text>
-      <NumText allowFontScaling={false}>{`${parseFloat(props.return).toFixed(
-        4,
-      )} %`}</NumText>
+      <P1Text
+        style={{ marginBottom: 10 }}
+        label={i18n.t('dashboard_label.average_return')}
+      />
+      <H2Text
+        style={{ marginBottom: 18 }}
+        label={`${parseFloat(props.return).toFixed(4)} %`}
+      />
     </View>
   );
 };

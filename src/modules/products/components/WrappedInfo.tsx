@@ -345,7 +345,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           <View style={{ paddingTop: 10 }}>
             <P3Text
               label={productDescription.summary}
-              style={{ color: '#1c1c1c' }}
+              style={{ color: '#1c1c1c', lineHeight: 25 }}
             />
           </View>
         )}

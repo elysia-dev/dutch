@@ -12,17 +12,12 @@ import styled from 'styled-components/native';
 import { PieChart } from 'react-native-svg-charts';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
+import { P1Text } from '../../../shared/components/Texts';
 
 interface Props {
   ownerships: SummaryReportResponse['content']['ownerships'];
 }
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: left;
-  margin-bottom: 20px;
-`;
 const data = [
   {
     name: 'ELYSIA Asset #1',
@@ -107,25 +102,21 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           height: 14,
           borderRadius: 7,
         }}></View>
-      <Text
-        allowFontScaling={false}
+      <P1Text
         style={{
           flex: 8,
           marginLeft: 5,
-          fontSize: 15,
           color: '#4E4E4E',
-          textAlign: 'left',
-        }}>
-        {value[0]}
-      </Text>
-      <Text
-        allowFontScaling={false}
+        }}
+        label={value[0]}
+      />
+      <P1Text
         style={{
           flex: 8,
-          fontSize: 15,
-          color: '#1C1C1C',
           textAlign: 'right',
-        }}>{`$ ${parseFloat(value[1]).toFixed(4)}`}</Text>
+        }}
+        label={`$ ${parseFloat(value[1]).toFixed(4)}`}
+      />
     </View>
   ));
 
@@ -146,29 +137,23 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           height: 14,
           borderRadius: 7,
         }}></View>
-      <Text
-        allowFontScaling={false}
+      <P1Text
         style={{
           flex: 8,
           marginLeft: 5,
-          fontSize: 15,
           color: '#4E4E4E',
-          textAlign: 'left',
-          fontFamily: 'Roboto_400Regular',
-        }}>
-        {value[0]}
-      </Text>
-      <Text
-        allowFontScaling={false}
+        }}
+        label={value[0]}
+      />
+      <P1Text
         style={{
           flex: 8,
-          fontSize: 15,
-          color: '#1C1C1C',
           textAlign: 'right',
-          fontFamily: 'Roboto_400Regular',
-        }}>{`${parseFloat(
-        `${(100 * parseFloat(value[1])) / totalValue}}`,
-      ).toFixed(4)} %`}</Text>
+        }}
+        label={`${parseFloat(
+          `${(100 * parseFloat(value[1])) / totalValue}}`,
+        ).toFixed(4)} %`}
+      />
     </View>
   ));
   return (
@@ -193,9 +178,10 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <H1Text allowFontScaling={false}>
-          {i18n.t('dashboard_label.asset_value_graph')}
-        </H1Text>
+        <P1Text
+          style={{ marginBottom: 20 }}
+          label={i18n.t('dashboard_label.asset_value_graph')}
+        />
         <View
           style={{
             flexDirection: 'row',
@@ -234,16 +220,10 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
             source={require('../images/noownership.png')}
             style={{ width: '85%', height: 200, resizeMode: 'center' }}
           />
-          <Text
-            allowFontScaling={false}
-            style={{
-              marginTop: 20,
-              textAlign: 'center',
-              color: '#1C1C1C',
-              fontSize: 15,
-            }}>
-            {i18n.t('dashboard.no_ownership')}
-          </Text>
+          <P1Text
+            style={{ marginTop: 25, textAlign: 'center' }}
+            label={i18n.t('dashboard.no_ownership')}
+          />
         </>
       ) : (
         <>

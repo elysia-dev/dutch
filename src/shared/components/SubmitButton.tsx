@@ -57,11 +57,10 @@ const DuplicateUpperLabel = styled.Text`
 `;
 const DuplicateLabel = styled.Text`
   font-size: 16px;
-  font-weight: bold;
   text-align: left;
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-family: 'Roboto_400Regular';
+  font-family: 'Roboto_700Bold';
 `;
 interface SubmitButtonProps {
   title: string;
