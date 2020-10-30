@@ -12,14 +12,6 @@ import { AverageReturnCard } from './components/AverageReturnCard';
 import { SummaryPropertyCard } from './components/SummaryPropertyCard';
 import { TitleText } from '../../shared/components/Texts';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 28px;
-  text-align: left;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 30px;
-`;
 
 export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
