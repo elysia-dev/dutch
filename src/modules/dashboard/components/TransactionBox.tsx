@@ -68,7 +68,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             style={{
               backgroundColor: '#A7A7A7',
               borderRadius: 2,
-              width: 60,
+              width: 75,
               height: 20,
               justifyContent: 'center',
               alignContent: 'center',
