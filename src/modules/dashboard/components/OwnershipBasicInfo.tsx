@@ -1,6 +1,4 @@
-import React, {
-  FunctionComponent,
-} from 'react';
+import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Image, Text } from 'react-native';
 import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
@@ -8,7 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import { OwnershipResponse } from '../../../types/Ownership';
 import { DashboardPage } from '../../../enums/pageEnum';
-import { H1Text, H2Text, H3Text, P1Text, P2Text } from '../../../shared/components/Texts';
+import {
+  H1Text,
+  H2Text,
+  H3Text,
+  P1Text,
+  P2Text,
+} from '../../../shared/components/Texts';
 
 const GText = styled.Text`
   color: #626368;
@@ -43,17 +47,22 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
-            <P2Text style={{ color: "#626368" }} label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ""}`} />
+            <P2Text
+              style={{ color: '#626368' }}
+              label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${
+                ownership.isLegacy ? ownership.legacyPaymentMethod : ''
+              }`}
+            />
             <H2Text
               style={{
                 marginTop: 7,
 
                 zIndex: 3,
               }}
-              label={`${ownership.product.tokenName} ${ownership.tokenValue}`} />
+              label={`${ownership.product.tokenName} ${ownership.tokenValue}`}
+            />
           </View>
-          {
-            !ownership.isLegacy &&
+          {!ownership.isLegacy && (
             <TouchableOpacity
               onPress={() => {
                 Linking.openURL(
@@ -72,9 +81,12 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 justifyContent: 'center',
                 alignContent: 'center',
               }}>
-              <P1Text label={'Token Contract'} style={{ textAlign: 'center', fontSize: 13 }} />
+              <P1Text
+                label={'Token Contract'}
+                style={{ textAlign: 'center', fontSize: 13 }}
+              />
             </TouchableOpacity>
-          }
+          )}
         </View>
         <View
           style={{
@@ -97,7 +109,11 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <GText>{i18n.t('dashboard_label.stake')}</GText>
-            <ValueText>{`${parseFloat(ownership.stake).toFixed(2)}%`}</ValueText>
+            <ValueText>{`${
+              parseFloat(ownership.stake) < 0.01
+                ? '< 0.01'
+                : parseFloat(ownership.stake).toFixed(2)
+            }%`}</ValueText>
           </View>
           <View
             style={{
@@ -107,12 +123,13 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <GText>{i18n.t('dashboard_label.total_interest')}</GText>
-            <ValueText>{`$ ${parseFloat(ownership.expectProfit).toFixed(
-              2,
-            )}`}</ValueText>
+            <ValueText>{`$ ${
+              parseFloat(ownership.expectProfit) < 0.01
+                ? '< 0.01'
+                : parseFloat(ownership.expectProfit).toFixed(2)
+            }`}</ValueText>
           </View>
-          {
-            !ownership.isLegacy &&
+          {!ownership.isLegacy && (
             <View
               style={{
                 flex: 1,
@@ -121,21 +138,27 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 alignItems: 'center',
               }}>
               <GText>{i18n.t('dashboard_label.available_interest')}</GText>
-              <ValueText>{`$ ${parseFloat(ownership.availableProfit).toFixed(
-                2,
-              )}`}</ValueText>
+              <ValueText>{`$ ${
+                parseFloat(ownership.availableProfit) < 0.01
+                  ? '< 0.01'
+                  : parseFloat(ownership.availableProfit).toFixed(2)
+              }`}</ValueText>
             </View>
-          }
+          )}
         </View>
         {props.children}
       </View>
-      <View style={{
-        padding: 20,
-        paddingBottom: 0,
-        borderBottomColor: '#F6F6F8',
-        borderBottomWidth: 5,
-      }}>
-        <H3Text label={i18n.t('dashboard_label.product_info')} style={{ marginTop: 5, marginBottom: 20 }} />
+      <View
+        style={{
+          padding: 20,
+          paddingBottom: 0,
+          borderBottomColor: '#F6F6F8',
+          borderBottomWidth: 5,
+        }}>
+        <H3Text
+          label={i18n.t('dashboard_label.product_info')}
+          style={{ marginTop: 5, marginBottom: 20 }}
+        />
         <TouchableOpacity
           onPress={() => {
             navigation.navigate(DashboardPage.ProductData, {
@@ -150,15 +173,14 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <P1Text label={i18n.t('dashboard_label.documents')} />
-            <Image
-              source={require('../images/graynextbutton.png')}
-            />
+            <Image source={require('../images/graynextbutton.png')} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(DashboardPage.ProductNotice,
-              { productId: ownership.product.id })
+            navigation.navigate(DashboardPage.ProductNotice, {
+              productId: ownership.product.id,
+            })
           }>
           <View
             style={{
@@ -168,9 +190,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <P1Text label={i18n.t('dashboard_label.notice')} />
-            <Image
-              source={require('../images/graynextbutton.png')}
-            />
+            <Image source={require('../images/graynextbutton.png')} />
           </View>
         </TouchableOpacity>
       </View>
