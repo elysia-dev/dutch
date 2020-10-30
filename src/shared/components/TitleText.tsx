@@ -16,5 +16,9 @@ export const TitleText: FunctionComponent<{
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
-  return <Title style={style}>{label}</Title>;
+  return (
+    <Title allowFontScaling={false} style={style}>
+      {label}
+    </Title>
+  );
 };

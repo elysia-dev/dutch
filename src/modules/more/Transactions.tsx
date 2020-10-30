@@ -1,4 +1,11 @@
-import React, { FunctionComponent, useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import {
   SafeAreaView,
   View,
@@ -20,7 +27,6 @@ import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
 import RootContext from '../../contexts/RootContext';
-
 
 export const initialState = {
   page: 1,
@@ -59,14 +65,14 @@ const Transactions: FunctionComponent = () => {
       state.period,
       state.productId,
     )
-      .then(res => {
+      .then((res) => {
         dispatch({
           type: 'UPDATE_TRANSACTIONS',
           transactions: res.data,
         });
         dispatch({ type: 'UPDATE_PAGE', page: 1 });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -82,7 +88,7 @@ const Transactions: FunctionComponent = () => {
       state.period,
       state.productId,
     )
-      .then(res => {
+      .then((res) => {
         if (res.data.length === 0 && state.page > 1) {
           return alert(i18n.t('dashboard.last_transaction'));
         }
@@ -92,7 +98,7 @@ const Transactions: FunctionComponent = () => {
           transactions: res.data,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -101,7 +107,7 @@ const Transactions: FunctionComponent = () => {
 
   const loadProducts = useCallback(() => {
     Server.getAllProductIds()
-      .then(res => {
+      .then((res) => {
         setState({
           ...productState,
           iosList: productState.iosList.concat(
@@ -122,7 +128,7 @@ const Transactions: FunctionComponent = () => {
           ),
         });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -155,8 +161,8 @@ const Transactions: FunctionComponent = () => {
           style={{ marginTop: 10, marginBottom: 10 }}
         />
         <TitleText
-          style={{ fontSize: 28, marginBottom: 25 }}
-          label={'TRANSACTIONS'}
+          style={{ marginBottom: 25 }}
+          label={i18n.t('dashboard_label.transaction')}
         />
         <TouchableOpacity
           onPress={() => dispatch({ type: 'MODAL_CONTROL', modal: true })}
@@ -165,7 +171,8 @@ const Transactions: FunctionComponent = () => {
             style={{ color: '#838383' }}
             label={`${i18n.t(`more_label.${state.period}_day`)} · ${i18n.t(
               `more_label.type_${state.type}`,
-            )} · ${i18n.t('more_label.latest')}`} />
+            )} · ${i18n.t('more_label.latest')}`}
+          />
           <Image
             source={require('./images/graydownbutton.png')}
             style={{
@@ -210,36 +217,36 @@ const Transactions: FunctionComponent = () => {
             />
           </View>
         ) : (
-            <>
-              {historyList}
-              <TouchableOpacity
-                onPress={() => {
-                  loadTransactions();
-                }}
+          <>
+            {historyList}
+            <TouchableOpacity
+              onPress={() => {
+                loadTransactions();
+              }}
+              style={{
+                width: '100%',
+                height: 50,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: '#A7A7A7',
+                justifyContent: 'center',
+                alignContent: 'center',
+                marginTop: 15,
+                marginBottom: 40,
+              }}>
+              <Text
+                allowFontScaling={false}
                 style={{
-                  width: '100%',
-                  height: 50,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: '#A7A7A7',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  marginTop: 15,
-                  marginBottom: 40,
+                  color: '#4E4E4E',
+                  fontSize: 17,
+                  textAlign: 'center',
+                  fontFamily: 'Roboto_400Regular',
                 }}>
-                <Text
-                  allowFontScaling={false}
-                  style={{
-                    color: '#4E4E4E',
-                    fontSize: 17,
-                    textAlign: 'center',
-                    fontFamily: 'Roboto_400Regular',
-                  }}>
-                  {i18n.t('dashboard_label.more_transactions')}
-                </Text>
-              </TouchableOpacity>
-            </>
-          )}
+                {i18n.t('dashboard_label.more_transactions')}
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
       </ScrollView>
       {state.modal && (
         <View
@@ -251,15 +258,20 @@ const Transactions: FunctionComponent = () => {
           }}></View>
       )}
       <Modal transparent={true} animationType={'slide'} visible={state.modal}>
-        <Filter children={<ProductPicker
-          loadProducts={() => loadProducts()}
-          productList={productState}
-          style={{ marginBottom: 30 }}
+        <Filter
+          children={
+            <ProductPicker
+              loadProducts={() => loadProducts()}
+              productList={productState}
+              style={{ marginBottom: 30 }}
+              dispatch={dispatch}
+              filter={state}
+            />
+          }
           dispatch={dispatch}
           filter={state}
+          filterTransactions={() => filterTransactions()}
         />
-        }
-          dispatch={dispatch} filter={state} filterTransactions={() => filterTransactions()} />
       </Modal>
     </SafeAreaView>
   );
