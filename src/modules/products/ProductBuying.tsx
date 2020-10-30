@@ -61,7 +61,7 @@ const ProductBuying: FunctionComponent = () => {
   const purchasability =
     user.kycStatus === KycStatus.SUCCESS &&
     user.ethAddresses?.length > 0 &&
-    !state.product?.restrictedCountries.includes(shortNationality);
+    !state.product?.restrictedCountries?.includes(shortNationality);
 
   const submitButtonTitle = () => {
     if (!purchasability) {
