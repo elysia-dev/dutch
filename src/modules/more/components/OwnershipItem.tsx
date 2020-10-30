@@ -10,13 +10,6 @@ import {
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  margin-top: 15px;
-  margin-bottom: 15px;
-`;
 const GText = styled.Text`
   color: #838383;
   font-size: 12px;

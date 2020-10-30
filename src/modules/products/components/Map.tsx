@@ -16,13 +16,6 @@ import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  z-index: 3;
-`;
-
 interface Props {
   product: Product;
 }

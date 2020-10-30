@@ -14,20 +14,6 @@ import {
   P2Text,
 } from '../../../shared/components/Texts';
 
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-  font-weight: 300;
-`;
-const ValueText = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: right;
-  margin-top: 4px;
-  font-weight: 400;
-`;
-
 type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
@@ -132,11 +118,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={`$ ${
-                parseFloat(ownership.expectProfit) < 0.01
-                  ? '< 0.01'
-                  : parseFloat(ownership.expectProfit).toFixed(2)
-              }`}
+              label={`$ ${parseFloat(ownership.expectProfit).toFixed(4)}`}
             />
           </View>
           {!ownership.isLegacy && (
@@ -152,11 +134,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 style={{ color: '#626368' }}
               />
               <P1Text
-                label={`$ ${
-                  parseFloat(ownership.availableProfit) < 0.01
-                    ? '< 0.01'
-                    : parseFloat(ownership.availableProfit).toFixed(2)
-                }`}
+                label={`$ ${parseFloat(ownership.availableProfit).toFixed(4)}`}
               />
             </View>
           )}

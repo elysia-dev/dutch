@@ -1,12 +1,5 @@
-import React, { FunctionComponent } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Text,
-} from "react-native";
-import styled from "styled-components/native";
+import React, { FunctionComponent } from 'react';
+import styled from 'styled-components/native';
 
 const OptionBtn = styled.TouchableOpacity`
   width: 40%;
@@ -46,12 +39,6 @@ const CheckedOptionBtnText = styled.Text`
   line-height: 40px;
   z-index: 5;
 `;
-const InputHeaderText = styled.Text`
-  color: #a7a7a7;
-  margin: 5px 20px;
-  font-size: 12px;
-  text-align: left;
-`;
 
 export const ShortOptionButton: FunctionComponent<{
   check: string;
@@ -59,7 +46,7 @@ export const ShortOptionButton: FunctionComponent<{
   // handler: (event: GestureResponderEvent) => void;
   handler: any;
 }> = ({ title, handler, check }) => {
-  if (check === "checked") {
+  if (check === 'checked') {
     return (
       <CheckedOptionBtn onPress={handler}>
         <CheckedOptionBtnText>{title}</CheckedOptionBtnText>

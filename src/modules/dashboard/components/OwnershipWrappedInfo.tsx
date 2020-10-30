@@ -6,25 +6,6 @@ import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  text-align: left;
-  z-index: 3;
-  margin-bottom: 15px;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 12px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-
 const DesView = styled.View`
   margin-top: 18px;
   flex: 1;
