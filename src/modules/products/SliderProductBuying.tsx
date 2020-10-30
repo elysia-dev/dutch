@@ -72,7 +72,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       .then((_res) => {
         if (props.setSubcribed !== undefined) {
           props.setSubcribed(true);
-          alert(i18n.t('prodduct.subscribed'));
+          alert(i18n.t('product.subscribed'));
         }
       })
       .catch((e) => {
@@ -132,7 +132,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       <View style={{ width: '100%', height: '100%' }}>
         <TouchableOpacity
           style={{
-            position: 'relative',
             top: 10,
             width: 30,
             height: 30,

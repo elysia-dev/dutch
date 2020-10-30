@@ -15,6 +15,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
+import Pusher from 'pusher-js/react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -24,7 +25,7 @@ import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
-import pusherClient from './src/api/pusherClient';
+import getPusherClient from './src/api/pusherClient';
 import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
 import Notification from './src/types/Notification';
@@ -33,7 +34,6 @@ import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
 import disablePushNotificationsAsync from './src/utiles/disableNotificationsAsync';
-import enablePushNotifications from './src/utiles/enableNotifications';
 
 Sentry.init({
   dsn: 'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
@@ -44,6 +44,7 @@ Sentry.init({
 interface AppState {
   signedIn: boolean;
   user: {
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
@@ -64,6 +65,7 @@ const defaultState = {
   signedIn: false,
   locale: currentLocale(),
   user: {
+    id: 0,
     email: '',
     firstName: '',
     lastName: '',
@@ -80,9 +82,10 @@ const defaultState = {
   Server: new Server(() => { }, ''),
 };
 
+
 const App = () => {
   const [state, setState] = useState<AppState>(defaultState);
-
+  const [pusherClient, setPusherClient] = useState<Pusher>();
   const navigationRef = React.createRef<NavigationContainerRef>();
 
   /* eslint-disable @typescript-eslint/camelcase */
@@ -118,11 +121,7 @@ const App = () => {
           unreadNotificationCount: res.data.unreadNotificationCount,
           Server: authServer,
         });
-
-        const pusher = await pusherClient();
-        const channel = pusher.subscribe(userChannel(res.data.user.id));
-        channel.bind('notification', handleNotification);
-        enablePushNotifications(res.data.user.email);
+        // enablePushNotifications(res.data.user.email);
       })
       .catch(() => {
         if (state.user?.email) {
@@ -134,15 +133,29 @@ const App = () => {
 
   useEffect(() => {
     signIn();
+    getPusherClient().then((client) => {
+      setPusherClient(client);
+    });
   }, []);
 
-  const handleNotification = (notification: Notification) => {
-    setState({
-      ...state,
-      unreadNotificationCount: state.unreadNotificationCount + 1,
-      notifications: [notification, ...state.notifications],
-    });
-  };
+  useEffect(() => {
+    if (state.signedIn && state.user.id && pusherClient) {
+      const handleNotification = (notification: Notification) => {
+        setState({
+          ...state,
+          unreadNotificationCount: state.unreadNotificationCount + 1,
+          notifications: [notification, ...state.notifications],
+        });
+      };
+
+      const channel = pusherClient.subscribe(userChannel(state.user.id));
+      channel.bind('notification', handleNotification);
+
+      return () => channel.unbind("notification", handleNotification);
+    } else {
+      return () => { };
+    }
+  }, [state.signedIn, state.notifications, pusherClient, state.unreadNotificationCount]);
 
   const RootStack = createStackNavigator();
 

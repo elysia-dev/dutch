@@ -8,6 +8,7 @@ import Notification from '../types/Notification';
 type RootContextType = {
   signedIn: boolean;
   user: {
+    id: number;
     email: string;
     firstName: string;
     lastName: string;
@@ -33,6 +34,7 @@ type RootContextType = {
 const RootContext = createContext<RootContextType>({
   signedIn: false,
   user: {
+    id: 0,
     email: '',
     firstName: '',
     lastName: '',
