@@ -212,7 +212,7 @@
     "none_kyc": "您需要进行KYC认证。",
     "proceed_kyc": "KYC认证正在进行中。",
     "success_kyc": "KYC认证完成。",
-    "rejected_kyc": "KYC认证失败、请再试一次。",
+    "rejected_kyc": "KYC认证失败，请再申请一次。",
     "none_kyc_duplicate_label": "为了使用App",
     "proceed_kyc_duplicate_label": "pending",
     "success_kyc_duplicate_label": "approved",
@@ -391,6 +391,6 @@
     ]
   },
   "legacy": {
-    "refund_notice": "将在3个工作日内完成股份回收，我们的团队将通过邮件与您取得联系。"
+    "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"
   }
 }

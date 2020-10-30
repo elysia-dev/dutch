@@ -2,10 +2,10 @@
 import React, {
   FunctionComponent,
 } from 'react';
-import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
+import { P1Text } from '../../shared/components/Texts';
 
 interface Props {
   modalHandler: () => void;
@@ -22,7 +22,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
         borderTopRightRadius: 10,
         paddingLeft: 20,
         paddingRight: 20,
-        height: 200,
+        height: 280,
         width: '100%',
         backgroundColor: '#fff',
         justifyContent: 'center',
@@ -30,7 +30,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
       <TouchableOpacity
         style={{
           position: 'relative',
-          top: 0,
+          top: -10,
           width: '100%',
         }}
         onPress={props.modalHandler}>
@@ -55,12 +55,12 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
           borderColor: '#F1F1F1',
           borderRadius: 10,
           padding: 15,
-          marginTop: 20,
+          marginTop: 30,
         }}
       >
-        <Text>
-          {i18n.t('legacy.refund_notice')}
-        </Text>
+        <P1Text 
+          label={i18n.t('legacy.refund_notice')}
+        />
       </View>
       <SubmitButton
         style={{

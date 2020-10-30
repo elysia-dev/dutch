@@ -89,7 +89,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
                 {
                   translateX: scrollY.interpolate({
                     inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 0, 0],
+                    outputRange: [0, 0, 10, 10],
                   }),
                 },
                 {
@@ -142,7 +142,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
                 {
                   translateX: scrollY.interpolate({
                     inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 0, 0],
+                    outputRange: [0, 0, -10, -10],
                   }),
                 },
                 {
