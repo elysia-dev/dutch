@@ -120,12 +120,13 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                 renderArrowRight={() => (
                   <TouchableOpacity
                     style={{
-                      width: 60,
-                      height: 60,
+                      width: 35,
+                      height: 35,
                       opacity: 0.7,
                       position: 'relative',
                       top: -(Dimensions.get('window').height * 0.4),
                       marginLeft: 'auto',
+                      marginRight: 10,
                     }}
                     onPress={() =>
                       setState({ ...state, showShareholderCertificate: false })
@@ -133,8 +134,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: 60,
-                        height: 60,
+                        width: 35,
+                        height: 35,
                       }}
                     />
                   </TouchableOpacity>
@@ -154,12 +155,13 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                 renderArrowRight={() => (
                   <TouchableOpacity
                     style={{
-                      width: 60,
-                      height: 60,
+                      width: 35,
+                      height: 35,
                       opacity: 0.7,
                       position: 'relative',
                       top: -(Dimensions.get('window').height * 0.4),
                       marginLeft: 'auto',
+                      marginRight: 10,
                     }}
                     onPress={() =>
                       setState({ ...state, showLeaseContract: false })
@@ -167,8 +169,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: 60,
-                        height: 60,
+                        width: 35,
+                        height: 35,
                       }}
                     />
                   </TouchableOpacity>
@@ -188,12 +190,13 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                 renderArrowRight={() => (
                   <TouchableOpacity
                     style={{
-                      width: 60,
-                      height: 60,
+                      width: 40,
+                      height: 40,
                       opacity: 0.7,
                       position: 'relative',
                       top: -(Dimensions.get('window').height * 0.4),
                       marginLeft: 'auto',
+                      marginRight: 10,
                     }}
                     onPress={() =>
                       setState({ ...state, showStakeCertificate: false })
@@ -201,8 +204,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                     <Image
                       source={require('../images/quitbutton.png')}
                       style={{
-                        width: 60,
-                        height: 60,
+                        width: 40,
+                        height: 40,
                       }}
                     />
                   </TouchableOpacity>

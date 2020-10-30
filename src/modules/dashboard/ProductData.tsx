@@ -1,5 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
@@ -23,20 +28,26 @@ const ProductData: FunctionComponent = () => {
   const { product } = route.params;
   const [docs, setDocs] = useState(defaultDocsResponse);
   const { Server } = useContext(RootContext);
+  const isDocumentempty =
+    docs.leaseContract === '' &&
+    docs.shareholderCertificate === '' &&
+    docs.stakeCertificate === '';
 
   const callDocsApi = () => {
     Server.productDocs(product.id)
-      .then(res => {
+      .then((res) => {
         setDocs(res.data);
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
   };
 
-  useEffect(() => { callDocsApi(); }, []);
+  useEffect(() => {
+    callDocsApi();
+  }, []);
 
   return (
     <ScrollView
@@ -75,7 +86,7 @@ const ProductData: FunctionComponent = () => {
           }}>
           <Map product={product} />
         </View>
-        <Documents docs={docs} />
+        {!isDocumentempty && <Documents docs={docs} />}
       </View>
       <View style={{ backgroundColor: '#fff', height: '100%' }}>
         <OwnershipWrappedInfo product={product} />
