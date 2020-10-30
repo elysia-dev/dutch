@@ -39,8 +39,12 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
         marginLeft: 3,
         marginRight: 3,
       }}>
-      <H1Text allowFontScaling={false}>{i18n.t('dashboard_label.average_return')}</H1Text>
-      <NumText allowFontScaling={false}>{`${parseFloat(props.return).toFixed(2)} %`}</NumText>
+      <H1Text allowFontScaling={false}>
+        {i18n.t('dashboard_label.average_return')}
+      </H1Text>
+      <NumText allowFontScaling={false}>{`${parseFloat(props.return).toFixed(
+        4,
+      )} %`}</NumText>
     </View>
   );
 };
