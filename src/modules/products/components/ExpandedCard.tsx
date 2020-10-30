@@ -1,4 +1,11 @@
-import React, { createRef, FunctionComponent, useContext, useEffect, useState, useRef } from 'react';
+import React, {
+  createRef,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import {
   Animated,
   Image,
@@ -63,7 +70,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     closed: false,
     scrollEnabled: true,
   });
-  const { height: windowHeight } = Dimensions.get("window");
+  const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
   const scrollRef = useRef<ScrollView>(null);
 
@@ -95,8 +102,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
           inputRange: [0, 1],
           outputRange: [windowHeight - yOffset - ELEMENT_HEIGHT, 0],
         }),
-      }}
-    >
+      }}>
       <ScrollView
         ref={scrollRef}
         scrollEventThrottle={16}
@@ -105,10 +111,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
         showsVerticalScrollIndicator={state.scrollEnabled}
         onScroll={(event) => {
           setState({
-            ...state, scrollY: event.nativeEvent.contentOffset.y,
+            ...state,
+            scrollY: event.nativeEvent.contentOffset.y,
           });
-        }}
-      >
+        }}>
         <Animated.Image
           source={{ uri: story.image }}
           style={{
@@ -129,35 +135,38 @@ const ExpandedItem: FunctionComponent<Props> = ({
             flexDirection: 'column',
             top: 20,
             left: 20,
-          }}
-        >
+          }}>
           <P1Text label={story.subTitle} />
           <H1Text label={story.title} style={{ marginTop: 10 }} />
         </View>
-        <Animated.View style={{
-          backgroundColor: '#fff',
-          paddingTop: 30,
-          paddingBottom: 60,
+        <Animated.View
+          style={{
+            backgroundColor: '#fff',
+            paddingTop: 30,
+            paddingBottom: 60,
+            opacity: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1],
+            }),
+          }}>
+          <HTMLView
+            value={story.body}
+            stylesheet={htmlStyles}
+            textComponentProps={defaultTextProps}
+            nodeComponentProps={defaultTextProps}
+          />
+        </Animated.View>
+      </ScrollView>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          top: 30,
+          right: 20,
           opacity: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1],
           }),
         }}>
-          <HTMLView value={story.body} stylesheet={htmlStyles}
-            textComponentProps={defaultTextProps}
-          />
-        </Animated.View>
-      </ScrollView>
-      <Animated.View style={{
-        position: 'absolute',
-        top: 30,
-        right: 20,
-        opacity: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 1],
-        }),
-      }}
-      >
         <TouchableOpacity
           onPress={() => {
             scrollRef.current?.scrollTo({ y: 0, animated: false });
@@ -168,11 +177,15 @@ const ExpandedItem: FunctionComponent<Props> = ({
               useNativeDriver: false,
               easing: Easing.elastic(1),
             }).start(() => deactivateStory());
-          }}
-        >
-          <View style={{
-            width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(28,28,28,0.3)',
-          }} />
+          }}>
+          <View
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 16,
+              backgroundColor: 'rgba(28,28,28,0.3)',
+            }}
+          />
           <Image
             style={{
               position: 'absolute',
@@ -186,20 +199,23 @@ const ExpandedItem: FunctionComponent<Props> = ({
           />
         </TouchableOpacity>
       </Animated.View>
-      { /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
-        !state.closed && state.scrollY > 50 && <SubmitButton
-          style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-          title={i18n.t('product_label.more_info')}
-          handler={() => {
-            StatusBar.setHidden(false);
-            navigation.navigate('Product', {
-              screen: 'ProductBuying',
-              params: { productId: story.productId },
-            });
-          }}
-        />
+      {
+        /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
+        !state.closed && state.scrollY > 50 && (
+          <SubmitButton
+            style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
+            title={i18n.t('product_label.more_info')}
+            handler={() => {
+              StatusBar.setHidden(false);
+              navigation.navigate('Product', {
+                screen: 'ProductBuying',
+                params: { productId: story.productId },
+              });
+            }}
+          />
+        )
       }
-    </Animated.View >
+    </Animated.View>
   );
 };
 
