@@ -57,10 +57,12 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         onPress={() => {
           props.readNotification(props.notification);
           if (type === NotificationType.PRODUCT_NOTICE) {
-            navigation.navigate('Dashboard', { screen: DashboardPage.ProductNotice, params: { productId: data.productId } });
+            navigation.navigate('Dashboard', {
+              screen: DashboardPage.ProductNotice,
+              params: { productId: data.productId },
+            });
           }
-        }
-        }>
+        }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
             <Image
@@ -84,14 +86,15 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             <P1Text
               style={{
                 color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
-                fontFamily: status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
+                fontFamily:
+                  status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
                 marginBottom: 6,
               }}
               label={i18n.t(`notification.${type}`, {
                 month: data.month,
                 week: data.week,
                 device: data.message,
-                profit: data.message,
+                profit: parseFloat(data.message).toFixed(4),
               })}
             />
             {type === NotificationType.FAIL_KYC && (
@@ -123,18 +126,16 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               alignContent: 'center',
               justifyContent: 'center',
             }}>
-            {
-              type === NotificationType.PRODUCT_NOTICE
-              && (
-                <Image
-                  style={{ width: 6, height: 9 }}
-                  source={images[9][status === 'read' ? 0 : 1]}
-                />
-              )}
+            {type === NotificationType.PRODUCT_NOTICE && (
+              <Image
+                style={{ width: 6, height: 9 }}
+                source={images[9][status === 'read' ? 0 : 1]}
+              />
+            )}
           </View>
         </View>
       </TouchableOpacity>
-    </View >
+    </View>
   );
 };
 
