@@ -88,7 +88,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             </GText>
           </View>
         </View>
-        {product.status !== ProductStatus.SALE && (
+        {product.status === ProductStatus.SALE && product.contractAddress && (
           <TouchableOpacity
             onPress={() => {
               Linking.openURL(
