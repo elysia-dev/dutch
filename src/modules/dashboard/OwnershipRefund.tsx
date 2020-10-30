@@ -18,7 +18,7 @@ interface Props {
   ownership: OwnershipResponse;
 }
 
-const OwnershipRefund: FunctionComponent<Props> = props => {
+const OwnershipRefund: FunctionComponent<Props> = (props) => {
   const [tokenCount, setTokenCount] = useState(1);
 
   return (
@@ -35,7 +35,7 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
         backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
-      <View style={{ width: "100%", height: "100%" }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <TouchableOpacity
           style={{
             top: 10,
@@ -58,16 +58,17 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
             setTokenCount(token);
           }}
           buttonHandler={(token: number) => {
-            setTokenCount(tokenCount + token);
+            if (tokenCount + token < props.ownership.tokenValue) {
+              setTokenCount(tokenCount + token);
+            } else {
+              setTokenCount(props.ownership.tokenValue);
+            }
           }}
           tokenName={props.ownership.product.tokenName}
           tokenCount={tokenCount}
           max={props.ownership.tokenValue}
         />
-        <ExchangedValue
-          tokenCount={tokenCount}
-          type={'refund'}
-        />
+        <ExchangedValue tokenCount={tokenCount} type={'refund'} />
         <SubmitButton
           style={{
             position: 'absolute',
@@ -78,7 +79,9 @@ const OwnershipRefund: FunctionComponent<Props> = props => {
             marginRight: 'auto',
             marginTop: 10,
           }}
-          handler={() => { alert(i18n.t('legacy.refund_notice')); }}
+          handler={() => {
+            alert(i18n.t('legacy.refund_notice'));
+          }}
           title={i18n.t('product_label.refund')}
         />
       </View>

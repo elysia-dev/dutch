@@ -30,7 +30,7 @@ interface State {
   tokenCount: number;
 }
 
-const SliderProductBuying: FunctionComponent<Props> = props => {
+const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
   const { Server } = useContext(RootContext);
   const [state, setState] = useState<State>({
@@ -38,29 +38,44 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
   });
 
   const submitButtonTitle = () => {
-    if (props.product.status === ProductStatus.SALE || props.from === "ownershipDetail") {
+    if (
+      props.product.status === ProductStatus.SALE ||
+      props.from === 'ownershipDetail'
+    ) {
       return i18n.t('product_label.purchase_now');
     } else if (props.product.status === ProductStatus.SUBSCRIBING) {
       if (props.subscribed) {
         return i18n.t('product_label.reserved');
-      } else { return i18n.t('product_label.reserve'); }
+      } else {
+        return i18n.t('product_label.reserve');
+      }
     }
     return i18n.t('product_label.non_purchasable');
   };
 
   const submitButtonHandler = () => {
-    if (props.product.status === ProductStatus.SALE || props.from === "ownershipDetail") {
+    if (
+      props.product.status === ProductStatus.SALE ||
+      props.from === 'ownershipDetail'
+    ) {
       callApi();
       props.modalHandler();
     } else if (props.product.status === ProductStatus.SUBSCRIBING) {
-      if (!props.subscribed) { subscribeProduct(); }
+      if (!props.subscribed) {
+        subscribeProduct();
+      }
     }
   };
 
   const subscribeProduct = () => {
     Server.setProductSubscription(props.product.id)
-      .then(_res => { if (props.setSubcribed !== undefined) { props.setSubcribed(true); alert(i18n.t('product.subscribed')); } })
-      .catch(e => {
+      .then((_res) => {
+        if (props.setSubcribed !== undefined) {
+          props.setSubcribed(true);
+          alert(i18n.t('product.subscribed'));
+        }
+      })
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('product.subscribed_already'));
         } else if (e.response.status === 404) {
@@ -72,25 +87,32 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
   };
 
   const callApi = () => {
-    Server.requestTransaction(props.product.id, state.tokenCount, "buying").then(
-      res => props.from === "ownershipDetail" ?
-        navigation.navigate(
-          "Product", {
-          screen: ProductPage.PaymentSelection,
-          params: {
-            id: res.data.id, product: props.product, tokenCount: state.tokenCount, type: "buying",
-          },
-        }) : navigation.navigate(
-          ProductPage.PaymentSelection, {
-          id: res.data.id, product: props.product, tokenCount: state.tokenCount, type: "buying",
-        }),
-    ).catch(e => {
-      if (e.response.status === 400) {
-        alert(i18n.t('product.transaction_error'));
-      } else if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
-      }
-    });
+    Server.requestTransaction(props.product.id, state.tokenCount, 'buying')
+      .then((res) =>
+        props.from === 'ownershipDetail'
+          ? navigation.navigate('Product', {
+              screen: ProductPage.PaymentSelection,
+              params: {
+                id: res.data.id,
+                product: props.product,
+                tokenCount: state.tokenCount,
+                type: 'buying',
+              },
+            })
+          : navigation.navigate(ProductPage.PaymentSelection, {
+              id: res.data.id,
+              product: props.product,
+              tokenCount: state.tokenCount,
+              type: 'buying',
+            }),
+      )
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t('product.transaction_error'));
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
   };
 
   return (
@@ -107,13 +129,13 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
         backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
-      <View style={{ width: "100%", height: "100%" }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <TouchableOpacity
           style={{
             top: 10,
             width: 30,
             height: 30,
-            alignSelf: "center",
+            alignSelf: 'center',
           }}
           onPress={props.modalHandler}>
           <Image
@@ -129,10 +151,16 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
             setState({ ...state, tokenCount: token });
           }}
           buttonHandler={(token: number) => {
-            if (state.tokenCount < parseInt(props.product.presentValue)) {
+            if (
+              state.tokenCount + token <
+              parseInt(props.product.presentValue)
+            ) {
               setState({ ...state, tokenCount: state.tokenCount + token });
             } else {
-              setState({ ...state, tokenCount: parseInt(props.product.presentValue, 10) });
+              setState({
+                ...state,
+                tokenCount: parseInt(props.product.presentValue, 10),
+              });
             }
           }}
           tokenName={props.product.tokenName}
@@ -158,9 +186,7 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
             marginTop: 10,
           }}
           handler={submitButtonHandler}
-          title={
-            submitButtonTitle()
-          }
+          title={submitButtonTitle()}
         />
       </View>
     </View>

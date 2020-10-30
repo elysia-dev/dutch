@@ -14,24 +14,13 @@ import Product from '../../../types/product';
 import ProductInfo from '../ProductBuying';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
+import { H3Text, P1Text } from '../../../shared/components/Texts';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
   font-size: 20px;
   text-align: left;
   z-index: 3;
-`;
-
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 15px;
-  font-weight: 300;
 `;
 
 interface Props {
@@ -46,13 +35,12 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
   const { user } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription =
-    product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
 
   return (
     <View>
-      <H1Text>{i18n.t('product_label.address')}</H1Text>
+      <H3Text label={i18n.t('product_label.address')} />
       <View
         style={{
           width: '100%',
@@ -73,9 +61,16 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
+            marginBottom: 10,
           }}>
-          <GText>{i18n.t('product_label.location')}</GText>
-          <PText>{productDescription.address}</PText>
+          <P1Text
+            label={i18n.t('product_label.location')}
+            style={{ flex: 1, color: '#626368' }}
+          />
+          <P1Text
+            label={productDescription.address}
+            style={{ flex: 4, textAlign: 'right' }}
+          />
         </View>
       </View>
     </View>

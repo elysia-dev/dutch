@@ -1,4 +1,10 @@
-import React, { FunctionComponent, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   View,
   ScrollView,
@@ -7,10 +13,18 @@ import {
   Text,
   Modal,
 } from 'react-native';
-import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  RouteProp,
+  useFocusEffect,
+} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { BackButton } from '../../shared/components/BackButton';
-import { defaultOwnershipResponse, OwnershipResponse } from '../../types/Ownership';
+import {
+  defaultOwnershipResponse,
+  OwnershipResponse,
+} from '../../types/Ownership';
 import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
@@ -56,7 +70,7 @@ const OwnershipDetail: FunctionComponent = () => {
 
   const callTransactionApi = () => {
     Server.getTransaction(ownershipId, state.transactionCount)
-      .then(res => {
+      .then((res) => {
         if (res.data.length === 0 && state.transactionCount > 1) {
           alert(i18n.t('dashboard.last_transaction'));
         } else {
@@ -67,7 +81,7 @@ const OwnershipDetail: FunctionComponent = () => {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('dashboard.ownership_error'));
         } else if (e.response.status === 500) {
@@ -88,7 +102,7 @@ const OwnershipDetail: FunctionComponent = () => {
           legacyRefundModalVisible: false,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 404) {
           alert(i18n.t('dashboard.ownership_error'));
         } else if (e.response.status === 500) {
@@ -99,7 +113,10 @@ const OwnershipDetail: FunctionComponent = () => {
 
   const loadOwnership = async () => {
     try {
-      const transactions = await Server.getTransaction(ownershipId, state.transactionCount);
+      const transactions = await Server.getTransaction(
+        ownershipId,
+        state.transactionCount,
+      );
       const ownership = await Server.ownershipDetail(ownershipId);
       setState({
         ...state,
@@ -115,7 +132,6 @@ const OwnershipDetail: FunctionComponent = () => {
       }
     }
   };
-
 
   useEffect(() => {
     loadOwnership();
@@ -151,34 +167,45 @@ const OwnershipDetail: FunctionComponent = () => {
             <BackButton handler={() => navigation.goBack()} />
           </View>
         </View>
-        <OwnershipBasicInfo
-          ownership={state.ownership}
-        >
-          {
-            state.ownership.isLegacy ?
-              <LegacyOptionButtons
-                ownership={state.ownership}
-                refundHandler={() => {
-                  setState({ ...state, legacyRefundModalVisible: !state.legacyRefundModalVisible });
-                }}
-              /> :
-              (<OptionButtons
-                productId={state.ownership.product.id}
-                refundHandler={() =>
-                  setState({ ...state, refundModalVisible: !state.refundModalVisible })
-                }
-                purchaseHandler={() =>
-                  setState({ ...state, purchaseModalVisible: !state.purchaseModalVisible })
-                }
-                interestHandler={() =>
-                  navigation.navigate(DashboardPage.InterestWithdraw,
-                    { ownership: state.ownership })}
-              />
-              )
-          }
+        <OwnershipBasicInfo ownership={state.ownership}>
+          {state.ownership.isLegacy ? (
+            <LegacyOptionButtons
+              ownership={state.ownership}
+              refundHandler={() => {
+                setState({
+                  ...state,
+                  legacyRefundModalVisible: !state.legacyRefundModalVisible,
+                });
+              }}
+            />
+          ) : (
+            <OptionButtons
+              productId={state.ownership.product.id}
+              refundHandler={() =>
+                setState({
+                  ...state,
+                  refundModalVisible: !state.refundModalVisible,
+                })
+              }
+              purchaseHandler={() =>
+                setState({
+                  ...state,
+                  purchaseModalVisible: !state.purchaseModalVisible,
+                })
+              }
+              interestHandler={() =>
+                navigation.navigate(DashboardPage.InterestWithdraw, {
+                  ownership: state.ownership,
+                })
+              }
+            />
+          )}
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
-          <H3Text label={i18n.t('dashboard_label.transaction')} style={{ marginTop: 5, marginBottom: 20 }} />
+          <H3Text
+            label={i18n.t('dashboard_label.transaction')}
+            style={{ marginTop: 5, marginBottom: 20 }}
+          />
           {transactionList}
           <TouchableOpacity
             onPress={() => callTransactionApi()}
@@ -192,28 +219,28 @@ const OwnershipDetail: FunctionComponent = () => {
               alignContent: 'center',
               marginTop: 15,
             }}>
-            <Text
+            <P1Text
               style={{
                 color: '#4E4E4E',
                 fontSize: 17,
                 textAlign: 'center',
-              }}>
-              {i18n.t('dashboard_label.more_transactions')}
-            </Text>
+              }}
+              label={i18n.t('dashboard_label.more_transactions')}
+            />
           </TouchableOpacity>
         </View>
       </ScrollView>
       {(state.purchaseModalVisible ||
         state.refundModalVisible ||
         state.legacyRefundModalVisible) && (
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-            }}></View>
-        )}
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
       <Modal
         transparent={true}
         animationType={'slide'}
@@ -230,9 +257,13 @@ const OwnershipDetail: FunctionComponent = () => {
         visible={state.purchaseModalVisible}
         onRequestClose={() => setState({ ...state, purchaseModalVisible: false })}>
         <SliderProductBuying
-          from={"ownershipDetail"}
-          product={state.ownership.product ? state.ownership.product : defaultProduct}
-          modalHandler={() => setState({ ...state, purchaseModalVisible: false })}
+          from={'ownershipDetail'}
+          product={
+            state.ownership.product ? state.ownership.product : defaultProduct
+          }
+          modalHandler={() =>
+            setState({ ...state, purchaseModalVisible: false })
+          }
         />
       </Modal>
       <Modal
@@ -241,7 +272,9 @@ const OwnershipDetail: FunctionComponent = () => {
         visible={state.legacyRefundModalVisible}
         onRequestClose={() => setState({ ...state, legacyRefundModalVisible: false })}>
         <LegacyOwnershipRefund
-          modalHandler={() => setState({ ...state, legacyRefundModalVisible: false })}
+          modalHandler={() =>
+            setState({ ...state, legacyRefundModalVisible: false })
+          }
           submitHandler={() => callLegacyRefundApi()}
         />
       </Modal>
