@@ -340,7 +340,8 @@
       "After choosing a property,\nplease select the number of real estate tokens you want to claim!",
       "Please make a transaction using Metamask!",
       "Rewards are generated based on how many real estate tokens you own."
-    ]
+    ],
+    "no_notice": "There is no notice."
   },
   "day": {
     "0": "Sun",
