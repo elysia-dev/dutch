@@ -212,6 +212,7 @@
     "none_kyc": "您需要进行KYC认证。",
     "proceed_kyc": "KYC认证正在进行中。",
     "success_kyc": "KYC认证完成。",
+    "rejected_kyc": "KYC认证失败、请再试一次。",
     "none_kyc_duplicate_label": "为了使用App",
     "proceed_kyc_duplicate_label": "pending",
     "success_kyc_duplicate_label": "approved",

@@ -59,7 +59,7 @@ const SliderProductBuying: FunctionComponent<Props> = props => {
 
   const subscribeProduct = () => {
     Server.setProductSubscription(props.product.id)
-      .then(_res => { if (props.setSubcribed !== undefined) { props.setSubcribed(true); alert(i18n.t('prodduct.subscribed')); } })
+      .then(_res => { if (props.setSubcribed !== undefined) { props.setSubcribed(true); alert(i18n.t('product.subscribed')); } })
       .catch(e => {
         if (e.response.status === 400) {
           alert(i18n.t('product.subscribed_already'));

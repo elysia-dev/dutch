@@ -212,6 +212,7 @@
     "none_kyc": "KYC verification required.",
     "pending_kyc": "KYC verification is pending.",
     "success_kyc": "KYC verification is complete.",
+    "rejected_kyc": "KYC has been rejected. please try again.",
     "none_kyc_duplicate_label": "For App use",
     "pending_kyc_duplicate_label": "Pending",
     "success_kyc_duplicate_label": "Approved",
