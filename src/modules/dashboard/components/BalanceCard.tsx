@@ -8,7 +8,7 @@ interface Props {
   handler: () => void;
 }
 
-export const BalanceCard: FunctionComponent<Props> = props => {
+export const BalanceCard: FunctionComponent<Props> = (props) => {
   return (
     <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
       <View
@@ -27,43 +27,52 @@ export const BalanceCard: FunctionComponent<Props> = props => {
         <P1Text
           label={i18n.t('dashboard_label.total_balance')}
           style={{
-            color: "#F6F6F8",
+            color: '#F6F6F8',
             marginBottom: 30,
           }}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: "center" }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignContent: 'center',
+          }}>
           <H1Text
             label={`$ ${parseFloat(props.balance).toFixed(2)}`}
             style={{
-              color: "#FFFFFF",
+              flex: 4,
+              color: '#FFFFFF',
               fontSize: 40,
-              alignSelf: "center",
+              alignSelf: 'center',
             }}
           />
-          <View
-            style={{
-              backgroundColor: '#fff',
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              shadowOffset: { width: 0, height: 3 },
-              shadowColor: '#1C1C1C4D',
-              shadowOpacity: 0.8,
-              shadowRadius: 6,
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
-            <Image
+          <View style={{ flex: 1 }}>
+            <View
               style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                width: 25,
-                height: 25,
-              }}
-              source={require('../images/chart.png')}></Image>
+                backgroundColor: '#fff',
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                shadowOffset: { width: 0, height: 3 },
+                shadowColor: '#1C1C1C4D',
+                shadowOpacity: 0.8,
+                shadowRadius: 6,
+                justifyContent: 'center',
+                alignContent: 'center',
+              }}>
+              <Image
+                style={{
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  width: 25,
+                  height: 25,
+                }}
+                source={require('../images/chart.png')}
+              />
+            </View>
           </View>
         </View>
       </View>
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
 };

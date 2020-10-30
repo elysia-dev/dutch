@@ -1,5 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  PixelRatio,
+} from 'react-native';
 import Dash from 'react-native-dash';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
 
@@ -17,7 +24,9 @@ interface Props {
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
   return (
-    <TouchableOpacity onPress={props.handler} style={{ width: '47%', elevation: 6 }}>
+    <TouchableOpacity
+      onPress={props.handler}
+      style={{ width: '47%', elevation: 6 }}>
       <View
         style={{
           backgroundColor:
@@ -51,16 +60,23 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
                 : require('../images/residential.png')
             }
           />
-          <P1Text label={props.ownership.title} style={{ flex: 2, color: "#fff", bottom: 1 }} />
+          <P1Text
+            label={props.ownership.title}
+            style={{ flex: 2, color: '#fff' }}
+          />
         </View>
         <H1Text
           style={{
             flex: 2,
-            color: "#fff",
-            fontSize: 30,
+            color: '#fff',
+            fontSize: PixelRatio.roundToNearestPixel(
+              (Dimensions.get('window').width * 0.47) / 7,
+            ),
             marginBottom: 10,
+            bottom: 0,
           }}
-          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`} />
+          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`}
+        />
         <Dash
           dashGap={4}
           dashLength={2}
@@ -75,10 +91,11 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           label={`$ ${parseFloat(`${props.ownership.profit}`).toFixed(2)}`}
           style={{
             flex: 2,
-            marginTop: 10,
-            color: "#fff",
+            marginTop: 15,
+            color: '#fff',
             fontSize: 18,
-          }} />
+          }}
+        />
       </View>
     </TouchableOpacity>
   );
