@@ -31,7 +31,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
           backgroundColor: '#fff',
           padding: 20,
           width: '100%',
-          height: ownership.isLegacy ? 300 : 420,
+          height: ownership.isLegacy ? 320 : 440,
           borderBottomColor: '#F6F6F8',
           borderBottomWidth: 5,
         }}>
