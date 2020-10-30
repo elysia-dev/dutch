@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
+import { P1Text, P3Text } from '../../../shared/components/Texts';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -44,10 +45,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
   const { user } = useContext(RootContext);
   const product = props.product;
-  // TODO : Add null guard languages & descrptions
-  const productDescription =
-    product.data.descriptions[user.language];
-  // TODO : Add null guard languages & descrptions
+  const productDescription = product.data.descriptions[user.language];
 
   return (
     <View style={{ width: '100%', paddingBottom: 0 }}>
@@ -62,7 +60,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <H1Text>{i18n.t('product_label.financials')}</H1Text>
+            <P1Text label={i18n.t('product_label.financials')} />
             <Image
               source={require('../images/downbutton.png')}
               style={[
@@ -79,51 +77,107 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
         {state.financial && (
           <View style={{ paddingBottom: 20 }}>
             <DesView>
-              <GText>
-                {i18n.t('product_financial.expected_annual_return')}
-              </GText>
-              <PText>{`${props.product.expectedAnnualReturn}%`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.expected_annual_return')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${props.product.expectedAnnualReturn}%`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.return_rent')}</GText>
-              <PText>{`${props.product.data.returnOnRent}%`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.return_rent')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${props.product.data.returnOnRent}%`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.return_sale')}</GText>
-              <PText>{`${props.product.data.returnOnSale}%`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.return_sale')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${props.product.data.returnOnSale}%`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.rent_distribution')}</GText>
-              <PText>
-                {productDescription.monthlyRentIncomeDistributionCycle}
-              </PText>
+              <P3Text
+                label={i18n.t('product_financial.rent_distribution')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={productDescription.monthlyRentIncomeDistributionCycle}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.lockup_period')}</GText>
-              <PText>{productDescription.lockupPeriod}</PText>
+              <P3Text
+                label={i18n.t('product_financial.lockup_period')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={productDescription.lockupPeriod}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.expected_sale_date')}</GText>
-              <PText>{productDescription.expectedSaleDate}</PText>
+              <P3Text
+                label={i18n.t('product_financial.expected_sale_date')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={productDescription.expectedSaleDate}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
             <DesView>
-              <GText>{i18n.t('product_financial.price')}</GText>
-              <PText>{`${product.data.propertyPrice}$`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.price')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${product.data.propertyPrice}$`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
 
             <DesView>
-              <GText>{i18n.t('product_financial.net_deposit')}</GText>
-              <PText>{`${product.data.netDeposit}$`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.net_deposit')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${product.data.netDeposit}$`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
 
             <DesView>
-              <GText>{i18n.t('product_financial.net_rent_year')}</GText>
-              <PText>{`${product.data.netRentPerYear}$`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.net_rent_year')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${product.data.netRentPerYear}$`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
 
             <DesView>
-              <GText>{i18n.t('product_financial.bankloan')}</GText>
-              <PText>{`${product.data.bankLoan}`}</PText>
+              <P3Text
+                label={i18n.t('product_financial.bankloan')}
+                style={{ color: '#626368' }}
+              />
+              <P3Text
+                label={`${product.data.bankLoan}`}
+                style={{ color: '#1c1c1c' }}
+              />
             </DesView>
           </View>
         )}
@@ -139,7 +193,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <H1Text>{i18n.t('dashboard_label.property_abstract')}</H1Text>
+            <P1Text label={i18n.t('dashboard_label.property_abstract')} />
             <Image
               source={require('../images/downbutton.png')}
               style={[
@@ -154,8 +208,8 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
           </View>
         </TouchableOpacity>
         {state.abstract && (
-          <View>
-            <PText>{productDescription.summary}</PText>
+          <View style={{ paddingTop: 20 }}>
+            <P3Text label={productDescription.summary} />
           </View>
         )}
       </View>

@@ -5,32 +5,8 @@ import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
+import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  z-index: 3;
-  margin-bottom: 15px;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 12px;
-  text-align: left;
-  font-weight: 300;
-`;
-const PText = styled.Text`
-  color: #1c1c1c;
-  font-size: 12px;
-  font-weight: 300;
-`;
-const MText = styled.Text`
-  color: #1c1c1c;
-  font-size: 14px;
-  font-weight: 300;
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
 const DesView = styled.View`
   margin-top: 18px;
   flex: 1;
@@ -52,8 +28,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   const { user } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription =
-    product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
 
   return (
@@ -64,7 +39,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           borderBottomColor: '#F6F6F8',
           borderBottomWidth: 5,
         }}>
-        <H1Text>{i18n.t('product_label.property_info')}</H1Text>
+        <H3Text
+          label={i18n.t('product_label.property_info')}
+          style={{ marginBottom: 15 }}
+        />
         <View style={{ marginBottom: 10 }}>
           <TouchableOpacity
             onPress={() => setState({ ...state, financial: !state.financial })}>
@@ -73,7 +51,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <MText>{i18n.t('product_label.financials')}</MText>
+              <P1Text
+                label={i18n.t('product_label.financials')}
+                style={{ marginVertical: 10 }}
+              />
               <Image
                 source={require('../images/downbutton.png')}
                 style={[
@@ -92,51 +73,107 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           {state.financial && (
             <View style={{ paddingBottom: 20 }}>
               <DesView>
-                <GText>
-                  {i18n.t('product_financial.expected_annual_return')}
-                </GText>
-                <PText>{`${props.product.expectedAnnualReturn}%`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.expected_annual_return')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${props.product.expectedAnnualReturn}%`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.return_rent')}</GText>
-                <PText>{`${props.product.data.returnOnRent}%`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.return_rent')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${props.product.data.returnOnRent}%`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.return_sale')}</GText>
-                <PText>{`${props.product.data.returnOnSale}%`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.return_sale')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${props.product.data.returnOnSale}%`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.rent_distribution')}</GText>
-                <PText>
-                  {productDescription.monthlyRentIncomeDistributionCycle}
-                </PText>
+                <P3Text
+                  label={i18n.t('product_financial.rent_distribution')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.monthlyRentIncomeDistributionCycle}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.lockup_period')}</GText>
-                <PText>{productDescription.lockupPeriod}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.lockup_period')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.lockupPeriod}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.expected_sale_date')}</GText>
-                <PText>{productDescription.expectedSaleDate}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.expected_sale_date')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.expectedSaleDate}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_financial.price')}</GText>
-                <PText>{`${product.data.propertyPrice}$`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.price')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${product.data.propertyPrice}$`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
 
               <DesView>
-                <GText>{i18n.t('product_financial.net_deposit')}</GText>
-                <PText>{`${product.data.netDeposit}$`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.net_deposit')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${product.data.netDeposit}$`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
 
               <DesView>
-                <GText>{i18n.t('product_financial.net_rent_year')}</GText>
-                <PText>{`${product.data.netRentPerYear}$`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.net_rent_year')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${product.data.netRentPerYear}$`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
 
               <DesView>
-                <GText>{i18n.t('product_financial.bankloan')}</GText>
-                <PText>{`${product.data.bankLoan}`}</PText>
+                <P3Text
+                  label={i18n.t('product_financial.bankloan')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={`${product.data.bankLoan}`}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
             </View>
           )}
@@ -149,7 +186,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <MText>{i18n.t('product_label.property_highlightes')}</MText>
+              <P1Text
+                label={i18n.t('product_label.property_highlightes')}
+                style={{ marginVertical: 10 }}
+              />
               <Image
                 source={require('../images/downbutton.png')}
                 style={[
@@ -168,47 +208,97 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           {state.highlight && (
             <View style={{ paddingBottom: 20 }}>
               <DesView>
-                <GText>{i18n.t('product_highlight.type')}</GText>
-                <PText>{productDescription.propertyType}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.type')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.propertyType}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.ground')}</GText>
-                <PText>{productDescription.ground}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.ground')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.ground}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.underground')}</GText>
-                <PText>{productDescription.underground}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.underground')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.underground}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.bedroom')}</GText>
-                <PText>{productDescription.bedroom}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.bedroom')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.bedroom}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.completion_date')}</GText>
-                <PText>
-                  {i18n.strftime(
+                <P3Text
+                  label={i18n.t('product_highlight.completion_date')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={i18n.strftime(
                     new Date(product.data.buildingCompletionDate),
                     '%Y-%m-%d',
                   )}
-                </PText>
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>
-                  {i18n.t('product_highlight.total_parking_available')}
-                </GText>
-                <PText>{productDescription.totalParkingAvailable}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.total_parking_available')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.totalParkingAvailable}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.air_conditioning')}</GText>
-                <PText>{productDescription.airConditioning}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.air_conditioning')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.airConditioning}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.heating')}</GText>
-                <PText>{productDescription.heating}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.heating')}
+                  style={{ color: '#626368' }}
+                />
+                <P3Text
+                  label={productDescription.heating}
+                  style={{ color: '#1c1c1c' }}
+                />
               </DesView>
               <DesView>
-                <GText>{i18n.t('product_highlight.security_facilities')}</GText>
-                <PText>{productDescription.securityFacilities}</PText>
+                <P3Text
+                  label={i18n.t('product_highlight.security_facilities')}
+                  style={{ color: '#626368', flex: 1 }}
+                />
+                <P3Text
+                  label={productDescription.securityFacilities}
+                  style={{ color: '#1c1c1c', flex: 4, textAlign: 'right' }}
+                />
               </DesView>
             </View>
           )}
@@ -219,9 +309,13 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           padding: 20,
           borderBottomColor: '#F6F6F8',
           borderBottomWidth: 5,
+          marginBottom: 20,
         }}>
-        <H1Text>{i18n.t('product_label.product_info')}</H1Text>
-        <View style={{ marginBottom: 10 }}>
+        <H3Text
+          label={i18n.t('product_label.product_info')}
+          style={{ marginBottom: 15 }}
+        />
+        <View>
           <TouchableOpacity
             onPress={() => setState({ ...state, abstract: !state.abstract })}>
             <View
@@ -229,7 +323,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <MText>{i18n.t('product_label.abstract')}</MText>
+              <P1Text
+                label={i18n.t('product_label.abstract')}
+                style={{ marginVertical: 10 }}
+              />
               <Image
                 source={require('../images/downbutton.png')}
                 style={[
@@ -245,8 +342,11 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           </TouchableOpacity>
         </View>
         {state.abstract && (
-          <View>
-            <PText>{productDescription.summary}</PText>
+          <View style={{ paddingTop: 10 }}>
+            <P3Text
+              label={productDescription.summary}
+              style={{ color: '#1c1c1c' }}
+            />
           </View>
         )}
       </View>

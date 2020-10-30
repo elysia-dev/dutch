@@ -4,18 +4,7 @@ import styled from 'styled-components/native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import i18n from '../../../i18n/i18n';
 import { DocsResponse } from '../../../types/Docs';
-
-const H1Text = styled.Text`
-  color: #1c1c1c;
-  font-size: 20px;
-  text-align: left;
-  z-index: 3;
-`;
-const GText = styled.Text`
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-`;
+import { H3Text, P1Text } from '../../../shared/components/Texts';
 
 interface Props {
   docs: DocsResponse;
@@ -37,7 +26,7 @@ const documentButton = (title: string, handler: () => void) => {
         padding: 10,
         paddingTop: 15,
       }}>
-      <GText>{title}</GText>
+      <P1Text label={title} style={{ color: '#626368' }} />
       <View
         style={{
           position: 'absolute',
@@ -99,7 +88,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         padding: 15,
         paddingTop: 20,
       }}>
-      <H1Text>{i18n.t('dashboard_label.document')}</H1Text>
+      <H3Text label={i18n.t('dashboard_label.document')} />
       <View
         style={{
           marginTop: 20,

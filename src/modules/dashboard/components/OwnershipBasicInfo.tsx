@@ -108,12 +108,17 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <GText>{i18n.t('dashboard_label.stake')}</GText>
-            <ValueText>{`${
-              parseFloat(ownership.stake) < 0.01
-                ? '< 0.01'
-                : parseFloat(ownership.stake).toFixed(2)
-            }%`}</ValueText>
+            <P1Text
+              label={i18n.t('dashboard_label.stake')}
+              style={{ color: '#626368' }}
+            />
+            <P1Text
+              label={`${
+                parseFloat(ownership.stake) < 0.01
+                  ? '< 0.01'
+                  : parseFloat(ownership.stake).toFixed(2)
+              }%`}
+            />
           </View>
           <View
             style={{
@@ -122,12 +127,17 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <GText>{i18n.t('dashboard_label.total_interest')}</GText>
-            <ValueText>{`$ ${
-              parseFloat(ownership.expectProfit) < 0.01
-                ? '< 0.01'
-                : parseFloat(ownership.expectProfit).toFixed(2)
-            }`}</ValueText>
+            <P1Text
+              label={i18n.t('dashboard_label.total_interest')}
+              style={{ color: '#626368' }}
+            />
+            <P1Text
+              label={`$ ${
+                parseFloat(ownership.expectProfit) < 0.01
+                  ? '< 0.01'
+                  : parseFloat(ownership.expectProfit).toFixed(2)
+              }`}
+            />
           </View>
           {!ownership.isLegacy && (
             <View
@@ -137,12 +147,17 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <GText>{i18n.t('dashboard_label.available_interest')}</GText>
-              <ValueText>{`$ ${
-                parseFloat(ownership.availableProfit) < 0.01
-                  ? '< 0.01'
-                  : parseFloat(ownership.availableProfit).toFixed(2)
-              }`}</ValueText>
+              <P1Text
+                label={i18n.t('dashboard_label.available_interest')}
+                style={{ color: '#626368' }}
+              />
+              <P1Text
+                label={`$ ${
+                  parseFloat(ownership.availableProfit) < 0.01
+                    ? '< 0.01'
+                    : parseFloat(ownership.availableProfit).toFixed(2)
+                }`}
+              />
             </View>
           )}
         </View>

@@ -9,6 +9,7 @@ import { ScrollView, View, Text } from 'react-native';
 import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
+import { H1Text } from '../../shared/components/Texts';
 import { defaultDocsResponse } from '../../types/Docs';
 import Product from '../../types/product';
 import { Transaction } from '../../types/Transaction';
@@ -61,22 +62,14 @@ const ProductData: FunctionComponent = () => {
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <Text
-          style={{
-            color: '#1C1C1C',
-            textAlign: 'left',
-            fontSize: 28,
-            fontWeight: 'bold',
-          }}>
-          {'DOCUMENT'}
-        </Text>
+        <H1Text label={'DOCUMENT'} />
         <View
           style={{
             marginTop: 40,
             padding: 15,
             paddingTop: 20,
             width: '100%',
-            height: 290,
+            height: 310,
             borderRadius: 10,
             backgroundColor: '#fff',
             shadowColor: '#3679B538',

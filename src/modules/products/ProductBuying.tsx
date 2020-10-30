@@ -4,7 +4,14 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import { View, ScrollView, Image, StatusBar, Modal, TouchableOpacity } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  StatusBar,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -48,11 +55,13 @@ const ProductBuying: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const { Server, user } = useContext(RootContext);
-  const shortNationality = user.nationality ? user.nationality.split(", ")[1] : "";
+  const shortNationality = user.nationality
+    ? user.nationality.split(', ')[1]
+    : '';
   const purchasability =
-    (user.kycStatus === KycStatus.SUCCESS
-      && user.ethAddresses?.length > 0
-      && !(state.product?.restrictedCountries.includes(shortNationality)));
+    user.kycStatus === KycStatus.SUCCESS &&
+    user.ethAddresses?.length > 0 &&
+    !state.product?.restrictedCountries.includes(shortNationality);
 
   const submitButtonTitle = () => {
     if (!purchasability) {
@@ -62,7 +71,9 @@ const ProductBuying: FunctionComponent = () => {
     } else if (state.product?.status === ProductStatus.SUBSCRIBING) {
       if (state.subscribed) {
         return i18n.t('product_label.reserved');
-      } else { return i18n.t('product_label.reserve'); }
+      } else {
+        return i18n.t('product_label.reserve');
+      }
     }
     // return i18n.t('product_label.non_purchasable');
   };
@@ -131,29 +142,34 @@ const ProductBuying: FunctionComponent = () => {
             />
           </View>
         </View>
-        {state.product &&
-          <BasicInfo product={state.product} />
-        }
+        {state.product && <BasicInfo product={state.product} />}
         <View
           style={{
             padding: 20,
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
-            height: 300,
+            height: 320,
           }}>
           {state.product && <Map product={state.product} />}
         </View>
         {state.product && <WrappedInfo product={state.product} />}
       </ScrollView>
       <SubmitButton
-        style={{ position: 'absolute', bottom: 0, marginBottom: 15, backgroundColor: purchasability ? "#3679B5" : "#D0D8DF" }}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          marginBottom: 15,
+          backgroundColor: purchasability ? '#3679B5' : '#D0D8DF',
+        }}
         handler={() => {
           if (!purchasability) {
             if (state.product?.restrictedCountries.includes(shortNationality)) {
-              return (alert(i18n.t('product.restricted_country')));
+              return alert(i18n.t('product.restricted_country'));
             }
-            return (alert(i18n.t('product.non_purchasable')));
-          } else { setState({ ...state, modalVisible: true }); }
+            return alert(i18n.t('product.non_purchasable'));
+          } else {
+            setState({ ...state, modalVisible: true });
+          }
         }}
         title={submitButtonTitle()}
       />
@@ -171,12 +187,13 @@ const ProductBuying: FunctionComponent = () => {
         transparent={true}
         animationType={'slide'}
         visible={state.modalVisible}
-        onRequestClose={() => setState({ ...state, modalVisible: false })}
-        >
+        onRequestClose={() => setState({ ...state, modalVisible: false })}>
         <SliderProductBuying
           product={state.product ? state.product : defaultProduct}
           subscribed={state.subscribed}
-          setSubcribed={(input: boolean) => setState({ ...state, subscribed: input })}
+          setSubcribed={(input: boolean) =>
+            setState({ ...state, subscribed: input })
+          }
           modalHandler={() => setState({ ...state, modalVisible: false })}
         />
       </Modal>

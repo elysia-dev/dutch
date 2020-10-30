@@ -3,6 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
 import { ProductPage } from '../../../enums/pageEnum';
 import i18n from '../../../i18n/i18n';
+import { P1Text } from '../../../shared/components/Texts';
 
 interface Props {
   refundHandler: () => void;
@@ -43,9 +44,10 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
             marginRight: 'auto',
           }}
           source={require('../images/purchase.png')}></Image>
-        <Text style={{ fontSize: 15, color: '#1C1C1C', textAlign: 'center' }}>
-          {i18n.t('dashboard_label.purchase')}
-        </Text>
+        <P1Text
+          style={{ textAlign: 'center' }}
+          label={i18n.t('dashboard_label.purchase')}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={props.refundHandler}
@@ -69,9 +71,10 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
             marginRight: 'auto',
           }}
           source={require('../images/stakeWithdraw.png')}></Image>
-        <Text style={{ fontSize: 15, color: '#1C1C1C', textAlign: 'center' }}>
-          {i18n.t('dashboard_label.withdraw_stake')}
-        </Text>
+        <P1Text
+          style={{ textAlign: 'center' }}
+          label={i18n.t('dashboard_label.withdraw_stake')}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={props.interestHandler}
@@ -95,9 +98,10 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
             marginRight: 'auto',
           }}
           source={require('../images/withdraw_interest.png')}></Image>
-        <Text style={{ fontSize: 15, color: '#1C1C1C', textAlign: 'center' }}>
-          {i18n.t('dashboard_label.withdraw_profit')}
-        </Text>
+        <P1Text
+          style={{ textAlign: 'center' }}
+          label={i18n.t('dashboard_label.withdraw_profit')}
+        />
       </TouchableOpacity>
     </View>
   );
