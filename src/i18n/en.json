@@ -312,7 +312,8 @@
     "product_info": "Product Information",
     "documents": "Documents",
     "notice": "Notice",
-    "less": "less than"
+    "less": "less than",
+    "daily_reward": "Daily rewards"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",

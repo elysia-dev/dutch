@@ -313,7 +313,8 @@
     "product_info": "商品信息",
     "documents": "相关材料",
     "notice": "公告",
-    "less": "不到"
+    "less": "不到",
+    "daily_reward": "每日收益"
   },
   "dashboard": {
     "ownership_error": "资产所有权出现错误。",
