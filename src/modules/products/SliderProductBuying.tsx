@@ -173,7 +173,9 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           tokenCount={state.tokenCount}
           type={'buy'}
         />
-        <P3Text label={i18n.t('product.for_subscription')} />
+        {props.product.status === ProductStatus.SUBSCRIBING && (
+          <P3Text label={i18n.t('product.for_subscription')} />
+        )}
         <SubmitButton
           disabled={props.subscribed}
           style={{
@@ -184,6 +186,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop: 10,
+            backgroundColor: props.subscribed ? '#D0D8DF' : '#3679B5',
           }}
           handler={submitButtonHandler}
           title={submitButtonTitle()}

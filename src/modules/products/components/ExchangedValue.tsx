@@ -64,7 +64,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
         position: 'relative',
         top: -10,
         width: '100%',
-        height: '30%',
+        height: '29%',
         backgroundColor: '#F6F6F8',
         borderWidth: 2,
         borderColor: '#F1F1F1',
