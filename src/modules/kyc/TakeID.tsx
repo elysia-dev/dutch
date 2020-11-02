@@ -220,13 +220,15 @@ const TakeID: FunctionComponent<{}> = () => {
       quality: 1,
       base64: true,
     });
-    setStatus(LoadingStatus.PENDING);
-    const compressedIdAlbum = await ImageManipulator.manipulateAsync(
-      !idAlbum.cancelled ? idAlbum.uri : '',
-      [{ resize: { width: 600 } }],
-      { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
-    );
-    return compressedIdAlbum;
+    if (!idAlbum.cancelled) {
+      setStatus(LoadingStatus.PENDING);
+      const compressedIdAlbum = await ImageManipulator.manipulateAsync(
+        !idAlbum.cancelled ? idAlbum.uri : '',
+        [{ resize: { width: 600 } }],
+        { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
+      );
+      return compressedIdAlbum;
+    }
   };
 
   if (!state.hasPermission) {
@@ -358,11 +360,14 @@ const TakeID: FunctionComponent<{}> = () => {
                     backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmID, {
-                      idPhoto: await pickImage(),
-                      id_type,
-                    });
-                    setStatus(LoadingStatus.SUCCESS);
+                    const idPhoto = await pickImage();
+                    if (idPhoto) {
+                      navigation.navigate(KycPage.ConfirmID, {
+                        idPhoto,
+                        id_type,
+                      });
+                      setStatus(LoadingStatus.SUCCESS);
+                    }
                   }}>
                   <Ionicons
                     name="ios-photos"
