@@ -24,7 +24,6 @@ import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import LocaleType from '../../enums/LocaleType';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
-
 const ExchangeBithumbImg = styled.Image`
   width: 100%;
   height: 60px;
@@ -70,7 +69,7 @@ const KycNoneButtonImg = styled.Image`
   margin-left: auto;
 `;
 const InfoHeaderSettingImg = styled.Image`
-  marginTop: 5px;
+  margintop: 5px;
   width: 21px;
   height: 21px;
 `;
@@ -93,8 +92,7 @@ const MainInfo: FunctionComponent = () => {
         height: '100%',
         top: 0,
         backgroundColor: '#FFF',
-      }}
-    >
+      }}>
       <Animated.View
         style={{
           flexDirection: 'row',
@@ -111,8 +109,8 @@ const MainInfo: FunctionComponent = () => {
           }),
           paddingTop: 93,
           paddingBottom: 15,
-          paddingLeft: "5%",
-          paddingRight: "5%",
+          paddingLeft: '5%',
+          paddingRight: '5%',
           transform: [
             {
               translateY: scrollY.interpolate({
@@ -121,8 +119,7 @@ const MainInfo: FunctionComponent = () => {
               }),
             },
           ],
-        }}
-      >
+        }}>
         <View>
           <Animated.Text
             allowFontScaling={false}
@@ -148,9 +145,7 @@ const MainInfo: FunctionComponent = () => {
           onPress={() => {
             navigation.navigate('More', { screen: MorePage.Setting });
           }}>
-          <InfoHeaderSettingImg
-            source={require('./images/setting.png')}
-          />
+          <InfoHeaderSettingImg source={require('./images/setting.png')} />
         </TouchableOpacity>
       </Animated.View>
       <Animated.ScrollView
@@ -163,8 +158,7 @@ const MainInfo: FunctionComponent = () => {
             },
           ],
           { useNativeDriver: true },
-        )}
-      >
+        )}>
         <View
           style={{
             borderBottomColor: '#F6F6F8',
@@ -185,7 +179,7 @@ const MainInfo: FunctionComponent = () => {
                   height: 70,
                   elevation: 6,
                 }}>
-                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
+                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
                   <Text
                     allowFontScaling={false}
                     style={{
@@ -214,7 +208,8 @@ const MainInfo: FunctionComponent = () => {
                       height: 8,
                       borderRadius: 4,
                       backgroundColor: '#FC5C4F',
-                    }} />
+                    }}
+                  />
                 </View>
                 <KycNoneButtonImg source={kycNoneButtonPng} />
               </KycNoneButton>
@@ -232,7 +227,7 @@ const MainInfo: FunctionComponent = () => {
                   height: 70,
                   elevation: 6,
                 }}>
-                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
+                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
                   <Text
                     allowFontScaling={false}
                     style={{
@@ -261,7 +256,8 @@ const MainInfo: FunctionComponent = () => {
                       height: 8,
                       borderRadius: 4,
                       backgroundColor: '#FC5C4F',
-                    }} />
+                    }}
+                  />
                 </View>
                 <KycNoneButtonImg source={kycNoneButtonPng} />
               </KycNoneButton>
@@ -272,22 +268,24 @@ const MainInfo: FunctionComponent = () => {
               <H3Text
                 label={i18n.t('more_label.pending_kyc')}
                 style={{
-                  color: "#FFF",
+                  color: '#FFF',
                   zIndex: 11,
-                  width: "100%",
-                  position: "absolute",
-                  textAlign: "center",
+                  width: '100%',
+                  position: 'absolute',
+                  textAlign: 'center',
                   lineHeight: 80,
-                }} />
+                }}
+              />
               <KycPendingButton
                 style={{
-                  backgroundColor: "#000000D0",
-                  position: "absolute",
+                  backgroundColor: '#000000D0',
+                  position: 'absolute',
                   zIndex: 10,
-                  marginLeft: "5%",
-                }} />
+                  marginLeft: '5%',
+                }}
+              />
               <KycPendingButton>
-                <View style={{ alignSelf: "center", marginLeft: '6%' }}>
+                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
                   <Text
                     allowFontScaling={false}
                     style={{
@@ -317,16 +315,13 @@ const MainInfo: FunctionComponent = () => {
               style={{
                 height: 70,
               }}
-              duplicateTitle={i18n.t(
-                'more_label.success_kyc_duplicate_label',
-              )}
+              duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
-              handler={() => { }}
+              handler={() => {}}
               variant={'GrayTheme'}
             />
           )}
-          <View
-            style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 38 }}>
+          <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 38 }}>
             <H3Text
               label={i18n.t('more_label.my_info')}
               style={{ marginBottom: 15, fontSize: 18 }}
@@ -337,9 +332,11 @@ const MainInfo: FunctionComponent = () => {
                 marginTop: 10,
               }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('More', {
-                  screen: MorePage.Transactions,
-                })}>
+                onPress={() =>
+                  navigation.navigate('More', {
+                    screen: MorePage.Transactions,
+                  })
+                }>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -349,51 +346,51 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.transaction_history')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
-            {!(user.ethAddresses?.length > 0) && <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('More', {
-                  screen: MorePage.RegisterEthAddress,
-                })}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View>
-                    <P1Text
-                      label={i18n.t('more_label.wallet_connect')}
-                      style={{ lineHeight: 50, fontSize: 15 }}
-                    />
-                    {!(user.ethAddresses?.length > 0) && (
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: 10,
-                          right: -13,
-                          width: 8,
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: '#FC5C4F',
-                        }} />
-                    )}
+            {!(user.ethAddresses?.length > 0) && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.RegisterEthAddress,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View>
+                      <P1Text
+                        label={i18n.t('more_label.wallet_connect')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
+                      />
+                      {!(user.ethAddresses?.length > 0) && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: -13,
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: '#FC5C4F',
+                          }}
+                        />
+                      )}
+                    </View>
+                    <InfoArrowImg source={require('./images/next_gray.png')} />
                   </View>
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            }
+                </TouchableOpacity>
+              </View>
+            )}
             <View
               style={{
                 height: 50,
@@ -414,9 +411,7 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.my_account')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -458,9 +453,7 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.faq')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -484,9 +477,7 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.contact')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -510,9 +501,7 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.service_terms')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -536,9 +525,7 @@ const MainInfo: FunctionComponent = () => {
                     label={i18n.t('more_label.privacy_policy')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg
-                    source={require('./images/next_gray.png')}
-                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -560,19 +547,30 @@ const MainInfo: FunctionComponent = () => {
               fontSize: 18,
             }}
           />
-          <View style={{ flexDirection: 'row', marginBottom: 30, paddingHorizontal: "3%" }}>
-            <TouchableOpacity style={{ width: "33%" }} onPress={() => Linking.openURL('https://www.bithumb.com')} >
+          <View
+            style={{
+              flexDirection: 'row',
+              marginBottom: 30,
+              paddingHorizontal: '3%',
+            }}>
+            <TouchableOpacity
+              style={{ width: '33%' }}
+              onPress={() => Linking.openURL('https://www.bithumb.com')}>
               <ExchangeBithumbImg source={ExchangeBithumbPng} />
             </TouchableOpacity>
-            <TouchableOpacity style={{ width: "33%" }} onPress={() => Linking.openURL('https://www.bithumb.pro/en-us')} >
+            <TouchableOpacity
+              style={{ width: '33%' }}
+              onPress={() => Linking.openURL('https://www.bithumb.pro/en-us')}>
               <ExchangeBithumbGlobalImg source={ExchangeBithumbGlobalPng} />
             </TouchableOpacity>
-            <TouchableOpacity style={{
-              width: "33%", paddingHorizontal: 5,
-            }} onPress={() => Linking.openURL('https://www.boboo.com')} >
+            <TouchableOpacity
+              style={{
+                width: '33%',
+                paddingHorizontal: 5,
+              }}
+              onPress={() => Linking.openURL('https://www.boboo.com')}>
               <ExchangeBobooImg source={ExchangebobooPng} />
             </TouchableOpacity>
-
           </View>
         </View>
         <P4Text
@@ -583,7 +581,7 @@ const MainInfo: FunctionComponent = () => {
             fontSize: 10,
             color: '#1c1c1c',
           }}
-          label={'v1.0.6'}
+          label={'v1.0.0'}
         />
         <View
           style={{
