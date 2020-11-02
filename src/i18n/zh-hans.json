@@ -1,5 +1,5 @@
 {
-  "welcome": "感谢使用爱立厦（ELYSIA)",
+  "welcome": "欢迎使用爱立厦（ELYSIA)",
   "greeting": "您好, %{firstName} %{lastName}",
   "greeting_new": "您好，投资者",
   "account": {
@@ -69,7 +69,7 @@
     "ethaddress": "钱包地址"
   },
   "kyc_label": {
-    "argos_terms": "查看Argos条款",
+    "argos_terms": "查看隐私保密条款",
     "agree": "同意",
     "agree_start": "同意并开始使用",
     "camera_access_return": "回到之前界面",
@@ -220,14 +220,14 @@
     "investment_history": "投资明细",
     "transaction_history": "交易明细",
     "reset_password": "变更密码",
-    "wallet_connect": "连接我的钱包",
+    "wallet_connect": "绑定钱包",
     "my_account": "我的账户",
     "service_center": "顾客服务中心",
     "notice": "公告栏",
-    "faq": "FAQ",
+    "faq": "常见问题解答",
     "service_terms": "服务条款",
     "privacy_policy": "隐私政策",
-    "contact": "直接询问",
+    "contact": "在线咨询",
     "my_info": "我的信息",
     "logout": "退出登录",
     "app_setting": "APP设定",
@@ -247,7 +247,7 @@
     "language": "语言",
     "el_exchange": "EL币交易所",
     "search": "搜索",
-    "contact_contents": "您之前留下的咨询事项。",
+    "contact_contents": "具体咨询事项",
     "retrieve": "查询",
     "period": "查询期间",
     "types": "交易类型",
@@ -258,10 +258,10 @@
     "type_close": "所有权到期",
     "type_expectedProfit": "累计收益",
     "type_profit": "取出收益",
-    "latest": "最新消息",
+    "latest": "最新信息",
     "push_notice": "弹窗提醒",
     "notification_setting": "提醒设置",
-    "connect": " 连接钱包"
+    "connect": " 绑定钱包"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -271,11 +271,11 @@
     "invalid_date": "无效期间，请再次确认",
     "invalid_password": "请输入现在的密码。",
     "contact_restriction": "1分钟内只能提交1次咨询。\n 请在1分钟后再试一次",
-    "check": "请参考相关内容。",
-    "check_text": "请阅读下列注意事项后，连接钱包地址。",
-    "check_1": "连接钱包地址后不能变更。",
-    "check_2": "每个用户只能使用一个钱包地址。",
-    "connected": "钱包地址连接成功。",
+    "check": "请注意",
+    "check_text": "请阅读下列注意事项后，绑定钱包地址。",
+    "check_1": "绑定钱包地址后不能变更。",
+    "check_2": "每个用户只能绑定一个钱包地址。",
+    "connected": "钱包地址绑定成功。",
     "find_more": "可以在“更多”中我的账户里查看详细信息。"
   },
   "dashboard_label": {
@@ -323,15 +323,15 @@
     "with_elysia": "能够储存EL代币。",
     "investment_guide": "爱立厦使用指南",
     "right_now": "投资就是现在",
-    "invest_first_asset": "来交换第一枚代币吧。",
-    "connect_wallet": "连接钱包",
+    "invest_first_asset": "来购买第一枚代币吧。",
+    "connect_wallet": "绑定钱包",
     "get_EL": "获得EL代币",
     "prepare_investment": "准备开始交换代币",
-    "need_kyc_wallet": "为了交换代币，您必须进行KYC认证和连接钱包。",
-    "no_wallet": "没有连接任何钱包。",
-    "wallet_connected": "成功连接钱包。",
+    "need_kyc_wallet": "为了交换代币，您必须进行KYC认证和绑定钱包。",
+    "no_wallet": "没有绑定任何钱包。",
+    "wallet_connected": "成功绑定钱包。",
     "event_guide_EL": "活动结束后，EL代币将被存入相应钱包地址中。",
-    "complete_prepare": "准备完毕。",
+    "complete_prepare": "准备完毕",
     "investment_guide_header": [
       "存放EL令牌",
       "选择产品和数量",
@@ -380,7 +380,7 @@
       "kyc认证被拒绝后，该如何处理呢？",
       "为什么需要kyc认证呢？",
       "什么是以太坊钱包地址？该如何获得呢？",
-      "为什么要连接以太坊钱包地址？"
+      "为什么要绑定以太坊钱包地址？"
     ],
     "answer": [
       "您可以注册或交换基于现货的以太币。在完成身份验证后，您可以根据持有的代币获得储蓄积分。",
