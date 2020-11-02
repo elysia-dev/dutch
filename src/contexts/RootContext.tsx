@@ -3,10 +3,11 @@ import { espressoClient } from '../api/axiosInstances';
 import Server from '../api/server';
 import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
+import { SignInStatus } from '../enums/LoginStatus';
 import Notification from '../types/Notification';
 
 type RootContextType = {
-  signedIn: boolean;
+  signedIn: SignInStatus;
   user: {
     id: number;
     email: string;
@@ -29,10 +30,10 @@ type RootContextType = {
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   Server: Server;
-}
+};
 
 const RootContext = createContext<RootContextType>({
-  signedIn: false,
+  signedIn: SignInStatus.PENDING,
   user: {
     id: 0,
     email: '',
@@ -42,19 +43,19 @@ const RootContext = createContext<RootContextType>({
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
     language: LocaleType.EN,
-    nationality: "South Korea, KOR",
+    nationality: 'South Korea, KOR',
   },
-  changeLanguage: () => { },
-  setKycStatus: () => { },
-  signIn: async () => { },
-  signOut: async () => { },
-  autoSignOut: async () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
+  signIn: async () => {},
+  signOut: async () => {},
+  autoSignOut: async () => {},
   notifications: [] as Notification[],
   unreadNotificationCount: 0,
-  setUnreadNotificationCount: (value: number) => { },
-  setNotifications: (notifications: Notification[]) => { },
-  setEthAddress: (address: string) => { },
-  Server: new Server(() => { }, ''),
+  setUnreadNotificationCount: (value: number) => {},
+  setNotifications: (notifications: Notification[]) => {},
+  setEthAddress: (address: string) => {},
+  Server: new Server(() => {}, ''),
 });
 
 export default RootContext;
