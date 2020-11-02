@@ -1,20 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, {
-  Component,
-  FunctionComponent,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-  Modal,
-  ActivityIndicator,
-} from 'react-native';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { View, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
-import { NavigationScreenProp } from 'react-navigation';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { Camera } from 'expo-camera';
@@ -29,7 +16,6 @@ import ReversePng from './images/reverse.png';
 import RecordPng from './images/recordbutton.png';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import { Photo } from '../../types/Photo';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import CameraPermissionPng from './images/cameraPermission.png';
@@ -130,7 +116,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
         [{ resize: { width: 800 } }],
         { compress: 1, format: ImageManipulator.SaveFormat.PNG, base64: true },
       );
-      const asset = await MediaLibrary.createAssetAsync(`${selfie.uri}`);
+      await MediaLibrary.createAssetAsync(`${selfie.uri}`);
       return compressedSelfie;
     }
   };
@@ -141,16 +127,18 @@ const TakeSelfie: FunctionComponent<{}> = () => {
       quality: 1,
       base64: true,
     });
-    setStatus(LoadingStatus.PENDING);
-    const compressedSelfieAlbum = await ImageManipulator.manipulateAsync(
-      !selfieAlbum.cancelled ? selfieAlbum.uri : '',
-      [{ resize: { width: 700 } }],
-      { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
-    );
-    return compressedSelfieAlbum;
+    if (!selfieAlbum.cancelled) {
+      setStatus(LoadingStatus.PENDING);
+      const compressedSelfieAlbum = await ImageManipulator.manipulateAsync(
+        !selfieAlbum.cancelled ? selfieAlbum.uri : '',
+        [{ resize: { width: 600 } }],
+        { compress: 0, format: ImageManipulator.SaveFormat.PNG, base64: true },
+      );
+      return compressedSelfieAlbum;
+    }
   };
 
-  if (state.hasPermission === false) {
+  if (!state.hasPermission) {
     return (
       <WrapperLayout
         title={' '}
@@ -241,13 +229,16 @@ const TakeSelfie: FunctionComponent<{}> = () => {
                     backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmSelfie, {
-                      selfie: await pickImage(),
-                      id_type,
-                      photoId_hash,
-                      idPhoto,
-                    });
-                    setStatus(LoadingStatus.SUCCESS);
+                    const selfiePhoto = await pickImage();
+                    if (selfiePhoto) {
+                      navigation.navigate(KycPage.ConfirmSelfie, {
+                        selfie: selfiePhoto,
+                        id_type,
+                        photoId_hash,
+                        idPhoto,
+                      });
+                      setStatus(LoadingStatus.SUCCESS);
+                    }
                   }}>
                   <Ionicons
                     name="ios-photos"

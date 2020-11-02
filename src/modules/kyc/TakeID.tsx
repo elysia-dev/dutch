@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, {
-  Component,
-  FunctionComponent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import {
   TouchableOpacity,
   Platform,
@@ -30,7 +24,6 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { KycPage } from '../../enums/pageEnum';
 import CameraPermissionPng from './images/cameraPermission.png';
-import { Photo } from '../../types/Photo';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { LoadingStatus } from '../../enums/LoadingStatus';
