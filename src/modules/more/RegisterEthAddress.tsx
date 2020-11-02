@@ -1,6 +1,6 @@
 import React, { Children, FunctionComponent, useContext, useState } from 'react';
 import { Dimensions, Image, View } from 'react-native';
-import { isAddress } from 'web3-utils';
+import { isAddress, checkAddressChecksum } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
@@ -85,7 +85,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   setState({
                     ...state,
                     address: input,
-                    error: isAddress(input) ? 0 : 1,
+                    error: isAddress(input) && checkAddressChecksum(input) ? 0 : 1,
                   });
                 }}
                 placeHolder="0x"
