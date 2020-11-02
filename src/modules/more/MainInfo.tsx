@@ -69,7 +69,7 @@ const KycNoneButtonImg = styled.Image`
   margin-left: auto;
 `;
 const InfoHeaderSettingImg = styled.Image`
-  margintop: 5px;
+  margin-top: 5px;
   width: 21px;
   height: 21px;
 `;
