@@ -43,7 +43,6 @@
     "husky": "^4.3.0",
     "i18n-js": "^3.7.1",
     "lint-staged": "^10.4.0",
-    "pusher-js": "^7.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "0.63.3",
@@ -59,7 +58,6 @@
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-localize": "^1.4.2",
     "react-native-maps": "0.27.1",
-    "react-native-pusher-push-notifications": "^2.4.0",
     "react-native-screens": "^2.11.0",
     "react-native-svg": "12.1.0",
     "react-native-svg-charts": "^5.4.0",
@@ -75,7 +73,6 @@
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@types/axios": "^0.14.0",
-    "@types/pusher-js": "^4.2.2",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/react-native-datepicker": "^1.7.0",
