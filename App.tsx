@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
@@ -33,7 +33,6 @@ import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
-import { ThemeConsumer } from 'styled-components';
 
 Sentry.init({
   dsn: 'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
