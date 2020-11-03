@@ -29,21 +29,21 @@ interface Props {
 
 type Scrolling = {
   Scrolling: boolean;
-  scrollY: Animated.value;
+  scrollY: Animated.Value;
 };
 
-const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
+const ConditionalKeyboardAvoidingView: FunctionComponent = (props) =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
-      behavior={'padding'}
+      // behavior={'padding'}
       style={{ flex: 1, flexDirection: 'column' }}>
       {props.children}
     </KeyboardAvoidingView>
   ) : (
-      <View style={{ flex: 1 }}>{props.children}</View>
-    );
+    <View style={{ flex: 1 }}>{props.children}</View>
+  );
 
-const ScrollingView: FunctionComponent<Scrolling> = props => {
+const ScrollingView: FunctionComponent<Scrolling> = (props) => {
   return props.Scrolling === true ? (
     <Animated.ScrollView
       scrollEventThrottle={16}
@@ -61,11 +61,11 @@ const ScrollingView: FunctionComponent<Scrolling> = props => {
       {props.children}
     </Animated.ScrollView>
   ) : (
-      <View style={{ flex: 1 }}>{props.children}</View>
-    );
+    <View style={{ flex: 1 }}>{props.children}</View>
+  );
 };
 
-const WrapperLayout: FunctionComponent<Props> = props => {
+const WrapperLayout: FunctionComponent<Props> = (props) => {
   const [scrollY] = useState(new Animated.Value(0));
   const { user } = useContext(RootContext);
   const languageType = user.language;
@@ -83,113 +83,119 @@ const WrapperLayout: FunctionComponent<Props> = props => {
         )}
         {languageType === LocaleType.EN ? (
           <Animated.View
-          style={[
-            props.backButtonHandler !== undefined ? {
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 10, 10],
-                  }),
-                },
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -57, -57],
-                  }),
-                },
-              ],
-            } : {
+            style={[
+              props.backButtonHandler !== undefined
+                ? {
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, 10, 10],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  }
+                : {
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -34, -34],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  },
+            ]}>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                fontSize: 22,
+                fontFamily: 'Roboto_700Bold',
+                transform: [
+                  {
+                    scale: scrollY.interpolate({
+                      inputRange: [-1000, 0, 50, 1000],
+                      outputRange: [1, 1, 0.8, 0.8],
+                    }),
+                  },
+                ],
+              }}>
+              {props.title}
+            </Animated.Text>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                position: 'absolute',
+                top: 40,
+                fontFamily: 'Roboto_400Regular',
                 transform: [
                   {
                     translateX: scrollY.interpolate({
                       inputRange: [-1000, 0, 50, 1000],
-                      outputRange: [0, 0, -34, -34],
+                      outputRange: [0, 0, -10, -10],
                     }),
                   },
                   {
                     translateY: scrollY.interpolate({
                       inputRange: [-1000, 0, 50, 1000],
-                      outputRange: [0, 0, -57, -57],
+                      outputRange: [0, 0, 0, 0],
                     }),
                   },
                 ],
-              }]}>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'absolute',
-              fontSize: 22,
-              fontFamily: 'Roboto_700Bold',
-              transform: [
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [1, 1, 0.8, 0.8],
-                  }),
-                },
-              ],
-            }}>
-            {props.title}
-          </Animated.Text>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'absolute',
-              top: 40,
-              fontFamily: 'Roboto_400Regular',
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, -10, -10],
-                  }),
-                },
-                {
-                  translateY: scrollY.interpolate({
-                    inputRange: [-1000, 0, 50, 1000],
-                    outputRange: [0, 0, 0, 0],
-                  }),
-                },
-              ],
-            }}>
-            {props.subTitle}
-          </Animated.Text>
-        </Animated.View>
+              }}>
+              {props.subTitle}
+            </Animated.Text>
+          </Animated.View>
         ) : (
           <Animated.View
             style={[
-              props.backButtonHandler !== undefined ? {
-                transform: [
-                  {
-                    translateX: scrollY.interpolate({
-                      inputRange: [-1000, 0, 50, 1000],
-                      outputRange: [0, 0, 30, 30],
-                    }),
+              props.backButtonHandler !== undefined
+                ? {
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, 30, 30],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  }
+                : {
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -17, -17],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
                   },
-                  {
-                    translateY: scrollY.interpolate({
-                      inputRange: [-1000, 0, 50, 1000],
-                      outputRange: [0, 0, -57, -57],
-                    }),
-                  },
-                ],
-              } : {
-                  transform: [
-                    {
-                      translateX: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -17, -17],
-                      }),
-                    },
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -57, -57],
-                      }),
-                    },
-                  ],
-                }]}>
+            ]}>
             <Animated.Text
               allowFontScaling={false}
               style={{
@@ -233,7 +239,7 @@ const WrapperLayout: FunctionComponent<Props> = props => {
           </Animated.View>
         )}
       </Animated.View>
-      {props.subTitle !== undefined && (<View style={{ marginBottom: 30 }} />)}
+      {props.subTitle !== undefined && <View style={{ marginBottom: 30 }} />}
       <ScrollingView Scrolling={props.isScrolling} scrollY={scrollY}>
         <ConditionalKeyboardAvoidingView>
           <View style={{ marginTop: 60 }}>{props.body}</View>
