@@ -28,30 +28,13 @@ const MyPage: FunctionComponent = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView
-      style={{
-        width: '100%',
-        backgroundColor: '#fff',
-        paddingTop: 25,
-        flex: 1,
-      }}>
-      <BackButton
-        handler={() => {
-          navigation.goBack();
-        }}
-        style={{ marginLeft: '5%' }}
-      />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingLeft: '5%',
-          paddingRight: '5%',
-          paddingBottom: 0,
-        }}>
-        <TitleText label={i18n.t('more_label.my_account')} />
-      </View>
-      <View
+    <WrapperLayout
+      isScrolling={false}
+      title={i18n.t('more_label.my_account')}
+      backButtonHandler={() => navigation.goBack()}
+      body={
+        <>
+        <View
         style={{
           paddingLeft: '5%',
           // paddingBottom: 20,
@@ -60,13 +43,13 @@ const MyPage: FunctionComponent = () => {
         }}>
         <P1Text
           label={i18n.t('account_label.account_email')}
-          style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+          style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
         />
         <P1Text label={user.email} style={{ fontSize: 15 }} />
         <View
           style={{
             height: 50,
-            marginTop: 10,
+            marginTop: 20,
           }}>
           <TouchableOpacity
             onPress={() =>
@@ -93,6 +76,7 @@ const MyPage: FunctionComponent = () => {
         <View
           style={{
             padding: '5%',
+            paddingTop: 30,
             borderBottomWidth: 5,
             borderBottomColor: '#F6F6F8',
           }}>
@@ -101,7 +85,7 @@ const MyPage: FunctionComponent = () => {
             <>
               <P1Text
                 label={i18n.t('more_label.name')}
-                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+                style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
               />
               <P1Text
                 label={`${user.firstName} ${
@@ -111,7 +95,7 @@ const MyPage: FunctionComponent = () => {
               />
               <P1Text
                 label={i18n.t('more_label.gender')}
-                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+                style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
               />
               <P1Text label={user.gender} style={{ fontSize: 15 }} />
             </>
@@ -120,7 +104,7 @@ const MyPage: FunctionComponent = () => {
             <>
               <P1Text
                 label={i18n.t('account_label.ethaddress')}
-                style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
+                style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
               />
               <P1Text
                 label={`${user.ethAddresses[0]}`}
@@ -130,7 +114,9 @@ const MyPage: FunctionComponent = () => {
           )}
         </View>
       )}
-    </SafeAreaView>
+        </>
+      }
+    />
   );
 };
 

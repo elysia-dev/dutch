@@ -179,14 +179,16 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   marginHorizontal: '5%',
                   borderWidth: 1,
                   borderRadius: 5,
+                  paddingLeft: 10,
                   borderColor: '#D0D8DF',
                   paddingRight: Platform.OS === 'android' ? 10 : 0,
                 }}>
                 {Platform.OS === 'android' ? (
                   <Picker
                     style={{
-                      height: 40,
+                      height: 30,
                       marginVertical: 10,
+                      padding: 0,
                     }}
                     accessibilityLabel={'settings'}
                     selectedValue={i18n.currentLocale()}
