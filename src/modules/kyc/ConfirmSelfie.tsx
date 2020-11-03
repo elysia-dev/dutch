@@ -108,6 +108,11 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
             />
             <SubmitButton
               title={i18n.t('kyc_label.submit')}
+              disabled={status === LoadingStatus.PENDING}
+              style={{
+                backgroundColor:
+                  status === LoadingStatus.PENDING ? '#D0D8DF' : '#3679B5',
+              }}
               handler={() => {
                 callKycApi();
               }}
