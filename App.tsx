@@ -108,9 +108,7 @@ const App = () => {
 
   const autoSignOut = async () => {
     await AsyncStorage.removeItem('@token');
-    console.log(navigationRef.current);
     setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
-    console.log(navigationRef.current);
     navigationRef.current?.navigate('Account', {
       screen: AccountPage.ExpiredAccount,
     });
