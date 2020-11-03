@@ -261,7 +261,11 @@
     "latest": "最新信息",
     "push_notice": "弹窗提醒",
     "notification_setting": "提醒设置",
-    "connect": " 绑定钱包"
+    "connect": " 绑定钱包",
+    "app_info": "App信息",
+    "version": "版本",
+    "done": "完成",
+    "close": "短期"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
