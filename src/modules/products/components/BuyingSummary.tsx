@@ -135,7 +135,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                {expectedElValue.toFixed(2)}
+                {' ' + expectedElValue.toFixed(2)}
               </BlackText>
             </View>
           </TextWrapper>
@@ -202,7 +202,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                {props.tokenCount}
+                {' ' + props.tokenCount}
               </BlackText>
             </View>
           </TextWrapper>
