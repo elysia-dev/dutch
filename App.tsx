@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import i18n from 'i18n-js';
 
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
+import * as Notifications from 'expo-notifications'
 
 /* eslint-disable @typescript-eslint/camelcase */
 import {
@@ -15,7 +16,6 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
-import Pusher from 'pusher-js/react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -25,15 +25,15 @@ import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
-import getPusherClient from './src/api/pusherClient';
-import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
-import Notification from './src/types/Notification';
+import Notification, { isNotification } from './src/types/Notification';
 
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
-import disablePushNotificationsAsync from './src/utiles/disableNotificationsAsync';
+
+import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
+import { ThemeConsumer } from 'styled-components';
 
 Sentry.init({
   dsn: 'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
@@ -56,7 +56,6 @@ interface AppState {
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
-  unreadNotificationCount: number;
   notifications: Notification[];
   Server: Server;
 }
@@ -77,15 +76,20 @@ const defaultState = {
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
-  unreadNotificationCount: 0,
   notifications: [],
   Server: new Server(() => { }, ''),
 };
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const App = () => {
   const [state, setState] = useState<AppState>(defaultState);
-  const [pusherClient, setPusherClient] = useState<Pusher>();
   const navigationRef = React.createRef<NavigationContainerRef>();
 
   /* eslint-disable @typescript-eslint/camelcase */
@@ -97,7 +101,6 @@ const App = () => {
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
-    await disablePushNotificationsAsync(state.user.email);
     setState(defaultState);
   };
 
@@ -110,52 +113,61 @@ const App = () => {
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
-    await authServer
+
+    authServer
       .me()
       .then(async res => {
         i18n.locale = res.data.user.language;
+
         setState({
           ...state,
           signedIn: true,
           user: res.data.user,
-          unreadNotificationCount: res.data.unreadNotificationCount,
           Server: authServer,
+          notifications: res.data.notifications || []
         });
-        // enablePushNotifications(res.data.user.email);
+
+        registerForPushNotificationsAsync().then((expoPushToken) => {
+          if (token && expoPushToken) {
+            authServer.registerExpoPushToken(expoPushToken)
+          }
+        });
       })
       .catch(() => {
-        if (state.user?.email) {
-          disablePushNotificationsAsync(state.user?.email);
-        }
         setState(defaultState);
       });
   };
 
   useEffect(() => {
     signIn();
-    getPusherClient().then((client) => {
-      setPusherClient(client);
-    });
   }, []);
 
   useEffect(() => {
-    if (state.signedIn && state.user.id && pusherClient) {
-      const handleNotification = (notification: Notification) => {
-        setState({
-          ...state,
-          unreadNotificationCount: state.unreadNotificationCount + 1,
-          notifications: [notification, ...state.notifications],
-        });
-      };
+    const addNotificationReceivedListener = Notifications
+      .addNotificationReceivedListener(response => {
+        if (isNotification(response.request.content.data as Notification)) {
+          setState((state) => {
+            return {
+              ...state,
+              notifications: [
+                response.request.content.data as Notification,
+                ...state.notifications
+              ]
+            }
+          })
+        }
+      });
 
-      const channel = pusherClient.subscribe(userChannel(state.user.id));
-      channel.bind('notification', handleNotification);
+    const addNotificationResponseReceivedListener = Notifications
+      .addNotificationResponseReceivedListener(response => {
+        signIn()
+      });
 
-      return () => channel.unbind("notification", handleNotification);
-    } else {
-      return () => { };
-    }
-  }, [state.signedIn, state.notifications, pusherClient, state.unreadNotificationCount]);
+    return () => {
+      Notifications.removeNotificationSubscription(addNotificationReceivedListener);
+      Notifications.removeNotificationSubscription(addNotificationResponseReceivedListener);
+    };
+  }, []);
 
   const RootStack = createStackNavigator();
 
@@ -177,14 +189,11 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
-          setUnreadNotificationCount: (value: number) => {
+          setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
-              unreadNotificationCount: value >= 0 ? value : 0,
-            });
-          },
-          setNotifications: (notifications: Notification[]) => {
-            setState({ ...state, notifications });
+              notifications
+            })
           },
           setEthAddress: (address: string) => {
             setState({ ...state, user: { ...state.user, ethAddresses: [address] } });
