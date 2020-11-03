@@ -9,7 +9,12 @@ import { KycStatus } from '../../enums/KycStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import { H1Text, H2Text, P1Text, TitleText } from '../../shared/components/Texts';
+import {
+  H1Text,
+  H2Text,
+  P1Text,
+  TitleText,
+} from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const InfoArrowImg = styled.Image`
@@ -45,23 +50,6 @@ const MyPage: FunctionComponent = () => {
           paddingBottom: 0,
         }}>
         <TitleText label={i18n.t('more_label.my_account')} />
-        <TouchableOpacity
-          onPress={() => {
-            signOut();
-          }}
-          style={{
-            backgroundColor: '#E6ECF2',
-            borderRadius: 5,
-            width: 80,
-            height: 25,
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <P1Text
-            label={i18n.t('more_label.logout')}
-            style={{ color: '#5c5b5b', textAlign: 'center' }}
-          />
-        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -81,7 +69,11 @@ const MyPage: FunctionComponent = () => {
             marginTop: 10,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('More', { screen: AccountPage.CurrentPassword })}>
+            onPress={() =>
+              navigation.navigate('More', {
+                screen: AccountPage.CurrentPassword,
+              })
+            }>
             <View
               style={{
                 flexDirection: 'row',
@@ -91,14 +83,13 @@ const MyPage: FunctionComponent = () => {
                 label={i18n.t('more_label.reset_password')}
                 style={{ lineHeight: 50, fontSize: 15 }}
               />
-              <InfoArrowImg
-                source={require('./images/next_gray.png')}
-              />
+              <InfoArrowImg source={require('./images/next_gray.png')} />
             </View>
           </TouchableOpacity>
         </View>
       </View>
-      {(user.kycStatus === KycStatus.SUCCESS || user.ethAddresses?.length > 0) && (
+      {(user.kycStatus === KycStatus.SUCCESS ||
+        user.ethAddresses?.length > 0) && (
         <View
           style={{
             padding: '5%',
@@ -106,14 +97,16 @@ const MyPage: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
           }}>
           <H2Text label={i18n.t('more_label.my_info')} />
-          {user.kycStatus === KycStatus.SUCCESS &&
+          {user.kycStatus === KycStatus.SUCCESS && (
             <>
               <P1Text
                 label={i18n.t('more_label.name')}
                 style={{ color: '#a7a7a7', marginTop: 15, marginBottom: 5 }}
               />
               <P1Text
-                label={`${user.firstName} ${user.lastName !== null ? (user.lastName) : ''}`}
+                label={`${user.firstName} ${
+                  user.lastName !== null ? user.lastName : ''
+                }`}
                 style={{ fontSize: 15 }}
               />
               <P1Text
@@ -122,8 +115,8 @@ const MyPage: FunctionComponent = () => {
               />
               <P1Text label={user.gender} style={{ fontSize: 15 }} />
             </>
-          }
-          {user.ethAddresses?.length > 0 &&
+          )}
+          {user.ethAddresses?.length > 0 && (
             <>
               <P1Text
                 label={i18n.t('account_label.ethaddress')}
@@ -134,8 +127,7 @@ const MyPage: FunctionComponent = () => {
                 style={{ fontSize: 15 }}
               />
             </>
-          }
-
+          )}
         </View>
       )}
     </SafeAreaView>
