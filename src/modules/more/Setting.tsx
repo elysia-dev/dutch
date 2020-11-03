@@ -9,7 +9,6 @@ import { H1Text, P1Text, H3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
-import disablePushNotificationsAsync from '../../utiles/disableNotificationsAsync';
 import enablePushNotificationsAsync from '../../utiles/enableNotificationsAsync';
 
 interface Props {
@@ -50,7 +49,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       const res = await enablePushNotificationsAsync(user.email);
       setState({ ...state, hasPermission: res });
     } else {
-      await disablePushNotificationsAsync(user.email);
+      await AsyncStorage.setItem('pushNotificationPermission', "denied");
       setState({ ...state, hasPermission: false });
     }
   };
