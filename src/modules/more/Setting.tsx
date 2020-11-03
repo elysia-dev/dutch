@@ -331,27 +331,3 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
 };
 
 export default Setting;
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-    textAlign: 'center',
-  },
-  inputAndroid: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-});
