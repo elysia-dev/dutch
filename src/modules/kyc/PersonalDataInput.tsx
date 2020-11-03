@@ -1,8 +1,16 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, ScrollView, SafeAreaView } from 'react-native';
+import {
+  View,
+  ScrollView,
+  SafeAreaView,
+  Platform,
+  TouchableOpacity,
+  Modal as RNModal,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
+import { Picker } from '@react-native-community/picker';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Modal } from '../../shared/components/Modal';
@@ -18,8 +26,11 @@ import {
   H1Text,
   SubTitleText,
   P1Text,
+  P2Text,
+  H3Text,
 } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import nations from './components/argos.json';
 
 const IdImg = styled.Image`
   margin-top: 10px;
@@ -48,15 +59,19 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
     firstName: '',
     lastName: '',
     nationality: '',
+    selectedNationality: '',
     birthday: '',
     modalVisible: false,
     submitDisabled: false,
+    pickerModalVisible: false,
   });
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'PersonalDataInput'>>();
   const { Server, setKycStatus } = useContext(RootContext);
-
+  const nationList = nations.map((nation, Key) => (
+    <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
+  ));
   const setModalVisible = (visible: boolean) => {
     setState({ ...state, modalVisible: visible, submitDisabled: true });
   };
@@ -142,14 +157,50 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
                   marginTop: 20,
                 }}
               />
-              <NationInput
-                type={i18n.t('kyc_label.nationality')}
-                eventHandler={setNationality}
-                nationality={state.nationality}
-                style={{
-                  marginTop: 20,
-                }}
-              />
+              {Platform.OS === 'android' ? (
+                <NationInput
+                  type={i18n.t('kyc_label.nationality')}
+                  eventHandler={setNationality}
+                  nationality={state.nationality}
+                  style={{
+                    marginTop: 20,
+                  }}
+                />
+              ) : (
+                <>
+                  <P3Text
+                    style={{
+                      marginTop: 20,
+                      color: '#a7a7a7',
+                      fontSize: 12,
+                      textAlign: 'left',
+                    }}
+                    label={i18n.t('kyc_label.nationality')}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      borderBottomColor: '#d0d8df',
+                      borderBottomWidth: 1,
+                    }}
+                    onPress={() => {
+                      setState({ ...state, pickerModalVisible: true });
+                    }}>
+                    <P1Text
+                      label={state.nationality.split(',')[0]}
+                      style={{
+                        textAlign: 'center',
+                      }}
+                    />
+                  </TouchableOpacity>
+                </>
+              )}
               <DateInput
                 type={i18n.t('kyc_label.birthday')}
                 eventHandler={setBirthday}
@@ -161,7 +212,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
                 }}
               />
               <P3Text
-                style={{ marginTop: 20 }}
+                style={{ marginTop: 40 }}
                 label={i18n.t('kyc_label.gender')}
               />
               <View
@@ -236,7 +287,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
           />
         }
       />
-      {state.modalVisible && (
+      {(state.modalVisible || state.pickerModalVisible) && (
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.5)',
@@ -245,6 +296,66 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
             height: '100%',
           }}></View>
       )}
+      <RNModal
+        visible={state.pickerModalVisible}
+        animationType={'slide'}
+        transparent={true}>
+        <View
+          style={{
+            backgroundColor: 'rgba(250,250,250,0.9)',
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: 245,
+          }}>
+          <View
+            style={{
+              backgroundColor: '#fff',
+              position: 'absolute',
+              top: 0,
+              width: '100%',
+              height: 45,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: '5%',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setState({ ...state, pickerModalVisible: false });
+              }}>
+              <P1Text
+                label={i18n.t('more_label.close')}
+                style={{ color: '#626368' }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={async () => {
+                setState({
+                  ...state,
+                  pickerModalVisible: false,
+                  nationality: state.selectedNationality,
+                });
+              }}>
+              <P1Text
+                label={i18n.t('more_label.done')}
+                style={{ color: '#3679B5' }}
+              />
+            </TouchableOpacity>
+          </View>
+          <Picker
+            style={{
+              top: 35,
+            }}
+            accessibilityLabel={'nationalinput'}
+            selectedValue={state.selectedNationality}
+            onValueChange={(itemValue, _itenIndex) => {
+              setState({ ...state, selectedNationality: itemValue.toString() });
+            }}>
+            {nationList}
+          </Picker>
+        </View>
+      </RNModal>
     </>
   );
 };

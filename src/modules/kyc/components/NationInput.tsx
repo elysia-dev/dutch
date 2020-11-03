@@ -13,9 +13,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
 import nations from './argos.json';
 
-
 const InputHeaderText = styled.Text`
-  color: #A7A7A7;
+  color: #a7a7a7;
   font-size: 12px;
   text-align: left;
   font-family: 'Roboto_400Regular';
@@ -28,28 +27,10 @@ interface Props {
   style?: StyleProp<ViewStyle>;
 }
 
-interface Placeholder {
-  label: string;
-  value: string;
-  color: string;
-}
-
 export const NationInput: FunctionComponent<Props> = (props) => {
-  const NationListIos = nations.map((nation, Key) => ({
-    label: nation.Nationality,
-    value: nation.Argos,
-    key: Key,
-  }));
-
-  const NationListAnd = nations.map((nation, Key) => (
+  const nationList = nations.map((nation, Key) => (
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
   ));
-
-  const placeholder: Placeholder = {
-    label: 'Select your nationality',
-    value: '',
-    color: '#1C1C1C',
-  };
 
   return (
     <View style={props.style}>
@@ -58,13 +39,12 @@ export const NationInput: FunctionComponent<Props> = (props) => {
       </InputHeaderText>
       <View style={pickerSelectStyles.inputAndroid}>
         <Picker
-          // mode="dropdown"
           accessibilityLabel={'nationalinput'}
           selectedValue={props.nationality}
-          onValueChange={(itemValue, itenIndex) => {
+          onValueChange={(itemValue, _itenIndex) => {
             props.eventHandler(itemValue.toString());
           }}>
-          {NationListAnd}
+          {nationList}
         </Picker>
       </View>
     </View>
@@ -89,7 +69,7 @@ const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
     backgroundColor: '#fff',
     fontSize: 14,
-    paddingVertical: 12,
+    paddingVertical: 0,
     paddingHorizontal: 5,
     borderWidth: 1,
     borderColor: '#d0d8df',

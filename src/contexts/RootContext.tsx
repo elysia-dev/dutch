@@ -2,10 +2,11 @@ import { createContext } from 'react';
 import Server from '../api/server';
 import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
+import { SignInStatus } from '../enums/LoginStatus';
 import Notification from '../types/Notification';
 
 type RootContextType = {
-  signedIn: boolean;
+  signedIn: SignInStatus;
   user: {
     id: number;
     email: string;
@@ -26,10 +27,10 @@ type RootContextType = {
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   Server: Server;
-}
+};
 
 const RootContext = createContext<RootContextType>({
-  signedIn: false,
+  signedIn: SignInStatus.PENDING,
   user: {
     id: 0,
     email: '',
@@ -39,7 +40,7 @@ const RootContext = createContext<RootContextType>({
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
     language: LocaleType.EN,
-    nationality: "South Korea, KOR",
+    nationality: 'South Korea, KOR',
   },
   changeLanguage: () => { },
   setKycStatus: () => { },

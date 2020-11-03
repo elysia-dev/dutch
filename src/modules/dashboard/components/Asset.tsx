@@ -87,15 +87,33 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             borderRadius: 100,
             overflow: 'hidden',
           }}></Dash>
-        <P1Text
-          label={`$ ${parseFloat(`${props.ownership.profit}`).toFixed(2)}`}
-          style={{
-            flex: 2,
-            marginTop: 15,
-            color: '#fff',
-            fontSize: 18,
-          }}
-        />
+        <View style={{ flexDirection: 'row', flex: 2 }}>
+          <P1Text
+            label={`$ ${parseFloat(`${props.ownership.profit}`).toFixed(2)}`}
+            style={{
+              marginTop: 15,
+              color: '#fff',
+              fontSize: 18,
+            }}
+          />
+          <View
+            style={{
+              alignSelf: 'center',
+              marginLeft: 5,
+              marginTop: 5,
+              width: 0,
+              height: 0,
+              borderTopWidth: 0,
+              borderBottomWidth: 8,
+              borderLeftWidth: 5,
+              borderRightWidth: 5,
+              borderTopColor: 'transparent',
+              borderRightColor: 'transparent',
+              borderBottomColor: '#fff',
+              borderLeftColor: 'transparent',
+            }}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   );

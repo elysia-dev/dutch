@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 
-import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { AppLoading } from 'expo';
+// import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
 import * as Notifications from 'expo-notifications'
 
@@ -16,6 +19,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
+import { ActivityIndicator } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -33,15 +37,17 @@ import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
+import { SignInStatus } from './src/enums/LoginStatus';
 
 Sentry.init({
-  dsn: 'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
+  dsn:
+    'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
   enableInExpoDevelopment: true,
   debug: true,
 });
 
 interface AppState {
-  signedIn: boolean;
+  signedIn: SignInStatus;
   user: {
     id: number;
     email: string;
@@ -60,7 +66,7 @@ interface AppState {
 }
 
 const defaultState = {
-  signedIn: false,
+  signedIn: SignInStatus.PENDING,
   locale: currentLocale(),
   user: {
     id: 0,
@@ -71,7 +77,7 @@ const defaultState = {
     kycStatus: KycStatus.NONE,
     language: LocaleType.KO,
     ethAddresses: [],
-    nationality: "South Korea, KOR",
+    nationality: 'South Korea, KOR',
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
@@ -100,41 +106,45 @@ const App = () => {
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
-    setState(defaultState);
+    setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
   };
 
   const autoSignOut = async () => {
     await AsyncStorage.removeItem('@token');
-    setState(defaultState);
-    navigationRef.current?.navigate('Account', { screen: AccountPage.ExpiredAccount });
+    setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
+    navigationRef.current?.navigate('Account', {
+      screen: AccountPage.ExpiredAccount,
+    });
   };
 
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
+    if (token) {
+      await authServer
+        .me()
+        .then(async (res) => {
+          i18n.locale = res.data.user.language;
+          setState({
+            ...state,
+            signedIn: SignInStatus.SIGNIN,
+            user: res.data.user,
+            notifications: res.data.notifications || [],
+            Server: authServer,
+          });
 
-    authServer
-      .me()
-      .then(async res => {
-        i18n.locale = res.data.user.language;
-
-        setState({
-          ...state,
-          signedIn: true,
-          user: res.data.user,
-          Server: authServer,
-          notifications: res.data.notifications || []
+          registerForPushNotificationsAsync().then((expoPushToken) => {
+            if (token && expoPushToken) {
+              authServer.registerExpoPushToken(expoPushToken)
+            }
+          });
+        })
+        .catch((e) => {
+          setState(defaultState);
         });
-
-        registerForPushNotificationsAsync().then((expoPushToken) => {
-          if (token && expoPushToken) {
-            authServer.registerExpoPushToken(expoPushToken)
-          }
-        });
-      })
-      .catch(() => {
-        setState(defaultState);
-      });
+    } else {
+      setState({ ...state, signedIn: SignInStatus.SIGNOUT });
+    }
   };
 
   useEffect(() => {
@@ -158,7 +168,7 @@ const App = () => {
       });
 
     const addNotificationResponseReceivedListener = Notifications
-      .addNotificationResponseReceivedListener(response => {
+      .addNotificationResponseReceivedListener(_response => {
         signIn()
       });
 
@@ -171,7 +181,7 @@ const App = () => {
   const RootStack = createStackNavigator();
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <ActivityIndicator size="large" color="#3679B5" />;
   }
 
   return (
@@ -183,7 +193,10 @@ const App = () => {
             setState({ ...state, user: { ...state.user, language: input } });
           },
           setKycStatus: () => {
-            setState({ ...state, user: { ...state.user, kycStatus: KycStatus.PENDING } });
+            setState({
+              ...state,
+              user: { ...state.user, kycStatus: KycStatus.PENDING },
+            });
           },
           signIn,
           signOut,
@@ -195,13 +208,14 @@ const App = () => {
             })
           },
           setEthAddress: (address: string) => {
-            setState({ ...state, user: { ...state.user, ethAddresses: [address] } });
+            setState({
+              ...state,
+              user: { ...state.user, ethAddresses: [address] },
+            });
           },
         }}>
-        <RootStack.Navigator
-          headerMode="none"
-        >
-          {state.signedIn ? (
+        <RootStack.Navigator headerMode="none">
+          {state.signedIn === SignInStatus.SIGNIN ? (
             <>
               <RootStack.Screen name={'Main'} component={Main} />
               <RootStack.Screen name={'Kyc'} component={Kyc} />
@@ -216,7 +230,7 @@ const App = () => {
             )}
         </RootStack.Navigator>
       </RootContext.Provider>
-    </NavigationContainer >
+    </NavigationContainer>
   );
 };
 
