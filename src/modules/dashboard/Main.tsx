@@ -167,6 +167,7 @@ export const Main: FunctionComponent = () => {
                     shadowOpacity: 0.8,
                     shadowRadius: 7,
                     elevation: 6,
+                    marginBottom: 20,
                   }}
                   onPress={() => navigation.navigate('ProductsMain')}>
                   <Text
