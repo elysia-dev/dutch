@@ -39,6 +39,7 @@ const htmlStyles = StyleSheet.create({
     lineHeight: 25,
     marginLeft: 10,
     marginRight: 10,
+    fontFamily: "Roboto_400Regular",
   },
   p: {
     fontSize: 15,
@@ -47,6 +48,7 @@ const htmlStyles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 10,
     marginRight: 10,
+    fontFamily: "Roboto_400Regular",
   },
 });
 const defaultTextProps = {
@@ -133,7 +135,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
           style={{
             position: 'absolute',
             flexDirection: 'column',
-            top: 20,
+            top: 40,
             left: 20,
           }}>
           <P1Text label={story.subTitle} />
@@ -155,6 +157,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             textComponentProps={defaultTextProps}
             nodeComponentProps={defaultTextProps}
           />
+          <View style={{ marginTop: 35 }} />
         </Animated.View>
       </ScrollView>
       <Animated.View
