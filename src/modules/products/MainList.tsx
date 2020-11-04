@@ -9,13 +9,14 @@ import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { PostItem } from './components/PostItem';
-import { Story } from '../../types/product';
+import Product, { Story } from '../../types/product';
 import ExpandedCard from './components/ExpandedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
 import RootContext from '../../contexts/RootContext';
 
 interface State {
   stories: Story[];
+  products: Product[];
   activeStory?: Story;
   xOffset: number;
   yOffset: number;
@@ -24,6 +25,7 @@ interface State {
 const MainList: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     stories: [],
+    products: [],
     xOffset: 0,
     yOffset: 0,
   });
@@ -38,11 +40,17 @@ const MainList: FunctionComponent = () => {
     Server.storyList()
       .then(res => {
         setState({ ...state, stories: res.data });
-        res.data.forEach(story => {
-          Image.prefetch(story.image);
+        Server.products().then((res) => {
+          setState((state) => {
+            return {
+              ...state,
+              products: res.data.filter((product) => product.status === 'terminated'),
+            };
+          });
         });
       })
       .catch(e => {
+        alert(e);
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -111,18 +119,25 @@ const MainList: FunctionComponent = () => {
               }
             />
           ))}
-          </View>
-          <View style={{
-            width: "90%",
-            marginLeft: "5%",
-            marginRight: "5%",
-            marginTop: 25,
-            marginBottom: 50,
-          }}>
-            <PostItem />
-            <PostItem />
-            <PostItem />
-          </View>
+        </View>
+        <View style={{
+          width: "90%",
+          marginLeft: "5%",
+          marginRight: "5%",
+          marginTop: 25,
+          marginBottom: 50,
+        }}>
+          {
+            state.products.map((product, index) => {
+              return (
+                <PostItem
+                  key={`terminated-product-${index}`}
+                  product={product}
+                />
+              );
+            })
+          }
+        </View>
         <VirtualTab />
       </ScrollView>
       {state.activeStory && (

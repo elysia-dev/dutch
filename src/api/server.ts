@@ -170,6 +170,10 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/products?productId=${id}`);
   };
 
+  products = async (): Promise<AxiosResponse<Product[]>> => {
+    return this.authenticatedEspressoClient.get(`/products`);
+  };
+
   coinPrice = async (): Promise<AxiosResponse<CoinPriceResponse>> => {
     return axios.get(
       'https://api.coingecko.com/api/v3/simple/price?ids=elysia,ethereum&vs_currencies=usd',
