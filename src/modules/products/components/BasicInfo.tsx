@@ -104,6 +104,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               shadowColor: '#00000029',
               shadowOpacity: 0.8,
               shadowRadius: 4,
+              elevation: 4,
               justifyContent: 'center',
               alignContent: 'center',
             }}>

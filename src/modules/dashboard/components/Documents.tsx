@@ -21,6 +21,7 @@ const documentButton = (title: string, handler: () => void) => {
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 7,
+        elevation: 4,
         width: 100,
         height: 95,
         padding: 10,
@@ -85,6 +86,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 7,
+        elevation: 5,
         padding: 15,
         paddingTop: 20,
       }}>

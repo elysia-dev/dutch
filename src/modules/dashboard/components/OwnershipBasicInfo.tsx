@@ -68,6 +68,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 shadowColor: '#00000029',
                 shadowOpacity: 0.8,
                 shadowRadius: 4,
+                elevation: 4,
                 justifyContent: 'center',
                 alignContent: 'center',
               }}>
@@ -110,7 +111,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                       user.language !== LocaleType.KO
                         ? i18n.t('dashboard_label.less')
                         : ''
-                    } 0.01% ${
+                    } 0.01%${
                       user.language === LocaleType.KO
                         ? i18n.t('dashboard_label.less')
                         : ''
