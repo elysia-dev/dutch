@@ -9,7 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 // import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
-import * as Notifications from 'expo-notifications'
+import * as Notifications from 'expo-notifications';
 
 /* eslint-disable @typescript-eslint/camelcase */
 import {
@@ -57,12 +57,14 @@ interface AppState {
     gender: string;
     language: LocaleType;
     ethAddresses: string[];
+    expoPushTokens: string[];
     nationality: string;
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
   notifications: Notification[];
   Server: Server;
+  expoPushToken: string;
 }
 
 const defaultState = {
@@ -77,12 +79,14 @@ const defaultState = {
     kycStatus: KycStatus.NONE,
     language: LocaleType.KO,
     ethAddresses: [],
+    expoPushTokens: [],
     nationality: 'South Korea, KOR',
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
   notifications: [],
   Server: new Server(() => { }, ''),
+  expoPushToken: '',
 };
 
 Notifications.setNotificationHandler({
@@ -135,7 +139,18 @@ const App = () => {
 
           registerForPushNotificationsAsync().then((expoPushToken) => {
             if (token && expoPushToken) {
-              authServer.registerExpoPushToken(expoPushToken)
+              authServer.registerExpoPushToken(expoPushToken).then(() => {
+                setState((state) => {
+                  return {
+                    ...state,
+                    user: {
+                      ...state.user,
+                      expoPushTokens: [expoPushToken],
+                    },
+                    expoPushToken,
+                  };
+                });
+              });
             }
           });
         })
@@ -160,16 +175,16 @@ const App = () => {
               ...state,
               notifications: [
                 response.request.content.data as Notification,
-                ...state.notifications
-              ]
-            }
-          })
+                ...state.notifications,
+              ],
+            };
+          });
         }
       });
 
     const addNotificationResponseReceivedListener = Notifications
       .addNotificationResponseReceivedListener(_response => {
-        signIn()
+        signIn();
       });
 
     return () => {
@@ -204,13 +219,19 @@ const App = () => {
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
-              notifications
-            })
+              notifications,
+            });
           },
           setEthAddress: (address: string) => {
             setState({
               ...state,
               user: { ...state.user, ethAddresses: [address] },
+            });
+          },
+          setUserExpoPushToken: (expoPushToken: string) => {
+            setState({
+              ...state,
+              user: { ...state.user, expoPushTokens: expoPushToken ? [expoPushToken] : [] },
             });
           },
         }}>

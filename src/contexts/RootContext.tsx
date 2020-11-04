@@ -16,6 +16,7 @@ type RootContextType = {
     gender: string;
     language: LocaleType;
     ethAddresses: string[];
+    expoPushTokens: string[];
     nationality: string;
   };
   changeLanguage: (input: LocaleType) => void;
@@ -26,7 +27,9 @@ type RootContextType = {
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
+  setUserExpoPushToken: (expoPushToken: string) => void;
   Server: Server;
+  expoPushToken: string;
 };
 
 const RootContext = createContext<RootContextType>({
@@ -39,6 +42,7 @@ const RootContext = createContext<RootContextType>({
     gender: '',
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
+    expoPushTokens: [],
     language: LocaleType.EN,
     nationality: 'South Korea, KOR',
   },
@@ -50,7 +54,9 @@ const RootContext = createContext<RootContextType>({
   notifications: [] as Notification[],
   setNotifications: (notifications: Notification[]) => { },
   setEthAddress: (address: string) => { },
+  setUserExpoPushToken: (expoPushToken: string) => { },
   Server: new Server(() => { }, ''),
+  expoPushToken: "",
 });
 
 export default RootContext;

@@ -15,6 +15,7 @@ export type UserResponse = {
     email: string;
     kycStatus: KycStatus;
     ethAddresses: string[];
+    expoPushTokens: string[];
     gender: string;
     firstName: string;
     lastName: string;
@@ -31,5 +32,5 @@ export type UserResponse = {
       profit: number;
     },
   ];
-  notifications: Notification[]
+  notifications: Notification[];
 };
