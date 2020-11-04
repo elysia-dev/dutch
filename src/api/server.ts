@@ -99,7 +99,15 @@ export default class Server {
 
   registerExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
     return this.authenticatedEspressoClient.put('/users/expoPushTokens', {
-      expoPushToken
+      expoPushToken,
+    });
+  };
+
+  deleteExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
+    return this.authenticatedEspressoClient.delete('/users/expoPushTokens?', {
+      data: {
+        expoPushToken,
+      },
     });
   };
 
