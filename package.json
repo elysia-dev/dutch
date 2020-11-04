@@ -5,7 +5,9 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "test": "jest",
-    "lint": "eslint . --ext .tsx --fix"
+    "lint": "eslint . --ext .tsx --fix",
+    "build:staging:ios": "expo build:ios --config stagingApp.json --release-channel staging-v1",
+    "build:staging:andriod": "expo build:andriod --config stagingApp.json --release-channel staging-v1"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",

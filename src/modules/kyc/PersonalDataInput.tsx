@@ -93,6 +93,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
       state.nationality === ''
     ) {
       alert(i18n.t('kyc.alert_data'));
+      setState({ ...state, submitDisabled: false });
     } else {
       Server.submission(
         state.firstName,

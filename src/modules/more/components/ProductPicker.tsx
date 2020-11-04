@@ -1,15 +1,5 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  StyleSheet,
-  View,
-  Platform,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { StyleSheet, View, Platform, StyleProp, ViewStyle } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
 
@@ -28,14 +18,19 @@ interface Props {
   };
 }
 
-export const ProductPicker: FunctionComponent<Props> = props => {
+export const ProductPicker: FunctionComponent<Props> = (props) => {
   useEffect(() => {
     props.loadProducts();
   }, []);
 
   return (
     <View style={props.style}>
-      <View style={pickerSelectStyles.inputAndroid}>
+      <View
+        style={
+          Platform.OS === 'android'
+            ? pickerSelectStyles.inputAndroid
+            : pickerSelectStyles.inputIOS
+        }>
         <Picker
           // mode="dropdown"
           accessibilityLabel={'product'}
@@ -55,14 +50,9 @@ export const ProductPicker: FunctionComponent<Props> = props => {
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    backgroundColor: '#fff',
+    top: 35,
     fontSize: 14,
     fontWeight: 'bold',
-    paddingVertical: 12,
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    borderColor: '#d0d8df',
-    borderRadius: 5,
     color: '#1C1C1C',
     textAlign: 'center',
   },
