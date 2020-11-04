@@ -47,7 +47,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
         if (
           settings.granted ||
           settings.ios?.status ===
-            Notifications.IosAuthorizationStatus.PROVISIONAL
+          Notifications.IosAuthorizationStatus.PROVISIONAL
         ) {
           AsyncStorage.getItem('pushNotificationPermission').then((res) => {
             setState({ ...state, hasPermission: res === 'granted' });
@@ -210,27 +210,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      setState({ ...state, showPickerModal: true });
-                    }}>
-                    <P1Text
-                      label={localeText()}
+                    <TouchableOpacity
                       style={{
-                        textAlign: 'center',
+                        width: '100%',
+                        height: 40,
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        setState({ ...state, showPickerModal: true });
+                      }}>
+                      <P1Text
+                        label={localeText()}
+                        style={{
+                          textAlign: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <View
                 style={{
