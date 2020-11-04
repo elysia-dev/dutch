@@ -1,5 +1,4 @@
 import React, {
-  Component,
   FunctionComponent,
   useContext,
   useEffect,
@@ -15,18 +14,16 @@ import {
   ActivityIndicator,
   Modal,
 } from 'react-native';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { Asset } from './components/Asset';
-import { DashboardPage, ProductPage } from '../../enums/pageEnum';
+import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { KycStatus } from '../../enums/KycStatus';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
-import { H2Text, P1Text, P3Text, H1Text } from '../../shared/components/Texts';
-import { defaultProduct } from '../../types/Product';
+import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
 
 export const Main: FunctionComponent = () => {
   const defaultUser = {
@@ -132,51 +129,96 @@ export const Main: FunctionComponent = () => {
               label={
                 user.firstName && user.lastName
                   ? i18n.t('greeting', {
-                      firstName: state.user.firstName,
-                      lastName:
-                        state.user.lastName === null ? '' : state.user.lastName,
-                    })
+                    firstName: state.user.firstName,
+                    lastName:
+                      state.user.lastName === null ? '' : state.user.lastName,
+                  })
                   : i18n.t('greeting_new')
               }
             />
+            <BalanceCard
+              balance={state.balance}
+              handler={() =>
+                navigation.navigate('Dashboard', {
+                  screen: DashboardPage.SummaryReport,
+                })
+              }
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+              }}>
+              {ownershipsList}
+              {
+                ownerships.length > 0 &&
+                <TouchableOpacity
+                  style={{
+                    position: 'relative',
+                    width: '47%',
+                    height: 200,
+                    borderRadius: 10,
+                    backgroundColor: '#fff',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    shadowOffset: { width: 2, height: 2 },
+                    shadowColor: '#1C1C1C4D',
+                    shadowOpacity: 0.8,
+                    shadowRadius: 7,
+                    elevation: 6,
+                  }}
+                  onPress={() => navigation.navigate('ProductsMain')}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontFamily: 'Roboto_700Bold',
+                      fontSize: 25,
+                      color: '#838383',
+                    }}>
+                    {'+'}
+                  </Text>
+                </TouchableOpacity>
+              }
+            </View>
             {(user.kycStatus !== KycStatus.SUCCESS ||
               !(user.ethAddresses?.length > 0)) && (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Dashboard', {
-                    screen: DashboardPage.PreparingInvestment,
-                  })
-                }
-                style={{
-                  marginBottom: 25,
-                  width: '100%',
-                  borderRadius: 10,
-                  backgroundColor: '#fff',
-                  shadowColor: '#3679B540',
-                  shadowOffset: { width: 1, height: 1 },
-                  shadowOpacity: 0.8,
-                  shadowRadius: 8,
-                  elevation: 6,
-                }}>
-                <Image
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Dashboard', {
+                      screen: DashboardPage.PreparingInvestment,
+                    })
+                  }
                   style={{
+                    marginBottom: 25,
                     width: '100%',
-                    height: 416,
-                    alignSelf: 'center',
                     borderRadius: 10,
-                  }}
-                  source={require('./images/promotion.png')}
-                />
-                <P1Text
-                  style={{ position: 'absolute', top: 30, left: 25 }}
-                  label={i18n.t('dashboard.connect_wallet')}
-                />
-                <H2Text
-                  style={{ position: 'absolute', top: 50, left: 25 }}
-                  label={i18n.t('dashboard.get_EL')}
-                />
-              </TouchableOpacity>
-            )}
+                    backgroundColor: '#fff',
+                    shadowColor: '#3679B540',
+                    shadowOffset: { width: 1, height: 1 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 8,
+                    elevation: 6,
+                  }}>
+                  <Image
+                    style={{
+                      width: '100%',
+                      height: 416,
+                      alignSelf: 'center',
+                      borderRadius: 10,
+                    }}
+                    source={require('./images/promotion.png')}
+                  />
+                  <P1Text
+                    style={{ position: 'absolute', top: 30, left: 25 }}
+                    label={i18n.t('dashboard.connect_wallet')}
+                  />
+                  <H2Text
+                    style={{ position: 'absolute', top: 50, left: 25 }}
+                    label={i18n.t('dashboard.get_EL')}
+                  />
+                </TouchableOpacity>
+              )}
             {user.kycStatus === KycStatus.SUCCESS &&
               user.ethAddresses?.length > 0 &&
               ownerships.length === 0 && (
@@ -281,52 +323,7 @@ export const Main: FunctionComponent = () => {
                   </TouchableOpacity>
                 </>
               )}
-            {ownerships.length > 0 && (
-              <>
-                <BalanceCard
-                  balance={state.balance}
-                  handler={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.SummaryReport,
-                    })
-                  }
-                />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                  }}>
-                  {ownershipsList}
-                  <TouchableOpacity
-                    style={{
-                      position: 'relative',
-                      width: '47%',
-                      height: 200,
-                      borderRadius: 10,
-                      backgroundColor: '#fff',
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                      shadowOffset: { width: 2, height: 2 },
-                      shadowColor: '#1C1C1C4D',
-                      shadowOpacity: 0.8,
-                      shadowRadius: 7,
-                      elevation: 6,
-                    }}
-                    onPress={() => navigation.navigate('ProductsMain')}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        fontFamily: 'Roboto_700Bold',
-                        fontSize: 25,
-                        color: '#838383',
-                      }}>
-                      {'+'}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
+
           </View>
           <VirtualTab />
         </SafeAreaView>
