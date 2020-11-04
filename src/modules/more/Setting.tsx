@@ -245,6 +245,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   style={{
                     width: '100%',
                     alignSelf: 'center',
+                    backgroundColor: "#767577",
                   }}
                 />
               </View>
