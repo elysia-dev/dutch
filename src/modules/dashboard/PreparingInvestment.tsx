@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useContext } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -9,6 +9,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 
 type ButtonProps = {
   title: string;
@@ -17,31 +18,31 @@ type ButtonProps = {
 };
 
 const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
-  const navigation = useNavigation();
-
   return (
     <TouchableOpacity
       onPress={props.onPress}
       disabled={props.color}
       style={{
-        width: '100%',
+        width: '90%',
         height: 50,
         padding: 15,
         marginBottom: 20,
         borderRadius: 5,
         borderWidth: 1,
         borderColor: props.color ? '#3679B5' : '#D0D8DF',
+        justifyContent: 'center',
+        alignContent: 'center',
+        marginLeft: "auto",
+        marginRight: 'auto',
       }}>
-      <Text
-        allowFontScaling={false}
+      <P1Text
         style={{
           color: props.color ? '#1C1C1C' : '#A7A7A7',
-          fontSize: 15,
           fontFamily: props.color ? 'Roboto_700Bold' : 'Roboto_400Regular',
           alignItems: 'center',
-        }}>
-        {props.title}
-      </Text>
+        }}
+        label={props.title}
+      />
     </TouchableOpacity>
   );
 };
@@ -51,18 +52,13 @@ const PreparingInvestment: FunctionComponent = () => {
   const { kycStatus, ethAddresses } = useContext(RootContext).user;
 
   return (
-    <View
-      style={{
-        backgroundColor: '#fff',
-        width: '100%',
-        height: '100%',
-        padding: 20,
-      }}>
-      <BackButton
-        style={{ marginTop: 10 }}
-        handler={() => navigation.goBack()}
-      />
-      {kycStatus === KycStatus.SUCCESS && ethAddresses !== null && (
+    <WrapperLayout
+      title={i18n.t('dashboard.prepare_investment')}
+      subTitle={<SubTitleText label={i18n.t('dashboard.need_kyc_wallet')} />}
+      backButtonHandler={() => navigation.goBack()}
+      isScrolling={false}
+      body={<>
+      {kycStatus === KycStatus.SUCCESS && ethAddresses !== null && Platform.OS === "ios" && (
         <ConfettiCannon
           count={100}
           origin={{ x: -10, y: -10 }}
@@ -70,40 +66,36 @@ const PreparingInvestment: FunctionComponent = () => {
           fadeOut={true}
         />
       )}
-      <TitleText label={i18n.t('dashboard.prepare_investment')} />
-      <SubTitleText
-        label={i18n.t('dashboard.need_kyc_wallet')}
-        style={{ marginTop: 10 }}
-      />
-      <View style={{ marginTop: 30, width: '100%' }}>
-        <StatusButton
-          title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
-          color={
-            kycStatus === KycStatus.PENDING || kycStatus === KycStatus.SUCCESS
-          }
-          onPress={() => {
-            if ([KycStatus.REJECTED, KycStatus.NONE].includes(kycStatus)) {
-              navigation.navigate('Kyc', { screen: KycPage.StartKYC });
+        <View style={{ marginTop: 20 }}>
+          <StatusButton
+            title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
+            color={
+              kycStatus === KycStatus.PENDING || kycStatus === KycStatus.SUCCESS
             }
-          }}
-        />
-        <StatusButton
-          title={
-            ethAddresses?.length > 0
-              ? i18n.t('dashboard.wallet_connected')
-              : i18n.t('dashboard.no_wallet')
-          }
-          color={ethAddresses?.length > 0}
-          onPress={() => {
-            if (!(ethAddresses?.length > 0)) {
-              navigation.navigate('More', {
-                screen: MorePage.RegisterEthAddress,
-              });
+            onPress={() => {
+              if ([KycStatus.REJECTED, KycStatus.NONE].includes(kycStatus)) {
+                navigation.navigate('Kyc', { screen: KycPage.StartKYC });
+              }
+            }}
+          />
+          <StatusButton
+            title={
+              ethAddresses?.length > 0
+                ? i18n.t('dashboard.wallet_connected')
+                : i18n.t('dashboard.no_wallet')
             }
-          }}
-        />
-      </View>
-
+            color={ethAddresses?.length > 0}
+            onPress={() => {
+              if (!(ethAddresses?.length > 0)) {
+                navigation.navigate('More', {
+                  screen: MorePage.RegisterEthAddress,
+                });
+              }
+            }}
+          />
+        </View>
+      </>}
+      button={
       <SubmitButton
         disabled={!(kycStatus === KycStatus.SUCCESS && ethAddresses !== null)}
         title={
@@ -113,16 +105,14 @@ const PreparingInvestment: FunctionComponent = () => {
         }
         handler={() => {}}
         style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 20,
           backgroundColor:
             kycStatus === KycStatus.SUCCESS && ethAddresses !== null
               ? '#3679B5'
               : '#D0D8DF',
         }}
-      />
-    </View>
+      />}
+    />
+
   );
 };
 
