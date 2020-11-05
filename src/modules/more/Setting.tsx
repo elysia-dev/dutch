@@ -22,6 +22,7 @@ import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
+import getEnvironment from '../../utiles/getEnvironment';
 
 interface Props {
   resetHandler: () => void;
@@ -158,7 +159,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   }}
                 />
                 <P1Text
-                  label={i18n.t('more_label.version') + ' 1.1.0'}
+                  label={i18n.t('more_label.version') + ` ${getEnvironment().version}`}
                   style={{
                     marginTop: 30,
                     paddingLeft: '5%',
