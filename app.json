@@ -67,7 +67,8 @@
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
       "versionCode": 6,
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "hooks": {
