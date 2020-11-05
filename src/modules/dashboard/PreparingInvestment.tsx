@@ -62,12 +62,12 @@ const PreparingInvestment: FunctionComponent = () => {
         { preparingCompletion && Platform.OS === "ios" && (
           <ConfettiCannon
             count={100}
-            origin={{ x: -10, y: -10 }}
+            origin={{ x: -10, y: -100 }}
             fallSpeed={3000}
             fadeOut={true}
           />
         )}
-        <View style={{ marginTop: 20 }}>
+        <View style={{ marginTop: 20, height: "100%" }}>
           <StatusButton
             title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
             color={
