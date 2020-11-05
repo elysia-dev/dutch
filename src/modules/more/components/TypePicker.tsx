@@ -50,7 +50,12 @@ export const TypePicker: FunctionComponent<Props> = (props) => {
 
   return (
     <View style={props.style}>
-      <View style={pickerSelectStyles.inputAndroid}>
+      <View
+        style={
+          Platform.OS === 'android'
+            ? pickerSelectStyles.inputAndroid
+            : pickerSelectStyles.inputIOS
+        }>
         <Picker
           accessibilityLabel={'type'}
           mode="dialog"
@@ -70,14 +75,8 @@ export const TypePicker: FunctionComponent<Props> = (props) => {
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    backgroundColor: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
-    paddingVertical: 12,
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    borderColor: '#d0d8df',
-    borderRadius: 5,
     color: '#1C1C1C',
     textAlign: 'center',
   },

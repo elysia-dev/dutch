@@ -11,6 +11,7 @@ import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
+import MetamaskFox from './images/metamask_logo.png';
 
 interface Props {
   resetHandler: () => void;
@@ -52,6 +53,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     Server.registerAddress(state.address).then(() => {
       setEthAddress(state.address);
       setState({ ...state, confirmModal: true });
+      navigation.goBack();
+      alert(`${i18n.t('dashboard.wallet_connected')}\n ${i18n.t('more.find_more')}`);
     }).catch(() => {
       alert(i18n.t('account_errors.server'));
     });
@@ -97,7 +100,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   <View style={{ width: "100%", padding: 15 }}>
                     <H2Text label={i18n.t('more.check')} style={{ textAlign: 'center', marginBottom: 3 }} />
                     <P3Text label={i18n.t('more.check_text')} style={{ color: "#626368", textAlign: 'center' }} />
-                    <View style={{ width: Dimensions.get("window").width * 0.9 - 40, height: 100, flexDirection: "column", padding: 15, backgroundColor: "#F6F6F8", borderRadius: 10, marginTop: 20, marginBottom: 60 }}>
+                    <Image source={MetamaskFox} style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: 20 }}></Image>
+                    <View style={{ width: Dimensions.get("window").width * 0.9 - 40, height: 100, flexDirection: "column", padding: 15, backgroundColor: "#F6F6F8", borderRadius: 10, marginTop: 20, marginBottom: 25 }}>
                       <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                         <BlueCircle />
                         <P3Text label={i18n.t('more.check_1')} style={{ color: "#1C1C1C" }} />

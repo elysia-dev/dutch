@@ -218,7 +218,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
         <>
           <Image
             source={require('../images/noownership.png')}
-            style={{ width: '85%', height: 200, resizeMode: 'center' }}
+            style={{ width: '85%', height: 200 }}
           />
           <P1Text
             style={{ marginTop: 25, textAlign: 'center' }}
@@ -226,27 +226,27 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           />
         </>
       ) : (
-        <>
-          <PieChart
-            style={{ height: 200 }}
-            data={pieData}
-            outerRadius={'100%'}
-            innerRadius={'70%'}
-            padAngle={0}
-          />
-          <View
-            style={{
-              width: '100%',
-              top: 20,
-              padding: 20,
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: '#F1F1F1',
-            }}>
-            {state.profit ? assetProfitLabel : assetPercentLabel}
-          </View>
-        </>
-      )}
+          <>
+            <PieChart
+              style={{ height: 200 }}
+              data={pieData}
+              outerRadius={'100%'}
+              innerRadius={'70%'}
+              padAngle={0}
+            />
+            <View
+              style={{
+                width: '100%',
+                top: 20,
+                padding: 20,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#F1F1F1',
+              }}>
+              {state.profit ? assetProfitLabel : assetPercentLabel}
+            </View>
+          </>
+        )}
     </View>
   );
 };

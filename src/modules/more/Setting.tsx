@@ -158,7 +158,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   }}
                 />
                 <P1Text
-                  label={i18n.t('more_label.version') + ' 1.1.0'}
+                  label={i18n.t('more_label.version') + ' 1.0.2'}
                   style={{
                     marginTop: 30,
                     paddingLeft: '5%',
@@ -178,14 +178,16 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   marginHorizontal: '5%',
                   borderWidth: 1,
                   borderRadius: 5,
+                  paddingLeft: 10,
                   borderColor: '#D0D8DF',
                   paddingRight: Platform.OS === 'android' ? 10 : 0,
                 }}>
                 {Platform.OS === 'android' ? (
                   <Picker
                     style={{
-                      height: 40,
+                      height: 30,
                       marginVertical: 10,
+                      padding: 0,
                     }}
                     accessibilityLabel={'settings'}
                     selectedValue={i18n.currentLocale()}
@@ -242,6 +244,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   style={{
                     width: '100%',
                     alignSelf: 'center',
+                    backgroundColor: "#767577",
                   }}
                 />
               </View>
@@ -330,27 +333,3 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
 };
 
 export default Setting;
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-    textAlign: 'center',
-  },
-  inputAndroid: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    fontSize: 16,
-    color: '#1C1C1C',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-});

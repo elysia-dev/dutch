@@ -1,0 +1,84 @@
+{
+  "expo": {
+    "owner": "devmodori",
+    "privacy": "hidden",
+    "name": "ElysiaStaging",
+    "slug": "ElysiaAppStaging",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#3679B5"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "notification": {
+      "icon": "https://elysia-public.s3.ap-northeast-2.amazonaws.com/pushicon.png",
+      "iosDisplayInForeground": true
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "land.elysia.staging",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY",
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Give permission to select photos.",
+        "NSPhotoLibraryAddUsageDescription": "Give permission to save photos.",
+        "NSCameraUsageDescription": "This app uses the camera for kyc certifications.",
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      },
+      "buildNumber": "1.0.2"
+    },
+    "android": {
+      "package": "land.elysia.staging",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCQhD0kqPwCwbylYI5t8ovgCd-7kQuo2DI"
+        }
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "USE_FINGERPRINT",
+        "USE_BIOMETRIC",
+        "WRITE_SETTINGS",
+        "VIBRATE",
+        "READ_PHONE_STATE",
+        "com.anddoes.launcher.permission.UPDATE_COUNT",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+        "com.google.android.providers.gsf.permission.READ_GSERVICES",
+        "com.htc.launcher.permission.READ_SETTINGS",
+        "com.htc.launcher.permission.UPDATE_SHORTCUT",
+        "com.majeur.launcher.permission.UPDATE_BADGE",
+        "com.sec.android.provider.badge.permission.READ",
+        "com.sec.android.provider.badge.permission.WRITE",
+        "com.sonyericsson.home.permission.BROADCAST_BADGE"
+      ],
+      "versionCode": 6
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "modori",
+            "project": "elysia",
+            "authToken": "2789d9171b0945e78c5fd93502b6d8d918eabb238d7f456ca07fce34c03dd9cf"
+          }
+        }
+      ]
+    },
+    "scheme": "elysia-app"
+  }
+}

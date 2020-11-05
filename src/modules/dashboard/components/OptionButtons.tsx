@@ -33,6 +33,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           shadowColor: '#00000033',
           shadowOpacity: 0.8,
           shadowRadius: 5,
+          elevation: 4,
           justifyContent: 'center',
           alignContent: 'center',
         }}>
@@ -60,6 +61,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           shadowColor: '#00000033',
           shadowOpacity: 0.8,
           shadowRadius: 5,
+          elevation: 4,
           justifyContent: 'center',
           alignContent: 'center',
         }}>
@@ -87,6 +89,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           shadowColor: '#00000033',
           shadowOpacity: 0.8,
           shadowRadius: 5,
+          elevation: 4,
           justifyContent: 'center',
           alignContent: 'center',
         }}>

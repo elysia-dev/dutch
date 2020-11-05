@@ -269,6 +269,7 @@ const Transactions: FunctionComponent = () => {
             />
           }
           dispatch={dispatch}
+          productList={productState}
           filter={state}
           filterTransactions={() => filterTransactions()}
         />

@@ -162,9 +162,17 @@ const ConfirmID: FunctionComponent<{}> = () => {
               title={i18n.t('kyc_label.shoot_again')}
               handler={() => navigation.navigate(KycPage.TakeID)}
               variant={'WhiteTheme'}
-              style={{ marginTop: 'auto', marginBottom: 10 }}
+              style={{
+                marginTop: 'auto',
+                marginBottom: 10,
+              }}
             />
             <SubmitButton
+              style={{
+                backgroundColor:
+                  status === LoadingStatus.PENDING ? '#D0D8DF' : '#3679B5',
+              }}
+              disabled={status === LoadingStatus.PENDING}
               title={i18n.t('kyc_label.submit')}
               handler={async () => {
                 callKycApi();

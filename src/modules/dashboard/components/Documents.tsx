@@ -1,5 +1,12 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, TouchableOpacity, Image, Modal, Dimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Modal,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import styled from 'styled-components/native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import i18n from '../../../i18n/i18n';
@@ -15,12 +22,14 @@ const documentButton = (title: string, handler: () => void) => {
     <TouchableOpacity
       onPress={handler}
       style={{
+        elevation: 1,
         borderRadius: 5,
         backgroundColor: '#fff',
         shadowColor: '#3679B538',
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 7,
+        elevation: 4,
         width: 100,
         height: 95,
         padding: 10,
@@ -85,8 +94,10 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 7,
+        elevation: 5,
         padding: 15,
         paddingTop: 20,
+        elevation: 2,
       }}>
       <H3Text label={i18n.t('dashboard_label.document')} />
       <View
@@ -103,33 +114,83 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
             )}
             <Modal
               visible={state.showShareholderCertificate}
-              transparent={true}>
-              <ImageViewer
-                imageUrls={shareholderCertificate}
-                renderArrowRight={() => (
-                  <TouchableOpacity
+              transparent={false}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000',
+                }}>
+                {Platform.OS === 'android' && (
+                  <View
                     style={{
-                      width: 30,
-                      height: 30,
-                      opacity: 0.7,
-                      position: 'relative',
-                      top: -(Dimensions.get('window').height * 0.4),
-                      marginLeft: 'auto',
-                      marginRight: 10,
-                    }}
-                    onPress={() =>
-                      setState({ ...state, showShareholderCertificate: false })
-                    }>
-                    <Image
-                      source={require('../images/quitbutton.png')}
+                      width: '100%',
+                      height: 50,
+                      position: 'absolute',
+                      top: 0,
+                    }}>
+                    <TouchableOpacity
                       style={{
+                        zIndex: 15,
                         width: 30,
                         height: 30,
+                        opacity: 0.7,
+                        position: 'relative',
+                        top: 30,
+                        marginLeft: 'auto',
+                        marginRight: 10,
                       }}
-                    />
-                  </TouchableOpacity>
+                      onPress={() => {
+                        setState({
+                          ...state,
+                          showShareholderCertificate: false,
+                        });
+                      }}>
+                      <Image
+                        source={require('../images/quitbutton.png')}
+                        style={{
+                          width: 30,
+                          height: 30,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 )}
-              />
+                <ImageViewer
+                  imageUrls={shareholderCertificate}
+                  renderArrowRight={() =>
+                    Platform.OS === 'ios' ? (
+                      <TouchableOpacity
+                        style={{
+                          zIndex: 10,
+                          width: 30,
+                          height: 30,
+                          opacity: 0.7,
+                          position: 'relative',
+                          top: -(Dimensions.get('window').height * 0.4),
+                          marginLeft: 'auto',
+                          marginRight: 10,
+                        }}
+                        onPress={() => {
+                          setState({
+                            ...state,
+                            showShareholderCertificate: false,
+                          });
+                        }}>
+                        <Image
+                          source={require('../images/quitbutton.png')}
+                          style={{
+                            width: 30,
+                            height: 30,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <View />
+                    )
+                  }
+                />
+              </View>
             </Modal>
           </View>
         )}
@@ -138,33 +199,79 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
             {documentButton(i18n.t('dashboard_label.lease_document'), () =>
               setState({ ...state, showLeaseContract: true }),
             )}
-            <Modal visible={state.showLeaseContract} transparent={true}>
-              <ImageViewer
-                imageUrls={leaseContract}
-                renderArrowRight={() => (
-                  <TouchableOpacity
+            <Modal visible={state.showLeaseContract} transparent={false}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000',
+                }}>
+                {Platform.OS === 'android' && (
+                  <View
                     style={{
-                      width: 30,
-                      height: 30,
-                      opacity: 0.7,
-                      position: 'relative',
-                      top: -(Dimensions.get('window').height * 0.4),
-                      marginLeft: 'auto',
-                      marginRight: 10,
-                    }}
-                    onPress={() =>
-                      setState({ ...state, showLeaseContract: false })
-                    }>
-                    <Image
-                      source={require('../images/quitbutton.png')}
+                      width: '100%',
+                      height: 50,
+                      position: 'absolute',
+                      top: 0,
+                    }}>
+                    <TouchableOpacity
                       style={{
+                        zIndex: 15,
                         width: 30,
                         height: 30,
+                        opacity: 0.7,
+                        position: 'relative',
+                        top: 30,
+                        marginLeft: 'auto',
+                        marginRight: 10,
                       }}
-                    />
-                  </TouchableOpacity>
+                      onPress={() => {
+                        setState({
+                          ...state,
+                          showLeaseContract: false,
+                        });
+                      }}>
+                      <Image
+                        source={require('../images/quitbutton.png')}
+                        style={{
+                          width: 30,
+                          height: 30,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 )}
-              />
+                <ImageViewer
+                  imageUrls={leaseContract}
+                  renderArrowRight={() =>
+                    Platform.OS === 'ios' ? (
+                      <TouchableOpacity
+                        style={{
+                          width: 30,
+                          height: 30,
+                          opacity: 0.7,
+                          position: 'relative',
+                          top: -(Dimensions.get('window').height * 0.4),
+                          marginLeft: 'auto',
+                          marginRight: 10,
+                        }}
+                        onPress={() =>
+                          setState({ ...state, showLeaseContract: false })
+                        }>
+                        <Image
+                          source={require('../images/quitbutton.png')}
+                          style={{
+                            width: 30,
+                            height: 30,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <View />
+                    )
+                  }
+                />
+              </View>
             </Modal>
           </View>
         )}
@@ -173,33 +280,79 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
             {documentButton(i18n.t('dashboard_label.stake_document'), () =>
               setState({ ...state, showStakeCertificate: true }),
             )}
-            <Modal visible={state.showStakeCertificate} transparent={true}>
-              <ImageViewer
-                imageUrls={stakeCertificate}
-                renderArrowRight={() => (
-                  <TouchableOpacity
+            <Modal visible={state.showStakeCertificate} transparent={false}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000',
+                }}>
+                {Platform.OS === 'android' && (
+                  <View
                     style={{
-                      width: 40,
-                      height: 40,
-                      opacity: 0.7,
-                      position: 'relative',
-                      top: -(Dimensions.get('window').height * 0.4),
-                      marginLeft: 'auto',
-                      marginRight: 10,
-                    }}
-                    onPress={() =>
-                      setState({ ...state, showStakeCertificate: false })
-                    }>
-                    <Image
-                      source={require('../images/quitbutton.png')}
+                      width: '100%',
+                      height: 50,
+                      position: 'absolute',
+                      top: 0,
+                    }}>
+                    <TouchableOpacity
                       style={{
-                        width: 40,
-                        height: 40,
+                        zIndex: 15,
+                        width: 30,
+                        height: 30,
+                        opacity: 0.7,
+                        position: 'relative',
+                        top: 30,
+                        marginLeft: 'auto',
+                        marginRight: 10,
                       }}
-                    />
-                  </TouchableOpacity>
+                      onPress={() => {
+                        setState({
+                          ...state,
+                          showStakeCertificate: false,
+                        });
+                      }}>
+                      <Image
+                        source={require('../images/quitbutton.png')}
+                        style={{
+                          width: 30,
+                          height: 30,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 )}
-              />
+                <ImageViewer
+                  imageUrls={stakeCertificate}
+                  renderArrowRight={() =>
+                    Platform.OS === 'ios' ? (
+                      <TouchableOpacity
+                        style={{
+                          width: 30,
+                          height: 30,
+                          opacity: 0.7,
+                          position: 'relative',
+                          top: -(Dimensions.get('window').height * 0.4),
+                          marginLeft: 'auto',
+                          marginRight: 10,
+                        }}
+                        onPress={() =>
+                          setState({ ...state, showStakeCertificate: false })
+                        }>
+                        <Image
+                          source={require('../images/quitbutton.png')}
+                          style={{
+                            width: 30,
+                            height: 30,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    ) : (
+                      <View />
+                    )
+                  }
+                />
+              </View>
             </Modal>
           </View>
         )}

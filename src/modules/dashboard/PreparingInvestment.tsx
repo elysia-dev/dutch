@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useContext } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -9,6 +9,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 
 type ButtonProps = {
   title: string;
@@ -17,31 +18,31 @@ type ButtonProps = {
 };
 
 const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
-  const navigation = useNavigation();
-
   return (
     <TouchableOpacity
       onPress={props.onPress}
       disabled={props.color}
       style={{
-        width: '100%',
+        width: '90%',
         height: 50,
         padding: 15,
         marginBottom: 20,
         borderRadius: 5,
         borderWidth: 1,
         borderColor: props.color ? '#3679B5' : '#D0D8DF',
+        justifyContent: 'center',
+        alignContent: 'center',
+        marginLeft: "auto",
+        marginRight: 'auto',
       }}>
-      <Text
-        allowFontScaling={false}
+      <P1Text
         style={{
           color: props.color ? '#1C1C1C' : '#A7A7A7',
-          fontSize: 15,
           fontFamily: props.color ? 'Roboto_700Bold' : 'Roboto_400Regular',
           alignItems: 'center',
-        }}>
-        {props.title}
-      </Text>
+        }}
+        label={props.title}
+      />
     </TouchableOpacity>
   );
 };
@@ -49,80 +50,70 @@ const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 const PreparingInvestment: FunctionComponent = () => {
   const navigation = useNavigation();
   const { kycStatus, ethAddresses } = useContext(RootContext).user;
+  const preparingCompletion = kycStatus === KycStatus.SUCCESS && ethAddresses?.length > 0;
 
   return (
-    <View
-      style={{
-        backgroundColor: '#fff',
-        width: '100%',
-        height: '100%',
-        padding: 20,
-      }}>
-      <BackButton
-        style={{ marginTop: 10 }}
-        handler={() => navigation.goBack()}
-      />
-      {kycStatus === KycStatus.SUCCESS && ethAddresses !== null && (
-        <ConfettiCannon
-          count={100}
-          origin={{ x: -10, y: -10 }}
-          fallSpeed={3000}
-          fadeOut={true}
-        />
-      )}
-      <TitleText label={i18n.t('dashboard.prepare_investment')} />
-      <SubTitleText
-        label={i18n.t('dashboard.need_kyc_wallet')}
-        style={{ marginTop: 10 }}
-      />
-      <View style={{ marginTop: 30, width: '100%' }}>
-        <StatusButton
-          title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
-          color={
-            kycStatus === KycStatus.PENDING || kycStatus === KycStatus.SUCCESS
-          }
-          onPress={() => {
-            if ([KycStatus.REJECTED, KycStatus.NONE].includes(kycStatus)) {
-              navigation.navigate('Kyc', { screen: KycPage.StartKYC });
+    <WrapperLayout
+      title={i18n.t('dashboard.prepare_investment')}
+      subTitle={<SubTitleText label={i18n.t('dashboard.need_kyc_wallet')} />}
+      backButtonHandler={() => navigation.goBack()}
+      isScrolling={false}
+      body={<>
+        { preparingCompletion && Platform.OS === "ios" && (
+          <ConfettiCannon
+            count={100}
+            origin={{ x: -10, y: -10 }}
+            fallSpeed={3000}
+            fadeOut={true}
+          />
+        )}
+        <View style={{ marginTop: 20 }}>
+          <StatusButton
+            title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
+            color={
+              kycStatus === KycStatus.PENDING || kycStatus === KycStatus.SUCCESS
             }
-          }}
-        />
-        <StatusButton
+            onPress={() => {
+              if ([KycStatus.REJECTED, KycStatus.NONE].includes(kycStatus)) {
+                navigation.navigate('Kyc', { screen: KycPage.StartKYC });
+              }
+            }}
+          />
+          <StatusButton
+            title={
+              ethAddresses?.length > 0
+                ? i18n.t('dashboard.wallet_connected')
+                : i18n.t('dashboard.no_wallet')
+            }
+            color={ethAddresses?.length > 0}
+            onPress={() => {
+              if (!(ethAddresses?.length > 0)) {
+                navigation.navigate('More', {
+                  screen: MorePage.RegisterEthAddress,
+                });
+              }
+            }}
+          />
+        </View>
+      </>}
+      button={
+        <SubmitButton
+          disabled={!(preparingCompletion)}
           title={
-            ethAddresses?.length > 0
-              ? i18n.t('dashboard.wallet_connected')
-              : i18n.t('dashboard.no_wallet')
-          }
-          color={ethAddresses?.length > 0}
-          onPress={() => {
-            if (!(ethAddresses?.length > 0)) {
-              navigation.navigate('More', {
-                screen: MorePage.RegisterEthAddress,
-              });
-            }
-          }}
-        />
-      </View>
-
-      <SubmitButton
-        disabled={!(kycStatus === KycStatus.SUCCESS && ethAddresses !== null)}
-        title={
-          kycStatus === KycStatus.SUCCESS && ethAddresses !== null
-            ? i18n.t('dashboard.event_guide_EL')
-            : i18n.t('dashboard.complete_prepare')
-        }
-        handler={() => {}}
-        style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 20,
-          backgroundColor:
             kycStatus === KycStatus.SUCCESS && ethAddresses !== null
-              ? '#3679B5'
-              : '#D0D8DF',
-        }}
-      />
-    </View>
+              ? i18n.t('dashboard.event_guide_EL')
+              : i18n.t('dashboard.complete_prepare')
+          }
+          handler={() => { }}
+          style={{
+            backgroundColor:
+              kycStatus === KycStatus.SUCCESS && ethAddresses !== null
+                ? '#3679B5'
+                : '#D0D8DF',
+          }}
+        />}
+    />
+
   );
 };
 

@@ -76,6 +76,7 @@ const ProductData: FunctionComponent = () => {
             shadowOffset: { width: 1, height: 1 },
             shadowOpacity: 0.6,
             shadowRadius: 7,
+            elevation: 5,
           }}>
           <Map product={product} />
         </View>

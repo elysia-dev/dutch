@@ -130,6 +130,7 @@ const ProductNotice: FunctionComponent = () => {
             width: '100%',
             borderRadius: 10,
             shadowRadius: 7,
+            elevation: 4,
             shadowColor: '#3679B540',
             shadowOffset: { width: 1, height: 1 },
             shadowOpacity: 0.6,

@@ -286,6 +286,7 @@ const TakeID: FunctionComponent<{}> = () => {
         }
         <TakeIdWrapper>
           <Camera
+            useCamera2Api={true}
             style={{
               flex: 1,
               width: '100%',
@@ -298,7 +299,12 @@ const TakeID: FunctionComponent<{}> = () => {
               camera = ref;
             }}>
             <HeaderCameraWrapper>
-              <View style={{ flex: 1, marginLeft: '5%', flexDirection: 'row' }}>
+              <View
+                style={{
+                  flex: 1,
+                  marginLeft: '5%',
+                  flexDirection: 'row',
+                }}>
                 <BackButton
                   handler={() => navigation.goBack()}
                   isWhite={true}
@@ -309,7 +315,7 @@ const TakeID: FunctionComponent<{}> = () => {
                     color: '#FFF',
                     fontSize: 18,
                     flex: 1,
-                    marginTop: Platform.OS === 'ios' ? 20 : 15,
+                    marginTop: Platform.OS === 'ios' ? 18 : 15,
                   }}
                 />
               </View>

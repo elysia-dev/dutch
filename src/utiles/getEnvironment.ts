@@ -29,7 +29,6 @@ function getEnvironment(): Environment {
   return {
     envName: "DEVELOPMENT",
     apiUrl: `http://${(manifest.debuggerHost || 'localhost').split(':').shift()}:3000`,
-    //apiUrl: "https://staging-api.elysia.land",
     // dappUrl: "localhost:5000",
     dappUrl: "staging-dapp.elysia.land",
   };

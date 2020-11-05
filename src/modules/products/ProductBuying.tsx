@@ -64,6 +64,9 @@ const ProductBuying: FunctionComponent = () => {
     !state.product?.restrictedCountries?.includes(shortNationality);
 
   const submitButtonTitle = () => {
+    if (state.product?.status === ProductStatus.TERMINATED) {
+      return "Closed";
+    }
     if (!purchasability) {
       return i18n.t('product_label.non_purchasable');
     } else if (state.product?.status === ProductStatus.SALE) {
@@ -161,6 +164,7 @@ const ProductBuying: FunctionComponent = () => {
           marginBottom: 15,
           backgroundColor: purchasability ? '#3679B5' : '#D0D8DF',
         }}
+        disabled={state.product?.status === 'terminated'}
         handler={() => {
           if (!purchasability) {
             if (state.product?.restrictedCountries.includes(shortNationality)) {
