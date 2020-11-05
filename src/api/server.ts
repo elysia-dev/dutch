@@ -5,11 +5,11 @@ import { Platform } from 'react-native';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
-axios.defaults.baseURL = 'http://localhost:3000';
 import Product, { ProductId, Story } from '../types/product';
 import { PostResponse } from '../types/PostResponse';
 import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
+import Notification from '../types/Notification';
 import { SummaryReportResponse } from '../types/SummaryReport';
 import { CoinPriceResponse, ELPriceResponse } from '../types/CoinPrice';
 import { KycResponse, PhotoResponse } from '../types/Kyc';
@@ -94,7 +94,21 @@ export default class Server {
   };
 
   me = async (): Promise<AxiosResponse<UserResponse>> => {
-    return this.authenticatedEspressoClient.get('/auth/me');
+    return this.authenticatedEspressoClient.get(`/auth/me`);
+  };
+
+  registerExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
+    return this.authenticatedEspressoClient.put('/users/expoPushTokens', {
+      expoPushToken,
+    });
+  };
+
+  deleteExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
+    return this.authenticatedEspressoClient.delete('/users/expoPushTokens?', {
+      data: {
+        expoPushToken,
+      },
+    });
   };
 
   logout = async () => {

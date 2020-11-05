@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 
 import {
@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 // import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
+import * as Notifications from 'expo-notifications';
 
 /* eslint-disable @typescript-eslint/camelcase */
 import {
@@ -18,7 +19,6 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
-import Pusher from 'pusher-js/react-native';
 import { ActivityIndicator } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -29,15 +29,14 @@ import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
-import getPusherClient from './src/api/pusherClient';
-import userChannel from './src/utiles/userChannel';
 import Main from './src/modules/main/Main';
-import Notification from './src/types/Notification';
+import Notification, { isNotification } from './src/types/Notification';
 
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 import { AccountPage } from './src/enums/pageEnum';
-import disablePushNotificationsAsync from './src/utiles/disableNotificationsAsync';
+
+import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
 import { SignInStatus } from './src/enums/LoginStatus';
 
 Sentry.init({
@@ -58,13 +57,14 @@ interface AppState {
     gender: string;
     language: LocaleType;
     ethAddresses: string[];
+    expoPushTokens: string[];
     nationality: string;
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
-  unreadNotificationCount: number;
   notifications: Notification[];
   Server: Server;
+  expoPushToken: string;
 }
 
 const defaultState = {
@@ -79,19 +79,27 @@ const defaultState = {
     kycStatus: KycStatus.NONE,
     language: LocaleType.KO,
     ethAddresses: [],
+    expoPushTokens: [],
     nationality: 'South Korea, KOR',
   },
-  changeLanguage: () => {},
-  setKycStatus: () => {},
-  unreadNotificationCount: 0,
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
+  expoPushToken: '',
 };
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const App = () => {
   const [state, setState] = useState<AppState>(defaultState);
-  const [pusherClient, setPusherClient] = useState<Pusher>();
-  const navigationRef = useRef<NavigationContainerRef>(null);
+  const navigationRef = React.createRef<NavigationContainerRef>();
 
   /* eslint-disable @typescript-eslint/camelcase */
   const [fontsLoaded] = useFonts({
@@ -102,7 +110,6 @@ const App = () => {
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
-    await disablePushNotificationsAsync(state.user.email);
     setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
   };
 
@@ -126,15 +133,28 @@ const App = () => {
             ...state,
             signedIn: SignInStatus.SIGNIN,
             user: res.data.user,
-            unreadNotificationCount: res.data.unreadNotificationCount,
+            notifications: res.data.notifications || [],
             Server: authServer,
           });
-          // enablePushNotifications(res.data.user.email);
+
+          registerForPushNotificationsAsync().then((expoPushToken) => {
+            if (token && expoPushToken) {
+              authServer.registerExpoPushToken(expoPushToken).then(() => {
+                setState((state) => {
+                  return {
+                    ...state,
+                    user: {
+                      ...state.user,
+                      expoPushTokens: [expoPushToken],
+                    },
+                    expoPushToken,
+                  };
+                });
+              });
+            }
+          });
         })
         .catch((e) => {
-          if (state.user?.email) {
-            disablePushNotificationsAsync(state.user?.email);
-          }
           setState(defaultState);
         });
     } else {
@@ -144,34 +164,34 @@ const App = () => {
 
   useEffect(() => {
     signIn();
-    getPusherClient().then((client) => {
-      setPusherClient(client);
-    });
   }, []);
 
   useEffect(() => {
-    if (state.signedIn && state.user.id && pusherClient) {
-      const handleNotification = (notification: Notification) => {
-        setState({
-          ...state,
-          unreadNotificationCount: state.unreadNotificationCount + 1,
-          notifications: [notification, ...state.notifications],
-        });
-      };
+    const addNotificationReceivedListener = Notifications
+      .addNotificationReceivedListener(response => {
+        if (isNotification(response.request.content.data as Notification)) {
+          setState((state) => {
+            return {
+              ...state,
+              notifications: [
+                response.request.content.data as Notification,
+                ...state.notifications,
+              ],
+            };
+          });
+        }
+      });
 
-      const channel = pusherClient.subscribe(userChannel(state.user.id));
-      channel.bind('notification', handleNotification);
+    const addNotificationResponseReceivedListener = Notifications
+      .addNotificationResponseReceivedListener(_response => {
+        signIn();
+      });
 
-      return () => channel.unbind('notification', handleNotification);
-    } else {
-      return () => {};
-    }
-  }, [
-    state.signedIn,
-    state.notifications,
-    pusherClient,
-    state.unreadNotificationCount,
-  ]);
+    return () => {
+      Notifications.removeNotificationSubscription(addNotificationReceivedListener);
+      Notifications.removeNotificationSubscription(addNotificationResponseReceivedListener);
+    };
+  }, []);
 
   const RootStack = createStackNavigator();
 
@@ -196,19 +216,22 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
-          setUnreadNotificationCount: (value: number) => {
+          setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
-              unreadNotificationCount: value >= 0 ? value : 0,
+              notifications,
             });
-          },
-          setNotifications: (notifications: Notification[]) => {
-            setState({ ...state, notifications });
           },
           setEthAddress: (address: string) => {
             setState({
               ...state,
               user: { ...state.user, ethAddresses: [address] },
+            });
+          },
+          setUserExpoPushToken: (expoPushToken: string) => {
+            setState({
+              ...state,
+              user: { ...state.user, expoPushTokens: expoPushToken ? [expoPushToken] : [] },
             });
           },
         }}>
@@ -222,10 +245,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-            <>
-              <RootStack.Screen name={'Account'} component={Account} />
-            </>
-          )}
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
         </RootStack.Navigator>
       </RootContext.Provider>
     </NavigationContainer>

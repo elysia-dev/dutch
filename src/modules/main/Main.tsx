@@ -29,7 +29,7 @@ const Icon = styled.Image`
 const Tab = createBottomTabNavigator();
 
 const Main: FunctionComponent = () => {
-  const { unreadNotificationCount, user } = useContext(RootContext);
+  const { notifications, user } = useContext(RootContext);
 
   return (
     <SafeAreaView
@@ -92,7 +92,7 @@ const Main: FunctionComponent = () => {
                     width: 25,
                   }}
                 />
-                {unreadNotificationCount > 0 && (
+                {notifications.filter((notification) => notification.status === 'unread').length > 0 && (
                   <View
                     style={{
                       position: 'absolute',

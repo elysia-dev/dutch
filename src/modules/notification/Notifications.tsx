@@ -1,11 +1,10 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
   useState,
 } from 'react';
-import { View, Animated, RefreshControl, Text, Platform, Image } from 'react-native';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import { View, Animated, RefreshControl } from 'react-native';
+import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
 import RootContext from '../../contexts/RootContext';
@@ -17,7 +16,6 @@ import { P1Text, P3Text } from '../../shared/components/Texts';
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
-  const navigation = useNavigation();
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -26,14 +24,8 @@ const Notifications: FunctionComponent = () => {
 
   const {
     notifications,
-    unreadNotificationCount,
     setNotifications,
-    setUnreadNotificationCount,
   } = useContext(RootContext);
-
-  useEffect(() => {
-    loadNotifications();
-  }, []);
 
   const loadNotifications = () =>
     Server.notification()
@@ -69,7 +61,6 @@ const Notifications: FunctionComponent = () => {
             }
           }),
         );
-        setUnreadNotificationCount(unreadNotificationCount - 1);
       })
       .catch(e => {
         if (e.response.status === 500) {
