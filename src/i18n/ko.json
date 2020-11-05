@@ -1,7 +1,7 @@
 {
   "welcome": "엘리시아에 오신 것을 환영합니다.",
   "greeting": "안녕하세요. %{lastName} %{firstName}님",
-  "greeting_new": "안녕하세요. 방문자님",
+  "greeting_new": "안녕하세요. %{email}님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "check_email": "이메일 주소를 확인해주세요.",

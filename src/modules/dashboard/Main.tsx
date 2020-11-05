@@ -133,7 +133,9 @@ export const Main: FunctionComponent = () => {
                     lastName:
                       state.user.lastName === null ? '' : state.user.lastName,
                   })
-                  : i18n.t('greeting_new')
+                  : i18n.t('greeting_new', {
+                    email: state.user.email,
+                  })
               }
             />
             <BalanceCard

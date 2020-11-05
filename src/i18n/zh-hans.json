@@ -1,7 +1,7 @@
 {
   "welcome": "欢迎使用爱立厦（ELYSIA)",
   "greeting": "您好, %{firstName} %{lastName}",
-  "greeting_new": "您好，投资者",
+  "greeting_new": "您好， %{email}",
   "account": {
     "insert_account_email": "请输入您的邮箱地址。",
     "check_email": "请检查您的邮箱地址。",

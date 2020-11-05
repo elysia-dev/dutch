@@ -1,7 +1,7 @@
 {
   "welcome": "Welcome to Elysia",
   "greeting": "Hi, %{firstName}!",
-  "greeting_new": "Hello, Guest",
+  "greeting_new": "Hello, %{email}!",
   "account": {
     "insert_account_email": "Please enter your email.",
     "check_email": "Please check your email address.",
