@@ -18,6 +18,7 @@
     "unmatched_verification": "验证码不正确，请再试一次。 (%{error}/5)",
     "resend_verification": "验证已重新申请，请输入新的验证码。",
     "insert_password": "请输入密码。",
+    "create_password": "请输入密码。",
     "insert_current_password": "请输入密码。",
     "insert_new_password": "请输入更改后的密码。",
     "recover_password": "请更改密码。",

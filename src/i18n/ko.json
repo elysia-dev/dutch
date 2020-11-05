@@ -18,6 +18,7 @@
     "unmatched_verification": "인증번호가 올바르지 않아요. 다시 시도해주세요. (%{error}/5)",
     "resend_verification": "인증이 재요청되었습니다. 새로운 인증번호를 확인해주세요.",
     "insert_password": "비밀번호를 입력해주세요.",
+    "create_password": "새 비밀번호를 입력해주세요.",
     "insert_current_password": "기존 비밀번호를 입력해주세요.",
     "insert_new_password": "변경할 비밀번호를 입력해주세요.",
     "recover_password": "비밀번호 변경을 진행해주세요.",
