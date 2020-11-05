@@ -2349,11 +2349,6 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/pusher-js@^4.2.2":
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/@types/pusher-js/-/pusher-js-4.2.2.tgz#129fae1854255c5883e874137cd045c48d0a422a"
-  integrity sha512-LP9isBRAFlNzQohQtySJxJjzmy4zQCcv5xGZD2G3rsDnTWfpEkFKyLw3x9711pFAXwwUl9ZivxKkcnFr8umSAQ==
-
 "@types/react-native-datepicker@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@types/react-native-datepicker/-/react-native-datepicker-1.7.0.tgz#b4dc63ed3bd356ac30c9195b7987aea45f79fe8d"
@@ -4740,7 +4735,7 @@ expo-camera@~9.0.0:
     invariant "2.2.4"
     lodash "^4.6.0"
 
-expo-constants@*, expo-constants@9.2.0, expo-constants@~9.2.0:
+expo-constants@*, expo-constants@9.2.0, expo-constants@^9.2.0, expo-constants@~9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.2.0.tgz#e86a38793deaff9018878afac65bce2543c80a4c"
   integrity sha512-WKwiEMvBgPrEPEyZKm21UUB2KWQux9OCWf6ZDORLTln7kO3rsbaJEprfWUWTP7AxyaLMYfN+/0WFHjZc25SZWQ==
@@ -8604,13 +8599,6 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pusher-js@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-7.0.0.tgz#9716ae3f79ca7f87a269764f278a8e14494a4e20"
-  integrity sha512-2ZSw8msMe6EKNTebQSthRInrWUK9bo3zXPmQx0bfeDFJdSnTWUROhdAhmpRQREHzqrL+l4imv/3uwgIQHUO0oQ==
-  dependencies:
-    tweetnacl "^1.0.3"
-
 qs@^6.5.0:
   version "6.9.4"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
@@ -8796,11 +8784,6 @@ react-native-measureme@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/react-native-measureme/-/react-native-measureme-0.0.2.tgz#7f54eeb0813d461ef6c49d921e42e253d649c47a"
   integrity sha512-m7Td7w1pVdIf7a3ejN7K/67AU+TtkZqTt9/ieKamirLRI3fjLToupmOKDtIOU3Y56oKojzTKz1lBbYSPN28HWA==
-
-react-native-pusher-push-notifications@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-pusher-push-notifications/-/react-native-pusher-push-notifications-2.4.0.tgz#2b5dabea8f70d518091c0faa6936382cd03deb6a"
-  integrity sha512-y+Q1C+QP0qjCesJLGAwEmjtbedF+XlW+5qUMcA10xWzL/I26ZwL1aueq9z8UYhqyzErPmd0vm+a8ezYBPVSafg==
 
 react-native-safe-area-context@3.1.4:
   version "3.1.4"
@@ -10274,11 +10257,6 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
-
-tweetnacl@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
-  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

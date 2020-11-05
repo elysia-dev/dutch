@@ -1,5 +1,6 @@
 import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
+import Notification from './Notification';
 
 export type AccountResponse = {
   verificationId?: string;
@@ -14,6 +15,7 @@ export type UserResponse = {
     email: string;
     kycStatus: KycStatus;
     ethAddresses: string[];
+    expoPushTokens: string[];
     gender: string;
     firstName: string;
     lastName: string;
@@ -30,5 +32,5 @@ export type UserResponse = {
       profit: number;
     },
   ];
-  unreadNotificationCount: number;
+  notifications: Notification[];
 };

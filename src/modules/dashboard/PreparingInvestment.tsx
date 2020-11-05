@@ -50,6 +50,7 @@ const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 const PreparingInvestment: FunctionComponent = () => {
   const navigation = useNavigation();
   const { kycStatus, ethAddresses } = useContext(RootContext).user;
+  const preparingCompletion = kycStatus === KycStatus.SUCCESS && ethAddresses?.length > 0;
 
   return (
     <WrapperLayout
@@ -58,14 +59,14 @@ const PreparingInvestment: FunctionComponent = () => {
       backButtonHandler={() => navigation.goBack()}
       isScrolling={false}
       body={<>
-      {kycStatus === KycStatus.SUCCESS && ethAddresses !== null && Platform.OS === "ios" && (
-        <ConfettiCannon
-          count={100}
-          origin={{ x: -10, y: -10 }}
-          fallSpeed={3000}
-          fadeOut={true}
-        />
-      )}
+        { preparingCompletion && Platform.OS === "ios" && (
+          <ConfettiCannon
+            count={100}
+            origin={{ x: -10, y: -10 }}
+            fallSpeed={3000}
+            fadeOut={true}
+          />
+        )}
         <View style={{ marginTop: 20 }}>
           <StatusButton
             title={`${i18n.t(`more_label.${kycStatus}_kyc`)}`}
@@ -96,21 +97,21 @@ const PreparingInvestment: FunctionComponent = () => {
         </View>
       </>}
       button={
-      <SubmitButton
-        disabled={!(kycStatus === KycStatus.SUCCESS && ethAddresses !== null)}
-        title={
-          kycStatus === KycStatus.SUCCESS && ethAddresses !== null
-            ? i18n.t('dashboard.event_guide_EL')
-            : i18n.t('dashboard.complete_prepare')
-        }
-        handler={() => {}}
-        style={{
-          backgroundColor:
+        <SubmitButton
+          disabled={!(preparingCompletion)}
+          title={
             kycStatus === KycStatus.SUCCESS && ethAddresses !== null
-              ? '#3679B5'
-              : '#D0D8DF',
-        }}
-      />}
+              ? i18n.t('dashboard.event_guide_EL')
+              : i18n.t('dashboard.complete_prepare')
+          }
+          handler={() => { }}
+          style={{
+            backgroundColor:
+              kycStatus === KycStatus.SUCCESS && ethAddresses !== null
+                ? '#3679B5'
+                : '#D0D8DF',
+          }}
+        />}
     />
 
   );

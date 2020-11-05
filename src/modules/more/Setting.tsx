@@ -1,8 +1,8 @@
 import React, {
   FunctionComponent,
   useState,
-  useEffect,
   useContext,
+  useEffect,
 } from 'react';
 import {
   View,
@@ -13,61 +13,60 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-community/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 import i18n from '../../i18n/i18n';
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
 import RootContext from '../../contexts/RootContext';
-import disablePushNotificationsAsync from '../../utiles/disableNotificationsAsync';
-import enablePushNotificationsAsync from '../../utiles/enableNotificationsAsync';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import currentLocale from '../../utiles/currentLocale';
+import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
 
 interface Props {
   resetHandler: () => void;
 }
 
 const Setting: FunctionComponent<Props> = (props: Props) => {
-  const { changeLanguage, Server, user, signOut } = useContext(RootContext);
+  const {
+    changeLanguage,
+    Server,
+    user,
+    signOut,
+    setUserExpoPushToken,
+    expoPushToken,
+  } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
-    hasPermission: false,
+    hasPermission: user.expoPushTokens?.includes(expoPushToken),
     selectedValue: i18n.currentLocale(),
     showPickerModal: false,
   });
 
-  const initializeState = () => {
-    setState({ ...state, selectedValue: i18n.currentLocale() });
-
-    Notifications.getPermissionsAsync().then((settings) => {
-      AsyncStorage.getItem('pushNotificationPermission').then((permission) => {
-        if (
-          settings.granted ||
-          settings.ios?.status ===
-            Notifications.IosAuthorizationStatus.PROVISIONAL
-        ) {
-          AsyncStorage.getItem('pushNotificationPermission').then((res) => {
-            setState({ ...state, hasPermission: res === 'granted' });
-          });
-        }
+  useEffect(() => {
+    Notifications.getExpoPushTokenAsync().then((token) => {
+      setState({
+        ...state,
+        hasPermission: user.expoPushTokens?.includes(token.data),
       });
     });
-  };
-
-  useEffect(initializeState, []);
+  }, []);
 
   const activityToggleButton = async () => {
     setState({ ...state, hasPermission: !state.hasPermission });
 
     if (!state.hasPermission) {
-      const res = await enablePushNotificationsAsync(user.email);
-      setState({ ...state, hasPermission: res });
+      registerForPushNotificationsAsync().then((expoPushToken) => {
+        if (expoPushToken) {
+          Server.registerExpoPushToken(expoPushToken);
+          setUserExpoPushToken(expoPushToken);
+        }
+      });
     } else {
-      await disablePushNotificationsAsync(user.email);
-      setState({ ...state, hasPermission: false });
+      Notifications.getExpoPushTokenAsync().then((token) => {
+        Server.deleteExpoPushToken(token.data);
+        setUserExpoPushToken('');
+      });
     }
   };
 
@@ -210,27 +209,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      setState({ ...state, showPickerModal: true });
-                    }}>
-                    <P1Text
-                      label={localeText()}
+                    <TouchableOpacity
                       style={{
-                        textAlign: 'center',
+                        width: '100%',
+                        height: 40,
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        setState({ ...state, showPickerModal: true });
+                      }}>
+                      <P1Text
+                        label={localeText()}
+                        style={{
+                          textAlign: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <View
                 style={{

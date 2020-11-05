@@ -53,6 +53,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     Server.registerAddress(state.address).then(() => {
       setEthAddress(state.address);
       setState({ ...state, confirmModal: true });
+      navigation.goBack();
+      alert(`${i18n.t('dashboard.wallet_connected')}\n ${i18n.t('more.find_more')}`);
     }).catch(() => {
       alert(i18n.t('account_errors.server'));
     });
