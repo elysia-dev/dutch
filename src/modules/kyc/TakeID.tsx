@@ -286,6 +286,7 @@ const TakeID: FunctionComponent<{}> = () => {
         }
         <TakeIdWrapper>
           <Camera
+            useCamera2Api={true}
             style={{
               flex: 1,
               width: '100%',

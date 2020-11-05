@@ -198,6 +198,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
         }
         <TakeSelfieWrapper>
           <Camera
+            useCamera2Api={true}
             style={{ flex: 1, width: '100%', height: 700 }}
             type={state.type}
             ref={(ref) => {
