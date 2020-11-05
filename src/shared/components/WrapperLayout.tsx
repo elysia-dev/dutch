@@ -120,6 +120,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             ]}>
             <Animated.Text
               allowFontScaling={false}
+              numberOfLines={1}
               style={{
                 position: 'absolute',
                 fontSize: 22,
