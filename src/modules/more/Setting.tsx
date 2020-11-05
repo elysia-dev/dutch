@@ -159,7 +159,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   }}
                 />
                 <P1Text
-                  label={i18n.t('more_label.version') + ' 1.1.0'}
+                  label={i18n.t('more_label.version') + ' 1.0.2'}
                   style={{
                     marginTop: 30,
                     paddingLeft: '5%',

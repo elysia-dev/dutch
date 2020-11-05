@@ -4,7 +4,7 @@
     "privacy": "hidden",
     "name": "ElysiaStaging",
     "slug": "ElysiaAppStaging",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -34,7 +34,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "package": "land.elysia.staging",
@@ -64,7 +64,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": 5
+      "versionCode": 6
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "hooks": {
