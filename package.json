@@ -6,9 +6,12 @@
     "web": "expo start --web",
     "test": "jest",
     "lint": "eslint . --ext .tsx --fix",
-    "build:staging:ios": "expo build:ios --config stagingApp.json --release-channel staging-v1",
-    "publish:staging": "expo publish --config stagingApp.json --release-channel staging-v1",
-    "build:staging:andriod": "expo build:andriod --config stagingApp.json --release-channel staging-v1"
+    "publish:stag": "expo publish --config stagingApp.json --release-channel staging-v1",
+    "build:stag:ios": "expo build:ios --config stagingApp.json --release-channel staging-v1",
+    "build:stag:andriod": "expo build:andriod --config stagingApp.json --release-channel staging-v1",
+    "publish:prod": "expo publish --config stagingApp.json --release-channel prod-v1.1.0",
+    "build:prod:ios": "expo build:ios --release-channel prod-v1.1.0",
+    "build:prod:android": "expo build:android --release-channel prod-v1.1.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
@@ -114,5 +117,5 @@
     ]
   },
   "name": "dutch",
-  "version": "1.0.2"
+  "version": "1.1.0"
 }

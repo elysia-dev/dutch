@@ -4,7 +4,7 @@
     "privacy": "hidden",
     "name": "ElysiaStaging",
     "slug": "ElysiaAppStaging",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -17,7 +17,9 @@
     "assetBundlePatterns": ["**/*"],
     "notification": {
       "icon": "https://elysia-public.s3.ap-northeast-2.amazonaws.com/pushicon.png",
-      "iosDisplayInForeground": true
+      "iosDisplayInForeground": false,
+      "androidMode": "collapse",
+      "androidCollapsedTitle": "#{unread_notifications} new interactions"
     },
     "ios": {
       "supportsTablet": false,
@@ -34,7 +36,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.0.2"
+      "buildNumber": "1.1.0"
     },
     "android": {
       "package": "land.elysia.staging",

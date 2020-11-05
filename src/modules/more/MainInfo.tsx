@@ -317,7 +317,7 @@ const MainInfo: FunctionComponent = () => {
               }}
               duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
-              handler={() => {}}
+              handler={() => { }}
               variant={'GrayTheme'}
             />
           )}
@@ -573,16 +573,6 @@ const MainInfo: FunctionComponent = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <P4Text
-          style={{
-            backgroundColor: '#F6F6F8',
-            textAlign: 'right',
-            paddingRight: '5%',
-            fontSize: 10,
-            color: '#1c1c1c',
-          }}
-          label={'v1.0.2'}
-        />
         <View
           style={{
             height: 100,
