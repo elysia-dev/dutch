@@ -37,7 +37,7 @@ const RecoverPassword: FunctionComponent = () => {
       .then(() => {
         setState({ modalVisible: true });
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('recover_error'));
         } else if (e.reponse.status === 404) {
@@ -53,7 +53,7 @@ const RecoverPassword: FunctionComponent = () => {
     <View>
       <View
         style={{
-          top: 25,
+          paddingTop: 25,
           position: 'absolute',
           height: '100%',
           width: '100%',
