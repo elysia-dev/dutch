@@ -4,8 +4,19 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, Animated, StatusBar, Image, ScrollView, Text } from 'react-native';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import {
+  View,
+  Animated,
+  StatusBar,
+  Image,
+  ScrollView,
+  Text,
+} from 'react-native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useScrollToTop,
+} from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { PostItem } from './components/PostItem';
@@ -32,30 +43,39 @@ const MainList: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const { Server, user } = useContext(RootContext);
-
-  const ref = React.useRef(null);
+  const ref = React.useRef<ScrollView>(null);
   useScrollToTop(ref);
 
   useEffect(() => {
     Server.storyList()
-      .then(res => {
+      .then((res) => {
         setState({ ...state, stories: res.data });
         Server.products().then((res) => {
           setState((state) => {
             return {
               ...state,
-              products: res.data.filter((product) => product.status === 'terminated'),
+              products: res.data.filter(
+                (product) => product.status === 'terminated',
+              ),
             };
           });
         });
       })
-      .catch(e => {
+      .catch((e) => {
         alert(e);
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
       });
   }, [user.language]);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     if (ref.current !== null) {
+  //       ref.current.scrollTo({ y: 0 });
+  //     }
+  //   }, []),
+  // );
 
   return (
     <View
@@ -69,13 +89,14 @@ const MainList: FunctionComponent = () => {
         scrollEnabled={!state.activeStory}
         ref={ref}
         style={{ width: '100%' }}>
-        <View style={{
-          borderBottomColor: '#F6F6F8',
-          borderBottomWidth: 5,
-          paddingLeft: "5%",
-          paddingRight: "5%",
-          paddingBottom: 35,
-        }}>
+        <View
+          style={{
+            borderBottomColor: '#F6F6F8',
+            borderBottomWidth: 5,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            paddingBottom: 35,
+          }}>
           <Animated.View
             style={{
               backgroundColor: '#fff',
@@ -91,7 +112,7 @@ const MainList: FunctionComponent = () => {
                 color: '#1c1c1c',
                 fontSize: 28,
                 textAlign: 'left',
-                fontFamily: "Roboto_700Bold",
+                fontFamily: 'Roboto_700Bold',
               }}>
               {i18n.t('product_label.product')}
             </Animated.Text>
@@ -120,23 +141,19 @@ const MainList: FunctionComponent = () => {
             />
           ))}
         </View>
-        <View style={{
-          width: "90%",
-          marginLeft: "5%",
-          marginRight: "5%",
-          marginTop: 25,
-          marginBottom: 50,
-        }}>
-          {
-            state.products.map((product, index) => {
-              return (
-                <PostItem
-                  key={`terminated-product-${index}`}
-                  product={product}
-                />
-              );
-            })
-          }
+        <View
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginRight: '5%',
+            marginTop: 25,
+            marginBottom: 50,
+          }}>
+          {state.products.map((product, index) => {
+            return (
+              <PostItem key={`terminated-product-${index}`} product={product} />
+            );
+          })}
         </View>
         <VirtualTab />
       </ScrollView>
