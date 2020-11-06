@@ -36,7 +36,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.1.0"
+      "buildNumber": "1.1.1"
     },
     "android": {
       "package": "land.elysia",
@@ -66,7 +66,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": 6,
+      "versionCode": 7,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
     },
