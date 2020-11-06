@@ -11,13 +11,14 @@ import {
   Platform,
   Modal,
 } from 'react-native';
-import styled from 'styled-components/native';
+import { SafeAreaView } from 'react-navigation';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import i18n from '../../../i18n/i18n';
 import { TypePicker } from './TypePicker';
 import { DateInput } from './DateInput';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
+import IosPickerModal from '../../../shared/components/IosPickerModal';
 
 type ButtonProps = {
   title: string;
@@ -69,7 +70,8 @@ const Filter: FunctionComponent<props> = (props: props) => {
 
   return (
     <>
-      <View
+      <SafeAreaView
+        forceInset={{ top: 'never', bottom: 'always' }}
         style={{
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
@@ -262,7 +264,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
             }}
           />
         </View>
-      </View>
+      </SafeAreaView>
       {(state.typeModalVisible || state.productModalVisible) && (
         <View
           style={{
@@ -273,85 +275,28 @@ const Filter: FunctionComponent<props> = (props: props) => {
           }}
         />
       )}
-      <Modal
-        visible={state.typeModalVisible}
-        animationType={'slide'}
-        transparent={true}>
-        <View
-          style={{
-            backgroundColor: 'rgba(250,250,250,0.9)',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: 245,
-          }}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              paddingHorizontal: '5%',
-            }}>
-            <TouchableOpacity
-              onPress={async () => {
-                setState({ ...state, typeModalVisible: false });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.done')}
-                style={{ color: '#3679B5' }}
-              />
-            </TouchableOpacity>
-          </View>
+      <IosPickerModal
+        modalVisible={state.typeModalVisible}
+        doneHandler={() => {
+          setState({ ...state, typeModalVisible: false });
+        }}
+        buttonNumber={1}
+        children={
           <TypePicker
             style={{ top: 35 }}
             dispatch={props.dispatch}
             filter={props.filter}
           />
-        </View>
-      </Modal>
-      <Modal
-        visible={state.productModalVisible}
-        animationType={'slide'}
-        transparent={true}>
-        <View
-          style={{
-            backgroundColor: 'rgba(250,250,250,0.9)',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: 245,
-          }}>
-          <View
-            style={{
-              zIndex: 3,
-              backgroundColor: '#fff',
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              paddingHorizontal: '5%',
-            }}>
-            <TouchableOpacity
-              onPress={async () => {
-                setState({ ...state, productModalVisible: false });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.done')}
-                style={{ color: '#3679B5' }}
-              />
-            </TouchableOpacity>
-          </View>
-          {props.children}
-        </View>
-      </Modal>
+        }
+      />
+      <IosPickerModal
+        modalVisible={state.productModalVisible}
+        doneHandler={() => {
+          setState({ ...state, productModalVisible: false });
+        }}
+        buttonNumber={1}
+        children={props.children}
+      />
     </>
   );
 };
