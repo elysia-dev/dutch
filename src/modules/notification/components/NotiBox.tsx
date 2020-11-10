@@ -51,7 +51,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
       style={{
         backgroundColor: '#fff',
         width: '100%',
-        height: 120,
+        flex: 1,
+        marginBottom: 40,
       }}>
       <TouchableOpacity
         onPress={() => {

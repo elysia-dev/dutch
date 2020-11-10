@@ -1,8 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Animated, RefreshControl } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -22,18 +18,15 @@ const Notifications: FunctionComponent = () => {
 
   const { Server } = useContext(RootContext);
 
-  const {
-    notifications,
-    setNotifications,
-  } = useContext(RootContext);
+  const { notifications, setNotifications } = useContext(RootContext);
 
   const loadNotifications = () =>
     Server.notification()
-      .then(res => {
+      .then((res) => {
         setNotifications(res.data);
         setRefreshing(false);
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -50,7 +43,7 @@ const Notifications: FunctionComponent = () => {
     Server.read(notification.id)
       .then(() => {
         setNotifications(
-          notifications.map(n => {
+          notifications.map((n) => {
             if (n.id === notification.id) {
               return {
                 ...n,
@@ -62,7 +55,7 @@ const Notifications: FunctionComponent = () => {
           }),
         );
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -108,7 +101,7 @@ const Notifications: FunctionComponent = () => {
             position: 'relative',
             left: 0,
             paddingLeft: 0,
-            width: "100%",
+            width: '100%',
             color: '#1c1c1c',
             fontSize: 28,
             transform: [
@@ -130,7 +123,7 @@ const Notifications: FunctionComponent = () => {
             ],
             fontFamily: 'Roboto_700Bold',
             textAlign: 'left',
-            justifyContent: "flex-start",
+            justifyContent: 'flex-start',
             alignSelf: 'flex-start',
           }}>
           {i18n.t('notification_label.notification')}
@@ -151,7 +144,7 @@ const Notifications: FunctionComponent = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        {notifications.length === 0 ?
+        {notifications.length === 0 ? (
           <View
             style={{
               width: '100%',
@@ -168,7 +161,9 @@ const Notifications: FunctionComponent = () => {
               }}
               label={i18n.t('notification.no_notification')}
             />
-          </View> : <>
+          </View>
+        ) : (
+          <>
             {notifications.map((notification, index) => {
               return (
                 <NotiBox
@@ -180,14 +175,14 @@ const Notifications: FunctionComponent = () => {
             })}
             <P3Text
               style={{
-                marginTop: 20,
+                marginTop: 0,
                 marginBottom: 75,
                 textAlign: 'center',
               }}
               label={i18n.t('notification.saved_90days')}
             />
           </>
-        }
+        )}
         <VirtualTab />
       </Animated.ScrollView>
     </View>
