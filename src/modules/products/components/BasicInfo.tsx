@@ -21,6 +21,7 @@ import ProductStatus from '../../../enums/ProductStatus';
 
 interface Props {
   product: Product;
+  elPrice: number;
 }
 
 const GText = styled.Text`
@@ -32,13 +33,6 @@ const GText = styled.Text`
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const { user, Server } = useContext(RootContext);
-  const [elPrice, setELPrice] = useState(0.003);
-
-  useEffect(() => {
-    Server.getELPrice()
-      .then((res) => setELPrice(res.data.elysia.usd))
-      .catch((e) => alert(i18n.t('account_errors.server')));
-  }, []);
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
@@ -47,7 +41,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
 
   const totalElFormatter = () => {
     const totalEl = `${
-      (parseFloat(product.totalValue) * product.usdPricePerToken) / elPrice
+      (parseFloat(product.totalValue) * product.usdPricePerToken) /
+      props.elPrice
     }`;
     const intTotalEl = totalEl.split('.')[0];
     if (intTotalEl.length > 9) {
@@ -195,7 +190,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             <View style={{ flexDirection: 'row' }}>
               <P1Text
                 label={`EL ${commaFormatter(
-                  (product.usdPricePerToken / elPrice).toFixed(2),
+                  (product.usdPricePerToken / props.elPrice).toFixed(2),
                 )}`}
               />
               <P1Text label={' ($ 5)'} style={{ color: '#838383' }} />
