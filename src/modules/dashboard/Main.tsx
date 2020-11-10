@@ -113,17 +113,7 @@ export const Main: FunctionComponent = () => {
           backgroundColor: '#FAFCFF',
         }}>
         <SafeAreaView>
-          <View style={{ paddingTop: 65, height: '100%', padding: 20 }}>
-            <P1Text
-              style={{
-                color: '#7A7D8D',
-                fontSize: 15,
-                textAlign: 'left',
-                lineHeight: 23,
-                marginBottom: 5,
-              }}
-              label={i18n.t('welcome')}
-            />
+          <View style={{ paddingTop: 93, height: '100%', padding: 20 }}>
             <H1Text
               style={{ marginBottom: 40 }}
               label={
