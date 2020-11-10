@@ -1,12 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import {
-  View,
-  ScrollView,
-  SafeAreaView,
-  Platform,
-  TouchableOpacity,
-  Modal as RNModal,
-} from 'react-native';
+import { View, Platform, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -16,7 +9,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Modal } from '../../shared/components/Modal';
 import KycSubmitPng from './images/kycsubmit.png';
 import i18n from '../../i18n/i18n';
-import { BackButton } from '../../shared/components/BackButton';
 import { NationInput } from './components/NationInput';
 import { DateInput } from './components/DateInput';
 import { ShortOptionButton } from './components/ShortOptionButton';
@@ -26,11 +18,10 @@ import {
   H1Text,
   SubTitleText,
   P1Text,
-  P2Text,
-  H3Text,
 } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import nations from './components/argos.json';
+import IosPickerModal from '../../shared/components/IosPickerModal';
 
 const IdImg = styled.Image`
   margin-top: 10px;
@@ -297,53 +288,20 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
             height: '100%',
           }}></View>
       )}
-      <RNModal
-        visible={state.pickerModalVisible}
-        animationType={'slide'}
-        transparent={true}>
-        <View
-          style={{
-            backgroundColor: 'rgba(250,250,250,0.9)',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: 245,
-          }}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: '5%',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setState({ ...state, pickerModalVisible: false });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.close')}
-                style={{ color: '#626368' }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={async () => {
-                setState({
-                  ...state,
-                  pickerModalVisible: false,
-                  nationality: state.selectedNationality,
-                });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.done')}
-                style={{ color: '#3679B5' }}
-              />
-            </TouchableOpacity>
-          </View>
+      <IosPickerModal
+        modalVisible={state.pickerModalVisible}
+        doneHandler={() => {
+          setState({
+            ...state,
+            pickerModalVisible: false,
+            nationality: state.selectedNationality,
+          });
+        }}
+        cancelHandler={() => {
+          setState({ ...state, pickerModalVisible: false });
+        }}
+        buttonNumber={2}
+        children={
           <Picker
             style={{
               top: 35,
@@ -355,8 +313,8 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
             }}>
             {nationList}
           </Picker>
-        </View>
-      </RNModal>
+        }
+      />
     </>
   );
 };

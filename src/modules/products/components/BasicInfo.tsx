@@ -44,10 +44,30 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
-  const totalEl = `${
-    (parseFloat(product.totalValue) * product.usdPricePerToken) / elPrice
-  }`;
-  const intTotalEl = totalEl.split('.')[0];
+
+  const totalElFormatter = () => {
+    const totalEl = `${
+      (parseFloat(product.totalValue) * product.usdPricePerToken) / elPrice
+    }`;
+    const intTotalEl = totalEl.split('.')[0];
+    if (intTotalEl.length > 9) {
+      return `EL ${intTotalEl.slice(0, intTotalEl.length - 9)}G`;
+    } else if (intTotalEl.length > 6) {
+      return `EL ${intTotalEl.slice(0, intTotalEl.length - 6)}M`;
+    } else if (intTotalEl.length > 3) {
+      return `EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`;
+    }
+    return `EL ${intTotalEl}`;
+  };
+
+  const commaFormatter = (input: number | string) => {
+    if (typeof input === 'number') {
+      return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    } else if (typeof input === 'string') {
+      return input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+  };
+
   return (
     <View
       style={{
@@ -70,21 +90,21 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 marginBottom: 6,
                 zIndex: 3,
               }}
-              label={`EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`}
+              label={totalElFormatter()}
             />
             <GText
               allowFontScaling={false}
               style={{
                 fontSize: 15,
-                marginTop: 18,
+                marginTop: 15,
                 marginBottom: 6,
                 marginLeft: 7,
                 zIndex: 3,
                 fontFamily: 'Roboto_400Regular',
               }}>
-              {`($ ${
-                parseFloat(product.totalValue) * product.usdPricePerToken
-              })`}
+              {`($ ${commaFormatter(
+                parseFloat(product.totalValue) * product.usdPricePerToken,
+              )})`}
             </GText>
           </View>
         </View>
@@ -153,9 +173,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
               }}>
-              <P1Text label={`${product.presentValue}`} />
+              <P1Text label={`${commaFormatter(product.presentValue)}`} />
               <P1Text
-                label={` / ${product.totalValue}`}
+                label={` / ${commaFormatter(product.totalValue)}`}
                 style={{ color: '#838383' }}
               />
             </View>
@@ -174,7 +194,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             />
             <View style={{ flexDirection: 'row' }}>
               <P1Text
-                label={`EL ${(product.usdPricePerToken / elPrice).toFixed(2)}`}
+                label={`EL ${commaFormatter(
+                  (product.usdPricePerToken / elPrice).toFixed(2),
+                )}`}
               />
               <P1Text label={' ($ 5)'} style={{ color: '#838383' }} />
             </View>

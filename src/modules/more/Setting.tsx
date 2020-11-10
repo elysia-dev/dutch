@@ -23,6 +23,7 @@ import RootContext from '../../contexts/RootContext';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
 import getEnvironment from '../../utiles/getEnvironment';
+import IosPickerModal from '../../shared/components/IosPickerModal';
 
 interface Props {
   resetHandler: () => void;
@@ -159,7 +160,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   }}
                 />
                 <P1Text
-                  label={i18n.t('more_label.version') + ` ${getEnvironment().version}`}
+                  label={
+                    i18n.t('more_label.version') +
+                    ` ${getEnvironment().version}`
+                  }
                   style={{
                     marginTop: 30,
                     paddingLeft: '5%',
@@ -210,27 +214,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showPickerModal: true });
+                    }}>
+                    <P1Text
+                      label={localeText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showPickerModal: true });
-                      }}>
-                      <P1Text
-                        label={localeText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <View
                 style={{
@@ -245,7 +249,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   style={{
                     width: '100%',
                     alignSelf: 'center',
-                    backgroundColor: "#767577",
+                    backgroundColor: '#767577',
                   }}
                 />
               </View>
@@ -263,54 +267,25 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
           }}
         />
       )}
-      <Modal
-        visible={state.showPickerModal}
-        animationType={'slide'}
-        transparent={true}>
-        <View
-          style={{
-            backgroundColor: 'rgba(250,250,250,0.9)',
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: 245,
-          }}>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 45,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: '5%',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setState({ ...state, showPickerModal: false });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.close')}
-                style={{ color: '#626368' }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={async () => {
-                changeI18n(state.selectedValue);
-                await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
-                  alert(i18n.t('account_errors.server'));
-                });
-                changeLanguage(i18n.currentLocale() as LocaleType);
-                setState({ ...state, showPickerModal: false });
-              }}>
-              <P1Text
-                label={i18n.t('more_label.done')}
-                style={{ color: '#3679B5' }}
-              />
-            </TouchableOpacity>
-          </View>
+      <IosPickerModal
+        modalVisible={state.showPickerModal}
+        doneHandler={async () => {
+          changeI18n(state.selectedValue);
+          await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
+            alert(i18n.t('account_errors.server'));
+          });
+          changeLanguage(i18n.currentLocale() as LocaleType);
+          setState({ ...state, showPickerModal: false });
+        }}
+        cancelHandler={() => {
+          setState({
+            ...state,
+            selectedValue: i18n.currentLocale(),
+            showPickerModal: false,
+          });
+        }}
+        buttonNumber={2}
+        children={
           <Picker
             style={{
               top: 35,
@@ -327,8 +302,8 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
             <Picker.Item label={'English'} value="en" key={1} />
             <Picker.Item label={'简体中文'} value="zhHans" key={2} />
           </Picker>
-        </View>
-      </Modal>
+        }
+      />
     </>
   );
 };

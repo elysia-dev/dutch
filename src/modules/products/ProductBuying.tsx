@@ -4,16 +4,10 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  StatusBar,
-  Modal,
-  TouchableOpacity,
-} from 'react-native';
+import { View, ScrollView, Image, StatusBar, Modal } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import { SafeAreaView } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
@@ -65,7 +59,7 @@ const ProductBuying: FunctionComponent = () => {
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
-      return "Closed";
+      return 'Closed';
     }
     if (!purchasability) {
       return i18n.t('product_label.non_purchasable');
@@ -78,7 +72,6 @@ const ProductBuying: FunctionComponent = () => {
         return i18n.t('product_label.reserve');
       }
     }
-    // return i18n.t('product_label.non_purchasable');
   };
 
   const loadProductAndSubscription = async () => {
@@ -115,7 +108,10 @@ const ProductBuying: FunctionComponent = () => {
       <ScrollView
         scrollEnabled={true}
         scrollToOverflowEnabled={true}
-        style={{ height: '100%', backgroundColor: '#fff' }}>
+        style={{
+          height: '100%',
+          backgroundColor: '#fff',
+        }}>
         <View
           style={{
             top: 0,
@@ -123,6 +119,7 @@ const ProductBuying: FunctionComponent = () => {
             height: 293,
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
+            paddingBottom: 35,
           }}>
           <Image
             source={{ uri: state.product && state.product.data.images[0] }}
@@ -162,9 +159,15 @@ const ProductBuying: FunctionComponent = () => {
           position: 'absolute',
           bottom: 0,
           marginBottom: 15,
-          backgroundColor: purchasability ? '#3679B5' : '#D0D8DF',
+          backgroundColor:
+            // eslint-disable-next-line no-nested-ternary
+            state.product?.status === ProductStatus.TERMINATED
+              ? '#767577'
+              : purchasability
+              ? '#3679B5'
+              : '#D0D8DF',
         }}
-        disabled={state.product?.status === 'terminated'}
+        disabled={state.product?.status === ProductStatus.TERMINATED}
         handler={() => {
           if (!purchasability) {
             if (state.product?.restrictedCountries.includes(shortNationality)) {

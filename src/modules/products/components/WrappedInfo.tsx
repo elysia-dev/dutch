@@ -30,7 +30,13 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
-
+  const commaFormatter = (input: number | string) => {
+    if (typeof input === 'number') {
+      return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    } else if (typeof input === 'string') {
+      return input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+  };
   return (
     <View style={{ width: '100%', paddingBottom: 60 }}>
       <View
@@ -138,7 +144,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`${product.data.propertyPrice}$`}
+                  label={`$ ${commaFormatter(product.data.propertyPrice)}`}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -149,7 +155,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`${product.data.netDeposit}$`}
+                  label={`$ ${commaFormatter(product.data.netDeposit)}`}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -160,7 +166,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`${product.data.netRentPerYear}$`}
+                  label={`$ ${commaFormatter(product.data.netRentPerYear)}`}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -171,7 +177,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`${product.data.bankLoan}`}
+                  label={`$ ${product.data.bankLoan}`}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
