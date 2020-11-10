@@ -181,7 +181,7 @@ const Notifications: FunctionComponent = () => {
             <P3Text
               style={{
                 marginTop: 20,
-                marginBottom: 75,
+                marginBottom: 95,
                 textAlign: 'center',
               }}
               label={i18n.t('notification.saved_90days')}

@@ -37,8 +37,8 @@ const htmlStyles = StyleSheet.create({
   h2: {
     textAlign: 'left',
     lineHeight: 25,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
     fontFamily: "Roboto_400Regular",
   },
   p: {
@@ -46,8 +46,8 @@ const htmlStyles = StyleSheet.create({
     lineHeight: 25,
     color: '#626368',
     textAlign: 'left',
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
     fontFamily: "Roboto_400Regular",
   },
 });
@@ -88,6 +88,11 @@ const ExpandedItem: FunctionComponent<Props> = ({
     <Animated.View
       style={{
         position: 'absolute',
+        elevation: 6,
+        shadowOffset: { width: 2, height: 2 },
+        shadowColor: '#00000033',
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
         top: animatedValue.interpolate({
           inputRange: [0, 1],
           outputRange: [yOffset, 0],
@@ -131,16 +136,19 @@ const ExpandedItem: FunctionComponent<Props> = ({
             resizeMode: 'cover',
           }}
         />
-        <View
+        <Animated.View
           style={{
             position: 'absolute',
             flexDirection: 'column',
-            top: 40,
+            top: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [20, 40],
+            }),
             left: 20,
           }}>
           <P1Text label={story.subTitle} />
           <H1Text label={story.title} style={{ marginTop: 10 }} />
-        </View>
+        </Animated.View>
         <Animated.View
           style={{
             backgroundColor: '#fff',
