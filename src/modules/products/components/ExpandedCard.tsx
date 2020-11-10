@@ -37,30 +37,18 @@ const htmlStyles = StyleSheet.create({
   h2: {
     textAlign: 'left',
     lineHeight: 25,
-<<<<<<< HEAD
     marginLeft: '5%',
     marginRight: '5%',
     fontFamily: "Roboto_400Regular",
-=======
-    marginLeft: 10,
-    marginRight: 10,
-    fontFamily: 'Roboto_400Regular',
->>>>>>> 2dee4ba323ac29880268f30a3f6e1ca8aefc38ac
   },
   p: {
     fontSize: 15,
     lineHeight: 25,
     color: '#626368',
     textAlign: 'left',
-<<<<<<< HEAD
     marginLeft: '5%',
     marginRight: '5%',
     fontFamily: "Roboto_400Regular",
-=======
-    marginLeft: 10,
-    marginRight: 10,
-    fontFamily: 'Roboto_400Regular',
->>>>>>> 2dee4ba323ac29880268f30a3f6e1ca8aefc38ac
   },
 });
 const defaultTextProps = {
@@ -100,19 +88,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
     <Animated.View
       style={{
         position: 'absolute',
-<<<<<<< HEAD
         elevation: 6,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
         shadowOpacity: 0.8,
-=======
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        elevation: 3,
-        shadowOffset: { width: 2, height: 2 },
-        shadowColor: '#00000033',
-        shadowOpacity: 0.5,
->>>>>>> 2dee4ba323ac29880268f30a3f6e1ca8aefc38ac
         shadowRadius: 5,
         top: animatedValue.interpolate({
           inputRange: [0, 1],
