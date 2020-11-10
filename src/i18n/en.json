@@ -348,7 +348,8 @@
       "Please make a transaction using Metamask!",
       "Rewards are generated based on how many real estate tokens you own."
     ],
-    "no_notice": "There is no notice."
+    "no_notice": "There is no notice.",
+    "event_participation": "Sign up complete"
   },
   "day": {
     "0": "Sun",
