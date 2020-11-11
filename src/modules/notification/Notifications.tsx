@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Animated, RefreshControl } from 'react-native';
+import { View, Animated, RefreshControl, Dimensions } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -148,13 +148,13 @@ const Notifications: FunctionComponent = () => {
           <View
             style={{
               width: '100%',
-              height: '100%',
-              paddingTop: '45%',
+              height: Dimensions.get('window').height - 200,
+              alignContent: 'center',
+              justifyContent: 'center',
+              top: -20,
             }}>
             <P1Text
               style={{
-                marginTop: 20,
-                marginBottom: 50,
                 color: '#A7A7A7',
                 textAlign: 'center',
                 fontSize: 15,
