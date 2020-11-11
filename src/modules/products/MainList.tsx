@@ -4,19 +4,9 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {
-  View,
-  Animated,
-  StatusBar,
-  Image,
-  ScrollView,
-  Text,
-} from 'react-native';
-import {
-  useFocusEffect,
-  useNavigation,
-  useScrollToTop,
-} from '@react-navigation/native';
+import { View, Animated, StatusBar, ScrollView } from 'react-native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import base64 from 'base-64';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
 import { PostItem } from './components/PostItem';
@@ -90,6 +80,7 @@ const MainList: FunctionComponent = () => {
         ref={ref}
         style={{ width: '100%' }}>
         <View
+          // onStartShouldSetResponder={() => true}
           style={{
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
@@ -157,20 +148,41 @@ const MainList: FunctionComponent = () => {
         </View>
         <VirtualTab />
       </ScrollView>
-      {state.activeStory && (
-        <ExpandedCard
-          story={state.activeStory}
-          deactivateStory={() => {
-            StatusBar.setHidden(false);
-            navigation.setOptions({
-              tabBarVisible: true,
-            });
-            setState({ ...state, activeStory: undefined });
-          }}
-          xOffset={state.xOffset}
-          yOffset={state.yOffset}
-        />
-      )}
+      {state.stories.map((story, index) => (
+        <View
+          key={`card-${index}`}
+          style={{
+            width: '100%',
+            height:
+              (state.activeStory &&
+                state.activeStory.productId === story.productId) ||
+              false
+                ? '100%'
+                : 0,
+          }}>
+          <ExpandedCard
+            image={base64.encode(story.image)}
+            on={
+              (state.activeStory &&
+                state.activeStory.productId === story.productId) ||
+              false
+            }
+            story={story}
+            deactivateStory={() => {
+              StatusBar.setHidden(false);
+              navigation.setOptions({
+                tabBarVisible: true,
+              });
+              setState({
+                ...state,
+                activeStory: undefined,
+              });
+            }}
+            xOffset={state.xOffset}
+            yOffset={state.yOffset}
+          />
+        </View>
+      ))}
     </View>
   );
 };

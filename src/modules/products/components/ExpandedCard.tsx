@@ -20,6 +20,7 @@ import {
 import HTMLView from 'react-native-htmlview';
 
 import { useNavigation } from '@react-navigation/native';
+import base64 from 'base-64';
 import i18n from '../../../i18n/i18n';
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
@@ -31,6 +32,8 @@ interface Props {
   deactivateStory: () => void;
   xOffset: number;
   yOffset: number;
+  on: boolean;
+  image: string;
 }
 
 const htmlStyles = StyleSheet.create({
@@ -65,6 +68,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
   deactivateStory,
   xOffset,
   yOffset,
+  on,
+  image,
 }) => {
   const [animatedValue] = useState(new Animated.Value(0));
   const [state, setState] = useState({
@@ -77,13 +82,17 @@ const ExpandedItem: FunctionComponent<Props> = ({
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: false,
-      easing: Easing.elastic(1),
-    }).start();
-  }, []);
+    if (on) {
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: false,
+        easing: Easing.elastic(1),
+      }).start();
+      setState({ ...state, scrollY: 0, closed: false, scrollEnabled: true });
+    }
+  }, [on]);
+
   return (
     <Animated.View
       style={{
@@ -93,7 +102,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         elevation: 3,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
-        shadowOpacity: 0.5,
+        shadowOpacity: on ? 0.8 : 0.5,
         shadowRadius: 5,
         top: animatedValue.interpolate({
           inputRange: [0, 1],
@@ -125,7 +134,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
           });
         }}>
         <Animated.Image
-          source={{ uri: story.image }}
+          source={{ uri: base64.decode(image) }}
           style={{
             borderRadius: animatedValue.interpolate({
               inputRange: [0, 1],
