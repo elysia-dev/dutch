@@ -132,19 +132,23 @@ const MainList: FunctionComponent = () => {
             />
           ))}
         </View>
-        <View
-          style={{
-            width: '90%',
-            marginLeft: '5%',
-            marginRight: '5%',
-            marginTop: 25,
-            marginBottom: 50,
-          }}>
-          {state.products.map((product, index) => {
-            return (
-              <PostItem key={`terminated-product-${index}`} product={product} />
-            );
-          })}
+        <View style={{
+          width: "90%",
+          marginLeft: "5%",
+          marginRight: "5%",
+          marginTop: 25, 
+          marginBottom: 50,
+        }}>
+          {
+            state.products.map((product, index) => {
+              return (
+                <PostItem
+                  key={`terminated-product-${index}`}
+                  product={product}
+                />
+              );
+            })
+          }
         </View>
         <VirtualTab />
       </ScrollView>

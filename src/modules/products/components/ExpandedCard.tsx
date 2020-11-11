@@ -40,8 +40,8 @@ const htmlStyles = StyleSheet.create({
   h2: {
     textAlign: 'left',
     lineHeight: 25,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
     fontFamily: 'Roboto_400Regular',
   },
   p: {
@@ -49,8 +49,8 @@ const htmlStyles = StyleSheet.create({
     lineHeight: 25,
     color: '#626368',
     textAlign: 'left',
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
     fontFamily: 'Roboto_400Regular',
   },
 });
@@ -97,9 +97,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     <Animated.View
       style={{
         position: 'absolute',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        elevation: 3,
+        elevation: 6,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
         shadowOpacity: on ? 0.8 : 0.5,
