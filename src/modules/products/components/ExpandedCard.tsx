@@ -100,7 +100,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
         elevation: 6,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
-        shadowOpacity: on ? 0.8 : 0.5,
+        shadowOpacity: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.6, 0],
+        }),
         shadowRadius: 5,
         top: animatedValue.interpolate({
           inputRange: [0, 1],
