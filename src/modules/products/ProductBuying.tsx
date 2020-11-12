@@ -4,7 +4,14 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
-import { View, ScrollView, Image, StatusBar, Modal } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  StatusBar,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
@@ -38,12 +45,16 @@ interface State {
   modalVisible: boolean;
   subscribed: boolean;
   product?: Product;
+  loaded: boolean;
+  elPrice: number;
 }
 
 const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     modalVisible: false,
     subscribed: false,
+    loaded: false,
+    elPrice: 0,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
@@ -78,10 +89,13 @@ const ProductBuying: FunctionComponent = () => {
     try {
       const product = await Server.productInfo(productId);
       const subscription = await Server.getProductSubscription(productId);
+      const elPrice = await Server.getELPrice();
       setState({
         ...state,
         product: product.data,
         subscribed: subscription.status === 200,
+        loaded: true,
+        elPrice: elPrice.data.elysia.usd,
       });
     } catch (e) {
       if (e.response.status === 500) {
@@ -89,10 +103,13 @@ const ProductBuying: FunctionComponent = () => {
       } else if (e.response.status) {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
+          const elPrice = await Server.getELPrice();
           setState({
             ...state,
             product: product.data,
             subscribed: false,
+            loaded: true,
+            elPrice: elPrice.data.elysia.usd,
           });
         }
       }
@@ -142,7 +159,9 @@ const ProductBuying: FunctionComponent = () => {
             />
           </View>
         </View>
-        {state.product && <BasicInfo product={state.product} />}
+        {state.product && (
+          <BasicInfo product={state.product} elPrice={state.elPrice} />
+        )}
         <View
           style={{
             padding: 20,
@@ -189,6 +208,19 @@ const ProductBuying: FunctionComponent = () => {
             height: '100%',
           }}
         />
+      )}
+      {!state.elPrice && (
+        <View
+          style={{
+            backgroundColor: '#fff',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <ActivityIndicator size="large" color="#3679B5" />
+        </View>
       )}
       <Modal
         transparent={true}
