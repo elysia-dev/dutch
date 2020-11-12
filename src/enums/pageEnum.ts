@@ -53,5 +53,6 @@ export enum DashboardPage {
   ProductNotice = 'ProductNotice',
   PreparingInvestment = 'PreparingInvestment',
   InterestWithdraw = 'InterestWithdraw',
-  InvestmentGuide = 'InvestmentGuide'
+  InvestmentGuide = 'InvestmentGuide',
+  RemainingBalance = 'RemainingBalance',
 }

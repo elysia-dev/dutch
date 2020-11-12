@@ -9,6 +9,7 @@ import ProductNotice from './ProductNotice';
 import PreparingInvestment from './PreparingInvestment';
 import InterestWithdraw from './InterestWithdraw';
 import InvestmentGuide from './InvestmentGuide';
+import { RemainingBalance } from './RemainingBalance';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,10 @@ export const Dashboard = () => {
       <Stack.Screen
         name={DashboardPage.InterestWithdraw}
         component={InterestWithdraw}
+      />
+      <Stack.Screen
+        name={DashboardPage.RemainingBalance}
+        component={RemainingBalance}
       />
     </Stack.Navigator>
   );
