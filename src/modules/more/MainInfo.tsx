@@ -317,7 +317,7 @@ const MainInfo: FunctionComponent = () => {
               }}
               duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
-              handler={() => { }}
+              handler={() => {}}
               variant={'GrayTheme'}
             />
           )}
@@ -350,47 +350,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            {!(user.ethAddresses?.length > 0) ? (
-              <View
-                style={{
-                  height: 50,
-                  marginTop: 10,
-                }}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('More', {
-                      screen: MorePage.RegisterEthAddress,
-                    })
-                  }>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <View>
-                      <P1Text
-                        label={i18n.t('more_label.wallet_connect')}
-                        style={{ lineHeight: 50, fontSize: 15 }}
-                      />
-                      {!(user.ethAddresses?.length > 0) && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: -13,
-                            width: 8,
-                            height: 8,
-                            borderRadius: 4,
-                            backgroundColor: '#FC5C4F',
-                          }}
-                        />
-                      )}
-                    </View>
-                    <InfoArrowImg source={require('./images/next_gray.png')} />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : (
+
             <View
               style={{
                 height: 50,
@@ -399,7 +359,7 @@ const MainInfo: FunctionComponent = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
-                    screen: MorePage.MyWallet,
+                    screen: MorePage.RegisterEthAddress,
                   })
                 }>
                 <View
@@ -407,15 +367,34 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <P1Text
-                    label={'내 지갑'}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
+                  <View>
+                    <P1Text
+                      label={
+                        user.ethAddresses?.length > 0
+                          ? i18n.t('more_label.my_wallet')
+                          : i18n.t('more_label.wallet_connect')
+                      }
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    {!(user.ethAddresses?.length > 0) && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: -13,
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: '#FC5C4F',
+                        }}
+                      />
+                    )}
+                  </View>
                   <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
-            )}
+
             <View
               style={{
                 height: 50,

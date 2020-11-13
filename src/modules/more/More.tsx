@@ -13,7 +13,6 @@ import CurrentPassword from '../account/CurrentPassword';
 import RegisterEthAddress from './RegisterEthAddress';
 import TermsOfUse from './TermsOfUse';
 import PrivacyPolicy from './PrivacyPolicy';
-import MyWallet from './MyWallet';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +40,6 @@ export const More = () => {
         name={MorePage.RegisterEthAddress}
         component={RegisterEthAddress}
       />
-      <Stack.Screen name={MorePage.MyWallet} component={MyWallet} />
     </Stack.Navigator>
   );
 };
