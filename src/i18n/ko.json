@@ -266,7 +266,9 @@
     "app_info": "앱 정보",
     "version": "버전",
     "done": "완료",
-    "close": "닫기"
+    "close": "닫기",
+    "my_wallet": "내 지갑",
+    "metamask_wallet": "메타마스크 지갑"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",

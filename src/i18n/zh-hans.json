@@ -262,11 +262,13 @@
     "latest": "最新信息",
     "push_notice": "弹窗提醒",
     "notification_setting": "提醒设置",
-    "connect": " 绑定钱包",
+    "connect": "绑定钱包",
     "app_info": "App信息",
     "version": "版本",
     "done": "完成",
-    "close": "短期"
+    "close": "短期",
+    "my_wallet": "我的钱包",
+    "metamask_wallet": "Metamask 钱包"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -281,7 +283,8 @@
     "check_1": "绑定钱包地址后不能变更。",
     "check_2": "每个用户只能绑定一个钱包地址。",
     "connected": "钱包地址绑定成功。",
-    "find_more": "可以在“更多”中我的账户里查看详细信息。"
+    "find_more": "可以在“更多”中我的账户里查看详细信息。",
+    "no_address": "请输入您的地址。"
   },
   "dashboard_label": {
     "total_balance": "总额",

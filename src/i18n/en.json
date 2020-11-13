@@ -265,7 +265,9 @@
     "app_info": "App info",
     "version": "Version",
     "done": "Done",
-    "close": "Close"
+    "close": "Close",
+    "my_wallet": "My wallet",
+    "metamask_wallet": "Metamask wallet"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
