@@ -94,6 +94,14 @@ const PreparingInvestment: FunctionComponent = () => {
               }
             }}
           />
+          <P1Text
+            style={{
+              color: '#626368',
+              fontFamily: 'Roboto_400Regular',
+              margin: "5%",
+            }}
+            label={'* ' + i18n.t('dashboard.event_guide_EL')}
+          />
         </View>
       </>}
       button={
@@ -101,7 +109,7 @@ const PreparingInvestment: FunctionComponent = () => {
           disabled={!(preparingCompletion)}
           title={
             kycStatus === KycStatus.SUCCESS && ethAddresses !== null
-              ? i18n.t('dashboard.event_guide_EL')
+              ? i18n.t('dashboard.event_participation')
               : i18n.t('dashboard.complete_prepare')
           }
           handler={() => { }}

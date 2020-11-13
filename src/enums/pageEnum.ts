@@ -43,6 +43,7 @@ export enum MorePage {
   RegisterEthAddress = 'RegisterEthAddress',
   TermsOfUse = 'TermsOfUse',
   PrivacyPolicy = 'PrivacyPolicy',
+  MyWallet = 'MyWallet'
 }
 
 export enum DashboardPage {
@@ -53,5 +54,6 @@ export enum DashboardPage {
   ProductNotice = 'ProductNotice',
   PreparingInvestment = 'PreparingInvestment',
   InterestWithdraw = 'InterestWithdraw',
-  InvestmentGuide = 'InvestmentGuide'
+  InvestmentGuide = 'InvestmentGuide',
+  RemainingBalance = 'RemainingBalance',
 }

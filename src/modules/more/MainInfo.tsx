@@ -350,7 +350,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            {!(user.ethAddresses?.length > 0) && (
+            {!(user.ethAddresses?.length > 0) ? (
               <View
                 style={{
                   height: 50,
@@ -390,6 +390,31 @@ const MainInfo: FunctionComponent = () => {
                   </View>
                 </TouchableOpacity>
               </View>
+            ) : (
+            <View
+              style={{
+                height: 50,
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('More', {
+                    screen: MorePage.MyWallet,
+                  })
+                }>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <P1Text
+                    label={'내 지갑'}
+                    style={{ lineHeight: 50, fontSize: 15 }}
+                  />
+                  <InfoArrowImg source={require('./images/next_gray.png')} />
+                </View>
+              </TouchableOpacity>
+            </View>
             )}
             <View
               style={{

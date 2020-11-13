@@ -23,6 +23,7 @@ import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { ProductPage } from '../../enums/pageEnum';
 import { Map } from './components/Map';
+import { ExpectedReturn } from './components/ExpectedReturn';
 import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
@@ -162,6 +163,15 @@ const ProductBuying: FunctionComponent = () => {
         {state.product && (
           <BasicInfo product={state.product} elPrice={state.elPrice} />
         )}
+        <View
+          style={{
+            padding: 20,
+            borderBottomColor: '#F6F6F8',
+            borderBottomWidth: 5,
+            height: 136,
+          }}>
+          {state.product && <ExpectedReturn product={state.product} />}
+        </View>
         <View
           style={{
             padding: 20,

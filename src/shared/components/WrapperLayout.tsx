@@ -5,6 +5,9 @@ import {
   GestureResponderEvent,
   View,
   Animated,
+  ViewComponent,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
@@ -25,6 +28,7 @@ interface Props {
   backButtonHandler?: (event: GestureResponderEvent) => void;
   isScrolling: boolean;
   button?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
 }
 
 type Scrolling = {
@@ -71,7 +75,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
   const languageType = user.language;
 
   return (
-    <Wrapper>
+    <Wrapper style={props.style}>
       <Animated.View
         style={{
           marginLeft: '5%',

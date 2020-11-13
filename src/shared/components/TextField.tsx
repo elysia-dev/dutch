@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useState } from 'react';
-import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
+import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
+import { StyleSheet, View, StyleProp, ViewStyle, Keyboard } from 'react-native';
 import styled from 'styled-components/native';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
@@ -43,7 +43,22 @@ export const TextField: FunctionComponent<Props> = ({
   ...props
 }) => {
   const [focusing, setFocus] = useState(onFocused);
-  // const [VaildationImage, setVaildationImage] = useState(props.helperIcon);
+
+  useEffect(() => {
+    // Keyboard.addListener("keyboardDidShow", keyboardDidShow);
+    Keyboard.addListener("keyboardDidHide", keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      // Keyboard.removeListener("keyboardDidShow", keyboardDidShow);
+      Keyboard.removeListener("keyboardDidHide", keyboardDidHide);
+    };
+  }, []);
+
+  const keyboardDidHide = () => {
+    setFocus(false);
+    focusHandler(false);
+  };
 
   return (
     <View style={props.style}>
@@ -81,6 +96,10 @@ export const TextField: FunctionComponent<Props> = ({
         onBlur={() => {
           setFocus(false);
           focusHandler(false);
+        }}
+        onKeyPress={() => {
+          setFocus(true);
+          focusHandler(true);
         }}
         placeholder={props.placeHolder}
         onFocus={() => {

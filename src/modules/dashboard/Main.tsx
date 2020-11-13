@@ -17,6 +17,7 @@ import {
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
+import { WithdrawalCard } from './components/WithdrawalCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
@@ -133,6 +134,14 @@ export const Main: FunctionComponent = () => {
               handler={() =>
                 navigation.navigate('Dashboard', {
                   screen: DashboardPage.SummaryReport,
+                })
+              }
+            />
+            <WithdrawalCard
+              balance={state.balance}
+              handler={() =>
+                navigation.navigate('Dashboard', {
+                  screen: DashboardPage.RemainingBalance,
                 })
               }
             />
@@ -309,7 +318,6 @@ export const Main: FunctionComponent = () => {
                         position: 'absolute',
                         top: 50,
                         left: 25,
-                        color: '#FFF',
                       }}
                       label={i18n.t('dashboard.invest_first_asset')}
                     />
