@@ -1,10 +1,32 @@
-import React, { Children, FunctionComponent, useContext, useState } from 'react';
-import { Dimensions, Image, View } from 'react-native';
+import React, {
+  Children,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  Dimensions,
+  Image,
+  View,
+  AppState,
+  Text,
+  AppStateStatus,
+} from 'react-native';
 import { isAddress, checkAddressChecksum } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import * as Linking from 'expo-linking';
 import i18n from '../../i18n/i18n';
-import { P1Text, TitleText, P3Text, H2Text, P2Text } from '../../shared/components/Texts';
+
+import {
+  P1Text,
+  TitleText,
+  P3Text,
+  H2Text,
+  P2Text,
+  H1Text,
+} from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextField } from '../../shared/components/TextField';
@@ -12,55 +34,88 @@ import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
 import MetamaskFox from './images/metamask_logo.png';
+import getEnvironment from '../../utiles/getEnvironment';
+import App from '../../../App';
 
 interface Props {
   resetHandler: () => void;
 }
 
 type State = {
-  address: string;
-  error: number;
   localeTerms?: string;
-  firstModal: boolean;
   confirmModal: boolean;
-}
+  appState: AppStateStatus;
+  balance: string;
+};
 
 const BlueCircle = styled.View`
- width: 10px;
-height: 10px;
-border-radius: 5px;
-background-color: #3679B5;
-margin-right: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #3679b5;
+  margin-right: 10px;
 `;
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
+  const { Server, setEthAddress, user } = useContext(RootContext);
+
   const [state, setState] = useState<State>({
-    address: "",
-    error: 0,
-    firstModal: true,
     confirmModal: false,
+    appState: AppState.currentState,
+    balance: '0',
   });
 
   const navigation = useNavigation();
 
-  const {
-    Server,
-    setEthAddress,
-    user,
-  } = useContext(RootContext);
-
-  const callApi = () => {
-    Server.registerAddress(state.address).then(() => {
-      setEthAddress(state.address);
-      setState({ ...state, confirmModal: true });
-      navigation.goBack();
-      alert(`${i18n.t('dashboard.wallet_connected')}\n ${i18n.t('more.find_more')}`);
-    }).catch(() => {
-      alert(i18n.t('account_errors.server'));
-    });
+  const userBalance = () => {
+    Server.getBalance(user.ethAddresses[0])
+      .then((res) => setState({ ...state, balance: res.data.result }))
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
   };
 
-  const hasAddress = user.ethAddresses?.length > 0;
+  const callApi = () => {
+    Server.requestEthAddressRegister()
+      .then((res) => {
+        Linking.openURL(
+          `https://metamask.app.link/dapp/${
+            getEnvironment().dappUrl
+          }/ethAddress/${res.data.id}`,
+        );
+      })
+      .catch((e) => {
+        alert(i18n.t('account_errors.server'));
+      });
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', () =>
+      setState({ ...state, appState: AppState.currentState }),
+    );
+    if (user.ethAddresses?.length > 0) {
+      userBalance();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (state.appState === 'active' || !(user.ethAddresses?.length > 0)) {
+      Server.me()
+        .then((res) => {
+          if (res.data.user.ethAddresses?.length > 0) {
+            setEthAddress(res.data.user.ethAddresses[0]);
+            userBalance();
+          }
+        })
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(i18n.t('account_errors.server'));
+          }
+        });
+    }
+  }, [state.appState]);
 
   return (
     <>
@@ -69,92 +124,161 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
           <>
             <BackButton handler={() => navigation.goBack()} />
             <TitleText
-              style={{ paddingTop: 20 }}
+              style={{ paddingTop: 10 }}
               label={
-                hasAddress
-                  ? i18n.t('account.already_insert_ethaddress')
-                  : i18n.t('account.insert_ethaddress')
+                user.ethAddresses?.length > 0
+                  ? i18n.t('more_label.my_wallet')
+                  : i18n.t('more_label.wallet_connect')
               }
             />
+            {!(user.ethAddresses?.length > 0) && (
+              <P3Text
+                label={i18n.t('more.check_text')}
+                style={{ color: '#626368', textAlign: 'left', marginTop: 10 }}
+              />
+            )}
           </>
         }
         body={
-          hasAddress ?
-            <P1Text label={user.ethAddresses[0]} />
-            : (<>
-              <TextField
-                label={i18n.t('account_label.ethaddress')}
-                eventHandler={(input: string) => {
-                  setState({
-                    ...state,
-                    address: input,
-                    error: isAddress(input) && checkAddressChecksum(input) ? 0 : 1,
-                  });
-                }}
-                placeHolder="0x"
-              />
-              <P3Text label={terms[user.language]} style={{ marginTop: 30 }} />
-              <Modal visible={state.firstModal}
-                modalHandler={() => setState({ ...state, firstModal: false })}
-                child={
-                  <View style={{ width: "100%", padding: 15 }}>
-                    <H2Text label={i18n.t('more.check')} style={{ textAlign: 'center', marginBottom: 3 }} />
-                    <P3Text label={i18n.t('more.check_text')} style={{ color: "#626368", textAlign: 'center' }} />
-                    <Image source={MetamaskFox} style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: 20 }}></Image>
-                    <View style={{ width: Dimensions.get("window").width * 0.9 - 40, height: 100, flexDirection: "column", padding: 15, backgroundColor: "#F6F6F8", borderRadius: 10, marginTop: 20, marginBottom: 25 }}>
-                      <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                        <BlueCircle />
-                        <P3Text label={i18n.t('more.check_1')} style={{ color: "#1C1C1C" }} />
-                      </View>
-                      <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                        <BlueCircle />
-                        <P3Text label={i18n.t('more.check_2')} style={{ color: "#1C1C1C" }} />
-                      </View>
-                    </View>
-                    <SubmitButton title={i18n.t('more_label.connect')} handler={() => setState({ ...state, firstModal: false })} style={{ width: Dimensions.get("window").width * 0.9 - 40, marginLeft: 0, marginRight: 0, alignSelf: 'center' }} />
-                  </View>
-                }
-              />
-              <Modal visible={state.confirmModal}
-                modalHandler={() => {
-                  setState({ ...state, confirmModal: false });
-                  navigation.goBack();
-                }}
-                child={
-                  <View style={{ width: "100%", padding: 15 }}>
-                    <Image source={require('./images/check.png')} style={{ marginLeft: 'auto', marginRight: 'auto' }}></Image>
-                    <H2Text label={i18n.t('more.connected')} style={{ marginTop: 10 }} />
-                    <P2Text label={i18n.t('more.find_more')} style={{ color: "#626368", textAlign: 'center', top: 5, marginBottom: 40 }} />
-                  </View>
-                }
-              />
-            </>
-            )
+          user.ethAddresses?.length > 0 ? (
+            <View
+              style={{
+                width: '100%',
+                height: 240,
+                borderRadius: 10,
+                shadowColor: '#1C1C1C4D',
+                shadowOffset: { width: 1, height: 2 },
+                shadowOpacity: 0.7,
+                shadowRadius: 4,
+                backgroundColor: '#fff',
+                flexDirection: 'column',
+                padding: 20,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{ flexDirection: 'column' }}>
+                  <P1Text
+                    style={{ color: '#7A7D8D' }}
+                    label={i18n.t('more_label.metamask_wallet')}
+                  />
+                  <H2Text
+                    style={{ marginTop: 5 }}
+                    label={`EL ${parseFloat(state.balance).toFixed(2)}`}
+                  />
+                </View>
+                <View
+                  style={{
+                    width: 54,
+                    height: 54,
+                    backgroundColor: '#fff',
+                    borderRadius: 27,
+                    shadowColor: '#1C1C1C4D',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.6,
+                    shadowRadius: 2,
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    style={{ width: 30, height: 29, alignSelf: 'center' }}
+                    source={require('./images/metamask_logo.png')}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  height: 110,
+                  backgroundColor: '#F6F6F8',
+                  borderRadius: 10,
+                  borderColor: '#F1F1F1',
+                  borderWidth: 2,
+                  marginTop: 30,
+                  padding: 15,
+                }}>
+                <P1Text label={'Address'} style={{ color: '#838383' }} />
+                <P1Text
+                  style={{ marginTop: 10 }}
+                  label={
+                    user.ethAddresses?.length > 0 ? user.ethAddresses[0] : ''
+                  }
+                />
+              </View>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                display: 'flex',
+                alignSelf: 'center',
+                marginTop: Dimensions.get('window').height * 0.1,
+              }}>
+              <Image
+                source={MetamaskFox}
+                style={{
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}></Image>
+              <View
+                style={{
+                  width: Dimensions.get('window').width * 0.9,
+                  height: 100,
+                  flexDirection: 'column',
+                  padding: 15,
+                  backgroundColor: '#F6F6F8',
+                  borderRadius: 10,
+                  marginTop: 20,
+                  marginBottom: 25,
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <BlueCircle />
+                  <P3Text
+                    label={i18n.t('more.check_1')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <BlueCircle />
+                  <P3Text
+                    label={i18n.t('more.check_2')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+              </View>
+            </View>
+          )
         }
         button={
-          hasAddress
-            ? <></>
-            : <SubmitButton
-              disabled={hasAddress}
-              title={
-                state.error === 1
-                  ? i18n.t('account_errors.ethaddress')
-                  : i18n.t('account.submit_ethaddress')
-              }
-              handler={
-                state.error === 1
-                  ? () => { }
-                  : () => callApi()
-              }
-              variant={
-                state.error === 1 || hasAddress
-                  ? 'GrayTheme'
-                  : undefined
-              }
+          user.ethAddresses?.length > 0 ? (
+            <></>
+          ) : (
+            <SubmitButton
+              title={i18n.t('more_label.connect')}
+              handler={callApi}
+              style={{
+                width: Dimensions.get('window').width * 0.9,
+                marginLeft: 0,
+                marginRight: 0,
+                alignSelf: 'center',
+              }}
             />
+          )
         }
       />
-      {(state.firstModal || state.confirmModal) && (
+      {state.confirmModal && (
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.5)',
@@ -163,6 +287,36 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             height: '100%',
           }}></View>
       )}
+      <Modal
+        visible={state.confirmModal}
+        modalHandler={() => {
+          setState({ ...state, confirmModal: false });
+          navigation.goBack();
+        }}
+        child={
+          <View style={{ width: '100%', padding: 15 }}>
+            <Image
+              source={require('./images/check.png')}
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}></Image>
+            <H2Text
+              label={i18n.t('more.connected')}
+              style={{ marginTop: 10 }}
+            />
+            <P2Text
+              label={i18n.t('more.find_more')}
+              style={{
+                color: '#626368',
+                textAlign: 'center',
+                top: 5,
+                marginBottom: 40,
+              }}
+            />
+          </View>
+        }
+      />
     </>
   );
 };

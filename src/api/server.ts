@@ -14,6 +14,7 @@ import { SummaryReportResponse } from '../types/SummaryReport';
 import { CoinPriceResponse, ELPriceResponse } from '../types/CoinPrice';
 import { KycResponse, PhotoResponse } from '../types/Kyc';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
+import { BalanceResponse } from '../types/BalanceResponse';
 
 export default class Server {
   token: string;
@@ -97,13 +98,17 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/auth/me`);
   };
 
-  registerExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
+  registerExpoPushToken = async (
+    expoPushToken: string,
+  ): Promise<AxiosResponse<void>> => {
     return this.authenticatedEspressoClient.put('/users/expoPushTokens', {
       expoPushToken,
     });
   };
 
-  deleteExpoPushToken = async (expoPushToken: string): Promise<AxiosResponse<void>> => {
+  deleteExpoPushToken = async (
+    expoPushToken: string,
+  ): Promise<AxiosResponse<void>> => {
     return this.authenticatedEspressoClient.delete('/users/expoPushTokens?', {
       data: {
         expoPushToken,
@@ -127,8 +132,8 @@ export default class Server {
     const formData = new FormData();
     formData.append('image', {
       uri: Platform.OS === 'android' ? photo : photo.replace('file://', ''),
-      name: "image.png",
-      type: "image/png",
+      name: 'image.png',
+      type: 'image/png',
     });
     formData.append('type', type);
     return this.authenticatedEspressoClient.post('/kyc/upload', formData);
@@ -170,10 +175,10 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/ownerships/${id}`);
   };
 
-  ownershipLegacyRefund = async (
-    id: number,
-  ): Promise<AxiosResponse<void>> => {
-    return this.authenticatedEspressoClient.post(`/ownerships/${id}/legacyRefund`);
+  ownershipLegacyRefund = async (id: number): Promise<AxiosResponse<void>> => {
+    return this.authenticatedEspressoClient.post(
+      `/ownerships/${id}/legacyRefund`,
+    );
   };
 
   storyList = async (): Promise<AxiosResponse<Story[]>> => {
@@ -195,15 +200,11 @@ export default class Server {
   };
 
   productPost = async (id: number): Promise<AxiosResponse<PostResponse[]>> => {
-    return this.authenticatedEspressoClient.get(
-      `/posts/products?id=${id}`,
-    );
+    return this.authenticatedEspressoClient.get(`/posts/products?id=${id}`);
   };
 
   elysiaPost = async (): Promise<AxiosResponse<PostResponse[]>> => {
-    return this.authenticatedEspressoClient.get(
-      '/posts/elysia',
-    );
+    return this.authenticatedEspressoClient.get('/posts/elysia');
   };
 
   productDocs = async (id: number): Promise<AxiosResponse<DocsResponse>> => {
@@ -251,20 +252,24 @@ export default class Server {
   };
 
   resetLanguage = async (language: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put(
-      '/users/language', { language },
-    );
+    return this.authenticatedEspressoClient.put('/users/language', {
+      language,
+    });
   };
 
-  requestTransaction = async (productId: number, amount: number, type: string):
-    Promise<AxiosResponse<TransactionRequestResponse>> => {
-    return this.authenticatedEspressoClient.post(
-      '/transactionRequests', { productId, amount, type },
-    );
+  requestTransaction = async (
+    productId: number,
+    amount: number,
+    type: string,
+  ): Promise<AxiosResponse<TransactionRequestResponse>> => {
+    return this.authenticatedEspressoClient.post('/transactionRequests', {
+      productId,
+      amount,
+      type,
+    });
   };
 
-  sendEmailForTransaction = async (id: string):
-    Promise<AxiosResponse> => {
+  sendEmailForTransaction = async (id: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.get(
       `/transactionRequests/${id}/sendEmail`,
     );
@@ -277,22 +282,40 @@ export default class Server {
   };
 
   registerAddress = async (ethAddress: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put(
-      '/users/ethAddresses', { ethAddress },
-    );
-  }
+    return this.authenticatedEspressoClient.put('/users/ethAddresses', {
+      ethAddress,
+    });
+  };
 
-  getProductSubscription = async (productId: number): Promise<AxiosResponse> => {
+  getProductSubscription = async (
+    productId: number,
+  ): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.get(
       `/productSubscriptions?productId=${productId}`,
     );
-  }
+  };
 
-  setProductSubscription = async (productId: number): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.post(
-      `/productSubscriptions`, {
+  setProductSubscription = async (
+    productId: number,
+  ): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post(`/productSubscriptions`, {
       productId,
-    },
+    });
+  };
+
+  requestEthAddressRegister = async (): Promise<
+    AxiosResponse<TransactionRequestResponse>
+  > => {
+    return this.authenticatedEspressoClient.post('/ethAddress');
+  };
+
+  setEthAddressRegister = async (id: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.put(`/ethAddress/${id}`);
+  };
+
+  getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
+    return axios.get(
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x2781246fe707bb15cee3e5ea354e2154a2877b16&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
-  }
+  };
 }
