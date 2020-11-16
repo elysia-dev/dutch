@@ -9,7 +9,12 @@ import SelfieBeforePng from './images/selfiebefore.png';
 import { KycPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { Modal } from '../../shared/components/Modal';
-import { H1Text, P1Text, P3Text, SubTitleText } from '../../shared/components/Texts';
+import {
+  H1Text,
+  P1Text,
+  P3Text,
+  SubTitleText,
+} from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 
 const Container = styled.View`
@@ -36,34 +41,24 @@ const InformationCircle = styled.View`
   top: 2px;
 `;
 
-type ParamList = {
-  TakeSelfieBefore: {
-    photoId_hash: string;
-    id_type: string;
-    idPhoto: any;
-  };
-};
-
 const TakeSelfieBefore: FunctionComponent<{}> = () => {
   const [state, setState] = useState({
     modalVisible: false,
   });
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'TakeSelfieBefore'>>();
-  const { photoId_hash, id_type, idPhoto } = route.params;
-
 
   return (
     <>
       <WrapperLayout
         backButtonHandler={() => navigation.navigate(KycPage.ConfirmID)}
         isScrolling={false}
-        title={i18n.t('kyc.step2')
+        title={i18n.t('kyc.step2')}
+        subTitle={
+          <SubTitleText
+            label={i18n.t('kyc.step2_text')}
+            style={{ color: '#626368', marginBottom: 15 }}
+          />
         }
-        subTitle={<SubTitleText
-          label={i18n.t('kyc.step2_text')}
-          style={{ color: '#626368', marginBottom: 15 }}
-        />}
         body={
           <>
             <Container>
@@ -169,11 +164,7 @@ const TakeSelfieBefore: FunctionComponent<{}> = () => {
                   title={i18n.t('kyc.accepted_shoot')}
                   handler={() => {
                     setState({ modalVisible: false });
-                    navigation.navigate(KycPage.TakeSelfie, {
-                      id_type,
-                      photoId_hash,
-                      idPhoto,
-                    });
+                    navigation.navigate(KycPage.TakeSelfie);
                   }}
                   style={{ width: '100%', right: '5%' }}
                 />
