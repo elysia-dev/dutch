@@ -69,7 +69,7 @@ interface State {
 const TakeSelfie: FunctionComponent<{}> = () => {
   let camera: Camera | null;
   const navigation = useNavigation();
-  const { idType, idPhoto, setSelfie } = useContext(KycContext);
+  const { setSelfie } = useContext(KycContext);
   const [state, setState] = useState<State>({
     hasPermission: false,
     type: Camera.Constants.Type.back,
