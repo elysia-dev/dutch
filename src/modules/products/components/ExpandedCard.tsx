@@ -89,7 +89,12 @@ const ExpandedItem: FunctionComponent<Props> = ({
         useNativeDriver: false,
         easing: Easing.elastic(1),
       }).start();
-      setState({ ...state, scrollY: 0, closed: false, scrollEnabled: true });
+      setState({
+        ...state,
+        scrollY: 0,
+        closed: false,
+        scrollEnabled: true,
+      });
     }
   }, [on]);
 
@@ -98,6 +103,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
       style={{
         position: 'absolute',
         elevation: 6,
+        height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
         shadowOpacity: animatedValue.interpolate({
@@ -124,6 +130,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
       }}>
       <ScrollView
         ref={scrollRef}
+        contentInset={{ bottom: -500 }}
+        bouncesZoom={false}
         scrollEventThrottle={16}
         contentOffset={{ x: 0, y: 0 }}
         scrollEnabled={state.scrollEnabled}
@@ -177,7 +185,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             textComponentProps={defaultTextProps}
             nodeComponentProps={defaultTextProps}
           />
-          <View style={{ marginTop: 35 }} />
+          <View style={{ marginTop: 535 }} />
         </Animated.View>
       </ScrollView>
       <Animated.View
@@ -186,14 +194,18 @@ const ExpandedItem: FunctionComponent<Props> = ({
           top: 30,
           right: 20,
           opacity: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1],
+            inputRange: [0, 0.8, 1],
+            outputRange: [0, 1, 1],
           }),
         }}>
         <TouchableOpacity
           onPress={() => {
             scrollRef.current?.scrollTo({ y: 0, animated: false });
-            setState({ ...state, closed: true, scrollEnabled: false });
+            setState({
+              ...state,
+              closed: true,
+              scrollEnabled: false,
+            });
             Animated.timing(animatedValue, {
               toValue: 0,
               duration: 500,

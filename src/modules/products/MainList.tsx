@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, Animated, StatusBar, ScrollView } from 'react-native';
+import { View, Animated, StatusBar, ScrollView, Modal } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import base64 from 'base-64';
 import i18n from '../../i18n/i18n';
@@ -132,60 +132,45 @@ const MainList: FunctionComponent = () => {
             />
           ))}
         </View>
-        <View style={{
-          width: "90%",
-          marginLeft: "5%",
-          marginRight: "5%",
-          marginTop: 25, 
-          marginBottom: 50,
-        }}>
-          {
-            state.products.map((product, index) => {
-              return (
-                <PostItem
-                  key={`terminated-product-${index}`}
-                  product={product}
-                />
-              );
-            })
-          }
+        <View
+          style={{
+            width: '90%',
+            marginLeft: '5%',
+            marginRight: '5%',
+            marginTop: 25,
+            marginBottom: 50,
+          }}>
+          {state.products.map((product, index) => {
+            return (
+              <PostItem key={`terminated-product-${index}`} product={product} />
+            );
+          })}
         </View>
         <VirtualTab />
       </ScrollView>
       {state.stories.map((story, index) => (
-        <View
+        <ExpandedCard
           key={`card-${index}`}
-          style={{
-            width: '100%',
-            height:
-              (state.activeStory &&
-                state.activeStory.productId === story.productId) ||
-              false
-                ? '100%'
-                : 0,
-          }}>
-          <ExpandedCard
-            image={base64.encode(story.image)}
-            on={
-              (state.activeStory &&
-                state.activeStory.productId === story.productId) ||
-              false
-            }
-            story={story}
-            deactivateStory={() => {
-              StatusBar.setHidden(false);
-              navigation.setOptions({
-                tabBarVisible: true,
-              });
-              setState({
-                ...state,
-                activeStory: undefined,
-              });
-            }}
-            xOffset={state.xOffset}
-            yOffset={state.yOffset}
-          />
-        </View>
+          image={base64.encode(story.image)}
+          on={
+            (state.activeStory &&
+              state.activeStory.productId === story.productId) ||
+            false
+          }
+          story={story}
+          deactivateStory={() => {
+            StatusBar.setHidden(false);
+            navigation.setOptions({
+              tabBarVisible: true,
+            });
+            setState({
+              ...state,
+              activeStory: undefined,
+            });
+          }}
+          xOffset={state.xOffset}
+          yOffset={state.yOffset}
+        />
       ))}
     </View>
   );
