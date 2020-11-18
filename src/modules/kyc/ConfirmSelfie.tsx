@@ -18,6 +18,7 @@ import RootContext from '../../contexts/RootContext';
 import { P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { LoadingStatus } from '../../enums/LoadingStatus';
+import KycContext from '../../contexts/KycContext';
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -28,34 +29,20 @@ const SelfieImg = styled.Image`
   resize-mode: cover;
 `;
 
-type ParamList = {
-  ConfirmSelfie: {
-    photoId_hash: string;
-    selfie: any;
-    idPhoto: any;
-    id_type: string;
-  };
-};
-
 const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ConfirmSelfie'>>();
   const { Server } = useContext(RootContext);
+  const { selfie, setHashedSelfie } = useContext(KycContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 
   const callKycApi = () => {
     setStatus(LoadingStatus.PENDING);
 
-    const { photoId_hash, selfie, id_type, idPhoto } = route.params;
     Server.kycUpload(selfie.uri, 'selfie')
       .then((res) => {
+        setHashedSelfie(res.data.filehash);
         setStatus(LoadingStatus.SUCCESS);
-        navigation.navigate(KycPage.PersonalDataInput, {
-          selfie_hash: res.data.filehash,
-          id_type,
-          photoId_hash,
-          idPhoto,
-        });
+        navigation.navigate(KycPage.PersonalDataInput);
       })
       .catch((e) => {
         if (e.response.status === 404) {
@@ -97,7 +84,7 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
             style={{ color: '#626368', marginBottom: 15 }}
           />
         }
-        body={<SelfieImg source={{ uri: route.params.selfie.uri }} />}
+        body={<SelfieImg source={{ uri: selfie.uri }} />}
         button={
           <>
             <SubmitButton

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +15,7 @@ import WrapperLayout from '../../shared/components/WrapperLayout';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
 import { SubTitleText } from '../../shared/components/Texts';
+import KycContext from '../../contexts/KycContext';
 
 const IDImg = styled.Image`
   width: 28px;
@@ -28,27 +29,31 @@ const Checked = styled.Image`
   margin-right: 15px;
 `;
 
-const SelectID: FunctionComponent<{}> = props => {
+const SelectID: FunctionComponent<{}> = (props) => {
   const [state, setState] = useState({
     idType: '',
   });
   const navigation = useNavigation();
+  const { setIdType } = useContext(KycContext);
 
   const setID = (text: string) => {
-    // eslint-disable-next-line no-unused-expressions
-    state.idType !== text
-      ? setState({ idType: text })
-      : setState({ idType: '' });
+    if (state.idType !== text) {
+      setState({ idType: text });
+    } else {
+      setState({ idType: '' });
+    }
   };
 
   return (
     <WrapperLayout
       backButtonHandler={() => navigation.goBack()}
       title={i18n.t('kyc.step1')}
-      subTitle={<SubTitleText
-        label={i18n.t('kyc.step1_text')}
-        style={{ color: '#626368', marginBottom: 42, fontSize: 15 }}
-      />}
+      subTitle={
+        <SubTitleText
+          label={i18n.t('kyc.step1_text')}
+          style={{ color: '#626368', marginBottom: 42, fontSize: 15 }}
+        />
+      }
       isScrolling={false}
       body={
         <>
@@ -67,8 +72,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'passport' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                  <View />
-                )
+                <View />
+              )
             }
             selected={state.idType === 'passport' ? 'selected' : ''}
           />
@@ -88,8 +93,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'drivers_license' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                  <View />
-                )
+                <View />
+              )
             }
             selected={state.idType === 'drivers_license' ? 'selected' : ''}
           />
@@ -109,8 +114,8 @@ const SelectID: FunctionComponent<{}> = props => {
               state.idType === 'government_id' ? (
                 <Checked source={CheckedPng} />
               ) : (
-                  <View />
-                )
+                <View />
+              )
             }
             selected={state.idType === 'government_id' ? 'selected' : ''}
           />
@@ -123,10 +128,8 @@ const SelectID: FunctionComponent<{}> = props => {
             if (state.idType === '') {
               alert(i18n.t('kyc.alert_id'));
             } else {
-              navigation.navigate(KycPage.TakeID, {
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                id_type: state.idType,
-              });
+              setIdType(state.idType);
+              navigation.navigate(KycPage.TakeID);
             }
           }}
         />

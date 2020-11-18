@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { View, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -21,6 +26,7 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 import CameraPermissionPng from './images/cameraPermission.png';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { LoadingStatus } from '../../enums/LoadingStatus';
+import KycContext from '../../contexts/KycContext';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -60,19 +66,10 @@ interface State {
   type: typeof Camera.Constants.Type;
 }
 
-type ParamList = {
-  TakeSelfie: {
-    id_type: string;
-    idPhoto: any;
-    photoId_hash: string;
-  };
-};
-
 const TakeSelfie: FunctionComponent<{}> = () => {
-  let camera: any;
+  let camera: Camera | null;
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'TakeSelfie'>>();
-  const { id_type, idPhoto, photoId_hash } = route.params;
+  const { setSelfie } = useContext(KycContext);
   const [state, setState] = useState<State>({
     hasPermission: false,
     type: Camera.Constants.Type.back,
@@ -230,14 +227,10 @@ const TakeSelfie: FunctionComponent<{}> = () => {
                     backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
-                    const selfiePhoto = await pickImage();
-                    if (selfiePhoto) {
-                      navigation.navigate(KycPage.ConfirmSelfie, {
-                        selfie: selfiePhoto,
-                        id_type,
-                        photoId_hash,
-                        idPhoto,
-                      });
+                    const pickedSelfie = await pickImage();
+                    if (pickedSelfie) {
+                      setSelfie(pickedSelfie);
+                      navigation.navigate(KycPage.ConfirmSelfie);
                       setStatus(LoadingStatus.SUCCESS);
                     }
                   }}>
@@ -253,13 +246,12 @@ const TakeSelfie: FunctionComponent<{}> = () => {
                     alignItems: 'center',
                   }}
                   onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmSelfie, {
-                      selfie: await takePicture(),
-                      id_type,
-                      photoId_hash,
-                      idPhoto,
-                    });
-                    setStatus(LoadingStatus.SUCCESS);
+                    const selfieTaken = await takePicture();
+                    if (selfieTaken) {
+                      setSelfie(selfieTaken);
+                      navigation.navigate(KycPage.ConfirmSelfie);
+                      setStatus(LoadingStatus.SUCCESS);
+                    }
                   }}>
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>

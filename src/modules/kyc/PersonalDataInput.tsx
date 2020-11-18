@@ -22,6 +22,7 @@ import {
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import nations from './components/argos.json';
 import IosPickerModal from '../../shared/components/IosPickerModal';
+import KycContext from '../../contexts/KycContext';
 
 const IdImg = styled.Image`
   margin-top: 10px;
@@ -34,15 +35,6 @@ const ConfirmImg = styled.Image`
   height: 150px;
   align-self: center;
 `;
-
-type ParamList = {
-  PersonalDataInput: {
-    selfie_hash: string;
-    photoId_hash: string;
-    id_type: string;
-    idPhoto: any;
-  };
-};
 
 const PersonalDataInput: FunctionComponent<{}> = (props) => {
   const [state, setState] = useState({
@@ -58,7 +50,9 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
   });
 
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'PersonalDataInput'>>();
+  const { hashedIdPhoto, hashedSelfie, idType, idPhoto } = useContext(
+    KycContext,
+  );
   const { Server, setKycStatus } = useContext(RootContext);
   const nationList = nations.map((nation, Key) => (
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
@@ -92,9 +86,9 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
         state.nationality,
         state.birthday,
         state.gender,
-        route.params.id_type === 'passport' ? 'passport' : 'government_id',
-        route.params.photoId_hash,
-        route.params.selfie_hash,
+        idType === 'passport' ? 'passport' : 'government_id',
+        hashedIdPhoto,
+        hashedSelfie,
       )
         .then((res) => {
           setModalVisible(true);
@@ -126,7 +120,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
               flexGrow: 1,
             }}>
             <View style={{ flex: 1 }}>
-              <IdImg source={{ uri: route.params.idPhoto.uri }} />
+              <IdImg source={{ uri: idPhoto.uri }} />
               <H1Text
                 label={i18n.t('kyc_label.personal_data')}
                 style={{ marginTop: 40, marginBottom: 6, fontSize: 20 }}

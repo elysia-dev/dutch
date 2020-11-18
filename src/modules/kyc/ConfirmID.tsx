@@ -24,6 +24,7 @@ import {
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import RootContext from '../../contexts/RootContext';
 import { LoadingStatus } from '../../enums/LoadingStatus';
+import KycContext from '../../contexts/KycContext';
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -47,34 +48,23 @@ const WarningWrapper = styled.View`
   margin: 10% auto 0px auto;
 `;
 
-type ParamList = {
-  ConfirmID: {
-    id_type: string;
-    idPhoto: any;
-  };
-};
-
 const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ConfirmID'>>();
+  const { idPhoto, idType, setHashedIdPhoto } = useContext(KycContext);
   const { Server } = useContext(RootContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 
   // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
   const callKycApi = () => {
     setStatus(LoadingStatus.PENDING);
-    const { id_type, idPhoto } = route.params;
     Server.kycUpload(
       idPhoto.uri,
-      id_type === 'passport' ? 'passport' : 'government_id',
+      idType === 'passport' ? 'passport' : 'government_id',
     )
       .then((res) => {
         setStatus(LoadingStatus.SUCCESS);
-        navigation.navigate(KycPage.TakeSelfieBefore, {
-          photoId_hash: res.data.filehash,
-          id_type,
-          idPhoto,
-        });
+        setHashedIdPhoto(res.data.filehash);
+        navigation.navigate(KycPage.TakeSelfieBefore);
       })
       .catch((e) => {
         if (e.response.status === 404) {
@@ -119,7 +109,7 @@ const ConfirmID: FunctionComponent<{}> = () => {
         body={
           <>
             <SelfieImg
-              source={{ uri: route.params.idPhoto.uri }}
+              source={{ uri: idPhoto.uri }}
               style={{ resizeMode: 'cover', marginTop: 20 }}
             />
             <WarningWrapper>
