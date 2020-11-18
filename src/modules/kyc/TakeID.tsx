@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   TouchableOpacity,
   Platform,
@@ -27,6 +32,7 @@ import CameraPermissionPng from './images/cameraPermission.png';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { LoadingStatus } from '../../enums/LoadingStatus';
+import KycContext from '../../contexts/KycContext';
 
 const ButtonImg = styled.Image`
   width: 47px;
@@ -148,17 +154,10 @@ interface State {
   type: typeof Camera.Constants.Type;
 }
 
-type ParamList = {
-  TakeID: {
-    id_type: string;
-  };
-};
-
 const TakeID: FunctionComponent<{}> = () => {
-  let camera: any;
+  let camera: Camera | null;
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'TakeID'>>();
-  const { id_type } = route.params;
+  const { idType, setIdPhoto } = useContext(KycContext);
   const [state, setState] = useState<State>({
     hasPermission: false,
     type: Camera.Constants.Type.back,
@@ -310,7 +309,7 @@ const TakeID: FunctionComponent<{}> = () => {
                   isWhite={true}
                 />
                 <H1Text
-                  label={i18n.t(`kyc_label.${id_type}`)}
+                  label={i18n.t(`kyc_label.${idType}`)}
                   style={{
                     color: '#FFF',
                     fontSize: 18,
@@ -359,12 +358,10 @@ const TakeID: FunctionComponent<{}> = () => {
                     backgroundColor: 'transparent',
                   }}
                   onPress={async () => {
-                    const idPhoto = await pickImage();
-                    if (idPhoto) {
-                      navigation.navigate(KycPage.ConfirmID, {
-                        idPhoto,
-                        id_type,
-                      });
+                    const pickedIdPhoto = await pickImage();
+                    if (pickedIdPhoto) {
+                      setIdPhoto(pickedIdPhoto);
+                      navigation.navigate(KycPage.ConfirmID);
                       setStatus(LoadingStatus.SUCCESS);
                     }
                   }}>
@@ -380,11 +377,12 @@ const TakeID: FunctionComponent<{}> = () => {
                     alignItems: 'center',
                   }}
                   onPress={async () => {
-                    navigation.navigate(KycPage.ConfirmID, {
-                      id_type,
-                      idPhoto: await takePicture(),
-                    });
-                    setStatus(LoadingStatus.SUCCESS);
+                    const idPhotoTaken = await takePicture();
+                    if (idPhotoTaken) {
+                      setIdPhoto(idPhotoTaken);
+                      navigation.navigate(KycPage.ConfirmID);
+                      setStatus(LoadingStatus.SUCCESS);
+                    }
                   }}>
                   <ButtonImg source={RecordPng} />
                 </TouchableOpacity>
