@@ -27,16 +27,18 @@ function getEnvironment(): Environment {
       envName: 'STAGING',
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
-      version: '1.1.0',
+      version: '1.1.2',
     };
   }
 
   return {
     envName: 'DEVELOPMENT',
-    apiUrl: `http://${(manifest.debuggerHost || 'localhost')
-      .split(':')
-      .shift()}:3000`,
-    // dappUrl: "localhost:5000",
+    // apiUrl: 'https://api.elysia.land',
+    apiUrl: 'https://staging-api.elysia.land',
+    // apiUrl: `http://${(manifest.debuggerHost || 'localhost')
+    //   .split(':')
+    //   .shift()}:3000`,
+    // dappUrl: 'localhost:3001',
     dappUrl: 'staging-dapp.elysia.land',
     version: '1.1.0',
   };
