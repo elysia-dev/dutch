@@ -62,7 +62,7 @@ const MyWallet: FunctionComponent = () => {
             flexDirection: "column",
           }}>
             <View style={{ padding: 12, flex: 2 }}>
-              <P2Text label={i18n.t("more_label.ethaddress")} style={{ marginBottom: 5 }} />
+              <P2Text label={i18n.t("account_label.ethaddress")} style={{ marginBottom: 5 }} />
               <P1Text label={'0x12312312312312312321312313123125453'} />
             </View>
             <View style={{ flex: 1, paddingHorizontal: 12, flexDirection: "row", justifyContent: "space-between", borderTopWidth: 2, borderColor: "#F1F1F1", paddingTop: 12 }}>
