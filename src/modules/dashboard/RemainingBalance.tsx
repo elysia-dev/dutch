@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useContext, useEffect, useMemo } from 'react';
 import { View, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -8,7 +8,9 @@ import { Modal as Modals } from '../../shared/components/Modal';
 import i18n from '../../i18n/i18n';
 import { RemainingBalanceCard } from './components/RemainingBalanceCard';
 import SliderWithdrawal from './SliderWithdrawal';
+import RootContext from '../../contexts/RootContext';
 
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import AcceptedImg from '../account/images/accepted.png';
 
@@ -27,11 +29,56 @@ const InformationCircle = styled.View`
   top: 6px;
 `;
 export const RemainingBalance: FunctionComponent<{}> = () => {
+  const defaultUser = {
+    legacyEl: 0,
+    legacyUsd: 0,
+    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+  };
   const navigation = useNavigation();
   const [state, setState] = useState({
+    user: defaultUser,
+    errorReturn: 0,
+    elPrice: 0.003,
     modalVisible: false,
     switchingHandler: false,
+    status: LegacyRefundStatus,
   });
+  const {
+    user,
+    Server,
+    setRefundStatus,
+  } = useContext(RootContext);
+
+  function TotalValueUpdate(legacyEl: number, elPrice: number, legacyUsd: number) {
+    return parseFloat(((legacyEl * elPrice) + legacyUsd).toFixed(2));
+  }
+  const legacyTotal =
+    useMemo(() => TotalValueUpdate(user.legacyEl, state.elPrice, user.legacyUsd), [state]);
+
+  const legacyTotalValue = async () => {
+    try {
+      const userInfo = await Server.me();
+      const getElPrice = await Server.getELPrice();
+      setState({
+        ...state,
+        user: userInfo.data.user,
+        elPrice: getElPrice.data.elysia.usd,
+      });
+    } catch (e) {
+      if (e.response.status === 400) {
+        alert('출금할 금액이 없거나, 이미 출금하셨습니다.');
+        setState({ ...state, errorReturn: 1 });
+      } else if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+        setState({ ...state, errorReturn: 1 });
+      }
+      setState({ ...state, errorReturn: 1 });
+    }
+  };
+
+  useEffect(() => {
+    legacyTotalValue();
+  }, []);
 
   return (
     <>
@@ -43,7 +90,8 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
         body={
           <>
             <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-              <RemainingBalanceCard totalBalance={123.12} usd={12.2} el={12331} />
+              <RemainingBalanceCard
+                totalBalance={legacyTotal} usd={user.legacyUsd} el={user.legacyEl} />
               <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
                 <InformationCircle />
                 <P1Text
@@ -69,6 +117,8 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
                 switchingHandler={() => setState({
                   ...state, modalVisible: false, switchingHandler: true,
                   })}
+                el={user.legacyEl}
+                usd={user.legacyUsd}
               />
             </Modal>
             <Modals
@@ -102,8 +152,23 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
         }
         button={
           <SubmitButton
-            title={'출금하기'}
-            handler={() => setState({ ...state, modalVisible: true })}
+            title={
+              // eslint-disable-next-line no-nested-ternary
+              (user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
+                ? '출금하기'
+                : (user.legacyWalletRefundStatus === LegacyRefundStatus.PENDING)
+                ? '출금 요청이 진행중입니다'
+                : '출금 대상이 아닙니다'
+              }
+            handler={(user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
+              ? () => setState({ ...state, modalVisible: true })
+              : () => {}
+            }
+            variant={
+              (user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
+                ? undefined
+                : 'GrayTheme'
+            }
           />
         }
       />

@@ -27,6 +27,7 @@ import { Account } from './src/modules/account/Account';
 
 import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
+import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
@@ -59,6 +60,11 @@ interface AppState {
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
+    legacyEl: number;
+    legacyUsd: number;
+    legacyWalletRefundStatus: LegacyRefundStatus;
+    withdrawEthAddress: string;
+    withdrawEmail: string;
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
@@ -81,6 +87,11 @@ const defaultState = {
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
+    legacyEl: 0,
+    legacyUsd: 0,
+    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+    withdrawEthAddress: '',
+    withdrawEmail: '',
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
@@ -226,6 +237,18 @@ const App = () => {
             setState({
               ...state,
               user: { ...state.user, ethAddresses: [address] },
+            });
+          },
+          setWithdrawAddress: (address: string, email: string) => {
+            setState({
+              ...state,
+              user: { ...state.user, withdrawEthAddress: address, withdrawEmail: email },
+            });
+          },
+          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+            setState({
+              ...state,
+              user: { ...state.user, legacyWalletRefundStatus: legacyRefundStatus },
             });
           },
           setUserExpoPushToken: (expoPushToken: string) => {

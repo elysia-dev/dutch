@@ -4,6 +4,7 @@ import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
 import { SignInStatus } from '../enums/LoginStatus';
 import Notification from '../types/Notification';
+import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 
 type RootContextType = {
   signedIn: SignInStatus;
@@ -18,6 +19,9 @@ type RootContextType = {
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
+    legacyEl: number;
+    legacyUsd: number;
+    legacyWalletRefundStatus: LegacyRefundStatus;
   };
   changeLanguage: (input: LocaleType) => void;
   setKycStatus: () => void;
@@ -28,6 +32,8 @@ type RootContextType = {
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
+  setWithdrawAddress: (address: string, email: string) => void;
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
   Server: Server;
   expoPushToken: string;
 };
@@ -45,6 +51,9 @@ const RootContext = createContext<RootContextType>({
     expoPushTokens: [],
     language: LocaleType.EN,
     nationality: 'South Korea, KOR',
+    legacyEl: 0,
+    legacyUsd: 0,
+    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
@@ -55,6 +64,8 @@ const RootContext = createContext<RootContextType>({
   setNotifications: (notifications: Notification[]) => { },
   setEthAddress: (address: string) => { },
   setUserExpoPushToken: (expoPushToken: string) => { },
+  setWithdrawAddress: (address: string, email: string) => { },
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
   Server: new Server(() => { }, ''),
   expoPushToken: "",
 });

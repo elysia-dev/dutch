@@ -295,4 +295,9 @@ export default class Server {
     },
     );
   }
+  setRefundLegacyWallet = async (ethAddress: string, email: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post(
+      `/users/refundLegacyWallet`, { ethAddress, email },
+    );
+  }
 }

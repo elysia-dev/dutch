@@ -4,7 +4,7 @@ import i18n from '../../../i18n/i18n';
 import { P1Text, H1Text } from '../../../shared/components/Texts';
 
 interface Props {
-  balance: string;
+  balance: number;
   handler: () => void;
 }
 
@@ -42,7 +42,7 @@ export const WithdrawalCard: FunctionComponent<Props> = (props) => {
               }}
             />
             <H1Text
-              label={`$ ${parseFloat(props.balance).toFixed(2)}`}
+              label={`$ ${(props.balance).toFixed(2)}`}
               style={{
                 color: '#FFFFFF',
                 fontSize: 25,

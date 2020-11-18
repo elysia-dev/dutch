@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useState,
+  useMemo,
 } from 'react';
 import {
   View,
@@ -25,6 +26,7 @@ import { KycStatus } from '../../enums/KycStatus';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 
 export const Main: FunctionComponent = () => {
   const defaultUser = {
@@ -36,6 +38,9 @@ export const Main: FunctionComponent = () => {
     firstName: '',
     lastName: '',
     language: LocaleType.EN,
+    legacyEl: 0,
+    legacyUsd: 0,
+    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   };
 
   const defaultOwnerships = {
@@ -52,31 +57,47 @@ export const Main: FunctionComponent = () => {
     user: defaultUser,
     ownerships: [defaultOwnerships],
     balance: '0',
+    errorReturn: 0,
+    elPrice: 0.003,
   });
   const { user, ownerships } = state;
+
+  function TotalValueUpdate(legacyEl: number, elPrice: number, legacyUsd: number) {
+    return parseFloat(((legacyEl * elPrice) + legacyUsd).toFixed(2));
+  }
+
+  const legacyTotal =
+    useMemo(() => TotalValueUpdate(user.legacyEl, state.elPrice, user.legacyUsd), [state]);
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const callApi = () => {
-    Server.me()
-      .then((res) => {
-        setState({
-          ...state,
-          user: res.data.user,
-          ownerships: res.data.ownerships,
-          balance: res.data.totalBalance,
-        });
-      })
-      .catch((e) => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
+  const legacyTotalValue = async () => {
+    try {
+      const userInfo = await Server.me();
+      const getElPrice = await Server.getELPrice();
+      setState({
+        ...state,
+        user: userInfo.data.user,
+        ownerships: userInfo.data.ownerships,
+        balance: userInfo.data.totalBalance,
+        elPrice: getElPrice.data.elysia.usd,
       });
+    } catch (e) {
+      if (e.response.status === 404) {
+        alert(i18n.t('account_errors.server'));
+        setState({ ...state, errorReturn: 1 });
+      } else if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+        setState({ ...state, errorReturn: 1 });
+      }
+      setState({ ...state, errorReturn: 1 });
+    }
   };
 
   useEffect(() => {
-    callApi();
+    legacyTotalValue();
+    // legacyTotalValue().then(dataThen);
   }, []);
 
   const ownershipsList = state.ownerships.map((ownership, index) => (
@@ -137,14 +158,21 @@ export const Main: FunctionComponent = () => {
                 })
               }
             />
-            <WithdrawalCard
-              balance={state.balance}
-              handler={() =>
+            {(
+              (user.legacyEl !== 0 || user.legacyUsd !== 0)
+              && state.errorReturn === 0
+              && [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING]
+                .includes(user.legacyWalletRefundStatus)
+              ) && (
+              <WithdrawalCard
+                balance={legacyTotal}
+                handler={() =>
                 navigation.navigate('Dashboard', {
                   screen: DashboardPage.RemainingBalance,
                 })
-              }
-            />
+                }
+              />
+            )}
             <View
               style={{
                 flexDirection: 'row',
