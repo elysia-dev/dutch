@@ -62,14 +62,16 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     confirmModal: false,
     appState: AppState.currentState,
-    balance: '0',
+    balance: '',
   });
 
   const navigation = useNavigation();
 
   const userBalance = () => {
     Server.getBalance(user.ethAddresses[0])
-      .then((res) => setState({ ...state, balance: res.data.result }))
+      .then((res) => {
+        setState({ ...state, balance: res.data.result });
+      })
       .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
@@ -95,7 +97,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     AppState.addEventListener('change', () =>
       setState({ ...state, appState: AppState.currentState }),
     );
-    if (user.ethAddresses?.length > 0) {
+    if (user.ethAddresses?.length > 0 && !state.balance) {
       userBalance();
     }
   }, []);
@@ -166,7 +168,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   />
                   <H2Text
                     style={{ marginTop: 5 }}
-                    label={`EL ${parseFloat(state.balance).toFixed(2)}`}
+                    label={`EL ${
+                      state.balance
+                        ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
+                        : '-.--'
+                    }`}
                   />
                 </View>
                 <View
