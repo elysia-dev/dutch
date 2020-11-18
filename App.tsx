@@ -19,7 +19,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -82,10 +82,10 @@ const defaultState = {
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
   },
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
 };
 
@@ -167,8 +167,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const addNotificationReceivedListener = Notifications
-      .addNotificationReceivedListener(response => {
+    const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
+      (response) => {
         if (isNotification(response.request.content.data as Notification)) {
           setState((state) => {
             return {
@@ -180,23 +180,39 @@ const App = () => {
             };
           });
         }
-      });
+      },
+    );
 
-    const addNotificationResponseReceivedListener = Notifications
-      .addNotificationResponseReceivedListener(_response => {
+    const addNotificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
+      (_response) => {
         signIn();
-      });
+      },
+    );
 
     return () => {
-      Notifications.removeNotificationSubscription(addNotificationReceivedListener);
-      Notifications.removeNotificationSubscription(addNotificationResponseReceivedListener);
+      Notifications.removeNotificationSubscription(
+        addNotificationReceivedListener,
+      );
+      Notifications.removeNotificationSubscription(
+        addNotificationResponseReceivedListener,
+      );
     };
   }, []);
 
   const RootStack = createStackNavigator();
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="#3679B5" />;
+    return (
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#3679B5" />
+      </View>
+    );
   }
 
   return (
@@ -231,7 +247,10 @@ const App = () => {
           setUserExpoPushToken: (expoPushToken: string) => {
             setState({
               ...state,
-              user: { ...state.user, expoPushTokens: expoPushToken ? [expoPushToken] : [] },
+              user: {
+                ...state.user,
+                expoPushTokens: expoPushToken ? [expoPushToken] : [],
+              },
             });
           },
         }}>
@@ -245,10 +264,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+            <>
+              <RootStack.Screen name={'Account'} component={Account} />
+            </>
+          )}
         </RootStack.Navigator>
       </RootContext.Provider>
     </NavigationContainer>
