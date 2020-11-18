@@ -408,7 +408,7 @@ const MainInfo: FunctionComponent = () => {
                     justifyContent: 'space-between',
                   }}>
                   <P1Text
-                    label={'내 지갑'}
+                    label={i18n.t("more_label.my_wallet")}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
                   <InfoArrowImg source={require('./images/next_gray.png')} />

@@ -56,7 +56,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         setRefundStatus(LegacyRefundStatus.PENDING);
       }).catch((e) => {
         if (e.response.status === 400) {
-          alert('출금할 금액이 없거나, 이미 출금하셨습니다.');
+          alert(i18n.t("dashboard.already_pending"));
         } else if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         } else {
@@ -66,41 +66,33 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   };
   const checkWithdrawInput = () => {
     if (state.inputEmail === '' && state.inputWallet === '') {
-      // 아무것도 입력하지 않음
-      alert('출금 받으실 주소를 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.0"));
       return false;
     }
     if (props.el === 0 && props.usd === 0) {
-      // 서버에서 el usd 값을 받아오지 못 했거나 비정상 접근 오류
       alert(i18n.t('account_errors.server'));
       return false;
     }
 
     if (state.inputWallet !== '' && state.inputEmail === '' && props.el === 0) {
-      // USD만 있는데 페이팔 주소를 안 적고 EL 주소를 적음
-      alert('USD 잔액은 페이팔로만 출금할 수 있습니다. 페이팔 계정 주소만 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.1"));
       return false;
     } else if ((props.usd > 0 && props.el > 0) && state.inputWallet !== '' && state.inputEmail === '') {
-      // USD, EL이 모두 있는데 페이팔 주소를 안 적고 EL 주소만 적음
-      alert('USD 출금을 위해 Paypal 주소를 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.2"));
       return false;
     } else if ((state.inputWallet !== '' && state.inputEmail !== '') && props.usd === 0 && props.el > 0) {
-      // EL만 있는데 둘 다 입력함
-      alert('USD 잔고가 없습니다. 개인 이더리움 지갑 주소만 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.3"));
       return false;
     }
 
     if (state.inputEmail !== '' && state.inputWallet === '' && props.usd === 0) {
-      // EL이 있는데 지갑 주소를 안 적고 페이팔 주소를 적음
-      alert('EL 잔액은 이더리움 지갑주소로만 출금할 수 있습니다. 개인 이더리움 지갑 주소만 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.4"));
       return false;
     } else if ((props.usd > 0 && props.el > 0) && state.inputWallet === '' && state.inputEmail !== '') {
-      // USD, EL이 모두 있는데 지갑 주소를 안 적고 페이팔 주소만 적음
-      alert('EL 출금을 위해 이더리움 지갑 주소를 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.5"));
       return false;
     } else if ((state.inputWallet !== '' && state.inputEmail !== '') && props.el === 0 && props.usd > 0) {
-      // USD만 있는데 둘 다 입력함
-      alert('EL 잔고가 없습니다. 페이팔 계정 주소만 입력해주세요.');
+      alert(i18n.t("dashboard.checking_withdraw_error.6"));
       return false;
     }
     return true;
@@ -109,7 +101,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   function ButtonCallback({ callback }) {
     return (
       <SubmitButton
-          title={'출금하기'}
+          title={i18n.t("dashboard_label.remaining_withdraw")}
           style={{
             position: 'absolute',
             bottom: 0,
@@ -168,14 +160,14 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       </TouchableOpacity>
       <View style={{ paddingTop: 40 }} />
       <TextField
-        label={'Paypal 계정 주소'}
+        label={i18n.t("dashboard_label.withdraw_paypal")}
         eventHandler={(input: string) => {
           setState({ ...state, inputEmail: input });
         }}
         focusHandler={value => setFocusing(value)}
       />
       <TextField
-        label={'개인 이더리움 지갑 주소'}
+        label={i18n.t("dashboard_label.withdraw_eth")}
         eventHandler={(input: string) => {
           setState({ ...state, inputWallet: input });
         }}
@@ -185,14 +177,14 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
           <InformationCircle />
           <P1Text
-            label={'위 금액은 엘리시아 웹사이트(elysia.land) 내부지갑에 있는 잔고입니다. 출금요청시 USD/EL이 각각 동시에 출금됩니다.'}
+            label={i18n.t("dashboard.remaining_text.0")}
             style={{ fontSize: 13, lineHeight: 17 }}
           />
         </View>
         <View style={{ flexDirection: 'row', marginRight: '5%' }}>
           <InformationCircle />
           <P1Text
-            label={'보유하신 상품별 적립금은, 상품별로 별도 인출 가능합니다.'}
+            label={i18n.t("dashboard.remaining_text.1")}
             style={{ fontSize: 13, lineHeight: 17 }}
           />
         </View>

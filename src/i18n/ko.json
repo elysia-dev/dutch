@@ -176,7 +176,7 @@
     "return_on_sale": "매매차익",
     "expected_annual_rate": "예상 연적립률",
     "rent_distribution": "월세 분배일",
-    "price_per_token": "토큰당 가격",
+    "price_per_token": "1 부동산 토큰당 가격",
     "return_method": "지급수단",
     "return_calculator": "예상 적립률 계산기",
     "investment": "투자금",
@@ -266,7 +266,10 @@
     "app_info": "앱 정보",
     "version": "버전",
     "done": "완료",
-    "close": "닫기"
+    "close": "닫기",
+    "my_wallet": "내 지갑",
+    "metamask_wallet": "메타마스크 지갑",
+    "balance" : "잔고"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
@@ -319,7 +322,15 @@
     "documents": "관련 서류",
     "notice": "공지사항",
     "less": " 미만",
-    "daily_reward": "일일 적립금"
+    "daily_reward": "일일 적립금",
+    "remaining_usd" : "USD 잔고",
+    "remaining_el" : "EL 잔고",
+    "withdraw_paypal": "Paypal 계정 주소",
+    "withdraw_eth": "개인 이더리움 지갑 주소",
+    "remaining_withdraw": "출금하기",
+    "remaining_withdraw_pending": "출금 요청이 진행중입니다",
+    "remaining_withdraw_other": "출금 대상이 아닙니다",
+    "remaining_balance": "잔여 EL / USD"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
@@ -350,7 +361,26 @@
       "소유한 부동산 토큰을 기준으로 수익이 발생합니다."
     ],
     "no_notice": "공지사항이 없습니다.",
-    "event_participation": "이벤트 참여 완료"
+    "remaining_balance_withdraw": "잔여 EL/USD 출금",
+    "event_participation": "이벤트 참여 완료",
+    "remaining_text": [
+      "위 금액은 엘리시아 웹사이트(elysia.land) 내부지갑에 있는 잔고입니다. 출금요청시 USD/EL이 각각 동시에 출금됩니다.",
+      "보유하신 상품별 적립금은, 상품별로 별도 인출 가능합니다."
+    ],
+    "remaining_withdraw_popup": [
+      "출금신청이 완료되었습니다",
+      "진행 사항은 알림으로 안내드리겠습니다."
+    ],
+    "checking_withdraw_error": [
+      "출금 받으실 주소를 입력해주세요.",
+      "USD 잔액은 페이팔로만 출금할 수 있습니다. 페이팔 계정 주소만 입력해주세요.",
+      "USD 출금을 위해 Paypal 주소를 입력해주세요.",
+      "USD 잔고가 없습니다. 개인 이더리움 지갑 주소만 입력해주세요.",
+      "EL 잔액은 이더리움 지갑주소로만 출금할 수 있습니다. 개인 이더리움 지갑 주소만 입력해주세요.",
+      "EL 출금을 위해 이더리움 지갑 주소를 입력해주세요.",
+      "EL 잔고가 없습니다. 페이팔 계정 주소만 입력해주세요."
+    ],
+    "already_pending": "출금할 금액이 없거나, 이미 출금하셨습니다."
   },
   "day": {
     "0": "일",

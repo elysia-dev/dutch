@@ -58,7 +58,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             alignItems: 'center',
             paddingBottom: 12,
           }}>
-          <P2Text label={'USD 잔고'} />
+          <P2Text label={i18n.t("dashboard_label.remaining_usd")} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={`$ ${(props.usd).toFixed(
@@ -73,7 +73,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={'EL 잔고'} />
+          <P2Text label={i18n.t("dashboard_label.remaining_el")} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={`EL ${(props.el).toFixed(

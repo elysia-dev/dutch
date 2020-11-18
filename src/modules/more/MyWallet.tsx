@@ -32,7 +32,7 @@ const MyWallet: FunctionComponent = () => {
             justifyContent: "space-between",
           }}>
             <View>
-              <P2Text label={'메타마스크 지갑'} />
+              <P2Text label={i18n.t("more_label.metamask_wallet")} />
               <H2Text label={'$ 123'} />
             </View>
             <View style={{
@@ -62,11 +62,11 @@ const MyWallet: FunctionComponent = () => {
             flexDirection: "column",
           }}>
             <View style={{ padding: 12, flex: 2 }}>
-              <P2Text label={'Address'} style={{ marginBottom: 5 }} />
+              <P2Text label={i18n.t("more_label.ethaddress")} style={{ marginBottom: 5 }} />
               <P1Text label={'0x12312312312312312321312313123125453'} />
             </View>
             <View style={{ flex: 1, paddingHorizontal: 12, flexDirection: "row", justifyContent: "space-between", borderTopWidth: 2, borderColor: "#F1F1F1", paddingTop: 12 }}>
-              <P2Text label={'잔고'} style={{ marginBottom: 5 }} />
+              <P2Text label={i18n.t("more_label.balance")} style={{ marginBottom: 5 }} />
               <P1Text label={'EL 1234.5678'} />
             </View>
           </View>

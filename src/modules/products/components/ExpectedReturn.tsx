@@ -32,8 +32,8 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         justifyContent: "space-between",
         marginBottom: 5,
       }}>
-        <P2Text label={'투자금'} />
-        <P2Text label={'예상적립금'} />
+        <P2Text label={i18n.t('product_label.investment')} />
+        <P2Text label={i18n.t('product_label.expected_return')} />
       </View>
       <View style={{
         flexDirection: "row",

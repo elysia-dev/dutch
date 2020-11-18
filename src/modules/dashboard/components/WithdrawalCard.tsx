@@ -6,6 +6,7 @@ import { P1Text, H1Text } from '../../../shared/components/Texts';
 interface Props {
   balance: number;
   handler: () => void;
+  redDot: boolean;
 }
 
 export const WithdrawalCard: FunctionComponent<Props> = (props) => {
@@ -35,7 +36,7 @@ export const WithdrawalCard: FunctionComponent<Props> = (props) => {
             marginTop: 3,
           }}>
             <P1Text
-              label={'잔여 EL/USD 출금'}
+              label={i18n.t("dashboard.remaining_balance_withdraw")}
               style={{
                 color: '#FFFFFF',
                 fontSize: 15,
@@ -72,16 +73,18 @@ export const WithdrawalCard: FunctionComponent<Props> = (props) => {
                 }}
                 source={require('../images/Wallet.png')}
               />
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 10,
-                  right: 12,
-                  width: 8,
-                  height: 8,
-                  borderRadius: 4,
-                  backgroundColor: '#FC5C4F',
-                }} />
+              {props.redDot && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 12,
+                    right: 12,
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: '#FC5C4F',
+                  }} />
+              )}
             </View>
           </View>
         </View>

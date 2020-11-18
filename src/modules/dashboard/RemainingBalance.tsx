@@ -65,13 +65,11 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
         elPrice: getElPrice.data.elysia.usd,
       });
     } catch (e) {
-      if (e.response.status === 400) {
-        alert('출금할 금액이 없거나, 이미 출금하셨습니다.');
-        setState({ ...state, errorReturn: 1 });
-      } else if (e.response.status === 500) {
+      if (e.response.status === 500) {
         alert(i18n.t('account_errors.server'));
         setState({ ...state, errorReturn: 1 });
       }
+      alert(i18n.t('account_errors.server'));
       setState({ ...state, errorReturn: 1 });
     }
   };
@@ -86,7 +84,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
         style={{ backgroundColor: "#FAFCFF" }}
         isScrolling={false}
         backButtonHandler={() => navigation.goBack()}
-        title={'잔여 EL / USD'}
+        title={i18n.t("dashboard_label.remaining_balance")}
         body={
           <>
             <View style={{ marginLeft: '5%', marginRight: '5%' }}>
@@ -95,14 +93,14 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
               <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
                 <InformationCircle />
                 <P1Text
-                  label={'위 금액은 엘리시아 웹사이트(elysia.land) 내부지갑에 있는 잔고입니다. 출금요청시 USD/EL이 각각 동시에 출금됩니다.'}
+                  label={i18n.t("dashboard.remaining_text.0")}
                   style={{ fontSize: 14, lineHeight: 22 }}
                 />
               </View>
               <View style={{ flexDirection: 'row', marginRight: '5%' }}>
                 <InformationCircle />
                 <P1Text
-                  label={'보유하신 상품별 적립금은, 상품별로 별도 인출 가능합니다.'}
+                  label={i18n.t("dashboard.remaining_text.1")}
                   style={{ fontSize: 14, lineHeight: 22 }}
                 />
               </View>
@@ -131,7 +129,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
                       marginTop: 5,
                       marginBottom: 5,
                     }}
-                    label={'출금신청이 완료되었습니다'}
+                    label={i18n.t("dashboard.remaining_withdraw_popup.0")}
                   />
                   <P1Text
                     style={{
@@ -139,7 +137,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
                       textAlign: 'center',
                       color: "#626368",
                     }}
-                    label={'진행 사항은 알림으로 안내드리겠습니다.'}
+                    label={i18n.t("dashboard.remaining_withdraw_popup.1")}
                   />
                 </View>
               }
@@ -155,10 +153,10 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
             title={
               // eslint-disable-next-line no-nested-ternary
               (user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
-                ? '출금하기'
+                ? i18n.t("dashboard_label.remaining_withdraw")
                 : (user.legacyWalletRefundStatus === LegacyRefundStatus.PENDING)
-                ? '출금 요청이 진행중입니다'
-                : '출금 대상이 아닙니다'
+                ? i18n.t("dashboard_label.remaining_withdraw_pending")
+                : i18n.t("dashboard_label.remaining_withdraw_other")
               }
             handler={(user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
               ? () => setState({ ...state, modalVisible: true })

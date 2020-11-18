@@ -265,7 +265,10 @@
     "app_info": "App info",
     "version": "Version",
     "done": "Done",
-    "close": "Close"
+    "close": "Close",
+    "my_wallet": "My Wallet",
+    "metamask_wallet": "Metamask Wallet",
+    "balance" : "Balance"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -318,7 +321,15 @@
     "documents": "Documents",
     "notice": "Notice",
     "less": "less than",
-    "daily_reward": "Daily rewards"
+    "daily_reward": "Daily rewards",
+    "remaining_usd" : "USD Balance",
+    "remaining_el" : "EL Balance",
+    "withdraw_paypal": "Paypal account",
+    "withdraw_eth": "Personal Ethereum wallet",
+    "remaining_withdraw": "Withdraw",
+    "remaining_withdraw_pending": "Your request is pending",
+    "remaining_withdraw_other": "Withdrawals unavailable",
+    "remaining_balance": "EL / USD balance"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",
@@ -349,7 +360,26 @@
       "Rewards are generated based on how many real estate tokens you own."
     ],
     "no_notice": "There is no notice.",
-    "event_participation": "Sign up complete"
+    "event_participation": "Sign up complete",
+    "remaining_balance_withdraw": "Withdraw EL / USD",
+    "remaining_text": [
+      "Above indicates the remaining balance on your web(elysia.land) account. Upon withdrawal request, both EL and USD will be deposited to your personal wallet/account.",
+      "Withdrawals for daily rewards can be found on each property."
+    ],
+    "remaining_withdraw_popup": [
+      "Withdraw request complete",
+      "You can check your transaction status through push notifications"
+    ],
+    "checking_withdraw_error": [
+      "Please check your wallet address again.",
+      "USD balance can only be withdrawn to your Paypal account.",
+      "Please enter your Paypal account for USD withdrawals.",
+      "You do not have sufficient USD balance. Please enter your personal Ethereum wallet only.",
+      "EL can only be deposited to your Ethereum wallet. Please enter your personal Ethereum wallet only.",
+      "Please enter your Ethereum wallet to withdraw EL.",
+      "You do not have sufficient EL balance. Please enter your Paypal account."
+    ],
+    "already_pending": "You do not have sufficient balance or your transaction is complete."
   },
   "day": {
     "0": "Sun",

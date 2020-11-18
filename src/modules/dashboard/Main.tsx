@@ -171,6 +171,7 @@ export const Main: FunctionComponent = () => {
                   screen: DashboardPage.RemainingBalance,
                 })
                 }
+                redDot={user.legacyWalletRefundStatus === LegacyRefundStatus.NONE}
               />
             )}
             <View
