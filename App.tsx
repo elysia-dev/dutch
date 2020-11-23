@@ -69,7 +69,6 @@ interface AppState {
 
 const defaultState = {
   signedIn: SignInStatus.PENDING,
-  locale: currentLocale(),
   user: {
     id: 0,
     email: '',
@@ -77,15 +76,15 @@ const defaultState = {
     lastName: '',
     gender: '',
     kycStatus: KycStatus.NONE,
-    language: LocaleType.KO,
+    language: currentLocale(),
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
   },
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
 };
 
@@ -163,12 +162,13 @@ const App = () => {
   };
 
   useEffect(() => {
+    i18n.locale = state.user.language;
     signIn();
   }, []);
 
   useEffect(() => {
-    const addNotificationReceivedListener = Notifications
-      .addNotificationReceivedListener(response => {
+    const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
+      (response) => {
         if (isNotification(response.request.content.data as Notification)) {
           setState((state) => {
             return {
@@ -180,16 +180,22 @@ const App = () => {
             };
           });
         }
-      });
+      },
+    );
 
-    const addNotificationResponseReceivedListener = Notifications
-      .addNotificationResponseReceivedListener(_response => {
+    const addNotificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
+      (_response) => {
         signIn();
-      });
+      },
+    );
 
     return () => {
-      Notifications.removeNotificationSubscription(addNotificationReceivedListener);
-      Notifications.removeNotificationSubscription(addNotificationResponseReceivedListener);
+      Notifications.removeNotificationSubscription(
+        addNotificationReceivedListener,
+      );
+      Notifications.removeNotificationSubscription(
+        addNotificationResponseReceivedListener,
+      );
     };
   }, []);
 
@@ -231,7 +237,10 @@ const App = () => {
           setUserExpoPushToken: (expoPushToken: string) => {
             setState({
               ...state,
-              user: { ...state.user, expoPushTokens: expoPushToken ? [expoPushToken] : [] },
+              user: {
+                ...state.user,
+                expoPushTokens: expoPushToken ? [expoPushToken] : [],
+              },
             });
           },
         }}>
@@ -245,10 +254,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+            <>
+              <RootStack.Screen name={'Account'} component={Account} />
+            </>
+          )}
         </RootStack.Navigator>
       </RootContext.Provider>
     </NavigationContainer>
