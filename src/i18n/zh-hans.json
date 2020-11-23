@@ -284,7 +284,7 @@
     "check_2": "每个用户只能绑定一个钱包地址。",
     "connected": "钱包地址绑定成功。",
     "find_more": "可以在“更多”中我的账户里查看详细信息。",
-    "no_address": "请输入您的地址。"
+    "confirm_logout": "您要退出吗？"
   },
   "dashboard_label": {
     "total_balance": "总额",
