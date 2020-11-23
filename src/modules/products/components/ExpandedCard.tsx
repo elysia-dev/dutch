@@ -76,6 +76,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     scrollY: 0,
     closed: false,
     scrollEnabled: true,
+    backgroundColor: true,
   });
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
@@ -102,6 +103,18 @@ const ExpandedItem: FunctionComponent<Props> = ({
     <Animated.View
       style={{
         position: 'absolute',
+        borderRadius: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [10, 0],
+        }),
+        backgroundColor: animatedValue.interpolate({
+          inputRange: [0, 0.9, 1],
+          outputRange: [
+            'rgba(255,255,255,0)',
+            'rgba(255,255,255,0)',
+            'rgba(255,255,255,1)',
+          ],
+        }),
         elevation: 6,
         height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
@@ -205,13 +218,16 @@ const ExpandedItem: FunctionComponent<Props> = ({
               ...state,
               closed: true,
               scrollEnabled: false,
+              backgroundColor: false,
             });
             Animated.timing(animatedValue, {
               toValue: 0,
               duration: 500,
               useNativeDriver: false,
               easing: Easing.elastic(1),
-            }).start(() => deactivateStory());
+            }).start(() => {
+              deactivateStory();
+            });
           }}>
           <View
             style={{
