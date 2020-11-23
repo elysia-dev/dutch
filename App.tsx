@@ -69,7 +69,6 @@ interface AppState {
 
 const defaultState = {
   signedIn: SignInStatus.PENDING,
-  locale: currentLocale(),
   user: {
     id: 0,
     email: '',
@@ -77,7 +76,7 @@ const defaultState = {
     lastName: '',
     gender: '',
     kycStatus: KycStatus.NONE,
-    language: LocaleType.KO,
+    language: currentLocale(),
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
@@ -163,6 +162,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    i18n.locale = state.user.language;
     signIn();
   }, []);
 
