@@ -1,5 +1,4 @@
 import React, {
-  Children,
   FunctionComponent,
   useContext,
   useEffect,
@@ -10,13 +9,15 @@ import {
   Image,
   View,
   AppState,
-  Text,
   AppStateStatus,
+  TouchableOpacity,
+  Pressable,
+  Share,
 } from 'react-native';
-import { isAddress, checkAddressChecksum } from 'web3-utils';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
+import * as Haptics from 'expo-haptics';
 import i18n from '../../i18n/i18n';
 
 import {
@@ -25,17 +26,14 @@ import {
   P3Text,
   H2Text,
   P2Text,
-  H1Text,
 } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
 import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
-import App from '../../../App';
 
 interface Props {
   resetHandler: () => void;
@@ -44,8 +42,8 @@ interface Props {
 type State = {
   localeTerms?: string;
   confirmModal: boolean;
-  appState: AppStateStatus;
-  balance: string;
+  balance: string | undefined;
+  pressed: boolean;
 };
 
 const BlueCircle = styled.View`
@@ -61,14 +59,20 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
 
   const [state, setState] = useState<State>({
     confirmModal: false,
-    appState: AppState.currentState,
-    balance: '',
+    balance: undefined,
+    pressed: false,
   });
+
+  const [appState, setAppState] = useState<AppStateStatus>(
+    AppState.currentState,
+  );
+
+  // const [data, setString] = useClipboard();
 
   const navigation = useNavigation();
 
-  const userBalance = () => {
-    Server.getBalance(user.ethAddresses[0])
+  const userBalance = (address?: string) => {
+    Server.getBalance(address || user.ethAddresses[0])
       .then((res) => {
         setState({ ...state, balance: res.data.result });
       })
@@ -95,7 +99,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
 
   useEffect(() => {
     AppState.addEventListener('change', () =>
-      setState({ ...state, appState: AppState.currentState }),
+      setAppState(AppState.currentState),
     );
     if (user.ethAddresses?.length > 0 && !state.balance) {
       userBalance();
@@ -103,12 +107,12 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (state.appState === 'active' || !(user.ethAddresses?.length > 0)) {
+    if (appState === 'active' || !(user.ethAddresses?.length > 0)) {
       Server.me()
         .then((res) => {
           if (res.data.user.ethAddresses?.length > 0) {
             setEthAddress(res.data.user.ethAddresses[0]);
-            userBalance();
+            userBalance(res.data.user.ethAddresses[0]);
           }
         })
         .catch((e) => {
@@ -117,7 +121,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
           }
         });
     }
-  }, [state.appState]);
+  }, [appState]);
 
   return (
     <>
@@ -143,76 +147,121 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         }
         body={
           user.ethAddresses?.length > 0 ? (
-            <View
-              style={{
-                width: '100%',
-                height: 240,
-                borderRadius: 10,
-                shadowColor: '#1C1C1C4D',
-                shadowOffset: { width: 1, height: 2 },
-                shadowOpacity: 0.7,
-                shadowRadius: 4,
-                backgroundColor: '#fff',
-                flexDirection: 'column',
-                padding: 20,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <View style={{ flexDirection: 'column' }}>
-                  <P1Text
-                    style={{ color: '#7A7D8D' }}
-                    label={i18n.t('more_label.metamask_wallet')}
-                  />
-                  <H2Text
-                    style={{ marginTop: 5 }}
-                    label={`EL ${
-                      state.balance
-                        ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
-                        : '-.--'
-                    }`}
-                  />
-                </View>
-                <View
-                  style={{
-                    width: 54,
-                    height: 54,
-                    backgroundColor: '#fff',
-                    borderRadius: 27,
-                    shadowColor: '#1C1C1C4D',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: 0.6,
-                    shadowRadius: 2,
-                    justifyContent: 'center',
-                  }}>
-                  <Image
-                    style={{ width: 30, height: 29, alignSelf: 'center' }}
-                    source={require('./images/metamask_logo.png')}
-                  />
-                </View>
-              </View>
+            <>
               <View
                 style={{
                   width: '100%',
-                  height: 110,
-                  backgroundColor: '#F6F6F8',
+                  height: 240,
                   borderRadius: 10,
-                  borderColor: '#F1F1F1',
-                  borderWidth: 2,
-                  marginTop: 30,
-                  padding: 15,
+                  elevation: 6,
+                  shadowColor: '#1C1C1C4D',
+                  shadowOffset: { width: 1, height: 2 },
+                  shadowOpacity: 0.7,
+                  shadowRadius: 4,
+                  backgroundColor: '#fff',
+                  flexDirection: 'column',
+                  padding: 20,
                 }}>
-                <P1Text label={'Address'} style={{ color: '#838383' }} />
-                <P1Text
-                  style={{ marginTop: 10 }}
-                  label={
-                    user.ethAddresses?.length > 0 ? user.ethAddresses[0] : ''
-                  }
-                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <P1Text
+                      style={{ color: '#7A7D8D' }}
+                      label={i18n.t('more_label.metamask_wallet')}
+                    />
+                    <H2Text
+                      style={{ marginTop: 5 }}
+                      label={`EL ${
+                        state.balance
+                          ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
+                          : '-.--'
+                      }`}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setState({ ...state, balance: undefined });
+                      userBalance();
+                    }}
+                    style={{
+                      width: 54,
+                      height: 54,
+                      backgroundColor: '#fff',
+                      elevation: 2,
+                      borderRadius: 27,
+                      shadowColor: '#1C1C1C4D',
+                      shadowOffset: { width: 0, height: 1 },
+                      shadowOpacity: 0.6,
+                      shadowRadius: 2,
+                      justifyContent: 'center',
+                    }}>
+                    <Image
+                      style={{ width: 30, height: 29, alignSelf: 'center' }}
+                      source={require('./images/metamask_logo.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 110,
+                    backgroundColor: '#F6F6F8',
+                    borderRadius: 10,
+                    borderColor: '#F1F1F1',
+                    borderWidth: 2,
+                    marginTop: 30,
+                    padding: 15,
+                  }}>
+                  <P1Text label={'Address'} style={{ color: '#838383' }} />
+
+                  <Pressable
+                    onPressIn={(_nativeEvent) => {
+                      setState({ ...state, pressed: true });
+                    }}
+                    onPressOut={(_nativeEvent) => {
+                      setState({ ...state, pressed: false });
+                    }}
+                    style={{
+                      marginTop: 10,
+                      backgroundColor: state.pressed
+                        ? 'rgba(0,0,0,0.07)'
+                        : 'rgba(0,0,0,0)',
+
+                      borderRadius: 10,
+                    }}
+                    pressRetentionOffset={{
+                      bottom: 30,
+                      left: 20,
+                      right: 20,
+                      top: 20,
+                    }}
+                    onLongPress={(_nativeEvent) => {
+                      if (user.ethAddresses?.length > 0) {
+                        Share.share({
+                          message: user.ethAddresses[0],
+                        });
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                      }
+                    }}>
+                    <P1Text
+                      style={{
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                        textDecorationLine: 'underline',
+                      }}
+                      label={
+                        user.ethAddresses?.length > 0
+                          ? user.ethAddresses[0]
+                          : ''
+                      }
+                    />
+                  </Pressable>
+                </View>
               </View>
-            </View>
+            </>
           ) : (
             <View
               style={{
