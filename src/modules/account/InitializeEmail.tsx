@@ -3,9 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Modal, View } from 'react-native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { P1Text, TitleText } from '../../shared/components/Texts';
+import { TitleText } from '../../shared/components/Texts';
+
 import i18n from '../../i18n/i18n';
-// import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
