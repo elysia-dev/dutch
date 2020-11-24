@@ -104,12 +104,12 @@ const MainList: FunctionComponent = () => {
                 shadowOffset: { width: 1, height: 1 },
                 shadowColor: '#00000033',
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
-                paddingBottom: 15,
               }}>
               <H1Text
                 style={{
                   width: '100%',
                   textAlign: 'left',
+                  marginBottom: 30,
                 }}
                 label={i18n.t('product_label.product')}
               />
