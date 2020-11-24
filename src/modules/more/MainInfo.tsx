@@ -20,24 +20,14 @@ import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
+import ExchangeGopaxPng from './images/gopax.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
-const ExchangeBithumbImg = styled.Image`
+const ExchangeImg = styled.Image`
   width: 100%;
   height: 60px;
   resize-mode: contain;
-`;
-const ExchangeBithumbGlobalImg = styled.Image`
-  width: 100%;
-  height: 60px;
-  resize-mode: contain;
-`;
-const ExchangeBobooImg = styled.Image`
-  width: 100%;
-  height: 60px;
-  resize-mode: contain;
-  top: 3px;
 `;
 const KycNoneButton = styled.TouchableOpacity`
   color: #1c1c1c;
@@ -564,34 +554,55 @@ const MainInfo: FunctionComponent = () => {
               marginLeft: '5%',
               marginRight: '5%',
               paddingTop: 25,
-              paddingBottom: 45,
+              paddingBottom: 30,
               fontSize: 18,
             }}
           />
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               marginBottom: 30,
               paddingHorizontal: '3%',
             }}>
-            <TouchableOpacity
-              style={{ width: '33%' }}
-              onPress={() => Linking.openURL('https://www.bithumb.com')}>
-              <ExchangeBithumbImg source={ExchangeBithumbPng} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ width: '33%' }}
-              onPress={() => Linking.openURL('https://www.bithumb.pro/en-us')}>
-              <ExchangeBithumbGlobalImg source={ExchangeBithumbGlobalPng} />
-            </TouchableOpacity>
-            <TouchableOpacity
+            <View
               style={{
-                width: '33%',
-                paddingHorizontal: 5,
-              }}
-              onPress={() => Linking.openURL('https://www.boboo.com')}>
-              <ExchangeBobooImg source={ExchangebobooPng} />
-            </TouchableOpacity>
+                flexDirection: 'row',
+                marginBottom: 20,
+              }}>
+              <TouchableOpacity
+                style={{ width: '50%' }}
+                onPress={() => Linking.openURL('https://www.bithumb.com')}>
+                <ExchangeImg source={ExchangeBithumbPng} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ width: '50%' }}
+                onPress={() =>
+                  Linking.openURL('https://www.bithumb.pro/en-us')
+                }>
+                <ExchangeImg source={ExchangeBithumbGlobalPng} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  paddingHorizontal: '3%',
+                }}
+                onPress={() => Linking.openURL('https://www.boboo.com')}>
+                <ExchangeImg source={ExchangebobooPng} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  paddingHorizontal: '5%',
+                }}
+                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
+                <ExchangeImg source={ExchangeGopaxPng} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <View
