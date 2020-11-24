@@ -16,6 +16,7 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
@@ -25,7 +26,7 @@ import i18n from '../../../i18n/i18n';
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
-import { P1Text, H1Text } from '../../../shared/components/Texts';
+import { P1Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
   story: Story;
@@ -115,7 +116,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
             'rgba(255,255,255,1)',
           ],
         }),
-        elevation: 6,
+        elevation: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 6],
+        }),
         height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
@@ -143,7 +147,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
       }}>
       <ScrollView
         ref={scrollRef}
-        contentInset={{ bottom: -500 }}
+        contentInset={{ bottom: Platform.OS === 'ios' ? -500 : 0 }}
         bouncesZoom={false}
         scrollEventThrottle={16}
         contentOffset={{ x: 0, y: 0 }}
@@ -180,7 +184,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             left: 20,
           }}>
           <P1Text label={story.subTitle} />
-          <H1Text label={story.title} style={{ marginTop: 10 }} />
+          <H2Text label={story.title} style={{ marginTop: 10 }} />
         </Animated.View>
         <Animated.View
           style={{
@@ -198,7 +202,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             textComponentProps={defaultTextProps}
             nodeComponentProps={defaultTextProps}
           />
-          <View style={{ marginTop: 535 }} />
+          <View style={{ marginTop: Platform.OS === 'ios' ? 535 : 35 }} />
         </Animated.View>
       </ScrollView>
       <Animated.View

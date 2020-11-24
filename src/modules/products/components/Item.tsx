@@ -1,12 +1,7 @@
 import React, { createRef, FunctionComponent, useState } from 'react';
-import {
-  View,
-  Image,
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, Image, Animated, TouchableWithoutFeedback } from 'react-native';
 
-import { H1Text, P1Text } from '../../../shared/components/Texts';
+import { H1Text, H2Text, P1Text } from '../../../shared/components/Texts';
 import { Story } from '../../../types/product';
 
 interface Props {
@@ -26,11 +21,10 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             props.activateCard(pageX, pageY);
           });
         }
-      }}
-    >
+      }}>
       <Animated.View
         style={{
-          backgroundColor: "#fff",
+          backgroundColor: '#fff',
           elevation: 3,
           height: 416,
           marginLeft: 3,
@@ -55,9 +49,14 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           }}
         />
         <View
-          style={{ position: 'absolute', flexDirection: 'column', marginTop: 20, marginLeft: 20 }}>
+          style={{
+            position: 'absolute',
+            flexDirection: 'column',
+            marginTop: 20,
+            marginLeft: 20,
+          }}>
           <P1Text label={props.story.subTitle} />
-          <H1Text label={props.story.title} style={{ marginTop: 10 }} />
+          <H2Text label={props.story.title} style={{ marginTop: 10 }} />
         </View>
       </Animated.View>
     </TouchableWithoutFeedback>
