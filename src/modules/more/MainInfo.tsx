@@ -7,10 +7,10 @@ import {
   Text,
   ScrollView,
   Animated,
+  SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import * as Linking from 'expo-linking';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -21,7 +21,6 @@ import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
-import LocaleType from '../../enums/LocaleType';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
 const ExchangeBithumbImg = styled.Image`
@@ -86,7 +85,7 @@ const MainInfo: FunctionComponent = () => {
   useScrollToTop(ref);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         width: '100%',
         height: '100%',
@@ -95,58 +94,76 @@ const MainInfo: FunctionComponent = () => {
       }}>
       <Animated.View
         style={{
-          flexDirection: 'row',
-          backgroundColor: '#fff',
-          elevation: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 5, 5],
-          }),
-          shadowOffset: { width: 1, height: 1 },
-          shadowColor: '#00000033',
-          shadowOpacity: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 0.5, 0.5],
-          }),
-          paddingTop: 93,
-          paddingBottom: 15,
-          paddingLeft: '5%',
-          paddingRight: '5%',
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [0, 15, 1000],
-                outputRange: [0, -5, -5],
-              }),
-            },
-          ],
+          overflow: 'hidden',
+          backgroundColor: 'transparent',
+          paddingBottom: 1,
         }}>
-        <View>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              color: '#1c1c1c',
-              fontSize: 28,
-              transform: [
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [1, 1, 0.9, 0.9],
-                  }),
-                },
-              ],
-              textAlign: 'left',
-              fontFamily: 'Roboto_700Bold',
-            }}>
-            {i18n.t('more_label.more')}
-          </Animated.Text>
-        </View>
-        <TouchableOpacity
-          style={{ marginLeft: 'auto' }}
-          onPress={() => {
-            navigation.navigate('More', { screen: MorePage.Setting });
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            elevation: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 5, 5],
+            }),
+            shadowOffset: { width: 1, height: 1 },
+            shadowColor: '#00000033',
+            shadowOpacity: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 0.5, 0.5],
+            }),
+            paddingTop: Platform.OS === 'android' ? 65 : 45,
+            paddingBottom: 10,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [-1000, 0, 15, 1000],
+                  outputRange: [0, 0, -5, -5],
+                }),
+              },
+            ],
           }}>
-          <InfoHeaderSettingImg source={require('./images/setting.png')} />
-        </TouchableOpacity>
+          <View>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                color: '#1c1c1c',
+                fontSize: 28,
+                left: 0,
+                paddingLeft: 0,
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 15, 1000],
+                      outputRange: [0, 0, -5, -5],
+                    }),
+                  },
+                  {
+                    translateY: 0,
+                  },
+                  {
+                    scale: scrollY.interpolate({
+                      inputRange: [-1000, 0, 15, 1000],
+                      outputRange: [1, 1, 0.9, 0.9],
+                    }),
+                  },
+                ],
+                textAlign: 'left',
+                fontFamily: 'Roboto_700Bold',
+              }}>
+              {i18n.t('more_label.more')}
+            </Animated.Text>
+          </View>
+          <TouchableOpacity
+            style={{ marginLeft: 'auto' }}
+            onPress={() => {
+              navigation.navigate('More', { screen: MorePage.Setting });
+            }}>
+            <InfoHeaderSettingImg source={require('./images/setting.png')} />
+          </TouchableOpacity>
+        </Animated.View>
       </Animated.View>
       <Animated.ScrollView
         ref={ref}
@@ -584,7 +601,7 @@ const MainInfo: FunctionComponent = () => {
           }}
         />
       </Animated.ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

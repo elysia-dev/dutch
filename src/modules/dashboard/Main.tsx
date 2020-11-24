@@ -13,6 +13,7 @@ import {
   Image,
   ActivityIndicator,
   Modal,
+  Platform,
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -114,7 +115,12 @@ export const Main: FunctionComponent = () => {
           backgroundColor: '#FAFCFF',
         }}>
         <SafeAreaView>
-          <View style={{ paddingTop: 93, height: '100%', padding: 20 }}>
+          <View
+            style={{
+              paddingTop: Platform.OS === 'android' ? 65 : 45,
+              height: '100%',
+              padding: 20,
+            }}>
             <H1Text
               style={{ marginBottom: 40 }}
               label={
