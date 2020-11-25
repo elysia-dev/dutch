@@ -42,7 +42,6 @@ export const Main: FunctionComponent = () => {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   };
-
   const defaultOwnerships = {
     id: 0,
     title: '',
@@ -52,36 +51,28 @@ export const Main: FunctionComponent = () => {
   };
 
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server, getElPrice, elPrice } = useContext(RootContext);
   const [state, setState] = useState({
     user: defaultUser,
     ownerships: [defaultOwnerships],
     balance: '0',
     errorReturn: 0,
-    elPrice: 0.003,
   });
   const { user, ownerships } = state;
-
-  function TotalValueUpdate(legacyEl: number, elPrice: number, legacyUsd: number) {
-    return parseFloat(((legacyEl * elPrice) + legacyUsd).toFixed(2));
-  }
-
-  const legacyTotal =
-    useMemo(() => TotalValueUpdate(user.legacyEl, state.elPrice, user.legacyUsd), [state]);
+  const legacyTotal: number | undefined =
+    parseFloat(((user.legacyEl * elPrice) + user.legacyUsd).toFixed(2));
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const legacyTotalValue = async () => {
+  const callApi = async () => {
     try {
       const userInfo = await Server.me();
-      const getElPrice = await Server.getELPrice();
       setState({
         ...state,
         user: userInfo.data.user,
         ownerships: userInfo.data.ownerships,
         balance: userInfo.data.totalBalance,
-        elPrice: getElPrice.data.elysia.usd,
       });
     } catch (e) {
       if (e.response.status === 404) {
@@ -96,8 +87,8 @@ export const Main: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    legacyTotalValue();
-    // legacyTotalValue().then(dataThen);
+    callApi();
+    getElPrice();
   }, []);
 
   const ownershipsList = state.ownerships.map((ownership, index) => (
@@ -115,7 +106,7 @@ export const Main: FunctionComponent = () => {
 
   return (
     <>
-      <Modal visible={user === defaultUser} transparent={false}>
+      <Modal visible={user === defaultUser || !legacyTotal} transparent={false}>
         <View
           style={{
             width: '100%',

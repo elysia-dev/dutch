@@ -28,14 +28,15 @@ type RootContextType = {
   signIn: () => void;
   signOut: () => void;
   autoSignOut: () => void;
+  getElPrice: () => void;
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
-  setWithdrawAddress: (address: string, email: string) => void;
   setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
   Server: Server;
   expoPushToken: string;
+  elPrice: number;
 };
 
 const RootContext = createContext<RootContextType>({
@@ -60,14 +61,15 @@ const RootContext = createContext<RootContextType>({
   signIn: async () => { },
   signOut: async () => { },
   autoSignOut: async () => { },
+  getElPrice: async () => { },
   notifications: [] as Notification[],
   setNotifications: (notifications: Notification[]) => { },
   setEthAddress: (address: string) => { },
   setUserExpoPushToken: (expoPushToken: string) => { },
-  setWithdrawAddress: (address: string, email: string) => { },
   setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
   Server: new Server(() => { }, ''),
   expoPushToken: "",
+  elPrice: 0,
 });
 
 export default RootContext;

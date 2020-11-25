@@ -19,7 +19,6 @@ const Accepted = styled.Image`
   height: 140px;
   margin: 10px auto;
 `;
-
 const InformationCircle = styled.View`
   width: 10px;
   height: 10px;
@@ -28,54 +27,27 @@ const InformationCircle = styled.View`
   margin-right: 10px;
   top: 6px;
 `;
+
 export const RemainingBalance: FunctionComponent<{}> = () => {
   const defaultUser = {
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   };
+  const { user, getElPrice, elPrice } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     user: defaultUser,
     errorReturn: 0,
-    elPrice: 0.003,
     modalVisible: false,
     switchingHandler: false,
     status: LegacyRefundStatus,
   });
-  const {
-    user,
-    Server,
-    setRefundStatus,
-  } = useContext(RootContext);
 
-  function TotalValueUpdate(legacyEl: number, elPrice: number, legacyUsd: number) {
-    return parseFloat(((legacyEl * elPrice) + legacyUsd).toFixed(2));
-  }
-  const legacyTotal =
-    useMemo(() => TotalValueUpdate(user.legacyEl, state.elPrice, user.legacyUsd), [state]);
-
-  const legacyTotalValue = async () => {
-    try {
-      const userInfo = await Server.me();
-      const getElPrice = await Server.getELPrice();
-      setState({
-        ...state,
-        user: userInfo.data.user,
-        elPrice: getElPrice.data.elysia.usd,
-      });
-    } catch (e) {
-      if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
-        setState({ ...state, errorReturn: 1 });
-      }
-      alert(i18n.t('account_errors.server'));
-      setState({ ...state, errorReturn: 1 });
-    }
-  };
+  const legacyTotal = parseFloat(((user.legacyEl * elPrice) + user.legacyUsd).toFixed(2));
 
   useEffect(() => {
-    legacyTotalValue();
+    getElPrice();
   }, []);
 
   return (

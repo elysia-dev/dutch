@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import i18n from 'i18n-js';
 
 import {
@@ -63,14 +63,13 @@ interface AppState {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
-    withdrawEthAddress: string;
-    withdrawEmail: string;
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
   notifications: Notification[];
   Server: Server;
   expoPushToken: string;
+  elPrice: number;
 }
 
 const defaultState = {
@@ -90,14 +89,13 @@ const defaultState = {
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
-    withdrawEthAddress: '',
-    withdrawEmail: '',
   },
   changeLanguage: () => { },
   setKycStatus: () => { },
   notifications: [],
   Server: new Server(() => { }, ''),
   expoPushToken: '',
+  elPrice: 0,
 };
 
 Notifications.setNotificationHandler({
@@ -132,6 +130,21 @@ const App = () => {
     });
   };
 
+  const getElPrice = async () => {
+    const token = await AsyncStorage.getItem('@token');
+    const authServer = new Server(autoSignOut, token !== null ? token : '');
+    if (token) {
+      await authServer.getELPrice().then(async (res) => {
+        setState({
+          ...state,
+          elPrice: res.data.elysia.usd,
+        });
+      });
+    } else {
+      setState({ ...state, signedIn: SignInStatus.SIGNOUT });
+    }
+  };
+  
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
@@ -227,6 +240,7 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
+          getElPrice,
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
@@ -237,12 +251,6 @@ const App = () => {
             setState({
               ...state,
               user: { ...state.user, ethAddresses: [address] },
-            });
-          },
-          setWithdrawAddress: (address: string, email: string) => {
-            setState({
-              ...state,
-              user: { ...state.user, withdrawEthAddress: address, withdrawEmail: email },
             });
           },
           setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {

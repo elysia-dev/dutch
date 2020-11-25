@@ -16,7 +16,6 @@ import { P1Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 
-
 interface Props {
   modalHandler: () => void;
   switchingHandler: () => void;
@@ -37,7 +36,6 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   // const navigation = useNavigation();
   const {
     Server,
-    setWithdrawAddress,
     setRefundStatus,
    } = useContext(RootContext);
   const [state, setState] = useState({
@@ -52,7 +50,6 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       state.inputWallet,
       state.inputEmail,
       ).then((_res) => {
-        setWithdrawAddress(state.inputWallet, state.inputEmail);
         setRefundStatus(LegacyRefundStatus.PENDING);
       }).catch((e) => {
         if (e.response.status === 400) {
