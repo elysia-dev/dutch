@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { FunctionComponent, useState, useContext, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useState, useContext, useEffect } from 'react';
 import { View, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import WrapperLayout from '../../shared/components/WrapperLayout';

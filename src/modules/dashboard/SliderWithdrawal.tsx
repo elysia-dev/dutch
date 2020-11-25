@@ -4,10 +4,8 @@ import React, {
   FunctionComponent,
   useCallback,
   useContext,
-  useMemo,
 } from 'react';
-import { View, Image, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -33,7 +31,6 @@ const InformationCircle = styled.View`
 `;
 
 const SliderWithdrawal: FunctionComponent<Props> = (props) => {
-  // const navigation = useNavigation();
   const {
     Server,
     setRefundStatus,
@@ -94,35 +91,6 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
     }
     return true;
   };
-
-  function ButtonCallback({ callback }) {
-    return (
-      <SubmitButton
-          title={i18n.t("dashboard_label.remaining_withdraw")}
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            marginBottom: 10,
-            width: '100%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            marginTop: 10,
-            backgroundColor: '#3679B5',
-          }}
-          handler={callback}
-        />
-    );
-  }
-  function WithDrawalButton() {
-    const [callbacks, setCallback] = useState(() => { });
-    const callback = useCallback(() => {
-      if (checkWithdrawInput()) {
-        refundLegacyWallet();
-        setCallback(props.switchingHandler());
-      }
-    }, []);
-    return <ButtonCallback callback={callback} />;
-  }
 
   return (
   <View
@@ -187,7 +155,26 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         </View>
       </View>
       {!focusing &&
-        <WithDrawalButton />
+        <SubmitButton
+        title={i18n.t("dashboard_label.remaining_withdraw")}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          marginBottom: 10,
+          width: '100%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: 10,
+          backgroundColor: '#3679B5',
+        }}
+        handler={() => {
+          if (checkWithdrawInput()) {
+            refundLegacyWallet();
+            props.switchingHandler();
+            }
+          }
+        }
+      />
       }
     </View>
   </View>

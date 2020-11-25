@@ -106,7 +106,7 @@ export const Main: FunctionComponent = () => {
 
   return (
     <>
-      <Modal visible={user === defaultUser || !legacyTotal} transparent={false}>
+      <Modal visible={user === defaultUser || elPrice === 0} transparent={false}>
         <View
           style={{
             width: '100%',
