@@ -34,7 +34,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   };
-  const { user, getElPrice, elPrice } = useContext(RootContext);
+  const { user, elPrice } = useContext(RootContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     user: defaultUser,
@@ -43,12 +43,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
     switchingHandler: false,
     status: LegacyRefundStatus,
   });
-
   const legacyTotal = parseFloat(((user.legacyEl * elPrice) + user.legacyUsd).toFixed(2));
-
-  useEffect(() => {
-    getElPrice();
-  }, []);
 
   return (
     <>
