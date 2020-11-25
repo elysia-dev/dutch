@@ -18,6 +18,7 @@ import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import RootContext from '../../contexts/RootContext';
 import { KycStatus } from '../../enums/KycStatus';
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 
 const Icon = styled.Image`
   position: absolute;
@@ -52,13 +53,36 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon
-                source={focused ? DashboardBlackPng : DashboardPng}
-                style={{
-                  width: 30,
+              <>
+                <View style={{
                   height: 30,
-                }}
-              />
+                  width: 25,
+                }}>
+                  <Icon
+                    source={focused ? DashboardBlackPng : DashboardPng}
+                    style={{
+                      top: 0,
+                      width: 30,
+                      height: 30,
+                      position: "absolute",
+                    }}
+                  />
+                  {(
+                (user.legacyEl !== 0 || user.legacyUsd !== 0) &&
+                user.legacyWalletRefundStatus === LegacyRefundStatus.NONE) && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 28,
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#FC5C4F',
+                      }} />
+                  )}
+                </View>
+              </>
             ),
           }}
         />
@@ -85,25 +109,32 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
-                  source={focused ? NotificationBlackPng : NotificationPng}
-                  style={{
-                    height: 30,
-                    width: 25,
-                  }}
-                />
-                {notifications.filter((notification) => notification.status === 'unread').length > 0 && (
-                  <View
+                <View style={{
+                  height: 30,
+                  width: 25,
+                }}>
+                  <Icon
+                    source={focused ? NotificationBlackPng : NotificationPng}
                     style={{
+                      top: 0,
+                      height: 30,
+                      width: 25,
                       position: 'absolute',
-                      top: 10,
-                      right: 30,
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
-                    }} />
-                )}
+                    }}
+                    />
+                  {notifications.filter((notification) => notification.status === 'unread').length > 0 && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 25,
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#FC5C4F',
+                      }} />
+                  )}
+                </View>
               </>
             ),
           }}
@@ -115,26 +146,32 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
-                  style={{
-                    top: 20,
-                    height: 5,
-                    width: 25,
-                  }}
-                  source={focused ? OptionsBlackPng : OptionsPng}
-                />
-                {(user.kycStatus === KycStatus.NONE || !(user.ethAddresses?.length > 0)) && (
-                  <View
+                <View style={{
+                  height: 30,
+                  width: 25,
+                }}>
+                  <Icon
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       top: 10,
-                      right: 25,
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
-                    }} />
-                )}
+                      height: 5,
+                      width: 25,
+                    }}
+                    source={focused ? OptionsBlackPng : OptionsPng}
+                  />
+                  {(user.kycStatus === KycStatus.NONE || !(user.ethAddresses?.length > 0)) && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 25,
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#FC5C4F',
+                      }} />
+                  )}
+                </View>
               </>
             ),
           }}
