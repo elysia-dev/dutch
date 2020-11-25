@@ -69,9 +69,6 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           style={{
             flex: 2,
             color: '#fff',
-            fontSize: PixelRatio.roundToNearestPixel(
-              (Dimensions.get('window').width * 0.47) / 7,
-            ),
             marginBottom: 10,
             bottom: 0,
           }}
