@@ -28,8 +28,8 @@ type RootContextType = {
   signIn: () => void;
   signOut: () => void;
   autoSignOut: () => void;
-  getElPrice: () => void;
   notifications: Notification[];
+  setElPrice: (elValue: number) => void;
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
@@ -61,8 +61,8 @@ const RootContext = createContext<RootContextType>({
   signIn: async () => { },
   signOut: async () => { },
   autoSignOut: async () => { },
-  getElPrice: async () => { },
   notifications: [] as Notification[],
+  setElPrice: (elValue: number) => { },
   setNotifications: (notifications: Notification[]) => { },
   setEthAddress: (address: string) => { },
   setUserExpoPushToken: (expoPushToken: string) => { },

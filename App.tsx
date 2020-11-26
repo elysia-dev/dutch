@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import i18n from 'i18n-js';
 
 import {
@@ -130,21 +130,6 @@ const App = () => {
     });
   };
 
-  const getElPrice = async () => {
-    const token = await AsyncStorage.getItem('@token');
-    const authServer = new Server(autoSignOut, token !== null ? token : '');
-    if (token) {
-      await authServer.getELPrice().then(async (res) => {
-        setState({
-          ...state,
-          elPrice: res.data.elysia.usd,
-        });
-      });
-    } else {
-      setState({ ...state, signedIn: SignInStatus.SIGNOUT });
-    }
-  };
-  
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
@@ -240,7 +225,12 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
-          getElPrice,
+          setElPrice: (elValue: number) => {
+            setState({
+              ...state,
+              elPrice: elValue,
+            });
+          },
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,

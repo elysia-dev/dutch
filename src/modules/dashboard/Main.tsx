@@ -50,7 +50,7 @@ export const Main: FunctionComponent = () => {
   };
 
   const navigation = useNavigation();
-  const { Server, getElPrice, elPrice } = useContext(RootContext);
+  const { Server, setElPrice, elPrice } = useContext(RootContext);
   const [state, setState] = useState({
     user: defaultUser,
     ownerships: [defaultOwnerships],
@@ -67,6 +67,8 @@ export const Main: FunctionComponent = () => {
   const callApi = async () => {
     try {
       const userInfo = await Server.me();
+      const tempElPrice = await Server.getELPrice();
+      setElPrice(tempElPrice.data.elysia.usd);
       setState({
         ...state,
         user: userInfo.data.user,
@@ -87,7 +89,6 @@ export const Main: FunctionComponent = () => {
 
   useEffect(() => {
     callApi();
-    getElPrice();
   }, []);
 
   const ownershipsList = state.ownerships.map((ownership, index) => (
