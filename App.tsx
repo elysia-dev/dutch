@@ -27,6 +27,7 @@ import { Account } from './src/modules/account/Account';
 
 import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
+import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
 import currentLocale from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
@@ -59,12 +60,16 @@ interface AppState {
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
+    legacyEl: number;
+    legacyUsd: number;
+    legacyWalletRefundStatus: LegacyRefundStatus;
   };
   changeLanguage: () => void;
   setKycStatus: () => void;
   notifications: Notification[];
   Server: Server;
   expoPushToken: string;
+  elPrice: number;
 }
 
 const defaultState = {
@@ -80,12 +85,16 @@ const defaultState = {
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
+    legacyEl: 0,
+    legacyUsd: 0,
+    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
   changeLanguage: () => {},
   setKycStatus: () => {},
   notifications: [],
   Server: new Server(() => {}, ''),
   expoPushToken: '',
+  elPrice: 0,
 };
 
 Notifications.setNotificationHandler({
@@ -232,6 +241,12 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
+          setElPrice: (elValue: number) => {
+            setState({
+              ...state,
+              elPrice: elValue,
+            });
+          },
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
@@ -242,6 +257,12 @@ const App = () => {
             setState({
               ...state,
               user: { ...state.user, ethAddresses: [address] },
+            });
+          },
+          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+            setState({
+              ...state,
+              user: { ...state.user, legacyWalletRefundStatus: legacyRefundStatus },
             });
           },
           setUserExpoPushToken: (expoPushToken: string) => {

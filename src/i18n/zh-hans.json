@@ -176,7 +176,7 @@
     "return_on_sale": "交易收益",
     "expected_annual_rate": "预期年收益率",
     "rent_distribution": "月租分配日",
-    "price_per_token": "每个代币的价格",
+    "price_per_token": "每个房地产代币的价格",
     "return_method": "支付方式",
     "return_calculator": "预期收益率计算器",
     "investment": "投资金额",
@@ -268,7 +268,8 @@
     "done": "完成",
     "close": "短期",
     "my_wallet": "我的钱包",
-    "metamask_wallet": "Metamask 钱包"
+    "metamask_wallet": "Metamask钱包",
+    "balance" : "余额"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -322,7 +323,15 @@
     "documents": "相关材料",
     "notice": "公告",
     "less": "不到",
-    "daily_reward": "每日收益"
+    "daily_reward": "每日收益",
+    "remaining_usd" : "USD余额",
+    "remaining_el" : "EL币余额",
+    "withdraw_paypal": "贝宝账号",
+    "withdraw_eth": "私人以太坊钱包地址",
+    "remaining_withdraw": "取款",
+    "remaining_withdraw_pending": "取款请求正在处理",
+    "remaining_withdraw_other": "不符合取款要求",
+    "remaining_balance": "EL币/USD余额"
   },
   "dashboard": {
     "ownership_error": "资产所有权出现错误。",
@@ -353,7 +362,26 @@
       "利润是根据拥有的房地产令牌产生的。"
     ],
     "no_notice": "没有任何公告。",
-    "event_participation": "已参与活动"
+    "event_participation": "已参与活动",
+    "remaining_balance_withdraw": "取出EL币/USD余额",
+    "remaining_text": [
+      "以上金额是在爱立厦（ELYSIA）网站(elysia.land) 的内部钱包的余额。USD/EL币都可以被取出。",
+      "您可以分别提取不同房地产产品的积分。"
+    ],
+    "remaining_withdraw_popup": [
+      "取款申请已完成",
+      "我们会通知您取款进度"
+    ],
+    "checking_withdraw_error": [
+      "请输入贝宝账户或钱包地址以接收提款。",
+      "USD余额只能由贝宝提取，请输入您的贝宝帐户。",
+      "请输入您的贝宝账户以提取USD。",
+      "没有USD余额， 请仅输入您的私人以太坊钱包地址。",
+      "EL币余额只能提取到以太币钱包地址， 请仅输入您的私人以太坊钱包地址。",
+      "请输入您的以太坊钱包地址以进行EL币提款。",
+      "没有EL币余额， 请仅输入您的贝宝帐户。"
+    ],
+    "already_pending": "没有要取出的款项，或者您已经取款成功。"
   },
   "day": {
     "0": "周日",

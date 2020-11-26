@@ -317,5 +317,10 @@ export default class Server {
     return axios.get(
       `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x2781246fe707bb15cee3e5ea354e2154a2877b16&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
-  };
+  }
+  setRefundLegacyWallet = async (ethAddress: string, email: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post(
+      `/users/refundLegacyWallet`, { ethAddress, email },
+    );
+  }
 }
