@@ -1,6 +1,6 @@
 {
   "welcome": "엘리시아에 오신 것을 환영합니다.",
-  "greeting": "안녕하세요. %{lastName} %{firstName}님",
+  "greeting": "안녕하세요.\n%{lastName} %{firstName}님",
   "greeting_new": "안녕하세요. %{email}님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
@@ -284,7 +284,8 @@
     "check_1": "1번 등록된 지갑 주소는 변경이 불가합니다.",
     "check_2": "유저당 1개의 메타마스크 지갑주소만 사용 가능합니다.",
     "connected": "내 지갑이 연결되었습니다",
-    "find_more": "더보기의 내 계정에서 확인할 수 있습니다"
+    "find_more": "더보기의 내 계정에서 확인할 수 있습니다",
+    "confirm_logout": "로그아웃 하시겠어요?"
   },
   "dashboard_label": {
     "total_balance": "총액",

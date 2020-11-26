@@ -283,7 +283,8 @@
     "check_1": "You will not be able to change the wallet address once it is registered.",
     "check_2": "Only one wallet address can be registered per account.",
     "connected": "Wallet is connected",
-    "find_more": "Find out more by going to your account and clicking 'more'"
+    "find_more": "Find out more by going to your account and clicking 'more'",
+    "confirm_logout": "Would you like to sign out?"
   },
   "dashboard_label": {
     "total_balance": "Balance",

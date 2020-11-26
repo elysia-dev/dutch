@@ -262,7 +262,7 @@
     "latest": "最新信息",
     "push_notice": "弹窗提醒",
     "notification_setting": "提醒设置",
-    "connect": " 绑定钱包",
+    "connect": "绑定钱包",
     "app_info": "App信息",
     "version": "版本",
     "done": "完成",
@@ -284,7 +284,8 @@
     "check_1": "绑定钱包地址后不能变更。",
     "check_2": "每个用户只能绑定一个钱包地址。",
     "connected": "钱包地址绑定成功。",
-    "find_more": "可以在“更多”中我的账户里查看详细信息。"
+    "find_more": "可以在“更多”中我的账户里查看详细信息。",
+    "confirm_logout": "您要退出吗？"
   },
   "dashboard_label": {
     "total_balance": "总额",

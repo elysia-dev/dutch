@@ -7,10 +7,10 @@ import {
   Text,
   ScrollView,
   Animated,
+  SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import * as Linking from 'expo-linking';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -20,25 +20,14 @@ import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
+import ExchangeGopaxPng from './images/gopax.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
-import LocaleType from '../../enums/LocaleType';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
-const ExchangeBithumbImg = styled.Image`
+const ExchangeImg = styled.Image`
   width: 100%;
   height: 60px;
   resize-mode: contain;
-`;
-const ExchangeBithumbGlobalImg = styled.Image`
-  width: 100%;
-  height: 60px;
-  resize-mode: contain;
-`;
-const ExchangeBobooImg = styled.Image`
-  width: 100%;
-  height: 60px;
-  resize-mode: contain;
-  top: 3px;
 `;
 const KycNoneButton = styled.TouchableOpacity`
   color: #1c1c1c;
@@ -86,7 +75,7 @@ const MainInfo: FunctionComponent = () => {
   useScrollToTop(ref);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         width: '100%',
         height: '100%',
@@ -95,58 +84,76 @@ const MainInfo: FunctionComponent = () => {
       }}>
       <Animated.View
         style={{
-          flexDirection: 'row',
-          backgroundColor: '#fff',
-          elevation: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 5, 5],
-          }),
-          shadowOffset: { width: 1, height: 1 },
-          shadowColor: '#00000033',
-          shadowOpacity: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 0.5, 0.5],
-          }),
-          paddingTop: 93,
-          paddingBottom: 15,
-          paddingLeft: '5%',
-          paddingRight: '5%',
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [0, 15, 1000],
-                outputRange: [0, -5, -5],
-              }),
-            },
-          ],
+          overflow: 'hidden',
+          backgroundColor: 'transparent',
+          paddingBottom: 1,
         }}>
-        <View>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              color: '#1c1c1c',
-              fontSize: 28,
-              transform: [
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [1, 1, 0.9, 0.9],
-                  }),
-                },
-              ],
-              textAlign: 'left',
-              fontFamily: 'Roboto_700Bold',
-            }}>
-            {i18n.t('more_label.more')}
-          </Animated.Text>
-        </View>
-        <TouchableOpacity
-          style={{ marginLeft: 'auto' }}
-          onPress={() => {
-            navigation.navigate('More', { screen: MorePage.Setting });
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            elevation: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 5, 5],
+            }),
+            shadowOffset: { width: 1, height: 1 },
+            shadowColor: '#00000033',
+            shadowOpacity: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 0.5, 0.5],
+            }),
+            paddingTop: Platform.OS === 'android' ? 65 : 45,
+            paddingBottom: 10,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            transform: [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [-1000, 0, 15, 1000],
+                  outputRange: [0, 0, -5, -5],
+                }),
+              },
+            ],
           }}>
-          <InfoHeaderSettingImg source={require('./images/setting.png')} />
-        </TouchableOpacity>
+          <View>
+            <Animated.Text
+              allowFontScaling={false}
+              style={{
+                color: '#1c1c1c',
+                fontSize: 28,
+                left: 0,
+                paddingLeft: 0,
+                transform: [
+                  {
+                    translateX: scrollY.interpolate({
+                      inputRange: [-1000, 0, 15, 1000],
+                      outputRange: [0, 0, -5, -5],
+                    }),
+                  },
+                  {
+                    translateY: 0,
+                  },
+                  {
+                    scale: scrollY.interpolate({
+                      inputRange: [-1000, 0, 15, 1000],
+                      outputRange: [1, 1, 0.9, 0.9],
+                    }),
+                  },
+                ],
+                textAlign: 'left',
+                fontFamily: 'Roboto_700Bold',
+              }}>
+              {i18n.t('more_label.more')}
+            </Animated.Text>
+          </View>
+          <TouchableOpacity
+            style={{ marginLeft: 'auto' }}
+            onPress={() => {
+              navigation.navigate('More', { screen: MorePage.Setting });
+            }}>
+            <InfoHeaderSettingImg source={require('./images/setting.png')} />
+          </TouchableOpacity>
+        </Animated.View>
       </Animated.View>
       <Animated.ScrollView
         ref={ref}
@@ -317,7 +324,7 @@ const MainInfo: FunctionComponent = () => {
               }}
               duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
-              handler={() => { }}
+              handler={() => {}}
               variant={'GrayTheme'}
             />
           )}
@@ -350,47 +357,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            {!(user.ethAddresses?.length > 0) ? (
-              <View
-                style={{
-                  height: 50,
-                  marginTop: 10,
-                }}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('More', {
-                      screen: MorePage.RegisterEthAddress,
-                    })
-                  }>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <View>
-                      <P1Text
-                        label={i18n.t('more_label.wallet_connect')}
-                        style={{ lineHeight: 50, fontSize: 15 }}
-                      />
-                      {!(user.ethAddresses?.length > 0) && (
-                        <View
-                          style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: -13,
-                            width: 8,
-                            height: 8,
-                            borderRadius: 4,
-                            backgroundColor: '#FC5C4F',
-                          }}
-                        />
-                      )}
-                    </View>
-                    <InfoArrowImg source={require('./images/next_gray.png')} />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : (
+
             <View
               style={{
                 height: 50,
@@ -399,7 +366,7 @@ const MainInfo: FunctionComponent = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
-                    screen: MorePage.MyWallet,
+                    screen: MorePage.RegisterEthAddress,
                   })
                 }>
                 <View
@@ -407,15 +374,34 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <P1Text
-                    label={i18n.t("more_label.my_wallet")}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
+                  <View>
+                    <P1Text
+                      label={
+                        user.ethAddresses?.length > 0
+                          ? i18n.t('more_label.my_wallet')
+                          : i18n.t('more_label.wallet_connect')
+                      }
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    {!(user.ethAddresses?.length > 0) && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          right: -13,
+                          width: 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: '#FC5C4F',
+                        }}
+                      />
+                    )}
+                  </View>
                   <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
-            )}
+
             <View
               style={{
                 height: 50,
@@ -568,34 +554,55 @@ const MainInfo: FunctionComponent = () => {
               marginLeft: '5%',
               marginRight: '5%',
               paddingTop: 25,
-              paddingBottom: 45,
+              paddingBottom: 30,
               fontSize: 18,
             }}
           />
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               marginBottom: 30,
               paddingHorizontal: '3%',
             }}>
-            <TouchableOpacity
-              style={{ width: '33%' }}
-              onPress={() => Linking.openURL('https://www.bithumb.com')}>
-              <ExchangeBithumbImg source={ExchangeBithumbPng} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ width: '33%' }}
-              onPress={() => Linking.openURL('https://www.bithumb.pro/en-us')}>
-              <ExchangeBithumbGlobalImg source={ExchangeBithumbGlobalPng} />
-            </TouchableOpacity>
-            <TouchableOpacity
+            <View
               style={{
-                width: '33%',
-                paddingHorizontal: 5,
-              }}
-              onPress={() => Linking.openURL('https://www.boboo.com')}>
-              <ExchangeBobooImg source={ExchangebobooPng} />
-            </TouchableOpacity>
+                flexDirection: 'row',
+                marginBottom: 20,
+              }}>
+              <TouchableOpacity
+                style={{ width: '50%' }}
+                onPress={() => Linking.openURL('https://www.bithumb.com')}>
+                <ExchangeImg source={ExchangeBithumbPng} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ width: '50%' }}
+                onPress={() =>
+                  Linking.openURL('https://www.bithumb.pro/en-us')
+                }>
+                <ExchangeImg source={ExchangeBithumbGlobalPng} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  paddingHorizontal: '3%',
+                }}
+                onPress={() => Linking.openURL('https://www.boboo.com')}>
+                <ExchangeImg source={ExchangebobooPng} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  paddingHorizontal: '5%',
+                }}
+                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
+                <ExchangeImg source={ExchangeGopaxPng} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <View
@@ -605,7 +612,7 @@ const MainInfo: FunctionComponent = () => {
           }}
         />
       </Animated.ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

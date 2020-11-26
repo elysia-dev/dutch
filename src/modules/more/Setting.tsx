@@ -4,14 +4,8 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import {
-  View,
-  StyleSheet,
-  Switch,
-  Platform,
-  Modal,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Switch, Platform, TouchableOpacity, Alert } from 'react-native';
+
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
@@ -84,6 +78,22 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     } else {
       return 'English';
     }
+  };
+
+  const confirmSignOut = () => {
+    Alert.alert(
+      i18n.t('more_label.logout'),
+      i18n.t('more.confirm_logout'),
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: signOut, style: 'default' },
+      ],
+      { cancelable: false },
+    );
   };
 
   return (
@@ -245,7 +255,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                 }}>
                 <SubmitButton
                   title={i18n.t('more_label.logout')}
-                  handler={signOut}
+                  handler={confirmSignOut}
                   style={{
                     width: '100%',
                     alignSelf: 'center',

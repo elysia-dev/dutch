@@ -1,5 +1,12 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Animated, RefreshControl, Dimensions } from 'react-native';
+import {
+  View,
+  Animated,
+  RefreshControl,
+  Dimensions,
+  SafeAreaView,
+  Platform,
+} from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
@@ -63,7 +70,7 @@ const Notifications: FunctionComponent = () => {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         width: '100%',
         height: '100%',
@@ -72,62 +79,69 @@ const Notifications: FunctionComponent = () => {
       }}>
       <Animated.View
         style={{
-          backgroundColor: '#fff',
-          elevation: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 5, 5],
-          }),
-          shadowOffset: { width: 1, height: 1 },
-          shadowColor: '#00000033',
-          shadowOpacity: scrollY.interpolate({
-            inputRange: [0, 15, 1000],
-            outputRange: [0, 0.5, 0.5],
-          }),
-          paddingTop: 93,
-          paddingBottom: 8,
-          paddingLeft: 20,
-          transform: [
-            {
-              translateY: scrollY.interpolate({
-                inputRange: [0, 50, 1000],
-                outputRange: [0, -15, -15],
-              }),
-            },
-          ],
+          overflow: 'hidden',
+          backgroundColor: 'transparent',
+          paddingBottom: 1,
         }}>
-        <Animated.Text
-          allowFontScaling={false}
+        <Animated.View
           style={{
-            position: 'relative',
-            left: 0,
-            paddingLeft: 0,
-            width: '100%',
-            color: '#1c1c1c',
-            fontSize: 28,
+            backgroundColor: '#fff',
+            elevation: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 5, 5],
+            }),
+            shadowOffset: { width: 1, height: 1 },
+            shadowColor: '#00000033',
+            shadowOpacity: scrollY.interpolate({
+              inputRange: [-1000, 0, 15, 1000],
+              outputRange: [0, 0, 0.5, 0.5],
+            }),
+            paddingTop: Platform.OS === 'android' ? 65 : 45,
+            paddingBottom: 10,
+            paddingLeft: 20,
             transform: [
               {
-                translateX: scrollY.interpolate({
-                  inputRange: [-1000, 0, 15, 1000],
-                  outputRange: [0, 0, -20, -20],
-                }),
-              },
-              {
-                translateY: 0,
-              },
-              {
-                scale: scrollY.interpolate({
-                  inputRange: [-1000, 0, 15, 1000],
-                  outputRange: [1, 1, 0.9, 0.9],
+                translateY: scrollY.interpolate({
+                  inputRange: [-1000, 0, 50, 1000],
+                  outputRange: [0, 0, -5, -5],
                 }),
               },
             ],
-            fontFamily: 'Roboto_700Bold',
-            textAlign: 'left',
-            justifyContent: 'flex-start',
-            alignSelf: 'flex-start',
           }}>
-          {i18n.t('notification_label.notification')}
-        </Animated.Text>
+          <Animated.Text
+            allowFontScaling={false}
+            style={{
+              position: 'relative',
+              left: 0,
+              paddingLeft: 0,
+              width: '100%',
+              color: '#1c1c1c',
+              fontSize: 28,
+              transform: [
+                {
+                  translateX: scrollY.interpolate({
+                    inputRange: [-1000, 0, 15, 1000],
+                    outputRange: [0, 0, -20, -20],
+                  }),
+                },
+                {
+                  translateY: 0,
+                },
+                {
+                  scale: scrollY.interpolate({
+                    inputRange: [-1000, 0, 15, 1000],
+                    outputRange: [1, 1, 0.9, 0.9],
+                  }),
+                },
+              ],
+              fontFamily: 'Roboto_700Bold',
+              textAlign: 'left',
+              justifyContent: 'flex-start',
+              alignSelf: 'flex-start',
+            }}>
+            {i18n.t('notification_label.notification')}
+          </Animated.Text>
+        </Animated.View>
       </Animated.View>
       <Animated.ScrollView
         ref={ref}
@@ -185,7 +199,7 @@ const Notifications: FunctionComponent = () => {
         )}
         <VirtualTab />
       </Animated.ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

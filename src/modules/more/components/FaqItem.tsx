@@ -38,29 +38,38 @@ export const FaqItem: FunctionComponent<Props> = (props: Props) => {
   };
   return (
     <View>
-      <QuestionWrapper onPress={props.handler} style={{
-        display: "flex",
-        width: '100%',
-        justifyContent: 'space-between',
-      }}>
+      <QuestionWrapper
+        onPress={props.handler}
+        style={{
+          display: 'flex',
+          width: '100%',
+          height: 'auto',
+          justifyContent: 'space-between',
+        }}>
         <H3Text
           label={ZeroFill(props.faqId.toString())}
           style={{
+            alignSelf: 'center',
             fontSize: 15,
-            color: (props.faqId <= 3) ?
-              '#3679B5' : "#1c1c1c",
+            color: props.faqId <= 3 ? '#3679B5' : '#1c1c1c',
           }}
         />
-        <View style={{ flex: 1, marginLeft: 5, marginRight: 10, marginTop: 1 }}>
-          <H3Text label={props.question} style={{ fontSize: 12, flexShrink: 1 }} />
+        <View
+          style={{
+            flex: 1,
+            marginLeft: 15,
+            marginRight: 15,
+            alignSelf: 'baseline',
+          }}>
+          <P1Text label={props.question} style={{ flexShrink: 1 }} />
         </View>
-        <View style={{ marginLeft: 'auto', marginTop: 5 }}>
+        <View style={{ marginLeft: 'auto', alignSelf: 'center' }}>
           <ArrowImg source={props.isSelected ? UpperArrowPng : lowerArrowPng} />
         </View>
       </QuestionWrapper>
       {props.isSelected && (
         <AnswerWrapper>
-          <P1Text label={props.answer} style={{ fontSize: 13 }} />
+          <P1Text label={props.answer} style={{ fontSize: 14 }} />
         </AnswerWrapper>
       )}
     </View>

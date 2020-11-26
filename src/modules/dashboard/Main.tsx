@@ -13,6 +13,7 @@ import {
   Image,
   ActivityIndicator,
   Modal,
+  Platform,
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -106,7 +107,7 @@ export const Main: FunctionComponent = () => {
 
   return (
     <>
-      <Modal visible={user === defaultUser || elPrice === 0} transparent={false}>
+      <Modal visible={user.id === 0 || elPrice === 0} transparent={false}>
         <View
           style={{
             width: '100%',
@@ -126,19 +127,24 @@ export const Main: FunctionComponent = () => {
           backgroundColor: '#FAFCFF',
         }}>
         <SafeAreaView>
-          <View style={{ paddingTop: 93, height: '100%', padding: 20 }}>
+          <View
+            style={{
+              paddingTop: Platform.OS === 'android' ? 65 : 45,
+              height: '100%',
+              padding: 20,
+            }}>
             <H1Text
               style={{ marginBottom: 40 }}
               label={
                 user.firstName && user.lastName
                   ? i18n.t('greeting', {
-                    firstName: state.user.firstName,
-                    lastName:
-                      state.user.lastName === null ? '' : state.user.lastName,
-                  })
+                      firstName: state.user.firstName,
+                      lastName:
+                        state.user.lastName === null ? '' : state.user.lastName,
+                    })
                   : i18n.t('greeting_new', {
-                    email: state.user.email,
-                  })
+                      email: state.user.email,
+                    })
               }
             />
             <BalanceCard
@@ -172,8 +178,7 @@ export const Main: FunctionComponent = () => {
                 flexWrap: 'wrap',
               }}>
               {ownershipsList}
-              {
-                ownerships.length > 0 &&
+              {ownerships.length > 0 && (
                 <TouchableOpacity
                   style={{
                     position: 'relative',
@@ -201,46 +206,46 @@ export const Main: FunctionComponent = () => {
                     {'+'}
                   </Text>
                 </TouchableOpacity>
-              }
+              )}
             </View>
             {(user.kycStatus !== KycStatus.SUCCESS ||
               !(user.ethAddresses?.length > 0)) && (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.PreparingInvestment,
-                    })
-                  }
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Dashboard', {
+                    screen: DashboardPage.PreparingInvestment,
+                  })
+                }
+                style={{
+                  marginBottom: 25,
+                  width: '100%',
+                  borderRadius: 10,
+                  backgroundColor: '#fff',
+                  shadowColor: '#3679B540',
+                  shadowOffset: { width: 1, height: 1 },
+                  shadowOpacity: 0.8,
+                  shadowRadius: 8,
+                  elevation: 6,
+                }}>
+                <Image
                   style={{
-                    marginBottom: 25,
                     width: '100%',
+                    height: 416,
+                    alignSelf: 'center',
                     borderRadius: 10,
-                    backgroundColor: '#fff',
-                    shadowColor: '#3679B540',
-                    shadowOffset: { width: 1, height: 1 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
-                    elevation: 6,
-                  }}>
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 416,
-                      alignSelf: 'center',
-                      borderRadius: 10,
-                    }}
-                    source={require('./images/promotion.png')}
-                  />
-                  <P1Text
-                    style={{ position: 'absolute', top: 30, left: 25 }}
-                    label={i18n.t('dashboard.connect_wallet')}
-                  />
-                  <H2Text
-                    style={{ position: 'absolute', top: 50, left: 25 }}
-                    label={i18n.t('dashboard.get_EL')}
-                  />
-                </TouchableOpacity>
-              )}
+                  }}
+                  source={require('./images/promotion.png')}
+                />
+                <P1Text
+                  style={{ position: 'absolute', top: 30, left: 25 }}
+                  label={i18n.t('dashboard.connect_wallet')}
+                />
+                <H2Text
+                  style={{ position: 'absolute', top: 50, left: 25 }}
+                  label={i18n.t('dashboard.get_EL')}
+                />
+              </TouchableOpacity>
+            )}
             {user.kycStatus === KycStatus.SUCCESS &&
               user.ethAddresses?.length > 0 &&
               ownerships.length === 0 && (
@@ -344,7 +349,6 @@ export const Main: FunctionComponent = () => {
                   </TouchableOpacity>
                 </>
               )}
-
           </View>
           <VirtualTab />
         </SafeAreaView>

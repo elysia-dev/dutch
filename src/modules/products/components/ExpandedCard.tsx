@@ -16,6 +16,7 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import HTMLView from 'react-native-htmlview';
 
@@ -25,7 +26,7 @@ import i18n from '../../../i18n/i18n';
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
-import { P1Text, H1Text } from '../../../shared/components/Texts';
+import { P1Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
   story: Story;
@@ -76,6 +77,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     scrollY: 0,
     closed: false,
     scrollEnabled: true,
+    backgroundColor: true,
   });
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
@@ -89,7 +91,12 @@ const ExpandedItem: FunctionComponent<Props> = ({
         useNativeDriver: false,
         easing: Easing.elastic(1),
       }).start();
-      setState({ ...state, scrollY: 0, closed: false, scrollEnabled: true });
+      setState({
+        ...state,
+        scrollY: 0,
+        closed: false,
+        scrollEnabled: true,
+      });
     }
   }, [on]);
 
@@ -97,10 +104,29 @@ const ExpandedItem: FunctionComponent<Props> = ({
     <Animated.View
       style={{
         position: 'absolute',
-        elevation: 6,
+        borderRadius: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [10, 0],
+        }),
+        backgroundColor: animatedValue.interpolate({
+          inputRange: [0, 0.9, 1],
+          outputRange: [
+            'rgba(255,255,255,0)',
+            'rgba(255,255,255,0)',
+            'rgba(255,255,255,1)',
+          ],
+        }),
+        elevation: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 6],
+        }),
+        height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: '#00000033',
-        shadowOpacity: on ? 0.8 : 0.5,
+        shadowOpacity: animatedValue.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.6, 0],
+        }),
         shadowRadius: 5,
         top: animatedValue.interpolate({
           inputRange: [0, 1],
@@ -121,6 +147,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
       }}>
       <ScrollView
         ref={scrollRef}
+        contentInset={{ bottom: Platform.OS === 'ios' ? -500 : 0 }}
+        bouncesZoom={false}
         scrollEventThrottle={16}
         contentOffset={{ x: 0, y: 0 }}
         scrollEnabled={state.scrollEnabled}
@@ -156,7 +184,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             left: 20,
           }}>
           <P1Text label={story.subTitle} />
-          <H1Text label={story.title} style={{ marginTop: 10 }} />
+          <H2Text label={story.title} style={{ marginTop: 10 }} />
         </Animated.View>
         <Animated.View
           style={{
@@ -174,7 +202,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             textComponentProps={defaultTextProps}
             nodeComponentProps={defaultTextProps}
           />
-          <View style={{ marginTop: 35 }} />
+          <View style={{ marginTop: Platform.OS === 'ios' ? 535 : 35 }} />
         </Animated.View>
       </ScrollView>
       <Animated.View
@@ -183,20 +211,27 @@ const ExpandedItem: FunctionComponent<Props> = ({
           top: 30,
           right: 20,
           opacity: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1],
+            inputRange: [0, 0.8, 1],
+            outputRange: [0, 1, 1],
           }),
         }}>
         <TouchableOpacity
           onPress={() => {
             scrollRef.current?.scrollTo({ y: 0, animated: false });
-            setState({ ...state, closed: true, scrollEnabled: false });
+            setState({
+              ...state,
+              closed: true,
+              scrollEnabled: false,
+              backgroundColor: false,
+            });
             Animated.timing(animatedValue, {
               toValue: 0,
               duration: 500,
               useNativeDriver: false,
               easing: Easing.elastic(1),
-            }).start(() => deactivateStory());
+            }).start(() => {
+              deactivateStory();
+            });
           }}>
           <View
             style={{
