@@ -32,10 +32,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
 
   const totalElFormatter = () => {
-    const totalEl = `${
-      (parseFloat(product.totalValue) * product.usdPricePerToken) /
+    const totalEl = `${(parseFloat(product.totalValue) * product.usdPricePerToken) /
       props.elPrice
-    }`;
+      }`;
     const intTotalEl = totalEl.split('.')[0];
     if (intTotalEl.length > 9) {
       return `EL ${intTotalEl.slice(0, intTotalEl.length - 9)}G`;
@@ -140,7 +139,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               borderRightWidth: 1,
               borderColor: "#CCCCCC",
             }}
-            label={`연 ${product.expectedAnnualReturn}%`}
+
+            label={`${i18n.t('product_label.expected_annual_return', { return: product.expectedAnnualReturn })}`}
           />
           <H3Text
             style={{
@@ -192,7 +192,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               alignItems: 'center',
             }}>
             <P1Text
-              label={'1 부동산 토큰당 가격'}
+              label={i18n.t('product_label.price_per_token')}
               style={{ color: '#838383' }}
             />
             <View style={{ flexDirection: 'row' }}>

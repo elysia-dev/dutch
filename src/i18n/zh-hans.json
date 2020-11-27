@@ -269,7 +269,7 @@
     "close": "短期",
     "my_wallet": "我的钱包",
     "metamask_wallet": "Metamask钱包",
-    "balance" : "余额"
+    "balance": "余额"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -324,8 +324,8 @@
     "notice": "公告",
     "less": "不到",
     "daily_reward": "每日收益",
-    "remaining_usd" : "USD余额",
-    "remaining_el" : "EL币余额",
+    "remaining_usd": "USD余额",
+    "remaining_el": "EL币余额",
     "withdraw_paypal": "贝宝账号",
     "withdraw_eth": "私人以太坊钱包地址",
     "remaining_withdraw": "取款",
@@ -368,10 +368,7 @@
       "以上金额是在爱立厦（ELYSIA）网站(elysia.land) 的内部钱包的余额。USD/EL币都可以被取出。",
       "您可以分别提取不同房地产产品的积分。"
     ],
-    "remaining_withdraw_popup": [
-      "取款申请已完成",
-      "我们会通知您取款进度"
-    ],
+    "remaining_withdraw_popup": ["取款申请已完成", "我们会通知您取款进度"],
     "checking_withdraw_error": [
       "请输入贝宝账户或钱包地址以接收提款。",
       "USD余额只能由贝宝提取，请输入您的贝宝帐户。",

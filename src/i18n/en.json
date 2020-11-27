@@ -268,7 +268,7 @@
     "close": "Close",
     "my_wallet": "My Wallet",
     "metamask_wallet": "Metamask Wallet",
-    "balance" : "Balance"
+    "balance": "Balance"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -323,8 +323,8 @@
     "notice": "Notice",
     "less": "less than",
     "daily_reward": "Daily rewards",
-    "remaining_usd" : "USD Balance",
-    "remaining_el" : "EL Balance",
+    "remaining_usd": "USD Balance",
+    "remaining_el": "EL Balance",
     "withdraw_paypal": "Paypal account",
     "withdraw_eth": "Personal Ethereum wallet",
     "remaining_withdraw": "Withdraw",

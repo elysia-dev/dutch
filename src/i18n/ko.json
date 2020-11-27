@@ -269,7 +269,7 @@
     "close": "닫기",
     "my_wallet": "내 지갑",
     "metamask_wallet": "메타마스크 지갑",
-    "balance" : "잔고"
+    "balance": "잔고"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
@@ -324,8 +324,8 @@
     "notice": "공지사항",
     "less": " 미만",
     "daily_reward": "일일 적립금",
-    "remaining_usd" : "USD 잔고",
-    "remaining_el" : "EL 잔고",
+    "remaining_usd": "USD 잔고",
+    "remaining_el": "EL 잔고",
     "withdraw_paypal": "Paypal 계정 주소",
     "withdraw_eth": "개인 이더리움 지갑 주소",
     "remaining_withdraw": "출금하기",
