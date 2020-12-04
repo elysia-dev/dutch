@@ -4,7 +4,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { View, Switch, Platform, TouchableOpacity, Alert } from 'react-native';
+import { View, Switch, Platform, TouchableOpacity, Alert, Image } from 'react-native';
 
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
 import getEnvironment from '../../utiles/getEnvironment';
 import IosPickerModal from '../../shared/components/IosPickerModal';
+import { MorePage } from '../../enums/pageEnum';
 
 interface Props {
   resetHandler: () => void;
@@ -87,7 +88,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       [
         {
           text: 'Cancel',
-          onPress: () => {},
+          onPress: () => { },
           style: 'cancel',
         },
         { text: 'OK', onPress: signOut, style: 'default' },
@@ -169,16 +170,31 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     fontSize: 18,
                   }}
                 />
-                <P1Text
-                  label={
-                    i18n.t('more_label.version') +
-                    ` ${getEnvironment().version}`
-                  }
+                <TouchableOpacity
                   style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     marginTop: 30,
-                    paddingLeft: '5%',
+                    paddingLeft: "5%",
+                    paddingRight: "5%",
                   }}
-                />
+                  onPress={() => navigation.navigate('More', {
+                    screen: MorePage.WhatsNew,
+                  })}
+                >
+                  <P1Text
+                    label={
+                      i18n.t('more_label.version') +
+                      ` ${getEnvironment().version}`
+                    }
+                  />
+                  <Image
+                    source={require('./images/next_gray.png')}
+                    style={{
+                      width: 5, height: 8,
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
               <H3Text
                 label={i18n.t('more_label.language')}
@@ -224,27 +240,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      setState({ ...state, showPickerModal: true });
-                    }}>
-                    <P1Text
-                      label={localeText()}
+                    <TouchableOpacity
                       style={{
-                        textAlign: 'center',
+                        width: '100%',
+                        height: 40,
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        setState({ ...state, showPickerModal: true });
+                      }}>
+                      <P1Text
+                        label={localeText()}
+                        style={{
+                          textAlign: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <View
                 style={{
