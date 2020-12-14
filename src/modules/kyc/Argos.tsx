@@ -1,6 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import React, { FunctionComponent, useContext } from 'react';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
@@ -8,20 +6,28 @@ import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text } from '../../shared/components/Texts';
 
-
 interface Props {
   updateAgree: () => void;
 }
 export const Argos: FunctionComponent<Props> = (props: Props) => {
   const { user } = useContext(RootContext);
-  const localeTerms = terms[user.language === LocaleType.KO ? user.language : LocaleType.EN];
+  const localeTerms =
+    terms[user.language === LocaleType.KO ? user.language : LocaleType.EN];
 
   return (
     <WrapperLayout
       isScrolling={true}
       title={i18n.t('kyc_label.argos_terms')}
       body={
-        <P1Text label={localeTerms} style={{ marginLeft: "5%", marginRight: "5%", marginBottom: 50, lineHeight: 20 }} />
+        <P1Text
+          label={localeTerms}
+          style={{
+            marginLeft: '5%',
+            marginRight: '5%',
+            marginBottom: 50,
+            lineHeight: 20,
+          }}
+        />
       }
       button={
         <SubmitButton
