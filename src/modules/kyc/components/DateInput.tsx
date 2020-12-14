@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,10 @@ import {
   TextInput as RNTextInput,
   StyleProp,
   ViewStyle,
-} from "react-native";
-import DatePicker from "react-native-datepicker";
-import styled from "styled-components/native";
+} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import styled from 'styled-components/native';
+import i18n from '../../../i18n/i18n';
 
 interface Props {
   type: string;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const InputHeaderText = styled.Text`
-  color: #A7A7A7;
+  color: #a7a7a7;
   font-size: 12px;
   text-align: left;
   font-family: 'Roboto_400Regular';
@@ -35,39 +36,15 @@ export const DateInput: FunctionComponent<Props> = (props) => {
   return (
     <View style={props.style}>
       <InputHeaderText allowFontScaling={false}>{props.type}</InputHeaderText>
-      <DatePicker
-        style={{ width: "100%", height: 40 }}
-        date={props.birthday}
-        onDateChange={props.eventHandler}
+      <DateTimePicker
+        value={props.birthday ? new Date(props.birthday) : currentDate}
+        display="spinner"
         mode="date"
-        androidMode="spinner"
-        placeholder="select date"
-        allowFontScaling={false}
-        format="YYYY-MM-DD"
-        minDate="1900-01-01"
-        maxDate={currentDate}
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          btnTextConfirm: {
-            color: "#3679B5",
-            fontFamily: "Roboto_400Regular",
-          },
-          dateIcon: {
-            opacity: 0,
-            position: "absolute",
-            left: 0,
-            top: 4,
-            marginLeft: 0,
-          },
-          dateInput: {
-            borderTopWidth: 0,
-            borderRightWidth: 0,
-            borderLeftWidth: 0,
-            borderBottomWidth: 1,
-            borderBottomColor: "#D0D8DF",
-          },
-        }}
+        onChange={(_event, date) =>
+          props.eventHandler(i18n.strftime(date, '%Y-%m-%d'))
+        }
+        minimumDate={new Date(1900, 1, 1)}
+        maximumDate={currentDate}
       />
     </View>
   );

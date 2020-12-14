@@ -17,16 +17,12 @@ const Stack = createStackNavigator();
 interface KycState {
   idType: string;
   idPhoto: ImageManipulator.ImageResult;
-  hashedIdPhoto: string;
   selfie: ImageManipulator.ImageResult;
-  hashedSelfie: string;
 }
 const defaultState = {
   idType: '',
   idPhoto: {} as ImageManipulator.ImageResult,
-  hashedIdPhoto: '',
   selfie: {} as ImageManipulator.ImageResult,
-  hashedSelfie: '',
 };
 
 export const Kyc: FunctionComponent<{}> = () => {
@@ -42,14 +38,8 @@ export const Kyc: FunctionComponent<{}> = () => {
         setIdPhoto: (photo: ImageManipulator.ImageResult) => {
           setState({ ...state, idPhoto: photo });
         },
-        setHashedIdPhoto: (hash: string) => {
-          setState({ ...state, hashedIdPhoto: hash });
-        },
         setSelfie: (photo: ImageManipulator.ImageResult) => {
           setState({ ...state, selfie: photo });
-        },
-        setHashedSelfie: (hash: string) => {
-          setState({ ...state, hashedSelfie: hash });
         },
       }}>
       <Stack.Navigator initialRouteName={KycPage.StartKYC} headerMode="none">

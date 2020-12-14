@@ -32,15 +32,14 @@ const SelfieImg = styled.Image`
 const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const { Server } = useContext(RootContext);
-  const { selfie, setHashedSelfie } = useContext(KycContext);
+  const { selfie } = useContext(KycContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 
   const callKycApi = () => {
     setStatus(LoadingStatus.PENDING);
 
     Server.kycUpload(selfie.uri, 'selfie')
-      .then((res) => {
-        setHashedSelfie(res.data.filehash);
+      .then((_res) => {
         setStatus(LoadingStatus.SUCCESS);
         navigation.navigate(KycPage.PersonalDataInput);
       })

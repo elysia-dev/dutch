@@ -125,10 +125,11 @@ export default class Server {
     }
   };
 
-  kycUpload = async (
-    photo: string,
-    type: string,
-  ): Promise<AxiosResponse<PhotoResponse>> => {
+  kycInit = async (): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post('/v2/kyc/');
+  };
+
+  kycUpload = async (photo: string, type: string): Promise<AxiosResponse> => {
     const formData = new FormData();
     formData.append('image', {
       uri: Platform.OS === 'android' ? photo : photo.replace('file://', ''),
@@ -136,28 +137,24 @@ export default class Server {
       type: 'image/png',
     });
     formData.append('type', type);
-    return this.authenticatedEspressoClient.post('/kyc/upload', formData);
+    return this.authenticatedEspressoClient.post('/v2/kyc/upload', formData);
   };
 
-  submission = async (
-    first_name: string,
-    last_name: string,
+  kycInformation = async (
+    firstName: string,
+    lastName: string,
     nationality: string,
-    date_of_birth: string,
+    dateOfBirth: string,
     gender: string,
-    id_type: string,
-    photoid_res: string,
-    selfie_res: string,
-  ): Promise<AxiosResponse<KycResponse>> => {
-    return this.authenticatedEspressoClient.post('/kyc/submission', {
-      first_name,
-      last_name,
+    idType: string,
+  ): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post('/v2/kyc/information', {
+      firstName,
+      lastName,
       nationality,
-      date_of_birth,
+      dateOfBirth,
       gender,
-      id_type,
-      photoid_res,
-      selfie_res,
+      idType,
     });
   };
 
@@ -167,6 +164,10 @@ export default class Server {
 
   read = async (id: number): Promise<AxiosResponse<void>> => {
     return this.authenticatedEspressoClient.put(`/notifications/${id}`);
+  };
+
+  readAll = async (): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.patch('notifications/readAll');
   };
 
   ownershipDetail = async (
@@ -317,10 +318,14 @@ export default class Server {
     return axios.get(
       `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x2781246fe707bb15cee3e5ea354e2154a2877b16&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
-  }
-  setRefundLegacyWallet = async (ethAddress: string, email: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.post(
-      `/users/refundLegacyWallet`, { ethAddress, email },
-    );
-  }
+  };
+  setRefundLegacyWallet = async (
+    ethAddress: string,
+    email: string,
+  ): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.post(`/users/refundLegacyWallet`, {
+      ethAddress,
+      email,
+    });
+  };
 }

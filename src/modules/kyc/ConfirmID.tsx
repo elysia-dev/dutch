@@ -50,20 +50,17 @@ const WarningWrapper = styled.View`
 
 const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const { idPhoto, idType, setHashedIdPhoto } = useContext(KycContext);
+  const { idPhoto, idType } = useContext(KycContext);
   const { Server } = useContext(RootContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 
-  // 나중에 아르고스 서버 테스트 할 때 사용. 지우지 마세요!
-  const callKycApi = () => {
-    setStatus(LoadingStatus.PENDING);
+  const uploadPhoto = () => {
     Server.kycUpload(
       idPhoto.uri,
       idType === 'passport' ? 'passport' : 'government_id',
     )
-      .then((res) => {
+      .then((_res) => {
         setStatus(LoadingStatus.SUCCESS);
-        setHashedIdPhoto(res.data.filehash);
         navigation.navigate(KycPage.TakeSelfieBefore);
       })
       .catch((e) => {
@@ -74,6 +71,17 @@ const ConfirmID: FunctionComponent<{}> = () => {
           alert(i18n.t('account_errors.server'));
         }
         setStatus(LoadingStatus.NONE);
+      });
+  };
+
+  const callKycApi = () => {
+    setStatus(LoadingStatus.PENDING);
+    Server.kycInit()
+      .then(uploadPhoto)
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t('kyc.submit_error'));
+        }
       });
   };
 
