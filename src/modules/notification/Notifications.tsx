@@ -41,8 +41,18 @@ const Notifications: FunctionComponent = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    loadNotifications();
+    readAllNotification();
   }, []);
+
+  const readAllNotification = () => {
+    Server.readAll()
+      .then((_res) => loadNotifications())
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
 
   const readNotification = (notification: Notification) => {
     if (notification.status === NotificationStatus.READ) return;
