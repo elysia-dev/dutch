@@ -11,7 +11,7 @@
       "fallbackToCacheTimeout": 0
     },
     "splash": {
-      "image": "./assets/splash01010.png",
+      "image": "./assets/splash.png",
       "backgroundColor": "#3679B5"
     },
     "assetBundlePatterns": ["**/*"],
