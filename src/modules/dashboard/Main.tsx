@@ -27,6 +27,7 @@ import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import CurrencyType from '../../enums/CurrencyType';
 
 export const Main: FunctionComponent = () => {
   const defaultUser = {
@@ -38,6 +39,7 @@ export const Main: FunctionComponent = () => {
     firstName: '',
     lastName: '',
     language: LocaleType.EN,
+    currency: CurrencyType.USD,
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
@@ -51,7 +53,7 @@ export const Main: FunctionComponent = () => {
   };
 
   const navigation = useNavigation();
-  const { Server, setElPrice, elPrice } = useContext(RootContext);
+  const { Server, setCurrencyPrice, elPrice } = useContext(RootContext);
   const [state, setState] = useState({
     user: defaultUser,
     ownerships: [defaultOwnerships],
@@ -59,8 +61,9 @@ export const Main: FunctionComponent = () => {
     errorReturn: 0,
   });
   const { user, ownerships } = state;
-  const legacyTotal: number | undefined =
-    parseFloat(((user.legacyEl * elPrice) + user.legacyUsd).toFixed(2));
+  const legacyTotal: number | undefined = parseFloat(
+    (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
+  );
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -68,8 +71,8 @@ export const Main: FunctionComponent = () => {
   const callApi = async () => {
     try {
       const userInfo = await Server.me();
-      const tempElPrice = await Server.getELPrice();
-      setElPrice(tempElPrice.data.elysia.usd);
+      const allCurrency = await Server.getAllCurrency();
+      setCurrencyPrice(allCurrency.data);
       setState({
         ...state,
         user: userInfo.data.user,
@@ -77,6 +80,7 @@ export const Main: FunctionComponent = () => {
         balance: userInfo.data.totalBalance,
       });
     } catch (e) {
+      alert(e);
       if (e.response.status === 404) {
         alert(i18n.t('account_errors.server'));
         setState({ ...state, errorReturn: 1 });
@@ -155,22 +159,23 @@ export const Main: FunctionComponent = () => {
                 })
               }
             />
-            {(
-              (user.legacyEl !== 0 || user.legacyUsd !== 0)
-              && state.errorReturn === 0
-              && [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING]
-                .includes(user.legacyWalletRefundStatus)
+            {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
+              state.errorReturn === 0 &&
+              [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
+                user.legacyWalletRefundStatus,
               ) && (
-              <WithdrawalCard
-                balance={legacyTotal}
-                handler={() =>
-                navigation.navigate('Dashboard', {
-                  screen: DashboardPage.RemainingBalance,
-                })
-                }
-                redDot={user.legacyWalletRefundStatus === LegacyRefundStatus.NONE}
-              />
-            )}
+                <WithdrawalCard
+                  balance={legacyTotal}
+                  handler={() =>
+                    navigation.navigate('Dashboard', {
+                      screen: DashboardPage.RemainingBalance,
+                    })
+                  }
+                  redDot={
+                    user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
+                  }
+                />
+              )}
             <View
               style={{
                 flexDirection: 'row',
