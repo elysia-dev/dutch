@@ -4,7 +4,14 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { View, Switch, Platform, TouchableOpacity, Alert, Image } from 'react-native';
+import {
+  View,
+  Switch,
+  Platform,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from 'react-native';
 
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +26,7 @@ import registerForPushNotificationsAsync from '../../utiles/registerForPushNotif
 import getEnvironment from '../../utiles/getEnvironment';
 import IosPickerModal from '../../shared/components/IosPickerModal';
 import { MorePage } from '../../enums/pageEnum';
+import CurrencyType from '../../enums/CurrencyType';
 
 interface Props {
   resetHandler: () => void;
@@ -27,6 +35,7 @@ interface Props {
 const Setting: FunctionComponent<Props> = (props: Props) => {
   const {
     changeLanguage,
+    changeCurrency,
     Server,
     user,
     signOut,
@@ -36,8 +45,10 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: user.expoPushTokens?.includes(expoPushToken),
-    selectedValue: i18n.currentLocale(),
-    showPickerModal: false,
+    selectedLanguage: i18n.currentLocale(),
+    selectedCurrency: user.currency,
+    showLanguageModal: false,
+    showCurrencyModal: false,
   });
 
   useEffect(() => {
@@ -81,6 +92,16 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     }
   };
 
+  const currencyText = () => {
+    if (user.currency === CurrencyType.KRW) {
+      return 'KRW (₩)';
+    } else if (user.currency === CurrencyType.CNY) {
+      return 'CNY (¥)';
+    } else {
+      return 'USD ($)';
+    }
+  };
+
   const confirmSignOut = () => {
     Alert.alert(
       i18n.t('more_label.logout'),
@@ -88,7 +109,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       [
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
         { text: 'OK', onPress: signOut, style: 'default' },
@@ -100,7 +121,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
   return (
     <>
       <WrapperLayout
-        isScrolling={false}
+        isScrolling={true}
         backButtonHandler={() => {
           navigation.goBack();
         }}
@@ -109,8 +130,8 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
           <>
             <View
               style={{
-                paddingBottom: 20,
-                borderBottomWidth: 5,
+                // paddingBottom: 20,
+                // borderBottomWidth: 5,
                 borderBottomColor: '#F6F6F8',
                 top: 22,
               }}>
@@ -175,13 +196,14 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     marginTop: 30,
-                    paddingLeft: "5%",
-                    paddingRight: "5%",
+                    paddingLeft: '5%',
+                    paddingRight: '5%',
                   }}
-                  onPress={() => navigation.navigate('More', {
-                    screen: MorePage.WhatsNew,
-                  })}
-                >
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.WhatsNew,
+                    })
+                  }>
                   <P1Text
                     label={
                       i18n.t('more_label.version') +
@@ -191,7 +213,8 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                   <Image
                     source={require('./images/next_gray.png')}
                     style={{
-                      width: 5, height: 8,
+                      width: 5,
+                      height: 8,
                     }}
                   />
                 </TouchableOpacity>
@@ -226,7 +249,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                       changeI18n(itemValue.toString());
                       setState({
                         ...state,
-                        selectedValue: i18n.currentLocale(),
+                        selectedLanguage: i18n.currentLocale(),
                       });
                       await Server.resetLanguage(i18n.currentLocale()).catch(
                         (e) => {
@@ -240,34 +263,113 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showLanguageModal: true });
+                    }}>
+                    <P1Text
+                      label={localeText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showPickerModal: true });
-                      }}>
-                      <P1Text
-                        label={localeText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+              <H3Text
+                label={i18n.t('more_label.currency')}
+                style={{
+                  paddingLeft: '5%',
+                  fontSize: 18,
+                }}
+              />
+              <View
+                style={{
+                  marginVertical: 20,
+                  marginBottom: 40,
+                  marginHorizontal: '5%',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  paddingLeft: 10,
+                  borderColor: '#D0D8DF',
+                  paddingRight: Platform.OS === 'android' ? 10 : 0,
+                }}>
+                {Platform.OS === 'android' ? (
+                  <Picker
+                    style={{
+                      height: 30,
+                      marginVertical: 10,
+                      padding: 0,
+                    }}
+                    accessibilityLabel={'settings'}
+                    selectedValue={state.selectedCurrency}
+                    onValueChange={async (itemValue) => {
+                      setState({
+                        ...state,
+                        selectedCurrency: itemValue as CurrencyType,
+                      });
+                      await Server.resetCurrency(itemValue as string).catch(
+                        (e) => {
+                          alert(i18n.t('account_errors.server'));
+                        },
+                      );
+                      changeCurrency(itemValue as CurrencyType);
+                    }}>
+                    <Picker.Item
+                      label={'KRW (₩)'}
+                      value={CurrencyType.KRW}
+                      key={0}
+                    />
+                    <Picker.Item
+                      label={'USD ($)'}
+                      value={CurrencyType.USD}
+                      key={1}
+                    />
+                    <Picker.Item
+                      label={'CNY (¥)'}
+                      value={CurrencyType.CNY}
+                      key={2}
+                    />
+                  </Picker>
+                ) : (
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showCurrencyModal: true });
+                    }}>
+                    <P1Text
+                      label={currencyText()}
+                      style={{
+                        textAlign: 'center',
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <View
                 style={{
-                  height: 500,
+                  height: 125,
                   backgroundColor: '#F6F6F8',
                   paddingHorizontal: '5%',
                   paddingTop: 25,
+                  paddingBottom: 25,
                 }}>
                 <SubmitButton
                   title={i18n.t('more_label.logout')}
@@ -283,7 +385,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
           </>
         }
       />
-      {state.showPickerModal && (
+      {(state.showLanguageModal || state.showCurrencyModal) && (
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.3)',
@@ -294,20 +396,20 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
         />
       )}
       <IosPickerModal
-        modalVisible={state.showPickerModal}
+        modalVisible={state.showLanguageModal}
         doneHandler={async () => {
-          changeI18n(state.selectedValue);
+          changeI18n(state.selectedLanguage);
           await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
             alert(i18n.t('account_errors.server'));
           });
           changeLanguage(i18n.currentLocale() as LocaleType);
-          setState({ ...state, showPickerModal: false });
+          setState({ ...state, showLanguageModal: false });
         }}
         cancelHandler={() => {
           setState({
             ...state,
-            selectedValue: i18n.currentLocale(),
-            showPickerModal: false,
+            selectedLanguage: i18n.currentLocale(),
+            showLanguageModal: false,
           });
         }}
         buttonNumber={2}
@@ -317,16 +419,51 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
               top: 35,
             }}
             accessibilityLabel={'settings'}
-            selectedValue={state.selectedValue}
+            selectedValue={state.selectedLanguage}
             onValueChange={async (itemValue) => {
               setState({
                 ...state,
-                selectedValue: itemValue.toString(),
+                selectedLanguage: itemValue.toString(),
               });
             }}>
             <Picker.Item label={'한국어'} value="ko" key={0} />
             <Picker.Item label={'English'} value="en" key={1} />
             <Picker.Item label={'简体中文'} value="zhHans" key={2} />
+          </Picker>
+        }
+      />
+      <IosPickerModal
+        modalVisible={state.showCurrencyModal}
+        doneHandler={async () => {
+          await Server.resetCurrency(state.selectedCurrency).catch((e) => {
+            alert(i18n.t('account_errors.server'));
+          });
+          changeCurrency(state.selectedCurrency);
+          setState({ ...state, showCurrencyModal: false });
+        }}
+        cancelHandler={() => {
+          setState({
+            ...state,
+            showCurrencyModal: false,
+          });
+        }}
+        buttonNumber={2}
+        children={
+          <Picker
+            style={{
+              top: 35,
+            }}
+            accessibilityLabel={'settings'}
+            selectedValue={state.selectedCurrency}
+            onValueChange={async (itemValue) => {
+              setState({
+                ...state,
+                selectedCurrency: itemValue as CurrencyType,
+              });
+            }}>
+            <Picker.Item label={'KRW (₩)'} value={CurrencyType.KRW} key={0} />
+            <Picker.Item label={'USD ($)'} value={CurrencyType.USD} key={1} />
+            <Picker.Item label={'CNY (¥)'} value={CurrencyType.CNY} key={2} />
           </Picker>
         }
       />
