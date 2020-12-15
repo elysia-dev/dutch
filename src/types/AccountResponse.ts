@@ -2,6 +2,7 @@ import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
 import Notification from './Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
+import CurrencyType from '../enums/CurrencyType';
 
 export type AccountResponse = {
   verificationId?: string;
@@ -21,6 +22,7 @@ export type UserResponse = {
     firstName: string;
     lastName: string;
     language: LocaleType;
+    currency: CurrencyType;
     nationality: string;
     legacyEl: number;
     legacyUsd: number;

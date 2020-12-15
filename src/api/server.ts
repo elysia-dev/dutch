@@ -12,9 +12,9 @@ import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
 import { SummaryReportResponse } from '../types/SummaryReport';
 import { CoinPriceResponse, ELPriceResponse } from '../types/CoinPrice';
-import { KycResponse, PhotoResponse } from '../types/Kyc';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
+import { CurrencyResponse } from '../types/CurrencyResponse';
 
 export default class Server {
   token: string;
@@ -276,12 +276,6 @@ export default class Server {
     );
   };
 
-  getELPrice = async (): Promise<AxiosResponse<ELPriceResponse>> => {
-    return axios.get(
-      'https://api.coingecko.com/api/v3/simple/price?ids=elysia&vs_currencies=usd',
-    );
-  };
-
   registerAddress = async (ethAddress: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.put('/users/ethAddresses', {
       ethAddress,
@@ -319,6 +313,7 @@ export default class Server {
       `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x2781246fe707bb15cee3e5ea354e2154a2877b16&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };
+
   setRefundLegacyWallet = async (
     ethAddress: string,
     email: string,
@@ -326,6 +321,22 @@ export default class Server {
     return this.authenticatedEspressoClient.post(`/users/refundLegacyWallet`, {
       ethAddress,
       email,
+    });
+  };
+
+  getAllCurrency = async (): Promise<AxiosResponse<CurrencyResponse[]>> => {
+    return espressoClient.get('/currency/');
+  };
+
+  getCurrency = async (
+    code: string,
+  ): Promise<AxiosResponse<CurrencyResponse>> => {
+    return espressoClient.get(`/currency/${code}`);
+  };
+
+  resetCurrency = async (currency: string): Promise<AxiosResponse> => {
+    return this.authenticatedEspressoClient.put('/currency/', {
+      currency,
     });
   };
 }
