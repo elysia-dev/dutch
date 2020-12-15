@@ -17,6 +17,7 @@ import {
   H3Text,
 } from '../../../shared/components/Texts';
 import ProductStatus from '../../../enums/ProductStatus';
+import currentLocale from '../../../utiles/currentLocale';
 
 interface Props {
   product: Product;
@@ -24,7 +25,7 @@ interface Props {
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { user, Server } = useContext(RootContext);
+  const { user, Server, currencyExchange } = useContext(RootContext);
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
@@ -32,9 +33,10 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
 
   const totalElFormatter = () => {
-    const totalEl = `${(parseFloat(product.totalValue) * product.usdPricePerToken) /
+    const totalEl = `${
+      (parseFloat(product.totalValue) * product.usdPricePerToken) /
       props.elPrice
-      }`;
+    }`;
     const intTotalEl = totalEl.split('.')[0];
     if (intTotalEl.length > 9) {
       return `EL ${intTotalEl.slice(0, intTotalEl.length - 9)}G`;
@@ -59,8 +61,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       style={{
         backgroundColor: '#fff',
         padding: 20,
-        paddingLeft: "5%",
-        paddingRight: "5%",
+        paddingLeft: '5%',
+        paddingRight: '5%',
         width: '100%',
         borderBottomColor: '#F6F6F8',
         borderBottomWidth: 5,
@@ -78,9 +80,10 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 marginBottom: 6,
                 zIndex: 3,
               }}
-              label={`$ ${commaFormatter(
+              label={currencyExchange(
                 parseFloat(product.totalValue) * product.usdPricePerToken,
-              )?.toString()}`}
+                0,
+              )}
             />
           </View>
         </View>
@@ -124,23 +127,25 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           padding: 10,
           marginBottom: 10,
         }}>
-        <View style={{
-          flexDirection: 'row',
-          padding: 10,
-          paddingBottom: 20,
-          borderBottomWidth: 1.5,
-          borderColor: "#F1F1F1",
-        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: 10,
+            paddingBottom: 20,
+            borderBottomWidth: 1.5,
+            borderColor: '#F1F1F1',
+          }}>
           <H3Text
             style={{
               marginTop: 4,
               paddingRight: 10,
               fontSize: user.language === LocaleType.EN ? 15 : 18,
               borderRightWidth: 1,
-              borderColor: "#CCCCCC",
+              borderColor: '#CCCCCC',
             }}
-
-            label={`${i18n.t('product_label.expected_annual_return', { return: product.expectedAnnualReturn })}`}
+            label={`${i18n.t('product_label.expected_annual_return', {
+              return: product.expectedAnnualReturn,
+            })}`}
           />
           <H3Text
             style={{
@@ -201,7 +206,10 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   (product.usdPricePerToken / props.elPrice).toFixed(2),
                 )}`}
               />
-              <P1Text label={' ($5)'} style={{ color: '#838383' }} />
+              <P1Text
+                label={` (${currencyExchange(5, 0)})`}
+                style={{ color: '#838383' }}
+              />
             </View>
           </View>
         </View>

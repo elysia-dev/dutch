@@ -64,8 +64,7 @@ type Props = {
 };
 
 const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
-  const [elPrice, setELPrice] = useState(0.003);
-  const { Server } = useContext(RootContext);
+  const { elPrice, currencyExchange } = useContext(RootContext);
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);
@@ -76,12 +75,6 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
     0.01 *
     expectedUsdValue
   ).toFixed(2);
-
-  useEffect(() => {
-    Server.getELPrice()
-      .then((res) => setELPrice(res.data.elysia.usd))
-      .catch((e) => alert(i18n.t('account_errors.server')));
-  }, []);
 
   return (
     <View style={{ paddingTop: 20 }}>
@@ -218,7 +211,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
         <H1Text
           style={{ fontSize: 15 }}
           label={i18n.t('product_label.expected_return')}></H1Text>
-        <H1Text style={{ fontSize: 15 }} label={`$ ${expectedProfit}`} />
+        <H1Text
+          style={{ fontSize: 15 }}
+          label={currencyExchange(parseFloat(expectedProfit), 2)}
+        />
       </View>
     </View>
   );

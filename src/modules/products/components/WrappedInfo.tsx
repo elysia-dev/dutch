@@ -25,18 +25,12 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { user } = useContext(RootContext);
+  const { user, currencyExchange } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
-  const commaFormatter = (input: number | string) => {
-    if (typeof input === 'number') {
-      return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    } else if (typeof input === 'string') {
-      return input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-  };
+
   return (
     <View style={{ width: '100%', paddingBottom: 60 }}>
       <View
@@ -144,7 +138,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`$ ${commaFormatter(product.data.propertyPrice)}`}
+                  label={currencyExchange(
+                    parseFloat(product.data.propertyPrice),
+                    0,
+                  )}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -155,7 +152,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`$ ${commaFormatter(product.data.netDeposit)}`}
+                  label={currencyExchange(
+                    parseFloat(product.data.netDeposit),
+                    0,
+                  )}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -166,7 +166,10 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`$ ${commaFormatter(product.data.netRentPerYear)}`}
+                  label={currencyExchange(
+                    parseFloat(product.data.netRentPerYear),
+                    0,
+                  )}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -177,7 +180,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={`$ ${product.data.bankLoan}`}
+                  label={currencyExchange(parseFloat(product.data.bankLoan), 0)}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { PieChart } from 'react-native-svg-charts';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text } from '../../../shared/components/Texts';
+import RootContext from '../../../contexts/RootContext';
 
 interface Props {
   ownerships: SummaryReportResponse['content']['ownerships'];
@@ -44,6 +45,7 @@ const data = [
 
 export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = React.useState({ profit: true });
+  const { currencyExchange } = useContext(RootContext);
 
   const data = props.ownerships.map((value, index) => parseFloat(value[1]));
   const totalValue = data.reduce((accumulator, currentValue) => {
@@ -115,7 +117,7 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           flex: 8,
           textAlign: 'right',
         }}
-        label={`$ ${parseFloat(value[1]).toFixed(4)}`}
+        label={currencyExchange(parseFloat(value[1]), 4)}
       />
     </View>
   ));
@@ -226,27 +228,27 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           />
         </>
       ) : (
-          <>
-            <PieChart
-              style={{ height: 200 }}
-              data={pieData}
-              outerRadius={'100%'}
-              innerRadius={'70%'}
-              padAngle={0}
-            />
-            <View
-              style={{
-                width: '100%',
-                top: 20,
-                padding: 20,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: '#F1F1F1',
-              }}>
-              {state.profit ? assetProfitLabel : assetPercentLabel}
-            </View>
-          </>
-        )}
+        <>
+          <PieChart
+            style={{ height: 200 }}
+            data={pieData}
+            outerRadius={'100%'}
+            innerRadius={'70%'}
+            padAngle={0}
+          />
+          <View
+            style={{
+              width: '100%',
+              top: 20,
+              padding: 20,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#F1F1F1',
+            }}>
+            {state.profit ? assetProfitLabel : assetPercentLabel}
+          </View>
+        </>
+      )}
     </View>
   );
 };

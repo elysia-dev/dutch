@@ -24,7 +24,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { user } = useContext(RootContext);
+  const { user, currencyExchange } = useContext(RootContext);
   const product = props.product;
   const productDescription = product.data.descriptions[user.language];
 
@@ -123,7 +123,10 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.propertyPrice}$`}
+                label={currencyExchange(
+                  parseFloat(product.data.propertyPrice),
+                  0,
+                )}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>
@@ -134,7 +137,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.netDeposit}$`}
+                label={currencyExchange(parseFloat(product.data.netDeposit), 0)}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>
@@ -145,7 +148,10 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.netRentPerYear}$`}
+                label={currencyExchange(
+                  parseFloat(product.data.netRentPerYear),
+                  0,
+                )}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>

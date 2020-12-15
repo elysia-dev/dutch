@@ -60,7 +60,7 @@ const ProductBuying: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
-  const { Server, user } = useContext(RootContext);
+  const { Server, user, elPrice } = useContext(RootContext);
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
@@ -90,13 +90,13 @@ const ProductBuying: FunctionComponent = () => {
     try {
       const product = await Server.productInfo(productId);
       const subscription = await Server.getProductSubscription(productId);
-      const elPrice = await Server.getELPrice();
+      const elPrice = await Server.getCurrency('el');
       setState({
         ...state,
         product: product.data,
         subscribed: subscription.status === 200,
         loaded: true,
-        elPrice: elPrice.data.elysia.usd,
+        elPrice: elPrice.data.rate,
       });
     } catch (e) {
       if (e.response.status === 500) {
@@ -104,13 +104,13 @@ const ProductBuying: FunctionComponent = () => {
       } else if (e.response.status) {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
-          const elPrice = await Server.getELPrice();
+          const elPrice = await Server.getCurrency('el');
           setState({
             ...state,
             product: product.data,
             subscribed: false,
             loaded: true,
-            elPrice: elPrice.data.elysia.usd,
+            elPrice: elPrice.data.rate,
           });
         }
       }
