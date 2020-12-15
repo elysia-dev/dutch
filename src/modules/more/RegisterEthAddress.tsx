@@ -67,8 +67,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     AppState.currentState,
   );
 
-  // const [data, setString] = useClipboard();
-
   const navigation = useNavigation();
 
   const userBalance = (address?: string) => {
