@@ -179,7 +179,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
                       label={
                         state.nationality
                           ? state.nationality.split(',')[0]
-                          : 'South Korea'
+                          : 'Nationality'
                       }
                       style={{
                         color: state.nationality ? '#1c1c1c' : '#a7a7a7',
@@ -190,20 +190,28 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
                 </>
               )}
               <P3Text
-                style={{ marginTop: 40 }}
+                style={{ marginTop: 40, marginBottom: 10 }}
                 label={i18n.t('kyc_label.birthday')}
               />
               {Platform.OS === 'android' ? (
-                <DateInput
-                  type={i18n.t('kyc_label.birthday')}
-                  eventHandler={setBirthday}
-                  birthday={state.birthday}
+                <View
                   style={{
-                    marginTop: 20,
-                    width: '100%',
-                    height: 40,
-                  }}
-                />
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: '#d0d8df',
+                    height: 45,
+                  }}>
+                  <DateInput
+                    type={i18n.t('kyc_label.birthday')}
+                    eventHandler={setBirthday}
+                    birthday={state.birthday}
+                    style={{
+                      marginTop: 0,
+                      width: '100%',
+                      height: 40,
+                    }}
+                  />
+                </View>
               ) : (
                 <TouchableOpacity
                   style={{

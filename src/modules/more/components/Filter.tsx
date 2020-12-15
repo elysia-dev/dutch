@@ -15,9 +15,9 @@ import { SafeAreaView } from 'react-navigation';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import i18n from '../../../i18n/i18n';
 import { TypePicker } from './TypePicker';
-import { DateInput } from './DateInput';
+import DateInput from './DateInput';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
-import { H3Text, P1Text } from '../../../shared/components/Texts';
+import { H3Text, P1Text, P2Text } from '../../../shared/components/Texts';
 import IosPickerModal from '../../../shared/components/IosPickerModal';
 
 type ButtonProps = {
@@ -66,6 +66,8 @@ const Filter: FunctionComponent<props> = (props: props) => {
   const [state, setState] = useState({
     typeModalVisible: false,
     productModalVisible: false,
+    startDateModalVisible: false,
+    endDateModalVisible: false,
   });
 
   return (
@@ -155,25 +157,110 @@ const Filter: FunctionComponent<props> = (props: props) => {
                     borderColor: '#D0D8DF',
                     borderWidth: 1,
                   }}>
-                  <DateInput
-                    date={props.filter.start}
-                    eventHandler={(date: string) =>
-                      props.dispatch({ type: 'UPDATE_STARTDATE', start: date })
-                    }
-                  />
+                  <View style={{ flex: 1 }}>
+                    {Platform.OS === 'ios' ? (
+                      <TouchableOpacity
+                        style={{
+                          width: '100%',
+                          height: 40,
+                          backgroundColor: 'transparent',
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                          setState({ ...state, startDateModalVisible: true });
+                        }}>
+                        {props.filter.start ? (
+                          <H3Text
+                            label={props.filter.start}
+                            style={{
+                              fontSize: 13,
+                              textAlign: 'center',
+                            }}
+                          />
+                        ) : (
+                          <P1Text
+                            label={i18n.strftime(new Date(), '%Y-%m-%d')}
+                            style={{
+                              color: '#A7A7A7',
+                              fontSize: 13,
+                              textAlign: 'center',
+                            }}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    ) : (
+                      <DateInput
+                        date={props.filter.start}
+                        eventHandler={(date: string) =>
+                          props.dispatch({
+                            type: 'UPDATE_STARTDATE',
+                            start: date,
+                          })
+                        }
+                      />
+                    )}
+                  </View>
                   <Text
                     allowFontScaling={false}
-                    style={{ textAlign: 'center', alignItems: 'center' }}>
+                    style={{
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      flex: 0.2,
+                    }}>
                     {'-'}
                   </Text>
-                  <DateInput
-                    date={props.filter.end}
-                    eventHandler={(date: string) =>
-                      props.dispatch({ type: 'UPDATE_ENDDATE', end: date })
-                    }
-                  />
+                  <View style={{ flex: 1 }}>
+                    {Platform.OS === 'ios' ? (
+                      <TouchableOpacity
+                        style={{
+                          width: '100%',
+                          height: 40,
+                          backgroundColor: 'transparent',
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                          setState({ ...state, endDateModalVisible: true });
+                        }}>
+                        {props.filter.end ? (
+                          <H3Text
+                            label={
+                              props.filter.end ? props.filter.end : 'end date'
+                            }
+                            style={{
+                              fontSize: 13,
+                              textAlign: 'center',
+                            }}
+                          />
+                        ) : (
+                          <P1Text
+                            label={i18n.strftime(new Date(), '%Y-%m-%d')}
+                            style={{
+                              color: '#A7A7A7',
+                              fontSize: 13,
+                              textAlign: 'center',
+                            }}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    ) : (
+                      <DateInput
+                        date={props.filter.end}
+                        eventHandler={(date: string) =>
+                          props.dispatch({
+                            type: 'UPDATE_ENDDATE',
+                            end: date,
+                          })
+                        }
+                      />
+                    )}
+                  </View>
                 </View>
               )}
+
               <H3Text
                 style={{ marginTop: 30, fontSize: 16, marginBottom: 10 }}
                 label={i18n.t('more_label.types')}
@@ -265,38 +352,75 @@ const Filter: FunctionComponent<props> = (props: props) => {
           />
         </View>
       </SafeAreaView>
-      {(state.typeModalVisible || state.productModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      )}
-      <IosPickerModal
-        modalVisible={state.typeModalVisible}
-        doneHandler={() => {
-          setState({ ...state, typeModalVisible: false });
-        }}
-        buttonNumber={1}
-        children={
-          <TypePicker
-            style={{ top: 35 }}
-            dispatch={props.dispatch}
-            filter={props.filter}
+      {Platform.OS === 'ios' && (
+        <>
+          {(state.typeModalVisible ||
+            state.productModalVisible ||
+            state.startDateModalVisible ||
+            state.endDateModalVisible) && (
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          )}
+          <IosPickerModal
+            modalVisible={state.typeModalVisible}
+            doneHandler={() => {
+              setState({ ...state, typeModalVisible: false });
+            }}
+            buttonNumber={1}
+            children={
+              <TypePicker
+                style={{ top: 35 }}
+                dispatch={props.dispatch}
+                filter={props.filter}
+              />
+            }
           />
-        }
-      />
-      <IosPickerModal
-        modalVisible={state.productModalVisible}
-        doneHandler={() => {
-          setState({ ...state, productModalVisible: false });
-        }}
-        buttonNumber={1}
-        children={props.children}
-      />
+          <IosPickerModal
+            modalVisible={state.startDateModalVisible}
+            doneHandler={() => {
+              setState({ ...state, startDateModalVisible: false });
+            }}
+            buttonNumber={1}
+            children={
+              <DateInput
+                date={props.filter.start}
+                eventHandler={(date: string) =>
+                  props.dispatch({ type: 'UPDATE_STARTDATE', start: date })
+                }
+              />
+            }
+          />
+          <IosPickerModal
+            modalVisible={state.endDateModalVisible}
+            doneHandler={() => {
+              setState({ ...state, endDateModalVisible: false });
+            }}
+            buttonNumber={1}
+            children={
+              <DateInput
+                date={props.filter.end}
+                eventHandler={(date: string) =>
+                  props.dispatch({ type: 'UPDATE_ENDDATE', end: date })
+                }
+              />
+            }
+          />
+          <IosPickerModal
+            modalVisible={state.productModalVisible}
+            doneHandler={() => {
+              setState({ ...state, productModalVisible: false });
+            }}
+            buttonNumber={1}
+            children={props.children}
+          />
+        </>
+      )}
     </>
   );
 };

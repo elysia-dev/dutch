@@ -1,11 +1,6 @@
 import React, { Component, FunctionComponent, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput as RNTextInput,
-  Image,
-} from 'react-native';
+import { View, TextInput as RNTextInput, Platform } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import i18n from '../../../i18n/i18n';
 
@@ -14,34 +9,44 @@ interface Props {
   eventHandler: (date: string) => void;
 }
 
-interface State {
-  date: string;
-}
+const DateInput: FunctionComponent<Props> = (props: Props) => {
+  const currentDate = new Date();
 
-export class DateInput extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { date: '' };
-  }
-  currentTime = new Date();
-
-  render() {
-    return (
-      <View style={{ width: '45%' }}>
+  return (
+    <View style={{ width: '100%', paddingTop: 20 }}>
+      {Platform.OS === 'ios' ? (
+        <DateTimePicker
+          value={props.date ? new Date(props.date) : currentDate}
+          display="spinner"
+          mode="date"
+          onChange={(_event, date) =>
+            props.eventHandler(i18n.strftime(date, '%Y-%m-%d'))
+          }
+          neutralButtonLabel="clear"
+          minimumDate={new Date(1900, 1, 1)}
+          maximumDate={currentDate}
+        />
+      ) : (
         <DatePicker
-          style={{ width: '100%', height: 40 }}
-          date={this.props.date}
-          onDateChange={date => {
-            this.props.eventHandler(date);
+          style={{
+            width: '100%',
+            height: 40,
+            marginTop: -10,
+            position: 'absolute',
+            top: 0,
+          }}
+          date={props.date}
+          onDateChange={(date) => {
+            props.eventHandler(date);
           }}
           mode="date"
           androidMode="spinner"
-          placeholder={i18n.strftime(this.currentTime, '%Y-%m-%d')}
+          placeholder={i18n.strftime(currentDate, '%Y-%m-%d')}
           format="YYYY-MM-DD"
           minDate={'2000-01-01'}
-          maxDate={this.currentTime}
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
+          maxDate={currentDate}
+          confirmBtnText={i18n.t('more_label.done')}
+          cancelBtnText={i18n.t('more_label.close')}
           customStyles={{
             btnTextConfirm: {
               color: '#3679B5',
@@ -61,7 +66,9 @@ export class DateInput extends Component<Props, State> {
             },
           }}
         />
-      </View>
-    );
-  }
-}
+      )}
+    </View>
+  );
+};
+
+export default DateInput;
