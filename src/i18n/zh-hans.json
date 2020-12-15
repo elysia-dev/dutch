@@ -269,7 +269,8 @@
     "close": "短期",
     "my_wallet": "我的钱包",
     "metamask_wallet": "Metamask钱包",
-    "balance": "余额"
+    "balance": "余额",
+    "currency": "货币"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -393,7 +394,7 @@
     "closeOwnership": "%{name} 项目的所有权已到期  ",
     "successKyc": "KYC认证成功。",
     "failKyc": "KYC认证失败。",
-    "profit": "每日获得$%{profit}收益",
+    "profit": "每日获得%{profit}收益",
     "productNotice": "有和代币相关的公告。",
     "saved_90days": "收到的通知将会被保存90天。",
     "no_notification": "没有任何通知。"
