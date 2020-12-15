@@ -81,6 +81,8 @@ const ConfirmID: FunctionComponent<{}> = () => {
       .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('kyc.submit_error'));
+        } else if (e.response.status === 404) {
+          alert(i18n.t('kyc.submit_error'));
         }
       });
   };
