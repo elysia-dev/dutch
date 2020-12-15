@@ -5,6 +5,8 @@ import LocaleType from '../enums/LocaleType';
 import { SignInStatus } from '../enums/LoginStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
+import CurrencyType from '../enums/CurrencyType';
+import { CurrencyResponse } from '../types/CurrencyResponse';
 
 type RootContextType = {
   signedIn: SignInStatus;
@@ -16,6 +18,7 @@ type RootContextType = {
     kycStatus: KycStatus;
     gender: string;
     language: LocaleType;
+    currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
@@ -24,12 +27,13 @@ type RootContextType = {
     legacyWalletRefundStatus: LegacyRefundStatus;
   };
   changeLanguage: (input: LocaleType) => void;
+  changeCurrency: (input: CurrencyType) => void;
   setKycStatus: () => void;
   signIn: () => void;
   signOut: () => void;
   autoSignOut: () => void;
   notifications: Notification[];
-  setElPrice: (elValue: number) => void;
+  setCurrencyPrice: (currency: CurrencyResponse[]) => void;
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
@@ -37,6 +41,9 @@ type RootContextType = {
   Server: Server;
   expoPushToken: string;
   elPrice: number;
+  krwPrice: number;
+  cnyPrice: number;
+  currencyExchange: (usdValue: number, fix: number) => string;
 };
 
 const RootContext = createContext<RootContextType>({
@@ -51,25 +58,30 @@ const RootContext = createContext<RootContextType>({
     ethAddresses: [],
     expoPushTokens: [],
     language: LocaleType.EN,
+    currency: CurrencyType.USD,
     nationality: 'South Korea, KOR',
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
-  changeLanguage: () => { },
-  setKycStatus: () => { },
-  signIn: async () => { },
-  signOut: async () => { },
-  autoSignOut: async () => { },
+  changeLanguage: () => {},
+  changeCurrency: () => {},
+  setKycStatus: () => {},
+  signIn: async () => {},
+  signOut: async () => {},
+  autoSignOut: async () => {},
   notifications: [] as Notification[],
-  setElPrice: (elValue: number) => { },
-  setNotifications: (notifications: Notification[]) => { },
-  setEthAddress: (address: string) => { },
-  setUserExpoPushToken: (expoPushToken: string) => { },
-  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
-  Server: new Server(() => { }, ''),
-  expoPushToken: "",
+  setCurrencyPrice: (currency: CurrencyResponse[]) => {},
+  setNotifications: (notifications: Notification[]) => {},
+  setEthAddress: (address: string) => {},
+  setUserExpoPushToken: (expoPushToken: string) => {},
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {},
+  Server: new Server(() => {}, ''),
+  expoPushToken: '',
   elPrice: 0,
+  krwPrice: 0,
+  cnyPrice: 0,
+  currencyExchange: (usdValue: number, fix: number) => '',
 });
 
 export default RootContext;

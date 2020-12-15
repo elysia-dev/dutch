@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-nested-ternary */
+import React, { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
 
 import {
@@ -19,7 +20,13 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 
-import { ActivityIndicator, View } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  AppState,
+  AppStateStatus,
+  Image,
+} from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -39,6 +46,9 @@ import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
 import { SignInStatus } from './src/enums/LoginStatus';
+import ExpiredAccount from './src/modules/account/ExpiredAccount';
+import CurrencyType from './src/enums/CurrencyType';
+import { CurrencyResponse } from './src/types/CurrencyResponse';
 
 Sentry.init({
   dsn:
@@ -47,7 +57,7 @@ Sentry.init({
   debug: true,
 });
 
-interface AppState {
+interface AppInformation {
   signedIn: SignInStatus;
   user: {
     id: number;
@@ -57,6 +67,7 @@ interface AppState {
     kycStatus: KycStatus;
     gender: string;
     language: LocaleType;
+    currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
@@ -70,6 +81,8 @@ interface AppState {
   Server: Server;
   expoPushToken: string;
   elPrice: number;
+  krwPrice: number;
+  cnyPrice: number;
 }
 
 const defaultState = {
@@ -82,6 +95,7 @@ const defaultState = {
     gender: '',
     kycStatus: KycStatus.NONE,
     language: currentLocale(),
+    currency: CurrencyType.USD,
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
@@ -95,6 +109,8 @@ const defaultState = {
   Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
+  krwPrice: 0,
+  cnyPrice: 0,
 };
 
 Notifications.setNotificationHandler({
@@ -106,7 +122,7 @@ Notifications.setNotificationHandler({
 });
 
 const App = () => {
-  const [state, setState] = useState<AppState>(defaultState);
+  const [state, setState] = useState<AppInformation>(defaultState);
   const navigationRef = React.createRef<NavigationContainerRef>();
 
   /* eslint-disable @typescript-eslint/camelcase */
@@ -115,6 +131,10 @@ const App = () => {
     Roboto_400Regular,
     Roboto_700Bold,
   });
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState<AppStateStatus>(
+    appState.current,
+  );
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
@@ -129,6 +149,34 @@ const App = () => {
     });
   };
 
+  const commaFormatter = (input: number | string) => {
+    if (typeof input === 'number') {
+      const n = String(input);
+      const p = n.indexOf('.');
+      return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
+        p < 0 || i < p ? `${m},` : m,
+      );
+    } else if (typeof input === 'string') {
+      const p = input.indexOf('.');
+      return input.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
+        p < 0 || i < p ? `${m},` : m,
+      );
+    }
+  };
+
+  const currencyExchange = (usdValue: number, fix: number) => {
+    if (state.user.currency === CurrencyType.KRW) {
+      return `₩ ${commaFormatter(
+        parseFloat(`${usdValue * state.krwPrice}`).toFixed(fix),
+      )}`;
+    } else if (state.user.currency === CurrencyType.CNY) {
+      return `¥ ${commaFormatter(
+        parseFloat(`${usdValue * state.cnyPrice}`).toFixed(fix),
+      )}`;
+    } else {
+      return `$ ${commaFormatter(parseFloat(`${usdValue}`).toFixed(fix))}`;
+    }
+  };
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
@@ -192,6 +240,7 @@ const App = () => {
       },
     );
 
+    // eslint-disable-next-line max-len
     const addNotificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
       (_response) => {
         signIn();
@@ -229,8 +278,17 @@ const App = () => {
       <RootContext.Provider
         value={{
           ...state,
-          changeLanguage: (input) => {
-            setState({ ...state, user: { ...state.user, language: input } });
+          changeLanguage: (newLanguage: LocaleType) => {
+            setState({
+              ...state,
+              user: { ...state.user, language: newLanguage },
+            });
+          },
+          changeCurrency: (newCurrency: CurrencyType) => {
+            setState({
+              ...state,
+              user: { ...state.user, currency: newCurrency },
+            });
           },
           setKycStatus: () => {
             setState({
@@ -241,12 +299,15 @@ const App = () => {
           signIn,
           signOut,
           autoSignOut,
-          setElPrice: (elValue: number) => {
+          setCurrencyPrice: (currency: CurrencyResponse[]) => {
             setState({
               ...state,
-              elPrice: elValue,
+              elPrice: currency[0].rate,
+              krwPrice: currency[1].rate,
+              cnyPrice: currency[2].rate,
             });
           },
+          currencyExchange,
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
@@ -262,7 +323,10 @@ const App = () => {
           setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
             setState({
               ...state,
-              user: { ...state.user, legacyWalletRefundStatus: legacyRefundStatus },
+              user: {
+                ...state.user,
+                legacyWalletRefundStatus: legacyRefundStatus,
+              },
             });
           },
           setUserExpoPushToken: (expoPushToken: string) => {
