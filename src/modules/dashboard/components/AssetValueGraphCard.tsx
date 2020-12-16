@@ -14,6 +14,7 @@ import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   ownerships: SummaryReportResponse['content']['ownerships'];
@@ -45,7 +46,7 @@ const data = [
 
 export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = React.useState({ profit: true });
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   const data = props.ownerships.map((value, index) => parseFloat(value[1]));
   const totalValue = data.reduce((accumulator, currentValue) => {
@@ -117,7 +118,12 @@ export const AssetValueGraphCard: FunctionComponent<Props> = (props: Props) => {
           flex: 8,
           textAlign: 'right',
         }}
-        label={currencyExchange(parseFloat(value[1]), 4)}
+        label={currencyFormatter(
+          currencyUnit,
+          currencyRatio,
+          parseFloat(value[1]),
+          4,
+        )}
       />
     </View>
   ));

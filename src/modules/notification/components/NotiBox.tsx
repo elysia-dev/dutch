@@ -8,6 +8,7 @@ import Notification from '../../../types/Notification';
 import { DashboardPage } from '../../../enums/pageEnum';
 import { P3Text, P1Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   notification: Notification;
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   const type = props.notification.notificationType;
   const typeId = () => {
@@ -98,7 +99,12 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 month: data.month,
                 week: data.week,
                 device: data.message,
-                profit: currencyExchange(parseFloat(data.message), 4),
+                profit: currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(data.message),
+                  4,
+                ),
               })}
             />
             {type === NotificationType.FAIL_KYC && (

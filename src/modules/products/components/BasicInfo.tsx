@@ -18,6 +18,7 @@ import {
 } from '../../../shared/components/Texts';
 import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   product: Product;
@@ -25,7 +26,7 @@ interface Props {
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { user, Server, currencyExchange } = useContext(RootContext);
+  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
@@ -72,7 +73,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 marginBottom: 6,
                 zIndex: 3,
               }}
-              label={currencyExchange(
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
                 parseFloat(product.totalValue) * product.usdPricePerToken,
                 0,
               )}
@@ -199,7 +202,12 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 )}`}
               />
               <P1Text
-                label={` (${currencyExchange(5, 0)})`}
+                label={` (${currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  5,
+                  0,
+                )})`}
                 style={{ color: '#838383' }}
               />
             </View>

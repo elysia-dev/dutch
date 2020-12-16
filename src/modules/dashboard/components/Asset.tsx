@@ -10,6 +10,7 @@ import {
 import Dash from 'react-native-dash';
 import RootContext from '../../../contexts/RootContext';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 import currentLocale from '../../../utiles/currentLocale';
 
 interface Props {
@@ -25,7 +26,7 @@ interface Props {
 }
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   return (
     <TouchableOpacity
@@ -76,7 +77,12 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             marginBottom: 10,
             bottom: 0,
           }}
-          label={currencyExchange(props.ownership.value, 2)}
+          label={currencyFormatter(
+            currencyUnit,
+            currencyRatio,
+            props.ownership.value,
+            2,
+          )}
         />
         <Dash
           dashGap={4}
@@ -90,7 +96,12 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           }}></Dash>
         <View style={{ flexDirection: 'row', flex: 2 }}>
           <P1Text
-            label={currencyExchange(props.ownership.profit, 2)}
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              props.ownership.profit,
+              2,
+            )}
             style={{
               marginTop: 15,
               color: '#fff',

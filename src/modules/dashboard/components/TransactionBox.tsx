@@ -11,13 +11,14 @@ import {
   H3Text,
 } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   transaction: Transaction;
 }
 
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   const [state, setState] = useState({
     show: false,
@@ -108,11 +109,18 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               props.transaction.transactionType === 'refund' ||
               props.transaction.transactionType === 'close' ||
               props.transaction.transactionType === 'profit'
-                ? `- ${currencyExchange(
+                ? `- ${currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
                     parseFloat(props.transaction.value),
                     2,
                   )}`
-                : currencyExchange(parseFloat(props.transaction.value), 2)
+                : currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(props.transaction.value),
+                    2,
+                  )
             }
           />
         </View>

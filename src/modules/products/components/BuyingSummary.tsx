@@ -10,6 +10,7 @@ import RootContext from '../../../contexts/RootContext';
 import i18n from '../../../i18n/i18n';
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const GrayBox = styled.View`
   display: flex;
@@ -64,7 +65,7 @@ type Props = {
 };
 
 const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
-  const { elPrice, currencyExchange } = useContext(RootContext);
+  const { elPrice, currencyUnit, currencyRatio } = useContext(RootContext);
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);
@@ -213,7 +214,12 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
           label={i18n.t('product_label.expected_return')}></H1Text>
         <H1Text
           style={{ fontSize: 15 }}
-          label={currencyExchange(parseFloat(expectedProfit), 2)}
+          label={currencyFormatter(
+            currencyUnit,
+            currencyRatio,
+            parseFloat(expectedProfit),
+            2,
+          )}
         />
       </View>
     </View>

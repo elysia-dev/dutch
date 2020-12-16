@@ -11,6 +11,7 @@ import RootContext from '../../../contexts/RootContext';
 import i18n from '../../../i18n/i18n';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import { CoinPriceResponse } from '../../../types/CoinPrice';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const DesView = styled.View`
   flex: 1;
@@ -30,7 +31,9 @@ interface State {
 }
 
 const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
-  const { Server, currencyExchange, elPrice } = useContext(RootContext);
+  const { Server, currencyUnit, currencyRatio, elPrice } = useContext(
+    RootContext,
+  );
   const [state, setState] = useState<State>({
     ethPrice: 0,
   });
@@ -76,7 +79,12 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={currencyExchange(5.0 * props.tokenCount, 2)}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                5.0 * props.tokenCount,
+                2,
+              )}
               style={{ fontWeight: 'bold' }}
             />
           </DesView>
@@ -101,7 +109,12 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={currencyExchange(5.0 * props.tokenCount, 2)}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                5.0 * props.tokenCount,
+                2,
+              )}
               style={{ fontWeight: 'bold' }}
             />
           </DesView>
@@ -153,7 +166,9 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               }
             />
             <H3Text
-              label={currencyExchange(
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
                 0.01 * parseFloat(props.return!) * 5 * props.tokenCount,
                 2,
               )}

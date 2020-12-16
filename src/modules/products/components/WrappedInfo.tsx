@@ -6,6 +6,7 @@ import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -25,7 +26,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { user, currencyExchange } = useContext(RootContext);
+  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
@@ -138,7 +139,9 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyExchange(
+                  label={currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
                     parseFloat(product.data.propertyPrice),
                     0,
                   )}
@@ -152,7 +155,9 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyExchange(
+                  label={currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
                     parseFloat(product.data.netDeposit),
                     0,
                   )}
@@ -166,7 +171,9 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyExchange(
+                  label={currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
                     parseFloat(product.data.netRentPerYear),
                     0,
                   )}
@@ -180,7 +187,12 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyExchange(parseFloat(product.data.bankLoan), 0)}
+                  label={currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(product.data.bankLoan),
+                    0,
+                  )}
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>

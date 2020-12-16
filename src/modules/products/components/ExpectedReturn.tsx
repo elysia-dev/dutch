@@ -6,6 +6,7 @@ import i18n from '../../../i18n/i18n';
 import Product from '../../../types/Product';
 import { P2Text, H3Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   product: Product;
@@ -16,7 +17,7 @@ interface State {
 }
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   const [state, setState] = useState<State>({
     tokenCount: 10,
@@ -42,9 +43,18 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           justifyContent: 'space-between',
           marginBottom: 5,
         }}>
-        <H3Text label={currencyExchange(state.tokenCount * 5, 2)} />
         <H3Text
-          label={currencyExchange(
+          label={currencyFormatter(
+            currencyUnit,
+            currencyRatio,
+            state.tokenCount * 5,
+            2,
+          )}
+        />
+        <H3Text
+          label={currencyFormatter(
+            currencyUnit,
+            currencyRatio,
             0.01 *
               parseFloat(props.product.expectedAnnualReturn) *
               5 *

@@ -15,6 +15,7 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { OwnershipResponse } from '../../types/Ownership';
+import currencyFormatter from '../../utiles/currencyFormatter';
 
 type ParamList = {
   InterestWithdraw: {
@@ -30,7 +31,9 @@ const TextWrapper = styled.View`
 `;
 
 const InterestWithdraw: FunctionComponent = () => {
-  const { Server, elPrice, currencyExchange, user } = useContext(RootContext);
+  const { Server, elPrice, currencyUnit, currencyRatio, user } = useContext(
+    RootContext,
+  );
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'InterestWithdraw'>>();
@@ -107,7 +110,12 @@ const InterestWithdraw: FunctionComponent = () => {
             style={{ color: '#838383', fontSize: 15 }}
           />
           <P1Text
-            label={currencyExchange(parseFloat(ownership.availableProfit), 2)}
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              parseFloat(ownership.availableProfit),
+              2,
+            )}
             style={{ color: '#1C1C1C', fontSize: 15 }}
           />
         </TextWrapper>

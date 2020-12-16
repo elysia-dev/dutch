@@ -14,6 +14,7 @@ import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import RootContext from '../../../contexts/RootContext';
 import currentLocale from '../../../utiles/currentLocale';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -29,7 +30,7 @@ interface Props {
 }
 
 export const AssetGraphCard: FunctionComponent<Props> = (props) => {
-  const { currencyExchange } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
 
   const fill = '#E6ECF2';
   const today = new Date().getDay();
@@ -186,8 +187,18 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
           formatLabel={(value: string) =>
             `${
               `${parseInt(value, 10)}`.length > 2
-                ? currencyExchange(parseFloat(value), 0)
-                : currencyExchange(parseFloat(value), 3)
+                ? currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    0,
+                  )
+                : currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    3,
+                  )
             }`
           }
         />
@@ -239,8 +250,18 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
           formatLabel={(value) =>
             `${
               `${parseInt(value, 10)}`.length > 2
-                ? currencyExchange(parseFloat(value), 0)
-                : currencyExchange(parseFloat(value), 3)
+                ? currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    0,
+                  )
+                : currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    3,
+                  )
             }`
           }
         />
