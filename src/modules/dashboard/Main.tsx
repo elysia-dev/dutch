@@ -80,7 +80,6 @@ export const Main: FunctionComponent = () => {
         balance: userInfo.data.totalBalance,
       });
     } catch (e) {
-      alert(e);
       if (e.response.status === 404) {
         alert(i18n.t('account_errors.server'));
         setState({ ...state, errorReturn: 1 });
