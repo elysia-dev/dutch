@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View, Dimensions, Text } from 'react-native';
 import styled from 'styled-components/native';
 import { StackedBarChart } from 'react-native-chart-kit';
@@ -12,6 +12,9 @@ import {
 import { Circle } from 'react-native-svg';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
+import RootContext from '../../../contexts/RootContext';
+import currentLocale from '../../../utiles/currentLocale';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const H1Text = styled.Text`
   color: #1c1c1c;
@@ -27,6 +30,8 @@ interface Props {
 }
 
 export const AssetGraphCard: FunctionComponent<Props> = (props) => {
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
+
   const fill = '#E6ECF2';
   const today = new Date().getDay();
   const dayFormatter = (day: number) => {
@@ -180,10 +185,20 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
           }}
           numberOfTicks={3}
           formatLabel={(value: string) =>
-            `$ ${
+            `${
               `${parseInt(value, 10)}`.length > 2
-                ? parseFloat(value)
-                : parseFloat(value).toFixed(3)
+                ? currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    0,
+                  )
+                : currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    3,
+                  )
             }`
           }
         />
@@ -233,10 +248,20 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
           }}
           numberOfTicks={3}
           formatLabel={(value) =>
-            `$ ${
+            `${
               `${parseInt(value, 10)}`.length > 2
-                ? parseFloat(value)
-                : parseFloat(value).toFixed(3)
+                ? currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    0,
+                  )
+                : currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(value),
+                    3,
+                  )
             }`
           }
         />

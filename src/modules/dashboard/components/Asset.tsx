@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,10 @@ import {
   PixelRatio,
 } from 'react-native';
 import Dash from 'react-native-dash';
+import RootContext from '../../../contexts/RootContext';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
+import currencyFormatter from '../../../utiles/currencyFormatter';
+import currentLocale from '../../../utiles/currentLocale';
 
 interface Props {
   ownership: {
@@ -23,6 +26,8 @@ interface Props {
 }
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
+
   return (
     <TouchableOpacity
       onPress={props.handler}
@@ -72,7 +77,12 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             marginBottom: 10,
             bottom: 0,
           }}
-          label={`$ ${parseFloat(`${props.ownership.value}`).toFixed(2)}`}
+          label={currencyFormatter(
+            currencyUnit,
+            currencyRatio,
+            props.ownership.value,
+            2,
+          )}
         />
         <Dash
           dashGap={4}
@@ -86,7 +96,12 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
           }}></Dash>
         <View style={{ flexDirection: 'row', flex: 2 }}>
           <P1Text
-            label={`$ ${parseFloat(`${props.ownership.profit}`).toFixed(2)}`}
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              props.ownership.profit,
+              2,
+            )}
             style={{
               marginTop: 15,
               color: '#fff',

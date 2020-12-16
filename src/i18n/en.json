@@ -268,7 +268,8 @@
     "close": "Close",
     "my_wallet": "My Wallet",
     "metamask_wallet": "Metamask Wallet",
-    "balance": "Balance"
+    "balance": "Balance",
+    "currency": "Currency"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -395,7 +396,7 @@
     "closeOwnership": "Ownership expired %{name}.",
     "successKyc": "KYC has been approved.",
     "failKyc": "KYC has been rejected.",
-    "profit": "Daily reward of $%{profit} have been applied.",
+    "profit": "Daily reward of %{profit} have been applied.",
     "productNotice": "New announcement for token.",
     "saved_90days": "Notifications received are kept for 90 days.",
     "no_notification": "No notifications received."

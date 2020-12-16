@@ -1,15 +1,19 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 
 import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
+import RootContext from '../../../contexts/RootContext';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   summary: SummaryReportResponse['summary'];
 }
 
 export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
+  const { currencyUnit, currencyRatio } = useContext(RootContext);
+
   return (
     <View
       style={{
@@ -33,7 +37,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
       />
       <H2Text
         style={{ marginBottom: 18 }}
-        label={`$ ${parseFloat(props.summary.totalBalance).toFixed(4)}`}
+        label={currencyFormatter(
+          currencyUnit,
+          currencyRatio,
+          parseFloat(props.summary.totalBalance),
+          4,
+        )}
       />
       <View
         style={{
@@ -56,9 +65,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P2Text label={i18n.t('dashboard_label.total_property')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`$ ${parseFloat(props.summary.totalRealEstateValue).toFixed(
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              parseFloat(props.summary.totalRealEstateValue),
               4,
-            )}`}
+            )}
           />
         </View>
         <View
@@ -71,7 +83,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P2Text label={i18n.t('dashboard_label.total_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`$ ${parseFloat(props.summary.totalInterest).toFixed(4)}`}
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              parseFloat(props.summary.totalInterest),
+              4,
+            )}
           />
         </View>
         <View
@@ -84,9 +101,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P2Text label={i18n.t('dashboard_label.withdrawn_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`$ ${parseFloat(props.summary.withdrawnInterest).toFixed(
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              parseFloat(props.summary.withdrawnInterest),
               4,
-            )}`}
+            )}
           />
         </View>
         <View
@@ -99,9 +119,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P2Text label={i18n.t('dashboard_label.available_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`$ ${parseFloat(props.summary.withdrawableInterest).toFixed(
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              parseFloat(props.summary.withdrawableInterest),
               4,
-            )}`}
+            )}
           />
         </View>
       </View>

@@ -11,6 +11,7 @@ import RootContext from '../../../contexts/RootContext';
 import i18n from '../../../i18n/i18n';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import { CoinPriceResponse } from '../../../types/CoinPrice';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const DesView = styled.View`
   flex: 1;
@@ -26,14 +27,14 @@ interface Props {
 }
 
 interface State {
-  elPrice: number;
   ethPrice: number;
 }
 
 const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
-  const { Server } = useContext(RootContext);
+  const { Server, currencyUnit, currencyRatio, elPrice } = useContext(
+    RootContext,
+  );
   const [state, setState] = useState<State>({
-    elPrice: 0,
     ethPrice: 0,
   });
 
@@ -42,7 +43,6 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
       .then((res) => {
         setState({
           ...state,
-          elPrice: res.data.elysia.usd,
           ethPrice: res.data.ethereum.usd,
         });
       })
@@ -79,7 +79,12 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={`$ ${parseFloat(`${5.0 * props.tokenCount}`).toFixed(2)}`}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                5.0 * props.tokenCount,
+                2,
+              )}
               style={{ fontWeight: 'bold' }}
             />
           </DesView>
@@ -90,7 +95,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <H3Text
               label={`EL ${parseFloat(
-                `${(5.0 * props.tokenCount) / state.elPrice}`,
+                `${(5.0 * props.tokenCount) / elPrice}`,
               ).toFixed(2)}`}
               style={{ flex: 1, color: '#3679b5', textAlign: 'right' }}
             />
@@ -104,7 +109,12 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={`$ ${parseFloat(`${5.0 * props.tokenCount}`).toFixed(2)}`}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                5.0 * props.tokenCount,
+                2,
+              )}
               style={{ fontWeight: 'bold' }}
             />
           </DesView>
@@ -115,7 +125,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               label={`EL ${parseFloat(
-                `${(5.0 * props.tokenCount) / state.elPrice}`,
+                `${(5.0 * props.tokenCount) / elPrice}`,
               ).toFixed(2)}`}
               style={{ fontWeight: 'bold' }}
             />
@@ -156,9 +166,12 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               }
             />
             <H3Text
-              label={`$${parseFloat(
-                `${0.01 * parseFloat(props.return!) * 5 * props.tokenCount}`,
-              ).toFixed(2)}`}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                0.01 * parseFloat(props.return!) * 5 * props.tokenCount,
+                2,
+              )}
               style={{ color: '#3679b5' }}
             />
           </DesView>

@@ -16,13 +16,14 @@ import {
 import userChannel from '../../../utiles/userChannel';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
-  const { user } = useContext(RootContext);
+  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
 
   return (
     <>
@@ -132,7 +133,12 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               style={{ color: '#626368' }}
             />
             <P1Text
-              label={`$ ${parseFloat(ownership.expectProfit).toFixed(4)}`}
+              label={currencyFormatter(
+                currencyUnit,
+                currencyRatio,
+                parseFloat(ownership.expectProfit),
+                4,
+              )}
             />
           </View>
           {!ownership.isLegacy && (
@@ -148,7 +154,12 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 style={{ color: '#626368' }}
               />
               <P1Text
-                label={`$ ${parseFloat(ownership.availableProfit).toFixed(4)}`}
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(ownership.availableProfit),
+                  4,
+                )}
               />
             </View>
           )}

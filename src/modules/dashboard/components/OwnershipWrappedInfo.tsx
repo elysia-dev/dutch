@@ -5,6 +5,7 @@ import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import RootContext from '../../../contexts/RootContext';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
+import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -24,7 +25,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { user } = useContext(RootContext);
+  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
   const product = props.product;
   const productDescription = product.data.descriptions[user.language];
 
@@ -123,7 +124,12 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.propertyPrice}$`}
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(product.data.propertyPrice),
+                  0,
+                )}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>
@@ -134,7 +140,12 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.netDeposit}$`}
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(product.data.netDeposit),
+                  0,
+                )}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>
@@ -145,7 +156,12 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 style={{ color: '#626368' }}
               />
               <P3Text
-                label={`${product.data.netRentPerYear}$`}
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(product.data.netRentPerYear),
+                  0,
+                )}
                 style={{ color: '#1c1c1c' }}
               />
             </DesView>
