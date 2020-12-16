@@ -43,7 +43,8 @@ type RootContextType = {
   elPrice: number;
   krwPrice: number;
   cnyPrice: number;
-  currencyExchange: (usdValue: number, fix: number) => string;
+  currencyUnit: string;
+  currencyRatio: number;
 };
 
 const RootContext = createContext<RootContextType>({
@@ -81,7 +82,8 @@ const RootContext = createContext<RootContextType>({
   elPrice: 0,
   krwPrice: 0,
   cnyPrice: 0,
-  currencyExchange: (usdValue: number, fix: number) => '',
+  currencyUnit: '$',
+  currencyRatio: 1,
 });
 
 export default RootContext;

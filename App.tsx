@@ -132,10 +132,12 @@ const App = () => {
     Roboto_400Regular,
     Roboto_700Bold,
   });
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState<AppStateStatus>(
-    appState.current,
-  );
+
+  const [currencyState, setCurrencyState] = useState({
+    currencyUnit: '$',
+    currencyRatio: 1,
+  });
+  const { currencyUnit, currencyRatio } = currencyState;
 
   const signOut = async () => {
     await AsyncStorage.removeItem('@token');
@@ -150,19 +152,6 @@ const App = () => {
     });
   };
 
-  const currencyExchange = (usdValue: number, fix: number) => {
-    if (state.user.currency === CurrencyType.KRW) {
-      return `₩ ${commaFormatter(
-        parseFloat(`${usdValue * state.krwPrice}`).toFixed(fix),
-      )}`;
-    } else if (state.user.currency === CurrencyType.CNY) {
-      return `¥ ${commaFormatter(
-        parseFloat(`${usdValue * state.cnyPrice}`).toFixed(fix),
-      )}`;
-    } else {
-      return `$ ${commaFormatter(parseFloat(`${usdValue}`).toFixed(fix))}`;
-    }
-  };
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(autoSignOut, token !== null ? token : '');
@@ -208,6 +197,28 @@ const App = () => {
     i18n.locale = state.user.language;
     signIn();
   }, []);
+
+  useEffect(() => {
+    if (state.user.currency === CurrencyType.KRW) {
+      setCurrencyState({
+        ...currencyState,
+        currencyUnit: '₩',
+        currencyRatio: state.krwPrice,
+      });
+    } else if (state.user.currency === CurrencyType.CNY) {
+      setCurrencyState({
+        ...currencyState,
+        currencyUnit: '¥',
+        currencyRatio: state.cnyPrice,
+      });
+    } else {
+      setCurrencyState({
+        ...currencyState,
+        currencyUnit: '$',
+        currencyRatio: 1,
+      });
+    }
+  }, [state.user.currency]);
 
   useEffect(() => {
     const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
@@ -293,7 +304,6 @@ const App = () => {
               cnyPrice: currency[2].rate,
             });
           },
-          currencyExchange,
           setNotifications: (notifications: Notification[]) => {
             setState({
               ...state,
@@ -324,6 +334,8 @@ const App = () => {
               },
             });
           },
+          currencyUnit,
+          currencyRatio,
         }}>
         <RootStack.Navigator headerMode="none">
           {state.signedIn === SignInStatus.SIGNIN ? (
