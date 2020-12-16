@@ -297,12 +297,17 @@ const App = () => {
           signOut,
           autoSignOut,
           setCurrencyPrice: (currency: CurrencyResponse[]) => {
-            setState({
-              ...state,
-              elPrice: currency[0].rate,
-              krwPrice: currency[1].rate,
-              cnyPrice: currency[2].rate,
-            });
+            const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
+            const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
+            const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
+            if (elPrice && krwPrice && cnyPrice) {
+              setState({
+                ...state,
+                elPrice,
+                krwPrice,
+                cnyPrice,
+              });
+            }
           },
           setNotifications: (notifications: Notification[]) => {
             setState({
