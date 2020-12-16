@@ -17,7 +17,7 @@ import {
   H3Text,
 } from '../../../shared/components/Texts';
 import ProductStatus from '../../../enums/ProductStatus';
-import currentLocale from '../../../utiles/currentLocale';
+import commaFormatter from '../../../utiles/commaFormatter';
 
 interface Props {
   product: Product;
@@ -46,14 +46,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       return `EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`;
     }
     return `EL ${intTotalEl}`;
-  };
-
-  const commaFormatter = (input: number | string) => {
-    if (typeof input === 'number') {
-      return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    } else if (typeof input === 'string') {
-      return input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
   };
 
   return (

@@ -49,6 +49,7 @@ import { SignInStatus } from './src/enums/LoginStatus';
 import ExpiredAccount from './src/modules/account/ExpiredAccount';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
+import commaFormatter from './src/utiles/commaFormatter';
 
 Sentry.init({
   dsn:
@@ -147,21 +148,6 @@ const App = () => {
     navigationRef.current?.navigate('Account', {
       screen: AccountPage.ExpiredAccount,
     });
-  };
-
-  const commaFormatter = (input: number | string) => {
-    if (typeof input === 'number') {
-      const n = String(input);
-      const p = n.indexOf('.');
-      return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
-        p < 0 || i < p ? `${m},` : m,
-      );
-    } else if (typeof input === 'string') {
-      const p = input.indexOf('.');
-      return input.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
-        p < 0 || i < p ? `${m},` : m,
-      );
-    }
   };
 
   const currencyExchange = (usdValue: number, fix: number) => {
