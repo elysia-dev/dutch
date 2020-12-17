@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-navigation';
 import { ProductPage } from '../../enums/pageEnum';
 import ProductBuying from './ProductBuying';
 import PaymentSelection from './PaymentSelection';
+import ProductStory from './ProductStory';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,10 @@ export const Products = () => {
         <Stack.Screen
           name={ProductPage.ProductBuying}
           component={ProductBuying}
+        />
+        <Stack.Screen
+          name={ProductPage.ProductStory}
+          component={ProductStory}
         />
         <Stack.Screen
           name={ProductPage.PaymentSelection}
