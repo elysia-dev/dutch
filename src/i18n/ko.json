@@ -332,7 +332,8 @@
     "remaining_withdraw": "출금하기",
     "remaining_withdraw_pending": "출금 요청이 진행중입니다",
     "remaining_withdraw_other": "출금 대상이 아닙니다",
-    "remaining_balance": "잔여 EL / USD"
+    "remaining_balance": "잔여 EL / USD",
+    "event": "이벤트"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
@@ -382,7 +383,11 @@
       "EL 출금을 위해 이더리움 지갑 주소를 입력해주세요.",
       "EL 잔고가 없습니다. 페이팔 계정 주소만 입력해주세요."
     ],
-    "already_pending": "출금할 금액이 없거나, 이미 출금하셨습니다."
+    "already_pending": "출금할 금액이 없거나, 이미 출금하셨습니다.",
+    "first_product_subs": "첫 상품 사전예약하면",
+    "give_EL": "1,000 EL 지급!",
+    "how_get_EL": "지금 바로 EL 얻는 방법?",
+    "participate_event": "이벤트 참여하기"
   },
   "day": {
     "0": "일",

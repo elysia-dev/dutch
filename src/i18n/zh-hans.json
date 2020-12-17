@@ -332,7 +332,8 @@
     "remaining_withdraw": "取款",
     "remaining_withdraw_pending": "取款请求正在处理",
     "remaining_withdraw_other": "不符合取款要求",
-    "remaining_balance": "EL币/USD余额"
+    "remaining_balance": "EL币/USD余额",
+    "event": "活动"
   },
   "dashboard": {
     "ownership_error": "资产所有权出现错误。",
@@ -379,7 +380,11 @@
       "请输入您的以太坊钱包地址以进行EL币提款。",
       "没有EL币余额， 请仅输入您的贝宝帐户。"
     ],
-    "already_pending": "没有要取出的款项，或者您已经取款成功。"
+    "already_pending": "没有要取出的款项，或者您已经取款成功。",
+    "first_product_subs": "预约第一个房地产产品",
+    "give_EL": "获得1,000EL币红包",
+    "how_get_EL": "想要现在马上轻松获得EL币?",
+    "participate_event": "来参与预约活动吧!"
   },
   "day": {
     "0": "周日",

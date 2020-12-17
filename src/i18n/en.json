@@ -331,7 +331,8 @@
     "remaining_withdraw": "Withdraw",
     "remaining_withdraw_pending": "Your request is pending",
     "remaining_withdraw_other": "Withdrawals unavailable",
-    "remaining_balance": "EL / USD balance"
+    "remaining_balance": "EL / USD balance",
+    "event": "Event"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",
@@ -381,7 +382,11 @@
       "Please enter your Ethereum wallet to withdraw EL.",
       "You do not have sufficient EL balance. Please enter your Paypal account."
     ],
-    "already_pending": "You do not have sufficient balance or your transaction is complete."
+    "already_pending": "You do not have sufficient balance or your transaction is complete.",
+    "first_product_subs": "Reserve the first product",
+    "give_EL": "Earn 1,000 EL",
+    "how_get_EL": "How to get EL right now?",
+    "participate_event": "Participate in the event"
   },
   "day": {
     "0": "Sun",
