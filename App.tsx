@@ -50,6 +50,7 @@ import ExpiredAccount from './src/modules/account/ExpiredAccount';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
 import commaFormatter from './src/utiles/commaFormatter';
+import BlockScreen from './src/modules/main/BlockScreen';
 
 Sentry.init({
   dsn:
@@ -124,7 +125,9 @@ Notifications.setNotificationHandler({
 
 const App = () => {
   const [state, setState] = useState<AppInformation>(defaultState);
-  const navigationRef = React.createRef<NavigationContainerRef>();
+  const navigationRef = useRef<NavigationContainerRef>(null);
+
+  const appState = useRef(AppState.currentState);
 
   /* eslint-disable @typescript-eslint/camelcase */
   const [fontsLoaded] = useFonts({
@@ -193,6 +196,15 @@ const App = () => {
     }
   };
 
+  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
+    if (appState.current !== 'active' && nextAppState === 'active') {
+      navigationRef.current?.goBack();
+    } else if (appState.current === 'active' && nextAppState !== 'active') {
+      navigationRef.current?.navigate('BlockScreen');
+    }
+    appState.current = nextAppState;
+  };
+
   useEffect(() => {
     i18n.locale = state.user.language;
     signIn();
@@ -221,6 +233,8 @@ const App = () => {
   }, [state.user.currency]);
 
   useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
+
     const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
       (response) => {
         if (isNotification(response.request.content.data as Notification)) {
@@ -245,6 +259,8 @@ const App = () => {
     );
 
     return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+
       Notifications.removeNotificationSubscription(
         addNotificationReceivedListener,
       );
@@ -356,6 +372,11 @@ const App = () => {
               <RootStack.Screen name={'Account'} component={Account} />
             </>
           )}
+          <RootStack.Screen
+            name={'BlockScreen'}
+            component={BlockScreen}
+            options={{ animationEnabled: false }}
+          />
         </RootStack.Navigator>
       </RootContext.Provider>
     </NavigationContainer>
