@@ -28,7 +28,7 @@ export enum AccountPage {
   ResetPassword = 'ResetPassword',
   CertifySignup = 'CertifySignup',
   CertifyRecover = 'CertifyRecover',
-  ExpiredAccount = 'ExpiredAccount'
+  ExpiredAccount = 'ExpiredAccount',
 }
 
 export enum MorePage {
@@ -44,7 +44,7 @@ export enum MorePage {
   TermsOfUse = 'TermsOfUse',
   PrivacyPolicy = 'PrivacyPolicy',
   MyWallet = 'MyWallet',
-  WhatsNew = 'WhatsNew'
+  WhatsNew = 'WhatsNew',
 }
 
 export enum DashboardPage {
@@ -57,4 +57,5 @@ export enum DashboardPage {
   InterestWithdraw = 'InterestWithdraw',
   InvestmentGuide = 'InvestmentGuide',
   RemainingBalance = 'RemainingBalance',
+  EventList = 'EventList',
 }

@@ -48,6 +48,7 @@ const MainList: FunctionComponent = () => {
   useEffect(() => {
     Server.storyList()
       .then((res) => {
+        console.log(res.data);
         setState({ ...state, stories: res.data });
         Server.products().then((res) => {
           setState((state) => {
@@ -61,7 +62,6 @@ const MainList: FunctionComponent = () => {
         });
       })
       .catch((e) => {
-        alert(e);
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }

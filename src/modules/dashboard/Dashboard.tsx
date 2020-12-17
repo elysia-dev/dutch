@@ -10,6 +10,7 @@ import PreparingInvestment from './PreparingInvestment';
 import InterestWithdraw from './InterestWithdraw';
 import InvestmentGuide from './InvestmentGuide';
 import { RemainingBalance } from './RemainingBalance';
+import { EventList } from './EventList';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,10 @@ export const Dashboard = () => {
         name={DashboardPage.ProductNotice}
         component={ProductNotice}
       />
-      <Stack.Screen name={DashboardPage.InvestmentGuide} component={InvestmentGuide} />
+      <Stack.Screen
+        name={DashboardPage.InvestmentGuide}
+        component={InvestmentGuide}
+      />
       <Stack.Screen
         name={DashboardPage.PreparingInvestment}
         component={PreparingInvestment}
@@ -43,6 +47,7 @@ export const Dashboard = () => {
         name={DashboardPage.RemainingBalance}
         component={RemainingBalance}
       />
+      <Stack.Screen name={DashboardPage.EventList} component={EventList} />
     </Stack.Navigator>
   );
 };

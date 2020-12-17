@@ -28,6 +28,7 @@ import LocaleType from '../../enums/LocaleType';
 import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import CurrencyType from '../../enums/CurrencyType';
+import { EventCard } from './components/EventCard';
 
 export const Main: FunctionComponent = () => {
   const defaultUser = {
@@ -149,6 +150,13 @@ export const Main: FunctionComponent = () => {
                       email: state.user.email,
                     })
               }
+            />
+            <EventCard
+              handler={() => {
+                navigation.navigate('Dashboard', {
+                  screen: DashboardPage.EventList,
+                });
+              }}
             />
             <BalanceCard
               balance={state.balance}
