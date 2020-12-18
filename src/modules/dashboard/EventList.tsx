@@ -19,6 +19,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import AcceptedImg from '../account/images/accepted.png';
 import { DashboardPage, ProductPage } from '../../enums/pageEnum';
+import getEnvironment from '../../utiles/getEnvironment';
 
 export const EventList: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -74,7 +75,10 @@ export const EventList: FunctionComponent<{}> = () => {
                 onPress={() =>
                   navigation.navigate('Product', {
                     screen: ProductPage.ProductStory,
-                    params: { givenId: 35 },
+                    params: {
+                      givenId:
+                        getEnvironment().envName === 'PRODUCTION' ? 8 : 35,
+                    },
                   })
                 }
                 style={{
