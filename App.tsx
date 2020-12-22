@@ -105,10 +105,10 @@ const defaultState = {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -163,12 +163,16 @@ const App = () => {
         .me()
         .then(async (res) => {
           i18n.locale = res.data.user.language;
+          const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
             ...state,
             signedIn: SignInStatus.SIGNIN,
             user: res.data.user,
             notifications: res.data.notifications || [],
             Server: authServer,
+            elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
+            krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
+            cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
 
           registerForPushNotificationsAsync().then((expoPushToken) => {
@@ -368,10 +372,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-            <>
-              <RootStack.Screen name={'Account'} component={Account} />
-            </>
-          )}
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}
