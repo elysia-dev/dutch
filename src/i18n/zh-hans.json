@@ -201,7 +201,7 @@
     "eth_price": "以太币价格",
     "property_type": "房地产类型",
     "recovery": "卖出金额",
-    "non_purchasable": "不能交换",
+    "non_purchasable": "您需要进行KYC认证。",
     "view_details": "产品详细信息",
     "available_token": "可用的房地产代币数量",
     "minimum_el": "最少投资额度",

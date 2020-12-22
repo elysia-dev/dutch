@@ -201,12 +201,12 @@
     "eth_price": "(Swapped)",
     "property_type": "Property type",
     "recovery": "Recovery",
-    "non_purchasable": "Cannot be swapped",
+    "non_purchasable": "KYC required",
     "view_details": "View property details",
     "available_token": "Real estate tokens available",
     "minimum_el": "Minimum deposit",
-    "reserve": "Subscribe for notification",
-    "reserved": "Subscribed"
+    "reserve": "Sign up",
+    "reserved": "On waitlist"
   },
   "more_label": {
     "more": "More",
