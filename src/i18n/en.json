@@ -385,8 +385,8 @@
     "already_pending": "You do not have sufficient balance or your transaction is complete.",
     "first_product_subs": "Reserve the first product",
     "give_EL": "Earn 1,000 EL",
-    "how_get_EL": "How to get EL right now?",
-    "participate_event": "Participate in the event"
+    "how_get_EL": "Receive EL rewards.",
+    "participate_event": " Find out more…"
   },
   "day": {
     "0": "Sun",
