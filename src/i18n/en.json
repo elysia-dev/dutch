@@ -383,10 +383,10 @@
       "You do not have sufficient EL balance. Please enter your Paypal account."
     ],
     "already_pending": "You do not have sufficient balance or your transaction is complete.",
-    "first_product_subs": "Reserve the first product",
+    "first_product_subs": "Signup for property launch",
     "give_EL": "Earn 1,000 EL",
-    "how_get_EL": "Receive EL rewards.",
-    "participate_event": "Find out more…"
+    "how_get_EL": "Find out more…",
+    "participate_event": "Earn EL rewards"
   },
   "day": {
     "0": "Sun",
