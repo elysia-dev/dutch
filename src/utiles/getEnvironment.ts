@@ -17,7 +17,7 @@ function getEnvironment(): Environment {
       envName: 'PRODUCTION',
       apiUrl: 'https://api.elysia.land',
       dappUrl: 'dapp.elysia.land',
-      version: '1.2.1',
+      version: '1.2.2',
     };
   }
 
@@ -27,7 +27,7 @@ function getEnvironment(): Environment {
       envName: 'STAGING',
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
-      version: '1.2.0',
+      version: '1.2.2',
     };
   }
 
