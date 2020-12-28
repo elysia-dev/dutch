@@ -179,27 +179,27 @@ const OwnershipDetail: FunctionComponent = () => {
               }}
             />
           ) : (
-            <OptionButtons
-              productId={state.ownership.product.id}
-              refundHandler={() =>
-                setState({
-                  ...state,
-                  refundModalVisible: !state.refundModalVisible,
-                })
-              }
-              purchaseHandler={() =>
-                setState({
-                  ...state,
-                  purchaseModalVisible: !state.purchaseModalVisible,
-                })
-              }
-              interestHandler={() =>
-                navigation.navigate(DashboardPage.InterestWithdraw, {
-                  ownership: state.ownership,
-                })
-              }
-            />
-          )}
+              <OptionButtons
+                productId={state.ownership.product.id}
+                refundHandler={() =>
+                  setState({
+                    ...state,
+                    refundModalVisible: !state.refundModalVisible,
+                  })
+                }
+                purchaseHandler={() =>
+                  setState({
+                    ...state,
+                    purchaseModalVisible: !state.purchaseModalVisible,
+                  })
+                }
+                interestHandler={() =>
+                  navigation.navigate(DashboardPage.InterestWithdraw, {
+                    ownership: state.ownership,
+                  })
+                }
+              />
+            )}
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           <H3Text
@@ -233,14 +233,14 @@ const OwnershipDetail: FunctionComponent = () => {
       {(state.purchaseModalVisible ||
         state.refundModalVisible ||
         state.legacyRefundModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}></View>
-      )}
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
       <Modal
         transparent={true}
         animationType={'slide'}

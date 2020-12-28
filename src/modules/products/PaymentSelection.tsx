@@ -1,8 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
-import { View, ScrollView, SafeAreaView, Image, Text } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
@@ -10,11 +9,10 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import Product from '../../types/Product';
 import BuyingSummary from './components/BuyingSummary';
+import RefundSummary from './components/RefundSummary';
 import InterestSummary from './components/InterestSummary';
 import RootContext from '../../contexts/RootContext';
-
 import getEnvironment from '../../utiles/getEnvironment';
-
 
 type ParamList = {
     PaymentSelection: {
@@ -104,6 +102,7 @@ const PaymentSelection: FunctionComponent = () => {
             <H1Text label={i18n.t('product.transaction_ready')} style={{ fontSize: 25 }}></H1Text>
             {type === "buying" && <BuyingSummary product={product} tokenCount={tokenCount} />}
             {type === "interest" && <InterestSummary product={product} elInterest={elInterest || ""} />}
+            {type === "refund" && <RefundSummary product={product} tokenCount={tokenCount} />}
             <View style={{ marginTop: 40 }}>
                 <MetaMaskButton title={'MetaMask Mobile'} type={"mobile"} selected={mobile} modeHandler={() => setState({ ...state, mobile: true, pc: false })} />
                 <MetaMaskButton title={'MetaMask PC'} type={"pc"} selected={pc} modeHandler={() => setState({ ...state, mobile: false, pc: true })} />

@@ -12,6 +12,9 @@ import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
 import { OwnershipResponse } from '../../types/Ownership';
+import RootContext from '../../contexts/RootContext';
+import { useNavigation } from '@react-navigation/native';
+import { ProductPage } from '../../enums/pageEnum';
 
 interface Props {
   modalHandler: () => void;
@@ -20,6 +23,31 @@ interface Props {
 
 const OwnershipRefund: FunctionComponent<Props> = (props) => {
   const [tokenCount, setTokenCount] = useState(1);
+  const { Server } = useContext(RootContext);
+  const product = props.ownership.product
+  const navigation = useNavigation();
+
+  const callApi = () => {
+    Server.requestTransaction(product.id, tokenCount, 'refund')
+      .then((res) =>
+        navigation.navigate('Product', {
+          screen: ProductPage.PaymentSelection,
+          params: {
+            id: res.data.id,
+            product: product,
+            tokenCount: tokenCount,
+            type: 'refund',
+          },
+        })
+      )
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t('product.transaction_error'));
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
 
   return (
     <View
@@ -80,7 +108,8 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
             marginTop: 10,
           }}
           handler={() => {
-            alert(i18n.t('legacy.refund_notice'));
+            props.modalHandler();
+            callApi();
           }}
           title={i18n.t('product_label.refund')}
         />
