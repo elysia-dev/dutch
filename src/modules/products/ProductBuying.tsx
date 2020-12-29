@@ -14,14 +14,12 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
-import { SafeAreaView } from 'react-navigation';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
 import Product, { defaultProduct } from '../../types/Product';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { ProductPage } from '../../enums/pageEnum';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
 import RootContext from '../../contexts/RootContext';
@@ -91,6 +89,7 @@ const ProductBuying: FunctionComponent = () => {
       const product = await Server.productInfo(productId);
       const subscription = await Server.getProductSubscription(productId);
       const elPrice = await Server.getCurrency('el');
+      //const totalSupply = getErc20Contract(product.data.contractAddress)
       setState({
         ...state,
         product: product.data,
@@ -193,8 +192,8 @@ const ProductBuying: FunctionComponent = () => {
             state.product?.status === ProductStatus.TERMINATED
               ? '#767577'
               : purchasability
-              ? '#3679B5'
-              : '#D0D8DF',
+                ? '#3679B5'
+                : '#D0D8DF',
         }}
         disabled={state.product?.status === ProductStatus.TERMINATED}
         handler={() => {

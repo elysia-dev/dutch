@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import { useElysiaToken } from '../hooks/useContract';
 const { manifest } = Constants;
 
 type Environment = {
@@ -6,6 +7,9 @@ type Environment = {
   apiUrl: string;
   dappUrl: string;
   version: string;
+  infuraProjectId: string;
+  elAddress: string;
+  ethNetwork: string;
 };
 
 function getEnvironment(): Environment {
@@ -18,6 +22,9 @@ function getEnvironment(): Environment {
       apiUrl: 'https://api.elysia.land',
       dappUrl: 'dapp.elysia.land',
       version: '1.2.3',
+      infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+      ethNetwork: 'mainnet',
+      elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16'
     };
   }
 
@@ -28,6 +35,9 @@ function getEnvironment(): Environment {
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
       version: '1.2.3',
+      infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+      ethNetwork: 'ropsten',
+      elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8'
     };
   }
 
@@ -40,7 +50,10 @@ function getEnvironment(): Environment {
     //   .shift()}:3000`,
     // dappUrl: 'localhost:3001',
     dappUrl: 'staging-dapp.elysia.land',
-    version: '1.2.0',
+    version: '1.2.3',
+    infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+    ethNetwork: 'ropsten',
+    elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8'
   };
 }
 
