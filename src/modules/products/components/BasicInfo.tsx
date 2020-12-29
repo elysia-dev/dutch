@@ -1,8 +1,6 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import * as Linking from 'expo-linking';
@@ -33,22 +31,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
 
-  const totalElFormatter = () => {
-    const totalEl = `${
-      (parseFloat(product.totalValue) * product.usdPricePerToken) /
-      props.elPrice
-    }`;
-    const intTotalEl = totalEl.split('.')[0];
-    if (intTotalEl.length > 9) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 9)}G`;
-    } else if (intTotalEl.length > 6) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 6)}M`;
-    } else if (intTotalEl.length > 3) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`;
-    }
-    return `EL ${intTotalEl}`;
-  };
-
   return (
     <View
       style={{
@@ -64,7 +46,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         <View>
           <P2Text
             style={{ color: '#626368' }}
-            label={`ELYSIA co.Ltd  |  ${product.title}`}
+            label={product.title}
           />
           <View style={{ flexDirection: 'row' }}>
             <H2Text
