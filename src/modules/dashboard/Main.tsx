@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Modal,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -30,29 +31,29 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import CurrencyType from '../../enums/CurrencyType';
 import { EventCard } from './components/EventCard';
 
-export const Main: FunctionComponent = () => {
-  const defaultUser = {
-    id: 0,
-    email: '',
-    kycStatus: KycStatus.NONE,
-    ethAddresses: [] as string[],
-    gender: '',
-    firstName: '',
-    lastName: '',
-    language: LocaleType.EN,
-    currency: CurrencyType.USD,
-    legacyEl: 0,
-    legacyUsd: 0,
-    legacyWalletRefundStatus: LegacyRefundStatus.NONE,
-  };
-  const defaultOwnerships = {
-    id: 0,
-    title: '',
-    productType: '',
-    value: 0,
-    profit: 0,
-  };
+const defaultUser = {
+  id: 0,
+  email: '',
+  kycStatus: KycStatus.NONE,
+  ethAddresses: [] as string[],
+  gender: '',
+  firstName: '',
+  lastName: '',
+  language: LocaleType.EN,
+  currency: CurrencyType.USD,
+  legacyEl: 0,
+  legacyUsd: 0,
+  legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+};
+const defaultOwnerships = {
+  id: 0,
+  title: '',
+  productType: '',
+  value: 0,
+  profit: 0,
+};
 
+export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
   const { Server, setCurrencyPrice, elPrice } = useContext(RootContext);
   const [state, setState] = useState({
@@ -65,6 +66,7 @@ export const Main: FunctionComponent = () => {
   const legacyTotal: number | undefined = parseFloat(
     (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
   );
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -92,6 +94,11 @@ export const Main: FunctionComponent = () => {
 
   useEffect(() => {
     callApi();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    callApi().then(() => setRefreshing(false));
   }, []);
 
   const ownershipsList = state.ownerships.map((ownership, index) => (
@@ -127,7 +134,10 @@ export const Main: FunctionComponent = () => {
           height: '100%',
           top: 0,
           backgroundColor: '#FAFCFF',
-        }}>
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <SafeAreaView>
           <View
             style={{
