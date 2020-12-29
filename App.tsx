@@ -25,7 +25,6 @@ import {
   View,
   AppState,
   AppStateStatus,
-  Image,
 } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -46,11 +45,10 @@ import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
 import { SignInStatus } from './src/enums/LoginStatus';
-import ExpiredAccount from './src/modules/account/ExpiredAccount';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
-import commaFormatter from './src/utiles/commaFormatter';
 import BlockScreen from './src/modules/main/BlockScreen';
+import { OwnershipResponse } from './src/types/AccountResponse';
 
 Sentry.init({
   dsn:
@@ -77,6 +75,8 @@ interface AppInformation {
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
   };
+  ownerships: OwnershipResponse[];
+  balance: string;
   changeLanguage: () => void;
   setKycStatus: () => void;
   notifications: Notification[];
@@ -105,6 +105,8 @@ const defaultState = {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
+  ownerships: [],
+  balance: '0',
   changeLanguage: () => { },
   setKycStatus: () => { },
   notifications: [],
@@ -169,6 +171,8 @@ const App = () => {
             signedIn: SignInStatus.SIGNIN,
             user: res.data.user,
             notifications: res.data.notifications || [],
+            ownerships: res.data.ownerships || [],
+            balance: res.data.totalBalance,
             Server: authServer,
             elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
             krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
@@ -199,6 +203,18 @@ const App = () => {
       setState({ ...state, signedIn: SignInStatus.SIGNOUT });
     }
   };
+
+  const refreshUser = async () => {
+    await state.Server.me().then(async (res) => {
+      setState({
+        ...state,
+        user: res.data.user,
+        notifications: res.data.notifications || [],
+      });
+    }).catch(() => {
+      setState(defaultState);
+    })
+  }
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (appState.current !== 'active' && nextAppState === 'active') {
@@ -361,6 +377,7 @@ const App = () => {
           },
           currencyUnit,
           currencyRatio,
+          refreshUser,
         }}>
         <RootStack.Navigator headerMode="none">
           {state.signedIn === SignInStatus.SIGNIN ? (

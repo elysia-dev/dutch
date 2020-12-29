@@ -61,13 +61,14 @@ const PaymentSelection: FunctionComponent = () => {
     emailRestriction: false,
   });
   const { mobile, pc, emailRestriction } = state;
-  const { Server } = useContext(RootContext);
+  const { Server, refreshUser } = useContext(RootContext);
   const appState = useAppState();
 
   useEffect(() => {
     if (appState === 'active' && id) {
       Server.getTransactionRequest(id)
-        .catch(() => {
+        .catch(async () => {
+          await refreshUser();
           navigation.goBack();
         })
     }

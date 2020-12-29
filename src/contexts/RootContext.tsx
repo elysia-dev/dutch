@@ -7,6 +7,7 @@ import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
 import { CurrencyResponse } from '../types/CurrencyResponse';
+import { OwnershipResponse } from '../types/AccountResponse';
 
 type RootContextType = {
   signedIn: SignInStatus;
@@ -26,11 +27,14 @@ type RootContextType = {
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
   };
+  ownerships: OwnershipResponse[];
+  balance: string;
   changeLanguage: (input: LocaleType) => void;
   changeCurrency: (input: CurrencyType) => void;
   setKycStatus: () => void;
   signIn: () => void;
   signOut: () => void;
+  refreshUser: () => Promise<void>;
   autoSignOut: () => void;
   notifications: Notification[];
   setCurrencyPrice: (currency: CurrencyResponse[]) => void;
@@ -65,19 +69,22 @@ const RootContext = createContext<RootContextType>({
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
-  changeLanguage: () => {},
-  changeCurrency: () => {},
-  setKycStatus: () => {},
-  signIn: async () => {},
-  signOut: async () => {},
-  autoSignOut: async () => {},
+  ownerships: [],
+  balance: '0',
+  changeLanguage: () => { },
+  changeCurrency: () => { },
+  setKycStatus: () => { },
+  signIn: async () => { },
+  signOut: async () => { },
+  refreshUser: async () => { },
+  autoSignOut: async () => { },
   notifications: [] as Notification[],
-  setCurrencyPrice: (currency: CurrencyResponse[]) => {},
-  setNotifications: (notifications: Notification[]) => {},
-  setEthAddress: (address: string) => {},
-  setUserExpoPushToken: (expoPushToken: string) => {},
-  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {},
-  Server: new Server(() => {}, ''),
+  setCurrencyPrice: (currency: CurrencyResponse[]) => { },
+  setNotifications: (notifications: Notification[]) => { },
+  setEthAddress: (address: string) => { },
+  setUserExpoPushToken: (expoPushToken: string) => { },
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,

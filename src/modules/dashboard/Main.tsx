@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   useContext,
   useEffect,
-  useState,
 } from 'react';
 import {
   View,
@@ -25,44 +24,13 @@ import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { KycStatus } from '../../enums/KycStatus';
 import RootContext from '../../contexts/RootContext';
-import LocaleType from '../../enums/LocaleType';
 import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import CurrencyType from '../../enums/CurrencyType';
 import { EventCard } from './components/EventCard';
-
-const defaultUser = {
-  id: 0,
-  email: '',
-  kycStatus: KycStatus.NONE,
-  ethAddresses: [] as string[],
-  gender: '',
-  firstName: '',
-  lastName: '',
-  language: LocaleType.EN,
-  currency: CurrencyType.USD,
-  legacyEl: 0,
-  legacyUsd: 0,
-  legacyWalletRefundStatus: LegacyRefundStatus.NONE,
-};
-const defaultOwnerships = {
-  id: 0,
-  title: '',
-  productType: '',
-  value: 0,
-  profit: 0,
-};
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { Server, setCurrencyPrice, elPrice } = useContext(RootContext);
-  const [state, setState] = useState({
-    user: defaultUser,
-    ownerships: [defaultOwnerships],
-    balance: '0',
-    errorReturn: 0,
-  });
-  const { user, ownerships } = state;
+  const { elPrice, user, ownerships, refreshUser, balance } = useContext(RootContext);
   const legacyTotal: number | undefined = parseFloat(
     (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
   );
@@ -71,37 +39,16 @@ export const Main: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const callApi = async () => {
-    try {
-      const userInfo = await Server.me();
-      setState({
-        ...state,
-        user: userInfo.data.user,
-        ownerships: userInfo.data.ownerships,
-        balance: userInfo.data.totalBalance,
-      });
-    } catch (e) {
-      if (e.response.status === 404) {
-        alert(i18n.t('account_errors.server'));
-        setState({ ...state, errorReturn: 1 });
-      } else if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
-        setState({ ...state, errorReturn: 1 });
-      }
-      setState({ ...state, errorReturn: 1 });
-    }
-  };
-
   useEffect(() => {
-    callApi();
+    refreshUser();
   }, []);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    callApi().then(() => setRefreshing(false));
+    refreshUser().then(() => setRefreshing(false));
   }, []);
 
-  const ownershipsList = state.ownerships.map((ownership, index) => (
+  const ownershipsList = ownerships.map((ownership, index) => (
     <Asset
       handler={() => {
         navigation.navigate('Dashboard', {
@@ -150,12 +97,12 @@ export const Main: FunctionComponent = () => {
               label={
                 user.firstName && user.lastName
                   ? i18n.t('greeting', {
-                    firstName: state.user.firstName,
+                    firstName: user.firstName,
                     lastName:
-                      state.user.lastName === null ? '' : state.user.lastName,
+                      user.lastName === null ? '' : user.lastName,
                   })
                   : i18n.t('greeting_new', {
-                    email: state.user.email,
+                    email: user.email,
                   })
               }
             />
@@ -167,7 +114,7 @@ export const Main: FunctionComponent = () => {
               }}
             />
             <BalanceCard
-              balance={state.balance}
+              balance={balance}
               handler={() =>
                 navigation.navigate('Dashboard', {
                   screen: DashboardPage.SummaryReport,
@@ -175,7 +122,6 @@ export const Main: FunctionComponent = () => {
               }
             />
             {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-              state.errorReturn === 0 &&
               [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
                 user.legacyWalletRefundStatus,
               ) && (
