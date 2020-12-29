@@ -85,7 +85,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               alignContent: 'center',
             }}>
             <P1Text
-              label={'Token Contract'}
+              label={i18n.t('dashboard_label.token_contract')}
               style={{ textAlign: 'center', fontSize: 13 }}
             />
           </TouchableOpacity>

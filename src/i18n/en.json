@@ -333,7 +333,8 @@
     "remaining_withdraw_pending": "Your request is pending",
     "remaining_withdraw_other": "Withdrawals unavailable",
     "remaining_balance": "EL / USD balance",
-    "event": "Event"
+    "event": "Event",
+    "token_contract": "Token Contract"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",

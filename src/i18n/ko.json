@@ -334,7 +334,8 @@
     "remaining_withdraw_pending": "출금 요청이 진행중입니다",
     "remaining_withdraw_other": "출금 대상이 아닙니다",
     "remaining_balance": "잔여 EL / USD",
-    "event": "이벤트"
+    "event": "이벤트",
+    "token_contract": "토큰 컨트랙트"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",
