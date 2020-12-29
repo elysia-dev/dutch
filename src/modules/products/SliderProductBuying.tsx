@@ -91,20 +91,20 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       .then((res) =>
         props.from === 'ownershipDetail'
           ? navigation.navigate('Product', {
-              screen: ProductPage.PaymentSelection,
-              params: {
-                id: res.data.id,
-                product: props.product,
-                tokenCount: state.tokenCount,
-                type: 'buying',
-              },
-            })
-          : navigation.navigate(ProductPage.PaymentSelection, {
+            screen: ProductPage.PaymentSelection,
+            params: {
               id: res.data.id,
               product: props.product,
               tokenCount: state.tokenCount,
               type: 'buying',
-            }),
+            },
+          })
+          : navigation.navigate(ProductPage.PaymentSelection, {
+            id: res.data.id,
+            product: props.product,
+            tokenCount: state.tokenCount,
+            type: 'buying',
+          }),
       )
       .catch((e) => {
         if (e.response.status === 400) {

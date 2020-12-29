@@ -39,6 +39,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { defaultProduct } from '../../types/Product';
 import { DashboardPage } from '../../enums/pageEnum';
 import { H2Text, H3Text, P1Text } from '../../shared/components/Texts';
+import SliderInterest from './SliderInterest';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -63,6 +64,7 @@ const OwnershipDetail: FunctionComponent = () => {
     refundModalVisible: false,
     legacyRefundModalVisible: false,
     purchaseModalVisible: false,
+    interestModalVisible: false,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
@@ -194,8 +196,9 @@ const OwnershipDetail: FunctionComponent = () => {
                   })
                 }
                 interestHandler={() =>
-                  navigation.navigate(DashboardPage.InterestWithdraw, {
-                    ownership: state.ownership,
+                  setState({
+                    ...state,
+                    interestModalVisible: !state.interestModalVisible,
                   })
                 }
               />
@@ -232,7 +235,7 @@ const OwnershipDetail: FunctionComponent = () => {
       </ScrollView>
       {(state.purchaseModalVisible ||
         state.refundModalVisible ||
-        state.legacyRefundModalVisible) && (
+        state.legacyRefundModalVisible || state.interestModalVisible) && (
           <View
             style={{
               backgroundColor: 'rgba(0,0,0,0.5)',
@@ -249,6 +252,18 @@ const OwnershipDetail: FunctionComponent = () => {
         <OwnershipRefund
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
           ownership={state.ownership}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.interestModalVisible}
+        onRequestClose={() => setState({ ...state, interestModalVisible: false })}>
+        <SliderInterest
+          ownership={state.ownership}
+          modalHandler={() =>
+            setState({ ...state, interestModalVisible: false })
+          }
         />
       </Modal>
       <Modal
