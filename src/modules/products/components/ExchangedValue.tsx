@@ -102,81 +102,81 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
           </DesView>
         </>
       ) : (
-        <>
-          <DesView>
-            <P1Text
-              label={i18n.t('product_label.investment')}
-              style={{ color: '#626368' }}
-            />
-            <P1Text
-              label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
-                5.0 * props.tokenCount,
-                2,
-              )}
-              style={{ fontWeight: 'bold' }}
-            />
-          </DesView>
-          <DesView>
-            <P1Text
-              label={i18n.t('product_label.el_price')}
-              style={{ color: '#626368' }}
-            />
-            <P1Text
-              label={`EL ${parseFloat(
-                `${(5.0 * props.tokenCount) / elPrice}`,
-              ).toFixed(2)}`}
-              style={{ fontWeight: 'bold' }}
-            />
-          </DesView>
-          <DesView>
-            <P1Text
-              label={i18n.t('product_label.eth_price')}
-              style={{ color: '#626368' }}
-            />
-            <P1Text
-              label={`ETH ${parseFloat(
-                `${(5 * props.tokenCount) / state.ethPrice}`,
-              ).toFixed(2)}`}
-              style={{ fontWeight: 'bold' }}
-            />
-          </DesView>
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-            }}>
+          <>
+            <DesView>
+              <P1Text
+                label={i18n.t('product_label.investment')}
+                style={{ color: '#626368' }}
+              />
+              <P1Text
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  5.0 * props.tokenCount,
+                  2,
+                )}
+                style={{ fontWeight: 'bold' }}
+              />
+            </DesView>
+            <DesView>
+              <P1Text
+                label={i18n.t('product_label.expected_el_price')}
+                style={{ color: '#626368' }}
+              />
+              <P1Text
+                label={`EL ${parseFloat(
+                  `${(5.0 * props.tokenCount) / elPrice}`,
+                ).toFixed(2)}`}
+                style={{ fontWeight: 'bold' }}
+              />
+            </DesView>
+            <DesView>
+              <P1Text
+                label={i18n.t('product_label.eth_price')}
+                style={{ color: '#626368' }}
+              />
+              <P1Text
+                label={`ETH ${parseFloat(
+                  `${(5 * props.tokenCount) / state.ethPrice}`,
+                ).toFixed(2)}`}
+                style={{ fontWeight: 'bold' }}
+              />
+            </DesView>
             <View
               style={{
-                width: '100%',
-                height: 0,
-                borderWidth: 1,
-                borderColor: '#F1F1F1',
-              }}></View>
-          </View>
-          <DesView>
-            <P1Text
-              style={{ color: '#1C1C1C' }}
-              label={
-                props.type === 'buy'
-                  ? i18n.t('product_label.expected_return')
-                  : i18n.t('product_label.expected_refund')
-              }
-            />
-            <H3Text
-              label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
-                0.01 * parseFloat(props.return!) * 5 * props.tokenCount,
-                2,
-              )}
-              style={{ color: '#3679b5' }}
-            />
-          </DesView>
-        </>
-      )}
+                flex: 1,
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}>
+              <View
+                style={{
+                  width: '100%',
+                  height: 0,
+                  borderWidth: 1,
+                  borderColor: '#F1F1F1',
+                }}></View>
+            </View>
+            <DesView>
+              <P1Text
+                style={{ color: '#1C1C1C' }}
+                label={
+                  props.type === 'buy'
+                    ? i18n.t('product_label.expected_return')
+                    : i18n.t('product_label.expected_refund')
+                }
+              />
+              <H3Text
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  0.01 * parseFloat(props.return!) * 5 * props.tokenCount,
+                  2,
+                )}
+                style={{ color: '#3679b5' }}
+              />
+            </DesView>
+          </>
+        )}
     </View>
   );
 };
