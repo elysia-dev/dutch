@@ -185,7 +185,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop: 10,
-            backgroundColor: props.subscribed ? '#D0D8DF' : '#3679B5',
+            backgroundColor: props.subscribed && props.product.status !== ProductStatus.SALE ? '#D0D8DF' : '#3679B5',
           }}
           handler={submitButtonHandler}
           title={submitButtonTitle()}
