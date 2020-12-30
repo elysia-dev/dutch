@@ -420,7 +420,7 @@
     "failKyc": "没有通过KYC",
     "profit": "收益",
     "productNotice": "代币公告",
-    "date_format": "%m月 %m日"
+    "date_format": "%m月 %d日"
   },
   "FAQ": {
     "question": [
