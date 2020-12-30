@@ -144,7 +144,15 @@
     "subscribed": "예약 완료했습니다. 상품에 대한 변동사항을 알림으로 보내드릴게요.",
     "subscribed_already": "이미 예약한 상품입니다.",
     "subscribe_fail": "예약 가능한 상품이 아닙니다.",
-    "for_subscription": "* 위 수치는 수익률 파악을 위한 수치이며, 실제 예약에 반영되지는 않습니다. 토큰 수는 추후 교환 시 확정해주세요!"
+    "for_subscription": "* 위 수치는 수익률 파악을 위한 수치이며, 실제 예약에 반영되지는 않습니다. 토큰 수는 추후 교환 시 확정해주세요!",
+    "metamask_mobile": "MetaMask Mobile",
+    "metamask_pc": "MetaMask PC",
+    "from": "FROM",
+    "to": "TO",
+    "value": "VALUE",
+    "you": "YOU",
+    "elysia": "ELYSIA",
+    "el": "EL"
   },
   "product_financial": {
     "expected_annual_return": "예상 연 적립률",

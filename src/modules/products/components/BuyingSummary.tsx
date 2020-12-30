@@ -85,15 +85,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              FROM
+              {i18n.t("product.from")}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              TO
+              {i18n.t("product.to")}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              VALUE
+              {i18n.t("product.value")}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -110,10 +110,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              YOU
+              {i18n.t("product.you")}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              ELYSIA
+              {i18n.t("product.elysia")}
             </BlackText>
             <View
               style={{
@@ -124,7 +124,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                EL
+                {i18n.t("product.el")}
               </BlackText>
               <BlackText
                 allowFontScaling={false}
@@ -152,15 +152,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              FROM
+              {i18n.t("product.from")}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              TO
+              {i18n.t("product.to")}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              VALUE
+              {i18n.t("product.value")}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -177,10 +177,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              ELYSIA
+              {i18n.t("product.elysia")}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              YOU
+              {i18n.t("product.you")}
             </BlackText>
             <View
               style={{

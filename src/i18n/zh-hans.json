@@ -144,7 +144,15 @@
     "subscribed": "预约成功。将会给您发送商品最新信息。",
     "subscribed_already": "已经预约成功。",
     "subscribe_fail": "现在不能预约。",
-    "for_subscription": "以上数据仅用来预测商品收益率，与实际会有偏差。请在交换房地产代币时再次确定具体信息。"
+    "for_subscription": "以上数据仅用来预测商品收益率，与实际会有偏差。请在交换房地产代币时再次确定具体信息。",
+    "metamask_mobile": "Metamask钱包手机App",
+    "metamask_pc": "Metamask钱包网站（PC）",
+    "from": "从",
+    "to": "转到",
+    "value": "价值",
+    "you": "您的账户",
+    "elysia": "爱立厦",
+    "el": "EL代币"
   },
   "product_financial": {
     "expected_annual_return": "预期年收益",
