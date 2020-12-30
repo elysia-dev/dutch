@@ -139,6 +139,15 @@ const OwnershipDetail: FunctionComponent = () => {
     loadOwnership();
   }, [ownershipId]);
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadOwnership();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
   return (
     <ProductInfoWrapper>
       <ScrollView

@@ -59,7 +59,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       props.from === 'ownershipDetail'
     ) {
       callApi();
-      props.modalHandler();
     } else if (props.product.status === ProductStatus.SUBSCRIBING) {
       if (!props.subscribed) {
         subscribeProduct();
@@ -88,7 +87,8 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
 
   const callApi = () => {
     Server.requestTransaction(props.product.id, state.tokenCount, 'buying')
-      .then((res) =>
+      .then((res) => {
+        props.modalHandler();
         props.from === 'ownershipDetail'
           ? navigation.navigate('Product', {
             screen: ProductPage.PaymentSelection,
@@ -104,9 +104,8 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
             product: props.product,
             tokenCount: state.tokenCount,
             type: 'buying',
-          }),
-      )
-      .catch((e) => {
+          })
+      }).catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('product.transaction_error'));
         } else if (e.response.status === 500) {
