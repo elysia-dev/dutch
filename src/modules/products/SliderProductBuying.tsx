@@ -176,7 +176,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           <P3Text label={i18n.t('product.for_subscription')} />
         )}
         <SubmitButton
-          disabled={props.subscribed}
+          disabled={props.subscribed && props.product.status !== ProductStatus.SALE}
           style={{
             position: 'absolute',
             bottom: 15,
