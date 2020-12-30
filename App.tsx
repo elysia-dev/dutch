@@ -209,6 +209,8 @@ const App = () => {
       setState({
         ...state,
         user: res.data.user,
+        ownerships: res.data.ownerships,
+        balance: res.data.totalBalance,
         notifications: res.data.notifications || [],
       });
     }).catch(() => {
