@@ -116,8 +116,8 @@ const PaymentSelection: FunctionComponent = () => {
       {type === "interest" && <InterestSummary product={product} elInterest={elInterest || ""} />}
       {type === "refund" && <RefundSummary product={product} tokenCount={tokenCount} />}
       <View style={{ marginTop: 40 }}>
-        <MetaMaskButton title={'MetaMask Mobile'} type={"mobile"} selected={mobile} modeHandler={() => setState({ ...state, mobile: true, pc: false })} />
-        <MetaMaskButton title={'MetaMask PC'} type={"pc"} selected={pc} modeHandler={() => setState({ ...state, mobile: false, pc: true })} />
+        <MetaMaskButton title={i18n.t('product.metamask_mobile')} type={"mobile"} selected={mobile} modeHandler={() => setState({ ...state, mobile: true, pc: false })} />
+        <MetaMaskButton title={i18n.t('product.metamask_pc')} type={"pc"} selected={pc} modeHandler={() => setState({ ...state, mobile: false, pc: true })} />
       </View>
       {pc && <P1Text label={i18n.t('product.link_will_be_sent')} />}
       <SubmitButton

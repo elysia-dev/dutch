@@ -144,7 +144,15 @@
     "subscribed": "Reservation is complete. We will notify you of changes to the product.",
     "subscribed_already": "This property has already been reserved.",
     "subscribe_fail": "This property is not available for reservation.",
-    "for_subscription": "The above figures are for determining property yield and are not reflected during reservation. Please confirm token quantity again later!"
+    "for_subscription": "The above figures are for determining property yield and are not reflected during reservation. Please confirm token quantity again later!",
+    "metamask_mobile": "MetaMask Mobile",
+    "metamask_pc": "MetaMask PC",
+    "from": "FROM",
+    "to": "TO",
+    "value": "VALUE",
+    "you": "YOU",
+    "elysia": "ELYSIA",
+    "el": "EL"
   },
   "product_financial": {
     "expected_annual_return": "Estimated annual return",
