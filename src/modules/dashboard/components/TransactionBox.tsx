@@ -130,7 +130,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
           allowFontScaling={false}
           onPress={() => {
             Linking.openURL(
-              `https://etherscan.io/token/${props.transaction.hash}`,
+              `https://etherscan.io/tx/${props.transaction.hash}`,
             );
           }}
           style={{
