@@ -164,12 +164,17 @@
     "price": "Price",
     "net_deposit": "Net Deposit",
     "net_rent_year": "Net rent per year",
-    "bankloan": "Loans"
+    "bankloan": "Loans",
+    "apr": "APR",
+    "distribution_date": "Distribution date",
+    "expiry": "Expiry",
+    "annual_return": "Annual Return"
   },
   "product_highlight": {
     "type": "Type",
     "ground": "Ground level",
     "underground": "Basement level",
+    "unit": "Units",
     "bedroom": "Bedroom",
     "completion_date": "Construction date",
     "total_parking_available": "Parking space",
@@ -213,7 +218,8 @@
     "available_token": "Real estate tokens available",
     "minimum_el": "Minimum deposit",
     "reserve": "Sign up",
-    "reserved": "On waitlist"
+    "reserved": "On waitlist",
+    "loan": "Decentralized loans"
   },
   "more_label": {
     "more": "More",

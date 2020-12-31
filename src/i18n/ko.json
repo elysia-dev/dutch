@@ -164,12 +164,17 @@
     "price": "자산 가격",
     "net_deposit": "보증금 총액",
     "net_rent_year": "연간 임대 수익",
-    "bankloan": "은행 융자"
+    "bankloan": "은행 융자",
+    "apr": "연 이자율",
+    "distribution_date": "이자 분배일",
+    "expiry": "만기",
+    "annual_return": "연간 이자수익"
   },
   "product_highlight": {
-    "type": "분류",
+    "type": "종류",
     "ground": "지상 층수",
     "underground": "지하 층수",
+    "unit": "세대 수",
     "bedroom": "침실",
     "completion_date": "건물 완공일",
     "total_parking_available": "주차 가능 차량 수",
@@ -213,7 +218,8 @@
     "available_token": "투자가능 부동산토큰 수량",
     "minimum_el": "최소투자단위",
     "reserve": "예약하고 알림받기",
-    "reserved": "예약완료"
+    "reserved": "예약완료",
+    "loan": "탈중앙 대출채권형 상품"
   },
   "more_label": {
     "more": "더 보기",

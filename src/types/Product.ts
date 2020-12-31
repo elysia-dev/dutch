@@ -20,6 +20,7 @@ type Product = {
   usdPricePerToken: number;
   status: string;
   subscriptionsCount: number;
+  financeType: 'loan' | 'fund';
   data: {
     type: string;
     languages: LocaleType[];

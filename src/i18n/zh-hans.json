@@ -164,12 +164,17 @@
     "price": "价格",
     "net_deposit": "存款净额",
     "net_rent_year": "每年纯租金收益",
-    "bankloan": "房贷"
+    "bankloan": "房贷",
+    "apr": "年利率",
+    "distribution_date": "利息分配日",
+    "expiry": "到期时间",
+    "annual_return": "年利息收益"
   },
   "product_highlight": {
-    "type": "分类",
+    "type": "种类",
     "ground": "地上层数",
     "underground": "地下层数",
+    "unit": "户",
     "bedroom": "卧室",
     "completion_date": "建筑完工日期",
     "total_parking_available": "能否停车及停车位数量",
@@ -213,7 +218,8 @@
     "available_token": "可投资的房地产代币数量",
     "minimum_el": "最少投资额度",
     "reserve": "预约且接受通知",
-    "reserved": "预约成功。"
+    "reserved": "预约成功。",
+    "loan": "去中心化贷款债券型商品"
   },
   "more_label": {
     "more": "更多",

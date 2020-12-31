@@ -128,6 +128,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             style={{
               paddingLeft: 10,
               marginTop: 4,
+              marginLeft: "auto",
               fontSize: user.language === LocaleType.EN ? 15 : 18,
             }}
             label={productDescription.propertyType}
@@ -140,6 +141,28 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             alignContent: 'space-between',
             paddingTop: 10,
           }}>
+          {
+            product.financeType === 'loan' && <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+                alignItems: 'center',
+              }}>
+              <P1Text
+                label={i18n.t('product_highlight.type')}
+                style={{ color: '#838383' }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}>
+                <P1Text label={i18n.t('product_label.loan')} />
+              </View>
+            </View>
+          }
           <View
             style={{
               flex: 1,
