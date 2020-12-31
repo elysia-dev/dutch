@@ -127,7 +127,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.expected_sale_date')}
+                  label={i18n.t(isLoan ? 'product_financial.expiry' : 'product_financial.expected_sale_date')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
