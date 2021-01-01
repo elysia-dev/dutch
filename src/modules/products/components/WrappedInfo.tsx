@@ -155,28 +155,25 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
-
-              <DesView>
-                <P3Text
-                  label={i18n.t('product_financial.net_deposit')}
-                  style={{ color: '#626368' }}
-                />
-                <P3Text
-                  label={
-                    isLoan ?
-                      `₩ ${commaFormatter(parseFloat(product.data.netDeposit))}`
-                      :
+              { !isLoan &&
+                <DesView>
+                  <P3Text
+                    label={i18n.t('product_financial.net_deposit')}
+                    style={{ color: '#626368' }}
+                  />
+                  <P3Text
+                    label={
                       currencyFormatter(
                         currencyUnit,
                         currencyRatio,
                         parseFloat(product.data.netDeposit),
                         0,
                       )
-                  }
-                  style={{ color: '#1c1c1c' }}
-                />
-              </DesView>
-
+                    }
+                    style={{ color: '#1c1c1c' }}
+                  />
+                </DesView>
+              }
               <DesView>
                 <P3Text
                   label={i18n.t(isLoan ? 'product_financial.annual_return' : 'product_financial.net_rent_year')}
