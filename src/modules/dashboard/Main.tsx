@@ -207,7 +207,9 @@ export const Main: FunctionComponent = () => {
                     elevation: 6,
                     marginBottom: 20,
                   }}
-                  onPress={() => navigation.navigate('ProductsMain')}>
+                  onPress={() =>
+                    navigation.navigate('ProductsMain', { refresh: true })
+                  }>
                   <Text
                     style={{
                       textAlign: 'center',
@@ -330,7 +332,9 @@ export const Main: FunctionComponent = () => {
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('ProductsMain')}
+                    onPress={() =>
+                      navigation.navigate('ProductsMain', { refresh: true })
+                    }
                     style={{
                       marginBottom: 25,
                       width: '100%',

@@ -13,7 +13,12 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useRoute,
+  useScrollToTop,
+} from '@react-navigation/native';
 import base64 from 'base-64';
 import i18n from '../../i18n/i18n';
 import { Item } from './components/Item';
@@ -32,6 +37,12 @@ interface State {
   yOffset: number;
 }
 
+type ParamList = {
+  MainList: {
+    refresh?: boolean;
+  };
+};
+
 const MainList: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     stories: [],
@@ -41,6 +52,8 @@ const MainList: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
+  const route = useRoute<RouteProp<ParamList, 'MainList'>>();
+  const refresh = route.params;
   const { Server, user } = useContext(RootContext);
   const ref = React.useRef<ScrollView>(null);
   useScrollToTop(ref);
@@ -74,6 +87,12 @@ const MainList: FunctionComponent = () => {
   //     }
   //   }, []),
   // );
+
+  useEffect(() => {
+    if (refresh) {
+      ref.current?.scrollTo({ y: 0, animated: false });
+    }
+  }, [refresh]);
 
   return (
     <View
