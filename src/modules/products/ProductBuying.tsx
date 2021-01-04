@@ -28,6 +28,7 @@ import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
+import ProductStory from './ProductStory';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -163,15 +164,17 @@ const ProductBuying: FunctionComponent = () => {
         {state.product && (
           <BasicInfo product={state.product} elPrice={state.elPrice} />
         )}
-        <View
-          style={{
-            padding: 20,
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-            height: 136,
-          }}>
-          {state.product && <ExpectedReturn product={state.product} />}
-        </View>
+        {state.product && state.product?.status !== ProductStatus.TERMINATED && (
+          <View
+            style={{
+              padding: 20,
+              borderBottomColor: '#F6F6F8',
+              borderBottomWidth: 5,
+              height: 136,
+            }}>
+            <ExpectedReturn product={state.product} />
+          </View>
+        )}
         <View
           style={{
             padding: 20,
@@ -191,7 +194,7 @@ const ProductBuying: FunctionComponent = () => {
           backgroundColor:
             // eslint-disable-next-line no-nested-ternary
             state.product?.status === ProductStatus.TERMINATED
-              ? '#767577'
+              ? '#1c1c1c'
               : purchasability
               ? '#3679B5'
               : '#D0D8DF',
