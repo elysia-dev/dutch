@@ -1,8 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-} from 'react';
+import React, { FunctionComponent, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -30,7 +26,9 @@ import { EventCard } from './components/EventCard';
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { elPrice, user, ownerships, refreshUser, balance } = useContext(RootContext);
+  const { elPrice, user, ownerships, refreshUser, balance } = useContext(
+    RootContext,
+  );
   const legacyTotal: number | undefined = parseFloat(
     (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
   );
@@ -97,13 +95,12 @@ export const Main: FunctionComponent = () => {
               label={
                 user.firstName && user.lastName
                   ? i18n.t('greeting', {
-                    firstName: user.firstName,
-                    lastName:
-                      user.lastName === null ? '' : user.lastName,
-                  })
+                      firstName: user.firstName,
+                      lastName: user.lastName === null ? '' : user.lastName,
+                    })
                   : i18n.t('greeting_new', {
-                    email: user.email,
-                  })
+                      email: user.email,
+                    })
               }
             />
             <BalanceCard
@@ -169,74 +166,72 @@ export const Main: FunctionComponent = () => {
                 </TouchableOpacity>
               )}
             </View>
-            {user.kycStatus === KycStatus.SUCCESS &&
-              user.ethAddresses?.length > 0 &&
-              ownerships.length === 0 && (
-                <>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('Dashboard', {
-                        screen: DashboardPage.InvestmentGuide,
-                      })
-                    }
+            {ownerships.length === 0 && (
+              <>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Dashboard', {
+                      screen: DashboardPage.InvestmentGuide,
+                    })
+                  }
+                  style={{
+                    marginBottom: 25,
+                    width: '100%',
+                    backgroundColor: '#fff',
+                    borderRadius: 10,
+                    shadowColor: '#3679B540',
+                    shadowOffset: { width: 1, height: 1 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 8,
+                    elevation: 8,
+                  }}>
+                  <Image
+                    source={require('./images/investmentguide.png')}
+                    style={{ width: '100%', height: 416, borderRadius: 10 }}
+                  />
+                  <P1Text
+                    style={{ position: 'absolute', top: 30, left: 25 }}
+                    label={i18n.t('dashboard.with_elysia')}
+                  />
+                  <H2Text
+                    style={{ position: 'absolute', top: 50, left: 25 }}
+                    label={i18n.t('dashboard.investment_guide')}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('ProductsMain', { refresh: true })
+                  }
+                  style={{
+                    marginBottom: 25,
+                    width: '100%',
+                    backgroundColor: '#fff',
+                    borderRadius: 10,
+                    shadowColor: '#3679B540',
+                    shadowOffset: { width: 1, height: 1 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 8,
+                    elevation: 8,
+                  }}>
+                  <Image
+                    source={require('./images/newinvestment.png')}
+                    style={{ width: '100%', height: 250, borderRadius: 10 }}
+                  />
+                  <P1Text
+                    style={{ position: 'absolute', top: 30, left: 25 }}
+                    label={i18n.t('dashboard.right_now')}
+                  />
+                  <H2Text
                     style={{
-                      marginBottom: 25,
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      borderRadius: 10,
-                      shadowColor: '#3679B540',
-                      shadowOffset: { width: 1, height: 1 },
-                      shadowOpacity: 0.8,
-                      shadowRadius: 8,
-                      elevation: 8,
-                    }}>
-                    <Image
-                      source={require('./images/investmentguide.png')}
-                      style={{ width: '100%', height: 416, borderRadius: 10 }}
-                    />
-                    <P1Text
-                      style={{ position: 'absolute', top: 30, left: 25 }}
-                      label={i18n.t('dashboard.with_elysia')}
-                    />
-                    <H2Text
-                      style={{ position: 'absolute', top: 50, left: 25 }}
-                      label={i18n.t('dashboard.investment_guide')}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('ProductsMain', { refresh: true })
-                    }
-                    style={{
-                      marginBottom: 25,
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      borderRadius: 10,
-                      shadowColor: '#3679B540',
-                      shadowOffset: { width: 1, height: 1 },
-                      shadowOpacity: 0.8,
-                      shadowRadius: 8,
-                      elevation: 8,
-                    }}>
-                    <Image
-                      source={require('./images/newinvestment.png')}
-                      style={{ width: '100%', height: 250, borderRadius: 10 }}
-                    />
-                    <P1Text
-                      style={{ position: 'absolute', top: 30, left: 25 }}
-                      label={i18n.t('dashboard.right_now')}
-                    />
-                    <H2Text
-                      style={{
-                        position: 'absolute',
-                        top: 50,
-                        left: 25,
-                      }}
-                      label={i18n.t('dashboard.invest_first_asset')}
-                    />
-                  </TouchableOpacity>
-                </>
-              )}
+                      position: 'absolute',
+                      top: 50,
+                      left: 25,
+                    }}
+                    label={i18n.t('dashboard.invest_first_asset')}
+                  />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
           <VirtualTab />
         </SafeAreaView>
