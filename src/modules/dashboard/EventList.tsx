@@ -1,23 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  FunctionComponent,
-  useState,
-  useContext,
-  useEffect,
-} from 'react';
-import { View, Modal, TouchableOpacity, Image } from 'react-native';
-import styled from 'styled-components/native';
+import React, { FunctionComponent } from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text, H2Text } from '../../shared/components/Texts';
-import { Modal as Modals } from '../../shared/components/Modal';
 import i18n from '../../i18n/i18n';
-import { RemainingBalanceCard } from './components/RemainingBalanceCard';
-import SliderWithdrawal from './SliderWithdrawal';
-import RootContext from '../../contexts/RootContext';
 
-import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import { SubmitButton } from '../../shared/components/SubmitButton';
-import AcceptedImg from '../account/images/accepted.png';
 import { DashboardPage, ProductPage } from '../../enums/pageEnum';
 import getEnvironment from '../../utiles/getEnvironment';
 
@@ -36,9 +23,7 @@ export const EventList: FunctionComponent<{}> = () => {
             <View style={{ marginLeft: '5%', marginRight: '5%' }}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('Dashboard', {
-                    screen: DashboardPage.PreparingInvestment,
-                  })
+                  navigation.navigate(DashboardPage.PreparingInvestment)
                 }
                 style={{
                   marginBottom: 25,
