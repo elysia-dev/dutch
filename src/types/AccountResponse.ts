@@ -11,6 +11,14 @@ export type AccountResponse = {
   counts?: number;
 };
 
+export type OwnershipResponse = {
+  id: number;
+  title: string;
+  productType: string;
+  value: number;
+  profit: number;
+}
+
 export type UserResponse = {
   user: {
     id: number;
@@ -29,14 +37,6 @@ export type UserResponse = {
     legacyWalletRefundStatus: LegacyRefundStatus;
   };
   totalBalance: string;
-  ownerships: [
-    {
-      id: number;
-      title: string;
-      productType: string;
-      value: number;
-      profit: number;
-    },
-  ];
+  ownerships: OwnershipResponse[];
   notifications: Notification[];
 };

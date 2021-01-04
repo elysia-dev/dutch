@@ -39,6 +39,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { defaultProduct } from '../../types/Product';
 import { DashboardPage } from '../../enums/pageEnum';
 import { H2Text, H3Text, P1Text } from '../../shared/components/Texts';
+import SliderInterest from './SliderInterest';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -63,6 +64,7 @@ const OwnershipDetail: FunctionComponent = () => {
     refundModalVisible: false,
     legacyRefundModalVisible: false,
     purchaseModalVisible: false,
+    interestModalVisible: false,
   });
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
@@ -137,6 +139,15 @@ const OwnershipDetail: FunctionComponent = () => {
     loadOwnership();
   }, [ownershipId]);
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadOwnership();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
   return (
     <ProductInfoWrapper>
       <ScrollView
@@ -179,27 +190,28 @@ const OwnershipDetail: FunctionComponent = () => {
               }}
             />
           ) : (
-            <OptionButtons
-              productId={state.ownership.product.id}
-              refundHandler={() =>
-                setState({
-                  ...state,
-                  refundModalVisible: !state.refundModalVisible,
-                })
-              }
-              purchaseHandler={() =>
-                setState({
-                  ...state,
-                  purchaseModalVisible: !state.purchaseModalVisible,
-                })
-              }
-              interestHandler={() =>
-                navigation.navigate(DashboardPage.InterestWithdraw, {
-                  ownership: state.ownership,
-                })
-              }
-            />
-          )}
+              <OptionButtons
+                productId={state.ownership.product.id}
+                refundHandler={() =>
+                  setState({
+                    ...state,
+                    refundModalVisible: !state.refundModalVisible,
+                  })
+                }
+                purchaseHandler={() =>
+                  setState({
+                    ...state,
+                    purchaseModalVisible: !state.purchaseModalVisible,
+                  })
+                }
+                interestHandler={() =>
+                  setState({
+                    ...state,
+                    interestModalVisible: !state.interestModalVisible,
+                  })
+                }
+              />
+            )}
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           <H3Text
@@ -232,15 +244,15 @@ const OwnershipDetail: FunctionComponent = () => {
       </ScrollView>
       {(state.purchaseModalVisible ||
         state.refundModalVisible ||
-        state.legacyRefundModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}></View>
-      )}
+        state.legacyRefundModalVisible || state.interestModalVisible) && (
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
       <Modal
         transparent={true}
         animationType={'slide'}
@@ -249,6 +261,18 @@ const OwnershipDetail: FunctionComponent = () => {
         <OwnershipRefund
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
           ownership={state.ownership}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={state.interestModalVisible}
+        onRequestClose={() => setState({ ...state, interestModalVisible: false })}>
+        <SliderInterest
+          ownership={state.ownership}
+          modalHandler={() =>
+            setState({ ...state, interestModalVisible: false })
+          }
         />
       </Modal>
       <Modal

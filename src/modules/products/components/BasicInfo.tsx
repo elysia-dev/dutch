@@ -1,8 +1,6 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import * as Linking from 'expo-linking';
@@ -33,22 +31,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
 
-  const totalElFormatter = () => {
-    const totalEl = `${
-      (parseFloat(product.totalValue) * product.usdPricePerToken) /
-      props.elPrice
-    }`;
-    const intTotalEl = totalEl.split('.')[0];
-    if (intTotalEl.length > 9) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 9)}G`;
-    } else if (intTotalEl.length > 6) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 6)}M`;
-    } else if (intTotalEl.length > 3) {
-      return `EL ${intTotalEl.slice(0, intTotalEl.length - 3)}K`;
-    }
-    return `EL ${intTotalEl}`;
-  };
-
   return (
     <View
       style={{
@@ -64,7 +46,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         <View>
           <P2Text
             style={{ color: '#626368' }}
-            label={`ELYSIA co.Ltd  |  ${product.title}`}
+            label={product.title}
           />
           <View style={{ flexDirection: 'row' }}>
             <H2Text
@@ -103,7 +85,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               alignContent: 'center',
             }}>
             <P1Text
-              label={'Token Contract'}
+              label={i18n.t('dashboard_label.token_contract')}
               style={{ textAlign: 'center', fontSize: 13 }}
             />
           </TouchableOpacity>
@@ -146,6 +128,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             style={{
               paddingLeft: 10,
               marginTop: 4,
+              marginLeft: "auto",
               fontSize: user.language === LocaleType.EN ? 15 : 18,
             }}
             label={productDescription.propertyType}
@@ -158,6 +141,28 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             alignContent: 'space-between',
             paddingTop: 10,
           }}>
+          {
+            product.financeType === 'loan' && <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+                alignItems: 'center',
+              }}>
+              <P1Text
+                label={i18n.t('product_highlight.type')}
+                style={{ color: '#838383' }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}>
+                <P1Text label={i18n.t('product_label.loan')} />
+              </View>
+            </View>
+          }
           <View
             style={{
               flex: 1,

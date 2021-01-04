@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Platform, TouchableOpacity } from 'react-native';
+import { View, Platform, TouchableOpacity, Text, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Picker } from '@react-native-community/picker';
 import { TextField } from '../../shared/components/TextField';
@@ -19,10 +19,10 @@ import {
   SubTitleText,
   P1Text,
 } from '../../shared/components/Texts';
-import WrapperLayout from '../../shared/components/WrapperLayout';
 import nations from './components/argos.json';
 import IosPickerModal from '../../shared/components/IosPickerModal';
 import KycContext from '../../contexts/KycContext';
+import { BackButton } from '../../shared/components/BackButton';
 
 const IdImg = styled.Image`
   margin-top: 10px;
@@ -53,6 +53,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
   const navigation = useNavigation();
   const { idType, idPhoto } = useContext(KycContext);
   const { Server, setKycStatus } = useContext(RootContext);
+
   const nationList = nations.map((nation, Key) => (
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
   ));
@@ -101,118 +102,70 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
     }
   };
   return (
-    <>
-      <WrapperLayout
-        isScrolling={true}
-        backButtonHandler={() => navigation.goBack()}
-        title={i18n.t('kyc.step3')}
-        subTitle={<SubTitleText label={i18n.t('kyc.step3_text')} />}
-        body={
-          <View
+    <ScrollView style={{ backgroundColor: "white" }}>
+      <BackButton
+        handler={() => { navigation.goBack() }}
+        style={{ width: 30, marginTop: 25, marginLeft: "5%" }}
+      />
+      <Text
+        allowFontScaling={false}
+        style={{
+          fontSize: 25,
+          fontFamily: 'Roboto_700Bold',
+          marginLeft: "5%"
+        }}>
+        {i18n.t('kyc.step3')}
+      </Text>
+      <SubTitleText label={i18n.t('kyc.step3_text')} style={{ marginLeft: "5%" }} />
+      <View
+        style={{
+          paddingLeft: '5%',
+          paddingRight: '5%',
+        }}>
+        <View style={{ flex: 1 }}>
+          <IdImg source={{ uri: idPhoto.uri }} />
+          <H1Text
+            label={i18n.t('kyc_label.personal_data')}
+            style={{ marginTop: 40, marginBottom: 6, fontSize: 20 }}
+          />
+          <TextField
+            label={i18n.t('kyc_label.last_name')}
+            eventHandler={(input: string) => {
+              setState({ ...state, lastName: input });
+            }}
             style={{
-              paddingLeft: '5%',
-              paddingRight: '5%',
-              height: '100%',
-              flexDirection: 'column',
-              flexGrow: 1,
-            }}>
-            <View style={{ flex: 1 }}>
-              <IdImg source={{ uri: idPhoto.uri }} />
-              <H1Text
-                label={i18n.t('kyc_label.personal_data')}
-                style={{ marginTop: 40, marginBottom: 6, fontSize: 20 }}
-              />
-              <TextField
-                label={i18n.t('kyc_label.last_name')}
-                eventHandler={(input: string) => {
-                  setState({ ...state, lastName: input });
-                }}
-                style={{
-                  marginTop: 20,
-                }}
-              />
-              <TextField
-                label={i18n.t('kyc_label.first_name')}
-                eventHandler={(input: string) => {
-                  setState({ ...state, firstName: input });
-                }}
-                style={{
-                  marginTop: 20,
-                }}
-              />
-              {Platform.OS === 'android' ? (
-                <NationInput
-                  type={i18n.t('kyc_label.nationality')}
-                  eventHandler={setNationality}
-                  nationality={state.nationality}
+              marginTop: 20,
+            }}
+          />
+          <TextField
+            label={i18n.t('kyc_label.first_name')}
+            eventHandler={(input: string) => {
+              setState({ ...state, firstName: input });
+            }}
+            style={{
+              marginTop: 20,
+            }}
+          />
+          {Platform.OS === 'android' ? (
+            <NationInput
+              type={i18n.t('kyc_label.nationality')}
+              eventHandler={setNationality}
+              nationality={state.nationality}
+              style={{
+                marginTop: 20,
+              }}
+            />
+          ) : (
+              <>
+                <P3Text
                   style={{
                     marginTop: 20,
+                    color: '#a7a7a7',
+                    fontSize: 12,
+                    textAlign: 'left',
                   }}
+                  label={i18n.t('kyc_label.nationality')}
                 />
-              ) : (
-                <>
-                  <P3Text
-                    style={{
-                      marginTop: 20,
-                      color: '#a7a7a7',
-                      fontSize: 12,
-                      textAlign: 'left',
-                    }}
-                    label={i18n.t('kyc_label.nationality')}
-                  />
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      borderBottomColor: '#d0d8df',
-                      borderBottomWidth: 1,
-                    }}
-                    onPress={() => {
-                      setState({ ...state, nationModalVisible: true });
-                    }}>
-                    <P1Text
-                      label={
-                        state.nationality
-                          ? state.nationality.split(',')[0]
-                          : 'Nationality'
-                      }
-                      style={{
-                        color: state.nationality ? '#1c1c1c' : '#a7a7a7',
-                        textAlign: 'center',
-                      }}
-                    />
-                  </TouchableOpacity>
-                </>
-              )}
-              <P3Text
-                style={{ marginTop: 40, marginBottom: 10 }}
-                label={i18n.t('kyc_label.birthday')}
-              />
-              {Platform.OS === 'android' ? (
-                <View
-                  style={{
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: '#d0d8df',
-                    height: 45,
-                  }}>
-                  <DateInput
-                    type={i18n.t('kyc_label.birthday')}
-                    eventHandler={setBirthday}
-                    birthday={state.birthday}
-                    style={{
-                      marginTop: 0,
-                      width: '100%',
-                      height: 40,
-                    }}
-                  />
-                </View>
-              ) : (
                 <TouchableOpacity
                   style={{
                     width: '100%',
@@ -226,108 +179,158 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
                     borderBottomWidth: 1,
                   }}
                   onPress={() => {
-                    setState({ ...state, birthdayModalVisible: true });
+                    setState({ ...state, nationModalVisible: true });
                   }}>
                   <P1Text
                     label={
-                      state.birthday
-                        ? state.birthday
-                        : i18n.strftime(new Date(), '%Y-%m-%d')
+                      state.nationality
+                        ? state.nationality.split(',')[0]
+                        : 'Nationality'
                     }
                     style={{
-                      color: state.birthday ? '#1c1c1c' : '#a7a7a7',
+                      color: state.nationality ? '#1c1c1c' : '#a7a7a7',
                       textAlign: 'center',
                     }}
                   />
                 </TouchableOpacity>
-              )}
-              <P3Text
-                style={{ marginTop: 40 }}
-                label={i18n.t('kyc_label.gender')}
-              />
-              <View
+              </>
+            )}
+          <P3Text
+            style={{ marginTop: 40, marginBottom: 10 }}
+            label={i18n.t('kyc_label.birthday')}
+          />
+          {Platform.OS === 'android' ? (
+            <View
+              style={{
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: '#d0d8df',
+                height: 45,
+              }}>
+              <DateInput
+                type={i18n.t('kyc_label.birthday')}
+                eventHandler={setBirthday}
+                birthday={state.birthday}
                 style={{
+                  marginTop: 0,
+                  width: '100%',
+                  height: 40,
+                }}
+              />
+            </View>
+          ) : (
+              <TouchableOpacity
+                style={{
+                  width: '100%',
+                  height: 40,
+                  backgroundColor: '#fff',
+                  borderRadius: 5,
+                  alignItems: 'center',
                   flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: 20,
-                  marginTop: 10,
+                  justifyContent: 'center',
+                  borderBottomColor: '#d0d8df',
+                  borderBottomWidth: 1,
+                }}
+                onPress={() => {
+                  setState({ ...state, birthdayModalVisible: true });
                 }}>
-                <ShortOptionButton
-                  check={state.gender === 'male' ? 'checked' : ''}
-                  title={i18n.t('kyc_label.male')}
-                  handler={() =>
-                    setState({
-                      ...state,
-                      gender: state.gender === 'male' ? '' : 'male',
-                    })
+                <P1Text
+                  label={
+                    state.birthday
+                      ? state.birthday
+                      : i18n.strftime(new Date(), '%Y-%m-%d')
                   }
+                  style={{
+                    color: state.birthday ? '#1c1c1c' : '#a7a7a7',
+                    textAlign: 'center',
+                  }}
                 />
-                <ShortOptionButton
-                  check={state.gender === 'female' ? 'checked' : ''}
-                  title={i18n.t('kyc_label.female')}
-                  handler={() =>
-                    setState({
-                      ...state,
-                      gender: state.gender === 'female' ? '' : 'female',
-                    })
-                  }
+              </TouchableOpacity>
+            )}
+          <P3Text
+            style={{ marginTop: 40 }}
+            label={i18n.t('kyc_label.gender')}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 20,
+              marginTop: 10,
+            }}>
+            <ShortOptionButton
+              check={state.gender === 'male' ? 'checked' : ''}
+              title={i18n.t('kyc_label.male')}
+              handler={() =>
+                setState({
+                  ...state,
+                  gender: state.gender === 'male' ? '' : 'male',
+                })
+              }
+            />
+            <ShortOptionButton
+              check={state.gender === 'female' ? 'checked' : ''}
+              title={i18n.t('kyc_label.female')}
+              handler={() =>
+                setState({
+                  ...state,
+                  gender: state.gender === 'female' ? '' : 'female',
+                })
+              }
+            />
+          </View>
+        </View>
+        <View style={{ padding: 30 }} />
+        {state.modalVisible === true && (
+          <Modal
+            child={
+              <View>
+                <ConfirmImg source={KycSubmitPng} />
+                <H1Text
+                  label={i18n.t('kyc.submit')}
+                  style={{ textAlign: 'center', marginTop: 10 }}
+                />
+                <P1Text
+                  label={i18n.t('kyc.submit_text')}
+                  style={{
+                    textAlign: 'center',
+                    marginTop: 10,
+                    marginBottom: 20,
+                  }}
                 />
               </View>
-            </View>
-            <View style={{ padding: 30 }} />
-            {state.modalVisible === true && (
-              <Modal
-                child={
-                  <View>
-                    <ConfirmImg source={KycSubmitPng} />
-                    <H1Text
-                      label={i18n.t('kyc.submit')}
-                      style={{ textAlign: 'center', marginTop: 10 }}
-                    />
-                    <P1Text
-                      label={i18n.t('kyc.submit_text')}
-                      style={{
-                        textAlign: 'center',
-                        marginTop: 10,
-                        marginBottom: 20,
-                      }}
-                    />
-                  </View>
-                }
-                visible={state.modalVisible}
-                modalHandler={() => {
-                  setModalVisible(false);
-                  setKycStatus();
-                  navigation.navigate('Main', { screen: 'MoreMain' });
-                }}></Modal>
-            )}
-          </View>
-        }
-        button={
-          <SubmitButton
-            title={i18n.t('kyc_label.complete_input')}
-            handler={() => {
-              setState({ ...state, submitDisabled: true });
-              callKycApi();
-            }}
-            disabled={state.submitDisabled}
-            style={{
-              backgroundColor: state.submitDisabled ? '#D0D8DF' : '#3679B5',
-            }}
-          />
-        }
+            }
+            visible={state.modalVisible}
+            modalHandler={() => {
+              setModalVisible(false);
+              setKycStatus();
+              navigation.navigate('Main', { screen: 'MoreMain' });
+            }}></Modal>
+        )}
+      </View>
+      <SubmitButton
+        title={i18n.t('kyc_label.complete_input')}
+        handler={() => {
+          setState({ ...state, submitDisabled: true });
+          callKycApi();
+        }}
+        disabled={state.submitDisabled}
+        style={{
+          backgroundColor: state.submitDisabled ? '#D0D8DF' : '#3679B5',
+          marginBottom: 20,
+        }}
       />
       {(state.modalVisible ||
         state.nationModalVisible ||
         state.birthdayModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}></View>
-      )}
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
       <IosPickerModal
         modalVisible={state.birthdayModalVisible}
         doneHandler={() => {
@@ -374,7 +377,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
           </Picker>
         }
       />
-    </>
+    </ScrollView>
   );
 };
 export default PersonalDataInput;

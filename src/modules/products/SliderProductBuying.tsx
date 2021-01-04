@@ -59,7 +59,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       props.from === 'ownershipDetail'
     ) {
       callApi();
-      props.modalHandler();
     } else if (props.product.status === ProductStatus.SUBSCRIBING) {
       if (!props.subscribed) {
         subscribeProduct();
@@ -88,25 +87,25 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
 
   const callApi = () => {
     Server.requestTransaction(props.product.id, state.tokenCount, 'buying')
-      .then((res) =>
+      .then((res) => {
+        props.modalHandler();
         props.from === 'ownershipDetail'
           ? navigation.navigate('Product', {
-              screen: ProductPage.PaymentSelection,
-              params: {
-                id: res.data.id,
-                product: props.product,
-                tokenCount: state.tokenCount,
-                type: 'buying',
-              },
-            })
-          : navigation.navigate(ProductPage.PaymentSelection, {
+            screen: ProductPage.PaymentSelection,
+            params: {
               id: res.data.id,
               product: props.product,
               tokenCount: state.tokenCount,
               type: 'buying',
-            }),
-      )
-      .catch((e) => {
+            },
+          })
+          : navigation.navigate(ProductPage.PaymentSelection, {
+            id: res.data.id,
+            product: props.product,
+            tokenCount: state.tokenCount,
+            type: 'buying',
+          })
+      }).catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('product.transaction_error'));
         } else if (e.response.status === 500) {
@@ -177,7 +176,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           <P3Text label={i18n.t('product.for_subscription')} />
         )}
         <SubmitButton
-          disabled={props.subscribed}
+          disabled={props.subscribed && props.product.status !== ProductStatus.SALE}
           style={{
             position: 'absolute',
             bottom: 15,
@@ -186,7 +185,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop: 10,
-            backgroundColor: props.subscribed ? '#D0D8DF' : '#3679B5',
+            backgroundColor: props.subscribed && props.product.status !== ProductStatus.SALE ? '#D0D8DF' : '#3679B5',
           }}
           handler={submitButtonHandler}
           title={submitButtonTitle()}

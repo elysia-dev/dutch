@@ -334,6 +334,12 @@ export default class Server {
     return espressoClient.get(`/currency/${code}`);
   };
 
+  getTransactionRequest = async (
+    id: string,
+  ): Promise<AxiosResponse<void>> => {
+    return espressoClient.get(`transactionRequests/${id}`)
+  }
+
   resetCurrency = async (currency: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.put('/currency/', {
       currency,

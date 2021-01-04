@@ -25,7 +25,6 @@ import {
   View,
   AppState,
   AppStateStatus,
-  Image,
 } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -46,11 +45,10 @@ import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
 import { SignInStatus } from './src/enums/LoginStatus';
-import ExpiredAccount from './src/modules/account/ExpiredAccount';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
-import commaFormatter from './src/utiles/commaFormatter';
 import BlockScreen from './src/modules/main/BlockScreen';
+import { OwnershipResponse } from './src/types/AccountResponse';
 
 Sentry.init({
   dsn:
@@ -77,6 +75,8 @@ interface AppInformation {
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
   };
+  ownerships: OwnershipResponse[];
+  balance: string;
   changeLanguage: () => void;
   setKycStatus: () => void;
   notifications: Notification[];
@@ -105,10 +105,12 @@ const defaultState = {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   },
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  ownerships: [],
+  balance: '0',
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -163,12 +165,18 @@ const App = () => {
         .me()
         .then(async (res) => {
           i18n.locale = res.data.user.language;
+          const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
             ...state,
             signedIn: SignInStatus.SIGNIN,
             user: res.data.user,
             notifications: res.data.notifications || [],
+            ownerships: res.data.ownerships || [],
+            balance: res.data.totalBalance,
             Server: authServer,
+            elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
+            krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
+            cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
 
           registerForPushNotificationsAsync().then((expoPushToken) => {
@@ -195,6 +203,20 @@ const App = () => {
       setState({ ...state, signedIn: SignInStatus.SIGNOUT });
     }
   };
+
+  const refreshUser = async () => {
+    await state.Server.me().then(async (res) => {
+      setState({
+        ...state,
+        user: res.data.user,
+        ownerships: res.data.ownerships,
+        balance: res.data.totalBalance,
+        notifications: res.data.notifications || [],
+      });
+    }).catch(() => {
+      setState(defaultState);
+    })
+  }
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (appState.current !== 'active' && nextAppState === 'active') {
@@ -357,6 +379,7 @@ const App = () => {
           },
           currencyUnit,
           currencyRatio,
+          refreshUser,
         }}>
         <RootStack.Navigator headerMode="none">
           {state.signedIn === SignInStatus.SIGNIN ? (
@@ -368,10 +391,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-            <>
-              <RootStack.Screen name={'Account'} component={Account} />
-            </>
-          )}
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}

@@ -36,7 +36,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.1.0"
+      "buildNumber": "1.2.0"
     },
     "android": {
       "package": "land.elysia.staging",
@@ -66,7 +66,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": 6
+      "versionCode": 7
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "hooks": {
@@ -81,6 +81,6 @@
         }
       ]
     },
-    "scheme": "elysia-app"
+    "scheme": "elysia-staging-app"
   }
 }

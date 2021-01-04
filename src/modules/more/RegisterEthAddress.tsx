@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics';
+import Clipboard from 'expo-clipboard';
 import i18n from '../../i18n/i18n';
 
 import {
@@ -34,6 +35,7 @@ import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
 import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface Props {
   resetHandler: () => void;
@@ -85,8 +87,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     Server.requestEthAddressRegister()
       .then((res) => {
         Linking.openURL(
-          `https://metamask.app.link/dapp/${
-            getEnvironment().dappUrl
+          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
           }/ethAddress/${res.data.id}`,
         );
       })
@@ -94,6 +95,18 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         alert(i18n.t('account_errors.server'));
       });
   };
+
+  const copyLink = () => {
+    Server.requestEthAddressRegister()
+      .then((res) => {
+        const url = `https://${getEnvironment().dappUrl}/ethAddress/${res.data.id}`
+        Clipboard.setString(url);
+        alert(i18n.t('more_label.copied', { url: url }))
+      })
+      .catch((e) => {
+        alert(i18n.t('account_errors.server'));
+      });
+  }
 
   useEffect(() => {
     AppState.addEventListener('change', () =>
@@ -172,11 +185,10 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     />
                     <H2Text
                       style={{ marginTop: 5 }}
-                      label={`EL ${
-                        state.balance
-                          ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
-                          : '-.--'
-                      }`}
+                      label={`EL ${state.balance
+                        ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
+                        : '-.--'
+                        }`}
                     />
                   </View>
                   <TouchableOpacity
@@ -214,7 +226,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     padding: 15,
                   }}>
                   <P1Text label={'Address'} style={{ color: '#838383' }} />
-
                   <Pressable
                     onPressIn={(_nativeEvent) => {
                       setState({ ...state, pressed: true });
@@ -261,74 +272,87 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               </View>
             </>
           ) : (
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                display: 'flex',
-                alignSelf: 'center',
-                marginTop: Dimensions.get('window').height * 0.1,
-              }}>
-              <Image
-                source={MetamaskFox}
-                style={{
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}></Image>
               <View
                 style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  height: 100,
-                  flexDirection: 'column',
-                  padding: 15,
-                  backgroundColor: '#F6F6F8',
-                  borderRadius: 10,
-                  marginTop: 20,
-                  marginBottom: 25,
+                  width: '100%',
+                  alignItems: 'center',
+                  display: 'flex',
+                  alignSelf: 'center',
+                  marginTop: Dimensions.get('window').height * 0.1,
                 }}>
+                <Image
+                  source={MetamaskFox}
+                  style={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                  }}></Image>
                 <View
                   style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    width: Dimensions.get('window').width * 0.9,
+                    height: 100,
+                    flexDirection: 'column',
+                    padding: 15,
+                    backgroundColor: '#F6F6F8',
+                    borderRadius: 10,
+                    marginTop: 20,
+                    marginBottom: 25,
                   }}>
-                  <BlueCircle />
-                  <P3Text
-                    label={i18n.t('more.check_1')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <BlueCircle />
-                  <P3Text
-                    label={i18n.t('more.check_2')}
-                    style={{ color: '#1C1C1C' }}
-                  />
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <BlueCircle />
+                    <P3Text
+                      label={i18n.t('more.check_1')}
+                      style={{ color: '#1C1C1C' }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <BlueCircle />
+                    <P3Text
+                      label={i18n.t('more.check_2')}
+                      style={{ color: '#1C1C1C' }}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          )
+            )
         }
         button={
           user.ethAddresses?.length > 0 ? (
             <></>
           ) : (
-            <SubmitButton
-              title={i18n.t('more_label.connect')}
-              handler={callApi}
-              style={{
-                width: Dimensions.get('window').width * 0.9,
-                marginLeft: 0,
-                marginRight: 0,
-                alignSelf: 'center',
-              }}
-            />
-          )
+              <>
+                <SubmitButton
+                  title={i18n.t('more_label.connect')}
+                  handler={callApi}
+                  style={{
+                    width: Dimensions.get('window').width * 0.9,
+                    marginLeft: 0,
+                    marginRight: 0,
+                    alignSelf: 'center',
+                  }}
+                />
+                <P1Text label={"or"} style={{ textAlign: "center" }} />
+                <SubmitButton
+                  title={i18n.t('more_label.copy')}
+                  handler={copyLink}
+                  style={{
+                    width: Dimensions.get('window').width * 0.9,
+                    marginLeft: 0,
+                    marginRight: 0,
+                    alignSelf: 'center',
+                  }}
+                />
+              </>
+            )
         }
       />
       {state.confirmModal && (
@@ -372,39 +396,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       />
     </>
   );
-};
-
-const terms = {
-  ko: `본인이 해당 주소의 프라이빗 키를 정확이 알고 있는 이더리움 지갑 주소만 입력해주시기 바랍니다.
-(예를 들어, 메타마스크 내 지갑 주소)
-
-중앙화 플랫폼의 지갑 주소 입력 시 토큰 교환 후 해당 토큰들의 권한을 갖지 못할 수 있습니다.
-(중앙화 플랫폼의 지갑이란, 중앙화 거래소, 중앙화 지갑 서비스 등에서 제공하는 입금용 지갑 주소 등을 의미합니다.)
-
-잘못된 주소 입력으로 인한 책임은 전적으로 사용자 본인에게 있음을 한 번 더 알려 드립니다.
-
-필수 확인 사항
-- 이더리움 지갑 주소인가요?
-- 본인이 프라이빗 키를 정확히 알고 있는 주소인가요?`,
-  en: `Please enter only the Ethereum wallet address where you know the exact private key of the address.
-(e.g. metamask my wallet address)
-
-When entering the wallet address of the centralization platform, you may not have permission for these tokens after exchanging them.
-(The wallet on the centralization platform means the wallet address for deposit provided by the centralization exchange, centralization wallet service, etc.)
-
-I'd like to remind you once again that you are solely responsible for entering the wrong address.
-
-Required Checkpoints
-- Is this Ethereum's address?
-- Do you know the exact private key?`,
-  zhHans: `请输入您知道正确私钥的以太坊钱包地址。
-（例如，Metamask钱包地址。）
-如果输入的是中心化平台的钱包地址，在交换代币后，您可能无法获得相应代币的所有权。
-（中心化平台的钱包是指通过中心化交易所、中心化式钱包等提供存币服务的钱包。）
-我们想再次提醒您，您需要自行承担输入错误的钱包地址而产生的损失。
-请务必再次检查以下两项：
--这是一个以太坊钱包地址吗？
--您知道该以太坊钱包地址的私钥吗？`,
 };
 
 export default RegisterEthAddress;

@@ -144,7 +144,15 @@
     "subscribed": "예약 완료했습니다. 상품에 대한 변동사항을 알림으로 보내드릴게요.",
     "subscribed_already": "이미 예약한 상품입니다.",
     "subscribe_fail": "예약 가능한 상품이 아닙니다.",
-    "for_subscription": "* 위 수치는 수익률 파악을 위한 수치이며, 실제 예약에 반영되지는 않습니다. 토큰 수는 추후 교환 시 확정해주세요!"
+    "for_subscription": "* 위 수치는 수익률 파악을 위한 수치이며, 실제 예약에 반영되지는 않습니다. 토큰 수는 추후 교환 시 확정해주세요!",
+    "metamask_mobile": "MetaMask Mobile",
+    "metamask_pc": "MetaMask PC",
+    "from": "FROM",
+    "to": "TO",
+    "value": "VALUE",
+    "you": "YOU",
+    "elysia": "ELYSIA",
+    "el": "EL"
   },
   "product_financial": {
     "expected_annual_return": "예상 연 적립률",
@@ -156,12 +164,17 @@
     "price": "자산 가격",
     "net_deposit": "보증금 총액",
     "net_rent_year": "연간 임대 수익",
-    "bankloan": "은행 융자"
+    "bankloan": "은행 융자",
+    "apr": "연 이자율",
+    "distribution_date": "이자 분배일",
+    "expiry": "만기",
+    "annual_return": "연간 이자수익"
   },
   "product_highlight": {
-    "type": "분류",
+    "type": "종류",
     "ground": "지상 층수",
     "underground": "지하 층수",
+    "unit": "세대 수",
     "bedroom": "침실",
     "completion_date": "건물 완공일",
     "total_parking_available": "주차 가능 차량 수",
@@ -196,17 +209,17 @@
     "purchase_now": "바로 교환하기",
     "refund_token_count": "토큰 수",
     "token_count": "토큰 수",
-    "el_price": "(환산)",
     "expected_el_price": "예상 회수 EL(환산)",
     "eth_price": "(환산)",
     "property_type": "분류",
     "recovery": "회수금",
-    "non_purchasable": "교환 불가",
+    "non_purchasable": "KYC 인증 필요",
     "view_details": "상품 상세보기",
     "available_token": "투자가능 부동산토큰 수량",
     "minimum_el": "최소투자단위",
     "reserve": "예약하고 알림받기",
-    "reserved": "예약완료"
+    "reserved": "예약완료",
+    "loan": "탈중앙 대출채권형 상품"
   },
   "more_label": {
     "more": "더 보기",
@@ -262,7 +275,9 @@
     "latest": "최신순",
     "push_notice": "푸시 알림",
     "notification_setting": "알림 설정",
-    "connect": "참고완료, 지갑 연결하기",
+    "connect": "메타마스크 지갑 연결하기",
+    "copy": "링크 복사하기",
+    "copied": "복사됨 (%{url})",
     "app_info": "앱 정보",
     "version": "버전",
     "done": "완료",
@@ -333,7 +348,8 @@
     "remaining_withdraw_pending": "출금 요청이 진행중입니다",
     "remaining_withdraw_other": "출금 대상이 아닙니다",
     "remaining_balance": "잔여 EL / USD",
-    "event": "이벤트"
+    "event": "이벤트",
+    "token_contract": "토큰 컨트랙트"
   },
   "dashboard": {
     "ownership_error": "소유권이 없는 자산입니다.",

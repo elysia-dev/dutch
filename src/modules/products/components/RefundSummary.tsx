@@ -1,8 +1,6 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
@@ -64,7 +62,7 @@ type Props = {
   tokenCount: number;
 };
 
-const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
+const RefundSummary: FunctionComponent<Props> = (props: Props) => {
   const { elPrice, currencyUnit, currencyRatio } = useContext(RootContext);
 
   const expectedUsdValue =
@@ -85,15 +83,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.from")}
+              FROM
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.to")}
+              TO
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t("product.value")}
+              VALUE
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -110,10 +108,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.you")}
+              YOU
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.elysia")}
+              ELYSIA
             </BlackText>
             <View
               style={{
@@ -124,12 +122,12 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                {i18n.t("product.el")}
+                {props.product.tokenName}
               </BlackText>
               <BlackText
                 allowFontScaling={false}
                 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                {' ' + expectedElValue.toFixed(2)}
+                {' ' + props.tokenCount}
               </BlackText>
             </View>
           </TextWrapper>
@@ -152,15 +150,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.from")}
+              FROM
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.to")}
+              TO
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t("product.value")}
+              VALUE
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -177,10 +175,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.elysia")}
+              ELYSIA
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.you")}
+              YOU
             </BlackText>
             <View
               style={{
@@ -191,12 +189,12 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                {props.product.tokenName}
+                EL
               </BlackText>
               <BlackText
                 allowFontScaling={false}
                 style={{ fontWeight: 'bold', textAlign: 'right' }}>
-                {' ' + props.tokenCount}
+                {' ' + expectedElValue.toFixed(2)}
               </BlackText>
             </View>
           </TextWrapper>
@@ -226,4 +224,4 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
   );
 };
 
-export default BuyingSummary;
+export default RefundSummary;

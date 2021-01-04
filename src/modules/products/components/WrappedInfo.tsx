@@ -7,6 +7,7 @@ import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import commaFormatter from '../../../utiles/commaFormatter';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -31,6 +32,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
+  const isLoan = product.financeType === 'loan';
 
   return (
     <View style={{ width: '100%', paddingBottom: 60 }}>
@@ -85,7 +87,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.return_rent')}
+                  label={i18n.t(isLoan ? 'product_financial.apr' : 'product_financial.return_rent')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -105,7 +107,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.rent_distribution')}
+                  label={i18n.t(isLoan ? 'product_financial.distribution_date' : 'product_financial.rent_distribution')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -125,7 +127,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.expected_sale_date')}
+                  label={i18n.t(isLoan ? 'product_financial.expiry' : 'product_financial.expected_sale_date')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -139,35 +141,42 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(product.data.propertyPrice),
-                    0,
-                  )}
+                  label={
+                    isLoan ?
+                      `₩ ${commaFormatter(parseFloat(product.data.propertyPrice))}`
+                      :
+                      currencyFormatter(
+                        currencyUnit,
+                        currencyRatio,
+                        parseFloat(product.data.propertyPrice),
+                        0,
+                      )
+                  }
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
-
+              { !isLoan &&
+                <DesView>
+                  <P3Text
+                    label={i18n.t('product_financial.net_deposit')}
+                    style={{ color: '#626368' }}
+                  />
+                  <P3Text
+                    label={
+                      currencyFormatter(
+                        currencyUnit,
+                        currencyRatio,
+                        parseFloat(product.data.netDeposit),
+                        0,
+                      )
+                    }
+                    style={{ color: '#1c1c1c' }}
+                  />
+                </DesView>
+              }
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.net_deposit')}
-                  style={{ color: '#626368' }}
-                />
-                <P3Text
-                  label={currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(product.data.netDeposit),
-                    0,
-                  )}
-                  style={{ color: '#1c1c1c' }}
-                />
-              </DesView>
-
-              <DesView>
-                <P3Text
-                  label={i18n.t('product_financial.net_rent_year')}
+                  label={i18n.t(isLoan ? 'product_financial.annual_return' : 'product_financial.net_rent_year')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -187,12 +196,17 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(product.data.bankLoan),
-                    0,
-                  )}
+                  label={
+                    isLoan ?
+                      `₩ ${commaFormatter(parseFloat(product.data.bankLoan))}`
+                      :
+                      currencyFormatter(
+                        currencyUnit,
+                        currencyRatio,
+                        parseFloat(product.data.bankLoan),
+                        0,
+                      )
+                  }
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
@@ -258,6 +272,18 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
+              { productDescription.unit &&
+                <DesView>
+                  <P3Text
+                    label={i18n.t('product_highlight.unit')}
+                    style={{ color: '#626368' }}
+                  />
+                  <P3Text
+                    label={productDescription.unit}
+                    style={{ color: '#1c1c1c' }}
+                  />
+                </DesView>
+              }
               <DesView>
                 <P3Text
                   label={i18n.t('product_highlight.bedroom')}

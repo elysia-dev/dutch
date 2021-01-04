@@ -7,6 +7,7 @@ type ProductDescription = {
   propertyType: string;
   ground: string;
   underground: string;
+  unit: string;
   bedroom: string;
   bathroom: string;
   airConditioning: string;
@@ -25,6 +26,7 @@ export const defaultProductDescription = {
   propertyType: '',
   ground: '',
   underground: '',
+  unit: '',
   bedroom: '',
   bathroom: '',
   airConditioning: '',

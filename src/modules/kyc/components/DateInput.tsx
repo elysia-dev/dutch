@@ -44,50 +44,50 @@ export const DateInput: FunctionComponent<Props> = (props) => {
           maximumDate={currentDate}
         />
       ) : (
-        <DatePicker
-          style={{
-            width: '100%',
-            height: 45,
-            position: 'absolute',
-            top: 0,
-          }}
-          date={props.birthday}
-          onDateChange={(date) => {
-            props.eventHandler(date);
-          }}
-          allowFontScaling={false}
-          mode="date"
-          androidMode="spinner"
-          placeholder={i18n.strftime(currentDate, '%Y-%m-%d')}
-          format="YYYY-MM-DD"
-          minDate={'2000-01-01'}
-          maxDate={currentDate}
-          confirmBtnText={i18n.t('more_label.done')}
-          cancelBtnText={i18n.t('more_label.close')}
-          customStyles={{
-            dateText: {
-              fontSize: 15,
-              fontFamily: 'Roboto_400Regular',
-            },
-            btnTextConfirm: {
-              color: '#3679B5',
-            },
-            dateIcon: {
-              width: 0,
-              height: 0,
-              opacity: 0,
-              position: 'relative',
-            },
-            dateInput: {
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              borderRadius: 5,
-              borderWidth: 0,
-              borderColor: '#D0D8DF',
-            },
-          }}
-        />
-      )}
+          <DatePicker
+            style={{
+              width: '100%',
+              height: 45,
+              position: 'absolute',
+              top: 0,
+            }}
+            date={props.birthday}
+            onDateChange={(date) => {
+              props.eventHandler(date);
+            }}
+            allowFontScaling={false}
+            mode="date"
+            androidMode="spinner"
+            placeholder={i18n.strftime(currentDate, '%Y-%m-%d')}
+            format="YYYY-MM-DD"
+            minDate={new Date(1900, 1, 1)}
+            maxDate={currentDate}
+            confirmBtnText={i18n.t('more_label.done')}
+            cancelBtnText={i18n.t('more_label.close')}
+            customStyles={{
+              dateText: {
+                fontSize: 15,
+                fontFamily: 'Roboto_400Regular',
+              },
+              btnTextConfirm: {
+                color: '#3679B5',
+              },
+              dateIcon: {
+                width: 0,
+                height: 0,
+                opacity: 0,
+                position: 'relative',
+              },
+              dateInput: {
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                borderRadius: 5,
+                borderWidth: 0,
+                borderColor: '#D0D8DF',
+              },
+            }}
+          />
+        )}
     </View>
   );
 };

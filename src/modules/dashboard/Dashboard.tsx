@@ -7,7 +7,6 @@ import OwnershipDetail from './OwnershipDetail';
 import ProductData from './ProductData';
 import ProductNotice from './ProductNotice';
 import PreparingInvestment from './PreparingInvestment';
-import InterestWithdraw from './InterestWithdraw';
 import InvestmentGuide from './InvestmentGuide';
 import { RemainingBalance } from './RemainingBalance';
 import { EventList } from './EventList';
@@ -38,10 +37,6 @@ export const Dashboard = () => {
       <Stack.Screen
         name={DashboardPage.PreparingInvestment}
         component={PreparingInvestment}
-      />
-      <Stack.Screen
-        name={DashboardPage.InterestWithdraw}
-        component={InterestWithdraw}
       />
       <Stack.Screen
         name={DashboardPage.RemainingBalance}

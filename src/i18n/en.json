@@ -144,7 +144,15 @@
     "subscribed": "Reservation is complete. We will notify you of changes to the product.",
     "subscribed_already": "This property has already been reserved.",
     "subscribe_fail": "This property is not available for reservation.",
-    "for_subscription": "The above figures are for determining property yield and are not reflected during reservation. Please confirm token quantity again later!"
+    "for_subscription": "The above figures are for determining property yield and are not reflected during reservation. Please confirm token quantity again later!",
+    "metamask_mobile": "MetaMask Mobile",
+    "metamask_pc": "MetaMask PC",
+    "from": "FROM",
+    "to": "TO",
+    "value": "VALUE",
+    "you": "YOU",
+    "elysia": "ELYSIA",
+    "el": "EL"
   },
   "product_financial": {
     "expected_annual_return": "Estimated annual return",
@@ -156,12 +164,17 @@
     "price": "Price",
     "net_deposit": "Net Deposit",
     "net_rent_year": "Net rent per year",
-    "bankloan": "Loans"
+    "bankloan": "Loans",
+    "apr": "APR",
+    "distribution_date": "Distribution date",
+    "expiry": "Expiry",
+    "annual_return": "Annual Return"
   },
   "product_highlight": {
     "type": "Type",
     "ground": "Ground level",
     "underground": "Basement level",
+    "unit": "Units",
     "bedroom": "Bedroom",
     "completion_date": "Construction date",
     "total_parking_available": "Parking space",
@@ -196,17 +209,17 @@
     "purchase_now": "Swap immediately",
     "refund_token_count": "Number of tokens",
     "token_count": "Number of tokens",
-    "el_price": "(Swapped)",
-    "expected_el_price": "Expected EL quantity after refund(Swapped)",
-    "eth_price": "(Swapped)",
+    "expected_el_price": "Estimated  EL",
+    "eth_price": "Estimated",
     "property_type": "Property type",
-    "recovery": "Recovery",
-    "non_purchasable": "Cannot be swapped",
+    "recovery": "Total",
+    "non_purchasable": "KYC required",
     "view_details": "View property details",
     "available_token": "Real estate tokens available",
     "minimum_el": "Minimum deposit",
-    "reserve": "Subscribe for notification",
-    "reserved": "Subscribed"
+    "reserve": "Sign up",
+    "reserved": "On waitlist",
+    "loan": "Decentralized loans"
   },
   "more_label": {
     "more": "More",
@@ -238,7 +251,7 @@
     "entire_profit": "Total rewards",
     "expectd_sale_profit": "Expected rewards after sale proceeds",
     "all": "All",
-    "deposit": "Deposit",
+    "deposit": "Total",
     "withdraw": "Withdraw",
     "_day": "Range",
     "30_day": "1 month",
@@ -261,7 +274,9 @@
     "latest": "Latest",
     "push_notice": "Push notification",
     "notification_setting": "Notification settings",
-    "connect": "Connect wallet",
+    "connect": "Connect Metamask",
+    "copy": "Copy Address",
+    "copied": "Copied (%{url})",
     "app_info": "App info",
     "version": "Version",
     "done": "Done",
@@ -332,7 +347,8 @@
     "remaining_withdraw_pending": "Your request is pending",
     "remaining_withdraw_other": "Withdrawals unavailable",
     "remaining_balance": "EL / USD balance",
-    "event": "Event"
+    "event": "Event",
+    "token_contract": "Token Contract"
   },
   "dashboard": {
     "ownership_error": "You do not have ownership of this property.",
@@ -383,10 +399,10 @@
       "You do not have sufficient EL balance. Please enter your Paypal account."
     ],
     "already_pending": "You do not have sufficient balance or your transaction is complete.",
-    "first_product_subs": "Reserve the first product",
+    "first_product_subs": "Signup for property launch",
     "give_EL": "Earn 1,000 EL",
-    "how_get_EL": "How to get EL right now?",
-    "participate_event": "Participate in the event"
+    "how_get_EL": "Find out more…",
+    "participate_event": "Earn EL rewards"
   },
   "day": {
     "0": "Sun",
