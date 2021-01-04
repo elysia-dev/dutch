@@ -151,13 +151,6 @@ export const Main: FunctionComponent = () => {
                     })
               }
             />
-            <EventCard
-              handler={() => {
-                navigation.navigate('Dashboard', {
-                  screen: DashboardPage.EventList,
-                });
-              }}
-            />
             <BalanceCard
               balance={state.balance}
               handler={() =>
