@@ -60,14 +60,14 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
   ));
 
   const profit = [
-    { value: parseFloat(props.content.day0.dailyProfits) },
-    { value: parseFloat(props.content.day1.dailyProfits) },
-    { value: parseFloat(props.content.day2.dailyProfits) },
-    { value: parseFloat(props.content.day3.dailyProfits) },
-    { value: parseFloat(props.content.day4.dailyProfits) },
+    { value: parseFloat(props.content.day6.dailyProfits) },
     { value: parseFloat(props.content.day5.dailyProfits) },
+    { value: parseFloat(props.content.day4.dailyProfits) },
+    { value: parseFloat(props.content.day3.dailyProfits) },
+    { value: parseFloat(props.content.day2.dailyProfits) },
+    { value: parseFloat(props.content.day1.dailyProfits) },
     {
-      value: parseFloat(props.content.day6.dailyProfits),
+      value: parseFloat(props.content.day0.dailyProfits),
       svg: {
         fill: '#3679B5',
       },
@@ -87,13 +87,13 @@ export const AssetGraphCard: FunctionComponent<Props> = (props) => {
     }, 0);
 
   const value = [
-    parseFloat(props.content.day0.dailyValue),
-    parseFloat(props.content.day1.dailyValue),
-    parseFloat(props.content.day2.dailyValue),
-    parseFloat(props.content.day3.dailyValue),
-    parseFloat(props.content.day4.dailyValue),
-    parseFloat(props.content.day5.dailyValue),
     parseFloat(props.content.day6.dailyValue),
+    parseFloat(props.content.day5.dailyValue),
+    parseFloat(props.content.day4.dailyValue),
+    parseFloat(props.content.day3.dailyValue),
+    parseFloat(props.content.day2.dailyValue),
+    parseFloat(props.content.day1.dailyValue),
+    parseFloat(props.content.day0.dailyValue),
   ];
 
   const minValue = value.reduce((min, currentValue) => {
