@@ -6,6 +6,7 @@ import {
   Dimensions,
   SafeAreaView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -41,7 +42,7 @@ const Notifications: FunctionComponent = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    readAllNotification();
+    loadNotifications();
   }, []);
 
   const readAllNotification = () => {
@@ -52,6 +53,12 @@ const Notifications: FunctionComponent = () => {
           alert(i18n.t('account_errors.server'));
         }
       });
+  };
+
+  const countUnreadNotifications = () => {
+    return notifications.filter(
+      (notification) => notification.status === 'unread',
+    ).length;
   };
 
   const readNotification = (notification: Notification) => {
@@ -188,6 +195,20 @@ const Notifications: FunctionComponent = () => {
           </View>
         ) : (
           <>
+            {countUnreadNotifications() > 0 && (
+              <TouchableOpacity onPress={readAllNotification}>
+                <P3Text
+                  style={{
+                    marginTop: 0,
+                    marginBottom: 30,
+                    textAlign: 'center',
+                  }}
+                  label={i18n.t('notification.read_all_notifications', {
+                    number: countUnreadNotifications(),
+                  })}
+                />
+              </TouchableOpacity>
+            )}
             {notifications.map((notification, index) => {
               return (
                 <NotiBox
