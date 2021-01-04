@@ -404,7 +404,8 @@
     "profit": "Daily reward of %{profit} have been applied.",
     "productNotice": "New announcement for token.",
     "saved_90days": "Notifications received are kept for 90 days.",
-    "no_notification": "No notifications received."
+    "no_notification": "No notifications received.",
+    "read_all_notifications": "Read all %{number} unread notifications"
   },
   "notification_label": {
     "notification": "Notification",
