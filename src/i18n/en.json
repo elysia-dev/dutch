@@ -213,7 +213,7 @@
     "eth_price": "Estimated",
     "property_type": "Property type",
     "recovery": "Total",
-    "non_purchasable": "KYC required",
+    "non_purchasable": "KYC, wallet connection required",
     "view_details": "View property details",
     "available_token": "Real estate tokens available",
     "minimum_el": "Minimum deposit",

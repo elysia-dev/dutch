@@ -213,7 +213,7 @@
     "eth_price": "(환산)",
     "property_type": "분류",
     "recovery": "회수금",
-    "non_purchasable": "KYC 인증 필요",
+    "non_purchasable": "KYC 인증, 지갑 연결 필요",
     "view_details": "상품 상세보기",
     "available_token": "투자가능 부동산토큰 수량",
     "minimum_el": "최소투자단위",
