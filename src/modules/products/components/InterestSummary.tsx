@@ -103,7 +103,7 @@ const InterestSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                EL
+                {'EL '}
               </BlackText>
               <BlackText
                 allowFontScaling={false}
