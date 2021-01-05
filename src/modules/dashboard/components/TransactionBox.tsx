@@ -12,6 +12,7 @@ import {
 } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import getEnvironment from '../../../utiles/getEnvironment';
 
 interface Props {
   transaction: Transaction;
@@ -130,7 +131,9 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
           allowFontScaling={false}
           onPress={() => {
             Linking.openURL(
-              `https://etherscan.io/tx/${props.transaction.hash}`,
+              getEnvironment().envName === 'PRODUCTION'
+                ? `https://etherscan.io/tx/${props.transaction.hash}`
+                : `https://ropsten.etherscan.io/tx/${props.transaction.hash}`,
             );
           }}
           style={{
