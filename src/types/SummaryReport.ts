@@ -1,4 +1,41 @@
-export type SummaryReportResponse = {
+import { OwnershipResponse } from './Ownership';
+
+interface DailyContent {
+  [day0: string]: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day1: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day2: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day3: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day4: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day5: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+  day6: {
+    dailyProfits: string;
+    dailyValue: string;
+  };
+}
+
+interface SummaryOwnership {
+  ownerships: ['', ''];
+}
+
+export interface SummaryReportResponse {
   id: 0;
   type: string;
   summary: {
@@ -9,38 +46,8 @@ export type SummaryReportResponse = {
     withdrawableInterest: string;
     averageAnnualReturn: string;
   };
-  content: {
-    day0: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day1: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day2: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day3: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day4: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day5: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    day6: {
-      dailyProfits: string;
-      dailyValue: string;
-    };
-    ownerships: [];
-  };
-};
+  content: DailyContent & SummaryOwnership;
+}
 
 export const defaultSummaryReportResponse = {
   id: 0,
@@ -82,6 +89,6 @@ export const defaultSummaryReportResponse = {
       dailyProfits: '0',
       dailyValue: '0',
     },
-    ownerships: [],
+    ownerships: [] as SummaryOwnership[],
   },
 };
