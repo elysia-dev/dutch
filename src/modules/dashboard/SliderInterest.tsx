@@ -1,18 +1,16 @@
 /* eslint-disable radix */
-import React, {
-  FunctionComponent, useContext,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { Image, View } from 'react-native';
+import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
-import styled from 'styled-components/native';
 import { OwnershipResponse } from '../../types/Ownership';
 import RootContext from '../../contexts/RootContext';
 import currencyFormatter from '../../utiles/currencyFormatter';
-import { useNavigation } from '@react-navigation/native';
 import { ProductPage } from '../../enums/pageEnum';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface Props {
   modalHandler: () => void;
@@ -26,15 +24,15 @@ const TextWrapper = styled.View`
   align-items: center;
 `;
 
-const SliderInterest: FunctionComponent<Props> = props => {
+const SliderInterest: FunctionComponent<Props> = (props) => {
   const { Server, elPrice, currencyUnit, currencyRatio, user } = useContext(
-    RootContext
+    RootContext,
   );
 
   const navigation = useNavigation();
-  const elInterest = (parseFloat(props.ownership.availableProfit) / elPrice).toFixed(
-    2,
-  );
+  const elInterest = (
+    parseFloat(props.ownership.availableProfit) / elPrice
+  ).toFixed(2);
 
   const callApi = () => {
     props.modalHandler();
@@ -119,8 +117,9 @@ const SliderInterest: FunctionComponent<Props> = props => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t('dashboard_label.expected_profit')} (${user.currency
-                })`}
+              label={`${i18n.t('dashboard_label.expected_profit')} (${
+                user.currency
+              })`}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
