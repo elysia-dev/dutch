@@ -3,6 +3,7 @@ import React, {
   useState,
   useEffect,
   useContext,
+  useRef,
 } from 'react';
 import {
   View,
@@ -11,8 +12,10 @@ import {
   StatusBar,
   Modal,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
@@ -26,7 +29,6 @@ import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
-import ProductStory from './ProductStory';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -47,6 +49,7 @@ interface State {
   product?: Product;
   loaded: boolean;
   elPrice: number;
+  selectedImage: number;
 }
 
 const ProductBuying: FunctionComponent = () => {
@@ -55,10 +58,12 @@ const ProductBuying: FunctionComponent = () => {
     subscribed: false,
     loaded: false,
     elPrice: 0,
+    selectedImage: 0,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
+  const viewPager = useRef<ViewPager>(null);
   const { Server, user, elPrice } = useContext(RootContext);
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
@@ -83,6 +88,7 @@ const ProductBuying: FunctionComponent = () => {
         return i18n.t('product_label.reserve');
       }
     }
+    return '';
   };
 
   const loadProductAndSubscription = async () => {
@@ -90,7 +96,7 @@ const ProductBuying: FunctionComponent = () => {
       const product = await Server.productInfo(productId);
       const subscription = await Server.getProductSubscription(productId);
       const elPrice = await Server.getCurrency('el');
-      //const totalSupply = getErc20Contract(product.data.contractAddress)
+      // const totalSupply = getErc20Contract(product.data.contractAddress)
       setState({
         ...state,
         product: product.data,
@@ -117,6 +123,43 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
+  const ImageList = state.product?.data.images.map((image, index) => {
+    return (
+      <Image
+        key={index}
+        source={{ uri: image }}
+        style={{
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+          resizeMode: 'cover',
+        }}
+      />
+    );
+  });
+
+  const ButtonListing = Array(ImageList?.length)
+    .fill(0)
+    .map((_x, index) => {
+      return (
+        <TouchableOpacity
+          key={index}
+          onPress={() => {
+            viewPager.current?.setPage(index);
+          }}>
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              margin: 10,
+              backgroundColor:
+                state.selectedImage === index ? '#3679B5' : '#BDD3E6',
+            }}
+          />
+        </TouchableOpacity>
+      );
+    });
+
   useEffect(() => {
     loadProductAndSubscription();
   }, [user.language, productId]);
@@ -139,18 +182,31 @@ const ProductBuying: FunctionComponent = () => {
             borderBottomRightRadius: 10,
             paddingBottom: 35,
           }}>
-          <Image
-            source={{ uri: state.product && state.product.data.images[0] }}
+          <ViewPager
             style={{
-              borderBottomLeftRadius: 10,
-              borderBottomRightRadius: 10,
               position: 'absolute',
               top: 0,
               width: '100%',
               height: 293,
-              resizeMode: 'cover',
             }}
-          />
+            initialPage={0}
+            ref={viewPager}
+            onPageSelected={(e) => {
+              setState({ ...state, selectedImage: e.nativeEvent.position });
+            }}>
+            {ImageList}
+          </ViewPager>
+          <View
+            style={{
+              position: 'relative',
+              top: 250,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              bottom: '20%',
+            }}>
+            {ButtonListing}
+          </View>
           <View style={{ position: 'absolute', padding: 20 }}>
             <BackButton
               handler={() => {
@@ -195,8 +251,8 @@ const ProductBuying: FunctionComponent = () => {
             state.product?.status === ProductStatus.TERMINATED
               ? '#1c1c1c'
               : purchasability
-                ? '#3679B5'
-                : '#D0D8DF',
+              ? '#3679B5'
+              : '#D0D8DF',
         }}
         disabled={state.product?.status === ProductStatus.TERMINATED}
         handler={() => {
