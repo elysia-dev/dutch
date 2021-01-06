@@ -1,17 +1,25 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { Component, FunctionComponent, useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
-import styled from 'styled-components/native';
+import React, {
+  Component,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { ScrollView } from 'react-native';
 import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import { defaultSummaryReportResponse, SummaryReportResponse } from '../../types/SummaryReport';
-import { AssetGraphCard } from './components/AssetGraphCard';
-import { AssetValueGraphCard } from './components/AssetValueGraphCard';
+import {
+  defaultSummaryReportResponse,
+  SummaryReportResponse,
+} from '../../types/SummaryReport';
+import { AssetValueCard } from './components/AssetValueCard';
+import { AssetProfitCard } from './components/AssetProfitCard';
+import { AssetRatioCard } from './components/AssetRatioCard';
 import { AverageReturnCard } from './components/AverageReturnCard';
 import { SummaryPropertyCard } from './components/SummaryPropertyCard';
 import { TitleText } from '../../shared/components/Texts';
-
 
 export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -30,7 +38,9 @@ export const SummaryReport: FunctionComponent<{}> = () => {
       });
   };
 
-  useEffect(() => { callSummaryApi(); }, []);
+  useEffect(() => {
+    callSummaryApi();
+  }, []);
 
   return (
     <ScrollView
@@ -46,11 +56,15 @@ export const SummaryReport: FunctionComponent<{}> = () => {
         handler={() => navigation.goBack()}
       />
 
-      <TitleText style={{ marginTop: 10, marginBottom: 30 }} label={i18n.t('dashboard_label.asset_report')} />
+      <TitleText
+        style={{ marginTop: 10, marginBottom: 30 }}
+        label={i18n.t('dashboard_label.asset_report')}
+      />
       <SummaryPropertyCard summary={report.summary} />
       <AverageReturnCard return={report.summary.averageAnnualReturn} />
-      <AssetGraphCard content={report.content} />
-      <AssetValueGraphCard ownerships={report.content.ownerships} />
+      <AssetValueCard content={report.content} />
+      <AssetProfitCard content={report.content} />
+      <AssetRatioCard ownerships={report.content.ownerships} />
     </ScrollView>
   );
 };
