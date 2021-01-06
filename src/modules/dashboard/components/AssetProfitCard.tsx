@@ -37,9 +37,11 @@ export const AssetProfitCard: FunctionComponent<Props> = (props) => {
     </Text>
   ));
 
-  const pastSixDaysProfit: Profit[] = Array(6).map((_day, index) => ({
-    value: parseFloat(props.content[`day${6 - index}`].dailyProfits),
-  }));
+  const pastSixDaysProfit: Profit[] = Array(6)
+    .fill(0)
+    .map((_day, index) => ({
+      value: parseFloat(props.content[`day${6 - index}`].dailyProfits),
+    }));
   const thisWeekProfit = pastSixDaysProfit.concat({
     value: parseFloat(props.content.day0.dailyProfits),
     svg: {
@@ -79,7 +81,7 @@ export const AssetProfitCard: FunctionComponent<Props> = (props) => {
         }}>
         <YAxis
           min={0}
-          max={maxProfit * 1.5}
+          max={maxProfit ? maxProfit * 1.5 : 50}
           style={{
             flex: 1.5,
             height: 200,
@@ -113,7 +115,7 @@ export const AssetProfitCard: FunctionComponent<Props> = (props) => {
         <View style={{ flex: 8 }}>
           <BarChart
             yMin={0}
-            yMax={maxProfit ? maxProfit * 1.5 : 100}
+            yMax={maxProfit ? maxProfit * 1.5 : 50}
             yAccessor={({ item }) => item.value}
             style={{ marginLeft: 0, marginRight: 0, height: 200 }}
             spacingInner={0.7}
