@@ -123,6 +123,15 @@ const StartKYC: FunctionComponent<{}> = () => {
                 }}
               />
             </CircleWrapper>
+            <P1Text
+              style={{
+                color: '#626368',
+                fontFamily: 'Roboto_400Regular',
+                margin: '5%',
+              }}
+              label={'* ' + i18n.t('kyc.result')}
+            />
+
             <Modal
               transparent={true}
               animationType={'slide'}

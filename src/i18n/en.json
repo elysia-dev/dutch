@@ -130,7 +130,8 @@
     "decline_case4": "Submitting an ID card without either a photo, name, date of birth, nationality",
     "decline_case5": "If you submit your social security number without hiding the last 7 digits (Koreans only)",
     "networking_argos": "Communicating with Argos. Please wait a moment.",
-    "image_processing": "Image processing is in progress.\nPlease wait a moment."
+    "image_processing": "Image processing is in progress.\nPlease wait a moment.",
+    "result": "KYC approval is made through Argos,\n  and takes 1-2 business days."
   },
   "product": {
     "transaction_error": "This token cannot be swapped.",
