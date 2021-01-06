@@ -123,7 +123,7 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
-  const ImageList = state.product?.data.images.map((image, index) => {
+  const imageList = state.product?.data.images.map((image, index) => {
     return (
       <Image
         key={index}
@@ -137,7 +137,7 @@ const ProductBuying: FunctionComponent = () => {
     );
   });
 
-  const ButtonListing = Array(ImageList?.length)
+  const buttonList = Array(imageList?.length)
     .fill(0)
     .map((_x, index) => {
       return (
@@ -194,7 +194,7 @@ const ProductBuying: FunctionComponent = () => {
             onPageSelected={(e) => {
               setState({ ...state, selectedImage: e.nativeEvent.position });
             }}>
-            {ImageList}
+            {imageList}
           </ViewPager>
           <View
             style={{
@@ -205,7 +205,7 @@ const ProductBuying: FunctionComponent = () => {
               flexDirection: 'row',
               bottom: '20%',
             }}>
-            {ButtonListing}
+            {buttonList}
           </View>
           <View style={{ position: 'absolute', padding: 20 }}>
             <BackButton
