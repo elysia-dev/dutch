@@ -1,4 +1,6 @@
-import ProductDescription, { defaultProductDescription } from './ProductDescription';
+import ProductDescription, {
+  defaultProductDescription,
+} from './ProductDescription';
 import LocaleType from '../enums/LocaleType';
 
 export type Story = {
@@ -20,7 +22,7 @@ type Product = {
   usdPricePerToken: number;
   status: string;
   subscriptionsCount: number;
-  financeType: 'loan' | 'fund';
+  financeType: string;
   data: {
     type: string;
     languages: LocaleType[];
@@ -61,6 +63,7 @@ export const defaultProduct = {
   usdPricePerToken: 0,
   status: 'pending',
   subscriptionsCount: 0,
+  financeType: 'loan',
   data: {
     type: '',
     languages: [] as LocaleType[],
@@ -82,7 +85,7 @@ export const defaultProduct = {
       zhHans: defaultProductDescription,
     },
   },
-  restrictedCountries: [""],
+  restrictedCountries: [''],
 };
 
 export default Product;
