@@ -35,7 +35,6 @@ import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
 import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface Props {
   resetHandler: () => void;
@@ -83,13 +82,22 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       });
   };
 
-  const callApi = () => {
+  const callApi = (type: string) => {
     Server.requestEthAddressRegister()
       .then((res) => {
-        Linking.openURL(
-          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
-          }/ethAddress/${res.data.id}`,
-        );
+        if (type === 'metamask') {
+          Linking.openURL(
+            `https://metamask.app.link/dapp/${
+              getEnvironment().dappUrl
+            }/ethAddress/${res.data.id}`,
+          );
+        } else if (type === 'imtoken') {
+          Linking.openURL(
+            `imtokenv2://navigate?screen=DappView&url=https://${
+              getEnvironment().dappUrl
+            }/ethAddress/${res.data.id}`,
+          );
+        }
       })
       .catch((e) => {
         alert(i18n.t('account_errors.server'));
@@ -99,14 +107,16 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const copyLink = () => {
     Server.requestEthAddressRegister()
       .then((res) => {
-        const url = `https://${getEnvironment().dappUrl}/ethAddress/${res.data.id}`
+        const url = `https://${getEnvironment().dappUrl}/ethAddress/${
+          res.data.id
+        }`;
         Clipboard.setString(url);
-        alert(i18n.t('more_label.copied', { url: url }))
+        alert(i18n.t('more_label.copied', { url }));
       })
       .catch((e) => {
         alert(i18n.t('account_errors.server'));
       });
-  }
+  };
 
   useEffect(() => {
     AppState.addEventListener('change', () =>
@@ -185,10 +195,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     />
                     <H2Text
                       style={{ marginTop: 5 }}
-                      label={`EL ${state.balance
-                        ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
-                        : '-.--'
-                        }`}
+                      label={`EL ${
+                        state.balance
+                          ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
+                          : '-.--'
+                      }`}
                     />
                   </View>
                   <TouchableOpacity
@@ -272,87 +283,97 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               </View>
             </>
           ) : (
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                display: 'flex',
+                alignSelf: 'center',
+                marginTop: Dimensions.get('window').height * 0.1,
+              }}>
+              <Image
+                source={MetamaskFox}
+                style={{
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}></Image>
               <View
                 style={{
-                  width: '100%',
-                  alignItems: 'center',
-                  display: 'flex',
-                  alignSelf: 'center',
-                  marginTop: Dimensions.get('window').height * 0.1,
+                  width: Dimensions.get('window').width * 0.9,
+                  height: 100,
+                  flexDirection: 'column',
+                  padding: 15,
+                  backgroundColor: '#F6F6F8',
+                  borderRadius: 10,
+                  marginTop: 20,
+                  marginBottom: 25,
                 }}>
-                <Image
-                  source={MetamaskFox}
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}></Image>
                 <View
                   style={{
-                    width: Dimensions.get('window').width * 0.9,
-                    height: 100,
-                    flexDirection: 'column',
-                    padding: 15,
-                    backgroundColor: '#F6F6F8',
-                    borderRadius: 10,
-                    marginTop: 20,
-                    marginBottom: 25,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <BlueCircle />
-                    <P3Text
-                      label={i18n.t('more.check_1')}
-                      style={{ color: '#1C1C1C' }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <BlueCircle />
-                    <P3Text
-                      label={i18n.t('more.check_2')}
-                      style={{ color: '#1C1C1C' }}
-                    />
-                  </View>
+                  <BlueCircle />
+                  <P3Text
+                    label={i18n.t('more.check_1')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <BlueCircle />
+                  <P3Text
+                    label={i18n.t('more.check_2')}
+                    style={{ color: '#1C1C1C' }}
+                  />
                 </View>
               </View>
-            )
+            </View>
+          )
         }
         button={
           user.ethAddresses?.length > 0 ? (
             <></>
           ) : (
-              <>
-                <SubmitButton
-                  title={i18n.t('more_label.connect')}
-                  handler={callApi}
-                  style={{
-                    width: Dimensions.get('window').width * 0.9,
-                    marginLeft: 0,
-                    marginRight: 0,
-                    alignSelf: 'center',
-                  }}
-                />
-                <P1Text label={"or"} style={{ textAlign: "center" }} />
-                <SubmitButton
-                  title={i18n.t('more_label.copy')}
-                  handler={copyLink}
-                  style={{
-                    width: Dimensions.get('window').width * 0.9,
-                    marginLeft: 0,
-                    marginRight: 0,
-                    alignSelf: 'center',
-                  }}
-                />
-              </>
-            )
+            <>
+              <SubmitButton
+                title={i18n.t('more_label.connect')}
+                handler={() => callApi('metamask')}
+                style={{
+                  width: Dimensions.get('window').width * 0.9,
+                  marginLeft: 0,
+                  marginRight: 0,
+                  alignSelf: 'center',
+                }}
+              />
+              <SubmitButton
+                title={'아임토큰 연결하기'}
+                handler={() => callApi('imtoken')}
+                style={{
+                  width: Dimensions.get('window').width * 0.9,
+                  marginLeft: 0,
+                  marginRight: 0,
+                  alignSelf: 'center',
+                }}
+              />
+              <P1Text label={'or'} style={{ textAlign: 'center' }} />
+              <SubmitButton
+                title={i18n.t('more_label.copy')}
+                handler={copyLink}
+                style={{
+                  width: Dimensions.get('window').width * 0.9,
+                  marginLeft: 0,
+                  marginRight: 0,
+                  alignSelf: 'center',
+                }}
+              />
+            </>
+          )
         }
       />
       {state.confirmModal && (

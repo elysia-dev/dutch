@@ -99,9 +99,10 @@ const PaymentSelection: FunctionComponent = () => {
   const [state, setState] = useState({
     mobile: false,
     pc: false,
+    imtoken: false,
     emailRestriction: false,
   });
-  const { mobile, pc, emailRestriction } = state;
+  const { mobile, pc, imtoken, emailRestriction } = state;
   const { Server, refreshUser } = useContext(RootContext);
   const appState = useAppState();
 
@@ -114,8 +115,14 @@ const PaymentSelection: FunctionComponent = () => {
     }
   }, [appState]);
 
-  const linkMetamask = () => {
-    if (mobile) {
+  const linkDapp = () => {
+    if (imtoken) {
+      Linking.openURL(
+        `imtokenv2://navigate?screen=DappView&url=https://${
+          getEnvironment().dappUrl
+        }/requests/${id}`,
+      );
+    } else if (mobile) {
       Linking.openURL(
         `https://metamask.app.link/dapp/${
           getEnvironment().dappUrl
@@ -190,13 +197,25 @@ const PaymentSelection: FunctionComponent = () => {
           title={i18n.t('product.metamask_mobile')}
           type={'mobile'}
           selected={mobile}
-          modeHandler={() => setState({ ...state, mobile: true, pc: false })}
+          modeHandler={() =>
+            setState({ ...state, mobile: true, pc: false, imtoken: false })
+          }
         />
         <MetaMaskButton
           title={i18n.t('product.metamask_pc')}
           type={'pc'}
           selected={pc}
-          modeHandler={() => setState({ ...state, mobile: false, pc: true })}
+          modeHandler={() =>
+            setState({ ...state, mobile: false, pc: true, imtoken: false })
+          }
+        />
+        <MetaMaskButton
+          title={'ImToken Mobile'}
+          type={'imtoken'}
+          selected={imtoken}
+          modeHandler={() =>
+            setState({ ...state, mobile: false, pc: false, imtoken: true })
+          }
         />
       </View>
       {pc && <P1Text label={i18n.t('product.link_will_be_sent')} />}
@@ -216,10 +235,10 @@ const PaymentSelection: FunctionComponent = () => {
             : '#3679B5',
         }}
         handler={() => {
-          if (!(mobile || pc)) {
+          if (!(mobile || pc || imtoken)) {
             alert(i18n.t('product.select_metamask'));
           } else {
-            linkMetamask();
+            linkDapp();
           }
         }}></SubmitButton>
     </View>
