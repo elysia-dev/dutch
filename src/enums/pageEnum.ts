@@ -43,7 +43,6 @@ export enum MorePage {
   RegisterEthAddress = 'RegisterEthAddress',
   TermsOfUse = 'TermsOfUse',
   PrivacyPolicy = 'PrivacyPolicy',
-  MyWallet = 'MyWallet',
   WhatsNew = 'WhatsNew',
 }
 
