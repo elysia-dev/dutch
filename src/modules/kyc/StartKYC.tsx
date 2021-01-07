@@ -126,7 +126,20 @@ const StartKYC: FunctionComponent<{}> = () => {
             <P1Text
               style={{
                 color: '#626368',
-                fontFamily: 'Roboto_400Regular',
+                marginHorizontal: '5%',
+              }}
+              label={'* ' + i18n.t('FAQ.question.4')}
+            />
+            <P1Text
+              style={{
+                color: '#626368',
+                marginHorizontal: '5%',
+              }}
+              label={i18n.t('FAQ.answer.4')}
+            />
+            <P1Text
+              style={{
+                color: '#626368',
                 margin: '5%',
               }}
               label={'* ' + i18n.t('kyc.result')}
