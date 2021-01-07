@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { View, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
@@ -68,10 +68,11 @@ interface State {
 
 const TakeSelfie: FunctionComponent<{}> = () => {
   let camera: Camera | null;
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const { setSelfie } = useContext(KycContext);
   const [state, setState] = useState<State>({
-    hasPermission: false,
+    hasPermission: true,
     type: Camera.Constants.Type.back,
   });
   const [status, setStatus] = useState(LoadingStatus.NONE);
@@ -194,79 +195,81 @@ const TakeSelfie: FunctionComponent<{}> = () => {
           </Modal>
         }
         <TakeSelfieWrapper>
-          <Camera
-            useCamera2Api={true}
-            style={{ flex: 1, width: '100%', height: 700 }}
-            type={state.type}
-            ref={(ref) => {
-              camera = ref;
-            }}>
-            <HeaderCameraWrapper>
-              <BackButton
-                handler={() => navigation.goBack()}
-                isWhite={true}
-                style={{ marginTop: 30, marginLeft: 20 }}
-              />
-            </HeaderCameraWrapper>
+          {isFocused && (
+            <Camera
+              useCamera2Api={true}
+              style={{ flex: 1, width: '100%', height: 700 }}
+              type={state.type}
+              ref={(ref) => {
+                camera = ref;
+              }}>
+              <HeaderCameraWrapper>
+                <BackButton
+                  handler={() => navigation.goBack()}
+                  isWhite={true}
+                  style={{ marginTop: 30, marginLeft: 20 }}
+                />
+              </HeaderCameraWrapper>
 
-            <View
-              style={{
-                position: 'relative',
-                flex: 1,
-                backgroundColor: 'transparent',
-                flexDirection: 'column',
-                top: 220,
-              }}
-            />
-            <BottomCameraWrapper>
-              <BottomButtonWrapper>
-                <TouchableOpacity
-                  style={{
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                  }}
-                  onPress={async () => {
-                    const pickedSelfie = await pickImage();
-                    if (pickedSelfie) {
-                      setSelfie(pickedSelfie);
-                      navigation.navigate(KycPage.ConfirmSelfie);
-                      setStatus(LoadingStatus.SUCCESS);
-                    }
-                  }}>
-                  <Ionicons
-                    name="ios-photos"
-                    style={{ color: '#fff', fontSize: 40 }}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    flex: 0.1,
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                  }}
-                  onPress={async () => {
-                    const selfieTaken = await takePicture();
-                    if (selfieTaken) {
-                      setSelfie(selfieTaken);
-                      navigation.navigate(KycPage.ConfirmSelfie);
-                      setStatus(LoadingStatus.SUCCESS);
-                    }
-                  }}>
-                  <ButtonImg source={RecordPng} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    flex: 0.1,
-                    alignSelf: 'flex-end',
-                    alignItems: 'center',
-                  }}
-                  onPress={reverseCamera}>
-                  <ButtonImg source={ReversePng} />
-                </TouchableOpacity>
-              </BottomButtonWrapper>
-            </BottomCameraWrapper>
-          </Camera>
+              <View
+                style={{
+                  position: 'relative',
+                  flex: 1,
+                  backgroundColor: 'transparent',
+                  flexDirection: 'column',
+                  top: 220,
+                }}
+              />
+              <BottomCameraWrapper>
+                <BottomButtonWrapper>
+                  <TouchableOpacity
+                    style={{
+                      alignSelf: 'flex-end',
+                      alignItems: 'center',
+                      backgroundColor: 'transparent',
+                    }}
+                    onPress={async () => {
+                      const pickedSelfie = await pickImage();
+                      if (pickedSelfie) {
+                        setSelfie(pickedSelfie);
+                        navigation.navigate(KycPage.ConfirmSelfie);
+                        setStatus(LoadingStatus.SUCCESS);
+                      }
+                    }}>
+                    <Ionicons
+                      name="ios-photos"
+                      style={{ color: '#fff', fontSize: 40 }}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      flex: 0.1,
+                      alignSelf: 'flex-end',
+                      alignItems: 'center',
+                    }}
+                    onPress={async () => {
+                      const selfieTaken = await takePicture();
+                      if (selfieTaken) {
+                        setSelfie(selfieTaken);
+                        navigation.navigate(KycPage.ConfirmSelfie);
+                        setStatus(LoadingStatus.SUCCESS);
+                      }
+                    }}>
+                    <ButtonImg source={RecordPng} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      flex: 0.1,
+                      alignSelf: 'flex-end',
+                      alignItems: 'center',
+                    }}
+                    onPress={reverseCamera}>
+                    <ButtonImg source={ReversePng} />
+                  </TouchableOpacity>
+                </BottomButtonWrapper>
+              </BottomCameraWrapper>
+            </Camera>
+          )}
         </TakeSelfieWrapper>
         {status === LoadingStatus.PENDING && (
           <View
