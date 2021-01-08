@@ -27,6 +27,7 @@ import {
   P3Text,
   H2Text,
   P2Text,
+  H3Text,
 } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -35,6 +36,9 @@ import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
 import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
+import WalletType from '../../enums/WalletType';
+import commaFormatter from '../../utiles/commaFormatter';
+import currencyFormatter from '../../utiles/currencyFormatter';
 
 interface Props {
   resetHandler: () => void;
@@ -45,23 +49,72 @@ type State = {
   confirmModal: boolean;
   balance: string | undefined;
   pressed: boolean;
+  wallet: string;
 };
 
-const BlueCircle = styled.View`
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: #3679b5;
-  margin-right: 10px;
-`;
+type ButtonProps = {
+  title: string;
+  selected: boolean;
+  modeHandler: () => void;
+  type: string;
+};
+
+const buttonImage = (type: string) => {
+  switch (type) {
+    case WalletType.METAMASK_MOBILE:
+      return require('./images/metamask_icon.png');
+    case WalletType.METAMASK_PC:
+      return require('./images/metamask_pc.png');
+    case WalletType.IMTOKEN_MOBILE:
+      return require('./images/imToken_logo.png');
+    default:
+  }
+};
+
+const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
+  return (
+    <TouchableOpacity
+      onPress={props.modeHandler}
+      style={{
+        width: '90%',
+        marginLeft: '5%',
+        height: 50,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: props.selected ? '#3679B5' : '#D0D8DF',
+        paddingVertical: 15,
+        paddingHorizontal: 25,
+        flexDirection: 'row',
+        marginBottom: 15,
+      }}>
+      <Image
+        style={{ alignSelf: 'center' }}
+        source={buttonImage(props.type)}></Image>
+      <P1Text
+        style={{
+          flex: 5,
+          fontSize: 14,
+          paddingLeft: 10,
+          paddingRight: 30,
+          fontWeight: props.selected ? 'bold' : 'normal',
+          color: '#1C1C1C',
+          textAlign: 'center',
+          alignSelf: 'center',
+        }}
+        label={props.title}
+      />
+    </TouchableOpacity>
+  );
+};
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
-  const { Server, setEthAddress, user } = useContext(RootContext);
+  const { Server, setEthAddress, user, elPrice } = useContext(RootContext);
 
   const [state, setState] = useState<State>({
     confirmModal: false,
     balance: undefined,
     pressed: false,
+    wallet: '',
   });
 
   const [appState, setAppState] = useState<AppStateStatus>(
@@ -158,12 +211,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   : i18n.t('more_label.wallet_connect')
               }
             />
-            {!(user.ethAddresses?.length > 0) && (
-              <P3Text
-                label={i18n.t('more.check_text')}
-                style={{ color: '#626368', textAlign: 'left', marginTop: 10 }}
-              />
-            )}
           </>
         }
         body={
@@ -186,44 +233,71 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
                   }}>
-                  <View style={{ flexDirection: 'column' }}>
-                    <P1Text
-                      style={{ color: '#7A7D8D' }}
-                      label={i18n.t('more_label.metamask_wallet')}
-                    />
-                    <H2Text
-                      style={{ marginTop: 5 }}
-                      label={`EL ${
-                        state.balance
-                          ? (parseFloat(state.balance) / 10 ** 18).toFixed(2)
-                          : '-.--'
-                      }`}
-                    />
-                  </View>
                   <TouchableOpacity
                     onPress={() => {
                       setState({ ...state, balance: undefined });
                       userBalance();
                     }}
                     style={{
-                      width: 54,
-                      height: 54,
+                      width: 40,
+                      height: 40,
                       backgroundColor: '#fff',
                       elevation: 2,
-                      borderRadius: 27,
+                      borderRadius: 21,
                       shadowColor: '#1C1C1C4D',
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity: 0.6,
                       shadowRadius: 2,
                       justifyContent: 'center',
+                      marginRight: 8,
                     }}>
                     <Image
-                      style={{ width: 30, height: 29, alignSelf: 'center' }}
-                      source={require('./images/metamask_logo.png')}
+                      style={{
+                        width: 26,
+                        height: 26,
+                        alignSelf: 'center',
+                        resizeMode: 'center',
+                      }}
+                      source={require('./images/elysia_blue_logo.png')}
                     />
                   </TouchableOpacity>
+                  <H3Text
+                    label={'EL'}
+                    style={{
+                      flex: 3,
+                      marginTop: 9,
+                    }}
+                  />
+                  <View style={{ flexDirection: 'column', flex: 4 }}>
+                    <H3Text
+                      style={{ marginTop: 9, textAlign: 'right' }}
+                      label={`${
+                        state.balance
+                          ? commaFormatter(
+                              (parseFloat(state.balance) / 10 ** 18).toFixed(3),
+                            )
+                          : '-.--'
+                      }`}
+                    />
+                    <P3Text
+                      style={{
+                        color: '#7A7D8D',
+                        marginTop: 8,
+                        textAlign: 'right',
+                      }}
+                      label={`= ${
+                        state.balance
+                          ? currencyFormatter(
+                              '$',
+                              1,
+                              (elPrice * parseFloat(state.balance)) / 10 ** 18,
+                              2,
+                            )
+                          : '$ -.--'
+                      }`}
+                    />
+                  </View>
                 </View>
                 <View
                   style={{
@@ -286,26 +360,25 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             <View
               style={{
                 width: '100%',
-                alignItems: 'center',
+                height: '100%',
                 display: 'flex',
-                alignSelf: 'center',
-                marginTop: Dimensions.get('window').height * 0.1,
               }}>
-              <Image
-                source={MetamaskFox}
-                style={{
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}></Image>
               <View
                 style={{
                   width: Dimensions.get('window').width * 0.9,
-                  height: 100,
+                  height: 140,
                   flexDirection: 'column',
-                  padding: 15,
-                  backgroundColor: '#F6F6F8',
+                  padding: 20,
+                  backgroundColor: '#fff',
+                  elevation: 6,
+                  shadowColor: '#1C1C1C4D',
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4,
                   borderRadius: 10,
                   marginTop: 20,
+                  top: 0,
+                  position: 'relative',
                   marginBottom: 25,
                 }}>
                 <View
@@ -314,7 +387,12 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                   }}>
-                  <BlueCircle />
+                  <P3Text
+                    label={'*  '}
+                    style={{
+                      color: '#CC3743',
+                    }}
+                  />
                   <P3Text
                     label={i18n.t('more.check_1')}
                     style={{ color: '#1C1C1C' }}
@@ -326,9 +404,21 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                   }}>
-                  <BlueCircle />
+                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
                   <P3Text
                     label={i18n.t('more.check_2')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
+                  <P3Text
+                    label={i18n.t('more.check_3')}
                     style={{ color: '#1C1C1C' }}
                   />
                 </View>
@@ -341,36 +431,32 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             <></>
           ) : (
             <>
-              <SubmitButton
-                title={i18n.t('more_label.connect')}
-                handler={() => callApi('metamask')}
-                style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  marginLeft: 0,
-                  marginRight: 0,
-                  alignSelf: 'center',
+              <WalletButton
+                title={'MetaMask'}
+                selected={state.wallet === WalletType.METAMASK_MOBILE}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.METAMASK_MOBILE });
+                  callApi('metamask');
                 }}
+                type={WalletType.METAMASK_MOBILE}
               />
-              <SubmitButton
-                title={'아임토큰 연결하기'}
-                handler={() => callApi('imtoken')}
-                style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  marginLeft: 0,
-                  marginRight: 0,
-                  alignSelf: 'center',
+              <WalletButton
+                title={'imToken'}
+                selected={state.wallet === WalletType.IMTOKEN_MOBILE}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE });
+                  callApi('imtoken');
                 }}
+                type={WalletType.IMTOKEN_MOBILE}
               />
-              <P1Text label={'or'} style={{ textAlign: 'center' }} />
-              <SubmitButton
-                title={i18n.t('more_label.copy')}
-                handler={copyLink}
-                style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  marginLeft: 0,
-                  marginRight: 0,
-                  alignSelf: 'center',
+              <WalletButton
+                title={'Copy Link'}
+                selected={state.wallet === WalletType.METAMASK_PC}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.METAMASK_PC });
+                  copyLink();
                 }}
+                type={WalletType.METAMASK_PC}
               />
             </>
           )
