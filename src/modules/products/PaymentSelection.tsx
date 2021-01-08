@@ -25,6 +25,7 @@ import RootContext from '../../contexts/RootContext';
 import getEnvironment from '../../utiles/getEnvironment';
 import useAppState from '../../hooks/useAppState';
 import { DashboardPage } from '../../enums/pageEnum';
+import WalletType from '../../enums/WalletType';
 
 type ParamList = {
   PaymentSelection: {
@@ -44,14 +45,21 @@ type ButtonProps = {
 };
 
 const buttonImage = (type: string, selected: boolean) => {
-  if (type === 'mobile') {
-    return selected
-      ? require('./images/selected_mobile.png')
-      : require('./images/mobile.png');
+  switch (type) {
+    case WalletType.METAMASK_MOBILE:
+      return selected
+        ? require('./images/selected_mobile.png')
+        : require('./images/mobile.png');
+    case WalletType.METAMASK_PC:
+      return selected
+        ? require('./images/selected_desktop.png')
+        : require('./images/desktop.png');
+    case WalletType.IMTOKEN_MOBILE:
+      return selected
+        ? require('./images/selected_imtoken.png')
+        : require('./images/imtoken.png');
+    default:
   }
-  return selected
-    ? require('./images/selected_desktop.png')
-    : require('./images/desktop.png');
 };
 
 const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
@@ -97,12 +105,10 @@ const PaymentSelection: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'PaymentSelection'>>();
   const { id, tokenCount, product, type, elInterest } = route.params;
   const [state, setState] = useState({
-    mobile: false,
-    pc: false,
-    imtoken: false,
+    wallet: '',
     emailRestriction: false,
   });
-  const { mobile, pc, imtoken, emailRestriction } = state;
+  const { wallet, emailRestriction } = state;
   const { Server, refreshUser } = useContext(RootContext);
   const appState = useAppState();
 
@@ -116,38 +122,44 @@ const PaymentSelection: FunctionComponent = () => {
   }, [appState]);
 
   const linkDapp = () => {
-    if (imtoken) {
-      Linking.openURL(
-        `imtokenv2://navigate?screen=DappView&url=https://${
-          getEnvironment().dappUrl
-        }/requests/${id}`,
-      );
-    } else if (mobile) {
-      Linking.openURL(
-        `https://metamask.app.link/dapp/${
-          getEnvironment().dappUrl
-        }/requests/${id}`,
-      );
-    } else if (pc) {
-      if (emailRestriction) {
-        return alert(i18n.t('product.email_restriction'));
-      }
-      Server.sendEmailForTransaction(`${id}`)
-        .then((res) => {
-          setState({ ...state, emailRestriction: true });
-          alert(i18n.t('product.send_purchase_link'));
-          setTimeout(() => {
-            setState({
-              ...state,
-              emailRestriction: false,
-            });
-          }, 30000);
-        })
-        .catch((e) => {
-          if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
-          }
-        });
+    switch (wallet) {
+      case WalletType.IMTOKEN_MOBILE:
+        Linking.openURL(
+          `imtokenv2://navigate?screen=DappView&url=https://${
+            getEnvironment().dappUrl
+          }/requests/${id}`,
+        );
+        break;
+      case WalletType.METAMASK_MOBILE:
+        Linking.openURL(
+          `https://metamask.app.link/dapp/${
+            getEnvironment().dappUrl
+          }/requests/${id}`,
+        );
+        break;
+      case WalletType.METAMASK_PC:
+        if (emailRestriction) {
+          return alert(i18n.t('product.email_restriction'));
+        }
+        Server.sendEmailForTransaction(`${id}`)
+          .then((_res) => {
+            setState({ ...state, emailRestriction: true });
+            alert(i18n.t('product.send_purchase_link'));
+            setTimeout(() => {
+              setState({
+                ...state,
+                emailRestriction: false,
+              });
+            }, 30000);
+          })
+          .catch((e) => {
+            if (e.response.status === 500) {
+              alert(i18n.t('account_errors.server'));
+            }
+          });
+        break;
+      default:
+        alert(i18n.t('product.select_metamask'));
     }
   };
 
@@ -181,9 +193,9 @@ const PaymentSelection: FunctionComponent = () => {
         <QuitButton />
       </View>
       <H1Text
-        label={i18n.t('product.transaction_ready')}
+        label={i18n.t('product.select_payment')}
         style={{ fontSize: 25 }}></H1Text>
-      {type === 'buying' && (
+      {/* {type === 'buying' && (
         <BuyingSummary product={product} tokenCount={tokenCount} />
       )}
       {type === 'interest' && (
@@ -191,34 +203,36 @@ const PaymentSelection: FunctionComponent = () => {
       )}
       {type === 'refund' && (
         <RefundSummary product={product} tokenCount={tokenCount} />
-      )}
+      )} */}
       <View style={{ marginTop: 40 }}>
         <MetaMaskButton
           title={i18n.t('product.metamask_mobile')}
-          type={'mobile'}
-          selected={mobile}
+          type={WalletType.METAMASK_MOBILE}
+          selected={wallet === WalletType.METAMASK_MOBILE}
           modeHandler={() =>
-            setState({ ...state, mobile: true, pc: false, imtoken: false })
+            setState({ ...state, wallet: WalletType.METAMASK_MOBILE })
           }
         />
         <MetaMaskButton
           title={i18n.t('product.metamask_pc')}
-          type={'pc'}
-          selected={pc}
+          type={WalletType.METAMASK_PC}
+          selected={wallet === WalletType.METAMASK_PC}
           modeHandler={() =>
-            setState({ ...state, mobile: false, pc: true, imtoken: false })
+            setState({ ...state, wallet: WalletType.METAMASK_PC })
           }
         />
         <MetaMaskButton
-          title={'ImToken Mobile'}
-          type={'imtoken'}
-          selected={imtoken}
+          title={i18n.t('product.imtoken_mobile')}
+          type={WalletType.IMTOKEN_MOBILE}
+          selected={wallet === WalletType.IMTOKEN_MOBILE}
           modeHandler={() =>
-            setState({ ...state, mobile: false, pc: false, imtoken: true })
+            setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE })
           }
         />
       </View>
-      {pc && <P1Text label={i18n.t('product.link_will_be_sent')} />}
+      {wallet === WalletType.METAMASK_PC && (
+        <P1Text label={i18n.t('product.link_will_be_sent')} />
+      )}
       <SubmitButton
         title={i18n.t('account_label.continue')}
         // eslint-disable-next-line no-nested-ternary
@@ -227,20 +241,15 @@ const PaymentSelection: FunctionComponent = () => {
           bottom: 30,
           alignSelf: 'center',
           width: '100%',
-          // eslint-disable-next-line no-nested-ternary
-          backgroundColor: mobile
-            ? '#3679B5'
-            : emailRestriction
-            ? '#D0D8DF'
-            : '#3679B5',
+          backgroundColor:
+            // eslint-disable-next-line no-nested-ternary
+            wallet === WalletType.METAMASK_MOBILE
+              ? '#3679B5'
+              : emailRestriction
+              ? '#D0D8DF'
+              : '#3679B5',
         }}
-        handler={() => {
-          if (!(mobile || pc || imtoken)) {
-            alert(i18n.t('product.select_metamask'));
-          } else {
-            linkDapp();
-          }
-        }}></SubmitButton>
+        handler={linkDapp}></SubmitButton>
     </View>
   );
 };
