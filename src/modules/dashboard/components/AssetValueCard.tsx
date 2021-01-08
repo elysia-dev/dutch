@@ -9,9 +9,9 @@ import currencyFormatter from '../../../utiles/currencyFormatter';
 import { P1Text } from '../../../shared/components/Texts';
 import dayFormatter from '../../../utiles/dayFormatter';
 
-interface Props {
+type Props = {
   content: SummaryReportResponse['content'];
-}
+};
 
 export const AssetValueCard: FunctionComponent<Props> = (props) => {
   const { currencyUnit, currencyRatio } = useContext(RootContext);

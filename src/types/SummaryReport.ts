@@ -1,6 +1,6 @@
 import { OwnershipResponse } from './Ownership';
 
-interface DailyContent {
+type DailyContent = {
   [day0: string]: {
     dailyProfits: string;
     dailyValue: string;
@@ -29,13 +29,13 @@ interface DailyContent {
     dailyProfits: string;
     dailyValue: string;
   };
-}
+};
 
-interface SummaryOwnership {
+type SummaryOwnership = {
   ownerships: ['', ''];
-}
+};
 
-export interface SummaryReportResponse {
+export type SummaryReportResponse = {
   id: 0;
   type: string;
   summary: {
@@ -47,7 +47,7 @@ export interface SummaryReportResponse {
     averageAnnualReturn: string;
   };
   content: DailyContent & SummaryOwnership;
-}
+};
 
 export const defaultSummaryReportResponse = {
   id: 0,
