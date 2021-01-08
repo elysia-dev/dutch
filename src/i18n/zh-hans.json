@@ -153,7 +153,9 @@
     "value": "价值",
     "you": "您的账户",
     "elysia": "爱立厦",
-    "el": "EL代币"
+    "el": "EL代币",
+    "imtoken_mobile": "imToken钱包手机App",
+    "select_payment": "请选择钱包。"
   },
   "product_financial": {
     "expected_annual_return": "预期年收益",
@@ -300,6 +302,7 @@
     "check_text": "请阅读下列注意事项后，绑定钱包地址。",
     "check_1": "绑定钱包地址后不能变更。",
     "check_2": "每个用户只能绑定一个钱包地址。",
+    "check_3": "请选择以下选项中的一个。",
     "connected": "钱包地址绑定成功。",
     "find_more": "可以在“更多”中我的账户里查看详细信息。",
     "confirm_logout": "您要退出吗？"

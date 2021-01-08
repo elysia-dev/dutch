@@ -153,7 +153,9 @@
     "value": "VALUE",
     "you": "YOU",
     "elysia": "ELYSIA",
-    "el": "EL"
+    "el": "EL",
+    "imtoken_mobile": "imToken Mobile",
+    "select_payment": "Choose your wallet"
   },
   "product_financial": {
     "expected_annual_return": "Estimated annual return",
@@ -227,6 +229,7 @@
     "none_kyc": "KYC verification required.",
     "pending_kyc": "KYC verification is pending.",
     "success_kyc": "KYC verification is complete.",
+    "rejected_kyc": "KYC verification is rejected. Please try again.",
     "none_kyc_duplicate_label": "For App use",
     "pending_kyc_duplicate_label": "Pending",
     "success_kyc_duplicate_label": "Approved",
@@ -299,6 +302,7 @@
     "check_text": "Please check the following before proceeding with wallet connection.",
     "check_1": "You will not be able to change the wallet address once it is registered.",
     "check_2": "Only one wallet address can be registered per account.",
+    "check_3": "아래 방법 중 하나를 골라 진행해 주세요.",
     "connected": "Wallet is connected",
     "find_more": "Find out more by going to your account and clicking 'more'",
     "confirm_logout": "Would you like to sign out?"
