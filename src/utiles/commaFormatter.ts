@@ -11,6 +11,7 @@ const commaFormatter = (input: number | string) => {
       p < 0 || i < p ? `${m},` : m,
     );
   }
+  return '';
 };
 
 export default commaFormatter;
