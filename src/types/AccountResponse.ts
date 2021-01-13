@@ -13,11 +13,13 @@ export type AccountResponse = {
 
 export type OwnershipResponse = {
   id: number;
+  isLegacy: boolean;
   title: string;
   productType: string;
   value: number;
   profit: number;
-}
+  tokenValue: number;
+};
 
 export type UserResponse = {
   user: {
