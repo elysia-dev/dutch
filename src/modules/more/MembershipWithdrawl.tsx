@@ -1,31 +1,13 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
-} from 'react-native';
-import styled from 'styled-components/native';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
+import { View, Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import { KycStatus } from '../../enums/KycStatus';
-import { BackButton } from '../../shared/components/BackButton';
-import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
-import {
-  H1Text,
-  H2Text,
-  H3Text,
-  P1Text,
-  P3Text,
-  TitleText,
-} from '../../shared/components/Texts';
+import { P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TextField } from '../../shared/components/TextField';
+import LocaleType from '../../enums/LocaleType';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships, autoSignOut, Server } = useContext(RootContext);
@@ -86,7 +68,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
           <View
             style={{
               width: Dimensions.get('window').width * 0.9,
-              height: 240,
+              height: user.language === LocaleType.EN ? 330 : 240,
               flexDirection: 'column',
               padding: 20,
               backgroundColor: '#fff',
@@ -138,7 +120,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                     legacyEl: user.legacyUsd,
                     legacyUsd: user.legacyUsd,
                   })}
-                  style={{ color: '#1C1C1C' }}
+                  style={{ color: '#1C1C1C', lineHeight: 18 }}
                 />
               </View>
             )}
@@ -156,7 +138,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               />
               <P3Text
                 label={i18n.t('more.withdrawl_check_3')}
-                style={{ color: '#1C1C1C' }}
+                style={{ color: '#1C1C1C', lineHeight: 18 }}
               />
             </View>
             <View
@@ -173,7 +155,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               />
               <P3Text
                 label={i18n.t('more.withdrawl_check_4')}
-                style={{ color: '#1C1C1C' }}
+                style={{ color: '#1C1C1C', lineHeight: 18 }}
               />
             </View>
           </View>
