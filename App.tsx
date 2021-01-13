@@ -107,10 +107,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -149,11 +149,13 @@ const App = () => {
     setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
   };
 
-  const autoSignOut = async () => {
+  const autoSignOut = async (withdrawn?: boolean) => {
     await AsyncStorage.removeItem('@token');
     setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
     navigationRef.current?.navigate('Account', {
-      screen: AccountPage.ExpiredAccount,
+      screen: withdrawn
+        ? AccountPage.WithdrawnMember
+        : AccountPage.ExpiredAccount,
     });
   };
 
@@ -176,7 +178,8 @@ const App = () => {
             Server: authServer,
             elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
             krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
-            cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
+            cnyPrice:
+              allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
 
           registerForPushNotificationsAsync().then((expoPushToken) => {
@@ -205,18 +208,20 @@ const App = () => {
   };
 
   const refreshUser = async () => {
-    await state.Server.me().then(async (res) => {
-      setState({
-        ...state,
-        user: res.data.user,
-        ownerships: res.data.ownerships,
-        balance: res.data.totalBalance,
-        notifications: res.data.notifications || [],
+    await state.Server.me()
+      .then(async (res) => {
+        setState({
+          ...state,
+          user: res.data.user,
+          ownerships: res.data.ownerships,
+          balance: res.data.totalBalance,
+          notifications: res.data.notifications || [],
+        });
+      })
+      .catch(() => {
+        setState(defaultState);
       });
-    }).catch(() => {
-      setState(defaultState);
-    })
-  }
+  };
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (appState.current !== 'active' && nextAppState === 'active') {
@@ -391,10 +396,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+            <>
+              <RootStack.Screen name={'Account'} component={Account} />
+            </>
+          )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}

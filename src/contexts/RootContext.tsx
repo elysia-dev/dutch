@@ -35,7 +35,7 @@ type RootContextType = {
   signIn: () => void;
   signOut: () => void;
   refreshUser: () => Promise<void>;
-  autoSignOut: () => void;
+  autoSignOut: (withdrawn?: boolean) => void;
   notifications: Notification[];
   setCurrencyPrice: (currency: CurrencyResponse[]) => void;
   setNotifications: (notifications: Notification[]) => void;
@@ -71,20 +71,20 @@ const RootContext = createContext<RootContextType>({
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  changeCurrency: () => { },
-  setKycStatus: () => { },
-  signIn: async () => { },
-  signOut: async () => { },
-  refreshUser: async () => { },
-  autoSignOut: async () => { },
+  changeLanguage: () => {},
+  changeCurrency: () => {},
+  setKycStatus: () => {},
+  signIn: async () => {},
+  signOut: async () => {},
+  refreshUser: async () => {},
+  autoSignOut: async (withdrawn?: boolean) => {},
   notifications: [] as Notification[],
-  setCurrencyPrice: (currency: CurrencyResponse[]) => { },
-  setNotifications: (notifications: Notification[]) => { },
-  setEthAddress: (address: string) => { },
-  setUserExpoPushToken: (expoPushToken: string) => { },
-  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
-  Server: new Server(() => { }, ''),
+  setCurrencyPrice: (currency: CurrencyResponse[]) => {},
+  setNotifications: (notifications: Notification[]) => {},
+  setEthAddress: (address: string) => {},
+  setUserExpoPushToken: (expoPushToken: string) => {},
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {},
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
