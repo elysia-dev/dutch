@@ -14,6 +14,7 @@ import RegisterEthAddress from './RegisterEthAddress';
 import TermsOfUse from './TermsOfUse';
 import PrivacyPolicy from './PrivacyPolicy';
 import WhatsNew from './WhatsNew';
+import MembershipWithdrawl from './MembershipWithdrawl';
 
 const Stack = createStackNavigator();
 
@@ -40,10 +41,15 @@ export const More = () => {
       <Stack.Screen
         name={MorePage.RegisterEthAddress}
         component={RegisterEthAddress}
+    
       />
       <Stack.Screen
         name={MorePage.WhatsNew}
         component={WhatsNew}
+      />
+      <Stack.Screen
+        name={MorePage.MembershipWithdrawl}
+        component={MembershipWithdrawl}
       />
     </Stack.Navigator>
   );

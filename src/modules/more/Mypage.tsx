@@ -7,12 +7,15 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { BackButton } from '../../shared/components/BackButton';
-import { AccountPage } from '../../enums/pageEnum';
+import { AccountPage, MorePage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import {
   H1Text,
   H2Text,
+  H3Text,
   P1Text,
+  P2Text,
+  P3Text,
   TitleText,
 } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -101,6 +104,43 @@ const MyPage: FunctionComponent = () => {
               )}
             </View>
           )}
+          <View
+            style={{
+              paddingLeft: '5%',
+              paddingVertical: 10,
+              borderBottomWidth: 5,
+              borderBottomColor: '#F6F6F8',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(MorePage.MembershipWithdrawl);
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <View
+                  style={{
+                    paddingVertical: 10,
+                    flexDirection: 'column',
+                  }}>
+                  <H3Text
+                    label={i18n.t('more_label.leave_elysia')}
+                    style={{ fontSize: 15, lineHeight: 25, color: '#CC3743' }}
+                  />
+                  <P3Text
+                    label={i18n.t('more.delete_info')}
+                    style={{ color: '#a7a7a7' }}
+                  />
+                </View>
+                <InfoArrowImg
+                  source={require('./images/next_gray.png')}
+                  style={{ alignSelf: 'center' }}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </>
       }
     />
