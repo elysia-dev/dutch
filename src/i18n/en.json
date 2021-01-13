@@ -39,7 +39,8 @@
     "login_again": "Login",
     "insert_ethaddress": "Please enter your Ethereum wallet address.",
     "already_insert_ethaddress": "This is your registered Ethereum wallet address.",
-    "submit_ethaddress": "Register wallet address"
+    "submit_ethaddress": "Register wallet address",
+    "withdrawl_complete": "Membership withdrawal has been completed.\nGo to the initial screen."
   },
   "account_errors": {
     "wrong_email": "Wrong email format",
@@ -67,7 +68,8 @@
     "resend_2": "Resend",
     "change": "Change",
     "change_password": "Change Password",
-    "ethaddress": "Wallet address"
+    "ethaddress": "Wallet address",
+    "move": "Move"
   },
   "kyc_label": {
     "argos_terms": "View Argos Terms and Conditions",
@@ -288,7 +290,10 @@
     "my_wallet": "My Wallet",
     "metamask_wallet": "Metamask Wallet",
     "balance": "Balance",
-    "currency": "Currency"
+    "currency": "Currency",
+    "leave_elysia": "Withdraw from Elysia",
+    "account_withdrawl": "Leave account",
+    "agree_withdrawl": "Accept and withdraw"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -305,7 +310,13 @@
     "check_3": "아래 방법 중 하나를 골라 진행해 주세요.",
     "connected": "Wallet is connected",
     "find_more": "Find out more by going to your account and clicking 'more'",
-    "confirm_logout": "Would you like to sign out?"
+    "confirm_logout": "Would you like to sign out?",
+    "delete_info": "Personal information and settings will be deleted.",
+    "withdrawl_confirm": "Are you sure you want to withdraw?",
+    "withdrawl_check_1": "Please proceed with withdrawal after refunding the existing product(%{legacyOwnerships}).",
+    "withdrawl_check_2": "After withdrawal, you cannot withdraw the balance in the wallet of the website(elysia.land).\nPlease proceed with the withdrawal of EL %{legacyEl} and USD %{legacyUsd} first.",
+    "withdrawl_check_3": "Your personal information (email and KYC authentication) will be deleted completely.",
+    "withdrawl_check_4": "Losses on ownership and interest income after withdrawal are not liable."
   },
   "dashboard_label": {
     "total_balance": "Balance",

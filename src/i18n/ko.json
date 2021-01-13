@@ -39,7 +39,8 @@
     "login_again": "로그인 하기",
     "insert_ethaddress": "이더리움 지갑 주소를 입력해주세요.",
     "already_insert_ethaddress": "등록하신 이더리움 지갑 주소입니다.",
-    "submit_ethaddress": "지갑주소 등록"
+    "submit_ethaddress": "지갑주소 등록",
+    "withdrawl_complete": "회원 탈퇴가 완료되었습니다.\n초기 화면으로 이동합니다."
   },
   "account_errors": {
     "wrong_email": "잘못된 이메일 형식이에요.",
@@ -67,7 +68,8 @@
     "resend_2": "다시 전송하기",
     "change": "변경하기",
     "change_password": "비밀번호 변경",
-    "ethaddress": "지갑 주소"
+    "ethaddress": "지갑 주소",
+    "move": "이동하기"
   },
   "kyc_label": {
     "argos_terms": "아르고스 약관보기",
@@ -288,7 +290,10 @@
     "my_wallet": "내 지갑",
     "metamask_wallet": "메타마스크 지갑",
     "balance": "잔고",
-    "currency": "통화"
+    "currency": "통화",
+    "leave_elysia": "엘리시아 탈퇴하기",
+    "account_withdrawl": "계정 탈퇴",
+    "agree_withdrawl": "동의하고 탈퇴하기"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
@@ -305,7 +310,13 @@
     "check_3": "아래 방법 중 하나를 골라 진행해 주세요.",
     "connected": "내 지갑이 연결되었습니다",
     "find_more": "더보기의 내 계정에서 확인할 수 있습니다",
-    "confirm_logout": "로그아웃 하시겠어요?"
+    "confirm_logout": "로그아웃 하시겠어요?",
+    "delete_info": "개인 정보와 설정이 삭제됩니다.",
+    "withdrawl_confirm": "정말 탈퇴하시겠습니까?",
+    "withdrawl_check_1": "기존 상품(%{legacyOwnerships})의 환불 이후 탈퇴를 진행해 주세요.",
+    "withdrawl_check_2": "탈퇴 이후에는 엘리시아 웹사이트(elysia.land) 내부 지갑에 있는 잔고 출금이 불가능합니다.\nEL %{legacyEl}, USD %{legacyUsd}의 출금을 먼저 진행해 주세요.",
+    "withdrawl_check_3": "개인정보(이메일과 KYC 인증 여부)가 완전히 삭제됩니다.",
+    "withdrawl_check_4": "탈퇴 이후의 소유권과 이자 소득에 대한 손실은 책임지지 않습니다."
   },
   "dashboard_label": {
     "total_balance": "총액",
