@@ -39,19 +39,19 @@ const HelperIcon = styled.Image`
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
   autocapitalize = 'none',
-  focusHandler = () => { },
+  focusHandler = () => {},
   ...props
 }) => {
   const [focusing, setFocus] = useState(onFocused);
 
   useEffect(() => {
     // Keyboard.addListener("keyboardDidShow", keyboardDidShow);
-    Keyboard.addListener("keyboardDidHide", keyboardDidHide);
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide);
 
     // cleanup function
     return () => {
       // Keyboard.removeListener("keyboardDidShow", keyboardDidShow);
-      Keyboard.removeListener("keyboardDidHide", keyboardDidHide);
+      Keyboard.removeListener('keyboardDidHide', keyboardDidHide);
     };
   }, []);
 
@@ -62,16 +62,19 @@ export const TextField: FunctionComponent<Props> = ({
 
   return (
     <View style={props.style}>
-      <P3Text label={props.label} style={{
-        color:
-          // eslint-disable-next-line no-nested-ternary
-          props.helperText !== undefined
-            ? '#C91725'
-            : focusing === true
+      <P3Text
+        label={props.label}
+        style={{
+          color:
+            // eslint-disable-next-line no-nested-ternary
+            props.helperText !== undefined
+              ? '#C91725'
+              : focusing === true
               ? '#3679B5'
               : '#A7A7A7',
-        fontFamily: 'Roboto_400Regular',
-      }} />
+          fontFamily: 'Roboto_400Regular',
+        }}
+      />
       <TextInput
         style={{
           borderBottomColor:
@@ -79,8 +82,8 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-                ? '#3679B5'
-                : '#D0D8DF',
+              ? '#3679B5'
+              : '#D0D8DF',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
           fontFamily: 'Roboto_400Regular',
@@ -89,7 +92,7 @@ export const TextField: FunctionComponent<Props> = ({
         defaultValue={props.value}
         editable={props.editable}
         onChangeText={props.eventHandler}
-        enablesReturnKeyAutomatically={true}
+        enablesReturnKeyAutomatically={false}
         secureTextEntry={props.secure}
         maxLength={50}
         autoCapitalize={autocapitalize}
@@ -109,11 +112,14 @@ export const TextField: FunctionComponent<Props> = ({
       />
       {props.helperText !== undefined && (
         <HelperWrapper>
-          <P3Text label={props.helperText} style={{
-            fontSize: 12,
-            color: "#1c1c1c",
-            lineHeight: 15,
-          }} />
+          <P3Text
+            label={props.helperText}
+            style={{
+              fontSize: 12,
+              color: '#1c1c1c',
+              lineHeight: 15,
+            }}
+          />
           {(() => {
             switch (props.helperIcon) {
               case 'Error':
