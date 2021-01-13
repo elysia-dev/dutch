@@ -29,6 +29,7 @@ export enum AccountPage {
   CertifySignup = 'CertifySignup',
   CertifyRecover = 'CertifyRecover',
   ExpiredAccount = 'ExpiredAccount',
+  WithdrawnMember = 'WithdrawnMember',
 }
 
 export enum MorePage {
@@ -44,6 +45,7 @@ export enum MorePage {
   TermsOfUse = 'TermsOfUse',
   PrivacyPolicy = 'PrivacyPolicy',
   WhatsNew = 'WhatsNew',
+  MembershipWithdrawl = 'MembershipWithdrawl',
 }
 
 export enum DashboardPage {
