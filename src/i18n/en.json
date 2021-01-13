@@ -291,9 +291,9 @@
     "metamask_wallet": "Metamask Wallet",
     "balance": "Balance",
     "currency": "Currency",
-    "leave_elysia": "Withdraw from Elysia",
-    "account_withdrawl": "Leave account",
-    "agree_withdrawl": "Accept and withdraw"
+    "leave_elysia": "Delete your Elysia account",
+    "account_withdrawl": "Delete account",
+    "agree_withdrawl": "Accept and delete"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -312,11 +312,11 @@
     "find_more": "Find out more by going to your account and clicking 'more'",
     "confirm_logout": "Would you like to sign out?",
     "delete_info": "Personal information and settings will be deleted.",
-    "withdrawl_confirm": "Are you sure you want to withdraw?",
-    "withdrawl_check_1": "Please proceed with withdrawal after refunding the existing product(%{legacyOwnerships}).",
-    "withdrawl_check_2": "After withdrawal, you cannot withdraw the balance in the wallet of the website(elysia.land).\nPlease proceed with the withdrawal of EL %{legacyEl} and USD %{legacyUsd} first.",
-    "withdrawl_check_3": "Your personal information (email and KYC authentication) will be deleted completely.",
-    "withdrawl_check_4": "Losses on ownership and interest income after withdrawal are not liable."
+    "withdrawl_confirm": "Are you sure you want to delete",
+    "withdrawl_check_1": "Please refund all properties(%{legacyOwnerships}) before deleting your account.",
+    "withdrawl_check_2": "You will no longer have access to your funds (including the wallet at elysia.land).\nPlease proceed with the withdrawal of EL %{legacyEl} and USD %{legacyUsd} first.",
+    "withdrawl_check_3": "Your personal information including email and KYC documents will be deleted completely.",
+    "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account."
   },
   "dashboard_label": {
     "total_balance": "Balance",
