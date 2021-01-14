@@ -70,7 +70,7 @@ const StartKYC: FunctionComponent<{}> = () => {
           />
         </>
       }
-      isScrolling={false}
+      isScrolling={true}
       body={
         <>
           <View style={{ marginTop: 20 }}>
