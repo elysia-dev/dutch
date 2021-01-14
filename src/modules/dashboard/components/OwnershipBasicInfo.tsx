@@ -17,6 +17,7 @@ import userChannel from '../../../utiles/userChannel';
 import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import getEnvironment from '../../../utiles/getEnvironment';
 
 type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
@@ -40,8 +41,9 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
           <View>
             <P2Text
               style={{ color: '#626368' }}
-              label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ''
-                }`}
+              label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${
+                ownership.isLegacy ? ownership.legacyPaymentMethod : ''
+              }`}
             />
             <H2Text
               style={{
@@ -56,7 +58,9 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             <TouchableOpacity
               onPress={() => {
                 Linking.openURL(
-                  `https://etherscan.io/token/${ownership.product.contractAddress}`,
+                  getEnvironment().envName === 'PRODUCTION'
+                    ? `https://etherscan.io/token/${ownership.product.contractAddress}`
+                    : `https://ropsten.etherscan.io/token/${ownership.product.contractAddress}`,
                 );
               }}
               style={{
@@ -107,13 +111,15 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               style={{ flex: 1, textAlign: 'right' }}
               label={
                 parseFloat(ownership.stake) < 0.01
-                  ? `${user.language !== LocaleType.KO
-                    ? i18n.t('dashboard_label.less')
-                    : ''
-                  } 0.01%${user.language === LocaleType.KO
-                    ? i18n.t('dashboard_label.less')
-                    : ''
-                  }`
+                  ? `${
+                      user.language !== LocaleType.KO
+                        ? i18n.t('dashboard_label.less')
+                        : ''
+                    } 0.01%${
+                      user.language === LocaleType.KO
+                        ? i18n.t('dashboard_label.less')
+                        : ''
+                    }`
                   : `${parseFloat(ownership.stake).toFixed(2)}%`
               }
             />

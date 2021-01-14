@@ -257,13 +257,15 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                         width: 26,
                         height: 26,
                         alignSelf: 'center',
-                        resizeMode: 'center',
+                        resizeMode: 'cover',
                       }}
                       source={require('./images/elysia_blue_logo.png')}
                     />
                   </TouchableOpacity>
                   <H3Text
-                    label={'EL'}
+                    label={
+                      getEnvironment().envName === 'PRODUCTION' ? 'EL' : 'ELRS '
+                    }
                     style={{
                       flex: 3,
                       marginTop: 9,

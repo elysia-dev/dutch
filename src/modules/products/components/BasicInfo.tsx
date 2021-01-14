@@ -1,7 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import * as Linking from 'expo-linking';
 import i18n from '../../../i18n/i18n';
@@ -17,6 +14,7 @@ import {
 import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import getEnvironment from '../../../utiles/getEnvironment';
 
 interface Props {
   product: Product;
@@ -44,10 +42,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View>
-          <P2Text
-            style={{ color: '#626368' }}
-            label={product.title}
-          />
+          <P2Text style={{ color: '#626368' }} label={product.title} />
           <View style={{ flexDirection: 'row' }}>
             <H2Text
               style={{
@@ -68,7 +63,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           <TouchableOpacity
             onPress={() => {
               Linking.openURL(
-                `https://etherscan.io/token/${product.contractAddress}`,
+                getEnvironment().envName === 'PRODUCTION'
+                  ? `https://etherscan.io/token/${product.contractAddress}`
+                  : `https://ropsten.etherscan.io/token/${product.contractAddress}`,
               );
             }}
             style={{
@@ -128,7 +125,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             style={{
               paddingLeft: 10,
               marginTop: 4,
-              marginLeft: "auto",
+              marginLeft: 'auto',
               fontSize: user.language === LocaleType.EN ? 15 : 18,
             }}
             label={productDescription.propertyType}
@@ -141,8 +138,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             alignContent: 'space-between',
             paddingTop: 10,
           }}>
-          {
-            product.financeType === 'loan' && <View
+          {product.financeType === 'loan' && (
+            <View
               style={{
                 flex: 1,
                 flexDirection: 'row',
@@ -162,7 +159,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 <P1Text label={i18n.t('product_label.loan')} />
               </View>
             </View>
-          }
+          )}
           <View
             style={{
               flex: 1,
