@@ -49,6 +49,25 @@ const MyPage: FunctionComponent = () => {
               style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
             />
             <P1Text label={user.email} style={{ fontSize: 15 }} />
+            {user.kycStatus === KycStatus.SUCCESS && (
+              <>
+                <P1Text
+                  label={i18n.t('more_label.name')}
+                  style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
+                />
+                <P1Text
+                  label={`${user.firstName} ${
+                    user.lastName !== null ? user.lastName : ''
+                  }`}
+                  style={{ fontSize: 15 }}
+                />
+                <P1Text
+                  label={i18n.t('more_label.gender')}
+                  style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
+                />
+                <P1Text label={user.gender} style={{ fontSize: 15 }} />
+              </>
+            )}
             <View
               style={{
                 height: 50,
@@ -74,36 +93,7 @@ const MyPage: FunctionComponent = () => {
               </TouchableOpacity>
             </View>
           </View>
-          {user.kycStatus === KycStatus.SUCCESS && (
-            <View
-              style={{
-                padding: '5%',
-                paddingTop: 30,
-                borderBottomWidth: 5,
-                borderBottomColor: '#F6F6F8',
-              }}>
-              <H2Text label={i18n.t('more_label.my_info')} />
-              {user.kycStatus === KycStatus.SUCCESS && (
-                <>
-                  <P1Text
-                    label={i18n.t('more_label.name')}
-                    style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
-                  />
-                  <P1Text
-                    label={`${user.firstName} ${
-                      user.lastName !== null ? user.lastName : ''
-                    }`}
-                    style={{ fontSize: 15 }}
-                  />
-                  <P1Text
-                    label={i18n.t('more_label.gender')}
-                    style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
-                  />
-                  <P1Text label={user.gender} style={{ fontSize: 15 }} />
-                </>
-              )}
-            </View>
-          )}
+
           <View
             style={{
               paddingLeft: '5%',
