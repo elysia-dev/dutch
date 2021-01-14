@@ -4,10 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
-import { P3Text } from '../../shared/components/Texts';
+import { H1Text, H2Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { TextField } from '../../shared/components/TextField';
 import LocaleType from '../../enums/LocaleType';
+import WrapperLayoutAvoidingKeyboard from '../../shared/components/WrapperLayoutAvoidingKeyboard';
+import AccountLayout from '../../shared/components/AccountLayout';
+import { BackButton } from '../../shared/components/BackButton';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships, autoSignOut, Server } = useContext(RootContext);
@@ -54,21 +57,34 @@ const MembershipWithdrawl: FunctionComponent = () => {
   };
 
   return (
-    <WrapperLayout
-      isScrolling={false}
-      title={i18n.t('more_label.leave_elysia')}
-      backButtonHandler={() => navigation.goBack()}
+    <AccountLayout
+      title={
+        <>
+          <BackButton
+            handler={() => navigation.goBack()}
+            style={{ width: 30 }}
+          />
+          <H2Text label={i18n.t('more_label.leave_elysia')} />
+        </>
+      }
       body={
         <View
           style={{
-            paddingHorizontal: '5%',
+            // paddingHorizontal: '5%',
             width: '100%',
             height: '100%',
           }}>
+          <TextField
+            label={i18n.t('account.insert_password')}
+            eventHandler={(input: string) => setPassword(input)}
+            secure={true}
+            value={password}
+          />
           <View
             style={{
               width: Dimensions.get('window').width * 0.9,
-              height: user.language === LocaleType.EN ? 330 : 240,
+              minHeight: 240,
+              height: 'auto',
               flexDirection: 'column',
               padding: 20,
               backgroundColor: '#fff',
@@ -86,7 +102,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
             {legacyOwnerships.length > 0 && (
               <View
                 style={{
-                  flex: 1,
+                  marginVertical: 10,
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
@@ -102,10 +118,10 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 />
               </View>
             )}
-            {(user.legacyEl || user.legacyUsd) && (
+            {(user.legacyEl > 0 || user.legacyUsd > 0) && (
               <View
                 style={{
-                  flex: 1,
+                  marginVertical: 10,
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
@@ -126,7 +142,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
             )}
             <View
               style={{
-                flex: 1,
+                marginVertical: 10,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
@@ -143,7 +159,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
             </View>
             <View
               style={{
-                flex: 1,
+                marginVertical: 10,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
@@ -159,12 +175,6 @@ const MembershipWithdrawl: FunctionComponent = () => {
               />
             </View>
           </View>
-          <TextField
-            label={i18n.t('account.insert_password')}
-            eventHandler={(input: string) => setPassword(input)}
-            secure={true}
-            value={password}
-          />
         </View>
       }
       button={
