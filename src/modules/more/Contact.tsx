@@ -19,19 +19,22 @@ const Contact: FunctionComponent = () => {
   });
 
   const callApi = () => {
-    if (state.contactRestriction) { return (alert(i18n.t('more.contact_restriction'))); }
+    if (state.contactRestriction) {
+      return alert(i18n.t('more.contact_restriction'));
+    }
     Server.sendQuestion(state.contents)
-      .then(res => {
+      .then((res) => {
         alert(i18n.t('more.question_submitted'));
         setState({ ...state, contactRestriction: true, contents: '' });
         // navigation.goBack();
         setTimeout(() => {
           setState({
-            ...state, contactRestriction: false,
+            ...state,
+            contactRestriction: false,
           });
         }, 60000);
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }
@@ -44,10 +47,12 @@ const Contact: FunctionComponent = () => {
       backButtonHandler={() => {
         navigation.goBack();
       }}
-      subTitle={<SubTitleText
-        label={i18n.t('more.contact_text')}
-        style={{ marginBottom: 10, color: '#5c5b5b' }}
-      />}
+      subTitle={
+        <SubTitleText
+          label={i18n.t('more.contact_text')}
+          style={{ marginBottom: 10, color: '#5c5b5b' }}
+        />
+      }
       title={i18n.t('more_label.contact')}
       body={
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -82,13 +87,22 @@ const Contact: FunctionComponent = () => {
                 fontSize: 12,
                 textAlign: 'right',
                 marginTop: 2,
-              }} label={`${state.contents.length}/1000`} />
+              }}
+              label={`${state.contents.length}/1000`}
+            />
           </View>
         </TouchableWithoutFeedback>
       }
       button={
         <SubmitButton
-          style={{ zIndex: 999, backgroundColor: state.contactRestriction ? "#D0D8DF" : "#3679B5" }}
+          disabled={!state.contents || state.contactRestriction}
+          style={{
+            zIndex: 999,
+            backgroundColor:
+              !state.contents || state.contactRestriction
+                ? '#D0D8DF'
+                : '#3679B5',
+          }}
           title={i18n.t('kyc_label.submit')}
           handler={() => callApi()}
         />
