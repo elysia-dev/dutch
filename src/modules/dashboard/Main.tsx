@@ -95,12 +95,12 @@ export const Main: FunctionComponent = () => {
               label={
                 user.firstName && user.lastName
                   ? i18n.t('greeting', {
-                      firstName: user.firstName,
-                      lastName: user.lastName === null ? '' : user.lastName,
-                    })
+                    firstName: user.firstName,
+                    lastName: user.lastName === null ? '' : user.lastName,
+                  })
                   : i18n.t('greeting_new', {
-                      email: user.email,
-                    })
+                    email: user.email,
+                  })
               }
             />
             <BalanceCard
@@ -189,12 +189,8 @@ export const Main: FunctionComponent = () => {
                     source={require('./images/investmentguide.png')}
                     style={{ width: '100%', height: 416, borderRadius: 10 }}
                   />
-                  <P1Text
-                    style={{ position: 'absolute', top: 30, left: 25 }}
-                    label={i18n.t('dashboard.with_elysia')}
-                  />
                   <H2Text
-                    style={{ position: 'absolute', top: 50, left: 25 }}
+                    style={{ position: 'absolute', top: 30, left: 25 }}
                     label={i18n.t('dashboard.investment_guide')}
                   />
                 </TouchableOpacity>
@@ -217,14 +213,10 @@ export const Main: FunctionComponent = () => {
                     source={require('./images/newinvestment.png')}
                     style={{ width: '100%', height: 250, borderRadius: 10 }}
                   />
-                  <P1Text
-                    style={{ position: 'absolute', top: 30, left: 25 }}
-                    label={i18n.t('dashboard.right_now')}
-                  />
                   <H2Text
                     style={{
                       position: 'absolute',
-                      top: 50,
+                      top: 30,
                       left: 25,
                     }}
                     label={i18n.t('dashboard.invest_first_asset')}
