@@ -7,7 +7,7 @@ const currencyFormatter = (
   fix: number,
 ) => {
   return `${currencyUnit} ${commaFormatter(
-    parseFloat(`${usdValue * currencyRatio}`).toFixed(fix),
+    parseFloat(`${usdValue * currencyRatio}`).toFixed(currencyUnit === '₩' ? 0 : fix),
   )}`;
 };
 

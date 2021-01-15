@@ -1,17 +1,13 @@
 import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
-  Dimensions,
-  PixelRatio,
 } from 'react-native';
 import Dash from 'react-native-dash';
 import RootContext from '../../../contexts/RootContext';
-import { H1Text, P1Text } from '../../../shared/components/Texts';
+import { H1Text, H2Text, H3Text, P1Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
-import currentLocale from '../../../utiles/currentLocale';
 
 interface Props {
   ownership: {
@@ -27,6 +23,16 @@ interface Props {
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
   const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const ownershipValue = currencyFormatter(
+    currencyUnit,
+    currencyRatio,
+    props.ownership.value,
+    2,
+  );
+
+  const fontSizeCalcurator = (length: number): number => {
+    return 28 - 3 * Math.floor((length - 1) / 3);
+  }
 
   return (
     <TouchableOpacity
@@ -76,13 +82,9 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             color: '#fff',
             marginBottom: 10,
             bottom: 0,
+            fontSize: fontSizeCalcurator(ownershipValue.length),
           }}
-          label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
-            props.ownership.value,
-            2,
-          )}
+          label={ownershipValue}
         />
         <Dash
           dashGap={4}

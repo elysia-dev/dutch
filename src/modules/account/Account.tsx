@@ -1,23 +1,33 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import InitializeEmail from './InitializeEmail';
 import Signup from './Signup';
 import Login from './Login';
 import LockAccount from './LockAccount';
 import CurrentPassword from './CurrentPassword';
-import ResetPassword from './ResetPassword';
 import RecoverPassword from './RecoverPassword';
 import CertifySignup from './CertifySignup';
 import { AccountPage } from '../../enums/pageEnum';
 import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
 import WithdrawnMember from './WithdrawnMember';
+import RootContext from '../../contexts/RootContext';
+import SignInStatus from '../../enums/SignInStatus';
 
 const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
+
+  const { signedIn } = useContext(RootContext);
+
   return (
     <Stack.Navigator
-      initialRouteName={AccountPage.InitializeEmail}
+      initialRouteName={
+        signedIn === SignInStatus.DELETE ?
+          AccountPage.WithdrawnMember :
+          signedIn === SignInStatus.EXPIRED ?
+            AccountPage.ExpiredAccount :
+            AccountPage.InitializeEmail
+      }
       headerMode="none">
       <Stack.Screen
         name={AccountPage.InitializeEmail}

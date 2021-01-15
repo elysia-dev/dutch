@@ -10,7 +10,7 @@ import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
 import RootContext from '../../contexts/RootContext';
-import { SignInStatus } from '../../enums/LoginStatus';
+import SignInStatus from '../../enums/SignInStatus';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -89,12 +89,12 @@ const InitializeEmail: FunctionComponent = () => {
               state.errorLength === 1
                 ? i18n.t('account.insert_account_email')
                 : state.errorReg === 1
-                ? i18n.t('account.check_email')
-                : i18n.t('account_label.continue')
+                  ? i18n.t('account.check_email')
+                  : i18n.t('account_label.continue')
             }
             handler={
               state.errorLength === 1 || state.errorReg === 1
-                ? () => {}
+                ? () => { }
                 : () => callEmailApi()
             }
             variant={
