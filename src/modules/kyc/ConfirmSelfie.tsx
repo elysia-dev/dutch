@@ -26,7 +26,6 @@ const SelfieImg = styled.Image`
   justify-content: center;
   align-content: center;
   left: 5%;
-  resize-mode: cover;
 `;
 
 const ConfirmSelfie: FunctionComponent<{}> = () => {
