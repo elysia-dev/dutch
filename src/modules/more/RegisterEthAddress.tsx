@@ -39,6 +39,7 @@ import getEnvironment from '../../utiles/getEnvironment';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import currencyFormatter from '../../utiles/currencyFormatter';
+import storeDeeplink from '../../utiles/storeDeeplink';
 
 interface Props {
   resetHandler: () => void;
@@ -143,13 +144,20 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             `https://metamask.app.link/dapp/${
               getEnvironment().dappUrl
             }/ethAddress/${res.data.id}`,
-          );
+          ).catch((_e) => {
+            storeDeeplink('metamask/id1438144202', 'io.metamask');
+          });
         } else if (type === 'imtoken') {
           Linking.openURL(
             `imtokenv2://navigate?screen=DappView&url=https://${
               getEnvironment().dappUrl
             }/ethAddress/${res.data.id}`,
-          );
+          ).catch((_e) => {
+            storeDeeplink(
+              'imtoken-btc-eth-wallet/id1384798940',
+              'im.token.app',
+            );
+          });
         }
       })
       .catch((e) => {

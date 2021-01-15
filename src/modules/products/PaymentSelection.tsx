@@ -26,6 +26,7 @@ import getEnvironment from '../../utiles/getEnvironment';
 import useAppState from '../../hooks/useAppState';
 import { DashboardPage } from '../../enums/pageEnum';
 import WalletType from '../../enums/WalletType';
+import storeDeeplink from '../../utiles/storeDeeplink';
 
 type ParamList = {
   PaymentSelection: {
@@ -128,14 +129,18 @@ const PaymentSelection: FunctionComponent = () => {
           `imtokenv2://navigate?screen=DappView&url=https://${
             getEnvironment().dappUrl
           }/requests/${id}`,
-        );
+        ).catch((_e) => {
+          storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
+        });
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
           `https://metamask.app.link/dapp/${
             getEnvironment().dappUrl
           }/requests/${id}`,
-        );
+        ).catch((_e) => {
+          storeDeeplink('metamask/id1438144202', 'io.metamask');
+        });
         break;
       case WalletType.METAMASK_PC:
         if (emailRestriction) {
