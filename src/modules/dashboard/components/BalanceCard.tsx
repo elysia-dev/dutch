@@ -13,6 +13,17 @@ interface Props {
 export const BalanceCard: FunctionComponent<Props> = (props) => {
   const { currencyUnit, currencyRatio } = useContext(RootContext);
 
+  const balance = currencyFormatter(
+    currencyUnit,
+    currencyRatio,
+    parseFloat(props.balance),
+    2,
+  );
+
+  const fontSizeCalcurator = (length: number): number => {
+    return 40 - 5 * Math.floor((length - 7) / 3)
+  }
+
   return (
     <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
       <View
@@ -42,16 +53,13 @@ export const BalanceCard: FunctionComponent<Props> = (props) => {
             alignContent: 'center',
           }}>
           <H1Text
-            label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
-              parseFloat(props.balance),
-              2,
-            )}
+            label={
+              balance
+            }
             style={{
               flex: 4,
               color: '#FFFFFF',
-              fontSize: 40,
+              fontSize: fontSizeCalcurator(balance.length),
               alignSelf: 'center',
             }}
           />
