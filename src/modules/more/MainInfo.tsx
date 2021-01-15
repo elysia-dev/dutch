@@ -21,6 +21,7 @@ import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
+import ExchangeXtPng from './images/xt_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
 
@@ -601,6 +602,19 @@ const MainInfo: FunctionComponent = () => {
                 }}
                 onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
                 <ExchangeImg source={ExchangeGopaxPng} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                style={{
+                  width: '50%',
+                  paddingHorizontal: '5%',
+                }}
+                onPress={() => Linking.openURL('https://www.xt.com')}>
+                <ExchangeImg source={ExchangeXtPng} />
               </TouchableOpacity>
             </View>
           </View>
