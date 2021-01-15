@@ -6,7 +6,13 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { ActivityIndicator, Modal, Platform, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  Modal,
+  Platform,
+  View,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -27,11 +33,15 @@ import { LoadingStatus } from '../../enums/LoadingStatus';
 import KycContext from '../../contexts/KycContext';
 
 const SelfieImg = styled.Image`
-  width: 90%;
-  height: 50%;
+  width: ${Platform.OS === 'android'
+    ? `${Dimensions.get('window').width * 0.6}px`
+    : '90%'};
+  height: ${Platform.OS === 'android'
+    ? `${Dimensions.get('window').width * 0.9}px`
+    : '50%'};
   justify-content: center;
   align-content: center;
-  left: 5%;
+  left: ${Platform.OS === 'android' ? '20%' : '5%'};
 `;
 const WarningIcon = styled.Image`
   width: 12px;
@@ -121,8 +131,9 @@ const ConfirmID: FunctionComponent<{}> = () => {
               source={{ uri: idPhoto.uri }}
               style={[
                 {
-                  resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
-                  marginTop: 20,
+                  // resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
+                  marginTop: Platform.OS === 'android' ? -60 : 20,
+                  marginBottom: Platform.OS === 'android' ? -60 : 0,
                 },
                 {
                   transform: [

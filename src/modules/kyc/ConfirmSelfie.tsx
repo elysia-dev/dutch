@@ -88,7 +88,7 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
             source={{ uri: selfie.uri }}
             style={[
               {
-                resizeMode: Platform.OS === 'android' ? 'cover' : 'center',
+                // resizeMode: Platform.OS === 'android' ? 'cover' : 'cover',
                 marginTop: 20,
               },
               {

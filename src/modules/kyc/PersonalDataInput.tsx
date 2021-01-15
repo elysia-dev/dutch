@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   Text,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
 import { Picker } from '@react-native-community/picker';
+import { SafeAreaView } from 'react-navigation';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Modal } from '../../shared/components/Modal';
@@ -32,8 +34,11 @@ import { BackButton } from '../../shared/components/BackButton';
 
 const IdImg = styled.Image`
   margin-top: 10px;
-  width: 100%;
-  height: 200px;
+  width: ${Platform.OS === 'android' ? 200 : '100%'};
+  height: ${Platform.OS === 'android'
+    ? `${Dimensions.get('window').width * 0.9}px`
+    : '200px'};
+  left: ${Platform.OS === 'android' ? '22%' : '0px'};
   resize-mode: cover;
 `;
 const ConfirmImg = styled.Image`
@@ -109,16 +114,21 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
   };
   return (
     <ScrollView style={{ backgroundColor: 'white' }}>
+      <SafeAreaView></SafeAreaView>
       <BackButton
         handler={() => {
           navigation.goBack();
         }}
-        style={{ width: 30, marginTop: 25, marginLeft: '5%' }}
+        style={{
+          width: 30,
+          marginTop: Platform.OS === 'android' ? 25 : 5,
+          marginLeft: '5%',
+        }}
       />
       <Text
         allowFontScaling={false}
         style={{
-          fontSize: 25,
+          fontSize: 22,
           fontFamily: 'Roboto_700Bold',
           marginLeft: '5%',
         }}>
@@ -126,7 +136,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
       </Text>
       <SubTitleText
         label={i18n.t('kyc.step3_text')}
-        style={{ marginLeft: '5%' }}
+        style={{ marginLeft: '5%', marginTop: 15 }}
       />
       <View
         style={{
@@ -138,8 +148,9 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
             source={{ uri: idPhoto.uri }}
             style={[
               {
-                resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
-                marginTop: Platform.OS === 'android' ? 40 : 0,
+                // resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
+                marginTop: Platform.OS === 'android' ? -40 : 20,
+                marginBottom: Platform.OS === 'android' ? -60 : 0,
               },
               {
                 transform: [
