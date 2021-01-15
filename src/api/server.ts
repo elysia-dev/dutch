@@ -11,21 +11,20 @@ import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
 import { SummaryReportResponse } from '../types/SummaryReport';
-import { CoinPriceResponse, ELPriceResponse } from '../types/CoinPrice';
+import { CoinPriceResponse } from '../types/CoinPrice';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { CurrencyResponse } from '../types/CurrencyResponse';
 import getEnvironment from '../utiles/getEnvironment';
+import SignInStatus, { SignOut } from '../enums/SignInStatus';
 
 export default class Server {
   token: string;
   authenticatedEspressoClient: AxiosInstance;
-  autoSignOutHandler: () => void;
-  constructor(autoSignOutHandler: () => void, token: string) {
-    this.autoSignOutHandler = autoSignOutHandler;
+  constructor(signOutHandler: (signInStatus: SignOut) => void, token: string) {
     this.token = token;
     this.authenticatedEspressoClient = authenticatedEspressoClient(
-      this.autoSignOutHandler,
+      signOutHandler,
       this.token,
     );
   }
@@ -311,8 +310,7 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${
-        getEnvironment().elAddress
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${getEnvironment().elAddress
       }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };

@@ -41,10 +41,9 @@ import Notification, { isNotification } from './src/types/Notification';
 
 import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
-import { AccountPage } from './src/enums/pageEnum';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
-import { SignInStatus } from './src/enums/LoginStatus';
+import SignInStatus, { SignOut } from './src/enums/SignInStatus';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
 import BlockScreen from './src/modules/main/BlockScreen';
@@ -107,10 +106,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -144,24 +143,14 @@ const App = () => {
   });
   const { currencyUnit, currencyRatio } = currencyState;
 
-  const signOut = async () => {
+  const signOut = async (signInStatus: SignOut) => {
     await AsyncStorage.removeItem('@token');
-    setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
-  };
-
-  const autoSignOut = async (withdrawn?: boolean) => {
-    await AsyncStorage.removeItem('@token');
-    setState({ ...defaultState, signedIn: SignInStatus.SIGNOUT });
-    navigationRef.current?.navigate('Account', {
-      screen: withdrawn
-        ? AccountPage.WithdrawnMember
-        : AccountPage.ExpiredAccount,
-    });
+    setState({ ...defaultState, signedIn: signInStatus });
   };
 
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
-    const authServer = new Server(autoSignOut, token !== null ? token : '');
+    const authServer = new Server(signOut, token !== null ? token : '');
     if (token) {
       await authServer
         .me()
@@ -338,7 +327,6 @@ const App = () => {
           },
           signIn,
           signOut,
-          autoSignOut,
           setCurrencyPrice: (currency: CurrencyResponse[]) => {
             const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
             const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
@@ -396,10 +384,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-            <>
-              <RootStack.Screen name={'Account'} component={Account} />
-            </>
-          )}
+              <>
+                <RootStack.Screen name={'Account'} component={Account} />
+              </>
+            )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}

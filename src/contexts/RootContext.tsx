@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import Server from '../api/server';
 import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
-import { SignInStatus } from '../enums/LoginStatus';
+import SignInStatus, { SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
@@ -33,9 +33,8 @@ type RootContextType = {
   changeCurrency: (input: CurrencyType) => void;
   setKycStatus: () => void;
   signIn: () => void;
-  signOut: () => void;
+  signOut: (signInStatus: SignOut) => void;
   refreshUser: () => Promise<void>;
-  autoSignOut: (withdrawn?: boolean) => void;
   notifications: Notification[];
   setCurrencyPrice: (currency: CurrencyResponse[]) => void;
   setNotifications: (notifications: Notification[]) => void;
@@ -71,20 +70,19 @@ const RootContext = createContext<RootContextType>({
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => {},
-  changeCurrency: () => {},
-  setKycStatus: () => {},
-  signIn: async () => {},
-  signOut: async () => {},
-  refreshUser: async () => {},
-  autoSignOut: async (withdrawn?: boolean) => {},
+  changeLanguage: () => { },
+  changeCurrency: () => { },
+  setKycStatus: () => { },
+  signIn: async () => { },
+  signOut: async (signInStatus: SignOut) => { },
+  refreshUser: async () => { },
   notifications: [] as Notification[],
-  setCurrencyPrice: (currency: CurrencyResponse[]) => {},
-  setNotifications: (notifications: Notification[]) => {},
-  setEthAddress: (address: string) => {},
-  setUserExpoPushToken: (expoPushToken: string) => {},
-  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {},
-  Server: new Server(() => {}, ''),
+  setCurrencyPrice: (currency: CurrencyResponse[]) => { },
+  setNotifications: (notifications: Notification[]) => { },
+  setEthAddress: (address: string) => { },
+  setUserExpoPushToken: (expoPushToken: string) => { },
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => { },
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
