@@ -75,9 +75,12 @@ const ProductBuying: FunctionComponent = () => {
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
-      return 'Closed';
+      return 'Terminated';
     }
     if (!purchasability) {
+      if (state.product?.restrictedCountries?.includes(shortNationality)) {
+        return i18n.t('product_label.restricted_country');
+      }
       return i18n.t('product_label.non_purchasable');
     } else if (state.product?.status === ProductStatus.SALE) {
       return i18n.t('product_label.invest');
