@@ -1,5 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Platform, TouchableOpacity, Text, ScrollView } from 'react-native';
+import {
+  View,
+  Platform,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -102,28 +108,46 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
     }
   };
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
+    <ScrollView style={{ backgroundColor: 'white' }}>
       <BackButton
-        handler={() => { navigation.goBack() }}
-        style={{ width: 30, marginTop: 25, marginLeft: "5%" }}
+        handler={() => {
+          navigation.goBack();
+        }}
+        style={{ width: 30, marginTop: 25, marginLeft: '5%' }}
       />
       <Text
         allowFontScaling={false}
         style={{
           fontSize: 25,
           fontFamily: 'Roboto_700Bold',
-          marginLeft: "5%"
+          marginLeft: '5%',
         }}>
         {i18n.t('kyc.step3')}
       </Text>
-      <SubTitleText label={i18n.t('kyc.step3_text')} style={{ marginLeft: "5%" }} />
+      <SubTitleText
+        label={i18n.t('kyc.step3_text')}
+        style={{ marginLeft: '5%' }}
+      />
       <View
         style={{
           paddingLeft: '5%',
           paddingRight: '5%',
         }}>
         <View style={{ flex: 1 }}>
-          <IdImg source={{ uri: idPhoto.uri }} />
+          <IdImg
+            source={{ uri: idPhoto.uri }}
+            style={[
+              {
+                resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
+                marginTop: Platform.OS === 'android' ? 40 : 0,
+              },
+              {
+                transform: [
+                  { rotate: Platform.OS === 'android' ? '270deg' : '0deg' },
+                ],
+              },
+            ]}
+          />
           <H1Text
             label={i18n.t('kyc_label.personal_data')}
             style={{ marginTop: 40, marginBottom: 6, fontSize: 20 }}
@@ -156,45 +180,45 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
               }}
             />
           ) : (
-              <>
-                <P3Text
+            <>
+              <P3Text
+                style={{
+                  marginTop: 20,
+                  color: '#a7a7a7',
+                  fontSize: 12,
+                  textAlign: 'left',
+                }}
+                label={i18n.t('kyc_label.nationality')}
+              />
+              <TouchableOpacity
+                style={{
+                  width: '100%',
+                  height: 40,
+                  backgroundColor: '#fff',
+                  borderRadius: 5,
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  borderBottomColor: '#d0d8df',
+                  borderBottomWidth: 1,
+                }}
+                onPress={() => {
+                  setState({ ...state, nationModalVisible: true });
+                }}>
+                <P1Text
+                  label={
+                    state.nationality
+                      ? state.nationality.split(',')[0]
+                      : 'Nationality'
+                  }
                   style={{
-                    marginTop: 20,
-                    color: '#a7a7a7',
-                    fontSize: 12,
-                    textAlign: 'left',
+                    color: state.nationality ? '#1c1c1c' : '#a7a7a7',
+                    textAlign: 'center',
                   }}
-                  label={i18n.t('kyc_label.nationality')}
                 />
-                <TouchableOpacity
-                  style={{
-                    width: '100%',
-                    height: 40,
-                    backgroundColor: '#fff',
-                    borderRadius: 5,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    borderBottomColor: '#d0d8df',
-                    borderBottomWidth: 1,
-                  }}
-                  onPress={() => {
-                    setState({ ...state, nationModalVisible: true });
-                  }}>
-                  <P1Text
-                    label={
-                      state.nationality
-                        ? state.nationality.split(',')[0]
-                        : 'Nationality'
-                    }
-                    style={{
-                      color: state.nationality ? '#1c1c1c' : '#a7a7a7',
-                      textAlign: 'center',
-                    }}
-                  />
-                </TouchableOpacity>
-              </>
-            )}
+              </TouchableOpacity>
+            </>
+          )}
           <P3Text
             style={{ marginTop: 40, marginBottom: 10 }}
             label={i18n.t('kyc_label.birthday')}
@@ -219,34 +243,34 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
               />
             </View>
           ) : (
-              <TouchableOpacity
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 40,
+                backgroundColor: '#fff',
+                borderRadius: 5,
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                borderBottomColor: '#d0d8df',
+                borderBottomWidth: 1,
+              }}
+              onPress={() => {
+                setState({ ...state, birthdayModalVisible: true });
+              }}>
+              <P1Text
+                label={
+                  state.birthday
+                    ? state.birthday
+                    : i18n.strftime(new Date(), '%Y-%m-%d')
+                }
                 style={{
-                  width: '100%',
-                  height: 40,
-                  backgroundColor: '#fff',
-                  borderRadius: 5,
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  borderBottomColor: '#d0d8df',
-                  borderBottomWidth: 1,
+                  color: state.birthday ? '#1c1c1c' : '#a7a7a7',
+                  textAlign: 'center',
                 }}
-                onPress={() => {
-                  setState({ ...state, birthdayModalVisible: true });
-                }}>
-                <P1Text
-                  label={
-                    state.birthday
-                      ? state.birthday
-                      : i18n.strftime(new Date(), '%Y-%m-%d')
-                  }
-                  style={{
-                    color: state.birthday ? '#1c1c1c' : '#a7a7a7',
-                    textAlign: 'center',
-                  }}
-                />
-              </TouchableOpacity>
-            )}
+              />
+            </TouchableOpacity>
+          )}
           <P3Text
             style={{ marginTop: 40 }}
             label={i18n.t('kyc_label.gender')}
@@ -323,14 +347,14 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
       {(state.modalVisible ||
         state.nationModalVisible ||
         state.birthdayModalVisible) && (
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-            }}></View>
-        )}
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
       <IosPickerModal
         modalVisible={state.birthdayModalVisible}
         doneHandler={() => {

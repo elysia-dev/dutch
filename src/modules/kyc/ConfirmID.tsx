@@ -6,7 +6,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { ActivityIndicator, Modal, View } from 'react-native';
+import { ActivityIndicator, Modal, Platform, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
@@ -32,7 +32,6 @@ const SelfieImg = styled.Image`
   justify-content: center;
   align-content: center;
   left: 5%;
-  resize-mode: stretch;
 `;
 const WarningIcon = styled.Image`
   width: 12px;
@@ -120,7 +119,17 @@ const ConfirmID: FunctionComponent<{}> = () => {
           <>
             <SelfieImg
               source={{ uri: idPhoto.uri }}
-              style={{ resizeMode: 'cover', marginTop: 20 }}
+              style={[
+                {
+                  resizeMode: Platform.OS === 'android' ? 'contain' : 'center',
+                  marginTop: 20,
+                },
+                {
+                  transform: [
+                    { rotate: Platform.OS === 'android' ? '270deg' : '0deg' },
+                  ],
+                },
+              ]}
             />
             <WarningWrapper>
               <View

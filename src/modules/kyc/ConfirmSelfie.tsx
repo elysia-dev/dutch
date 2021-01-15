@@ -9,7 +9,7 @@ import React, {
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
-import { ActivityIndicator, Modal, View } from 'react-native';
+import { ActivityIndicator, Modal, Platform, View } from 'react-native';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
@@ -83,7 +83,22 @@ const ConfirmSelfie: FunctionComponent<{}> = () => {
             style={{ color: '#626368', marginBottom: 15 }}
           />
         }
-        body={<SelfieImg source={{ uri: selfie.uri }} />}
+        body={
+          <SelfieImg
+            source={{ uri: selfie.uri }}
+            style={[
+              {
+                resizeMode: Platform.OS === 'android' ? 'cover' : 'center',
+                marginTop: 20,
+              },
+              {
+                transform: [
+                  { rotate: Platform.OS === 'android' ? '270deg' : '0deg' },
+                ],
+              },
+            ]}
+          />
+        }
         button={
           <>
             <SubmitButton
