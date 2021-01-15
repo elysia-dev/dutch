@@ -177,6 +177,17 @@ const TakeID: FunctionComponent<{}> = () => {
     );
   }, []);
 
+  // const getRatio = async () => {
+  //   if (camera) {
+  //     const ratio = await camera.getSupportedRatiosAsync();
+  //     setState({ ...state, androidRatio: ratio[0] });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getRatio();
+  // }, [state]);
+
   const reverseCamera = () => {
     setState({
       ...state,
@@ -287,6 +298,7 @@ const TakeID: FunctionComponent<{}> = () => {
         <TakeIdWrapper>
           {isFocused && (
             <Camera
+              ratio={'16:9'}
               useCamera2Api={true}
               style={{
                 flex: 1,

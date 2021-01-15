@@ -197,6 +197,7 @@ const TakeSelfie: FunctionComponent<{}> = () => {
         <TakeSelfieWrapper>
           {isFocused && (
             <Camera
+              ratio={'16:9'}
               useCamera2Api={true}
               style={{ flex: 1, width: '100%', height: 700 }}
               type={state.type}
