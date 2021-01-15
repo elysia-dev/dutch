@@ -83,7 +83,6 @@ const MembershipWithdrawl: FunctionComponent = () => {
           <View
             style={{
               width: Dimensions.get('window').width * 0.9,
-              minHeight: 240,
               height: 'auto',
               flexDirection: 'column',
               padding: 20,
