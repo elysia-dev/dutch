@@ -39,7 +39,8 @@
     "login_again": "登录",
     "insert_ethaddress": "绑定以太坊钱包地址",
     "already_insert_ethaddress": "您输入的以太坊钱包地址已绑定其他账号",
-    "submit_ethaddress": "绑定以太坊钱包地址"
+    "submit_ethaddress": "绑定以太坊钱包地址",
+    "withdrawl_complete": "退出会员完成。\n 回到主页面"
   },
   "account_errors": {
     "wrong_email": "邮箱格式错误。",
@@ -67,7 +68,8 @@
     "resend_2": "再次发送验证邮件",
     "change": "变更",
     "change_password": "变更密码",
-    "ethaddress": "钱包地址"
+    "ethaddress": "钱包地址",
+    "move": "跳转到"
   },
   "kyc_label": {
     "argos_terms": "查看隐私保密条款",
@@ -222,7 +224,8 @@
     "minimum_el": "最少投资额度",
     "reserve": "预约且接受通知",
     "reserved": "预约成功。",
-    "loan": "去中心化贷款债券型商品"
+    "loan": "去中心化贷款债券型商品",
+    "restricted_country": "所在国家/地区不能交易。"
   },
   "more_label": {
     "more": "更多",
@@ -288,7 +291,10 @@
     "my_wallet": "我的钱包",
     "metamask_wallet": "Metamask钱包",
     "balance": "余额",
-    "currency": "货币"
+    "currency": "货币",
+    "leave_elysia": "退出爱立厦Elysia",
+    "account_withdrawl": "删除账号",
+    "agree_withdrawl": "同意并删除"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",
@@ -305,7 +311,13 @@
     "check_3": "请选择以下选项中的一个。",
     "connected": "钱包地址绑定成功。",
     "find_more": "可以在“更多”中我的账户里查看详细信息。",
-    "confirm_logout": "您要退出吗？"
+    "confirm_logout": "您要退出吗？",
+    "delete_info": "删除个人信息",
+    "withdrawl_confirm": "您真的要退出吗？",
+    "withdrawl_check_1": "请在售出持有产品(%{legacyOwnerships})并提款后，再删除账号。",
+    "withdrawl_check_2": "在删除账号后，您将不能从爱立厦Elysia的内部钱包中提款。\n请操作提款后，再删除账号。(EL %{legacyEl}, USD %{legacyUsd})",
+    "withdrawl_check_3": "您的个人信息（包括邮箱地址和KYC验证记录）将会被全部删除。",
+    "withdrawl_check_4": "在删除账号后，您将承担房地产所有权相关的所有潜在经济损失。"
   },
   "dashboard_label": {
     "total_balance": "总额",

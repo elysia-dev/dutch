@@ -224,7 +224,8 @@
     "minimum_el": "최소투자단위",
     "reserve": "예약하고 알림받기",
     "reserved": "예약완료",
-    "loan": "탈중앙 대출채권형 상품"
+    "loan": "탈중앙 대출채권형 상품",
+    "restricted_country": "현재 국가에서 교환 불가"
   },
   "more_label": {
     "more": "더 보기",

@@ -224,7 +224,8 @@
     "minimum_el": "Minimum deposit",
     "reserve": "Sign up",
     "reserved": "On waitlist",
-    "loan": "Decentralized loans"
+    "loan": "Decentralized loans",
+    "restricted_country": "Swap is unavailable in the country"
   },
   "more_label": {
     "more": "More",
@@ -314,7 +315,7 @@
     "delete_info": "Personal information and settings will be deleted.",
     "withdrawl_confirm": "Are you sure you want to delete",
     "withdrawl_check_1": "Please refund all properties(%{legacyOwnerships}) before deleting your account.",
-    "withdrawl_check_2": "You will no longer have access to your funds (including the wallet at elysia.land).\nPlease proceed with the withdrawal of EL %{legacyEl} and USD %{legacyUsd} first.",
+    "withdrawl_check_2": "You will no longer have access to your funds\n(including the wallet at elysia.land : EL %{legacyEl} and USD %{legacyUsd})",
     "withdrawl_check_3": "Your personal information including email and KYC documents will be deleted completely.",
     "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account."
   },
