@@ -25,6 +25,8 @@ import {
   View,
   AppState,
   AppStateStatus,
+  Platform,
+  Alert,
 } from 'react-native';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
@@ -43,11 +45,13 @@ import RootContext from './src/contexts/RootContext';
 import Server from './src/api/server';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
-import SignInStatus, { SignOut } from './src/enums/SignInStatus';
+import { SignInStatus, SignOut } from './src/enums/SignInStatus';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
 import BlockScreen from './src/modules/main/BlockScreen';
 import { OwnershipResponse } from './src/types/AccountResponse';
+import getEnvironment from './src/utiles/getEnvironment';
+import storeDeeplink from './src/utiles/storeDeeplink';
 
 Sentry.init({
   dsn:
@@ -106,10 +110,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -142,6 +146,32 @@ const App = () => {
     currencyRatio: 1,
   });
   const { currencyUnit, currencyRatio } = currencyState;
+
+  const checkLatestVersion = () => {
+    const server = new Server(signOut, '');
+    server.checkLatestVersion(Platform.OS).then((res) => {
+      if (res.data.value !== getEnvironment().version) {
+        Alert.alert(
+          i18n.t('more_label.update_alert'),
+          i18n.t('more_label.update_text'),
+          [
+            {
+              text: i18n.t('more_label.cancel'),
+              onPress: () => {},
+              style: 'default',
+            },
+            {
+              text: i18n.t('more_label.update'),
+              onPress: () =>
+                storeDeeplink('elysia/id1536733411', 'land.elysia'),
+              style: 'cancel',
+            },
+          ],
+          { cancelable: false },
+        );
+      }
+    });
+  };
 
   const signOut = async (signInStatus: SignOut) => {
     await AsyncStorage.removeItem('@token');
@@ -187,8 +217,10 @@ const App = () => {
               });
             }
           });
+
+          checkLatestVersion();
         })
-        .catch((e) => {
+        .catch((_e) => {
           setState(defaultState);
         });
     } else {
@@ -384,10 +416,10 @@ const App = () => {
               <RootStack.Screen name={'Product'} component={Products} />
             </>
           ) : (
-              <>
-                <RootStack.Screen name={'Account'} component={Account} />
-              </>
-            )}
+            <>
+              <RootStack.Screen name={'Account'} component={Account} />
+            </>
+          )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}

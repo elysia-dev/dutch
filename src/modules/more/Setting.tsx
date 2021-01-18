@@ -27,7 +27,8 @@ import getEnvironment from '../../utiles/getEnvironment';
 import IosPickerModal from '../../shared/components/IosPickerModal';
 import { MorePage } from '../../enums/pageEnum';
 import CurrencyType from '../../enums/CurrencyType';
-import SignInStatus from '../../enums/SignInStatus';
+import { SignInStatus } from '../../enums/SignInStatus';
+import storeDeeplink from '../../utiles/storeDeeplink';
 
 interface Props {
   resetHandler: () => void;
@@ -50,6 +51,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     selectedCurrency: user.currency,
     showLanguageModal: false,
     showCurrencyModal: false,
+    latestVersion: '',
   });
 
   useEffect(() => {
@@ -60,6 +62,16 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       });
     });
   }, []);
+
+  useEffect(() => {
+    checkLatestVersion();
+  }, []);
+
+  const checkLatestVersion = () => {
+    Server.checkLatestVersion(Platform.OS).then((res) => {
+      setState({ ...state, latestVersion: res.data.value });
+    });
+  };
 
   const activityToggleButton = async () => {
     setState({ ...state, hasPermission: !state.hasPermission });
@@ -110,10 +122,16 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
       [
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => { signOut(SignInStatus.SIGNOUT) }, style: 'default' },
+        {
+          text: 'OK',
+          onPress: () => {
+            signOut(SignInStatus.SIGNOUT);
+          },
+          style: 'default',
+        },
       ],
       { cancelable: false },
     );
@@ -219,6 +237,33 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     }}
                   />
                 </TouchableOpacity>
+                {state.latestVersion !== getEnvironment().version && (
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: 30,
+                      paddingLeft: '5%',
+                      paddingRight: '5%',
+                    }}
+                    onPress={() => {
+                      storeDeeplink('elysia/id1536733411', 'land.elysia');
+                    }}>
+                    <H3Text
+                      label={i18n.t('more_label.get_latest_version', {
+                        version: state.latestVersion,
+                      })}
+                      style={{ color: '#CC3743', fontSize: 15 }}
+                    />
+                    <Image
+                      source={require('./images/next_gray.png')}
+                      style={{
+                        width: 5,
+                        height: 8,
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <H3Text
                 label={i18n.t('more_label.language')}
@@ -264,27 +309,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showLanguageModal: true });
+                    }}>
+                    <P1Text
+                      label={localeText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showLanguageModal: true });
-                      }}>
-                      <P1Text
-                        label={localeText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <H3Text
                 label={i18n.t('more_label.currency')}
@@ -342,27 +387,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
                     />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showCurrencyModal: true });
+                    }}>
+                    <P1Text
+                      label={currencyText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showCurrencyModal: true });
-                      }}>
-                      <P1Text
-                        label={currencyText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <View
                 style={{
