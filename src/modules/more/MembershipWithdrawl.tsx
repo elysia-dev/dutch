@@ -8,7 +8,7 @@ import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
-import SignInStatus from '../../enums/SignInStatus';
+import { SignInStatus } from '../../enums/SignInStatus';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships, signOut, Server } = useContext(RootContext);
@@ -25,7 +25,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
   const callApi = () => {
     Server.deleteUser(password)
       .then((_res) => {
-        signOut(SignInStatus.DELETE)
+        signOut(SignInStatus.DELETE);
       })
       .catch((e) => {
         if (e.response.status === 400) {
@@ -41,7 +41,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
         {
