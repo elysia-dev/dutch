@@ -150,7 +150,7 @@ const App = () => {
   const checkLatestVersion = () => {
     const server = new Server(signOut, '');
     server.checkLatestVersion(Platform.OS).then((res) => {
-      if (res.data.value !== getEnvironment().version) {
+      if (res.data !== getEnvironment().version) {
         Alert.alert(
           i18n.t('more_label.update_alert'),
           i18n.t('more_label.update_text'),

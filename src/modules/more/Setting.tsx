@@ -69,7 +69,7 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
 
   const checkLatestVersion = () => {
     Server.checkLatestVersion(Platform.OS).then((res) => {
-      setState({ ...state, latestVersion: res.data.value });
+      setState({ ...state, latestVersion: res.data });
     });
   };
 
