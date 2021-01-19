@@ -30,11 +30,7 @@ import CurrencyType from '../../enums/CurrencyType';
 import { SignInStatus } from '../../enums/SignInStatus';
 import storeDeeplink from '../../utiles/storeDeeplink';
 
-interface Props {
-  resetHandler: () => void;
-}
-
-const Setting: FunctionComponent<Props> = (props: Props) => {
+const Setting: FunctionComponent = () => {
   const {
     changeLanguage,
     changeCurrency,
@@ -51,26 +47,27 @@ const Setting: FunctionComponent<Props> = (props: Props) => {
     selectedCurrency: user.currency,
     showLanguageModal: false,
     showCurrencyModal: false,
-    latestVersion: '',
+    latestVersion: getEnvironment().version,
   });
 
   useEffect(() => {
-    Notifications.getExpoPushTokenAsync().then((token) => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const token = await Notifications.getExpoPushTokenAsync();
+      const version = await Server.checkLatestVersion(Platform.OS);
       setState({
         ...state,
         hasPermission: user.expoPushTokens?.includes(token.data),
+        latestVersion: version.data,
       });
-    });
-  }, []);
-
-  useEffect(() => {
-    checkLatestVersion();
-  }, []);
-
-  const checkLatestVersion = () => {
-    Server.checkLatestVersion(Platform.OS).then((res) => {
-      setState({ ...state, latestVersion: res.data });
-    });
+    } catch (e) {
+      if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+      }
+    }
   };
 
   const activityToggleButton = async () => {
