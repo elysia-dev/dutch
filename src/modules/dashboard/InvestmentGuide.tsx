@@ -1,5 +1,11 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, SegmentedControlIOS } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  SegmentedControlIOS,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
@@ -19,7 +25,7 @@ const GuideImage = styled.Image`
 const Circle = styled.View`
   width: 10px;
   height: 10px;
-  background-color: #BDD3E6;
+  background-color: #bdd3e6;
   border-radius: 10px;
   overflow: hidden;
   margin: 10px;
@@ -31,21 +37,31 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
   const viewPager = React.createRef<ViewPager>();
   const ReturnImage = (imgNumber: number) => {
     switch (imgNumber) {
-      case 0: return investmentGuide1;
-      case 1: return investmentGuide2;
-      case 2: return investmentGuide3;
-      default: return investmentGuide4;
+      case 0:
+        return investmentGuide1;
+      case 1:
+        return investmentGuide2;
+      case 2:
+        return investmentGuide3;
+      default:
+        return investmentGuide4;
     }
   };
   const ItemListing = Array(4)
     .fill(0)
     .map((_x, index) => {
       return (
-        <View style={styles.page}>
+        <View style={styles.page} key={index}>
           <GuideImage source={ReturnImage(index)} />
-          <View style={{ marginTop: 'auto', marginBottom: "35%" }}>
-            <H2Text label={i18n.t('dashboard.investment_guide_header.' + index)} style={{ fontSize: 25, textAlign: "center" }} />
-            <P1Text label={i18n.t('dashboard.investment_guide_text.' + index)} style={{ marginTop: 20, textAlign: "center" }} />
+          <View style={{ marginTop: 'auto', marginBottom: '35%' }}>
+            <H2Text
+              label={i18n.t('dashboard.investment_guide_header.' + index)}
+              style={{ fontSize: 25, textAlign: 'center' }}
+            />
+            <P1Text
+              label={i18n.t('dashboard.investment_guide_text.' + index)}
+              style={{ marginTop: 20, textAlign: 'center' }}
+            />
           </View>
         </View>
       );
@@ -54,32 +70,47 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
     .fill(0)
     .map((_x, index) => {
       return (
-        <TouchableOpacity onPress={() => { viewPager.current?.setPage(index); }}>
-          <Circle style={[state === index ? styles.enableCircle : styles.disableCircle]} />
+        <TouchableOpacity
+          onPress={() => {
+            viewPager.current?.setPage(index);
+          }}
+          key={index}>
+          <Circle
+            style={[
+              state === index ? styles.enableCircle : styles.disableCircle,
+            ]}
+          />
         </TouchableOpacity>
       );
     });
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFF", paddingTop: 55 }}>
+    <View style={{ flex: 1, backgroundColor: '#FFF', paddingTop: 55 }}>
       <TouchableOpacity
-        onPress={() => { navigation.goBack(); }}
+        onPress={() => {
+          navigation.goBack();
+        }}
         style={{
-          marginLeft: "auto",
-          marginRight: "5%",
-        }}
-      >
-        <Image
-          source={QuitIcon}
-        />
+          marginLeft: 'auto',
+          marginRight: '5%',
+        }}>
+        <Image source={QuitIcon} />
       </TouchableOpacity>
-      <ViewPager style={styles.viewPager} initialPage={0} ref={viewPager}
-        onPageSelected={e => {
+      <ViewPager
+        style={styles.viewPager}
+        initialPage={0}
+        ref={viewPager}
+        onPageSelected={(e) => {
           setState(e.nativeEvent.position);
-        }}
-      >
+        }}>
         {ItemListing}
       </ViewPager>
-      <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', bottom: "20%" }}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+          bottom: '20%',
+        }}>
         {ButtonListing}
       </View>
     </View>
@@ -89,13 +120,12 @@ const styles = StyleSheet.create({
   viewPager: {
     flex: 1,
   },
-  page: {
-  },
+  page: {},
   enableCircle: {
-    backgroundColor: "#3679B5",
+    backgroundColor: '#3679B5',
   },
   disableCircle: {
-    backgroundColor: "#BDD3E6",
+    backgroundColor: '#BDD3E6',
   },
 });
 
