@@ -294,7 +294,11 @@
     "currency": "통화",
     "leave_elysia": "엘리시아 탈퇴하기",
     "account_withdrawl": "계정 탈퇴",
-    "agree_withdrawl": "동의하고 탈퇴하기"
+    "agree_withdrawl": "동의하고 탈퇴하기",
+    "get_latest_version": "최신 버전(%{version})으로 업데이트",
+    "update_alert": "새 버전 알림",
+    "update_text": "새로운 버전이 있습니다. 업데이트 하시고 새로운 기능을 만나보세요!",
+    "update": "업데이트"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",

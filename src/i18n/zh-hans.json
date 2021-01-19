@@ -294,7 +294,11 @@
     "currency": "货币",
     "leave_elysia": "退出爱立厦Elysia",
     "account_withdrawl": "删除账号",
-    "agree_withdrawl": "同意并删除"
+    "agree_withdrawl": "同意并删除",
+    "get_latest_version": "更新最新(%{version})版本",
+    "update_alert": "最新版本通知提醒",
+    "update_text": "最新版本已推出，请更新后体验最新功能。",
+    "update": "更新"
   },
   "more": {
     "kyc_proceeding_wait": "请稍等，正在进行KYC认证，通过后会向您发送通知。",

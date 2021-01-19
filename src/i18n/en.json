@@ -294,7 +294,11 @@
     "currency": "Currency",
     "leave_elysia": "Delete your Elysia account",
     "account_withdrawl": "Delete account",
-    "agree_withdrawl": "Accept and delete"
+    "agree_withdrawl": "Accept and delete",
+    "get_latest_version": "Get latest version(%{version})",
+    "update_alert": "New version alert",
+    "update_text": "New version is released. Update and see what's new!",
+    "update": "Update"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
