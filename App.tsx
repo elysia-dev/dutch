@@ -156,7 +156,7 @@ const App = () => {
           i18n.t('more_label.update_text'),
           [
             {
-              text: i18n.t('more_label.cancel'),
+              text: i18n.t('more_label.close'),
               onPress: () => {},
               style: 'default',
             },
@@ -164,7 +164,7 @@ const App = () => {
               text: i18n.t('more_label.update'),
               onPress: () =>
                 storeDeeplink('elysia/id1536733411', 'land.elysia'),
-              style: 'cancel',
+              style: 'destructive',
             },
           ],
           { cancelable: false },
