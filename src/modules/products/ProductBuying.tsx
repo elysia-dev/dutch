@@ -29,6 +29,7 @@ import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
+import CachedImage from '../../shared/components/CachedImage';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -128,9 +129,10 @@ const ProductBuying: FunctionComponent = () => {
 
   const imageList = state.product?.data.images.map((image, index) => {
     return (
-      <Image
+      <CachedImage
         key={index}
         source={{ uri: image }}
+        cacheKey={image.replaceAll('/', '_')}
         style={{
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,

@@ -1,5 +1,6 @@
 import React, { createRef, FunctionComponent, useState } from 'react';
 import { View, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import CachedImage from '../../../shared/components/CachedImage';
 
 import { H1Text, H2Text, P1Text } from '../../../shared/components/Texts';
 import { Story } from '../../../types/product';
@@ -38,8 +39,9 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           marginBottom: 15,
           opacity: props.active ? 0 : 1,
         }}>
-        <Image
+        <CachedImage
           ref={ref}
+          cacheKey={props.story.image.replaceAll('/', '_')}
           source={{ uri: props.story.image }}
           style={{
             width: '100%',

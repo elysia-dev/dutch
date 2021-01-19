@@ -1,10 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
-import {
-  View,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
+import CachedImage from '../../../shared/components/CachedImage';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/product';
 
@@ -23,26 +20,46 @@ export const PostItem: FunctionComponent<Props> = (props: Props) => {
           screen: 'ProductBuying',
           params: { productId: props.product?.id },
         });
-      }}
-    >
-      <View style={{
-        height: 200,
-        marginTop: 20,
       }}>
-        <ImageBackground source={{ uri: (props.product?.data.images[0]) }} style={{ flex: 1, justifyContent: "center" }} imageStyle={{ borderRadius: 10 }}>
-          <View style={{ backgroundColor: "#1c1c1ccc", flex: 1, borderRadius: 10 }}>
-            <View style={{ margin: 20 }}>
-              <P1Text style={{ color: "#FFF" }} label={props.product?.title || 'Asset'} />
-              <H1Text style={{
-                marginTop: 45,
-                textAlign: 'center',
-                color: "#Fff",
-              }}
-                label={'CLOSED'}
-              />
+      <View
+        style={{
+          height: 200,
+          marginTop: 20,
+        }}>
+        {props.product && (
+          <>
+            <CachedImage
+              cacheKey={props.product?.data.images[0].replaceAll('/', '_')}
+              source={{ uri: props.product?.data.images[0] }}
+              style={{ flex: 1, justifyContent: 'center', borderRadius: 10 }}
+            />
+
+            <View
+              style={{
+                backgroundColor: '#1c1c1ccc',
+                flex: 1,
+                width: '100%',
+                height: '100%',
+                borderRadius: 10,
+                position: 'absolute',
+              }}>
+              <View style={{ width: '100%', height: '100%' }}>
+                <P1Text
+                  style={{ color: '#FFF', marginLeft: 20, marginTop: 20 }}
+                  label={props.product?.title || 'Asset'}
+                />
+                <H1Text
+                  style={{
+                    marginTop: 45,
+                    textAlign: 'center',
+                    color: '#Fff',
+                  }}
+                  label={'CLOSED'}
+                />
+              </View>
             </View>
-          </View>
-        </ImageBackground>
+          </>
+        )}
       </View>
     </TouchableOpacity>
   );
