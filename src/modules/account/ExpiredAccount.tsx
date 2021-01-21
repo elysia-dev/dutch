@@ -31,7 +31,7 @@ const ExpiredAccount: FunctionComponent = () => {
         label={i18n.t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate(AccountPage.InitializeEmail)}
+        onPress={() => navigation.navigate(AccountPage.IntroduceElysia)}
         style={{
           position: 'absolute',
           bottom: '20%',

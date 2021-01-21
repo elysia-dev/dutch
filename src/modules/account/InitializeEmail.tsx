@@ -11,6 +11,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
 import RootContext from '../../contexts/RootContext';
 import SignInStatus from '../../enums/SignInStatus';
+import { BackButton } from '../../shared/components/BackButton';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -64,10 +65,17 @@ const InitializeEmail: FunctionComponent = () => {
       </Modal>
       <AccountLayout
         title={
-          <TitleText
-            style={{ paddingTop: 53 }}
-            label={i18n.t('account.insert_account_email')}
-          />
+          <>
+            <BackButton
+              handler={() => {
+                navigation.goBack();
+              }}
+            />
+            <TitleText
+              // style={{ paddingTop: 53 }}
+              label={i18n.t('account.insert_account_email')}
+            />
+          </>
         }
         body={
           <TextField
@@ -89,12 +97,12 @@ const InitializeEmail: FunctionComponent = () => {
               state.errorLength === 1
                 ? i18n.t('account.insert_account_email')
                 : state.errorReg === 1
-                  ? i18n.t('account.check_email')
-                  : i18n.t('account_label.continue')
+                ? i18n.t('account.check_email')
+                : i18n.t('account_label.continue')
             }
             handler={
               state.errorLength === 1 || state.errorReg === 1
-                ? () => { }
+                ? () => {}
                 : () => callEmailApi()
             }
             variant={

@@ -31,7 +31,7 @@ const WithdrawnMember: FunctionComponent = () => {
         label={i18n.t('account.withdrawl_complete')}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate(AccountPage.InitializeEmail)}
+        onPress={() => navigation.navigate(AccountPage.IntroduceElysia)}
         style={{
           position: 'absolute',
           bottom: '20%',
