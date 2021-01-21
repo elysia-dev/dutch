@@ -30,6 +30,7 @@ export enum AccountPage {
   CertifyRecover = 'CertifyRecover',
   ExpiredAccount = 'ExpiredAccount',
   WithdrawnMember = 'WithdrawnMember',
+  IntroduceElysia = 'IntroduceElysia',
 }
 
 export enum MorePage {

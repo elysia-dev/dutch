@@ -12,23 +12,28 @@ import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
 import WithdrawnMember from './WithdrawnMember';
 import RootContext from '../../contexts/RootContext';
-import SignInStatus from '../../enums/SignInStatus';
+import { SignInStatus } from '../../enums/SignInStatus';
+import IntroduceElysia from './IntroduceElysia';
 
 const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
-
   const { signedIn } = useContext(RootContext);
 
   return (
     <Stack.Navigator
       initialRouteName={
-        signedIn === SignInStatus.DELETE ?
-          AccountPage.WithdrawnMember :
-          signedIn === SignInStatus.EXPIRED ?
-            AccountPage.ExpiredAccount :
-            AccountPage.InitializeEmail
+        // eslint-disable-next-line no-nested-ternary
+        signedIn === SignInStatus.DELETE
+          ? AccountPage.WithdrawnMember
+          : signedIn === SignInStatus.EXPIRED
+          ? AccountPage.ExpiredAccount
+          : AccountPage.IntroduceElysia
       }
       headerMode="none">
+      <Stack.Screen
+        name={AccountPage.IntroduceElysia}
+        component={IntroduceElysia}
+      />
       <Stack.Screen
         name={AccountPage.InitializeEmail}
         component={InitializeEmail}
