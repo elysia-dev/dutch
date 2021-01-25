@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable radix */
 import React, {
   Component,
@@ -16,7 +18,7 @@ import { ProductPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import Product from '../../types/Product';
 import ProductStatus from '../../enums/ProductStatus';
-import { P2Text, P3Text } from '../../shared/components/Texts';
+import { H3Text, P2Text, P3Text } from '../../shared/components/Texts';
 
 interface Props {
   product: Product;
@@ -28,6 +30,7 @@ interface Props {
 
 interface State {
   tokenCount: number;
+  paymentMethod: string;
 }
 
 const SliderProductBuying: FunctionComponent<Props> = (props) => {
@@ -35,7 +38,14 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const { Server } = useContext(RootContext);
   const [state, setState] = useState<State>({
     tokenCount: 10,
+    paymentMethod: 'el',
   });
+
+  const hasChildProduct = props.product?.childProducts?.length > 0;
+
+  const swapDisabled =
+    (props.subscribed && props.product.status !== ProductStatus.SALE) ||
+    (hasChildProduct && !state.paymentMethod);
 
   const submitButtonTitle = () => {
     if (
@@ -58,7 +68,15 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       props.product.status === ProductStatus.SALE ||
       props.from === 'ownershipDetail'
     ) {
-      callApi();
+      if (hasChildProduct) {
+        const childProduct = props.product.childProducts.find(
+          (product, _index) => product.paymentMethod === state.paymentMethod,
+        );
+        console.log(childProduct?.id);
+        callApi(childProduct?.id!);
+      } else {
+        callApi(props.product.id);
+      }
     } else if (props.product.status === ProductStatus.SUBSCRIBING) {
       if (!props.subscribed) {
         subscribeProduct();
@@ -85,27 +103,28 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       });
   };
 
-  const callApi = () => {
-    Server.requestTransaction(props.product.id, state.tokenCount, 'buying')
+  const callApi = (id: number) => {
+    Server.requestTransaction(id, state.tokenCount, 'buying')
       .then((res) => {
         props.modalHandler();
         props.from === 'ownershipDetail'
           ? navigation.navigate('Product', {
-            screen: ProductPage.PaymentSelection,
-            params: {
+              screen: ProductPage.PaymentSelection,
+              params: {
+                id: res.data.id,
+                product: props.product,
+                tokenCount: state.tokenCount,
+                type: 'buying',
+              },
+            })
+          : navigation.navigate(ProductPage.PaymentSelection, {
               id: res.data.id,
               product: props.product,
               tokenCount: state.tokenCount,
               type: 'buying',
-            },
-          })
-          : navigation.navigate(ProductPage.PaymentSelection, {
-            id: res.data.id,
-            product: props.product,
-            tokenCount: state.tokenCount,
-            type: 'buying',
-          })
-      }).catch((e) => {
+            });
+      })
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('product.transaction_error'));
         } else if (e.response.status === 500) {
@@ -162,7 +181,14 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
               });
             }
           }}
-          tokenName={props.product.tokenName}
+          tokenName={
+            hasChildProduct
+              ? props.product.childProducts.find(
+                  (product, _index) =>
+                    product.paymentMethod === state.paymentMethod,
+                )?.tokenName!
+              : props.product.tokenName
+          }
           tokenCount={state.tokenCount}
           return={props.product.expectedAnnualReturn}
           max={parseInt(props.product.presentValue, 10)}
@@ -171,12 +197,68 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           return={props.product.expectedAnnualReturn}
           tokenCount={state.tokenCount}
           type={'buy'}
+          hasEth={hasChildProduct}
         />
         {props.product.status === ProductStatus.SUBSCRIBING && (
           <P3Text label={i18n.t('product.for_subscription')} />
         )}
+        {hasChildProduct && (
+          <>
+            <P3Text
+              label={i18n.t('product_label.payment_method')}
+              style={{ marginBottom: 10 }}
+            />
+            <View style={{ width: '100%', flexDirection: 'row' }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setState({ ...state, paymentMethod: 'el' });
+                }}
+                style={{
+                  width: '47%',
+                  marginRight: '3%',
+                  height: 40,
+                  padding: 10,
+                  borderRadius: 5,
+                  borderColor:
+                    state.paymentMethod === 'el' ? '#3679B5' : '#D0D8DF',
+                  borderWidth: 1,
+                }}>
+                <H3Text
+                  label={'EL'}
+                  style={{
+                    fontSize: 15,
+                    alignSelf: 'center',
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setState({ ...state, paymentMethod: 'eth' });
+                }}
+                style={{
+                  width: '47%',
+                  marginLeft: '3%',
+                  height: 40,
+                  padding: 10,
+                  borderRadius: 5,
+                  borderColor:
+                    state.paymentMethod === 'eth' ? '#3679B5' : '#D0D8DF',
+                  borderWidth: 1,
+                }}>
+                <H3Text
+                  label={'ETH'}
+                  style={{
+                    fontSize: 15,
+                    textAlign: 'center',
+                    alignSelf: 'center',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
         <SubmitButton
-          disabled={props.subscribed && props.product.status !== ProductStatus.SALE}
+          disabled={swapDisabled}
           style={{
             position: 'absolute',
             bottom: 15,
@@ -185,7 +267,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             marginTop: 10,
-            backgroundColor: props.subscribed && props.product.status !== ProductStatus.SALE ? '#D0D8DF' : '#3679B5',
+            backgroundColor: swapDisabled ? '#D0D8DF' : '#3679B5',
           }}
           handler={submitButtonHandler}
           title={submitButtonTitle()}

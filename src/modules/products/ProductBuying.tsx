@@ -49,6 +49,7 @@ interface State {
   subscribed: boolean;
   product?: Product;
   loaded: boolean;
+  ethPrice: number;
   elPrice: number;
   selectedImage: number;
 }
@@ -59,6 +60,7 @@ const ProductBuying: FunctionComponent = () => {
     subscribed: false,
     loaded: false,
     elPrice: 0,
+    ethPrice: 0,
     selectedImage: 0,
   });
   const navigation = useNavigation();
@@ -100,6 +102,7 @@ const ProductBuying: FunctionComponent = () => {
       const product = await Server.productInfo(productId);
       const subscription = await Server.getProductSubscription(productId);
       const elPrice = await Server.getCurrency('el');
+      const ethPrice = await Server.coinPrice();
       // const totalSupply = getErc20Contract(product.data.contractAddress)
       setState({
         ...state,
@@ -107,6 +110,7 @@ const ProductBuying: FunctionComponent = () => {
         subscribed: subscription.status === 200,
         loaded: true,
         elPrice: elPrice.data.rate,
+        ethPrice: ethPrice.data.ethereum.usd,
       });
     } catch (e) {
       if (e.response.status === 500) {
@@ -115,12 +119,14 @@ const ProductBuying: FunctionComponent = () => {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
           const elPrice = await Server.getCurrency('el');
+          const ethPrice = await Server.coinPrice();
           setState({
             ...state,
             product: product.data,
             subscribed: false,
             loaded: true,
             elPrice: elPrice.data.rate,
+            ethPrice: ethPrice.data.ethereum.usd,
           });
         }
       }
@@ -170,108 +176,144 @@ const ProductBuying: FunctionComponent = () => {
   }, [user.language, productId]);
 
   return (
-    <ProductInfoWrapper>
-      <ScrollView
-        scrollEnabled={true}
-        scrollToOverflowEnabled={true}
-        style={{
-          height: '100%',
-          backgroundColor: '#fff',
-        }}>
-        <View
+    <>
+      <ProductInfoWrapper>
+        <ScrollView
+          scrollEnabled={true}
+          scrollToOverflowEnabled={true}
           style={{
-            top: 0,
-            width: '100%',
-            height: 293,
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
-            paddingBottom: 35,
+            height: '100%',
+            backgroundColor: '#fff',
           }}>
-          <ViewPager
+          <View
             style={{
-              position: 'absolute',
               top: 0,
               width: '100%',
               height: 293,
-            }}
-            initialPage={0}
-            ref={viewPager}
-            onPageSelected={(e) => {
-              setState({ ...state, selectedImage: e.nativeEvent.position });
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              paddingBottom: 35,
             }}>
-            {imageList}
-          </ViewPager>
-          <View
-            style={{
-              position: 'relative',
-              top: 250,
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              bottom: '20%',
-            }}>
-            {buttonList}
-          </View>
-          <View style={{ position: 'absolute', padding: 20 }}>
-            <BackButton
-              handler={() => {
-                StatusBar.setHidden(true);
-                navigation.goBack();
+            <ViewPager
+              style={{
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                height: 293,
               }}
-            />
+              initialPage={0}
+              ref={viewPager}
+              onPageSelected={(e) => {
+                setState({ ...state, selectedImage: e.nativeEvent.position });
+              }}>
+              {imageList}
+            </ViewPager>
+            <View
+              style={{
+                position: 'relative',
+                top: 250,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
+                bottom: '20%',
+              }}>
+              {buttonList}
+            </View>
+            <View style={{ position: 'absolute', padding: 20 }}>
+              <BackButton
+                handler={() => {
+                  StatusBar.setHidden(true);
+                  navigation.goBack();
+                }}
+              />
+            </View>
           </View>
-        </View>
-        {state.product && (
-          <BasicInfo product={state.product} elPrice={state.elPrice} />
-        )}
-        {state.product && state.product?.status !== ProductStatus.TERMINATED && (
+          {state.product && (
+            <BasicInfo
+              product={state.product}
+              elPrice={state.elPrice}
+              ethPrice={state.ethPrice}
+            />
+          )}
+          {state.product && state.product?.status !== ProductStatus.TERMINATED && (
+            <View
+              style={{
+                padding: 20,
+                borderBottomColor: '#F6F6F8',
+                borderBottomWidth: 5,
+                height: 136,
+              }}>
+              <ExpectedReturn product={state.product} />
+            </View>
+          )}
           <View
             style={{
               padding: 20,
               borderBottomColor: '#F6F6F8',
               borderBottomWidth: 5,
-              height: 136,
+              height: 320,
             }}>
-            <ExpectedReturn product={state.product} />
+            {state.product && <Map product={state.product} />}
+          </View>
+          {state.product && <WrappedInfo product={state.product} />}
+        </ScrollView>
+        <SubmitButton
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            marginBottom: 15,
+            backgroundColor:
+              // eslint-disable-next-line no-nested-ternary
+              state.product?.status === ProductStatus.TERMINATED
+                ? '#1c1c1c'
+                : purchasability
+                ? '#3679B5'
+                : '#D0D8DF',
+          }}
+          disabled={state.product?.status === ProductStatus.TERMINATED}
+          handler={() => {
+            if (!purchasability) {
+              if (
+                state.product?.restrictedCountries.includes(shortNationality)
+              ) {
+                return alert(i18n.t('product.restricted_country'));
+              }
+              return alert(i18n.t('product.non_purchasable'));
+            } else {
+              setState({ ...state, modalVisible: true });
+            }
+          }}
+          title={submitButtonTitle()}
+        />
+
+        {!state.elPrice && (
+          <View
+            style={{
+              backgroundColor: '#fff',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignContent: 'center',
+            }}>
+            <ActivityIndicator size="large" color="#3679B5" />
           </View>
         )}
-        <View
-          style={{
-            padding: 20,
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-            height: 320,
-          }}>
-          {state.product && <Map product={state.product} />}
-        </View>
-        {state.product && <WrappedInfo product={state.product} />}
-      </ScrollView>
-      <SubmitButton
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          marginBottom: 15,
-          backgroundColor:
-            // eslint-disable-next-line no-nested-ternary
-            state.product?.status === ProductStatus.TERMINATED
-              ? '#1c1c1c'
-              : purchasability
-              ? '#3679B5'
-              : '#D0D8DF',
-        }}
-        disabled={state.product?.status === ProductStatus.TERMINATED}
-        handler={() => {
-          if (!purchasability) {
-            if (state.product?.restrictedCountries.includes(shortNationality)) {
-              return alert(i18n.t('product.restricted_country'));
+        <Modal
+          transparent={true}
+          animationType={'slide'}
+          visible={state.modalVisible}
+          onRequestClose={() => setState({ ...state, modalVisible: false })}>
+          <SliderProductBuying
+            product={state.product ? state.product : defaultProduct}
+            subscribed={state.subscribed}
+            setSubcribed={(input: boolean) =>
+              setState({ ...state, subscribed: input })
             }
-            return alert(i18n.t('product.non_purchasable'));
-          } else {
-            setState({ ...state, modalVisible: true });
-          }
-        }}
-        title={submitButtonTitle()}
-      />
+            modalHandler={() => setState({ ...state, modalVisible: false })}
+          />
+        </Modal>
+      </ProductInfoWrapper>
       {state.modalVisible && (
         <View
           style={{
@@ -282,34 +324,7 @@ const ProductBuying: FunctionComponent = () => {
           }}
         />
       )}
-      {!state.elPrice && (
-        <View
-          style={{
-            backgroundColor: '#fff',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#3679B5" />
-        </View>
-      )}
-      <Modal
-        transparent={true}
-        animationType={'slide'}
-        visible={state.modalVisible}
-        onRequestClose={() => setState({ ...state, modalVisible: false })}>
-        <SliderProductBuying
-          product={state.product ? state.product : defaultProduct}
-          subscribed={state.subscribed}
-          setSubcribed={(input: boolean) =>
-            setState({ ...state, subscribed: input })
-          }
-          modalHandler={() => setState({ ...state, modalVisible: false })}
-        />
-      </Modal>
-    </ProductInfoWrapper>
+    </>
   );
 };
 

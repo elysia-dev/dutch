@@ -19,6 +19,7 @@ import getEnvironment from '../../../utiles/getEnvironment';
 interface Props {
   product: Product;
   elPrice: number;
+  ethPrice: number;
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
@@ -28,6 +29,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];
   // TODO : Add null guard languages & descrptions
+  const hasChildProduct =
+    product?.childProducts && product?.childProducts.length > 0;
 
   return (
     <View
@@ -214,6 +217,34 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               />
             </View>
           </View>
+          {hasChildProduct && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+                alignItems: 'center',
+              }}>
+              <View />
+              <View style={{ flexDirection: 'row' }}>
+                <P1Text
+                  label={`ETH ${commaFormatter(
+                    (product.usdPricePerToken / props.ethPrice).toFixed(6),
+                  )}`}
+                />
+                <P1Text
+                  label={` (${currencyFormatter(
+                    currencyUnit,
+                    currencyRatio,
+                    5,
+                    0,
+                  )})`}
+                  style={{ color: '#838383' }}
+                />
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </View>
