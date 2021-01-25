@@ -22,6 +22,7 @@ type Product = {
   usdPricePerToken: number;
   status: string;
   subscriptionsCount: number;
+  childProducts: Product[];
   financeType: string;
   data: {
     type: string;
@@ -45,6 +46,7 @@ type Product = {
     };
   };
   restrictedCountries: string[];
+  paymentMethod: string;
 };
 
 export type ProductId = {
@@ -63,6 +65,7 @@ export const defaultProduct = {
   usdPricePerToken: 0,
   status: 'pending',
   subscriptionsCount: 0,
+  childProducts: [null],
   financeType: 'loan',
   data: {
     type: '',
@@ -86,6 +89,7 @@ export const defaultProduct = {
     },
   },
   restrictedCountries: [''],
+  paymentMethod: '',
 };
 
 export default Product;
