@@ -65,7 +65,7 @@ export const defaultProduct = {
   usdPricePerToken: 0,
   status: 'pending',
   subscriptionsCount: 0,
-  childProducts: [null],
+  childProducts: [] as Product[],
   financeType: 'loan',
   data: {
     type: '',
