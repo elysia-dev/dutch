@@ -270,7 +270,9 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
         {ButtonListing}
       </View>
       <SubmitButton
-        title={'로그인/회원가입'}
+        title={
+          i18n.t('account_label.login') + '/' + i18n.t('account_label.signup')
+        }
         style={{
           width: '90%',
           marginHorizontal: '5%',
@@ -279,11 +281,11 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
         }}
         handler={() => navigation.navigate(AccountPage.InitializeEmail)}
       />
-      <FlatButton
+      {/* <FlatButton
         style={{ position: 'absolute', bottom: 65, alignSelf: 'center' }}
         title={i18n.t('account.forget_password_link')}
         handler={() => navigation.navigate(AccountPage.InitializeEmail)}
-      />
+      /> */}
     </SafeAreaView>
   );
 };
