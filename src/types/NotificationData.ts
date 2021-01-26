@@ -5,6 +5,10 @@ type NotificationData = {
   month: number;
   week: number;
   message: string;
-}
+  tokenName: string;
+  tokenAmount: string;
+  txHash: string;
+  paymentMethod: string;
+};
 
 export default NotificationData;

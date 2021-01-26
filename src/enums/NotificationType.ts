@@ -8,6 +8,11 @@ enum NotificationType {
   PROFIT = 'profit',
   PRODUCT_NOTICE = 'productNotice',
   ELYSIA_NOTICE = 'elysiaNotice',
+  PENDING_TRANSACTION = 'pendingTransaction',
+  INCREASE_OWNERSHIP = 'increaseOwnership',
+  DECREASE_OWNERSHIP = 'decreaseOwnership',
+  WITHDRAW_INTEREST = 'withdrawInterest',
+  FAIL_TRANSACTION = 'failTransaction',
 }
 
 export default NotificationType;
