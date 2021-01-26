@@ -1,5 +1,11 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Linking,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../../i18n/i18n';
 import NotificationType from '../../../enums/NotificationType';
@@ -9,6 +15,7 @@ import { DashboardPage } from '../../../enums/pageEnum';
 import { P3Text, P1Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import getEnvironment from '../../../utiles/getEnvironment';
 
 interface Props {
   notification: Notification;
@@ -49,6 +56,12 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const status = props.notification.status;
   const data = props.notification.data;
   const navigation = useNavigation();
+  const isTransactionNoti = [
+    NotificationType.PENDING_TRANSACTION,
+    NotificationType.INCREASE_OWNERSHIP,
+    NotificationType.DECREASE_OWNERSHIP,
+    NotificationType.WITHDRAW_INTEREST,
+  ].includes(type);
 
   return (
     <View
@@ -60,12 +73,14 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
       }}>
       <TouchableOpacity
         onPress={() => {
-          props.readNotification(props.notification);
-          if (type === NotificationType.PRODUCT_NOTICE) {
-            navigation.navigate('Dashboard', {
-              screen: DashboardPage.ProductNotice,
-              params: { productId: data.productId },
-            });
+          if (type !== NotificationType.PENDING_TRANSACTION) {
+            props.readNotification(props.notification);
+            if (type === NotificationType.PRODUCT_NOTICE) {
+              navigation.navigate('Dashboard', {
+                screen: DashboardPage.ProductNotice,
+                params: { productId: data.productId },
+              });
+            }
           }
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -105,6 +120,9 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   parseFloat(data.message),
                   4,
                 ),
+                tokenName: data.tokenName,
+                tokenAmount: data.tokenAmount,
+                paymentMethod: data.paymentMethod?.toUpperCase(),
               })}
             />
             {type === NotificationType.FAIL_KYC && (
@@ -117,6 +135,24 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 }}
                 label={`- ${data.message}`}
               />
+            )}
+            {isTransactionNoti && (
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    getEnvironment().envName === 'PRODUCTION'
+                      ? `https://etherscan.io/tx/${data.txHash}`
+                      : `https://ropsten.etherscan.io/tx/${data.txHash}`,
+                  );
+                }}
+                style={{
+                  marginBottom: 8,
+                }}>
+                <P3Text
+                  label={data.txHash}
+                  style={{ textDecorationLine: 'underline' }}
+                />
+              </TouchableOpacity>
             )}
             <P3Text
               style={{
@@ -143,6 +179,16 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               />
             )}
           </View>
+          {type === NotificationType.PENDING_TRANSACTION && (
+            <View
+              style={{
+                flex: 1,
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}>
+              <ActivityIndicator size="small" color="#3679B5" />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     </View>
