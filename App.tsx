@@ -52,6 +52,7 @@ import BlockScreen from './src/modules/main/BlockScreen';
 import { OwnershipResponse } from './src/types/AccountResponse';
 import getEnvironment from './src/utiles/getEnvironment';
 import storeDeeplink from './src/utiles/storeDeeplink';
+import NotificationType from './src/enums/NotificationType';
 
 Sentry.init({
   dsn:
@@ -283,18 +284,36 @@ const App = () => {
   useEffect(() => {
     AppState.addEventListener('change', handleAppStateChange);
 
+    const isTransactionEnd = (type: NotificationType) => {
+      return [
+        NotificationType.INCREASE_OWNERSHIP,
+        NotificationType.DECREASE_OWNERSHIP,
+        NotificationType.WITHDRAW_INTEREST,
+        NotificationType.FAIL_TRANSACTION,
+      ].includes(type);
+    };
+
     const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
       (response) => {
         if (isNotification(response.request.content.data as Notification)) {
-          setState((state) => {
-            return {
-              ...state,
-              notifications: [
-                response.request.content.data as Notification,
-                ...state.notifications,
-              ],
-            };
-          });
+          if (
+            isTransactionEnd(
+              response.request.content.data
+                .notificationType as NotificationType,
+            )
+          ) {
+            refreshUser();
+          } else {
+            setState((state) => {
+              return {
+                ...state,
+                notifications: [
+                  response.request.content.data as Notification,
+                  ...state.notifications,
+                ],
+              };
+            });
+          }
         }
       },
     );
