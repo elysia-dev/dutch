@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -18,6 +23,8 @@ import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import { FlatButton } from '../../shared/components/FlatButton';
+import RootContext from '../../contexts/RootContext';
+import LocaleType from '../../enums/LocaleType';
 
 const Circle = styled.View`
   width: 10px;
@@ -32,7 +39,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  //   const [scrollX, setScrollX] = useState(0);
+  const { user } = useContext(RootContext);
 
   const viewPager = React.createRef<ViewPager>();
   const ReturnImageOrText = (imgNumber: number) => {
@@ -133,7 +140,8 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
             outputRange: [
               355,
-              Dimensions.get('window').height * 0.2 + 180,
+              Dimensions.get('window').height * 0.2 +
+                (user.language === LocaleType.KO ? 180 : 200),
               Dimensions.get('window').height * 0.1 +
                 (Platform.OS === 'ios' ? 203 : 195),
               Dimensions.get('window').height * 0.1 + 120,
@@ -152,7 +160,13 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
             outputRange: [
               550,
-              Dimensions.get('window').width * 0.46,
+              Dimensions.get('window').width * 0.46 +
+                // eslint-disable-next-line no-nested-ternary
+                (user.language === LocaleType.KO
+                  ? 0
+                  : user.language === LocaleType.CH
+                  ? -60
+                  : 0),
               Platform.OS === 'ios'
                 ? Dimensions.get('window').width * 0.421
                 : Dimensions.get('window').width * 0.433,
@@ -277,7 +291,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           width: '90%',
           marginHorizontal: '5%',
           position: 'absolute',
-          bottom: 100,
+          bottom: 40,
         }}
         handler={() => navigation.navigate(AccountPage.InitializeEmail)}
       />
