@@ -40,7 +40,20 @@
     "insert_ethaddress": "Please enter your Ethereum wallet address.",
     "already_insert_ethaddress": "This is your registered Ethereum wallet address.",
     "submit_ethaddress": "Register wallet address",
-    "withdrawl_complete": "Membership withdrawal has been completed.\nGo to the initial screen."
+    "withdrawl_complete": "Membership withdrawal has been completed.\nGo to the initial screen.",
+    "introduction_title": "Decentralized\nReal Estate Liquidation\nProtocol",
+    "introduction_header": [
+      "Real estate liquidation",
+      "Buy real estate assets",
+      "Decentralized transactions anywhere",
+      "Get started!"
+    ],
+    "introduction_text": [
+      "Real estate asset liquidity through Elysia",
+      "Purchase a liquidated real estate assets",
+      "You are free to trade your assets",
+      ""
+    ]
   },
   "account_errors": {
     "wrong_email": "Wrong email format",
@@ -215,6 +228,7 @@
     "refund_token_count": "Number of tokens",
     "token_count": "Number of tokens",
     "expected_el_price": "Estimated  EL",
+    "expected_eth_price": "Estimated  ETH",
     "eth_price": "Estimated",
     "property_type": "Property type",
     "recovery": "Total",
@@ -225,7 +239,8 @@
     "reserve": "Sign up",
     "reserved": "On waitlist",
     "loan": "Decentralized loans",
-    "restricted_country": "Swap is unavailable in the country"
+    "restricted_country": "Swap is unavailable in the country",
+    "payment_method": "Swap method"
   },
   "more_label": {
     "more": "More",
@@ -442,7 +457,12 @@
     "productNotice": "New announcement for token.",
     "saved_90days": "Notifications received are kept for 90 days.",
     "no_notification": "No notifications received.",
-    "read_all_notifications": "Read all %{number} unread notifications"
+    "read_all_notifications": "Read all %{number} unread notifications",
+    "pendingTransaction": "[%{tokenName}] Transaction is pending.",
+    "increaseOwnership": "[%{tokenName}] The number of tokens held has increased. (+ %{tokenAmount})",
+    "decreaseOwnership": "[%{tokenName}] The number of tokens held has decreased. (- %{tokenAmount})",
+    "withdrawInterest": "[%{tokenName}] The reserve has been withdrawn.(%{tokenAmount} %{paymentMethod})",
+    "failTransaction": "[%{tokenName}] Transaction is denied"
   },
   "notification_label": {
     "notification": "Notification",
@@ -450,7 +470,12 @@
     "failKyc": "KYC rejected",
     "profit": "Rewards",
     "productNotice": "Announcement",
-    "date_format": "%m/%d"
+    "date_format": "%m/%d",
+    "pendingTransaction": "Pending transaction",
+    "increaseOwnership": "Completed transaction",
+    "decreaseOwnership": "Completed transaction",
+    "withdrawInterest": "Completed transaction",
+    "failTransaction": "Failed transaction"
   },
   "FAQ": {
     "question": [

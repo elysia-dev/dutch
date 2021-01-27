@@ -40,7 +40,20 @@
     "insert_ethaddress": "绑定以太坊钱包地址",
     "already_insert_ethaddress": "您输入的以太坊钱包地址已绑定其他账号",
     "submit_ethaddress": "绑定以太坊钱包地址",
-    "withdrawl_complete": "退出会员完成。\n 回到主页面"
+    "withdrawl_complete": "退出会员完成。\n 回到主页面",
+    "introduction_title": "去中心化\n房地产证券化\n协议",
+    "introduction_header": [
+      "房地产证券化",
+      "购买房地产产品",
+      "全世界无论在哪，\n都能去中心化交易",
+      "现在，\n就开始走在时代最前沿。"
+    ],
+    "introduction_text": [
+      "通过爱立厦（ELYSIA），将房地产证券化",
+      "投资证券化房地产资产",
+      "将持有资产流动起来，让交易更为便捷",
+      ""
+    ]
   },
   "account_errors": {
     "wrong_email": "邮箱格式错误。",
@@ -215,6 +228,7 @@
     "refund_token_count": "房地产代币数",
     "token_count": "房地产代币数",
     "expected_el_price": "EL代币数量",
+    "expected_eth_price": "ETH代币数量",
     "eth_price": "以太币数量",
     "property_type": "房地产类型",
     "recovery": "金额",
@@ -225,7 +239,8 @@
     "reserve": "预约且接受通知",
     "reserved": "预约成功。",
     "loan": "去中心化贷款债券型商品",
-    "restricted_country": "所在国家/地区不能交易。"
+    "restricted_country": "所在国家/地区不能交易。",
+    "payment_method": "交换方式"
   },
   "more_label": {
     "more": "更多",
@@ -439,7 +454,12 @@
     "productNotice": "有和代币相关的公告。",
     "saved_90days": "收到的通知将会被保存90天。",
     "no_notification": "没有任何通知。",
-    "read_all_notifications": "未读通知 %{number}条 阅读全部"
+    "read_all_notifications": "未读通知 %{number}条 阅读全部",
+    "pendingTransaction": "[%{tokenName}] 交易正在进行中",
+    "increaseOwnership": "[%{tokenName}] 持有财产增加。（+%{tokenAmount}个",
+    "decreaseOwnership": "[%{tokenName}] 持有财产减少。(- %{tokenAmount}个)",
+    "withdrawInterest": "[%{tokenName}] 提取存储金成功。(%{tokenAmount} %{paymentMethod})",
+    "failTransaction": "[%{tokenName}] 交易被拒绝。"
   },
   "notification_label": {
     "notification": "通知",
@@ -447,7 +467,12 @@
     "failKyc": "没有通过KYC",
     "profit": "收益",
     "productNotice": "代币公告",
-    "date_format": "%m月 %d日"
+    "date_format": "%m月 %d日",
+    "pendingTransaction": "等待交易",
+    "increaseOwnership": "交易成功",
+    "decreaseOwnership": "交易成功",
+    "withdrawInterest": "交易成功",
+    "failTransaction": "交易失败"
   },
   "FAQ": {
     "question": [

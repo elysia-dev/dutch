@@ -40,7 +40,20 @@
     "insert_ethaddress": "이더리움 지갑 주소를 입력해주세요.",
     "already_insert_ethaddress": "등록하신 이더리움 지갑 주소입니다.",
     "submit_ethaddress": "지갑주소 등록",
-    "withdrawl_complete": "회원 탈퇴가 완료되었습니다.\n초기 화면으로 이동합니다."
+    "withdrawl_complete": "회원 탈퇴가 완료되었습니다.\n초기 화면으로 이동합니다.",
+    "introduction_title": "탈중앙\n부동산 유동화\n프로토콜",
+    "introduction_header": [
+      "부동산 유동화",
+      "부동산 자산 구매하기",
+      "전세계 어디서든 탈중앙거래",
+      "지금 시작해보세요!"
+    ],
+    "introduction_text": [
+      "엘리시아를 통해 부동산 자산 유동화",
+      "유동화된 부동산 자산 구매",
+      "본인이 소유한 자산을 자유롭게 거래",
+      ""
+    ]
   },
   "account_errors": {
     "wrong_email": "잘못된 이메일 형식이에요.",
@@ -215,6 +228,7 @@
     "refund_token_count": "토큰 수",
     "token_count": "토큰 수",
     "expected_el_price": "예상 회수 EL(환산)",
+    "expected_eth_price": "예상 회수 ETH(환산)",
     "eth_price": "(환산)",
     "property_type": "분류",
     "recovery": "회수금",
@@ -225,7 +239,8 @@
     "reserve": "예약하고 알림받기",
     "reserved": "예약완료",
     "loan": "탈중앙 대출채권형 상품",
-    "restricted_country": "현재 국가에서 교환 불가"
+    "restricted_country": "현재 국가에서 교환 불가",
+    "payment_method": "교환 수단"
   },
   "more_label": {
     "more": "더 보기",
@@ -442,7 +457,12 @@
     "productNotice": "토큰 관련 새로운 공지사항이 있습니다.",
     "saved_90days": "받은 알림은 90일동안 보관됩니다.",
     "no_notification": "받은 알림이 없습니다.",
-    "read_all_notifications": "읽지 않은 알림 %{number}개 전부 읽기"
+    "read_all_notifications": "읽지 않은 알림 %{number}개 전부 읽기",
+    "pendingTransaction": "[%{tokenName}] 대기중인 트랜잭션이 있습니다.",
+    "increaseOwnership": "[%{tokenName}] 보유 개수가 증가했습니다. (+ %{tokenAmount}개)",
+    "decreaseOwnership": "[%{tokenName}] 보유 개수가 감소했습니다. (- %{tokenAmount}개)",
+    "withdrawInterest": "[%{tokenName}] 적립금이 출금되었습니다. (%{tokenAmount} %{paymentMethod})",
+    "failTransaction": "[%{tokenName}] 트랜잭션이 실패했습니다."
   },
   "notification_label": {
     "notification": "알림",
@@ -450,7 +470,12 @@
     "failKyc": "KYC 거절",
     "profit": "적립",
     "productNotice": "토큰 공지",
-    "date_format": "%m월 %d일"
+    "date_format": "%m월 %d일",
+    "pendingTransaction": "트랜잭션 대기",
+    "increaseOwnership": "트랜잭션 완료",
+    "decreaseOwnership": "트랜잭션 완료",
+    "withdrawInterest": "트랜잭션 완료",
+    "failTransaction": "트랜잭션 실패"
   },
   "FAQ": {
     "question": [
