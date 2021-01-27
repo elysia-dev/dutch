@@ -141,7 +141,12 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             outputRange: [
               355,
               Dimensions.get('window').height * 0.2 +
-                (user.language === LocaleType.KO ? 180 : 200),
+                // eslint-disable-next-line no-nested-ternary
+                (user.language === LocaleType.KO
+                  ? 180
+                  : user.language === LocaleType.CH
+                  ? 200
+                  : 225),
               Dimensions.get('window').height * 0.1 +
                 (Platform.OS === 'ios' ? 203 : 195),
               Dimensions.get('window').height * 0.1 + 120,
@@ -166,7 +171,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                   ? 0
                   : user.language === LocaleType.CH
                   ? -60
-                  : 0),
+                  : 20),
               Platform.OS === 'ios'
                 ? Dimensions.get('window').width * 0.421
                 : Dimensions.get('window').width * 0.433,
