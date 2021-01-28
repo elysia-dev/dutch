@@ -218,8 +218,7 @@ const App = () => {
               });
             }
           });
-
-          checkLatestVersion();
+          // checkLatestVersion();
         })
         .catch((_e) => {
           setState(defaultState);
@@ -230,7 +229,7 @@ const App = () => {
   };
 
   const refreshUser = async () => {
-    await state.Server.me()
+    state.Server.me()
       .then(async (res) => {
         setState({
           ...state,
@@ -240,8 +239,8 @@ const App = () => {
           notifications: res.data.notifications || [],
         });
       })
-      .catch(() => {
-        setState(defaultState);
+      .catch((e) => {
+        // setState(defaultState);
       });
   };
 
@@ -302,7 +301,7 @@ const App = () => {
                 .notificationType as NotificationType,
             )
           ) {
-            refreshUser();
+            signIn();
           } else {
             setState((state) => {
               return {
