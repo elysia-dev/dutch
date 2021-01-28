@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import {
   View,
   Image,
@@ -12,7 +12,7 @@ import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
 import { DashboardPage } from '../../../enums/pageEnum';
-import { P3Text, P1Text } from '../../../shared/components/Texts';
+import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
@@ -24,6 +24,7 @@ interface Props {
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const [showTx, setShowTx] = useState(false);
 
   const type = props.notification.notificationType;
   const typeId = () => {
@@ -72,16 +73,17 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         marginBottom: 40,
       }}>
       <TouchableOpacity
+        disabled={type !== NotificationType.PRODUCT_NOTICE}
         onPress={() => {
-          if (type !== NotificationType.PENDING_TRANSACTION) {
-            props.readNotification(props.notification);
-            if (type === NotificationType.PRODUCT_NOTICE) {
-              navigation.navigate('Dashboard', {
-                screen: DashboardPage.ProductNotice,
-                params: { productId: data.productId },
-              });
-            }
+          // if (type !== NotificationType.PENDING_TRANSACTION) {
+          //   props.readNotification(props.notification);
+          if (type === NotificationType.PRODUCT_NOTICE) {
+            navigation.navigate('Dashboard', {
+              screen: DashboardPage.ProductNotice,
+              params: { productId: data.productId },
+            });
           }
+          // }
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
@@ -137,22 +139,62 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               />
             )}
             {isTransactionNoti && (
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL(
-                    getEnvironment().envName === 'PRODUCTION'
-                      ? `https://etherscan.io/tx/${data.txHash}`
-                      : `https://ropsten.etherscan.io/tx/${data.txHash}`,
-                  );
-                }}
-                style={{
-                  marginBottom: 8,
-                }}>
-                <P3Text
-                  label={data.txHash}
-                  style={{ textDecorationLine: 'underline' }}
-                />
-              </TouchableOpacity>
+              <>
+                <TouchableOpacity
+                  onPress={() => setShowTx(!showTx)}
+                  style={{
+                    backgroundColor: '#A7A7A7',
+                    borderRadius: 2,
+                    width: 75,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    marginBottom: 8,
+                  }}>
+                  <View
+                    style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <P4Text
+                      style={{ color: '#fff', textAlign: 'center' }}
+                      label={
+                        showTx
+                          ? i18n.t('dashboard_label.fold')
+                          : i18n.t('dashboard_label.transaction')
+                      }
+                    />
+                    <Image
+                      style={{
+                        width: 5,
+                        height: 3,
+                        marginTop: 'auto',
+                        marginBottom: 'auto',
+                        marginLeft: 3,
+                      }}
+                      source={
+                        showTx
+                          ? require('../../dashboard/images/whiteupbutton.png')
+                          : require('../../dashboard/images/whitedownbutton.png')
+                      }></Image>
+                  </View>
+                </TouchableOpacity>
+                {showTx && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(
+                        getEnvironment().envName === 'PRODUCTION'
+                          ? `https://etherscan.io/tx/${data.txHash}`
+                          : `https://ropsten.etherscan.io/tx/${data.txHash}`,
+                      );
+                    }}
+                    style={{
+                      marginBottom: 8,
+                    }}>
+                    <P3Text
+                      label={data.txHash}
+                      style={{ textDecorationLine: 'underline' }}
+                    />
+                  </TouchableOpacity>
+                )}
+              </>
             )}
             <P3Text
               style={{
