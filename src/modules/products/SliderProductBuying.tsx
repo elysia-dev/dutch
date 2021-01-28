@@ -198,7 +198,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           return={props.product.expectedAnnualReturn}
           tokenCount={state.tokenCount}
           type={'buy'}
-          hasEth={hasChildProduct}
+          hasEth={hasChildProduct || props.product.paymentMethod === 'eth'}
         />
         {props.product.status === ProductStatus.SUBSCRIBING && (
           <P3Text label={i18n.t('product.for_subscription')} />

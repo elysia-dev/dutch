@@ -7,13 +7,13 @@ import React, {
   useEffect,
 } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
 import { OwnershipResponse } from '../../types/Ownership';
 import RootContext from '../../contexts/RootContext';
-import { useNavigation } from '@react-navigation/native';
 import { ProductPage } from '../../enums/pageEnum';
 
 interface Props {
@@ -24,7 +24,7 @@ interface Props {
 const OwnershipRefund: FunctionComponent<Props> = (props) => {
   const [tokenCount, setTokenCount] = useState(1);
   const { Server } = useContext(RootContext);
-  const product = props.ownership.product
+  const product = props.ownership.product;
   const navigation = useNavigation();
 
   const callApi = () => {
@@ -34,11 +34,11 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
           screen: ProductPage.PaymentSelection,
           params: {
             id: res.data.id,
-            product: product,
-            tokenCount: tokenCount,
+            product,
+            tokenCount,
             type: 'refund',
           },
-        })
+        }),
       )
       .catch((e) => {
         if (e.response.status === 400) {
@@ -96,7 +96,11 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
           tokenCount={tokenCount}
           max={props.ownership.tokenValue}
         />
-        <ExchangedValue tokenCount={tokenCount} type={'refund'} />
+        <ExchangedValue
+          tokenCount={tokenCount}
+          type={'refund'}
+          hasEth={props.ownership.product.paymentMethod === 'eth'}
+        />
         <SubmitButton
           style={{
             position: 'absolute',
@@ -111,7 +115,9 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
             props.modalHandler();
             callApi();
           }}
-          title={i18n.t('product_label.refund')}
+          title={i18n.t('product_label.refund', {
+            paymentMethod: props.ownership.product.paymentMethod.toUpperCase(),
+          })}
         />
       </View>
     </View>

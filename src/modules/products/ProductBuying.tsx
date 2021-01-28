@@ -138,7 +138,7 @@ const ProductBuying: FunctionComponent = () => {
       <CachedImage
         key={index}
         source={{ uri: image }}
-        cacheKey={image.replaceAll('/', '_')}
+        cacheKey={image.replaceAll(/\//g, '_')}
         style={{
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,

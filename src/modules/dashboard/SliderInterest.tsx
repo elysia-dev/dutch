@@ -134,11 +134,13 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t('dashboard_label.expected_profit')} (EL)`}
+              label={`${i18n.t(
+                'dashboard_label.expected_profit',
+              )} (${props.ownership.product.paymentMethod.toUpperCase()})`}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
-              label={`EL ${elInterest}`}
+              label={`${props.ownership.product.paymentMethod.toUpperCase()} ${elInterest}`}
               style={{ color: '#1C1C1C', fontSize: 15 }}
             />
           </TextWrapper>

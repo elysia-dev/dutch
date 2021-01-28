@@ -18,6 +18,7 @@ const DesView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin: 2px;
 `;
 
 interface Props {
@@ -91,11 +92,15 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
           </DesView>
           <DesView>
             <P1Text
-              label={i18n.t('product_label.expected_el_price')}
+              label={
+                props.hasEth
+                  ? i18n.t('product_label.expected_eth_price')
+                  : i18n.t('product_label.expected_el_price')
+              }
               style={{ flex: 1, color: '#626368' }}
             />
             <H3Text
-              label={`EL ${parseFloat(
+              label={`${props.hasEth ? 'ETH' : 'EL'} ${parseFloat(
                 `${(5.0 * props.tokenCount) / elPrice}`,
               ).toFixed(2)}`}
               style={{ flex: 1, color: '#3679b5', textAlign: 'right' }}
@@ -159,6 +164,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
                 height: 0,
                 borderWidth: 1,
                 borderColor: '#F1F1F1',
+                marginVertical: 5,
               }}></View>
           </View>
           <DesView>

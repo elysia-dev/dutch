@@ -147,7 +147,6 @@ const OwnershipDetail: FunctionComponent = () => {
     return unsubscribe;
   }, [navigation]);
 
-
   return (
     <ProductInfoWrapper>
       <ScrollView
@@ -190,28 +189,29 @@ const OwnershipDetail: FunctionComponent = () => {
               }}
             />
           ) : (
-              <OptionButtons
-                productId={state.ownership.product.id}
-                refundHandler={() =>
-                  setState({
-                    ...state,
-                    refundModalVisible: !state.refundModalVisible,
-                  })
-                }
-                purchaseHandler={() =>
-                  setState({
-                    ...state,
-                    purchaseModalVisible: !state.purchaseModalVisible,
-                  })
-                }
-                interestHandler={() =>
-                  setState({
-                    ...state,
-                    interestModalVisible: !state.interestModalVisible,
-                  })
-                }
-              />
-            )}
+            <OptionButtons
+              paymentMethod={state.ownership.product.paymentMethod}
+              productId={state.ownership.product.id}
+              refundHandler={() =>
+                setState({
+                  ...state,
+                  refundModalVisible: !state.refundModalVisible,
+                })
+              }
+              purchaseHandler={() =>
+                setState({
+                  ...state,
+                  purchaseModalVisible: !state.purchaseModalVisible,
+                })
+              }
+              interestHandler={() =>
+                setState({
+                  ...state,
+                  interestModalVisible: !state.interestModalVisible,
+                })
+              }
+            />
+          )}
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           <H3Text
@@ -244,20 +244,23 @@ const OwnershipDetail: FunctionComponent = () => {
       </ScrollView>
       {(state.purchaseModalVisible ||
         state.refundModalVisible ||
-        state.legacyRefundModalVisible || state.interestModalVisible) && (
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-            }}></View>
-        )}
+        state.legacyRefundModalVisible ||
+        state.interestModalVisible) && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
       <Modal
         transparent={true}
         animationType={'slide'}
         visible={state.refundModalVisible}
-        onRequestClose={() => setState({ ...state, refundModalVisible: false })}>
+        onRequestClose={() =>
+          setState({ ...state, refundModalVisible: false })
+        }>
         <OwnershipRefund
           modalHandler={() => setState({ ...state, refundModalVisible: false })}
           ownership={state.ownership}
@@ -267,7 +270,9 @@ const OwnershipDetail: FunctionComponent = () => {
         transparent={true}
         animationType={'slide'}
         visible={state.interestModalVisible}
-        onRequestClose={() => setState({ ...state, interestModalVisible: false })}>
+        onRequestClose={() =>
+          setState({ ...state, interestModalVisible: false })
+        }>
         <SliderInterest
           ownership={state.ownership}
           modalHandler={() =>
@@ -279,7 +284,9 @@ const OwnershipDetail: FunctionComponent = () => {
         transparent={true}
         animationType={'slide'}
         visible={state.purchaseModalVisible}
-        onRequestClose={() => setState({ ...state, purchaseModalVisible: false })}>
+        onRequestClose={() =>
+          setState({ ...state, purchaseModalVisible: false })
+        }>
         <SliderProductBuying
           from={'ownershipDetail'}
           product={
@@ -294,7 +301,9 @@ const OwnershipDetail: FunctionComponent = () => {
         transparent={true}
         animationType={'slide'}
         visible={state.legacyRefundModalVisible}
-        onRequestClose={() => setState({ ...state, legacyRefundModalVisible: false })}>
+        onRequestClose={() =>
+          setState({ ...state, legacyRefundModalVisible: false })
+        }>
         <LegacyOwnershipRefund
           modalHandler={() =>
             setState({ ...state, legacyRefundModalVisible: false })
