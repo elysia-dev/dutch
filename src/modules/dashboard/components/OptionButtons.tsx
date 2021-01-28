@@ -10,6 +10,7 @@ interface Props {
   purchaseHandler: () => void;
   interestHandler: () => void;
   productId: number;
+  paymentMethod: string;
 }
 
 const OptionButtons: FunctionComponent<Props> = (props: Props) => {
@@ -75,7 +76,9 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           source={require('../images/stakeWithdraw.png')}></Image>
         <P1Text
           style={{ textAlign: 'center' }}
-          label={i18n.t('dashboard_label.withdraw_stake')}
+          label={i18n.t('dashboard_label.withdraw_stake', {
+            paymentMethod: props.paymentMethod.toUpperCase(),
+          })}
         />
       </TouchableOpacity>
       <TouchableOpacity
