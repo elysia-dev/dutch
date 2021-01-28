@@ -72,7 +72,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
         const childProduct = props.product.childProducts.find(
           (product, _index) => product.paymentMethod === state.paymentMethod,
         );
-        console.log(childProduct?.id);
         callApi(childProduct?.id!);
       } else {
         callApi(props.product.id);
@@ -142,8 +141,10 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
         borderTopRightRadius: 10,
         paddingLeft: 20,
         paddingRight: 20,
-        height: '70%',
         width: '100%',
+        height: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         backgroundColor: '#fff',
         justifyContent: 'center',
       }}>
@@ -260,8 +261,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
         <SubmitButton
           disabled={swapDisabled}
           style={{
-            position: 'absolute',
-            bottom: 15,
+            top: 20,
             marginBottom: 10,
             width: '100%',
             marginLeft: 'auto',
@@ -272,6 +272,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
+        <View style={{ marginTop: 60 }} />
       </View>
     </View>
   );
