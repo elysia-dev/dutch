@@ -1,15 +1,9 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useEffect,
-  useContext,
-} from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 import {
   StyleSheet,
   View,
   Image,
   TouchableOpacity,
-  SegmentedControlIOS,
   Dimensions,
   Animated,
   Platform,
@@ -22,7 +16,6 @@ import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
-import { FlatButton } from '../../shared/components/FlatButton';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 
@@ -32,7 +25,7 @@ const Circle = styled.View`
   background-color: #a8a8a8;
   border-radius: 10px;
   overflow: hidden;
-  margin: 10px;
+  margin: 6px;
 `;
 
 const IntroduceElysia: FunctionComponent<{}> = () => {
@@ -62,18 +55,17 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
     .fill(0)
     .map((_x, index) => {
       return (
-        <View style={{ flex: 1 }} key={index}>
+        <View style={{ width: '100%' }} key={index}>
           {index ? (
             <Image
               source={ReturnImageOrText(index)}
               style={{
+                // backgroundColor: '#1c1c1c',
                 width: '90%',
                 marginHorizontal: '5%',
                 position: 'absolute',
-                resizeMode: 'center',
-                // top: 100,
-
-                top: Dimensions.get('window').height * 0.1,
+                resizeMode: 'contain',
+                bottom: Dimensions.get('window').height * 0.5,
               }}
             />
           ) : (
@@ -83,7 +75,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                 width: '90%',
                 marginHorizontal: '5%',
                 position: 'absolute',
-                top: Dimensions.get('window').height * 0.2,
+                bottom: Dimensions.get('window').height * 0.5,
               }}
               label={ReturnImageOrText(index)}
             />
@@ -136,29 +128,22 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           position: 'absolute',
           zIndex: 5,
           backgroundColor: '#3679B5',
-          top: scrollX.interpolate({
+          bottom: scrollX.interpolate({
             inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
             outputRange: [
-              355,
-              Dimensions.get('window').height * 0.2 +
-                // eslint-disable-next-line no-nested-ternary
-                (user.language === LocaleType.KO
-                  ? 180
-                  : user.language === LocaleType.CH
-                  ? 200
-                  : 225),
-              Dimensions.get('window').height * 0.1 +
-                (Platform.OS === 'ios' ? 203 : 195),
-              Dimensions.get('window').height * 0.1 + 120,
-              Dimensions.get('window').height * 0.1 + 80,
-              Dimensions.get('window').height * 0.1 + 100,
-              Dimensions.get('window').height * 0.1 + 120,
-              Dimensions.get('window').height * 0.1 + 180,
-              Dimensions.get('window').height * 0.1 + 230,
-              Dimensions.get('window').height * 0.1 + 200,
-              Dimensions.get('window').height * 0.1 + 200,
-              Dimensions.get('window').height * 0.1 + 120,
-              Dimensions.get('window').height * 0.1 + 120,
+              Dimensions.get('window').height * 0.5 + 10,
+              Dimensions.get('window').height * 0.5 + 10,
+              Dimensions.get('window').height * 0.5 + 60,
+              Dimensions.get('window').height * 0.5 + 85,
+              Dimensions.get('window').height * 0.5 + 180,
+              Dimensions.get('window').height * 0.5 + 160,
+              Dimensions.get('window').height * 0.5 + 180,
+              Dimensions.get('window').height * 0.5 + 120,
+              Dimensions.get('window').height * 0.5 + 100,
+              Dimensions.get('window').height * 0.5 + 90,
+              Dimensions.get('window').height * 0.5 + 90,
+              Dimensions.get('window').height * 0.5 + 85,
+              Dimensions.get('window').height * 0.5 + 85,
             ],
           }),
           left: scrollX.interpolate({
@@ -167,13 +152,13 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               550,
               Dimensions.get('window').width * 0.46 +
                 // eslint-disable-next-line no-nested-ternary
-                (user.language === LocaleType.KO
+                (i18n.currentLocale() === LocaleType.KO
                   ? 0
-                  : user.language === LocaleType.CH
+                  : i18n.currentLocale() === LocaleType.CH
                   ? -60
                   : 20),
               Platform.OS === 'ios'
-                ? Dimensions.get('window').width * 0.421
+                ? Dimensions.get('window').width * 0.55
                 : Dimensions.get('window').width * 0.433,
               Dimensions.get('window').width * 0.28,
               Dimensions.get('window').width * 0.92,
@@ -205,23 +190,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               4,
               5,
             ],
-            outputRange: [
-              8,
-              8,
-              Platform.OS === 'ios' ? 25 : 22,
-              30,
-              8,
-              0,
-              0,
-              8,
-              30,
-              8,
-              0,
-              0,
-              8,
-              30,
-              30,
-            ],
+            outputRange: [8, 8, 50, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
           }),
           height: scrollX.interpolate({
             inputRange: [
@@ -241,31 +210,15 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               4,
               5,
             ],
-            outputRange: [
-              8,
-              8,
-              Platform.OS === 'ios' ? 25 : 22,
-              30,
-              8,
-              0,
-              0,
-              8,
-              30,
-              8,
-              0,
-              0,
-              8,
-              30,
-              30,
-            ],
+            outputRange: [8, 8, 50, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
           }),
           opacity: scrollX.interpolate({
             inputRange: [-1, 0, 1, 2, 2.7, 3, 4, 5],
-            outputRange: [1, 1, 1, 0.8, 1, 0.8, 0.8, 0.8],
+            outputRange: [1, 1, 0.8, 0.8, 1, 0.8, 0.8, 0.8],
           }),
         }}></Animated.View>
       <ViewPager
-        style={styles.viewPager}
+        style={{ width: '100%', height: '100%' }}
         initialPage={0}
         ref={viewPager}
         onPageScroll={(e) => {
@@ -278,13 +231,15 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
         }}>
         {ItemListing}
       </ViewPager>
-      {/* <P1Text label={`${JSON.stringify(scrollX)} ${state}`} /> */}
       <View
         style={{
           alignItems: 'center',
+          alignSelf: 'center',
           justifyContent: 'center',
           flexDirection: 'row',
-          bottom: Dimensions.get('window').height * 0.4,
+          position: 'absolute',
+          top: 40 + Dimensions.get('window').height * 0.5,
+          // bottom: Dimensions.get('window').height * 0.4,
         }}>
         {ButtonListing}
       </View>
