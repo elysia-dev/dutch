@@ -222,7 +222,10 @@ const App = () => {
           // checkLatestVersion();
         })
         .catch((_e) => {
-          setState(defaultState);
+          setState({
+            ...defaultState,
+            signedIn: SignInStatus.SIGNOUT
+          });
         });
     } else {
       setState({ ...state, signedIn: SignInStatus.SIGNOUT });
@@ -242,7 +245,10 @@ const App = () => {
         });
       })
       .catch((e) => {
-        // setState(defaultState);
+        setState({
+          ...defaultState,
+          signedIn: SignInStatus.SIGNOUT
+        });
       });
   };
 
