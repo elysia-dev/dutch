@@ -41,17 +41,17 @@
     "already_insert_ethaddress": "This is your registered Ethereum wallet address.",
     "submit_ethaddress": "Register wallet address",
     "withdrawl_complete": "Membership withdrawal has been completed.\nGo to the initial screen.",
-    "introduction_title": "Decentralized\nReal Estate Liquidation\nProtocol",
+    "introduction_title": "Marketplace for\nTokenized\nReal Estate",
     "introduction_header": [
-      "Real estate liquidation",
-      "Buy real estate assets",
-      "Decentralized transactions anywhere",
-      "Get started!"
+      "Reinventing real estate",
+      "Be your own bank",
+      "Find unique opportunities",
+      "Start now!"
     ],
     "introduction_text": [
-      "Real estate asset liquidity through Elysia",
-      "Purchase a liquidated real estate assets",
-      "You are free to trade your assets",
+      "Fractional ownership allows you to start small",
+      "Funds are deposited to your private wallet",
+      "Our global network allows you\nto buy properties around the world",
       ""
     ]
   },
@@ -403,13 +403,13 @@
     "event_guide_EL": "EL will be deposited to the address after the event is closed",
     "complete_prepare": "Please be ready.",
     "investment_guide_header": [
-      "Depositing EL tokens",
+      "Deposit EL tokens or Ethereum",
       "Select property & token quantity",
       "Create a transaction with a registered wallet",
       "Congrats! this property is now yours"
     ],
     "investment_guide_text": [
-      "After purchasing EL from a listed exchange, \nplease deposit EL to your registered wallet address!",
+      "Deposit EL or ETH to your registered address!",
       "After choosing a property,\nplease select the number of real estate tokens you want to claim!",
       "Please make a transaction using Metamask!",
       "Rewards are generated based on how many real estate tokens you own."
