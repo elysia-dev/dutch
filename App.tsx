@@ -53,6 +53,7 @@ import { OwnershipResponse } from './src/types/AccountResponse';
 import getEnvironment from './src/utiles/getEnvironment';
 import storeDeeplink from './src/utiles/storeDeeplink';
 import NotificationType from './src/enums/NotificationType';
+import Loading from './src/modules/main/Loading';
 
 Sentry.init({
   dsn:
@@ -111,10 +112,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -158,7 +159,7 @@ const App = () => {
           [
             {
               text: i18n.t('more_label.close'),
-              onPress: () => {},
+              onPress: () => { },
               style: 'default',
             },
             {
@@ -237,6 +238,7 @@ const App = () => {
           ownerships: res.data.ownerships,
           balance: res.data.totalBalance,
           notifications: res.data.notifications || [],
+          signedIn: SignInStatus.SIGNIN,
         });
       })
       .catch((e) => {
@@ -425,19 +427,27 @@ const App = () => {
           refreshUser,
         }}>
         <RootStack.Navigator headerMode="none">
-          {state.signedIn === SignInStatus.SIGNIN ? (
-            <>
-              <RootStack.Screen name={'Main'} component={Main} />
-              <RootStack.Screen name={'Kyc'} component={Kyc} />
-              <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-              <RootStack.Screen name={'More'} component={More} />
-              <RootStack.Screen name={'Product'} component={Products} />
-            </>
-          ) : (
-            <>
-              <RootStack.Screen name={'Account'} component={Account} />
-            </>
-          )}
+          {
+            state.signedIn === SignInStatus.PENDING ? <RootStack.Screen
+              name={'LoadingScreen'}
+              component={Loading}
+              options={{ animationEnabled: false }}
+            />
+              : state.signedIn === SignInStatus.SIGNIN ? (
+                <>
+                  <RootStack.Screen name={'Main'} component={Main} />
+                  <RootStack.Screen name={'Kyc'} component={Kyc} />
+                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+                  <RootStack.Screen name={'More'} component={More} />
+                  <RootStack.Screen name={'Product'} component={Products} />
+                </>
+              )
+                : (
+                  <>
+                    <RootStack.Screen name={'Account'} component={Account} />
+                  </>
+                )
+          }
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}
