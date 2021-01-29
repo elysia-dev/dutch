@@ -29,6 +29,7 @@ import { MorePage } from '../../enums/pageEnum';
 import CurrencyType from '../../enums/CurrencyType';
 import { SignInStatus } from '../../enums/SignInStatus';
 import storeDeeplink from '../../utiles/storeDeeplink';
+import checkLatestVersion from '../../utiles/checkLatestVersion';
 
 const Setting: FunctionComponent = () => {
   const {
@@ -234,7 +235,10 @@ const Setting: FunctionComponent = () => {
                     }}
                   />
                 </TouchableOpacity>
-                {state.latestVersion !== getEnvironment().version && (
+                {checkLatestVersion(
+                  getEnvironment().version,
+                  state.latestVersion,
+                ) && (
                   <TouchableOpacity
                     style={{
                       flexDirection: 'row',
