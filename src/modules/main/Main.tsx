@@ -34,9 +34,8 @@ const Main: FunctionComponent = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#FFF" }}
-      forceInset={{ top: 'never', bottom: 'always' }}
-    >
+      style={{ flex: 1, backgroundColor: '#FFF' }}
+      forceInset={{ top: 'never', bottom: 'always' }}>
       <Tab.Navigator
         initialRouteName="DashboardMain"
         tabBarOptions={{
@@ -60,10 +59,8 @@ const Main: FunctionComponent = () => {
                     height: 30,
                   }}
                 />
-                {(
-                  (user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-                  user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
-                ) && (
+                {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
+                  user.legacyWalletRefundStatus === LegacyRefundStatus.NONE && (
                     <View
                       style={{
                         position: 'absolute',
@@ -73,7 +70,8 @@ const Main: FunctionComponent = () => {
                         height: 8,
                         borderRadius: 4,
                         backgroundColor: '#FC5C4F',
-                      }} />
+                      }}
+                    />
                   )}
               </>
             ),
@@ -83,6 +81,7 @@ const Main: FunctionComponent = () => {
           name="ProductsMain"
           component={MainList}
           options={{
+            unmountOnBlur: true,
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <Icon
@@ -109,7 +108,9 @@ const Main: FunctionComponent = () => {
                     width: 25,
                   }}
                 />
-                {(notifications.filter((notification) => notification.status === 'unread').length > 0 &&
+                {notifications.filter(
+                  (notification) => notification.status === 'unread',
+                ).length > 0 && (
                   <View
                     style={{
                       position: 'absolute',
@@ -119,7 +120,8 @@ const Main: FunctionComponent = () => {
                       height: 8,
                       borderRadius: 4,
                       backgroundColor: '#FC5C4F',
-                    }} />
+                    }}
+                  />
                 )}
               </>
             ),
@@ -140,7 +142,8 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {(user.kycStatus === KycStatus.NONE || !(user.ethAddresses?.length > 0)) && (
+                {(user.kycStatus === KycStatus.NONE ||
+                  !(user.ethAddresses?.length > 0)) && (
                   <View
                     style={{
                       position: 'absolute',
@@ -150,7 +153,8 @@ const Main: FunctionComponent = () => {
                       height: 8,
                       borderRadius: 4,
                       backgroundColor: '#FC5C4F',
-                    }} />
+                    }}
+                  />
                 )}
               </>
             ),
