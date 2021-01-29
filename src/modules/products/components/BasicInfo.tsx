@@ -198,39 +198,32 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             }}>
             <P1Text
               label={i18n.t('product_label.price_per_token')}
-              style={{ color: '#838383' }}
+              style={{ color: '#838383', flex: 1.2 }}
             />
-            <View style={{ flexDirection: 'row' }}>
-              <P1Text
-                label={`EL ${commaFormatter(
-                  (product.usdPricePerToken / props.elPrice).toFixed(2),
-                )}`}
-              />
-              <P1Text
-                label={` (${currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
-                  5,
-                  0,
-                )})`}
-                style={{ color: '#838383' }}
-              />
-            </View>
-          </View>
-          {hasChildProduct && (
             <View
               style={{
-                flex: 1,
                 flexDirection: 'row',
+                flex: 1,
                 justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
               }}>
-              <View />
-              <View style={{ flexDirection: 'row' }}>
+              <H3Text
+                label={'EL'}
+                style={{
+                  flex: 1,
+                  alignSelf: 'center',
+                  fontSize: 15,
+                  justifyContent: 'flex-end',
+                }}
+              />
+              <View
+                style={{
+                  flex: 2,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}>
                 <P1Text
-                  label={`ETH ${commaFormatter(
-                    (product.usdPricePerToken / props.ethPrice).toFixed(6),
+                  label={` ${commaFormatter(
+                    (product.usdPricePerToken / props.elPrice).toFixed(2),
                   )}`}
                 />
                 <P1Text
@@ -242,6 +235,55 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   )})`}
                   style={{ color: '#838383' }}
                 />
+              </View>
+            </View>
+          </View>
+          {hasChildProduct && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+                alignItems: 'center',
+              }}>
+              <View style={{ flex: 1.2 }} />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                }}>
+                <H3Text
+                  label={'ETH'}
+                  style={{
+                    flex: 1,
+                    alignSelf: 'center',
+                    fontSize: 15,
+                    justifyContent: 'flex-end',
+                  }}
+                />
+                <View
+                  style={{
+                    flex: 2,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                  }}>
+                  <P1Text
+                    label={`${commaFormatter(
+                      (product.usdPricePerToken / props.ethPrice).toFixed(6),
+                    )}`}
+                  />
+                  <P1Text
+                    label={` (${currencyFormatter(
+                      currencyUnit,
+                      currencyRatio,
+                      5,
+                      0,
+                    )})`}
+                    style={{ color: '#838383' }}
+                  />
+                </View>
               </View>
             </View>
           )}
