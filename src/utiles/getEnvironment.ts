@@ -1,5 +1,4 @@
 import Constants from 'expo-constants';
-import { useElysiaToken } from '../hooks/useContract';
 const { manifest } = Constants;
 
 type Environment = {
