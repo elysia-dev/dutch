@@ -41,7 +41,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
         }}>
         <CachedImage
           ref={ref}
-          cacheKey={props.story.image.replaceAll('/', '_')}
+          cacheKey={props.story.image.replace(/\//g, '_')}
           source={{ uri: props.story.image }}
           style={{
             width: '100%',

@@ -138,7 +138,7 @@ const ProductBuying: FunctionComponent = () => {
       <CachedImage
         key={index}
         source={{ uri: image }}
-        cacheKey={image.replaceAll(/\//g, '_')}
+        cacheKey={image.replace(/\//g, '_')}
         style={{
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,
@@ -267,8 +267,8 @@ const ProductBuying: FunctionComponent = () => {
               state.product?.status === ProductStatus.TERMINATED
                 ? '#1c1c1c'
                 : purchasability
-                ? '#3679B5'
-                : '#D0D8DF',
+                  ? '#3679B5'
+                  : '#D0D8DF',
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={() => {

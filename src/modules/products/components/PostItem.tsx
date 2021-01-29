@@ -29,7 +29,7 @@ export const PostItem: FunctionComponent<Props> = (props: Props) => {
         {props.product && (
           <>
             <CachedImage
-              cacheKey={props.product?.data.images[0].replaceAll('/', '_')}
+              cacheKey={props.product?.data.images[0].replace(/\//g, '_')}
               source={{ uri: props.product?.data.images[0] }}
               style={{ flex: 1, justifyContent: 'center', borderRadius: 10 }}
             />
