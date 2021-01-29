@@ -34,7 +34,7 @@ const CachedImage = React.forwardRef((props: Props, ref: Ref) => {
         const metadata = await FileSystem.getInfoAsync(imageProps.fileURI);
         if (!metadata.exists) {
           if (componentIsMounted.current) {
-            setImgURI(undefined);
+            setImgURI(props.source.uri);
             await FileSystem.downloadAsync(
               props.source.uri,
               imageProps.fileURI,
