@@ -75,15 +75,15 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
       <TouchableOpacity
         disabled={type !== NotificationType.PRODUCT_NOTICE}
         onPress={() => {
-          // if (type !== NotificationType.PENDING_TRANSACTION) {
-          //   props.readNotification(props.notification);
-          if (type === NotificationType.PRODUCT_NOTICE) {
-            navigation.navigate('Dashboard', {
-              screen: DashboardPage.ProductNotice,
-              params: { productId: data.productId },
-            });
+          if (type !== NotificationType.PENDING_TRANSACTION) {
+            props.readNotification(props.notification);
+            if (type === NotificationType.PRODUCT_NOTICE) {
+              navigation.navigate('Dashboard', {
+                screen: DashboardPage.ProductNotice,
+                params: { productId: data.productId },
+              });
+            }
           }
-          // }
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
