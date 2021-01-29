@@ -60,9 +60,8 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             <Image
               source={ReturnImageOrText(index)}
               style={{
-                // backgroundColor: '#1c1c1c',
                 width: '90%',
-                marginHorizontal: '5%',
+                marginHorizontal: index === 1 ? '0.5%' : '5%',
                 position: 'absolute',
                 resizeMode: 'contain',
                 bottom: Dimensions.get('window').height * 0.5,
@@ -154,15 +153,15 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
               outputRange: [
                 550,
-                Dimensions.get('window').width * 0.46 +
+                Dimensions.get('window').width * 0.05 +
                   // eslint-disable-next-line no-nested-ternary
                   (i18n.currentLocale() === LocaleType.KO
-                    ? 0
+                    ? 200
                     : i18n.currentLocale() === LocaleType.CH
-                    ? -60
-                    : 20),
+                    ? 180
+                    : 230),
                 Platform.OS === 'ios'
-                  ? Dimensions.get('window').width * 0.55
+                  ? Dimensions.get('window').width * 0.52
                   : Dimensions.get('window').width * 0.433,
                 Dimensions.get('window').width * 0.25,
                 Dimensions.get('window').width * 0.92,
@@ -194,7 +193,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                 4,
                 5,
               ],
-              outputRange: [8, 8, 50, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
+              outputRange: [8, 8, 45, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
             }),
             height: scrollX.interpolate({
               inputRange: [
@@ -214,7 +213,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                 4,
                 5,
               ],
-              outputRange: [8, 8, 50, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
+              outputRange: [8, 8, 45, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
             }),
             opacity: scrollX.interpolate({
               inputRange: [-1, 0, 1, 2, 2.7, 3, 4, 5],
@@ -258,11 +257,6 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           }}
           handler={() => navigation.navigate(AccountPage.InitializeEmail)}
         />
-        {/* <FlatButton
-        style={{ position: 'absolute', bottom: 65, alignSelf: 'center' }}
-        title={i18n.t('account.forget_password_link')}
-        handler={() => navigation.navigate(AccountPage.InitializeEmail)}
-      /> */}
       </View>
     </SafeAreaView>
   );
