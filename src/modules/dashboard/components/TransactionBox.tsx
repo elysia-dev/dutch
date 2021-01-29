@@ -133,7 +133,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             Linking.openURL(
               getEnvironment().envName === 'PRODUCTION'
                 ? `https://etherscan.io/tx/${props.transaction.hash}`
-                : `https://ropsten.etherscan.io/tx/${props.transaction.hash}`,
+                : `https://kovan.etherscan.io/tx/${props.transaction.hash}`,
             );
           }}
           style={{

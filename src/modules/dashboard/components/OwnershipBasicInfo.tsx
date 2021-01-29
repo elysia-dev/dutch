@@ -60,7 +60,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 Linking.openURL(
                   getEnvironment().envName === 'PRODUCTION'
                     ? `https://etherscan.io/token/${ownership.product.contractAddress}`
-                    : `https://ropsten.etherscan.io/token/${ownership.product.contractAddress}`,
+                    : `https://kovan.etherscan.io/token/${ownership.product.contractAddress}`,
                 );
               }}
               style={{

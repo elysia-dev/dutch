@@ -182,7 +182,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                       Linking.openURL(
                         getEnvironment().envName === 'PRODUCTION'
                           ? `https://etherscan.io/tx/${data.txHash}`
-                          : `https://ropsten.etherscan.io/tx/${data.txHash}`,
+                          : `https://kovan.etherscan.io/tx/${data.txHash}`,
                       );
                     }}
                     style={{

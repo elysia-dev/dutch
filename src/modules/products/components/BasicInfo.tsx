@@ -68,7 +68,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               Linking.openURL(
                 getEnvironment().envName === 'PRODUCTION'
                   ? `https://etherscan.io/token/${product.contractAddress}`
-                  : `https://ropsten.etherscan.io/token/${product.contractAddress}`,
+                  : `https://kovan.etherscan.io/token/${product.contractAddress}`,
               );
             }}
             style={{

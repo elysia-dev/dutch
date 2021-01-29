@@ -24,7 +24,7 @@ function getEnvironment(): Environment {
       version: '1.3.0',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
       ethNetwork: 'mainnet',
-      elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16'
+      elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16',
     };
   }
 
@@ -34,26 +34,26 @@ function getEnvironment(): Environment {
       envName: 'STAGING',
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
-      version: '1.3.0',
+      version: '1.3.2',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
-      ethNetwork: 'ropsten',
-      elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8'
+      ethNetwork: 'kovan',
+      elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',
     };
   }
 
   return {
     envName: 'DEVELOPMENT',
     // apiUrl: 'https://api.elysia.land',
-    apiUrl: 'https://staging-api.elysia.land',
-    // apiUrl: `http://${(manifest.debuggerHost || 'localhost')
-    //   .split(':')
-    //   .shift()}:3000`,
+    // apiUrl: 'https://staging-api.elysia.land',
+    apiUrl: `http://${(manifest.debuggerHost || 'localhost')
+      .split(':')
+      .shift()}:3000`,
     // dappUrl: 'localhost:3001',
     dappUrl: 'staging-dapp.elysia.land',
-    version: '1.3.0',
+    version: '1.2.0',
     infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
-    ethNetwork: 'ropsten',
-    elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8'
+    ethNetwork: 'kovan',
+    elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',
   };
 }
 
