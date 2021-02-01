@@ -136,6 +136,8 @@ const App = () => {
 
   const appState = useRef(AppState.currentState);
 
+  const pushNotificationId = useRef(0);
+
   /* eslint-disable @typescript-eslint/camelcase */
   const [fontsLoaded] = useFonts({
     Roboto_300Light,
@@ -225,13 +227,13 @@ const App = () => {
       });
   };
 
-  const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-    if (appState.current !== 'active' && nextAppState === 'active') {
-      if (state.signedIn === SignInStatus.SIGNIN) {
-        navigationRef.current?.navigate('Main');
-      } else {
-        navigationRef.current?.navigate('Account');
-      }
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (
+      appState.current !== 'active' &&
+      nextAppState === 'active' &&
+      navigationRef.current?.getCurrentRoute()?.name !== 'NotificationMain'
+    ) {
+      navigationRef.current?.goBack();
     } else if (appState.current === 'active' && nextAppState !== 'active') {
       navigationRef.current?.navigate('BlockScreen');
     }
@@ -310,6 +312,8 @@ const App = () => {
             response.notification.request.content.data as Notification,
           )
         ) {
+          pushNotificationId.current = response.notification.request.content
+            .data.id as Notification['id'];
           navigationRef.current?.navigate('NotificationMain');
         }
       },
