@@ -136,8 +136,6 @@ const App = () => {
 
   const appState = useRef(AppState.currentState);
 
-  const pushNotificationId = useRef(0);
-
   /* eslint-disable @typescript-eslint/camelcase */
   const [fontsLoaded] = useFonts({
     Roboto_300Light,
@@ -178,7 +176,7 @@ const App = () => {
             cnyPrice:
               allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
-
+          console.log('signIn!');
           registerForPushNotificationsAsync().then((expoPushToken) => {
             if (token && expoPushToken) {
               authServer.registerExpoPushToken(expoPushToken).then(() => {
@@ -312,8 +310,24 @@ const App = () => {
             response.notification.request.content.data as Notification,
           )
         ) {
-          pushNotificationId.current = response.notification.request.content
-            .data.id as Notification['id'];
+          if (
+            isTransactionEnd(
+              response.notification.request.content.data
+                .notificationType as NotificationType,
+            )
+          ) {
+            signIn();
+          } else {
+            setState((state) => {
+              return {
+                ...state,
+                notifications: [
+                  response.notification.request.content.data as Notification,
+                  ...state.notifications,
+                ],
+              };
+            });
+          }
           navigationRef.current?.navigate('NotificationMain');
         }
       },
