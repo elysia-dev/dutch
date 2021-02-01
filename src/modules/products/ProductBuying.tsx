@@ -78,7 +78,7 @@ const ProductBuying: FunctionComponent = () => {
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
-      return 'Terminated';
+      return 'Sold Out';
     }
     if (!purchasability) {
       if (state.product?.restrictedCountries?.includes(shortNationality)) {
@@ -267,8 +267,8 @@ const ProductBuying: FunctionComponent = () => {
               state.product?.status === ProductStatus.TERMINATED
                 ? '#1c1c1c'
                 : purchasability
-                  ? '#3679B5'
-                  : '#D0D8DF',
+                ? '#3679B5'
+                : '#D0D8DF',
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={() => {
