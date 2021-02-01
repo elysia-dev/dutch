@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
 
 import {
@@ -112,10 +112,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -148,32 +148,6 @@ const App = () => {
     currencyRatio: 1,
   });
   const { currencyUnit, currencyRatio } = currencyState;
-
-  const checkLatestVersion = () => {
-    const server = new Server(signOut, '');
-    server.checkLatestVersion(Platform.OS).then((res) => {
-      if (res.data !== getEnvironment().version) {
-        Alert.alert(
-          i18n.t('more_label.update_alert'),
-          i18n.t('more_label.update_text'),
-          [
-            {
-              text: i18n.t('more_label.close'),
-              onPress: () => { },
-              style: 'default',
-            },
-            {
-              text: i18n.t('more_label.update'),
-              onPress: () =>
-                storeDeeplink('elysia/id1536733411', 'land.elysia'),
-              style: 'destructive',
-            },
-          ],
-          { cancelable: false },
-        );
-      }
-    });
-  };
 
   const signOut = async (signInStatus: SignOut) => {
     await AsyncStorage.removeItem('@token');
@@ -219,12 +193,11 @@ const App = () => {
               });
             }
           });
-          // checkLatestVersion();
         })
         .catch((_e) => {
           setState({
             ...defaultState,
-            signedIn: SignInStatus.SIGNOUT
+            signedIn: SignInStatus.SIGNOUT,
           });
         });
     } else {
@@ -247,14 +220,14 @@ const App = () => {
       .catch((e) => {
         setState({
           ...defaultState,
-          signedIn: SignInStatus.SIGNOUT
+          signedIn: SignInStatus.SIGNOUT,
         });
       });
   };
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (appState.current !== 'active' && nextAppState === 'active') {
-      navigationRef.current?.goBack();
+      navigationRef.current?.navigate('Main');
     } else if (appState.current === 'active' && nextAppState !== 'active') {
       navigationRef.current?.navigate('BlockScreen');
     }
@@ -327,8 +300,14 @@ const App = () => {
 
     // eslint-disable-next-line max-len
     const addNotificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
-      (_response) => {
-        signIn();
+      (response) => {
+        if (
+          isNotification(
+            response.notification.request.content.data as Notification,
+          )
+        ) {
+          navigationRef.current?.navigate('NotificationMain');
+        }
       },
     );
 
@@ -431,29 +410,28 @@ const App = () => {
           currencyUnit,
           currencyRatio,
           refreshUser,
+          // pushNotificationId,
         }}>
         <RootStack.Navigator headerMode="none">
-          {
-            state.signedIn === SignInStatus.PENDING ? <RootStack.Screen
+          {state.signedIn === SignInStatus.PENDING ? (
+            <RootStack.Screen
               name={'LoadingScreen'}
               component={Loading}
               options={{ animationEnabled: false }}
             />
-              : state.signedIn === SignInStatus.SIGNIN ? (
-                <>
-                  <RootStack.Screen name={'Main'} component={Main} />
-                  <RootStack.Screen name={'Kyc'} component={Kyc} />
-                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-                  <RootStack.Screen name={'More'} component={More} />
-                  <RootStack.Screen name={'Product'} component={Products} />
-                </>
-              )
-                : (
-                  <>
-                    <RootStack.Screen name={'Account'} component={Account} />
-                  </>
-                )
-          }
+          ) : state.signedIn === SignInStatus.SIGNIN ? (
+            <>
+              <RootStack.Screen name={'Main'} component={Main} />
+              <RootStack.Screen name={'Kyc'} component={Kyc} />
+              <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+              <RootStack.Screen name={'More'} component={More} />
+              <RootStack.Screen name={'Product'} component={Products} />
+            </>
+          ) : (
+            <>
+              <RootStack.Screen name={'Account'} component={Account} />
+            </>
+          )}
           <RootStack.Screen
             name={'BlockScreen'}
             component={BlockScreen}
