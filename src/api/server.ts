@@ -17,6 +17,7 @@ import { BalanceResponse } from '../types/BalanceResponse';
 import { CurrencyResponse } from '../types/CurrencyResponse';
 import getEnvironment from '../utiles/getEnvironment';
 import { SignOut } from '../enums/SignInStatus';
+import LocaleType from '../enums/LocaleType';
 
 export default class Server {
   token: string;
@@ -67,10 +68,12 @@ export default class Server {
   certifyEmail_recover = async (
     email: string,
     recoverType: string,
+    language: LocaleType,
   ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post(`/verifications`, {
       email,
       type: recoverType,
+      language,
     });
   };
 

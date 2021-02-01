@@ -27,22 +27,26 @@ const Login: FunctionComponent = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
-  const { signIn, Server } = useContext(RootContext);
+  const { signIn, Server, user } = useContext(RootContext);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);
   };
 
   const callRecoverApi = () => {
-    Server.certifyEmail_recover(route.params.email, 'recoverPassword')
-      .then(res =>
+    Server.certifyEmail_recover(
+      route.params.email,
+      'recoverPassword',
+      user.language,
+    )
+      .then((res) =>
         navigation.navigate(AccountPage.CertifyRecover, {
           email: route.params.email,
           verificationId: res.data.verificationId,
           status: res.data.status,
         }),
       )
-      .catch(e => {
+      .catch((e) => {
         if (e.response && e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
         } else {
@@ -58,7 +62,7 @@ const Login: FunctionComponent = () => {
       alert(i18n.t('account_errors.password_too_short'));
     } else {
       Server.login(route.params.email, state.password)
-        .then(async res => {
+        .then(async (res) => {
           // token local storage 저장
           if (res.data.status === 'wrong') {
             setState({ ...state, error: res.data.counts! });
@@ -73,7 +77,7 @@ const Login: FunctionComponent = () => {
             // navigation.navigate('Main');
           }
         })
-        .catch(e => {
+        .catch((e) => {
           setState({ ...state, error: e.response.data.counts });
           if (e.response.status === 400) {
             alert(i18n.t('account.insert_password'));

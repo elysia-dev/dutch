@@ -36,15 +36,19 @@ const LockAccount: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
-  const { Server } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
 
   const callResendApi = () => {
-    Server.certifyEmail_recover(route.params.email, 'recoverAccount')
-      .then(res => {
+    Server.certifyEmail_recover(
+      route.params.email,
+      'recoverAccount',
+      user.language,
+    )
+      .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId! });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch(e => alert(i18n.t('account.try_again_later')));
+      .catch((e) => alert(i18n.t('account.try_again_later')));
   };
 
   const callCertifyApi = () => {
@@ -56,7 +60,7 @@ const LockAccount: FunctionComponent = () => {
       state.verificationId || route.params.verificationId,
       state.code,
     )
-      .then(res => {
+      .then((res) => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             verificationId: state.verificationId || route.params.verificationId,
@@ -72,7 +76,7 @@ const LockAccount: FunctionComponent = () => {
           );
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 404) {
           alert(i18n.t('resigter.expired_verification'));
         } else if (e.response.status === 500) {
@@ -106,21 +110,23 @@ const LockAccount: FunctionComponent = () => {
             <View style={{ marginTop: 20 }} />
             <TextField
               label={i18n.t('account_label.authentication_code')}
-              eventHandler={value => setState({ ...state, code: value })}
+              eventHandler={(value) => setState({ ...state, code: value })}
               autoFocus={true}
-              focusHandler={value => setState({ ...state, focusing: value })}
+              focusHandler={(value) => setState({ ...state, focusing: value })}
             />
             <View
               style={{ marginTop: 10, display: 'flex', flexDirection: 'row' }}>
-              <P3Text style={{
-                marginLeft: 'auto',
-                color: "#1c1c1c",
-                fontSize: 13,
-                marginRight: "2%",
-                lineHeight: 21,
-                height: 21,
-              }}
-              label={i18n.t('account.resending_code_mail_label')}/>
+              <P3Text
+                style={{
+                  marginLeft: 'auto',
+                  color: '#1c1c1c',
+                  fontSize: 13,
+                  marginRight: '2%',
+                  lineHeight: 21,
+                  height: 21,
+                }}
+                label={i18n.t('account.resending_code_mail_label')}
+              />
               <BorderFlatButton
                 handler={() => callResendApi()}
                 title={i18n.t('account_label.resend_2')}

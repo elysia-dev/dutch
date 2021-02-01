@@ -26,16 +26,20 @@ const CertifyRecover: FunctionComponent<{}> = () => {
   });
 
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
   const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
 
   const callResendApi: () => void = () => {
-    Server.certifyEmail_recover(route.params.email, 'recoverPassword')
-      .then(res => {
+    Server.certifyEmail_recover(
+      route.params.email,
+      'recoverPassword',
+      user.language,
+    )
+      .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId! });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.invalid_email'));
         } else if (e.response.status === 500) {
@@ -57,7 +61,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
         : state.verificationId,
       state.code,
     )
-      .then(res => {
+      .then((res) => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.RecoverPassword, {
             email: route.params.email,
@@ -78,7 +82,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           );
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.authentication_recover'));
         } else if (e.response.status === 404) {
@@ -112,7 +116,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           />
           <TextField
             label={i18n.t('account_label.authentication_code')}
-            eventHandler={value => {
+            eventHandler={(value) => {
               setState({ ...state, code: value });
             }}
           />
@@ -127,7 +131,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                   marginLeft: 'auto',
                   lineHeight: 21,
                   height: 21,
-                  color: "#1c1c1c",
+                  color: '#1c1c1c',
                 }}
                 label={`${i18n.t('account.expiration_time')}`}
               />
