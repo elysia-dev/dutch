@@ -227,7 +227,11 @@ const App = () => {
 
   const handleAppStateChange = async (nextAppState: AppStateStatus) => {
     if (appState.current !== 'active' && nextAppState === 'active') {
-      navigationRef.current?.navigate('Main');
+      if (state.signedIn === SignInStatus.SIGNIN) {
+        navigationRef.current?.navigate('Main');
+      } else {
+        navigationRef.current?.navigate('Account');
+      }
     } else if (appState.current === 'active' && nextAppState !== 'active') {
       navigationRef.current?.navigate('BlockScreen');
     }
