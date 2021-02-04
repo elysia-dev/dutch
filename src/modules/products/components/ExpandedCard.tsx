@@ -17,8 +17,9 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  ImageStyle,
 } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
 
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
@@ -64,6 +65,47 @@ const defaultTextProps = {
 
 const ELEMENT_HEIGHT = 416;
 
+const AutoSizedImage: FunctionComponent<{
+  style?: ImageStyle;
+  source: { uri: string };
+}> = (props: { style?: ImageStyle; source: { uri: string } }) => {
+  const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
+  const windowWidth = Dimensions.get('window').width;
+
+  useEffect(() => {
+    if (props.style?.width || props.style?.height) {
+      return;
+    }
+    Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
+      const finalSize = {
+        width: originalWidth,
+        height: originalWidth,
+      };
+      if (originalWidth > windowWidth) {
+        finalSize.width = windowWidth;
+        const ratio = finalSize.width / originalWidth;
+        finalSize.height = originalHeight * ratio;
+      }
+      setState({
+        finalSize,
+      });
+    });
+  }, []);
+
+  return (
+    <Image
+      {...props}
+      resizeMode={'contain'}
+      style={[
+        props.style,
+        state.finalSize.width && state.finalSize.height
+          ? state.finalSize
+          : null,
+      ]}
+    />
+  );
+};
+
 const ExpandedItem: FunctionComponent<Props> = ({
   story,
   deactivateStory,
@@ -82,6 +124,20 @@ const ExpandedItem: FunctionComponent<Props> = ({
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
   const scrollRef = useRef<ScrollView>(null);
+  const renderNode = (
+    node: HTMLViewNode,
+    index: number,
+    _siblings: HTMLViewNode,
+    _parent: HTMLViewNode,
+    _defaultRenderer: (
+      node: HTMLViewNode,
+      parent: HTMLViewNode,
+    ) => React.ReactNode,
+  ) => {
+    if (node.name === 'img') {
+      return <AutoSizedImage key={index} source={{ uri: node.attribs.src }} />;
+    }
+  };
 
   useEffect(() => {
     if (on) {
@@ -197,6 +253,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             }),
           }}>
           <HTMLView
+            renderNode={renderNode}
             value={story.body}
             stylesheet={htmlStyles}
             textComponentProps={defaultTextProps}
