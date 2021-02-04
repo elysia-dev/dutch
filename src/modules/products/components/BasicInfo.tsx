@@ -62,34 +62,35 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             />
           </View>
         </View>
-        {product.status === ProductStatus.SALE && product.contractAddress && (
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(
-                getEnvironment().envName === 'PRODUCTION'
-                  ? `https://etherscan.io/token/${product.contractAddress}`
-                  : `https://kovan.etherscan.io/token/${product.contractAddress}`,
-              );
-            }}
-            style={{
-              backgroundColor: '#fff',
-              width: 120,
-              height: 30,
-              borderRadius: 15,
-              shadowOffset: { width: 1, height: 1 },
-              shadowColor: '#00000029',
-              shadowOpacity: 0.8,
-              shadowRadius: 4,
-              elevation: 4,
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
-            <P1Text
-              label={i18n.t('dashboard_label.token_contract')}
-              style={{ textAlign: 'center', fontSize: 13 }}
-            />
-          </TouchableOpacity>
-        )}
+        {product.status === ProductStatus.SALE &&
+          product.contractAddress.length > 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL(
+                  getEnvironment().envName === 'PRODUCTION'
+                    ? `https://etherscan.io/token/${product.contractAddress}`
+                    : `https://kovan.etherscan.io/token/${product.contractAddress}`,
+                );
+              }}
+              style={{
+                backgroundColor: '#fff',
+                width: 120,
+                height: 30,
+                borderRadius: 15,
+                shadowOffset: { width: 1, height: 1 },
+                shadowColor: '#00000029',
+                shadowOpacity: 0.8,
+                shadowRadius: 4,
+                elevation: 4,
+                justifyContent: 'center',
+                alignContent: 'center',
+              }}>
+              <P1Text
+                label={i18n.t('dashboard_label.token_contract')}
+                style={{ textAlign: 'center', fontSize: 13 }}
+              />
+            </TouchableOpacity>
+          )}
       </View>
       <View
         style={{
