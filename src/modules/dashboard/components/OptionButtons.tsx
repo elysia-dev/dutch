@@ -11,6 +11,7 @@ interface Props {
   interestHandler: () => void;
   productId: number;
   paymentMethod: string;
+  interestAvailability: boolean;
 }
 
 const OptionButtons: FunctionComponent<Props> = (props: Props) => {
@@ -82,6 +83,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
+        disabled={!props.interestAvailability}
         onPress={props.interestHandler}
         style={{
           backgroundColor: '#fff',
