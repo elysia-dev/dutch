@@ -10,7 +10,7 @@ import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
 import RootContext from '../../contexts/RootContext';
-import SignInStatus from '../../enums/SignInStatus';
+import { SignInStatus } from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
 
 const InitializeEmail: FunctionComponent = () => {
@@ -31,15 +31,14 @@ const InitializeEmail: FunctionComponent = () => {
 
     Server.initializeEmail(state.email)
       .then((res) => {
-        navigation.navigate(
-          res.data.status === 'exist'
-            ? AccountPage.Login
-            : AccountPage.CertifySignup,
-          {
+        if (res.data.status === 'exist') {
+          navigation.navigate(AccountPage.Login, {
             verificationId: res.data.verificationId,
             email: state.email,
-          },
-        );
+          });
+        } else {
+          alert(i18n.t('account_errors.unmatched_email'));
+        }
       })
       .catch((e) => {
         if (e.response.status === 400) {
