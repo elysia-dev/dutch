@@ -73,7 +73,7 @@ const Login: FunctionComponent = () => {
             });
           } else if (res.data.status === 'success') {
             await storeToken(res.data.token!);
-            await signIn();
+            signIn();
             // navigation.navigate('Main');
           }
         })
