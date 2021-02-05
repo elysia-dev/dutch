@@ -388,6 +388,6 @@ export default class Server {
   checkEthAddressRegisteration = (
     id: string,
   ): Promise<AxiosResponse<AccountResponse>> => {
-    return espressoClient.post(`/ethAddress/${id}/token`);
+    return espressoClient.get(`/ethAddress/${id}/token`);
   };
 }
