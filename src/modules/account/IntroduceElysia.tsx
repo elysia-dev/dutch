@@ -43,8 +43,8 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const callApi = () => {
     Server.addGuestUser(user.language)
       .then(async (res) => {
-        if (res.data.status === 'success') {
-          await storeToken(res.data.token!);
+        if (res.data.status === 'success' && res.data.token) {
+          await storeToken(res.data.token);
           signIn();
         }
       })
