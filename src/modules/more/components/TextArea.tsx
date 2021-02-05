@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { SafeAreaView, View, TextInput } from 'react-native';
-import { P1Text } from '../../../shared/components/Texts';
+import { P1Text, P3Text } from '../../../shared/components/Texts';
 
 import i18n from '../../../i18n/i18n';
 
@@ -16,10 +16,9 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <View>
-      <P1Text
+      <P3Text
         style={{
           color: state.focus ? '#3679B5' : '#A7A7A7',
-          fontSize: 15,
           textAlign: 'left',
           marginBottom: 15,
         }}
@@ -32,7 +31,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
         allowFontScaling={false}
         style={{
           backgroundColor: '#F6F6F8',
-          borderColor: state.focus ? '#3679B5' : '#00000040',
+          borderColor: state.focus ? '#3679B5' : '#D0D8DF',
           borderRadius: 10,
           borderWidth: 1,
           width: '100%',
