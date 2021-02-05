@@ -30,6 +30,7 @@ import CurrencyType from '../../enums/CurrencyType';
 import { SignInStatus } from '../../enums/SignInStatus';
 import storeDeeplink from '../../utiles/storeDeeplink';
 import checkLatestVersion from '../../utiles/checkLatestVersion';
+import ProviderType from '../../enums/ProviderType';
 
 const Setting: FunctionComponent = () => {
   const {
@@ -113,26 +114,66 @@ const Setting: FunctionComponent = () => {
     }
   };
 
+  const buttonTitle = () => {
+    switch (user.provider) {
+      case ProviderType.ETH:
+        return i18n.t('more_label.disconnect_address');
+      case ProviderType.GUEST:
+        return i18n.t('more_label.return_initial');
+      case ProviderType.EMAIL:
+        return i18n.t('more_label.logout');
+      default:
+        return '';
+    }
+  };
+
   const confirmSignOut = () => {
-    Alert.alert(
-      i18n.t('more_label.logout'),
-      i18n.t('more.confirm_logout'),
-      [
-        {
-          text: 'Cancel',
-          onPress: () => {},
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            signOut(SignInStatus.SIGNOUT);
-          },
-          style: 'default',
-        },
-      ],
-      { cancelable: false },
-    );
+    switch (user.provider) {
+      case ProviderType.ETH:
+        return Alert.alert(
+          i18n.t('more_label.disconnect'),
+          i18n.t('more.confirm_disconnect'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      case ProviderType.GUEST:
+        return signOut(SignInStatus.SIGNOUT);
+      case ProviderType.EMAIL:
+        return Alert.alert(
+          i18n.t('more_label.logout'),
+          i18n.t('more.confirm_logout'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {},
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      default:
+        break;
+    }
   };
 
   return (
@@ -419,7 +460,7 @@ const Setting: FunctionComponent = () => {
                   paddingBottom: 25,
                 }}>
                 <SubmitButton
-                  title={i18n.t('more_label.logout')}
+                  title={buttonTitle()}
                   handler={confirmSignOut}
                   style={{
                     width: '100%',
