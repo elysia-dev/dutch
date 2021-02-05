@@ -190,6 +190,9 @@ const OwnershipDetail: FunctionComponent = () => {
             />
           ) : (
             <OptionButtons
+              interestAvailability={
+                parseFloat(state.ownership.availableProfit) > 0
+              }
               paymentMethod={state.ownership.product.paymentMethod}
               productId={state.ownership.product.id}
               refundHandler={() =>
