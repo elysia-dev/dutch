@@ -1,7 +1,7 @@
 {
   "welcome": "엘리시아에 오신 것을 환영합니다.",
   "greeting": "안녕하세요.\n%{lastName} %{firstName}님",
-  "greeting_new": "안녕하세요. %{email}님",
+  "greeting_new": "안녕하세요.\n%{email}님",
   "account": {
     "insert_account_email": "이메일을 입력해주세요.",
     "check_email": "이메일 주소를 확인해주세요.",
@@ -64,7 +64,8 @@
     "incorrect_password_warning": "5회 실패시 계정이 잠금되며\n추가 인증이 요구됩니다",
     "server": "서버 통신 오류입니다. 담당자에게 문의하세요.",
     "duplicate_email": "이메일 중복 오류입니다. 다른 이메일로 다시 진행해 주세요.",
-    "ethaddress": "잘못된 지갑 주소 형식입니다."
+    "ethaddress": "잘못된 지갑 주소 형식입니다.",
+    "unmatched_email": "존재하지 않는 이메일입니다. 이메일을 확인해주세요."
   },
   "account_label": {
     "account_email": "이메일",
@@ -82,7 +83,9 @@
     "change": "변경하기",
     "change_password": "비밀번호 변경",
     "ethaddress": "지갑 주소",
-    "move": "이동하기"
+    "move": "이동하기",
+    "start_service": "서비스 둘러보기",
+    "existing_login": "기존 회원 로그인하기"
   },
   "kyc_label": {
     "argos_terms": "아르고스 약관보기",
@@ -170,7 +173,9 @@
     "elysia": "ELYSIA",
     "el": "EL",
     "imtoken_mobile": "imToken Mobile",
-    "select_payment": "지갑을 선택해 주세요."
+    "select_payment": "지갑을 선택해 주세요.",
+    "connect_wallet": "지갑 주소 연결이 필요합니다.",
+    "connect_wallet_confirm": "지갑 주소 연결이 필요합니다.\n지금 연결하시겠어요?"
   },
   "product_financial": {
     "expected_annual_return": "예상 연 적립률",
@@ -240,7 +245,8 @@
     "reserved": "예약완료",
     "loan": "탈중앙 대출채권형 상품",
     "restricted_country": "현재 국가에서 교환 불가",
-    "payment_method": "교환 수단"
+    "payment_method": "교환 수단",
+    "need_wallet": "지갑 연결 필요"
   },
   "more_label": {
     "more": "더 보기",
@@ -313,7 +319,12 @@
     "get_latest_version": "최신 버전(%{version})으로 업데이트",
     "update_alert": "새 버전 알림",
     "update_text": "새로운 버전이 있습니다. 업데이트 하시고 새로운 기능을 만나보세요!",
-    "update": "업데이트"
+    "update": "업데이트",
+    "disconnect_address": "지갑 주소 연결 해제하기",
+    "return_initial": "초기 화면으로 돌아가기",
+    "disconnect": "연결 해제",
+    "reply_email": "답변을 받으실 이메일",
+    "disconnect_and_new": "새로운 지갑 연결하기"
   },
   "more": {
     "kyc_proceeding_wait": "KYC 인증이 진행중입니다. 승인이 완료되면 알림을 보내드릴테니 조금만 기다려주세요.",
@@ -336,7 +347,9 @@
     "withdrawl_check_1": "기존 상품(%{legacyOwnerships})의 환불 이후 탈퇴를 진행해 주세요.",
     "withdrawl_check_2": "탈퇴 이후에는 엘리시아 웹사이트(elysia.land) 내부 지갑에 있는 잔고 출금이 불가능합니다.\nEL %{legacyEl}, USD %{legacyUsd}의 출금을 먼저 진행해 주세요.",
     "withdrawl_check_3": "개인정보(이메일과 KYC 인증 여부)가 완전히 삭제됩니다.",
-    "withdrawl_check_4": "탈퇴 이후의 소유권과 이자 소득에 대한 손실은 책임지지 않습니다."
+    "withdrawl_check_4": "탈퇴 이후의 소유권과 이자 소득에 대한 손실은 책임지지 않습니다.",
+    "confirm_disconnect": "지갑 연결을 해제하시겠어요?\n소유권은 그대로 유지되고 다시 연결하시면 확인 가능합니다.",
+    "confirm_disconnect_and_new": "새로운 지갑을 연결하시려면 기존 지갑 연결을 해제하셔야 합니다.\n연결을 해제해도 기존 지갑 주소의 소유권은 그대로 유지됩니다.\n지갑 연결을 해제하시겠어요?"
   },
   "dashboard_label": {
     "total_balance": "총액",
@@ -438,7 +451,8 @@
     "first_product_subs": "첫 상품 사전예약하면",
     "give_EL": "1,000 EL 지급!",
     "how_get_EL": "지금 바로 EL 얻는 방법?",
-    "participate_event": "이벤트 참여하기"
+    "participate_event": "이벤트 참여하기",
+    "connect_address": "지갑 주소를 연결해주세요."
   },
   "day": {
     "0": "일",
@@ -462,7 +476,9 @@
     "increaseOwnership": "[%{tokenName}] 보유 개수가 증가했습니다. (+ %{tokenAmount}개)",
     "decreaseOwnership": "[%{tokenName}] 보유 개수가 감소했습니다. (- %{tokenAmount}개)",
     "withdrawInterest": "[%{tokenName}] 적립금이 출금되었습니다. (%{tokenAmount} %{paymentMethod})",
-    "failTransaction": "[%{tokenName}] 트랜잭션이 실패했습니다."
+    "failTransaction": "[%{tokenName}] 트랜잭션이 실패했습니다.",
+    "onboardingNewUser": "엘리시아에 오신 것을 환영합니다!",
+    "onboardingConnectWallet": "더 보기 탭에서 이더리움 지갑 주소를 연결해주세요."
   },
   "notification_label": {
     "notification": "알림",
@@ -475,7 +491,9 @@
     "increaseOwnership": "트랜잭션 완료",
     "decreaseOwnership": "트랜잭션 완료",
     "withdrawInterest": "트랜잭션 완료",
-    "failTransaction": "트랜잭션 실패"
+    "failTransaction": "트랜잭션 실패",
+    "onboardingNewUser": "엘리시아 온보딩",
+    "onboardingConnectWallet": "엘리시아 온보딩"
   },
   "FAQ": {
     "question": [
