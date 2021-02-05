@@ -2,6 +2,7 @@ import React, {
   FunctionComponent,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -123,9 +124,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     wallet: '',
   });
 
-  const [appState, setAppState] = useState<AppStateStatus>(
-    AppState.currentState,
-  );
+  const appStateRef = useRef(AppState.currentState);
 
   const navigation = useNavigation();
 
@@ -167,7 +166,9 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         }
       })
       .catch((e) => {
-        alert(i18n.t('account_errors.server'));
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
       });
   };
 
@@ -184,22 +185,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         alert(i18n.t('account_errors.server'));
       });
   };
-
-  useEffect(() => {
-    AppState.addEventListener('change', () =>
-      setAppState(AppState.currentState),
-    );
-
-    if (user.ethAddresses?.length > 0 && !state.balance) {
-      userBalance();
-    }
-
-    return () => {
-      AppState.removeEventListener('change', () =>
-        setAppState(AppState.currentState),
-      );
-    };
-  }, []);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);
@@ -244,15 +229,31 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       });
   };
 
-  useEffect(() => {
-    if (appState === 'active' && !(user.ethAddresses?.length > 0)) {
-      if (user.provider === ProviderType.GUEST) {
-        checkGuestUserInfo();
-      } else {
-        checkUserInfo();
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (appStateRef.current !== 'active' && nextAppState === 'active') {
+      if (!(user.ethAddresses?.length > 0)) {
+        if (user.provider === ProviderType.GUEST) {
+          checkGuestUserInfo();
+        } else {
+          checkUserInfo();
+        }
       }
     }
-  }, [appState]);
+    appStateRef.current = nextAppState;
+    // setAppState(appStateRef.current);
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
+
+    if (user.ethAddresses?.length > 0 && !state.balance) {
+      userBalance();
+    }
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (user.ethAddresses?.length > 0) {
