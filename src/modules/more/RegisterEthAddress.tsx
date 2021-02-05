@@ -13,12 +13,13 @@ import {
   TouchableOpacity,
   Pressable,
   Share,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics';
 import Clipboard from 'expo-clipboard';
+import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../i18n/i18n';
 
 import {
@@ -40,6 +41,8 @@ import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import currencyFormatter from '../../utiles/currencyFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
+import { SignInStatus } from '../../enums/SignInStatus';
+import ProviderType from '../../enums/ProviderType';
 
 interface Props {
   resetHandler: () => void;
@@ -109,7 +112,9 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
-  const { Server, setEthAddress, user, elPrice } = useContext(RootContext);
+  const { Server, setEthAddress, user, elPrice, signOut, signIn } = useContext(
+    RootContext,
+  );
 
   const [state, setState] = useState<State>({
     confirmModal: false,
@@ -138,7 +143,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
 
   const callApi = (type: string) => {
     Server.requestEthAddressRegister()
-      .then((res) => {
+      .then(async (res) => {
+        await storeRequestId(res.data.id);
         if (type === 'metamask') {
           Linking.openURL(
             `https://metamask.app.link/dapp/${
@@ -186,22 +192,60 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     if (user.ethAddresses?.length > 0 && !state.balance) {
       userBalance();
     }
+
+    return () => {
+      AppState.removeEventListener('change', () =>
+        setAppState(AppState.currentState),
+      );
+    };
   }, []);
 
-  useEffect(() => {
-    if (appState === 'active' || !(user.ethAddresses?.length > 0)) {
-      Server.me()
-        .then((res) => {
-          if (res.data.user.ethAddresses?.length > 0) {
-            setEthAddress(res.data.user.ethAddresses[0]);
-            userBalance(res.data.user.ethAddresses[0]);
-          }
+  const storeToken = async (token: string) => {
+    await AsyncStorage.setItem('@token', token);
+  };
+
+  const storeRequestId = async (id: string) => {
+    await AsyncStorage.setItem('@requestId', id);
+  };
+
+  const checkGuestUserInfo = async () => {
+    const requestId = await AsyncStorage.getItem('@requestId');
+    if (requestId) {
+      Server.checkEthAddressRegisteration(requestId)
+        .then(async (res) => {
+          await storeToken(res.data.token!);
+          signIn();
         })
         .catch((e) => {
           if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
           }
         });
+    }
+  };
+
+  const checkUserInfo = () => {
+    Server.me()
+      .then((res) => {
+        if (res.data.user.ethAddresses?.length > 0) {
+          setEthAddress(res.data.user.ethAddresses[0]);
+          userBalance(res.data.user.ethAddresses[0]);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
+  };
+
+  useEffect(() => {
+    if (appState === 'active' || !(user.ethAddresses?.length > 0)) {
+      if (user.provider === ProviderType.GUEST) {
+        checkGuestUserInfo();
+      } else {
+        checkUserInfo();
+      }
     }
   }, [appState]);
 
@@ -437,8 +481,36 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
           )
         }
         button={
+          // eslint-disable-next-line no-nested-ternary
           user.ethAddresses?.length > 0 ? (
-            <></>
+            user.provider === ProviderType.ETH ? (
+              <SubmitButton
+                title={i18n.t('more_label.disconnect_and_new')}
+                handler={() => {
+                  return Alert.alert(
+                    i18n.t('more_label.disconnect'),
+                    i18n.t('more.confirm_disconnect_and_new'),
+                    [
+                      {
+                        text: 'Cancel',
+                        onPress: () => {},
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          signOut(SignInStatus.SIGNOUT);
+                        },
+                        style: 'default',
+                      },
+                    ],
+                    { cancelable: false },
+                  );
+                }}
+              />
+            ) : (
+              <></>
+            )
           ) : (
             <>
               <WalletButton
