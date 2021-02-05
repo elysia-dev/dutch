@@ -34,6 +34,7 @@ import CachedImage from '../../shared/components/CachedImage';
 import { SignInStatus } from '../../enums/SignInStatus';
 import { MorePage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
+import { PostItem } from './components/PostItem';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -76,20 +77,17 @@ const ProductBuying: FunctionComponent = () => {
     ? user.nationality.split(', ')[1]
     : '';
   const purchasability =
-    user.kycStatus === KycStatus.SUCCESS &&
-    user.ethAddresses?.length > 0 &&
-    !state.product?.restrictedCountries?.includes(shortNationality);
+    user.kycStatus === KycStatus.SUCCESS && user.ethAddresses?.length > 0;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
     } else if (user.provider === ProviderType.GUEST) {
       return i18n.t('product_label.need_wallet');
-    } else if (!purchasability) {
-      if (state.product?.restrictedCountries?.includes(shortNationality)) {
-        return i18n.t('product_label.restricted_country');
-      }
+    } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return i18n.t('product_label.non_purchasable');
+    } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
+      return i18n.t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
       return i18n.t('product_label.invest');
     }
@@ -118,7 +116,7 @@ const ProductBuying: FunctionComponent = () => {
         ],
         { cancelable: false },
       );
-    } else if (!purchasability) {
+    } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
         return alert(i18n.t('product.restricted_country'));
       }
@@ -297,7 +295,7 @@ const ProductBuying: FunctionComponent = () => {
               // eslint-disable-next-line no-nested-ternary
               state.product?.status === ProductStatus.TERMINATED
                 ? '#1c1c1c'
-                : purchasability
+                : user.provider === ProviderType.ETH || purchasability
                 ? '#3679B5'
                 : '#D0D8DF',
           }}
