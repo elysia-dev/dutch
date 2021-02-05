@@ -11,22 +11,23 @@ import React, {
   useState,
 } from 'react';
 import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import * as Linking from 'expo-linking';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import Product from '../../types/Product';
-import BuyingSummary from './components/BuyingSummary';
-import RefundSummary from './components/RefundSummary';
-import InterestSummary from './components/InterestSummary';
 import RootContext from '../../contexts/RootContext';
 import getEnvironment from '../../utiles/getEnvironment';
 import useAppState from '../../hooks/useAppState';
-import { DashboardPage } from '../../enums/pageEnum';
 import WalletType from '../../enums/WalletType';
 import storeDeeplink from '../../utiles/storeDeeplink';
+import ProviderType from '../../enums/ProviderType';
+import { TextField } from '../../shared/components/TextField';
 
 type ParamList = {
   PaymentSelection: {
@@ -104,13 +105,14 @@ const PaymentSelection: FunctionComponent = () => {
   useEffect(() => {}, []);
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'PaymentSelection'>>();
-  const { id, tokenCount, product, type, elInterest } = route.params;
+  const { id } = route.params;
   const [state, setState] = useState({
     wallet: '',
     emailRestriction: false,
+    email: '',
   });
-  const { wallet, emailRestriction } = state;
-  const { Server, refreshUser } = useContext(RootContext);
+  const { wallet, emailRestriction, email } = state;
+  const { Server, refreshUser, user } = useContext(RootContext);
   const appState = useAppState();
 
   useEffect(() => {
@@ -146,22 +148,45 @@ const PaymentSelection: FunctionComponent = () => {
         if (emailRestriction) {
           return alert(i18n.t('product.email_restriction'));
         }
-        Server.sendEmailForTransaction(`${id}`)
-          .then((_res) => {
-            setState({ ...state, emailRestriction: true });
-            alert(i18n.t('product.send_purchase_link'));
-            setTimeout(() => {
-              setState({
-                ...state,
-                emailRestriction: false,
+        if (user.provider === ProviderType.ETH) {
+          if (!email) {
+            return alert(i18n.t('account.check_email'));
+          } else {
+            Server.sendEmailForTransaction(id, email)
+              .then((_res) => {
+                setState({ ...state, emailRestriction: true });
+                alert(i18n.t('product.send_purchase_link'));
+                setTimeout(() => {
+                  setState({
+                    ...state,
+                    emailRestriction: false,
+                  });
+                }, 30000);
+              })
+              .catch((e) => {
+                if (e.response.status === 500) {
+                  alert(i18n.t('account_errors.server'));
+                }
               });
-            }, 30000);
-          })
-          .catch((e) => {
-            if (e.response.status === 500) {
-              alert(i18n.t('account_errors.server'));
-            }
-          });
+          }
+        } else {
+          Server.sendEmailForTransaction(id)
+            .then((_res) => {
+              setState({ ...state, emailRestriction: true });
+              alert(i18n.t('product.send_purchase_link'));
+              setTimeout(() => {
+                setState({
+                  ...state,
+                  emailRestriction: false,
+                });
+              }, 30000);
+            })
+            .catch((e) => {
+              if (e.response.status === 500) {
+                alert(i18n.t('account_errors.server'));
+              }
+            });
+        }
         break;
       default:
         alert(i18n.t('product.select_metamask'));
@@ -200,15 +225,6 @@ const PaymentSelection: FunctionComponent = () => {
       <H1Text
         label={i18n.t('product.select_payment')}
         style={{ fontSize: 25 }}></H1Text>
-      {/* {type === 'buying' && (
-        <BuyingSummary product={product} tokenCount={tokenCount} />
-      )}
-      {type === 'interest' && (
-        <InterestSummary product={product} elInterest={elInterest || ''} />
-      )}
-      {type === 'refund' && (
-        <RefundSummary product={product} tokenCount={tokenCount} />
-      )} */}
       <View style={{ marginTop: 40 }}>
         <MetaMaskButton
           title={i18n.t('product.metamask_mobile')}
@@ -236,7 +252,21 @@ const PaymentSelection: FunctionComponent = () => {
         />
       </View>
       {wallet === WalletType.METAMASK_PC && (
-        <P1Text label={i18n.t('product.link_will_be_sent')} />
+        <>
+          {user.provider === ProviderType.ETH && (
+            <TextField
+              eventHandler={(input: string) =>
+                setState({ ...state, email: input })
+              }
+              value={email}
+              label={i18n.t('account.insert_account_email')}
+            />
+          )}
+          <P1Text
+            label={'* ' + i18n.t('product.link_will_be_sent')}
+            style={{ color: '#a7a7a7' }}
+          />
+        </>
       )}
       <SubmitButton
         title={i18n.t('account_label.continue')}
