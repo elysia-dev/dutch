@@ -12,12 +12,14 @@ import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
+import { FlatButton } from '../../shared/components/FlatButton';
 
 const Circle = styled.View`
   width: 10px;
@@ -32,7 +34,22 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  const { user } = useContext(RootContext);
+  const { Server, user, signIn } = useContext(RootContext);
+
+  const storeToken = async (token: string) => {
+    await AsyncStorage.setItem('@token', token);
+  };
+
+  const callApi = () => {
+    Server.addGuestUser(user.language)
+      .then(async (res) => {
+        if (res.data.status === 'success') {
+          await storeToken(res.data.token);
+          signIn();
+        }
+      })
+      .catch((_e) => alert(i18n.t('account_errors.server')));
+  };
 
   const viewPager = React.createRef<ViewPager>();
   const ReturnImageOrText = (imgNumber: number) => {
@@ -246,14 +263,21 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           {ButtonListing}
         </View>
         <SubmitButton
-          title={
-            i18n.t('account_label.login') + '/' + i18n.t('account_label.signup')
-          }
+          title={i18n.t('account_label.start_service')}
           style={{
             width: '90%',
             marginHorizontal: '5%',
             position: 'absolute',
-            bottom: 20,
+            bottom: 40,
+          }}
+          handler={() => callApi()}
+        />
+        <FlatButton
+          title={i18n.t('account_label.existing_login')}
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            alignSelf: 'center',
           }}
           handler={() => navigation.navigate(AccountPage.InitializeEmail)}
         />
