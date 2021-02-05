@@ -3,6 +3,7 @@ import LocaleType from '../enums/LocaleType';
 import Notification from './Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
+import ProviderType from '../enums/ProviderType';
 
 export type AccountResponse = {
   verificationId?: string;
@@ -37,6 +38,7 @@ export type UserResponse = {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
+    provider: ProviderType;
   };
   totalBalance: string;
   ownerships: OwnershipResponse[];
