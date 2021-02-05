@@ -383,7 +383,7 @@ const MainInfo: FunctionComponent = () => {
                   <View>
                     <P1Text
                       label={
-                        user.ethAddress?.length > 0
+                        user.ethAddresses?.length > 0
                           ? i18n.t('more_label.my_wallet')
                           : i18n.t('more_label.wallet_connect')
                       }
