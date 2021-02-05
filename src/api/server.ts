@@ -185,7 +185,7 @@ export default class Server {
     );
   };
 
-  storyList = async (): Promise<AxiosResponse<Story[]>> => {
+  storyList = (): Promise<AxiosResponse<Story[]>> => {
     return this.authenticatedEspressoClient.get('/products/stories');
   };
 
@@ -223,6 +223,16 @@ export default class Server {
 
   sendQuestion = async (content: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.post('/questions', {
+      content,
+    });
+  };
+
+  sendQuestionWithEmail = (
+    email: string,
+    content: string,
+  ): Promise<AxiosResponse> => {
+    return espressoClient.post('/land/contact', {
+      email,
       content,
     });
   };
@@ -273,7 +283,15 @@ export default class Server {
     });
   };
 
-  sendEmailForTransaction = async (id: string): Promise<AxiosResponse> => {
+  sendEmailForTransaction = async (
+    id: string,
+    email?: string,
+  ): Promise<AxiosResponse> => {
+    if (email) {
+      return this.authenticatedEspressoClient.get(
+        `/transactionRequests/${id}/sendEmail?email=${email}`,
+      );
+    }
     return this.authenticatedEspressoClient.get(
       `/transactionRequests/${id}/sendEmail`,
     );
@@ -359,5 +377,17 @@ export default class Server {
 
   checkLatestVersion = (platform: string): Promise<AxiosResponse> => {
     return espressoClient.get(`/q/${platform}`);
+  };
+
+  addGuestUser = (
+    language: string,
+  ): Promise<AxiosResponse<AccountResponse>> => {
+    return espressoClient.post('/users/eth', { language });
+  };
+
+  checkEthAddressRegisteration = (
+    id: string,
+  ): Promise<AxiosResponse<AccountResponse>> => {
+    return espressoClient.post(`/ethAddress/${id}/token`);
   };
 }
