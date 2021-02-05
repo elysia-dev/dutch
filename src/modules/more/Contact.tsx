@@ -114,6 +114,7 @@ const Contact: FunctionComponent = () => {
               {(user.provider === ProviderType.GUEST ||
                 user.provider === ProviderType.ETH) && (
                 <TextField
+                  value={state.email}
                   label={i18n.t('more_label.reply_email')}
                   eventHandler={(input: string) =>
                     setState({ ...state, email: input })
