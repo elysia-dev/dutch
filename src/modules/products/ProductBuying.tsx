@@ -13,6 +13,7 @@ import {
   Modal,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
@@ -30,6 +31,9 @@ import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
+import { SignInStatus } from '../../enums/SignInStatus';
+import { MorePage } from '../../enums/pageEnum';
+import ProviderType from '../../enums/ProviderType';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -67,7 +71,7 @@ const ProductBuying: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
-  const { Server, user, elPrice } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
@@ -79,35 +83,62 @@ const ProductBuying: FunctionComponent = () => {
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
-    }
-    if (!purchasability) {
+    } else if (user.provider === ProviderType.GUEST) {
+      return i18n.t('product_label.need_wallet');
+    } else if (!purchasability) {
       if (state.product?.restrictedCountries?.includes(shortNationality)) {
         return i18n.t('product_label.restricted_country');
       }
       return i18n.t('product_label.non_purchasable');
     } else if (state.product?.status === ProductStatus.SALE) {
       return i18n.t('product_label.invest');
-    } else if (state.product?.status === ProductStatus.SUBSCRIBING) {
-      if (state.subscribed) {
-        return i18n.t('product_label.reserved');
-      } else {
-        return i18n.t('product_label.reserve');
-      }
     }
     return '';
+  };
+
+  const submitButtonHandler = () => {
+    if (user.provider === ProviderType.GUEST) {
+      return Alert.alert(
+        i18n.t('product_label.need_wallet'),
+        i18n.t('product.connect_wallet_confirm'),
+        [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () =>
+              navigation.navigate('More', {
+                screen: MorePage.RegisterEthAddress,
+              }),
+            style: 'default',
+          },
+        ],
+        { cancelable: false },
+      );
+    } else if (!purchasability) {
+      if (state.product?.restrictedCountries.includes(shortNationality)) {
+        return alert(i18n.t('product.restricted_country'));
+      }
+      return alert(i18n.t('product.non_purchasable'));
+    } else {
+      setState({ ...state, modalVisible: true });
+    }
   };
 
   const loadProductAndSubscription = async () => {
     try {
       const product = await Server.productInfo(productId);
-      const subscription = await Server.getProductSubscription(productId);
+      // const subscription = await Server.getProductSubscription(productId);
       const elPrice = await Server.getCurrency('el');
       const ethPrice = await Server.coinPrice();
       // const totalSupply = getErc20Contract(product.data.contractAddress)
       setState({
         ...state,
         product: product.data,
-        subscribed: subscription.status === 200,
+        // subscribed: subscription.status === 200,
         loaded: true,
         elPrice: elPrice.data.rate,
         ethPrice: ethPrice.data.ethereum.usd,
@@ -271,18 +302,7 @@ const ProductBuying: FunctionComponent = () => {
                 : '#D0D8DF',
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
-          handler={() => {
-            if (!purchasability) {
-              if (
-                state.product?.restrictedCountries.includes(shortNationality)
-              ) {
-                return alert(i18n.t('product.restricted_country'));
-              }
-              return alert(i18n.t('product.non_purchasable'));
-            } else {
-              setState({ ...state, modalVisible: true });
-            }
-          }}
+          handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
 
