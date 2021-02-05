@@ -18,11 +18,11 @@ import { WithdrawalCard } from './components/WithdrawalCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
-import { KycStatus } from '../../enums/KycStatus';
 import RootContext from '../../contexts/RootContext';
 import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import { EventCard } from './components/EventCard';
+import { SignInStatus } from '../../enums/SignInStatus';
+import ProviderType from '../../enums/ProviderType';
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -38,7 +38,9 @@ export const Main: FunctionComponent = () => {
   useScrollToTop(ref);
 
   useEffect(() => {
-    refreshUser();
+    if (user.provider !== ProviderType.GUEST) {
+      refreshUser();
+    }
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -58,6 +60,33 @@ export const Main: FunctionComponent = () => {
       key={index}
     />
   ));
+
+  const greeting = () => {
+    switch (user.provider) {
+      case ProviderType.GUEST:
+        return i18n.t('dashboard.connect_address');
+      case ProviderType.ETH:
+        return i18n.t('greeting_new', {
+          email: user.ethAddresses[0],
+        });
+      case ProviderType.EMAIL:
+        return user.firstName && user.lastName
+          ? i18n.t('greeting', {
+              firstName: user.firstName,
+              lastName: user.lastName === null ? '' : user.lastName,
+            })
+          : i18n.t('greeting_new', {
+              email: `${user.ethAddresses[0]?.substring(
+                0,
+                6,
+              )}...${user.ethAddresses[0]?.substring(
+                user.ethAddresses[0]?.length - 4,
+              )}`,
+            });
+      default:
+        return '';
+    }
+  };
 
   return (
     <>
@@ -90,19 +119,7 @@ export const Main: FunctionComponent = () => {
               height: '100%',
               padding: 20,
             }}>
-            <H1Text
-              style={{ marginBottom: 40 }}
-              label={
-                user.firstName && user.lastName
-                  ? i18n.t('greeting', {
-                    firstName: user.firstName,
-                    lastName: user.lastName === null ? '' : user.lastName,
-                  })
-                  : i18n.t('greeting_new', {
-                    email: user.email,
-                  })
-              }
-            />
+            <H1Text style={{ marginBottom: 40 }} label={greeting()} />
             <BalanceCard
               balance={balance}
               handler={() =>
