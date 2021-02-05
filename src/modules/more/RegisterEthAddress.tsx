@@ -189,6 +189,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     AppState.addEventListener('change', () =>
       setAppState(AppState.currentState),
     );
+
     if (user.ethAddresses?.length > 0 && !state.balance) {
       userBalance();
     }
@@ -213,12 +214,16 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     if (requestId) {
       Server.checkEthAddressRegisteration(requestId)
         .then(async (res) => {
-          await storeToken(res.data.token!);
-          signIn();
+          if (res.data.status === 'success' && res.data.token) {
+            await storeToken(res.data.token);
+            signIn();
+          }
         })
         .catch((e) => {
           if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
+          } else if (e.response.status === 404) {
+            signIn();
           }
         });
     }
@@ -240,7 +245,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   };
 
   useEffect(() => {
-    if (appState === 'active' || !(user.ethAddresses?.length > 0)) {
+    if (appState === 'active' && !(user.ethAddresses?.length > 0)) {
       if (user.provider === ProviderType.GUEST) {
         checkGuestUserInfo();
       } else {
@@ -248,6 +253,12 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       }
     }
   }, [appState]);
+
+  useEffect(() => {
+    if (user.ethAddresses?.length > 0) {
+      userBalance(user.ethAddresses[0]);
+    }
+  }, [user]);
 
   return (
     <>
