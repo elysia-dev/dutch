@@ -175,7 +175,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             }}>
             <P1Text
               label={i18n.t('product_label.available_token')}
-              style={{ flex: 2.5, color: '#838383' }}
+              style={{ flex: 1.2, color: '#838383' }}
             />
             <View
               style={{
@@ -183,7 +183,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
               }}>
-              <P1Text label={`${commaFormatter(product.presentValue)}`} />
+              <P1Text
+                label={`${commaFormatter(
+                  parseFloat(product.presentValue).toFixed(4),
+                )}`}
+              />
               <P1Text
                 label={` / ${commaFormatter(product.totalValue)}`}
                 style={{ color: '#838383' }}
