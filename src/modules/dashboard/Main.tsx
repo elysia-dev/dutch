@@ -67,7 +67,12 @@ export const Main: FunctionComponent = () => {
         return i18n.t('dashboard.connect_address');
       case ProviderType.ETH:
         return i18n.t('greeting_new', {
-          email: user.ethAddresses[0],
+          email: `${user.ethAddresses[0]?.substring(
+            0,
+            6,
+          )}...${user.ethAddresses[0]?.substring(
+            user.ethAddresses[0]?.length - 4,
+          )}`,
         });
       case ProviderType.EMAIL:
         return user.firstName && user.lastName
@@ -76,12 +81,7 @@ export const Main: FunctionComponent = () => {
               lastName: user.lastName === null ? '' : user.lastName,
             })
           : i18n.t('greeting_new', {
-              email: `${user.ethAddresses[0]?.substring(
-                0,
-                6,
-              )}...${user.ethAddresses[0]?.substring(
-                user.ethAddresses[0]?.length - 4,
-              )}`,
+              email: user.email,
             });
       default:
         return '';
