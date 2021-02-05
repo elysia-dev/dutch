@@ -44,7 +44,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
     Server.addGuestUser(user.language)
       .then(async (res) => {
         if (res.data.status === 'success') {
-          await storeToken(res.data.token);
+          await storeToken(res.data.token!);
           signIn();
         }
       })
