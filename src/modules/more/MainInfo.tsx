@@ -24,6 +24,7 @@ import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
+import ProviderType from '../../enums/ProviderType';
 
 const ExchangeImg = styled.Image`
   width: 100%;
@@ -74,6 +75,9 @@ const MainInfo: FunctionComponent = () => {
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
+
+  const isNewWalletUser =
+    user.provider === ProviderType.GUEST || user.provider === ProviderType.ETH;
 
   return (
     <SafeAreaView
@@ -172,11 +176,11 @@ const MainInfo: FunctionComponent = () => {
             borderBottomColor: '#F6F6F8',
             borderBottomWidth: 5,
             // height: 350,
-            marginTop: 30,
+            marginTop: 10,
             paddingBottom: 10,
           }}>
-          {user.kycStatus === KycStatus.NONE && (
-            <View>
+          {!isNewWalletUser && user.kycStatus === KycStatus.NONE && (
+            <View style={{ marginBottom: 28 }}>
               <KycNoneButton
                 onPress={() => navigation.navigate('Kyc')}
                 style={{
@@ -223,8 +227,8 @@ const MainInfo: FunctionComponent = () => {
               </KycNoneButton>
             </View>
           )}
-          {user.kycStatus === KycStatus.REJECTED && (
-            <View>
+          {!isNewWalletUser && user.kycStatus === KycStatus.REJECTED && (
+            <View style={{ marginBottom: 28 }}>
               <KycNoneButton
                 onPress={() => navigation.navigate('Kyc')}
                 style={{
@@ -271,8 +275,8 @@ const MainInfo: FunctionComponent = () => {
               </KycNoneButton>
             </View>
           )}
-          {user.kycStatus === KycStatus.PENDING && (
-            <View>
+          {!isNewWalletUser && user.kycStatus === KycStatus.PENDING && (
+            <View style={{ marginBottom: 28 }}>
               <H3Text
                 label={i18n.t('more_label.pending_kyc')}
                 style={{
@@ -318,10 +322,11 @@ const MainInfo: FunctionComponent = () => {
               </KycPendingButton>
             </View>
           )}
-          {user.kycStatus === KycStatus.SUCCESS && (
+          {!isNewWalletUser && user.kycStatus === KycStatus.SUCCESS && (
             <SubmitButton
               style={{
                 height: 70,
+                marginBottom: 28,
               }}
               duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
@@ -329,7 +334,7 @@ const MainInfo: FunctionComponent = () => {
               variant={'GrayTheme'}
             />
           )}
-          <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 38 }}>
+          <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 10 }}>
             <H3Text
               label={i18n.t('more_label.my_info')}
               style={{ marginBottom: 15, fontSize: 18 }}
@@ -378,7 +383,7 @@ const MainInfo: FunctionComponent = () => {
                   <View>
                     <P1Text
                       label={
-                        user.ethAddresses?.length > 0
+                        user.ethAddress?.length > 0
                           ? i18n.t('more_label.my_wallet')
                           : i18n.t('more_label.wallet_connect')
                       }
@@ -403,30 +408,32 @@ const MainInfo: FunctionComponent = () => {
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.MyPage,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <P1Text
-                    label={i18n.t('more_label.my_account')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
+            {!isNewWalletUser && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.MyPage,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <P1Text
+                      label={i18n.t('more_label.my_account')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    <InfoArrowImg source={require('./images/next_gray.png')} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
         <View
@@ -517,30 +524,32 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.PrivacyPolicy,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <P1Text
-                    label={i18n.t('more_label.privacy_policy')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
+            {!isNewWalletUser && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.PrivacyPolicy,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <P1Text
+                      label={i18n.t('more_label.privacy_policy')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    <InfoArrowImg source={require('./images/next_gray.png')} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </View>
         <View
