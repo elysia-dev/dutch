@@ -11,11 +11,12 @@ import i18n from '../../../i18n/i18n';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
-import { DashboardPage } from '../../../enums/pageEnum';
+import { DashboardPage, MorePage } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
+import NotificationStatus from '../../../enums/NotificationStatus';
 
 interface Props {
   notification: Notification;
@@ -23,7 +24,12 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const {
+    currencyUnit,
+    currencyRatio,
+    notifications,
+    setNotifications,
+  } = useContext(RootContext);
   const [showTx, setShowTx] = useState(false);
 
   const type = props.notification.notificationType;
@@ -51,9 +57,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         return 0;
     }
   };
-  const width = [15, 15, 20, 15, 15, 15, 15, 15, 15, 15];
-  const height = [17, 17, 18.5, 17, 17, 17, 17, 17, 17, 17];
-  const left = [0, 0, -1, 0, 0, 0, 0, 0, 0, 0];
+
   const status = props.notification.status;
   const data = props.notification.data;
   const navigation = useNavigation();
@@ -64,6 +68,55 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
     NotificationType.WITHDRAW_INTEREST,
   ].includes(type);
 
+  const navigate = () => {
+    switch (type) {
+      case NotificationType.PRODUCT_NOTICE:
+        navigation.navigate('Dashboard', {
+          screen: DashboardPage.ProductNotice,
+          params: { productId: data.productId },
+        });
+        break;
+      case NotificationType.ONBOARDING_CONNECT_WALLET:
+        navigation.navigate('More', {
+          screen: MorePage.RegisterEthAddress,
+        });
+        break;
+      case NotificationType.ONBOARDING_NEW_USER:
+        navigation.navigate('Dashboard', {
+          screen: DashboardPage.InvestmentGuide,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const readNotificationForEachType = () => {
+    if (
+      !(
+        type === NotificationType.PENDING_TRANSACTION ||
+        type === NotificationType.ONBOARDING_NEW_USER ||
+        type === NotificationType.ONBOARDING_CONNECT_WALLET
+      )
+    ) {
+      props.readNotification(props.notification);
+    } else if (
+      type === NotificationType.ONBOARDING_NEW_USER ||
+      type === NotificationType.ONBOARDING_CONNECT_WALLET
+    ) {
+      setNotifications(
+        notifications.map((notification, _index) => ({
+          ...notification,
+          status:
+            notification.status === NotificationStatus.READ ||
+            notification.id === props.notification.id
+              ? NotificationStatus.READ
+              : NotificationStatus.UNREAD,
+        })),
+      );
+    }
+  };
+
   return (
     <View
       style={{
@@ -73,17 +126,9 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
         marginBottom: 40,
       }}>
       <TouchableOpacity
-        disabled={type !== NotificationType.PRODUCT_NOTICE}
         onPress={() => {
-          if (type !== NotificationType.PENDING_TRANSACTION) {
-            props.readNotification(props.notification);
-            if (type === NotificationType.PRODUCT_NOTICE) {
-              navigation.navigate('Dashboard', {
-                screen: DashboardPage.ProductNotice,
-                params: { productId: data.productId },
-              });
-            }
-          }
+          readNotificationForEachType();
+          navigate();
         }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ flex: 1 }}>
@@ -214,9 +259,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               alignContent: 'center',
               justifyContent: 'center',
             }}>
-            {type === NotificationType.PRODUCT_NOTICE && (
+            {(type === NotificationType.PRODUCT_NOTICE ||
+              type === NotificationType.ONBOARDING_NEW_USER ||
+              type === NotificationType.ONBOARDING_CONNECT_WALLET) && (
               <Image
-                style={{ width: 6, height: 9 }}
+                style={{ left: 10, width: 6, height: 9 }}
                 source={images[9][status === 'read' ? 0 : 1]}
               />
             )}

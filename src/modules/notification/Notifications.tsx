@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   View,
   Animated,
@@ -16,6 +21,8 @@ import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { P1Text, P3Text } from '../../shared/components/Texts';
+import { SignInStatus } from '../../enums/SignInStatus';
+import ProviderType from '../../enums/ProviderType';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -24,7 +31,7 @@ const Notifications: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const { Server } = useContext(RootContext);
+  const { Server, user } = useContext(RootContext);
 
   const { notifications, setNotifications } = useContext(RootContext);
 
@@ -41,18 +48,29 @@ const Notifications: FunctionComponent = () => {
       });
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    loadNotifications();
+    if (user.provider !== ProviderType.GUEST) {
+      setRefreshing(true);
+      loadNotifications();
+    }
   }, []);
 
   const readAllNotification = () => {
-    Server.readAll()
-      .then((_res) => loadNotifications())
-      .catch((e) => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
+    if (user.provider === ProviderType.GUEST) {
+      setNotifications(
+        notifications.map((notification, _index) => ({
+          ...notification,
+          status: NotificationStatus.READ,
+        })),
+      );
+    } else {
+      Server.readAll()
+        .then((_res) => loadNotifications())
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(i18n.t('account_errors.server'));
+          }
+        });
+    }
   };
 
   const countUnreadNotifications = () => {
@@ -218,14 +236,16 @@ const Notifications: FunctionComponent = () => {
                 />
               );
             })}
-            <P3Text
-              style={{
-                marginTop: 0,
-                marginBottom: 75,
-                textAlign: 'center',
-              }}
-              label={i18n.t('notification.saved_90days')}
-            />
+            {user.provider !== ProviderType.GUEST && (
+              <P3Text
+                style={{
+                  marginTop: 0,
+                  marginBottom: 75,
+                  textAlign: 'center',
+                }}
+                label={i18n.t('notification.saved_90days')}
+              />
+            )}
           </>
         )}
         <VirtualTab />

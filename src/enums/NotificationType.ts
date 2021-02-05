@@ -13,6 +13,8 @@ enum NotificationType {
   DECREASE_OWNERSHIP = 'decreaseOwnership',
   WITHDRAW_INTEREST = 'withdrawInterest',
   FAIL_TRANSACTION = 'failTransaction',
+  ONBOARDING_NEW_USER = 'onboardingNewUser',
+  ONBOARDING_CONNECT_WALLET = 'onboardingConnectWallet',
 }
 
 export default NotificationType;

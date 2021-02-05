@@ -54,6 +54,9 @@ import getEnvironment from './src/utiles/getEnvironment';
 import storeDeeplink from './src/utiles/storeDeeplink';
 import NotificationType from './src/enums/NotificationType';
 import Loading from './src/modules/main/Loading';
+import NotificationStatus from './src/enums/NotificationStatus';
+import NotificationData from './src/types/NotificationData';
+import ProviderType from './src/enums/ProviderType';
 
 Sentry.init({
   dsn:
@@ -79,6 +82,7 @@ interface AppInformation {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
+    provider: ProviderType;
   };
   ownerships: OwnershipResponse[];
   balance: string;
@@ -109,6 +113,7 @@ const defaultState = {
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+    provider: ProviderType.GUEST,
   },
   ownerships: [],
   balance: '0',
@@ -176,7 +181,6 @@ const App = () => {
             cnyPrice:
               allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
-          console.log('signIn!');
           registerForPushNotificationsAsync().then((expoPushToken) => {
             if (token && expoPushToken) {
               authServer.registerExpoPushToken(expoPushToken).then(() => {
@@ -225,6 +229,30 @@ const App = () => {
       });
   };
 
+  const setOnboardingNotifications = () => {
+    setState({
+      ...state,
+      notifications: [
+        {
+          id: 1,
+          userId: 0,
+          notificationType: NotificationType.ONBOARDING_CONNECT_WALLET,
+          status: NotificationStatus.UNREAD,
+          data: {} as NotificationData,
+          createdAt: new Date(),
+        },
+        {
+          id: 0,
+          userId: 0,
+          notificationType: NotificationType.ONBOARDING_NEW_USER,
+          status: NotificationStatus.UNREAD,
+          data: {} as NotificationData,
+          createdAt: new Date(),
+        },
+      ],
+    });
+  };
+
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     if (
       appState.current !== 'active' &&
@@ -242,6 +270,12 @@ const App = () => {
     i18n.locale = state.user.language;
     signIn();
   }, []);
+
+  useEffect(() => {
+    if (state.user.provider === ProviderType.GUEST) {
+      setOnboardingNotifications();
+    }
+  }, [state.signedIn]);
 
   useEffect(() => {
     if (state.user.currency === CurrencyType.KRW) {
@@ -432,7 +466,6 @@ const App = () => {
           currencyUnit,
           currencyRatio,
           refreshUser,
-          // pushNotificationId,
         }}>
         <RootStack.Navigator headerMode="none">
           {state.signedIn === SignInStatus.PENDING ? (
