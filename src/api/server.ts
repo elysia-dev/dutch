@@ -33,7 +33,7 @@ export default class Server {
   initializeEmail = async (
     email: string,
   ): Promise<AxiosResponse<AccountResponse>> => {
-    return espressoClient.get(`/auth?email=${email}`);
+    return espressoClient.get(`/auth?email=${email}&send=false`);
   };
 
   login = async (
