@@ -89,12 +89,12 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
             if (tokenCount + token < props.ownership.tokenValue) {
               setTokenCount(tokenCount + token);
             } else {
-              setTokenCount(props.ownership.tokenValue);
+              setTokenCount(Math.floor(props.ownership.tokenValue));
             }
           }}
           tokenName={props.ownership.product.tokenName}
           tokenCount={tokenCount}
-          max={props.ownership.tokenValue}
+          max={Math.floor(props.ownership.tokenValue)}
         />
         <ExchangedValue
           tokenCount={tokenCount}
