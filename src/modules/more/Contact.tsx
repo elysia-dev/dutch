@@ -7,7 +7,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { TextArea } from './components/TextArea';
 import { SubTitleText, P1Text } from '../../shared/components/Texts';
-import WrapperLayout from '../../shared/components/WrapperLayout';
+import WrapperLayout from '../../shared/components/WrapperLayoutAvoidingKeyboard';
 import RootContext from '../../contexts/RootContext';
 import { TextField } from '../../shared/components/TextField';
 import ProviderType from '../../enums/ProviderType';
@@ -29,7 +29,7 @@ const Contact: FunctionComponent = () => {
       user.provider === ProviderType.GUEST ||
       user.provider === ProviderType.ETH
     ) {
-      Server.sendQuestionWithEmail(state.email, state.contents)
+      Server.sendQuestionWithEmail(state.email, state.contents, user.language)
         .then((_res) => {
           alert(i18n.t('more.question_submitted'));
           setState({
@@ -46,7 +46,9 @@ const Contact: FunctionComponent = () => {
           }, 60000);
         })
         .catch((e) => {
-          if (e.response.status === 500) {
+          if (e.response.status === 400) {
+            alert(i18n.t('accout.invalid_email'));
+          } else if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
           }
         });
@@ -71,88 +73,82 @@ const Contact: FunctionComponent = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}
-      forceInset={{ bottom: 'always' }}>
-      <TouchableWithoutFeedback
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        onPress={() => Keyboard.dismiss()}>
-        <WrapperLayout
-          isScrolling={false}
-          backButtonHandler={() => {
-            navigation.goBack();
-          }}
-          subTitle={
-            <SubTitleText
-              label={i18n.t('more.contact_text')}
-              style={{ marginBottom: 10, color: '#5c5b5b' }}
-            />
-          }
-          title={i18n.t('more_label.contact')}
-          body={
-            <View
-              style={{
-                marginLeft: '5%',
-                marginRight: '5%',
-                paddingLeft: 15,
-                paddingRight: 15,
-                paddingTop: 15,
-                paddingBottom: 15,
-                borderRadius: 10,
-                backgroundColor: '#fff',
-                shadowOffset: { width: 0, height: 2 },
-                shadowColor: '#00000029',
-                shadowOpacity: 0.8,
-                shadowRadius: 6,
-                marginBottom: 30,
-                elevation: 6,
-                zIndex: 1,
-              }}>
-              {(user.provider === ProviderType.GUEST ||
-                user.provider === ProviderType.ETH) && (
-                <TextField
-                  value={state.email}
-                  label={i18n.t('more_label.reply_email')}
-                  eventHandler={(input: string) =>
-                    setState({ ...state, email: input })
-                  }
-                />
-              )}
-              <TextArea
-                contents={state.contents}
-                eventHandler={(input: string) =>
-                  setState({ ...state, contents: input })
-                }
-              />
-              <P1Text
-                style={{
-                  color: '#A7A7A7',
-                  fontSize: 12,
-                  textAlign: 'right',
-                  marginTop: 2,
-                }}
-                label={`${state.contents.length}/1000`}
-              />
-            </View>
-          }
+    // <SafeAreaView
+    //   style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}
+    //   forceInset={{ bottom: 'always' }}>
+    <WrapperLayout
+      isScrolling={false}
+      backButtonHandler={() => {
+        navigation.goBack();
+      }}
+      subTitle={
+        <SubTitleText
+          label={i18n.t('more.contact_text')}
+          style={{ marginBottom: 10, color: '#5c5b5b' }}
         />
-      </TouchableWithoutFeedback>
-      <SubmitButton
-        disabled={!state.contents || state.contactRestriction}
-        style={{
-          position: 'relative',
-          bottom: 70,
-          zIndex: 999,
-          backgroundColor:
-            !state.contents || state.contactRestriction ? '#D0D8DF' : '#3679B5',
-        }}
-        title={i18n.t('kyc_label.submit')}
-        handler={() => callApi()}
-      />
-    </SafeAreaView>
+      }
+      title={i18n.t('more_label.contact')}
+      body={
+        <View
+          style={{
+            marginLeft: '5%',
+            marginRight: '5%',
+            paddingLeft: 15,
+            paddingRight: 15,
+            paddingTop: 15,
+            paddingBottom: 15,
+            borderRadius: 10,
+            backgroundColor: '#fff',
+            shadowOffset: { width: 0, height: 2 },
+            shadowColor: '#00000029',
+            shadowOpacity: 0.8,
+            shadowRadius: 6,
+            marginBottom: 30,
+            elevation: 6,
+            zIndex: 1,
+          }}>
+          {(user.provider === ProviderType.GUEST ||
+            user.provider === ProviderType.ETH) && (
+            <TextField
+              value={state.email}
+              label={i18n.t('more_label.reply_email')}
+              eventHandler={(input: string) =>
+                setState({ ...state, email: input })
+              }
+            />
+          )}
+          <TextArea
+            contents={state.contents}
+            eventHandler={(input: string) =>
+              setState({ ...state, contents: input })
+            }
+          />
+          <P1Text
+            style={{
+              color: '#A7A7A7',
+              fontSize: 12,
+              textAlign: 'right',
+              marginTop: 2,
+            }}
+            label={`${state.contents.length}/1000`}
+          />
+        </View>
+      }
+      button={
+        <SubmitButton
+          disabled={!state.contents || state.contactRestriction}
+          style={{
+            backgroundColor:
+              !state.contents || state.contactRestriction
+                ? '#D0D8DF'
+                : '#3679B5',
+          }}
+          title={i18n.t('kyc_label.submit')}
+          handler={() => callApi()}
+        />
+      }
+    />
+    // </SafeAreaView>
   );
 };
 

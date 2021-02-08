@@ -230,8 +230,9 @@ export default class Server {
   sendQuestionWithEmail = (
     email: string,
     content: string,
+    language: LocaleType,
   ): Promise<AxiosResponse> => {
-    return espressoClient.post('/land/contact', {
+    return espressoClient.post(`/land/contact?language=${language}`, {
       email,
       content,
     });
@@ -331,7 +332,8 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${getEnvironment().elAddress
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${
+        getEnvironment().elAddress
       }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };
