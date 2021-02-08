@@ -1,12 +1,8 @@
 import React, { FunctionComponent, useContext } from 'react';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import Dash from 'react-native-dash';
 import RootContext from '../../../contexts/RootContext';
-import { H1Text, H2Text, H3Text, P1Text } from '../../../shared/components/Texts';
+import { H1Text, P1Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
@@ -17,7 +13,6 @@ interface Props {
     value: number;
     profit: number;
   };
-
   handler: () => void;
 }
 
@@ -30,9 +25,11 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
     2,
   );
 
+  const regex = /\d(?=\D)/;
+
   const fontSizeCalcurator = (length: number): number => {
     return 28 - 3 * Math.floor((length - 1) / 3);
-  }
+  };
 
   return (
     <TouchableOpacity
@@ -72,7 +69,10 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
             }
           />
           <P1Text
-            label={props.ownership.title}
+            label={props.ownership.title.replace(
+              regex,
+              (payment) => `${payment[0]}\n${payment.substr(1)}`,
+            )}
             style={{ flex: 2, color: '#fff' }}
           />
         </View>
