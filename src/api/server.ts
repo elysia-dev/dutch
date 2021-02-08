@@ -331,8 +331,7 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${
-        getEnvironment().elAddress
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${getEnvironment().elAddress
       }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };
@@ -382,7 +381,7 @@ export default class Server {
   addGuestUser = (
     language: string,
   ): Promise<AxiosResponse<AccountResponse>> => {
-    return espressoClient.post('/users/eth', { language });
+    return espressoClient.post('/users/guest', { language });
   };
 
   checkEthAddressRegisteration = (
