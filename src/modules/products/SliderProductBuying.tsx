@@ -42,10 +42,30 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
   });
 
   const hasChildProduct = props.product?.childProducts?.length > 0;
+  const elProduct = props.product?.childProducts.find(
+    (prod, _index) => prod.paymentMethod === 'el',
+  );
+  const ethProduct = props.product?.childProducts.find(
+    (prod, _index) => prod.paymentMethod === 'eth',
+  );
+
+  const maxToken = () => {
+    if (state.paymentMethod === 'el' && hasChildProduct) {
+      return parseInt(elProduct?.presentValue!, 10);
+    } else if (state.paymentMethod === 'eth') {
+      return parseInt(ethProduct?.presentValue!, 10);
+    }
+    return parseInt(props.product.presentValue, 10);
+  };
 
   const swapDisabled =
     (props.subscribed && props.product.status !== ProductStatus.SALE) ||
-    (hasChildProduct && !state.paymentMethod);
+    (hasChildProduct && !state.paymentMethod) ||
+    (state.paymentMethod === 'el' &&
+      hasChildProduct &&
+      state.tokenCount > parseFloat(elProduct?.presentValue!)) ||
+    (state.paymentMethod === 'eth' &&
+      state.tokenCount > parseFloat(ethProduct?.presentValue!));
 
   const submitButtonTitle = () => {
     if (
@@ -192,7 +212,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           }
           tokenCount={state.tokenCount}
           return={props.product.expectedAnnualReturn}
-          max={parseInt(props.product.presentValue, 10)}
+          max={maxToken()}
         />
         <ExchangedValue
           return={props.product.expectedAnnualReturn}
