@@ -4,7 +4,7 @@
     "privacy": "hidden",
     "name": "Elysia",
     "slug": "ElysiaApp",
-    "version": "1.4j.0",
+    "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
