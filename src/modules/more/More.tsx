@@ -41,7 +41,6 @@ export const More = () => {
       <Stack.Screen
         name={MorePage.RegisterEthAddress}
         component={RegisterEthAddress}
-    
       />
       <Stack.Screen
         name={MorePage.WhatsNew}

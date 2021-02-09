@@ -26,7 +26,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { elPrice, user, ownerships, refreshUser, balance } = useContext(
+  const { elPrice, user, ownerships, refreshUser, balance, Server } = useContext(
     RootContext,
   );
   const legacyTotal: number | undefined = parseFloat(
@@ -37,16 +37,10 @@ export const Main: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  useEffect(() => {
-    if (user.provider !== ProviderType.GUEST) {
-      refreshUser();
-    }
-  }, []);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     refreshUser().then(() => setRefreshing(false));
-  }, []);
+  }, [Server.token]);
 
   const ownershipsList = ownerships.map((ownership, index) => (
     <Asset
@@ -77,12 +71,12 @@ export const Main: FunctionComponent = () => {
       case ProviderType.EMAIL:
         return user.firstName && user.lastName
           ? i18n.t('greeting', {
-              firstName: user.firstName,
-              lastName: user.lastName === null ? '' : user.lastName,
-            })
+            firstName: user.firstName,
+            lastName: user.lastName === null ? '' : user.lastName,
+          })
           : i18n.t('greeting_new', {
-              email: user.email,
-            });
+            email: user.email,
+          });
       default:
         return '';
     }
@@ -110,7 +104,9 @@ export const Main: FunctionComponent = () => {
           backgroundColor: '#FAFCFF',
         }}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          user.provider !== ProviderType.GUEST ?
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            : undefined
         }>
         <SafeAreaView>
           <View
