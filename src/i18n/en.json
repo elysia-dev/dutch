@@ -64,7 +64,8 @@
     "incorrect_password_warning": "If you have entered the wrong password more than 5 times, your account will be locked\nAdditional authentication is required.",
     "server": "Server communication error. Communication error. Please contact us.",
     "duplicate_email": "Email duplicate error. Please try again with another email.",
-    "ethaddress": "Invalid wallet address format."
+    "ethaddress": "Invalid wallet address format.",
+    "unmatched_email": "Email does not exist. Please check again"
   },
   "account_label": {
     "account_email": "Email",
@@ -82,7 +83,9 @@
     "change": "Change",
     "change_password": "Change Password",
     "ethaddress": "Wallet address",
-    "move": "Move"
+    "move": "Move",
+    "start_service": "Services",
+    "existing_login": "Log-in"
   },
   "kyc_label": {
     "argos_terms": "View Argos Terms and Conditions",
@@ -170,7 +173,9 @@
     "elysia": "ELYSIA",
     "el": "EL",
     "imtoken_mobile": "imToken Mobile",
-    "select_payment": "Choose your wallet"
+    "select_payment": "Choose your wallet",
+    "connect_wallet": "Wallet connection required",
+    "connect_wallet_confirm": "Wallet connection required.\nConnect now?"
   },
   "product_financial": {
     "expected_annual_return": "Estimated annual return",
@@ -240,7 +245,8 @@
     "reserved": "On waitlist",
     "loan": "Decentralized loans",
     "restricted_country": "Swap is unavailable in the country",
-    "payment_method": "Swap method"
+    "payment_method": "Swap method",
+    "need_wallet": "Wallet connection required"
   },
   "more_label": {
     "more": "More",
@@ -313,7 +319,12 @@
     "get_latest_version": "Get latest version(%{version})",
     "update_alert": "New version alert",
     "update_text": "New version is released. Update and see what's new!",
-    "update": "Update"
+    "update": "Update",
+    "disconnect_address": "Disconnect wallet",
+    "return_initial": "Go back to main page",
+    "disconnect": "Wallet disconnected",
+    "reply_email": "Please enter your email",
+    "disconnect_and_new": "Connect new wallet"
   },
   "more": {
     "kyc_proceeding_wait": "KYC verification is currently pending. We will send you a notification once the review is complete.",
@@ -336,7 +347,9 @@
     "withdrawl_check_1": "Please refund all properties(%{legacyOwnerships}) before deleting your account.",
     "withdrawl_check_2": "You will no longer have access to your funds\n(including the wallet at elysia.land : EL %{legacyEl} and USD %{legacyUsd})",
     "withdrawl_check_3": "Your personal information including email and KYC documents will be deleted completely.",
-    "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account."
+    "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account.",
+    "confirm_disconnect": "Do you want to disconnect your wallet?\nYour funds will remain in your wallet",
+    "confirm_disconnect_and_new": "In order to connect a new wallet,\nplease disconnect your previous wallet.\nWould you like to disconnect your wallet?"
   },
   "dashboard_label": {
     "total_balance": "Balance",
@@ -438,7 +451,8 @@
     "first_product_subs": "Signup for property launch",
     "give_EL": "Earn 1,000 EL",
     "how_get_EL": "Find out more…",
-    "participate_event": "Earn EL rewards"
+    "participate_event": "Earn EL rewards",
+    "connect_address": "Please connect your wallet"
   },
   "day": {
     "0": "Sun",
@@ -462,7 +476,9 @@
     "increaseOwnership": "[%{tokenName}] The number of tokens held has increased. (+ %{tokenAmount})",
     "decreaseOwnership": "[%{tokenName}] The number of tokens held has decreased. (- %{tokenAmount})",
     "withdrawInterest": "[%{tokenName}] The reserve has been withdrawn.(%{tokenAmount} %{paymentMethod})",
-    "failTransaction": "[%{tokenName}] Transaction is denied"
+    "failTransaction": "[%{tokenName}] Transaction is denied",
+    "onboardingNewUser": "Welcome to Elysia",
+    "onboardingConnectWallet": "Click 'More' tab to connect your Ethereum wallet"
   },
   "notification_label": {
     "notification": "Notification",
@@ -475,7 +491,9 @@
     "increaseOwnership": "Completed transaction",
     "decreaseOwnership": "Completed transaction",
     "withdrawInterest": "Completed transaction",
-    "failTransaction": "Failed transaction"
+    "failTransaction": "Failed transaction",
+    "onboardingNewUser": "Elysia onboarding",
+    "onboardingConnectWallet": "Elysia onboarding"
   },
   "FAQ": {
     "question": [
