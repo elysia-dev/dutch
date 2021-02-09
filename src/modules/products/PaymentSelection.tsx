@@ -102,7 +102,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const PaymentSelection: FunctionComponent = () => {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'PaymentSelection'>>();
   const { id } = route.params;
@@ -128,8 +128,7 @@ const PaymentSelection: FunctionComponent = () => {
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${
-            getEnvironment().dappUrl
+          `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
           }/requests/${id}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
@@ -137,8 +136,7 @@ const PaymentSelection: FunctionComponent = () => {
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${
-            getEnvironment().dappUrl
+          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
           }/requests/${id}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
@@ -242,6 +240,20 @@ const PaymentSelection: FunctionComponent = () => {
             setState({ ...state, wallet: WalletType.METAMASK_PC })
           }
         />
+        {wallet === WalletType.METAMASK_PC && (
+          <>
+            {user.provider === ProviderType.ETH && (
+              <TextField
+                eventHandler={(input: string) =>
+                  setState({ ...state, email: input })
+                }
+                value={email}
+                label={i18n.t('account.insert_account_email')}
+                placeHolder={'* ' + i18n.t('product.link_will_be_sent')}
+              />
+            )}
+          </>
+        )}
         <MetaMaskButton
           title={i18n.t('product.imtoken_mobile')}
           type={WalletType.IMTOKEN_MOBILE}
@@ -251,23 +263,6 @@ const PaymentSelection: FunctionComponent = () => {
           }
         />
       </View>
-      {wallet === WalletType.METAMASK_PC && (
-        <>
-          {user.provider === ProviderType.ETH && (
-            <TextField
-              eventHandler={(input: string) =>
-                setState({ ...state, email: input })
-              }
-              value={email}
-              label={i18n.t('account.insert_account_email')}
-            />
-          )}
-          <P1Text
-            label={'* ' + i18n.t('product.link_will_be_sent')}
-            style={{ color: '#a7a7a7' }}
-          />
-        </>
-      )}
       <SubmitButton
         title={i18n.t('account_label.continue')}
         // eslint-disable-next-line no-nested-ternary
@@ -281,8 +276,8 @@ const PaymentSelection: FunctionComponent = () => {
             wallet === WalletType.METAMASK_MOBILE
               ? '#3679B5'
               : emailRestriction
-              ? '#D0D8DF'
-              : '#3679B5',
+                ? '#D0D8DF'
+                : '#3679B5',
         }}
         handler={linkDapp}></SubmitButton>
     </View>
