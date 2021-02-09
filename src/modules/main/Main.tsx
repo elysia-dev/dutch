@@ -19,6 +19,7 @@ import Notifications from '../notification/Notifications';
 import RootContext from '../../contexts/RootContext';
 import { KycStatus } from '../../enums/KycStatus';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import ProviderType from '../../enums/ProviderType';
 
 const Icon = styled.Image`
   position: absolute;
@@ -142,7 +143,8 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {(user.kycStatus === KycStatus.NONE ||
+                {((user.kycStatus === KycStatus.NONE &&
+                  user.provider === ProviderType.EMAIL) ||
                   !(user.ethAddresses?.length > 0)) && (
                   <View
                     style={{
