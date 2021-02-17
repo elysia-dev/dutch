@@ -21,7 +21,6 @@ type Product = {
   tokenName: string;
   usdPricePerToken: number;
   status: string;
-  subscriptionsCount: number;
   childProducts: Product[];
   financeType: string;
   data: {
@@ -64,7 +63,6 @@ export const defaultProduct = {
   tokenName: '',
   usdPricePerToken: 0,
   status: 'pending',
-  subscriptionsCount: 0,
   childProducts: [] as Product[],
   financeType: 'loan',
   data: {

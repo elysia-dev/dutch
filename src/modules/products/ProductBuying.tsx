@@ -8,7 +8,6 @@ import React, {
 import {
   View,
   ScrollView,
-  Image,
   StatusBar,
   Modal,
   ActivityIndicator,
@@ -31,10 +30,8 @@ import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
-import { SignInStatus } from '../../enums/SignInStatus';
 import { MorePage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
-import { PostItem } from './components/PostItem';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -126,17 +123,14 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
-  const loadProductAndSubscription = async () => {
+  const loadProductAndPrice = async () => {
     try {
       const product = await Server.productInfo(productId);
-      // const subscription = await Server.getProductSubscription(productId);
       const elPrice = await Server.getCurrency('el');
       const ethPrice = await Server.coinPrice();
-      // const totalSupply = getErc20Contract(product.data.contractAddress)
       setState({
         ...state,
         product: product.data,
-        // subscribed: subscription.status === 200,
         loaded: true,
         elPrice: elPrice.data.rate,
         ethPrice: ethPrice.data.ethereum.usd,
@@ -201,7 +195,7 @@ const ProductBuying: FunctionComponent = () => {
     });
 
   useEffect(() => {
-    loadProductAndSubscription();
+    loadProductAndPrice();
   }, [user.language, productId]);
 
   return (
