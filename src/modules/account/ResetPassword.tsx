@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { H3Text, TitleText } from '../../shared/components/Texts';
@@ -106,7 +106,7 @@ const ResetPassword: FunctionComponent = () => {
               <TextField
                 label={i18n.t('account_label.new_password')}
                 value={state.password}
-                eventHandler={() => {}}
+                eventHandler={() => { }}
                 editable={false}
                 secure={true}
               />
@@ -114,21 +114,21 @@ const ResetPassword: FunctionComponent = () => {
           )}
           {state.step === 1 && (
             <TextField
-            label={i18n.t('account_label.new_password')}
-            editable={state.step === 1}
-            eventHandler={
-              state.step === 1
-                ? (input: string) => setState({ ...state, password: input })
-                : () => { }
-            }
-            secure={true}
-            helperText={
-              state.password === route.params.currentPassword
-                ? ` ${i18n.t('account.reset_current_same')} `
-                : undefined
-            }
-            helperIcon={state.password === route.params.currentPassword ? 'Error' : undefined}
-          />
+              label={i18n.t('account_label.new_password')}
+              editable={state.step === 1}
+              eventHandler={
+                state.step === 1
+                  ? (input: string) => setState({ ...state, password: input })
+                  : () => { }
+              }
+              secure={true}
+              helperText={
+                state.password === route.params.currentPassword
+                  ? ` ${i18n.t('account.reset_current_same')} `
+                  : undefined
+              }
+              helperIcon={state.password === route.params.currentPassword ? 'Error' : undefined}
+            />
           )}
           <TextField
             label={i18n.t('account_label.current_password')}

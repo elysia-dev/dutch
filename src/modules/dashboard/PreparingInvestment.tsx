@@ -1,12 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useContext } from 'react';
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { View, TouchableOpacity, Platform } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
-import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { SubTitleText, P1Text, TitleText } from '../../shared/components/Texts';
+import { SubTitleText, P1Text } from '../../shared/components/Texts';
 import { KycStatus } from '../../enums/KycStatus';
-import { KycPage, MorePage, ProductPage } from '../../enums/pageEnum';
+import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import RootContext from '../../contexts/RootContext';
 import WrapperLayout from '../../shared/components/WrapperLayout';

@@ -1,12 +1,10 @@
 /* eslint-disable radix */
 import React, {
-  Component,
   useState,
   useContext,
   FunctionComponent,
-  useEffect,
 } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { Calculator } from '../products/components/Calculator';

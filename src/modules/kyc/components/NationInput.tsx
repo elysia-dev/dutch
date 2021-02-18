@@ -1,16 +1,12 @@
-import React, { Component, FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
-  Platform,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { Picker } from '@react-native-community/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
-import i18n from '../../../i18n/i18n';
 import nations from './argos.json';
 
 const InputHeaderText = styled.Text`

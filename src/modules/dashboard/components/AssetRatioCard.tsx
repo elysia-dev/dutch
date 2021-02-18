@@ -1,14 +1,9 @@
 import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
-  StyleSheet,
-  Dimensions,
 } from 'react-native';
-import styled from 'styled-components/native';
-// import { PieChart } from 'react-native-chart-kit';
 import { PieChart } from 'react-native-svg-charts';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
@@ -214,27 +209,27 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
           />
         </>
       ) : (
-        <>
-          <PieChart
-            style={{ height: 200 }}
-            data={pieData}
-            outerRadius={'100%'}
-            innerRadius={'70%'}
-            padAngle={0}
-          />
-          <View
-            style={{
-              width: '100%',
-              top: 20,
-              padding: 20,
-              borderRadius: 10,
-              borderWidth: 1,
-              borderColor: '#F1F1F1',
-            }}>
-            {state.profit ? assetProfitLabel : assetPercentLabel}
-          </View>
-        </>
-      )}
+          <>
+            <PieChart
+              style={{ height: 200 }}
+              data={pieData}
+              outerRadius={'100%'}
+              innerRadius={'70%'}
+              padAngle={0}
+            />
+            <View
+              style={{
+                width: '100%',
+                top: 20,
+                padding: 20,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#F1F1F1',
+              }}>
+              {state.profit ? assetProfitLabel : assetPercentLabel}
+            </View>
+          </>
+        )}
     </View>
   );
 };

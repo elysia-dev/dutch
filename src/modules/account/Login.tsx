@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { TextField } from '../../shared/components/TextField';
@@ -112,9 +112,8 @@ const Login: FunctionComponent = () => {
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('account_errors.password_do_not_match')} ${
-                    state.error
-                  }/5`
+                ? ` ${i18n.t('account_errors.password_do_not_match')} ${state.error
+                }/5`
                 : undefined
             }
             helperIcon={state.error !== 0 ? 'Error' : undefined}
@@ -123,7 +122,7 @@ const Login: FunctionComponent = () => {
             label={i18n.t('account_label.account_email')}
             value={route.params.email}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
           />
         </>
       }

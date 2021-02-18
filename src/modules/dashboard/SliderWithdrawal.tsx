@@ -2,7 +2,6 @@
 import React, {
   useState,
   FunctionComponent,
-  useCallback,
   useContext,
 } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
@@ -34,7 +33,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   const {
     Server,
     setRefundStatus,
-   } = useContext(RootContext);
+  } = useContext(RootContext);
   const [state, setState] = useState({
     inputEmail: '',
     inputWallet: '',
@@ -46,17 +45,17 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
     Server.setRefundLegacyWallet(
       state.inputWallet,
       state.inputEmail,
-      ).then((_res) => {
-        setRefundStatus(LegacyRefundStatus.PENDING);
-      }).catch((e) => {
-        if (e.response.status === 400) {
-          alert(i18n.t("dashboard.already_pending"));
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        } else {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
+    ).then((_res) => {
+      setRefundStatus(LegacyRefundStatus.PENDING);
+    }).catch((e) => {
+      if (e.response.status === 400) {
+        alert(i18n.t("dashboard.already_pending"));
+      } else if (e.response.status === 500) {
+        alert(i18n.t('account_errors.server'));
+      } else {
+        alert(i18n.t('account_errors.server'));
+      }
+    });
   };
   const checkWithdrawInput = () => {
     if (state.inputEmail === '' && state.inputWallet === '') {
@@ -93,91 +92,91 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   };
 
   return (
-  <View
-    style={{
-      position: 'absolute',
-      bottom: 0,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      paddingLeft: 20,
-      paddingRight: 20,
-      height: '70%',
-      width: '100%',
-      backgroundColor: '#fff',
-      justifyContent: 'center',
-    }}>
-    <View style={{ width: '100%', height: '100%' }}>
-      <TouchableOpacity
-        style={{
-          top: 10,
-          width: 30,
-          height: 30,
-          alignSelf: 'center',
-        }}
-        onPress={props.modalHandler}>
-        <Image
-          source={require('./images/bluedownarrow.png')}
+    <View
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
+        height: '70%',
+        width: '100%',
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+      }}>
+      <View style={{ width: '100%', height: '100%' }}>
+        <TouchableOpacity
           style={{
+            top: 10,
             width: 30,
             height: 30,
+            alignSelf: 'center',
           }}
+          onPress={props.modalHandler}>
+          <Image
+            source={require('./images/bluedownarrow.png')}
+            style={{
+              width: 30,
+              height: 30,
+            }}
+          />
+        </TouchableOpacity>
+        <View style={{ paddingTop: 40 }} />
+        <TextField
+          label={i18n.t("dashboard_label.withdraw_paypal")}
+          eventHandler={(input: string) => {
+            setState({ ...state, inputEmail: input });
+          }}
+          focusHandler={value => setFocusing(value)}
         />
-      </TouchableOpacity>
-      <View style={{ paddingTop: 40 }} />
-      <TextField
-        label={i18n.t("dashboard_label.withdraw_paypal")}
-        eventHandler={(input: string) => {
-          setState({ ...state, inputEmail: input });
-        }}
-        focusHandler={value => setFocusing(value)}
-      />
-      <TextField
-        label={i18n.t("dashboard_label.withdraw_eth")}
-        eventHandler={(input: string) => {
-          setState({ ...state, inputWallet: input });
-        }}
-        focusHandler={value => setFocusing(value)}
-      />
-      <View style={{ backgroundColor: "#F6F6F8", borderRadius: 10, borderWidth: 1, borderColor: "#F1F1F1", padding: 15, marginTop: 15 }}>
-        <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
-          <InformationCircle />
-          <P1Text
-            label={i18n.t("dashboard.remaining_text.0")}
-            style={{ fontSize: 13, lineHeight: 17 }}
-          />
+        <TextField
+          label={i18n.t("dashboard_label.withdraw_eth")}
+          eventHandler={(input: string) => {
+            setState({ ...state, inputWallet: input });
+          }}
+          focusHandler={value => setFocusing(value)}
+        />
+        <View style={{ backgroundColor: "#F6F6F8", borderRadius: 10, borderWidth: 1, borderColor: "#F1F1F1", padding: 15, marginTop: 15 }}>
+          <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
+            <InformationCircle />
+            <P1Text
+              label={i18n.t("dashboard.remaining_text.0")}
+              style={{ fontSize: 13, lineHeight: 17 }}
+            />
+          </View>
+          <View style={{ flexDirection: 'row', marginRight: '5%' }}>
+            <InformationCircle />
+            <P1Text
+              label={i18n.t("dashboard.remaining_text.1")}
+              style={{ fontSize: 13, lineHeight: 17 }}
+            />
+          </View>
         </View>
-        <View style={{ flexDirection: 'row', marginRight: '5%' }}>
-          <InformationCircle />
-          <P1Text
-            label={i18n.t("dashboard.remaining_text.1")}
-            style={{ fontSize: 13, lineHeight: 17 }}
-          />
-        </View>
-      </View>
-      {!focusing &&
-        <SubmitButton
-        title={i18n.t("dashboard_label.remaining_withdraw")}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          marginBottom: 10,
-          width: '100%',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          marginTop: 10,
-          backgroundColor: '#3679B5',
-        }}
-        handler={() => {
-          if (checkWithdrawInput()) {
-            refundLegacyWallet();
-            props.switchingHandler();
+        {!focusing &&
+          <SubmitButton
+            title={i18n.t("dashboard_label.remaining_withdraw")}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              marginBottom: 10,
+              width: '100%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginTop: 10,
+              backgroundColor: '#3679B5',
+            }}
+            handler={() => {
+              if (checkWithdrawInput()) {
+                refundLegacyWallet();
+                props.switchingHandler();
+              }
             }
-          }
+            }
+          />
         }
-      />
-      }
+      </View>
     </View>
-  </View>
   );
 };
 

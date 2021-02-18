@@ -1,9 +1,6 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import {
-  StyleSheet,
-  Text,
   View,
-  TextInput as RNTextInput,
   StyleProp,
   ViewStyle,
   Platform,
