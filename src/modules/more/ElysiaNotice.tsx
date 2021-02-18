@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, {
   FunctionComponent,
   useContext,
@@ -41,8 +41,8 @@ const ElysiaNotice: FunctionComponent = () => {
 
   const loadElysiaNotice = () => {
     Server.elysiaPost()
-      .then(res => setState({ ...state, postList: res.data }))
-      .catch(e => {
+      .then((res) => setState({ ...state, postList: res.data }))
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }

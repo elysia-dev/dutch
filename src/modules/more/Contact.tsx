@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Keyboard } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-navigation';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { TextArea } from './components/TextArea';

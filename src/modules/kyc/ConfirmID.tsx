@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, {
-  Component,
-  FunctionComponent,
-  Props,
-  useContext,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -14,9 +8,7 @@ import {
   View,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-
-import { BackButton } from '../../shared/components/BackButton';
+import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import WarningImg from '../../shared/assets/images/warning_white.png';
 import i18n from '../../i18n/i18n';

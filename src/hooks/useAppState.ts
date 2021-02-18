@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { AppState, AppStateStatus } from "react-native";
+import { useEffect, useState } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 
 const useAppState = (): AppStateStatus => {
   const [appState, setAppState] = useState<AppStateStatus>(
@@ -13,6 +13,6 @@ const useAppState = (): AppStateStatus => {
   }, []);
 
   return appState;
-}
+};
 
-export default useAppState
+export default useAppState;

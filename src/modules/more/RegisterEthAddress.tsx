@@ -36,7 +36,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { BackButton } from '../../shared/components/BackButton';
 import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
-import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';

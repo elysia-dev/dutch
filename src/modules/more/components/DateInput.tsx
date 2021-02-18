@@ -1,5 +1,5 @@
-import React, { Component, FunctionComponent, useState } from 'react';
-import { View, TextInput as RNTextInput, Platform } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { View, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import i18n from '../../../i18n/i18n';

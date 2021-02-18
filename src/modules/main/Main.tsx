@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { Image, View, ViewProps, Text } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';

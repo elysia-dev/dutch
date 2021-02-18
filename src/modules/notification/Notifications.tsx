@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import {
   View,
   Animated,
@@ -21,7 +16,6 @@ import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { P1Text, P3Text } from '../../shared/components/Texts';
-import { SignInStatus } from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
 
 const Notifications: FunctionComponent = () => {

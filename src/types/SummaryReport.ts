@@ -1,5 +1,3 @@
-import { OwnershipResponse } from './Ownership';
-
 type DailyContent = {
   [day0: string]: {
     dailyProfits: string;

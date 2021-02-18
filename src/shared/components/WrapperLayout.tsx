@@ -5,7 +5,6 @@ import {
   GestureResponderEvent,
   View,
   Animated,
-  ViewComponent,
   StyleProp,
   ViewStyle,
 } from 'react-native';

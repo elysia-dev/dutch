@@ -1,5 +1,5 @@
 import axios from 'axios';
-import SignInStatus, { SignOut } from '../enums/SignInStatus';
+import { SignInStatus, SignOut } from '../enums/SignInStatus';
 import getEnvironment from '../utiles/getEnvironment';
 
 const baseURL = getEnvironment().apiUrl;
@@ -14,10 +14,10 @@ export const authenticatedEspressoClient = (
   });
 
   axiosInstance.interceptors.response.use(
-    res => {
+    (res) => {
       return res;
     },
-    e => {
+    (e) => {
       if (e.response.status === 401) {
         autoSignOutHandler(SignInStatus.EXPIRED);
       }

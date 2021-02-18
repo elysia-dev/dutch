@@ -1,4 +1,4 @@
-import React, { Children, FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,6 @@ import {
   ScrollView,
   Dimensions,
   Platform,
-  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { SubmitButton } from '../../../shared/components/SubmitButton';

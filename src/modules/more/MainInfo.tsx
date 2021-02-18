@@ -3,9 +3,7 @@ import {
   View,
   TouchableOpacity,
   Platform,
-  StyleSheet,
   Text,
-  ScrollView,
   Animated,
   SafeAreaView,
 } from 'react-native';
@@ -23,7 +21,7 @@ import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
-import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
+import { P1Text, H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 
 const ExchangeImg = styled.Image`
