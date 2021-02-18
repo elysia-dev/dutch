@@ -18,16 +18,18 @@ import { WithdrawalCard } from './components/WithdrawalCard';
 import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
-import RootContext from '../../contexts/RootContext';
 import { H2Text, H1Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
+import CurrencyContext from '../../contexts/CurrencyContext';
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { elPrice, user, ownerships, refreshUser, balance, Server } = useContext(
-    RootContext,
-  );
+  const { user, ownerships, balance } = useContext(UserContext);
+  const { elPrice } = useContext(CurrencyContext);
+  const { refreshUser, Server } = useContext(FunctionContext);
   const legacyTotal: number | undefined = parseFloat(
     (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
   );
@@ -70,12 +72,12 @@ export const Main: FunctionComponent = () => {
       case ProviderType.EMAIL:
         return user.firstName && user.lastName
           ? i18n.t('greeting', {
-            firstName: user.firstName,
-            lastName: user.lastName === null ? '' : user.lastName,
-          })
+              firstName: user.firstName,
+              lastName: user.lastName === null ? '' : user.lastName,
+            })
           : i18n.t('greeting_new', {
-            email: user.email,
-          });
+              email: user.email,
+            });
       default:
         return '';
     }
@@ -103,9 +105,9 @@ export const Main: FunctionComponent = () => {
           backgroundColor: '#FAFCFF',
         }}
         refreshControl={
-          user.provider !== ProviderType.GUEST ?
+          user.provider !== ProviderType.GUEST ? (
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            : undefined
+          ) : undefined
         }>
         <SafeAreaView>
           <View

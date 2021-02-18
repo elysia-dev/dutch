@@ -7,11 +7,11 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { FlatButton } from '../../shared/components/FlatButton';
 import i18n from '../../i18n/i18n';
-// import Api from '../../api/account';
 import { AccountPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { TitleText } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   Login: {
@@ -27,7 +27,8 @@ const Login: FunctionComponent = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
-  const { signIn, Server, user } = useContext(RootContext);
+  const { signIn, Server } = useContext(FunctionContext);
+  const { user } = useContext(UserContext);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);
@@ -112,8 +113,9 @@ const Login: FunctionComponent = () => {
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('account_errors.password_do_not_match')} ${state.error
-                }/5`
+                ? ` ${i18n.t('account_errors.password_do_not_match')} ${
+                    state.error
+                  }/5`
                 : undefined
             }
             helperIcon={state.error !== 0 ? 'Error' : undefined}
@@ -122,7 +124,7 @@ const Login: FunctionComponent = () => {
             label={i18n.t('account_label.account_email')}
             value={route.params.email}
             editable={false}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
           />
         </>
       }

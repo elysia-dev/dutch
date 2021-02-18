@@ -7,7 +7,7 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type ParamList = {
   ResetPassword: {
@@ -24,7 +24,7 @@ const ResetPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ResetPassword'>>();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
 
   const callChangeApi = () => {
     if (state.password !== state.passwordConfirmation) {
@@ -35,7 +35,7 @@ const ResetPassword: FunctionComponent = () => {
       alert(i18n.t('account.reset_current_same'));
     } else {
       Server.resetPassword(state.password, route.params.currentPassword)
-        .then(res => {
+        .then((res) => {
           // info페이지로 다시 돌아가게 해야함 !!
           if (res.data.status === 'success') {
             alert(i18n.t('account.password_changed'));
@@ -46,7 +46,7 @@ const ResetPassword: FunctionComponent = () => {
           }
           navigation.navigate('Main', { screen: 'MoreMain' });
         })
-        .catch(e => {
+        .catch((e) => {
           if (e.response.status === 400) {
             alert(i18n.t('account.reset_error'));
           } else if (e.response.status === 500) {
@@ -106,7 +106,7 @@ const ResetPassword: FunctionComponent = () => {
               <TextField
                 label={i18n.t('account_label.new_password')}
                 value={state.password}
-                eventHandler={() => { }}
+                eventHandler={() => {}}
                 editable={false}
                 secure={true}
               />
@@ -119,7 +119,7 @@ const ResetPassword: FunctionComponent = () => {
               eventHandler={
                 state.step === 1
                   ? (input: string) => setState({ ...state, password: input })
-                  : () => { }
+                  : () => {}
               }
               secure={true}
               helperText={
@@ -127,13 +127,17 @@ const ResetPassword: FunctionComponent = () => {
                   ? ` ${i18n.t('account.reset_current_same')} `
                   : undefined
               }
-              helperIcon={state.password === route.params.currentPassword ? 'Error' : undefined}
+              helperIcon={
+                state.password === route.params.currentPassword
+                  ? 'Error'
+                  : undefined
+              }
             />
           )}
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -144,10 +148,12 @@ const ResetPassword: FunctionComponent = () => {
           {state.step === 1 ? (
             <SubmitButton
               title={i18n.t('account_label.continue')}
-              disabled={
+              disabled={state.password === route.params.currentPassword}
+              variant={
                 state.password === route.params.currentPassword
+                  ? 'GrayTheme'
+                  : ''
               }
-              variant={state.password === route.params.currentPassword ? "GrayTheme" : ""}
               handler={() => {
                 if (state.password === '') {
                   alert(i18n.t('account.insert_password'));
@@ -157,11 +163,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-              <SubmitButton
-                title={i18n.t('account_label.change')}
-                handler={() => callChangeApi()}
-              />
-            )}
+            <SubmitButton
+              title={i18n.t('account_label.change')}
+              handler={() => callChangeApi()}
+            />
+          )}
         </>
       }
     />

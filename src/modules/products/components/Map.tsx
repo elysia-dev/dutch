@@ -1,20 +1,10 @@
 import React, { Component, FunctionComponent, useContext } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import styled from 'styled-components/native';
-import latlon from '../latlon';
+import { StyleSheet, View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
-import ProductInfo from '../ProductBuying';
-import RootContext from '../../../contexts/RootContext';
-import LocaleType from '../../../enums/LocaleType';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
+import UserContext from '../../../contexts/UserContext';
 
 interface Props {
   product: Product;
@@ -25,7 +15,7 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
     latitude: parseFloat(props.product.data.latitude),
     longitude: parseFloat(props.product.data.longitude),
   };
-  const { user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
   const productDescription = product.data.descriptions[user.language];

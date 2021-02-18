@@ -8,7 +8,7 @@ import AcceptedImg from './images/accepted.png';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const Accepted = styled.Image`
   width: 140px;
@@ -30,7 +30,7 @@ const RecoverPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'RecoverPassword'>>();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
 
   const callChangeApi = (password: string) => {
     Server.recoverPassword(route.params.verificationId, password)

@@ -30,7 +30,7 @@ type DailyContent = {
 };
 
 type SummaryOwnership = {
-  ownerships: ['', ''];
+  ownerships: string[];
 };
 
 export type SummaryReportResponse = {

@@ -5,17 +5,12 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {
-  ScrollView,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import RootContext from '../../contexts/RootContext';
+import { ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
 import { TitleText, P1Text, P3Text } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type ParamList = {
   ProductNotice: {
@@ -77,7 +72,7 @@ const ProductNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductNotice'>>();
   const { productId } = route.params;
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const [state, setState] = useState({
     full: false,
     posts: [] as PostResponse[],

@@ -7,8 +7,8 @@ import { SubTitleText, P1Text } from '../../shared/components/Texts';
 import { KycStatus } from '../../enums/KycStatus';
 import { KycPage, MorePage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
-import RootContext from '../../contexts/RootContext';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import UserContext from '../../contexts/UserContext';
 
 type ButtonProps = {
   title: string;
@@ -48,7 +48,7 @@ const StatusButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 
 const PreparingInvestment: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { kycStatus, ethAddresses } = useContext(RootContext).user;
+  const { kycStatus, ethAddresses } = useContext(UserContext).user;
   const preparingCompletion =
     kycStatus === KycStatus.SUCCESS && ethAddresses?.length > 0;
 

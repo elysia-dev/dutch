@@ -5,8 +5,8 @@ import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/Product';
 import { P2Text, H3Text } from '../../../shared/components/Texts';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 interface Props {
   product: Product;
@@ -17,7 +17,7 @@ interface State {
 }
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const [state, setState] = useState<State>({
     tokenCount: 10,

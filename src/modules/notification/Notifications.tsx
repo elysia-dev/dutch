@@ -11,12 +11,13 @@ import {
 import { useScrollToTop } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import NotiBox from './components/NotiBox';
-import RootContext from '../../contexts/RootContext';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { P1Text, P3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -25,9 +26,8 @@ const Notifications: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const { Server, user } = useContext(RootContext);
-
-  const { notifications, setNotifications } = useContext(RootContext);
+  const { Server, setNotifications } = useContext(FunctionContext);
+  const { user, notifications } = useContext(UserContext);
 
   const loadNotifications = () =>
     Server.notification()

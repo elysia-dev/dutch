@@ -4,17 +4,17 @@ import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import { Circle } from 'react-native-svg';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import { P1Text } from '../../../shared/components/Texts';
 import dayFormatter from '../../../utiles/dayFormatter';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 type Props = {
   content: SummaryReportResponse['content'];
 };
 
 export const AssetValueCard: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const today = new Date().getDay();
 

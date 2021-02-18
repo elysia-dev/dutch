@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import Dash from 'react-native-dash';
-import RootContext from '../../../contexts/RootContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const ownershipValue = currencyFormatter(
     currencyUnit,
     currencyRatio,

@@ -11,7 +11,8 @@ import { AccountPage } from '../../enums/pageEnum';
 
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
-import RootContext from '../../contexts/RootContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const LockAccountImg = styled.Image`
   width: 100%;
@@ -36,7 +37,8 @@ const LockAccount: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
-  const { Server, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
 
   const callResendApi = () => {
     Server.certifyEmail_recover(

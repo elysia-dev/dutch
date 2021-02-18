@@ -9,16 +9,16 @@ import {
   P4Text,
   H3Text,
 } from '../../../shared/components/Texts';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 interface Props {
   transaction: Transaction;
 }
 
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const [state, setState] = useState({
     show: false,
@@ -100,27 +100,27 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               textAlign: 'right',
               color:
                 props.transaction.transactionType === 'refund' ||
-                  props.transaction.transactionType === 'close' ||
-                  props.transaction.transactionType === 'profit'
+                props.transaction.transactionType === 'close' ||
+                props.transaction.transactionType === 'profit'
                   ? '#1C1C1C'
                   : '#3679B5',
             }}
             label={
               props.transaction.transactionType === 'refund' ||
-                props.transaction.transactionType === 'close' ||
-                props.transaction.transactionType === 'profit'
+              props.transaction.transactionType === 'close' ||
+              props.transaction.transactionType === 'profit'
                 ? `- ${currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
-                  parseFloat(props.transaction.value),
-                  2,
-                )}`
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(props.transaction.value),
+                    2,
+                  )}`
                 : currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
-                  parseFloat(props.transaction.value),
-                  2,
-                )
+                    currencyUnit,
+                    currencyRatio,
+                    parseFloat(props.transaction.value),
+                    2,
+                  )
             }
           />
         </View>

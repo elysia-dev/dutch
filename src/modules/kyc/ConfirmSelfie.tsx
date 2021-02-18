@@ -7,11 +7,11 @@ import { ActivityIndicator, Modal, Platform, View } from 'react-native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import { P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { LoadingStatus } from '../../enums/LoadingStatus';
 import KycContext from '../../contexts/KycContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -23,7 +23,7 @@ const SelfieImg = styled.Image`
 
 const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const { selfie } = useContext(KycContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 

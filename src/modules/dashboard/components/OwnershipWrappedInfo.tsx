@@ -3,9 +3,10 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
-import RootContext from '../../../contexts/RootContext';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import UserContext from '../../../contexts/UserContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -25,7 +26,8 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { user } = useContext(UserContext);
   const product = props.product;
   const productDescription = product.data.descriptions[user.language];
 

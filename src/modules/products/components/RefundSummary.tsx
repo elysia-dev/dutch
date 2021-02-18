@@ -1,10 +1,7 @@
-import React, {
-  FunctionComponent,
-  useContext,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
-import RootContext from '../../../contexts/RootContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 import i18n from '../../../i18n/i18n';
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
@@ -63,7 +60,7 @@ type Props = {
 };
 
 const RefundSummary: FunctionComponent<Props> = (props: Props) => {
-  const { elPrice, currencyUnit, currencyRatio } = useContext(RootContext);
+  const { elPrice, currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);

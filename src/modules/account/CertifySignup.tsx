@@ -10,7 +10,7 @@ import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { Timer } from './components/Timer';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   existence: string;
@@ -29,20 +29,20 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
     code: '',
     verificationId: '',
   });
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'CertifySignup'>>();
 
   const callResendApi = (): void => {
     Server.initializeEmail(route.params.email)
-      .then(res => {
+      .then((res) => {
         setState({
           ...state,
           verificationId: res.data.verificationId!,
         });
         alert(i18n.t('account.resend_verification'));
       })
-      .catch(e => {
+      .catch((e) => {
         alert(i18n.t('account.try_again_later'));
       });
   };
@@ -58,7 +58,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
         : state.verificationId,
       state.code,
     )
-      .then(res => {
+      .then((res) => {
         if (res.data.status === 'completed') {
           navigation.navigate(AccountPage.Signup, {
             email: route.params.email,
@@ -78,7 +78,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
           );
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (e.response.status === 400) {
           alert(i18n.t('account.authentication_recover'));
         } else if (e.response.status === 404) {
@@ -114,7 +114,7 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
           />
           <TextField
             label={i18n.t('account_label.authentication_code')}
-            eventHandler={value => setState({ ...state, code: value })}
+            eventHandler={(value) => setState({ ...state, code: value })}
           />
           <View style={{ bottom: 10, flexDirection: 'row-reverse' }}>
             <BorderFlatButton
@@ -127,8 +127,8 @@ const CertifySignup: FunctionComponent<Props> = (props: Props) => {
                   marginLeft: 'auto',
                   lineHeight: 21,
                   height: 21,
-                  color: "#1c1c1c",
-                 }}
+                  color: '#1c1c1c',
+                }}
                 label={`${i18n.t('account.expiration_time')}`}
               />
               <Timer verif={state.verificationId} />

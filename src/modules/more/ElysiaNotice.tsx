@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
@@ -37,7 +37,7 @@ const ElysiaNotice: FunctionComponent = () => {
     full: false,
     postList: [],
   });
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
 
   const loadElysiaNotice = () => {
     Server.elysiaPost()

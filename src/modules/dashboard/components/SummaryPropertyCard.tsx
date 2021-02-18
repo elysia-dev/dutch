@@ -4,15 +4,15 @@ import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 interface Props {
   summary: SummaryReportResponse['summary'];
 }
 
 export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   return (
     <View

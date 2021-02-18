@@ -20,9 +20,9 @@ import {
   SubTitleText,
 } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
-import RootContext from '../../contexts/RootContext';
 import { LoadingStatus } from '../../enums/LoadingStatus';
 import KycContext from '../../contexts/KycContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const SelfieImg = styled.Image`
   width: ${Platform.OS === 'android'
@@ -52,7 +52,7 @@ const WarningWrapper = styled.View`
 const ConfirmID: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const { idPhoto, idType } = useContext(KycContext);
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 
   const uploadPhoto = () => {

@@ -25,13 +25,14 @@ import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
-import RootContext from '../../contexts/RootContext';
 import SliderProductBuying from './SliderProductBuying';
 import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
 import { MorePage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -69,7 +70,9 @@ const ProductBuying: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
-  const { Server, user } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
+  const { user } = useContext(UserContext);
+
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';

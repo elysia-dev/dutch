@@ -10,7 +10,8 @@ import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { Timer } from './components/Timer';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
-import RootContext from '../../contexts/RootContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type ParamList = {
   CertifyRecover: {
@@ -26,7 +27,8 @@ const CertifyRecover: FunctionComponent<{}> = () => {
   });
 
   const navigation = useNavigation();
-  const { Server, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
   const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
 
   const callResendApi: () => void = () => {

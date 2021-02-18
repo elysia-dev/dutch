@@ -15,10 +15,10 @@ import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from './components/ExchangedValue';
 import { ProductPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import Product from '../../types/Product';
 import ProductStatus from '../../enums/ProductStatus';
 import { H3Text, P2Text, P3Text } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   product: Product;
@@ -35,7 +35,7 @@ interface State {
 
 const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const [state, setState] = useState<State>({
     tokenCount: 10,
     paymentMethod: 'el',

@@ -21,13 +21,14 @@ import { BackButton } from '../../shared/components/BackButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import Product from '../../types/Product';
-import RootContext from '../../contexts/RootContext';
 import getEnvironment from '../../utiles/getEnvironment';
 import useAppState from '../../hooks/useAppState';
 import WalletType from '../../enums/WalletType';
 import storeDeeplink from '../../utiles/storeDeeplink';
 import ProviderType from '../../enums/ProviderType';
 import { TextField } from '../../shared/components/TextField';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   PaymentSelection: {
@@ -102,7 +103,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const PaymentSelection: FunctionComponent = () => {
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'PaymentSelection'>>();
   const { id } = route.params;
@@ -112,7 +113,9 @@ const PaymentSelection: FunctionComponent = () => {
     email: '',
   });
   const { wallet, emailRestriction, email } = state;
-  const { Server, refreshUser, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server, refreshUser } = useContext(FunctionContext);
+
   const appState = useAppState();
 
   useEffect(() => {
@@ -128,7 +131,8 @@ const PaymentSelection: FunctionComponent = () => {
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
+          `imtokenv2://navigate?screen=DappView&url=https://${
+            getEnvironment().dappUrl
           }/requests/${id}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
@@ -136,7 +140,8 @@ const PaymentSelection: FunctionComponent = () => {
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
+          `https://metamask.app.link/dapp/${
+            getEnvironment().dappUrl
           }/requests/${id}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
@@ -276,8 +281,8 @@ const PaymentSelection: FunctionComponent = () => {
             wallet === WalletType.METAMASK_MOBILE
               ? '#3679B5'
               : emailRestriction
-                ? '#D0D8DF'
-                : '#3679B5',
+              ? '#D0D8DF'
+              : '#3679B5',
         }}
         handler={linkDapp}></SubmitButton>
     </View>

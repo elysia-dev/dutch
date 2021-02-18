@@ -9,9 +9,10 @@ import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
-import RootContext from '../../contexts/RootContext';
 import { SignInStatus } from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -21,7 +22,8 @@ const InitializeEmail: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { Server, signedIn } = useContext(RootContext);
+  const { signedIn } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
 
   const callEmailApi = () => {
     if (!state.email) {

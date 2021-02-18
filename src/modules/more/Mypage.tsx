@@ -5,9 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { AccountPage, MorePage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const InfoArrowImg = styled.Image`
   width: 5px;
@@ -16,7 +17,9 @@ const InfoArrowImg = styled.Image`
 `;
 
 const MyPage: FunctionComponent = () => {
-  const { user, signOut } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { signOut } = useContext(FunctionContext);
+
   const navigation = useNavigation();
 
   return (

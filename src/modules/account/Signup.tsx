@@ -2,8 +2,9 @@ import React, { FunctionComponent, useContext } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
-import RootContext from '../../contexts/RootContext';
 import PasswordForm from './PasswordForm';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type ParamList = {
   Signup: {
@@ -13,9 +14,9 @@ type ParamList = {
 };
 
 const Signup: FunctionComponent = () => {
-  const { signIn, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
   const route = useRoute<RouteProp<ParamList, 'Signup'>>();
-  const { Server } = useContext(RootContext);
+  const { Server, signIn } = useContext(FunctionContext);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);
@@ -26,14 +27,14 @@ const Signup: FunctionComponent = () => {
       alert(i18n.t('account_errors.password_too_short'));
     } else {
       Server.signup(route.params.verificationId, password, user.language)
-        .then(async res => {
+        .then(async (res) => {
           if (res.data.status === 'success') {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             await storeToken(res.data.token!);
             await signIn();
           }
         })
-        .catch(e => {
+        .catch((e) => {
           if (e.response.status === 404) {
             alert(i18n.t('account.try_again_later'));
           } else if (e.response.status === 500) {
