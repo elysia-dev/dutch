@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
-import { ProductPage } from '../../../enums/pageEnum';
+import { View, Image, TouchableOpacity } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import { P1Text } from '../../../shared/components/Texts';
 

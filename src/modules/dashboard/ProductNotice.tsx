@@ -8,14 +8,10 @@ import React, {
 import {
   ScrollView,
   View,
-  Text,
   TouchableOpacity,
   Image,
-  I18nManager,
 } from 'react-native';
-import styled from 'styled-components/native';
 import RootContext from '../../contexts/RootContext';
-import { DashboardPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';

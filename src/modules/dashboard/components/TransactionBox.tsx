@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
 import * as Linking from 'expo-linking';
 import i18n from '../../../i18n/i18n';
 import { Transaction } from '../../../types/Transaction';
@@ -101,27 +100,27 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               textAlign: 'right',
               color:
                 props.transaction.transactionType === 'refund' ||
-                props.transaction.transactionType === 'close' ||
-                props.transaction.transactionType === 'profit'
+                  props.transaction.transactionType === 'close' ||
+                  props.transaction.transactionType === 'profit'
                   ? '#1C1C1C'
                   : '#3679B5',
             }}
             label={
               props.transaction.transactionType === 'refund' ||
-              props.transaction.transactionType === 'close' ||
-              props.transaction.transactionType === 'profit'
+                props.transaction.transactionType === 'close' ||
+                props.transaction.transactionType === 'profit'
                 ? `- ${currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(props.transaction.value),
-                    2,
-                  )}`
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(props.transaction.value),
+                  2,
+                )}`
                 : currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(props.transaction.value),
-                    2,
-                  )
+                  currencyUnit,
+                  currencyRatio,
+                  parseFloat(props.transaction.value),
+                  2,
+                )
             }
           />
         </View>

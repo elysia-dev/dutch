@@ -1,10 +1,9 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   StyleSheet,
   View,
   Image,
   TouchableOpacity,
-  SegmentedControlIOS,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';

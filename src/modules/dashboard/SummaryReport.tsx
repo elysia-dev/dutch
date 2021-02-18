@@ -1,6 +1,5 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, {
-  Component,
   FunctionComponent,
   useContext,
   useEffect,
@@ -12,7 +11,6 @@ import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import {
   defaultSummaryReportResponse,
-  SummaryReportResponse,
 } from '../../types/SummaryReport';
 import { AssetValueCard } from './components/AssetValueCard';
 import { AssetProfitCard } from './components/AssetProfitCard';

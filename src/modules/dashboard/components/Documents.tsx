@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,7 +7,6 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import styled from 'styled-components/native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import i18n from '../../../i18n/i18n';
 import { DocsResponse } from '../../../types/Docs';
@@ -22,7 +21,6 @@ const documentButton = (title: string, handler: () => void) => {
     <TouchableOpacity
       onPress={handler}
       style={{
-        elevation: 1,
         borderRadius: 5,
         backgroundColor: '#fff',
         shadowColor: '#3679B538',
@@ -94,7 +92,6 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 7,
-        elevation: 5,
         padding: 15,
         paddingTop: 20,
         elevation: 2,
@@ -186,8 +183,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                      <View />
-                    )
+                        <View />
+                      )
                   }
                 />
               </View>
@@ -267,8 +264,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                      <View />
-                    )
+                        <View />
+                      )
                   }
                 />
               </View>
@@ -348,8 +345,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                      <View />
-                    )
+                        <View />
+                      )
                   }
                 />
               </View>

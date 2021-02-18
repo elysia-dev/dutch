@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import i18n from '../../../i18n/i18n';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 

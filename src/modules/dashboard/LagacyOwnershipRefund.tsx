@@ -2,7 +2,7 @@
 import React, {
   FunctionComponent,
 } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
@@ -58,7 +58,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
           marginTop: 30,
         }}
       >
-        <P1Text 
+        <P1Text
           label={i18n.t('legacy.refund_notice')}
         />
       </View>

@@ -5,14 +5,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { H1Text } from '../../shared/components/Texts';
 import { defaultDocsResponse } from '../../types/Docs';
 import Product from '../../types/product';
-import { Transaction } from '../../types/Transaction';
 import { Map } from '../products/components/Map';
 import Documents from './components/Documents';
 import OwnershipWrappedInfo from './components/OwnershipWrappedInfo';

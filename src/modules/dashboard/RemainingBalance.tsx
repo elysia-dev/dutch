@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { FunctionComponent, useState, useContext, useEffect } from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 import { View, Modal } from 'react-native';
 import styled from 'styled-components/native';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -81,7 +81,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
                 modalHandler={() => setState({ ...state, modalVisible: false })}
                 switchingHandler={() => setState({
                   ...state, modalVisible: false, switchingHandler: true,
-                  })}
+                })}
                 el={user.legacyEl}
                 usd={user.legacyUsd}
               />
@@ -122,12 +122,12 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
               (user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
                 ? i18n.t("dashboard_label.remaining_withdraw")
                 : (user.legacyWalletRefundStatus === LegacyRefundStatus.PENDING)
-                ? i18n.t("dashboard_label.remaining_withdraw_pending")
-                : i18n.t("dashboard_label.remaining_withdraw_other")
-              }
+                  ? i18n.t("dashboard_label.remaining_withdraw_pending")
+                  : i18n.t("dashboard_label.remaining_withdraw_other")
+            }
             handler={(user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)
               ? () => setState({ ...state, modalVisible: true })
-              : () => {}
+              : () => { }
             }
             variant={
               (user.legacyWalletRefundStatus === LegacyRefundStatus.NONE)

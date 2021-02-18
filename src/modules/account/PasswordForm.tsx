@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useState } from 'react';
-import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
@@ -37,12 +36,12 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               // eslint-disable-next-line no-unused-expressions
               state.step === 2
                 ? setState({
-                    ...state,
-                    step: 1,
-                    passwordConfirmation: '',
-                    errorLength: 0,
-                    errorReg: 0,
-                  })
+                  ...state,
+                  step: 1,
+                  passwordConfirmation: '',
+                  errorLength: 0,
+                  errorReg: 0,
+                })
                 : navigation.goBack();
             }}
           />
@@ -92,8 +91,8 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               state.errorLength === 1
                 ? i18n.t('account_errors.password_too_short')
                 : state.errorLength === 0 && state.errorReg === 1
-                ? i18n.t('account_errors.simple_password')
-                : undefined
+                  ? i18n.t('account_errors.simple_password')
+                  : undefined
             }
             helperIcon={
               state.errorLength === 1 || state.errorReg === 1
@@ -107,7 +106,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
             <TextField
               label={i18n.t('account_label.account_email')}
               editable={false}
-              eventHandler={() => {}}
+              eventHandler={() => { }}
               value={props.email}
             />
           )}
@@ -133,23 +132,23 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               }
             />
           ) : (
-            <SubmitButton
-              title={props.submitButtonTitle}
-              handler={() => props.submitHandler(state.password)}
-              disabled={
-                !state.passwordConfirmation ||
-                state.errorLength !== 0 ||
-                state.errorReg !== 0
-              }
-              variant={
-                !state.passwordConfirmation ||
-                state.errorLength !== 0 ||
-                state.errorReg !== 0
-                  ? 'GrayTheme'
-                  : undefined
-              }
-            />
-          )}
+              <SubmitButton
+                title={props.submitButtonTitle}
+                handler={() => props.submitHandler(state.password)}
+                disabled={
+                  !state.passwordConfirmation ||
+                  state.errorLength !== 0 ||
+                  state.errorReg !== 0
+                }
+                variant={
+                  !state.passwordConfirmation ||
+                    state.errorLength !== 0 ||
+                    state.errorReg !== 0
+                    ? 'GrayTheme'
+                    : undefined
+                }
+              />
+            )}
         </>
       }
     />

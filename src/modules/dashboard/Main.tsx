@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../i18n/i18n';
 import { BalanceCard } from './components/BalanceCard';
 import { WithdrawalCard } from './components/WithdrawalCard';
@@ -20,7 +19,7 @@ import { Asset } from './components/Asset';
 import { DashboardPage } from '../../enums/pageEnum';
 import VirtualTab from '../../shared/components/VirtualTab';
 import RootContext from '../../contexts/RootContext';
-import { H2Text, P1Text, H1Text } from '../../shared/components/Texts';
+import { H2Text, H1Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 

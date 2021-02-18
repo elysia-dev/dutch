@@ -1,11 +1,9 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import React, { FunctionComponent } from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
-import AccountLayout from '../../shared/components/AccountLayout';
-import { H1Text, H3Text, P1Text } from '../../shared/components/Texts';
+import { H3Text, P1Text } from '../../shared/components/Texts';
 
 const ExpiredAccount: FunctionComponent = () => {
   const navigation = useNavigation();

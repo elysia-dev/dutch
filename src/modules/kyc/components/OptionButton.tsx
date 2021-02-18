@@ -1,10 +1,6 @@
 import React, { FunctionComponent } from "react";
 import {
-  StyleSheet,
   View,
-  TouchableOpacity,
-  GestureResponderEvent,
-  Text,
 } from "react-native";
 import styled from "styled-components/native";
 import { P1Text } from '../../../shared/components/Texts';
@@ -53,7 +49,7 @@ export const OptionButton: FunctionComponent<Props> = (props: Props) => {
             textAlign: "center",
             lineHeight: 40,
             alignSelf: "center",
-          }}/>
+          }} />
         <OptionBtnChecked>{props.checked}</OptionBtnChecked>
       </OptionBtn>
     </View>
