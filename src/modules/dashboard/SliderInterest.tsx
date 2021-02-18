@@ -11,6 +11,7 @@ import { OwnershipResponse } from '../../types/Ownership';
 import RootContext from '../../contexts/RootContext';
 import currencyFormatter from '../../utiles/currencyFormatter';
 import { ProductPage } from '../../enums/pageEnum';
+import usePrices from '../../hooks/usePrice';
 
 interface Props {
   modalHandler: () => void;
@@ -29,10 +30,14 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
     RootContext,
   );
 
+  const prices = usePrices();
   const navigation = useNavigation();
-  const elInterest = (
-    parseFloat(props.ownership.availableProfit) / elPrice
-  ).toFixed(2);
+  const interest = (
+    parseFloat(props.ownership.availableProfit) /
+    (props.ownership.product.paymentMethod === 'eth' ? prices.ethPrice : prices.elPrice)
+  ).toFixed(
+    props.ownership.product.paymentMethod === 'eth' ? 4 : 2
+  );
 
   const callApi = () => {
     props.modalHandler();
@@ -45,7 +50,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
             product: props.ownership.product,
             tokenCount: 0,
             type: 'interest',
-            elInterest,
+            interest,
           },
         }),
       )
@@ -117,9 +122,8 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t('dashboard_label.expected_profit')} (${
-                user.currency
-              })`}
+              label={`${i18n.t('dashboard_label.expected_profit')} (${user.currency
+                })`}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
@@ -140,7 +144,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
-              label={`${props.ownership.product.paymentMethod.toUpperCase()} ${elInterest}`}
+              label={`${props.ownership.product.paymentMethod.toUpperCase()} ${interest}`}
               style={{ color: '#1C1C1C', fontSize: 15 }}
             />
           </TextWrapper>
