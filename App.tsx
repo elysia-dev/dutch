@@ -23,22 +23,22 @@ const App = () => {
       const update = await Updates.checkForUpdateAsync();
       if (update.isAvailable) {
         await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync()
+        await Updates.reloadAsync();
       }
     } catch (e) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     checkUpdateAndRefreshApp();
-  }, [])
+  }, []);
 
   if (loading) {
-    return <Loading />
+    return <Loading />;
   } else {
-    return <AppMain />
+    return <AppMain />;
   }
 };
 

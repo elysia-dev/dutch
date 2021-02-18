@@ -38,7 +38,9 @@ import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Notification, { isNotification } from './src/types/Notification';
 
-import RootContext from './src/contexts/RootContext';
+import UserContext from './src/contexts/UserContext';
+import FunctionContext from './src/contexts/FunctionContext';
+import CurrencyContext from './src/contexts/CurrencyContext';
 import Server from './src/api/server';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
@@ -105,10 +107,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -385,103 +387,120 @@ const AppMain = () => {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <RootContext.Provider
+      <UserContext.Provider
         value={{
-          ...state,
-          changeLanguage: (newLanguage: LocaleType) => {
-            setState({
-              ...state,
-              user: { ...state.user, language: newLanguage },
-            });
-          },
-          changeCurrency: (newCurrency: CurrencyType) => {
-            setState({
-              ...state,
-              user: { ...state.user, currency: newCurrency },
-            });
-          },
-          setKycStatus: () => {
-            setState({
-              ...state,
-              user: { ...state.user, kycStatus: KycStatus.PENDING },
-            });
-          },
-          signIn,
-          signOut,
-          setCurrencyPrice: (currency: CurrencyResponse[]) => {
-            const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
-            const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
-            const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
-            if (elPrice && krwPrice && cnyPrice) {
-              setState({
-                ...state,
-                elPrice,
-                krwPrice,
-                cnyPrice,
-              });
-            }
-          },
-          setNotifications: (notifications: Notification[]) => {
-            setState({
-              ...state,
-              notifications,
-            });
-          },
-          setEthAddress: (address: string) => {
-            setState({
-              ...state,
-              user: { ...state.user, ethAddresses: [address] },
-            });
-          },
-          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
-            setState({
-              ...state,
-              user: {
-                ...state.user,
-                legacyWalletRefundStatus: legacyRefundStatus,
-              },
-            });
-          },
-          setUserExpoPushToken: (expoPushToken: string) => {
-            setState({
-              ...state,
-              user: {
-                ...state.user,
-                expoPushTokens: expoPushToken ? [expoPushToken] : [],
-              },
-            });
-          },
-          currencyUnit,
-          currencyRatio,
-          refreshUser,
+          signedIn: state.signedIn,
+          user: state.user,
+          ownerships: state.ownerships,
+          balance: state.balance,
+          notifications: state.notifications,
+          expoPushToken: state.expoPushToken,
         }}>
-        <RootStack.Navigator headerMode="none">
-          {state.signedIn === SignInStatus.PENDING ? (
-            <RootStack.Screen
-              name={'LoadingScreen'}
-              component={Loading}
-              options={{ animationEnabled: false }}
-            />
-          ) : state.signedIn === SignInStatus.SIGNIN ? (
-            <>
-              <RootStack.Screen name={'Main'} component={Main} />
-              <RootStack.Screen name={'Kyc'} component={Kyc} />
-              <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-              <RootStack.Screen name={'More'} component={More} />
-              <RootStack.Screen name={'Product'} component={Products} />
-            </>
-          ) : (
+        <CurrencyContext.Provider
+          value={{
+            elPrice: state.elPrice,
+            krwPrice: state.krwPrice,
+            cnyPrice: state.cnyPrice,
+            currencyUnit,
+            currencyRatio,
+          }}>
+          <FunctionContext.Provider
+            value={{
+              setLanguage: (newLanguage: LocaleType) => {
+                setState({
+                  ...state,
+                  user: { ...state.user, language: newLanguage },
+                });
+              },
+              setCurrency: (newCurrency: CurrencyType) => {
+                setState({
+                  ...state,
+                  user: { ...state.user, currency: newCurrency },
+                });
+              },
+              setKycStatus: () => {
+                setState({
+                  ...state,
+                  user: { ...state.user, kycStatus: KycStatus.PENDING },
+                });
+              },
+              signIn,
+              signOut,
+              refreshUser,
+              setCurrencyPrice: (currency: CurrencyResponse[]) => {
+                const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
+                const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
+                const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
+                if (elPrice && krwPrice && cnyPrice) {
+                  setState({
+                    ...state,
+                    elPrice,
+                    krwPrice,
+                    cnyPrice,
+                  });
+                }
+              },
+              setNotifications: (notifications: Notification[]) => {
+                setState({
+                  ...state,
+                  notifications,
+                });
+              },
+              setEthAddress: (address: string) => {
+                setState({
+                  ...state,
+                  user: { ...state.user, ethAddresses: [address] },
+                });
+              },
+              setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+                setState({
+                  ...state,
+                  user: {
+                    ...state.user,
+                    legacyWalletRefundStatus: legacyRefundStatus,
+                  },
+                });
+              },
+              setUserExpoPushToken: (expoPushToken: string) => {
+                setState({
+                  ...state,
+                  user: {
+                    ...state.user,
+                    expoPushTokens: expoPushToken ? [expoPushToken] : [],
+                  },
+                });
+              },
+              Server: state.Server,
+            }}>
+            <RootStack.Navigator headerMode="none">
+              {state.signedIn === SignInStatus.PENDING ? (
+                <RootStack.Screen
+                  name={'LoadingScreen'}
+                  component={Loading}
+                  options={{ animationEnabled: false }}
+                />
+              ) : state.signedIn === SignInStatus.SIGNIN ? (
+                <>
+                  <RootStack.Screen name={'Main'} component={Main} />
+                  <RootStack.Screen name={'Kyc'} component={Kyc} />
+                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
+                  <RootStack.Screen name={'More'} component={More} />
+                  <RootStack.Screen name={'Product'} component={Products} />
+                </>
+              ) : (
                 <>
                   <RootStack.Screen name={'Account'} component={Account} />
                 </>
               )}
-          <RootStack.Screen
-            name={'BlockScreen'}
-            component={BlockScreen}
-            options={{ animationEnabled: false }}
-          />
-        </RootStack.Navigator>
-      </RootContext.Provider>
+              <RootStack.Screen
+                name={'BlockScreen'}
+                component={BlockScreen}
+                options={{ animationEnabled: false }}
+              />
+            </RootStack.Navigator>
+          </FunctionContext.Provider>
+        </CurrencyContext.Provider>
+      </UserContext.Provider>
     </NavigationContainer>
   );
 };
