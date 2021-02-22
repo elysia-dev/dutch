@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { FunctionComponent, useState } from 'react';
-import { Text, View, SafeAreaView, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { NavigationRoute, NavigationScreenProp } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import SelfieBeforePng from './images/selfiebefore.png';
 import { KycPage } from '../../enums/pageEnum';

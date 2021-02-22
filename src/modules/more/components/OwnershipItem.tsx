@@ -1,12 +1,5 @@
-import React, { Component, FunctionComponent } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { View, Text, Image } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from '../../../i18n/i18n';
 

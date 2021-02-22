@@ -4,28 +4,15 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Modal,
-} from 'react-native';
-import {
-  useNavigation,
-  useRoute,
-  RouteProp,
-} from '@react-navigation/native';
+import { View, ScrollView, Image, TouchableOpacity, Modal } from 'react-native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { BackButton } from '../../shared/components/BackButton';
-import {
-  defaultOwnershipResponse,
-} from '../../types/Ownership';
+import { defaultOwnershipResponse } from '../../types/Ownership';
 import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
 import i18n from '../../i18n/i18n';
-import RootContext from '../../contexts/RootContext';
 import OwnershipRefund from './OwnershipRefund';
 import OptionButtons from './components/OptionButtons';
 import LegacyOptionButtons from './components/LegacyOptionButtons';
@@ -35,6 +22,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { defaultProduct } from '../../types/Product';
 import { H3Text, P1Text } from '../../shared/components/Texts';
 import SliderInterest from './SliderInterest';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -50,7 +38,7 @@ type ParamList = {
 const OwnershipDetail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'OwnershipDetail'>>();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const { ownershipId } = route.params;
   const [state, setState] = useState({
     ownership: defaultOwnershipResponse,
@@ -184,32 +172,32 @@ const OwnershipDetail: FunctionComponent = () => {
               }}
             />
           ) : (
-              <OptionButtons
-                interestAvailability={
-                  parseFloat(state.ownership.availableProfit) > 0
-                }
-                paymentMethod={state.ownership.product.paymentMethod}
-                productId={state.ownership.product.id}
-                refundHandler={() =>
-                  setState({
-                    ...state,
-                    refundModalVisible: !state.refundModalVisible,
-                  })
-                }
-                purchaseHandler={() =>
-                  setState({
-                    ...state,
-                    purchaseModalVisible: !state.purchaseModalVisible,
-                  })
-                }
-                interestHandler={() =>
-                  setState({
-                    ...state,
-                    interestModalVisible: !state.interestModalVisible,
-                  })
-                }
-              />
-            )}
+            <OptionButtons
+              interestAvailability={
+                parseFloat(state.ownership.availableProfit) > 0
+              }
+              paymentMethod={state.ownership.product.paymentMethod}
+              productId={state.ownership.product.id}
+              refundHandler={() =>
+                setState({
+                  ...state,
+                  refundModalVisible: !state.refundModalVisible,
+                })
+              }
+              purchaseHandler={() =>
+                setState({
+                  ...state,
+                  purchaseModalVisible: !state.purchaseModalVisible,
+                })
+              }
+              interestHandler={() =>
+                setState({
+                  ...state,
+                  interestModalVisible: !state.interestModalVisible,
+                })
+              }
+            />
+          )}
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           <H3Text
@@ -244,14 +232,14 @@ const OwnershipDetail: FunctionComponent = () => {
         state.refundModalVisible ||
         state.legacyRefundModalVisible ||
         state.interestModalVisible) && (
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-            }}></View>
-        )}
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}></View>
+      )}
       <Modal
         transparent={true}
         animationType={'slide'}

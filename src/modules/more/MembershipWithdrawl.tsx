@@ -3,15 +3,18 @@ import { View, Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import RootContext from '../../contexts/RootContext';
 import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
 import { SignInStatus } from '../../enums/SignInStatus';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const MembershipWithdrawl: FunctionComponent = () => {
-  const { user, ownerships, signOut, Server } = useContext(RootContext);
+  const { user, ownerships } = useContext(UserContext);
+  const { signOut, Server } = useContext(FunctionContext);
+
   const navigation = useNavigation();
 
   const legacyOwnerships = ownerships

@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 import i18n from '../../../i18n/i18n';
 import { P1Text, H1Text } from '../../../shared/components/Texts';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const BalanceCard: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const balance = currencyFormatter(
     currencyUnit,
@@ -21,8 +21,8 @@ export const BalanceCard: FunctionComponent<Props> = (props) => {
   );
 
   const fontSizeCalcurator = (length: number): number => {
-    return 40 - 5 * Math.floor((length - 7) / 3)
-  }
+    return 40 - 5 * Math.floor((length - 7) / 3);
+  };
 
   return (
     <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
@@ -53,9 +53,7 @@ export const BalanceCard: FunctionComponent<Props> = (props) => {
             alignContent: 'center',
           }}>
           <H1Text
-            label={
-              balance
-            }
+            label={balance}
             style={{
               flex: 4,
               color: '#FFFFFF',

@@ -3,8 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
 import WrapperLayoutAvoidingKeyboard from '../../shared/components/WrapperLayoutAvoidingKeyboard';
 import { FaqItem } from './components/FaqItem';
-import RootContext from '../../contexts/RootContext';
 import ProviderType from '../../enums/ProviderType';
+import UserContext from '../../contexts/UserContext';
 
 const Faq: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -12,7 +12,7 @@ const Faq: FunctionComponent = () => {
     selectNumber: 0,
   });
 
-  const { user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
 
   const setQuestionNumber = (arrayNum: number) => {
     // eslint-disable-next-line no-unused-expressions

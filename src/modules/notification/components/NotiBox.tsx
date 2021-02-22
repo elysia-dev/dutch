@@ -13,10 +13,12 @@ import images from '../Images';
 import Notification from '../../../types/Notification';
 import { DashboardPage, MorePage } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
-import RootContext from '../../../contexts/RootContext';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
+import CurrencyContext from '../../../contexts/CurrencyContext';
+import UserContext from '../../../contexts/UserContext';
+import FunctionContext from '../../../contexts/FunctionContext';
 
 interface Props {
   notification: Notification;
@@ -24,12 +26,9 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const {
-    currencyUnit,
-    currencyRatio,
-    notifications,
-    setNotifications,
-  } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { notifications } = useContext(UserContext);
+  const { setNotifications } = useContext(FunctionContext);
   const [showTx, setShowTx] = useState(false);
 
   const type = props.notification.notificationType;

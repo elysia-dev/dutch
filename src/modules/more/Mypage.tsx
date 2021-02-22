@@ -1,24 +1,14 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import { NavigationScreenProp, NavigationRoute } from 'react-navigation';
 import { useNavigation } from '@react-navigation/native';
-import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
-import { BackButton } from '../../shared/components/BackButton';
 import { AccountPage, MorePage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
-import {
-  H1Text,
-  H2Text,
-  H3Text,
-  P1Text,
-  P2Text,
-  P3Text,
-  TitleText,
-} from '../../shared/components/Texts';
+import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const InfoArrowImg = styled.Image`
   width: 5px;
@@ -27,7 +17,9 @@ const InfoArrowImg = styled.Image`
 `;
 
 const MyPage: FunctionComponent = () => {
-  const { user, signOut } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { signOut } = useContext(FunctionContext);
+
   const navigation = useNavigation();
 
   return (

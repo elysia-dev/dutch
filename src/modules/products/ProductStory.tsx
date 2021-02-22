@@ -1,5 +1,4 @@
 import React, {
-  createRef,
   FunctionComponent,
   useContext,
   useEffect,
@@ -10,8 +9,6 @@ import {
   Animated,
   Image,
   View,
-  Dimensions,
-  Easing,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
@@ -22,13 +19,12 @@ import {
 import HTMLView from 'react-native-htmlview';
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import base64 from 'base-64';
 import i18n from '../../i18n/i18n';
 import QuitIcon from './images/quitbuttonblack.png';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { Story } from '../../types/product';
 import { P1Text, H2Text } from '../../shared/components/Texts';
-import RootContext from '../../contexts/RootContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type ParamList = {
   ProductStory: {
@@ -70,7 +66,9 @@ const defaultStory = {
 };
 
 const ProductStory: FunctionComponent<{}> = () => {
-  const { Server, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
+
   const [state, setState] = useState({
     scrollY: 0,
     story: defaultStory,

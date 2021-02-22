@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
-import { SafeAreaView, View, TextInput } from 'react-native';
-import { P1Text, P3Text } from '../../../shared/components/Texts';
+import { View, TextInput } from 'react-native';
+import { P3Text } from '../../../shared/components/Texts';
 
 import i18n from '../../../i18n/i18n';
 

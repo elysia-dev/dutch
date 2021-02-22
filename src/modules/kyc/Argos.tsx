@@ -1,16 +1,16 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text } from '../../shared/components/Texts';
+import UserContext from '../../contexts/UserContext';
 
 interface Props {
   updateAgree: () => void;
 }
 export const Argos: FunctionComponent<Props> = (props: Props) => {
-  const { user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
   const localeTerms =
     terms[user.language === LocaleType.KO ? user.language : LocaleType.EN];
 

@@ -1,17 +1,13 @@
 /* eslint-disable radix */
-import React, {
-  useState,
-  FunctionComponent,
-  useContext,
-} from 'react';
+import React, { useState, FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import RootContext from '../../contexts/RootContext';
 import { P1Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   modalHandler: () => void;
@@ -30,10 +26,7 @@ const InformationCircle = styled.View`
 `;
 
 const SliderWithdrawal: FunctionComponent<Props> = (props) => {
-  const {
-    Server,
-    setRefundStatus,
-  } = useContext(RootContext);
+  const { Server, setRefundStatus } = useContext(FunctionContext);
   const [state, setState] = useState({
     inputEmail: '',
     inputWallet: '',
@@ -42,24 +35,23 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   const [focusing, setFocusing] = useState(false);
 
   const refundLegacyWallet = () => {
-    Server.setRefundLegacyWallet(
-      state.inputWallet,
-      state.inputEmail,
-    ).then((_res) => {
-      setRefundStatus(LegacyRefundStatus.PENDING);
-    }).catch((e) => {
-      if (e.response.status === 400) {
-        alert(i18n.t("dashboard.already_pending"));
-      } else if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
-      } else {
-        alert(i18n.t('account_errors.server'));
-      }
-    });
+    Server.setRefundLegacyWallet(state.inputWallet, state.inputEmail)
+      .then((_res) => {
+        setRefundStatus(LegacyRefundStatus.PENDING);
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          alert(i18n.t('dashboard.already_pending'));
+        } else if (e.response.status === 500) {
+          alert(i18n.t('account_errors.server'));
+        } else {
+          alert(i18n.t('account_errors.server'));
+        }
+      });
   };
   const checkWithdrawInput = () => {
     if (state.inputEmail === '' && state.inputWallet === '') {
-      alert(i18n.t("dashboard.checking_withdraw_error.0"));
+      alert(i18n.t('dashboard.checking_withdraw_error.0'));
       return false;
     }
     if (props.el === 0 && props.usd === 0) {
@@ -68,24 +60,48 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
     }
 
     if (state.inputWallet !== '' && state.inputEmail === '' && props.el === 0) {
-      alert(i18n.t("dashboard.checking_withdraw_error.1"));
+      alert(i18n.t('dashboard.checking_withdraw_error.1'));
       return false;
-    } else if ((props.usd > 0 && props.el > 0) && state.inputWallet !== '' && state.inputEmail === '') {
-      alert(i18n.t("dashboard.checking_withdraw_error.2"));
+    } else if (
+      props.usd > 0 &&
+      props.el > 0 &&
+      state.inputWallet !== '' &&
+      state.inputEmail === ''
+    ) {
+      alert(i18n.t('dashboard.checking_withdraw_error.2'));
       return false;
-    } else if ((state.inputWallet !== '' && state.inputEmail !== '') && props.usd === 0 && props.el > 0) {
-      alert(i18n.t("dashboard.checking_withdraw_error.3"));
+    } else if (
+      state.inputWallet !== '' &&
+      state.inputEmail !== '' &&
+      props.usd === 0 &&
+      props.el > 0
+    ) {
+      alert(i18n.t('dashboard.checking_withdraw_error.3'));
       return false;
     }
 
-    if (state.inputEmail !== '' && state.inputWallet === '' && props.usd === 0) {
-      alert(i18n.t("dashboard.checking_withdraw_error.4"));
+    if (
+      state.inputEmail !== '' &&
+      state.inputWallet === '' &&
+      props.usd === 0
+    ) {
+      alert(i18n.t('dashboard.checking_withdraw_error.4'));
       return false;
-    } else if ((props.usd > 0 && props.el > 0) && state.inputWallet === '' && state.inputEmail !== '') {
-      alert(i18n.t("dashboard.checking_withdraw_error.5"));
+    } else if (
+      props.usd > 0 &&
+      props.el > 0 &&
+      state.inputWallet === '' &&
+      state.inputEmail !== ''
+    ) {
+      alert(i18n.t('dashboard.checking_withdraw_error.5'));
       return false;
-    } else if ((state.inputWallet !== '' && state.inputEmail !== '') && props.el === 0 && props.usd > 0) {
-      alert(i18n.t("dashboard.checking_withdraw_error.6"));
+    } else if (
+      state.inputWallet !== '' &&
+      state.inputEmail !== '' &&
+      props.el === 0 &&
+      props.usd > 0
+    ) {
+      alert(i18n.t('dashboard.checking_withdraw_error.6'));
       return false;
     }
     return true;
@@ -124,38 +140,51 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         </TouchableOpacity>
         <View style={{ paddingTop: 40 }} />
         <TextField
-          label={i18n.t("dashboard_label.withdraw_paypal")}
+          label={i18n.t('dashboard_label.withdraw_paypal')}
           eventHandler={(input: string) => {
             setState({ ...state, inputEmail: input });
           }}
-          focusHandler={value => setFocusing(value)}
+          focusHandler={(value) => setFocusing(value)}
         />
         <TextField
-          label={i18n.t("dashboard_label.withdraw_eth")}
+          label={i18n.t('dashboard_label.withdraw_eth')}
           eventHandler={(input: string) => {
             setState({ ...state, inputWallet: input });
           }}
-          focusHandler={value => setFocusing(value)}
+          focusHandler={(value) => setFocusing(value)}
         />
-        <View style={{ backgroundColor: "#F6F6F8", borderRadius: 10, borderWidth: 1, borderColor: "#F1F1F1", padding: 15, marginTop: 15 }}>
-          <View style={{ flexDirection: 'row', marginBottom: 10, marginRight: '5%' }}>
+        <View
+          style={{
+            backgroundColor: '#F6F6F8',
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: '#F1F1F1',
+            padding: 15,
+            marginTop: 15,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginBottom: 10,
+              marginRight: '5%',
+            }}>
             <InformationCircle />
             <P1Text
-              label={i18n.t("dashboard.remaining_text.0")}
+              label={i18n.t('dashboard.remaining_text.0')}
               style={{ fontSize: 13, lineHeight: 17 }}
             />
           </View>
           <View style={{ flexDirection: 'row', marginRight: '5%' }}>
             <InformationCircle />
             <P1Text
-              label={i18n.t("dashboard.remaining_text.1")}
+              label={i18n.t('dashboard.remaining_text.1')}
               style={{ fontSize: 13, lineHeight: 17 }}
             />
           </View>
         </View>
-        {!focusing &&
+        {!focusing && (
           <SubmitButton
-            title={i18n.t("dashboard_label.remaining_withdraw")}
+            title={i18n.t('dashboard_label.remaining_withdraw')}
             style={{
               position: 'absolute',
               bottom: 0,
@@ -171,10 +200,9 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
                 refundLegacyWallet();
                 props.switchingHandler();
               }
-            }
-            }
+            }}
           />
-        }
+        )}
       </View>
     </View>
   );

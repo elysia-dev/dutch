@@ -20,7 +20,6 @@ import i18n from '../../i18n/i18n';
 import { NationInput } from './components/NationInput';
 import { DateInput } from './components/DateInput';
 import { ShortOptionButton } from './components/ShortOptionButton';
-import RootContext from '../../contexts/RootContext';
 import {
   P3Text,
   H1Text,
@@ -31,6 +30,7 @@ import nations from './components/argos.json';
 import IosPickerModal from '../../shared/components/IosPickerModal';
 import KycContext from '../../contexts/KycContext';
 import { BackButton } from '../../shared/components/BackButton';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const IdImg = styled.Image`
   margin-top: 10px;
@@ -63,7 +63,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
 
   const navigation = useNavigation();
   const { idType, idPhoto } = useContext(KycContext);
-  const { Server, setKycStatus } = useContext(RootContext);
+  const { Server, setKycStatus } = useContext(FunctionContext);
 
   const nationList = nations.map((nation, Key) => (
     <Picker.Item key={Key} label={nation.Nationality} value={nation.Argos} />
@@ -99,7 +99,7 @@ const PersonalDataInput: FunctionComponent<{}> = (props) => {
         state.gender,
         idType === 'passport' ? 'passport' : 'government_id',
       )
-        .then((res) => {
+        .then((_res) => {
           setModalVisible(true);
         })
         .catch((e) => {

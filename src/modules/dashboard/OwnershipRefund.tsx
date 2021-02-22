@@ -1,9 +1,5 @@
 /* eslint-disable radix */
-import React, {
-  useState,
-  useContext,
-  FunctionComponent,
-} from 'react';
+import React, { useState, useContext, FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
@@ -11,8 +7,8 @@ import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
 import { OwnershipResponse } from '../../types/Ownership';
-import RootContext from '../../contexts/RootContext';
 import { ProductPage } from '../../enums/pageEnum';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   modalHandler: () => void;
@@ -21,7 +17,7 @@ interface Props {
 
 const OwnershipRefund: FunctionComponent<Props> = (props) => {
   const [tokenCount, setTokenCount] = useState(1);
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const product = props.ownership.product;
   const navigation = useNavigation();
 

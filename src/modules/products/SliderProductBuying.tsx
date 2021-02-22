@@ -15,10 +15,10 @@ import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from './components/ExchangedValue';
 import { ProductPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import Product from '../../types/Product';
 import ProductStatus from '../../enums/ProductStatus';
 import { H3Text, P2Text, P3Text } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   product: Product;
@@ -35,7 +35,7 @@ interface State {
 
 const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const [state, setState] = useState<State>({
     tokenCount: 10,
     paymentMethod: 'el',
@@ -59,7 +59,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
   };
 
   const swapDisabled =
-    (props.subscribed && props.product.status !== ProductStatus.SALE) ||
+    props.product.status !== ProductStatus.SALE ||
     (hasChildProduct && !state.paymentMethod) ||
     (state.paymentMethod === 'el' &&
       hasChildProduct &&
@@ -73,12 +73,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       props.from === 'ownershipDetail'
     ) {
       return i18n.t('product_label.purchase_now');
-    } else if (props.product.status === ProductStatus.SUBSCRIBING) {
-      if (props.subscribed) {
-        return i18n.t('product_label.reserved');
-      } else {
-        return i18n.t('product_label.reserve');
-      }
     }
     return i18n.t('product_label.non_purchasable');
   };
@@ -96,30 +90,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       } else {
         callApi(props.product.id);
       }
-    } else if (props.product.status === ProductStatus.SUBSCRIBING) {
-      if (!props.subscribed) {
-        subscribeProduct();
-      }
     }
-  };
-
-  const subscribeProduct = () => {
-    Server.setProductSubscription(props.product.id)
-      .then((_res) => {
-        if (props.setSubcribed !== undefined) {
-          props.setSubcribed(true);
-          alert(i18n.t('product.subscribed'));
-        }
-      })
-      .catch((e) => {
-        if (e.response.status === 400) {
-          alert(i18n.t('product.subscribed_already'));
-        } else if (e.response.status === 404) {
-          alert(i18n.t('product.subscribe_fail'));
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
   };
 
   const callApi = (id: number) => {
@@ -220,9 +191,6 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           type={'buy'}
           hasEth={hasChildProduct || props.product.paymentMethod === 'eth'}
         />
-        {props.product.status === ProductStatus.SUBSCRIBING && (
-          <P3Text label={i18n.t('product.for_subscription')} />
-        )}
         {hasChildProduct && (
           <>
             <P3Text

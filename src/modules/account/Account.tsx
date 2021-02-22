@@ -11,13 +11,13 @@ import { AccountPage } from '../../enums/pageEnum';
 import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
 import WithdrawnMember from './WithdrawnMember';
-import RootContext from '../../contexts/RootContext';
+import UserContext from '../../contexts/UserContext';
 import { SignInStatus } from '../../enums/SignInStatus';
 import IntroduceElysia from './IntroduceElysia';
 
 const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
-  const { signedIn } = useContext(RootContext);
+  const { signedIn } = useContext(UserContext);
 
   return (
     <Stack.Navigator

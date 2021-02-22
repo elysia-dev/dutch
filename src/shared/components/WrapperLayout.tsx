@@ -5,14 +5,13 @@ import {
   GestureResponderEvent,
   View,
   Animated,
-  ViewComponent,
   StyleProp,
   ViewStyle,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
-import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
+import UserContext from '../../contexts/UserContext';
 
 const Wrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
@@ -71,7 +70,7 @@ const ScrollingView: FunctionComponent<Scrolling> = (props) => {
 
 const WrapperLayout: FunctionComponent<Props> = (props) => {
   const [scrollY] = useState(new Animated.Value(0));
-  const { user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
   const languageType = user.language;
 
   return (

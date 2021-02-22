@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, {
   FunctionComponent,
   useContext,
@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
@@ -37,12 +37,12 @@ const ElysiaNotice: FunctionComponent = () => {
     full: false,
     postList: [],
   });
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
 
   const loadElysiaNotice = () => {
     Server.elysiaPost()
-      .then(res => setState({ ...state, postList: res.data }))
-      .catch(e => {
+      .then((res) => setState({ ...state, postList: res.data }))
+      .catch((e) => {
         if (e.response.status === 500) {
           alert(i18n.t('account_errors.server'));
         }

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { StyleSheet, View, Platform, StyleProp, ViewStyle } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';

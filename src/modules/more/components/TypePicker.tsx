@@ -1,15 +1,6 @@
-import React, { Component, FunctionComponent } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Platform,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { StyleSheet, View, Platform, StyleProp, ViewStyle } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import styled from 'styled-components/native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import i18n from '../../../i18n/i18n';
 
 interface Props {

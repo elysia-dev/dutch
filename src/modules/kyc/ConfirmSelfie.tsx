@@ -1,24 +1,17 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, {
-  Component,
-  FunctionComponent,
-  Props,
-  useContext,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import styled from 'styled-components/native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { ActivityIndicator, Modal, Platform, View } from 'react-native';
-import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import { P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { LoadingStatus } from '../../enums/LoadingStatus';
 import KycContext from '../../contexts/KycContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const SelfieImg = styled.Image`
   width: 90%;
@@ -30,7 +23,7 @@ const SelfieImg = styled.Image`
 
 const ConfirmSelfie: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const { selfie } = useContext(KycContext);
   const [status, setStatus] = useState(LoadingStatus.NONE);
 

@@ -34,9 +34,7 @@ import {
 import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { BackButton } from '../../shared/components/BackButton';
-import RootContext from '../../contexts/RootContext';
 import { Modal } from '../../shared/components/Modal';
-import MetamaskFox from './images/metamask_logo.png';
 import getEnvironment from '../../utiles/getEnvironment';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
@@ -44,6 +42,9 @@ import currencyFormatter from '../../utiles/currencyFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
 import { SignInStatus } from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
+import CurrencyContext from '../../contexts/CurrencyContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 interface Props {
   resetHandler: () => void;
@@ -113,9 +114,11 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
-  const { Server, setEthAddress, user, elPrice, signOut, signIn } = useContext(
-    RootContext,
+  const { user } = useContext(UserContext);
+  const { Server, setEthAddress, signOut, signIn } = useContext(
+    FunctionContext,
   );
+  const { elPrice } = useContext(CurrencyContext);
 
   const [state, setState] = useState<State>({
     confirmModal: false,

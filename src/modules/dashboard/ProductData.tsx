@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ScrollView, View } from 'react-native';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import { H1Text } from '../../shared/components/Texts';
@@ -27,7 +27,7 @@ const ProductData: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'OwnershipProduct'>>();
   const { product } = route.params;
   const [docs, setDocs] = useState(defaultDocsResponse);
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const isDocumentempty =
     docs.leaseContract === '' &&
     docs.shareholderCertificate === '' &&

@@ -304,22 +304,6 @@ export default class Server {
     });
   };
 
-  getProductSubscription = async (
-    productId: number,
-  ): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.get(
-      `/productSubscriptions?productId=${productId}`,
-    );
-  };
-
-  setProductSubscription = async (
-    productId: number,
-  ): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.post(`/productSubscriptions`, {
-      productId,
-    });
-  };
-
   requestEthAddressRegister = async (): Promise<
     AxiosResponse<TransactionRequestResponse>
   > => {

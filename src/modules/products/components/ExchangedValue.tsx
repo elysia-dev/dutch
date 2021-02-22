@@ -1,16 +1,15 @@
 import React, {
   FunctionComponent,
-  useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
-import RootContext from '../../../contexts/RootContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
+import FunctionContext from '../../../contexts/FunctionContext';
 import i18n from '../../../i18n/i18n';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
-import { CoinPriceResponse } from '../../../types/CoinPrice';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 
 const DesView = styled.View`
@@ -33,9 +32,8 @@ interface State {
 }
 
 const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
-  const { Server, currencyUnit, currencyRatio, elPrice } = useContext(
-    RootContext,
-  );
+  const { Server } = useContext(FunctionContext);
+  const { currencyUnit, currencyRatio, elPrice } = useContext(CurrencyContext);
   const [state, setState] = useState<State>({
     ethPrice: 0,
   });

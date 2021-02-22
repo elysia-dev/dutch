@@ -1,5 +1,3 @@
-import { OwnershipResponse } from './Ownership';
-
 type DailyContent = {
   [day0: string]: {
     dailyProfits: string;
@@ -32,7 +30,7 @@ type DailyContent = {
 };
 
 type SummaryOwnership = {
-  ownerships: ['', ''];
+  ownerships: string[];
 };
 
 export type SummaryReportResponse = {

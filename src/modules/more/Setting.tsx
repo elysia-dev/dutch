@@ -20,7 +20,6 @@ import i18n from '../../i18n/i18n';
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import LocaleType from '../../enums/LocaleType';
-import RootContext from '../../contexts/RootContext';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
 import getEnvironment from '../../utiles/getEnvironment';
@@ -31,17 +30,18 @@ import { SignInStatus } from '../../enums/SignInStatus';
 import storeDeeplink from '../../utiles/storeDeeplink';
 import checkLatestVersion from '../../utiles/checkLatestVersion';
 import ProviderType from '../../enums/ProviderType';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const Setting: FunctionComponent = () => {
+  const { user, expoPushToken } = useContext(UserContext);
   const {
-    changeLanguage,
-    changeCurrency,
+    setLanguage,
+    setCurrency,
     Server,
-    user,
     signOut,
     setUserExpoPushToken,
-    expoPushToken,
-  } = useContext(RootContext);
+  } = useContext(FunctionContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: user.expoPushTokens?.includes(expoPushToken),
@@ -344,7 +344,7 @@ const Setting: FunctionComponent = () => {
                           alert(i18n.t('account_errors.server'));
                         },
                       );
-                      changeLanguage(i18n.currentLocale() as LocaleType);
+                      setLanguage(i18n.currentLocale() as LocaleType);
                     }}>
                     <Picker.Item label={'한국어'} value="ko" key={0} />
                     <Picker.Item label={'English'} value="en" key={1} />
@@ -410,7 +410,7 @@ const Setting: FunctionComponent = () => {
                           alert(i18n.t('account_errors.server'));
                         },
                       );
-                      changeCurrency(itemValue as CurrencyType);
+                      setCurrency(itemValue as CurrencyType);
                     }}>
                     <Picker.Item
                       label={'KRW (₩)'}
@@ -490,7 +490,7 @@ const Setting: FunctionComponent = () => {
           await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
             alert(i18n.t('account_errors.server'));
           });
-          changeLanguage(i18n.currentLocale() as LocaleType);
+          setLanguage(i18n.currentLocale() as LocaleType);
           setState({ ...state, showLanguageModal: false });
         }}
         cancelHandler={() => {
@@ -526,7 +526,7 @@ const Setting: FunctionComponent = () => {
           await Server.resetCurrency(state.selectedCurrency).catch((e) => {
             alert(i18n.t('account_errors.server'));
           });
-          changeCurrency(state.selectedCurrency);
+          setCurrency(state.selectedCurrency);
           setState({ ...state, showCurrencyModal: false });
         }}
         cancelHandler={() => {

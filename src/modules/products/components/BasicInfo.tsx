@@ -3,7 +3,6 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import * as Linking from 'expo-linking';
 import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
-import RootContext from '../../../contexts/RootContext';
 import LocaleType from '../../../enums/LocaleType';
 import {
   P1Text,
@@ -15,6 +14,8 @@ import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
+import UserContext from '../../../contexts/UserContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 
 interface Props {
   product: Product;
@@ -23,7 +24,8 @@ interface Props {
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { user, currencyUnit, currencyRatio } = useContext(RootContext);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { user } = useContext(UserContext);
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions

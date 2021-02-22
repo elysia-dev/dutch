@@ -8,10 +8,12 @@ import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { OwnershipResponse } from '../../types/Ownership';
-import RootContext from '../../contexts/RootContext';
 import currencyFormatter from '../../utiles/currencyFormatter';
 import { ProductPage } from '../../enums/pageEnum';
 import usePrices from '../../hooks/usePrice';
+import CurrencyContext from '../../contexts/CurrencyContext';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 interface Props {
   modalHandler: () => void;
@@ -26,18 +28,18 @@ const TextWrapper = styled.View`
 `;
 
 const SliderInterest: FunctionComponent<Props> = (props) => {
-  const { Server, elPrice, currencyUnit, currencyRatio, user } = useContext(
-    RootContext,
-  );
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { user } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
 
   const prices = usePrices();
   const navigation = useNavigation();
   const interest = (
     parseFloat(props.ownership.availableProfit) /
-    (props.ownership.product.paymentMethod === 'eth' ? prices.ethPrice : prices.elPrice)
-  ).toFixed(
-    props.ownership.product.paymentMethod === 'eth' ? 4 : 2
-  );
+    (props.ownership.product.paymentMethod === 'eth'
+      ? prices.ethPrice
+      : prices.elPrice)
+  ).toFixed(props.ownership.product.paymentMethod === 'eth' ? 4 : 2);
 
   const callApi = () => {
     props.modalHandler();
@@ -122,8 +124,9 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t('dashboard_label.expected_profit')} (${user.currency
-                })`}
+              label={`${i18n.t('dashboard_label.expected_profit')} (${
+                user.currency
+              })`}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text

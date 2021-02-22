@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
-import RootContext from '../../../contexts/RootContext';
+import CurrencyContext from '../../../contexts/CurrencyContext';
 import i18n from '../../../i18n/i18n';
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
@@ -65,7 +65,7 @@ type Props = {
 };
 
 const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
-  const { elPrice, currencyUnit, currencyRatio } = useContext(RootContext);
+  const { elPrice, currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);
@@ -85,15 +85,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.from")}
+              {i18n.t('product.from')}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.to")}
+              {i18n.t('product.to')}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t("product.value")}
+              {i18n.t('product.value')}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -110,10 +110,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.you")}
+              {i18n.t('product.you')}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.elysia")}
+              {i18n.t('product.elysia')}
             </BlackText>
             <View
               style={{
@@ -124,7 +124,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                {i18n.t("product.el")}
+                {i18n.t('product.el')}
               </BlackText>
               <BlackText
                 allowFontScaling={false}
@@ -152,15 +152,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.from")}
+              {i18n.t('product.from')}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.to")}
+              {i18n.t('product.to')}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t("product.value")}
+              {i18n.t('product.value')}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -177,10 +177,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t("product.elysia")}
+              {i18n.t('product.elysia')}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t("product.you")}
+              {i18n.t('product.you')}
             </BlackText>
             <View
               style={{

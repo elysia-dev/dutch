@@ -17,9 +17,10 @@ import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const Circle = styled.View`
   width: 10px;
@@ -34,7 +35,8 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  const { Server, user, signIn } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server, signIn } = useContext(FunctionContext);
 
   const storeToken = async (token: string) => {
     await AsyncStorage.setItem('@token', token);

@@ -3,9 +3,7 @@ import {
   View,
   TouchableOpacity,
   Platform,
-  StyleSheet,
   Text,
-  ScrollView,
   Animated,
   SafeAreaView,
 } from 'react-native';
@@ -16,15 +14,15 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
-import RootContext from '../../contexts/RootContext';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
 import kycNoneButtonPng from './images/kycNoneButtonImg.png';
-import { H1Text, P1Text, P4Text, H3Text } from '../../shared/components/Texts';
+import { P1Text, H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
+import UserContext from '../../contexts/UserContext';
 
 const ExchangeImg = styled.Image`
   width: 100%;
@@ -71,7 +69,7 @@ const InfoArrowImg = styled.Image`
 `;
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
-  const { user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);

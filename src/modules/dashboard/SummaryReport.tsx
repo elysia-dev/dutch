@@ -6,22 +6,20 @@ import React, {
   useState,
 } from 'react';
 import { ScrollView } from 'react-native';
-import RootContext from '../../contexts/RootContext';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
-import {
-  defaultSummaryReportResponse,
-} from '../../types/SummaryReport';
+import { defaultSummaryReportResponse } from '../../types/SummaryReport';
 import { AssetValueCard } from './components/AssetValueCard';
 import { AssetProfitCard } from './components/AssetProfitCard';
 import { AssetRatioCard } from './components/AssetRatioCard';
 import { AverageReturnCard } from './components/AverageReturnCard';
 import { SummaryPropertyCard } from './components/SummaryPropertyCard';
 import { TitleText } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
 
 export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const [report, setReport] = useState(defaultSummaryReportResponse);
 
   const callSummaryApi = () => {

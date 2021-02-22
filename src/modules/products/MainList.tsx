@@ -26,8 +26,9 @@ import { PostItem } from './components/PostItem';
 import Product, { Story } from '../../types/product';
 import ExpandedCard from './components/ExpandedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
-import RootContext from '../../contexts/RootContext';
 import { H1Text } from '../../shared/components/Texts';
+import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 interface State {
   stories: Story[];
@@ -54,7 +55,9 @@ const MainList: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'MainList'>>();
   const refresh = route.params;
-  const { Server, user } = useContext(RootContext);
+  const { user } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
+
   const ref = React.useRef<ScrollView>(null);
   useScrollToTop(ref);
 

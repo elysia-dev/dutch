@@ -26,7 +26,7 @@ import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
-import RootContext from '../../contexts/RootContext';
+import FunctionContext from '../../contexts/FunctionContext';
 
 export const initialState = {
   page: 1,
@@ -49,7 +49,7 @@ const Transactions: FunctionComponent = () => {
     ],
   });
 
-  const { Server } = useContext(RootContext);
+  const { Server } = useContext(FunctionContext);
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
       <TransactionBox transaction={transaction} key={index} />
