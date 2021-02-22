@@ -4,12 +4,12 @@
     "privacy": "hidden",
     "name": "ElysiaStaging",
     "slug": "ElysiaAppStaging",
-    "version": "1.2.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "enabled": false
+      "enabled": true
     },
     "splash": {
       "image": "./assets/splash.png",
@@ -37,7 +37,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.2.0"
+      "buildNumber": "1.4.1"
     },
     "android": {
       "package": "land.elysia.staging",
