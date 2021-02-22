@@ -107,10 +107,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  changeLanguage: () => { },
+  setKycStatus: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -488,10 +488,10 @@ const AppMain = () => {
                   <RootStack.Screen name={'Product'} component={Products} />
                 </>
               ) : (
-                <>
-                  <RootStack.Screen name={'Account'} component={Account} />
-                </>
-              )}
+                    <>
+                      <RootStack.Screen name={'Account'} component={Account} />
+                    </>
+                  )}
               <RootStack.Screen
                 name={'BlockScreen'}
                 component={BlockScreen}
