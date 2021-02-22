@@ -4,7 +4,7 @@
     "privacy": "hidden",
     "name": "Elysia",
     "slug": "ElysiaApp",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -37,7 +37,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.4.0"
+      "buildNumber": "1.4.1"
     },
     "android": {
       "package": "land.elysia",
