@@ -20,7 +20,7 @@ function getEnvironment(): Environment {
       envName: 'PRODUCTION',
       apiUrl: 'https://api.elysia.land',
       dappUrl: 'dapp.elysia.land',
-      version: '1.4.0',
+      version: '1.4.1',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
       ethNetwork: 'mainnet',
       elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16',
