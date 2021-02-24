@@ -108,10 +108,10 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
-  setKycStatus: () => { },
+  changeLanguage: () => {},
+  setKycStatus: () => {},
   notifications: [],
-  Server: new Server(() => { }, ''),
+  Server: new Server(() => {}, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -268,14 +268,6 @@ const AppMain = () => {
       i18n.locale = Localization.locale;
     }
   }, [state.signedIn]);
-
-  // useEffect(() => {
-  //   alert(
-  //     `Localization ${Localization.locale} i18n ${i18n.currentLocale()} user ${
-  //       state.user.language
-  //     } provider ${state.user.provider} `,
-  //   );
-  // }, [i18n.locale, state.user.language]);
 
   useEffect(() => {
     if (state.user.provider === ProviderType.GUEST) {
@@ -504,10 +496,10 @@ const AppMain = () => {
                   <RootStack.Screen name={'Product'} component={Products} />
                 </>
               ) : (
-                    <>
-                      <RootStack.Screen name={'Account'} component={Account} />
-                    </>
-                  )}
+                <>
+                  <RootStack.Screen name={'Account'} component={Account} />
+                </>
+              )}
               <RootStack.Screen
                 name={'BlockScreen'}
                 component={BlockScreen}
