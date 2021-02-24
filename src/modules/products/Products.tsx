@@ -27,10 +27,6 @@ export const Products = () => {
           component={ProductBuying}
         />
         <Stack.Screen
-          name={ProductPage.ProductStory}
-          component={ProductStory}
-        />
-        <Stack.Screen
           name={ProductPage.PaymentSelection}
           component={PaymentSelection}
         />

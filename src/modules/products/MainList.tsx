@@ -6,10 +6,8 @@ import React, {
 } from 'react';
 import {
   View,
-  Animated,
   StatusBar,
   ScrollView,
-  Modal,
   SafeAreaView,
   Platform,
 } from 'react-native';
