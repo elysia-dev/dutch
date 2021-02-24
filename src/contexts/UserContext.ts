@@ -26,6 +26,7 @@ type UserContextType = {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
+    legacyAsset2Value: number;
     provider: ProviderType;
   };
   ownerships: OwnershipResponse[];
@@ -51,6 +52,7 @@ const UserContext = createContext<UserContextType>({
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+    legacyAsset2Value: 0,
     provider: ProviderType.GUEST,
   },
   ownerships: [],

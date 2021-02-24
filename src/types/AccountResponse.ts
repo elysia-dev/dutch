@@ -38,6 +38,7 @@ export type UserResponse = {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
+    legacyAsset2Value: number;
     provider: ProviderType;
   };
   totalBalance: string;

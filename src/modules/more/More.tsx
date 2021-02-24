@@ -15,6 +15,7 @@ import TermsOfUse from './TermsOfUse';
 import PrivacyPolicy from './PrivacyPolicy';
 import WhatsNew from './WhatsNew';
 import MembershipWithdrawl from './MembershipWithdrawl';
+import Asset2Ownership from './Asset2Ownership';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export const More = () => {
       <Stack.Screen name={MorePage.Setting} component={Setting} />
       <Stack.Screen name={MorePage.TermsOfUse} component={TermsOfUse} />
       <Stack.Screen name={MorePage.PrivacyPolicy} component={PrivacyPolicy} />
+      <Stack.Screen name={MorePage.Asset2Ownership} component={Asset2Ownership} />
       <Stack.Screen
         name={AccountPage.CurrentPassword}
         component={CurrentPassword}

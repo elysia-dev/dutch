@@ -76,6 +76,7 @@ const MainInfo: FunctionComponent = () => {
 
   const isNewWalletUser =
     user.provider === ProviderType.GUEST || user.provider === ProviderType.ETH;
+  const isLegacyAsset2Owner = user.legacyAsset2Value > 0;
 
   return (
     <SafeAreaView
@@ -328,7 +329,7 @@ const MainInfo: FunctionComponent = () => {
               }}
               duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
               title={i18n.t('more_label.success_kyc')}
-              handler={() => {}}
+              handler={() => { }}
               variant={'GrayTheme'}
             />
           )}
@@ -425,6 +426,33 @@ const MainInfo: FunctionComponent = () => {
                     }}>
                     <P1Text
                       label={i18n.t('more_label.my_account')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                    <InfoArrowImg source={require('./images/next_gray.png')} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {isLegacyAsset2Owner && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.Asset2Ownership,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <P1Text
+                      label='My asset#2 ownership'
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
                     <InfoArrowImg source={require('./images/next_gray.png')} />

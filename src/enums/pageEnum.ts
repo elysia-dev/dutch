@@ -47,6 +47,7 @@ export enum MorePage {
   PrivacyPolicy = 'PrivacyPolicy',
   WhatsNew = 'WhatsNew',
   MembershipWithdrawl = 'MembershipWithdrawl',
+  Asset2Ownership = 'Asset2Ownership',
 }
 
 export enum DashboardPage {

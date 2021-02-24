@@ -4,12 +4,12 @@
     "privacy": "hidden",
     "name": "Elysia",
     "slug": "ElysiaApp",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "enabled": false
+      "enabled": true
     },
     "splash": {
       "image": "./assets/splash.png",
@@ -37,7 +37,7 @@
           "NSAllowsArbitraryLoads": true
         }
       },
-      "buildNumber": "1.4.0"
+      "buildNumber": "1.4.1"
     },
     "android": {
       "package": "land.elysia",
@@ -67,7 +67,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": 10,
+      "versionCode": 11,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
     },
