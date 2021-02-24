@@ -7,6 +7,7 @@ import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
+import { currentLocalization } from '../utiles/currentLocale';
 
 type UserContextType = {
   signedIn: SignInStatus;
@@ -44,7 +45,7 @@ const UserContext = createContext<UserContextType>({
     kycStatus: KycStatus.NONE,
     ethAddresses: [],
     expoPushTokens: [],
-    language: LocaleType.EN,
+    language: currentLocalization(),
     currency: CurrencyType.USD,
     nationality: 'South Korea, KOR',
     legacyEl: 0,

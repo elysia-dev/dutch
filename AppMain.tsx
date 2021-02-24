@@ -25,6 +25,7 @@ import {
   AppState,
   AppStateStatus,
 } from 'react-native';
+import * as Localization from 'expo-localization';
 import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
@@ -33,7 +34,7 @@ import { Account } from './src/modules/account/Account';
 import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
-import currentLocale from './src/utiles/currentLocale';
+import currentLocale, { currentLocalization } from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Notification, { isNotification } from './src/types/Notification';
@@ -95,7 +96,7 @@ const defaultState = {
     lastName: '',
     gender: '',
     kycStatus: KycStatus.NONE,
-    language: currentLocale(),
+    language: currentLocalization(),
     currency: CurrencyType.USD,
     ethAddresses: [],
     expoPushTokens: [],
@@ -156,6 +157,7 @@ const AppMain = () => {
       await authServer
         .me()
         .then(async (res) => {
+          console.log(res.data);
           i18n.locale = res.data.user.language;
           const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
@@ -260,6 +262,20 @@ const AppMain = () => {
     i18n.locale = state.user.language;
     signIn();
   }, []);
+
+  useEffect(() => {
+    if (state.signedIn !== SignInStatus.SIGNIN) {
+      i18n.locale = Localization.locale;
+    }
+  }, [state.signedIn]);
+
+  // useEffect(() => {
+  //   alert(
+  //     `Localization ${Localization.locale} i18n ${i18n.currentLocale()} user ${
+  //       state.user.language
+  //     } provider ${state.user.provider} `,
+  //   );
+  // }, [i18n.locale, state.user.language]);
 
   useEffect(() => {
     if (state.user.provider === ProviderType.GUEST) {
