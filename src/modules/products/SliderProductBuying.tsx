@@ -42,10 +42,10 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
   });
 
   const hasChildProduct = props.product?.childProducts?.length > 0;
-  const elProduct = props.product?.childProducts.find(
+  const elProduct = props.product?.childProducts?.find(
     (prod, _index) => prod.paymentMethod === 'el',
   );
-  const ethProduct = props.product?.childProducts.find(
+  const ethProduct = props.product?.childProducts?.find(
     (prod, _index) => prod.paymentMethod === 'eth',
   );
 
@@ -99,20 +99,20 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
         props.modalHandler();
         props.from === 'ownershipDetail'
           ? navigation.navigate('Product', {
-              screen: ProductPage.PaymentSelection,
-              params: {
-                id: res.data.id,
-                product: props.product,
-                tokenCount: state.tokenCount,
-                type: 'buying',
-              },
-            })
-          : navigation.navigate(ProductPage.PaymentSelection, {
+            screen: ProductPage.PaymentSelection,
+            params: {
               id: res.data.id,
               product: props.product,
               tokenCount: state.tokenCount,
               type: 'buying',
-            });
+            },
+          })
+          : navigation.navigate(ProductPage.PaymentSelection, {
+            id: res.data.id,
+            product: props.product,
+            tokenCount: state.tokenCount,
+            type: 'buying',
+          });
       })
       .catch((e) => {
         if (e.response.status === 400) {
@@ -176,9 +176,9 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
           tokenName={
             hasChildProduct
               ? props.product.childProducts.find(
-                  (product, _index) =>
-                    product.paymentMethod === state.paymentMethod,
-                )?.tokenName!
+                (product, _index) =>
+                  product.paymentMethod === state.paymentMethod,
+              )?.tokenName!
               : props.product.tokenName
           }
           tokenCount={state.tokenCount}
