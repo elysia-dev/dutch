@@ -26,15 +26,13 @@ import {
   AppStateStatus,
 } from 'react-native';
 import * as Localization from 'expo-localization';
-import { Kyc } from './src/modules/kyc/Kyc';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
 import { Account } from './src/modules/account/Account';
 
-import { KycStatus } from './src/enums/KycStatus';
 import LocaleType from './src/enums/LocaleType';
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
-import currentLocale, { currentLocalization } from './src/utiles/currentLocale';
+import { currentLocalization } from './src/utiles/currentLocale';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Notification, { isNotification } from './src/types/Notification';
@@ -63,7 +61,6 @@ interface AppInformation {
     email: string;
     firstName: string;
     lastName: string;
-    kycStatus: KycStatus;
     gender: string;
     language: LocaleType;
     currency: CurrencyType;
@@ -78,7 +75,6 @@ interface AppInformation {
   ownerships: OwnershipResponse[];
   balance: string;
   changeLanguage: () => void;
-  setKycStatus: () => void;
   notifications: Notification[];
   Server: Server;
   expoPushToken: string;
@@ -95,7 +91,6 @@ const defaultState = {
     firstName: '',
     lastName: '',
     gender: '',
-    kycStatus: KycStatus.NONE,
     language: currentLocalization(),
     currency: CurrencyType.USD,
     ethAddresses: [],
@@ -108,10 +103,9 @@ const defaultState = {
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => {},
-  setKycStatus: () => {},
+  changeLanguage: () => { },
   notifications: [],
-  Server: new Server(() => {}, ''),
+  Server: new Server(() => { }, ''),
   expoPushToken: '',
   elPrice: 0,
   krwPrice: 0,
@@ -426,12 +420,6 @@ const AppMain = () => {
                   user: { ...state.user, currency: newCurrency },
                 });
               },
-              setKycStatus: () => {
-                setState({
-                  ...state,
-                  user: { ...state.user, kycStatus: KycStatus.PENDING },
-                });
-              },
               signIn,
               signOut,
               refreshUser,
@@ -490,16 +478,15 @@ const AppMain = () => {
               ) : state.signedIn === SignInStatus.SIGNIN ? (
                 <>
                   <RootStack.Screen name={'Main'} component={Main} />
-                  <RootStack.Screen name={'Kyc'} component={Kyc} />
                   <RootStack.Screen name={'Dashboard'} component={Dashboard} />
                   <RootStack.Screen name={'More'} component={More} />
                   <RootStack.Screen name={'Product'} component={Products} />
                 </>
               ) : (
-                <>
-                  <RootStack.Screen name={'Account'} component={Account} />
-                </>
-              )}
+                    <>
+                      <RootStack.Screen name={'Account'} component={Account} />
+                    </>
+                  )}
               <RootStack.Screen
                 name={'BlockScreen'}
                 component={BlockScreen}

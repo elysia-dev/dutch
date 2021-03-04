@@ -109,14 +109,14 @@ const Contact: FunctionComponent = () => {
           }}>
           {(user.provider === ProviderType.GUEST ||
             user.provider === ProviderType.ETH) && (
-            <TextField
-              value={state.email}
-              label={i18n.t('more_label.reply_email')}
-              eventHandler={(input: string) =>
-                setState({ ...state, email: input })
-              }
-            />
-          )}
+              <TextField
+                value={state.email}
+                label={i18n.t('more_label.reply_email')}
+                eventHandler={(input: string) =>
+                  setState({ ...state, email: input })
+                }
+              />
+            )}
           <TextArea
             contents={state.contents}
             eventHandler={(input: string) =>
@@ -143,7 +143,7 @@ const Contact: FunctionComponent = () => {
                 ? '#D0D8DF'
                 : '#3679B5',
           }}
-          title={i18n.t('kyc_label.submit')}
+          title={i18n.t('button.submit')}
           handler={() => callApi()}
         />
       }

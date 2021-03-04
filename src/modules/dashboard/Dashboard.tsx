@@ -6,7 +6,6 @@ import { SummaryReport } from './SummaryReport';
 import OwnershipDetail from './OwnershipDetail';
 import ProductData from './ProductData';
 import ProductNotice from './ProductNotice';
-import PreparingInvestment from './PreparingInvestment';
 import InvestmentGuide from './InvestmentGuide';
 import { RemainingBalance } from './RemainingBalance';
 
@@ -32,10 +31,6 @@ export const Dashboard = () => {
       <Stack.Screen
         name={DashboardPage.InvestmentGuide}
         component={InvestmentGuide}
-      />
-      <Stack.Screen
-        name={DashboardPage.PreparingInvestment}
-        component={PreparingInvestment}
       />
       <Stack.Screen
         name={DashboardPage.RemainingBalance}

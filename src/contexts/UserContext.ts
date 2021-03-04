@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import { KycStatus } from '../enums/KycStatus';
 import LocaleType from '../enums/LocaleType';
 import { SignInStatus } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
@@ -16,7 +15,6 @@ type UserContextType = {
     email: string;
     firstName: string;
     lastName: string;
-    kycStatus: KycStatus;
     gender: string;
     language: LocaleType;
     currency: CurrencyType;
@@ -43,7 +41,6 @@ const UserContext = createContext<UserContextType>({
     firstName: '',
     lastName: '',
     gender: '',
-    kycStatus: KycStatus.NONE,
     ethAddresses: [],
     expoPushTokens: [],
     language: currentLocalization(),

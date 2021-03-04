@@ -30,9 +30,6 @@
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Give permission to select photos.",
-        "NSPhotoLibraryAddUsageDescription": "Give permission to save photos.",
-        "NSCameraUsageDescription": "This app uses the camera for kyc certifications.",
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         }
@@ -47,7 +44,6 @@
         }
       },
       "permissions": [
-        "CAMERA",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "USE_FINGERPRINT",

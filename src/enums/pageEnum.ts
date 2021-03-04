@@ -1,15 +1,3 @@
-export enum KycPage {
-  StartKYC = 'StartKYC',
-  Argos = 'Argos',
-  SelectID = 'SelectID',
-  TakeID = 'TakeID',
-  ConfirmID = 'ConfirmID',
-  TakeSelfieBefore = 'TakeSelfieBefore',
-  TakeSelfie = 'TakeSelfie',
-  ConfirmSelfie = 'ConfirmSelfie',
-  PersonalDataInput = 'PersonalDataInput',
-}
-
 export enum ProductPage {
   MainList = 'MainList',
   ProductStory = 'ProductStory',
@@ -56,7 +44,6 @@ export enum DashboardPage {
   OwnershipDetail = 'OwnershipDetail',
   ProductData = 'ProductData',
   ProductNotice = 'ProductNotice',
-  PreparingInvestment = 'PreparingInvestment',
   InvestmentGuide = 'InvestmentGuide',
   RemainingBalance = 'RemainingBalance',
   EventList = 'EventList',

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import AsyncStorage from '@react-native-community/async-storage';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { Platform } from 'react-native';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
@@ -126,39 +125,6 @@ export default class Server {
     } catch (exception) {
       return false;
     }
-  };
-
-  kycInit = async (): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.post('/v2/kyc/');
-  };
-
-  kycUpload = async (photo: string, type: string): Promise<AxiosResponse> => {
-    const formData = new FormData();
-    formData.append('image', {
-      uri: Platform.OS === 'android' ? photo : photo.replace('file://', ''),
-      name: 'image.png',
-      type: 'image/png',
-    });
-    formData.append('type', type);
-    return this.authenticatedEspressoClient.post('/v2/kyc/upload', formData);
-  };
-
-  kycInformation = async (
-    firstName: string,
-    lastName: string,
-    nationality: string,
-    dateOfBirth: string,
-    gender: string,
-    idType: string,
-  ): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.post('/v2/kyc/information', {
-      firstName,
-      lastName,
-      nationality,
-      dateOfBirth,
-      gender,
-      idType,
-    });
   };
 
   notification = async (): Promise<AxiosResponse<Notification[]>> => {
@@ -316,8 +282,7 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${
-        getEnvironment().elAddress
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${getEnvironment().elAddress
       }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };

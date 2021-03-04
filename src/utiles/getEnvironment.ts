@@ -33,7 +33,7 @@ function getEnvironment(): Environment {
       envName: 'STAGING',
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
-      version: '1.4.0',
+      version: '1.4.1',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
       ethNetwork: 'kovan',
       elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',
@@ -43,13 +43,13 @@ function getEnvironment(): Environment {
   return {
     envName: 'DEVELOPMENT',
     // apiUrl: 'https://api.elysia.land',
-    // apiUrl: 'https://staging-api.elysia.land',
-    apiUrl: `http://${(manifest.debuggerHost || 'localhost')
-      .split(':')
-      .shift()}:3000`,
+    apiUrl: 'https://staging-api.elysia.land',
+    //apiUrl: `http://${(manifest.debuggerHost || 'localhost')
+    //.split(':')
+    //.shift()}:3000`,
     // dappUrl: 'localhost:3001',
     dappUrl: 'staging-dapp.elysia.land',
-    version: '1.4.0',
+    version: '1.4.1',
     infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
     ethNetwork: 'kovan',
     elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',

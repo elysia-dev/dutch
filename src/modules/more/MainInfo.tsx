@@ -3,23 +3,19 @@ import {
   View,
   TouchableOpacity,
   Platform,
-  Text,
   Animated,
   SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
-import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
-import { KycStatus } from '../../enums/KycStatus';
 import { MorePage } from '../../enums/pageEnum';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
-import kycNoneButtonPng from './images/kycNoneButtonImg.png';
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
@@ -28,34 +24,6 @@ const ExchangeImg = styled.Image`
   width: 100%;
   height: 60px;
   resize-mode: contain;
-`;
-const KycNoneButton = styled.TouchableOpacity`
-  color: #1c1c1c;
-  width: 90%;
-  margin: 5px auto;
-  height: 70px;
-  background-color: #fff;
-  border-radius: 5px;
-  border: solid 1.5px #3679b5;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-  z-index: 5;
-`;
-const KycPendingButton = styled.View`
-  color: #1c1c1c;
-  width: 90%;
-  margin: 5px auto;
-  height: 70px;
-  border-radius: 5px;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-`;
-const KycNoneButtonImg = styled.Image`
-  height: 67px;
-  z-index: 0;
-  margin-left: auto;
 `;
 const InfoHeaderSettingImg = styled.Image`
   margin-top: 5px;
@@ -178,161 +146,6 @@ const MainInfo: FunctionComponent = () => {
             marginTop: 10,
             paddingBottom: 10,
           }}>
-          {!isNewWalletUser && user.kycStatus === KycStatus.NONE && (
-            <View style={{ marginBottom: 28 }}>
-              <KycNoneButton
-                onPress={() => navigation.navigate('Kyc')}
-                style={{
-                  shadowOffset: { width: 2, height: 1 },
-                  shadowColor: '#00000064',
-                  shadowOpacity: 0.8,
-                  shadowRadius: 6,
-                  height: 70,
-                  elevation: 6,
-                }}>
-                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
-                  <Text
-                    allowFontScaling={false}
-                    style={{
-                      fontSize: 13,
-                      textAlign: 'left',
-                      fontFamily: 'Roboto_400Regular',
-                    }}>
-                    {i18n.t('more_label.none_kyc_duplicate_label')}
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        fontSize: 15,
-                        textAlign: 'left',
-                        fontFamily: 'Roboto_700Bold',
-                      }}>
-                      {'\n'}
-                      {i18n.t('more_label.none_kyc')}
-                    </Text>
-                  </Text>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 9,
-                      right: -9,
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
-                    }}
-                  />
-                </View>
-                <KycNoneButtonImg source={kycNoneButtonPng} />
-              </KycNoneButton>
-            </View>
-          )}
-          {!isNewWalletUser && user.kycStatus === KycStatus.REJECTED && (
-            <View style={{ marginBottom: 28 }}>
-              <KycNoneButton
-                onPress={() => navigation.navigate('Kyc')}
-                style={{
-                  shadowOffset: { width: 2, height: 1 },
-                  shadowColor: '#00000064',
-                  shadowOpacity: 0.8,
-                  shadowRadius: 6,
-                  height: 70,
-                  elevation: 6,
-                }}>
-                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
-                  <Text
-                    allowFontScaling={false}
-                    style={{
-                      fontSize: 13,
-                      textAlign: 'left',
-                      fontFamily: 'Roboto_400Regular',
-                    }}>
-                    {i18n.t('more_label.none_kyc_duplicate_label')}
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        fontSize: 15,
-                        textAlign: 'left',
-                        fontFamily: 'Roboto_700Bold',
-                      }}>
-                      {'\n'}
-                      {i18n.t('more_label.none_kyc')}
-                    </Text>
-                  </Text>
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 9,
-                      right: -9,
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
-                    }}
-                  />
-                </View>
-                <KycNoneButtonImg source={kycNoneButtonPng} />
-              </KycNoneButton>
-            </View>
-          )}
-          {!isNewWalletUser && user.kycStatus === KycStatus.PENDING && (
-            <View style={{ marginBottom: 28 }}>
-              <H3Text
-                label={i18n.t('more_label.pending_kyc')}
-                style={{
-                  color: '#FFF',
-                  zIndex: 11,
-                  width: '100%',
-                  position: 'absolute',
-                  textAlign: 'center',
-                  lineHeight: 80,
-                }}
-              />
-              <KycPendingButton
-                style={{
-                  backgroundColor: '#000000D0',
-                  position: 'absolute',
-                  zIndex: 10,
-                  marginLeft: '5%',
-                }}
-              />
-              <KycPendingButton>
-                <View style={{ alignSelf: 'center', marginLeft: '6%' }}>
-                  <Text
-                    allowFontScaling={false}
-                    style={{
-                      fontSize: 13,
-                      textAlign: 'left',
-                      fontFamily: 'Roboto_400Regular',
-                    }}>
-                    {i18n.t('more_label.none_kyc_duplicate_label')}
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        fontSize: 15,
-                        textAlign: 'left',
-                        fontFamily: 'Roboto_700Bold',
-                      }}>
-                      {'\n'}
-                      {i18n.t('more_label.none_kyc')}
-                    </Text>
-                  </Text>
-                </View>
-                <KycNoneButtonImg source={kycNoneButtonPng} />
-              </KycPendingButton>
-            </View>
-          )}
-          {!isNewWalletUser && user.kycStatus === KycStatus.SUCCESS && (
-            <SubmitButton
-              style={{
-                height: 70,
-                marginBottom: 28,
-              }}
-              duplicateTitle={i18n.t('more_label.success_kyc_duplicate_label')}
-              title={i18n.t('more_label.success_kyc')}
-              handler={() => { }}
-              variant={'GrayTheme'}
-            />
-          )}
           <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 10 }}>
             <H3Text
               label={i18n.t('more_label.my_info')}

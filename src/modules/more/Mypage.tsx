@@ -3,7 +3,6 @@ import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../../i18n/i18n';
-import { KycStatus } from '../../enums/KycStatus';
 import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -41,24 +40,6 @@ const MyPage: FunctionComponent = () => {
               style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
             />
             <P1Text label={user.email} style={{ fontSize: 15 }} />
-            {user.kycStatus === KycStatus.SUCCESS && (
-              <>
-                <P1Text
-                  label={i18n.t('more_label.name')}
-                  style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
-                />
-                <P1Text
-                  label={`${user.firstName} ${user.lastName !== null ? user.lastName : ''
-                    }`}
-                  style={{ fontSize: 15 }}
-                />
-                <P1Text
-                  label={i18n.t('more_label.gender')}
-                  style={{ color: '#a7a7a7', marginTop: 30, marginBottom: 5 }}
-                />
-                <P1Text label={user.gender} style={{ fontSize: 15 }} />
-              </>
-            )}
             <View
               style={{
                 height: 50,

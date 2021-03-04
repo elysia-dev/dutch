@@ -16,7 +16,6 @@ import MainInfo from '../more/MainInfo';
 import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
-import { KycStatus } from '../../enums/KycStatus';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
@@ -112,18 +111,18 @@ const Main: FunctionComponent = () => {
                 {notifications.filter(
                   (notification) => notification.status === 'unread',
                 ).length > 0 && (
-                  <View
-                    style={{
-                      position: 'absolute',
-                      top: 10,
-                      right: 25,
-                      width: 8,
-                      height: 8,
-                      borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
-                    }}
-                  />
-                )}
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: 10,
+                        right: 25,
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        backgroundColor: '#FC5C4F',
+                      }}
+                    />
+                  )}
               </>
             ),
           }}
@@ -143,9 +142,7 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {((user.kycStatus === KycStatus.NONE &&
-                  user.provider === ProviderType.EMAIL) ||
-                  !(user.ethAddresses?.length > 0)) && (
+                {!(user.ethAddresses?.length > 0) && (
                   <View
                     style={{
                       position: 'absolute',

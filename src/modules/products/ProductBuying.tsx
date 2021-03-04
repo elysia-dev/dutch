@@ -26,7 +26,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
 import SliderProductBuying from './SliderProductBuying';
-import { KycStatus } from '../../enums/KycStatus';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
 import { MorePage } from '../../enums/pageEnum';
@@ -76,8 +75,7 @@ const ProductBuying: FunctionComponent = () => {
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
-  const purchasability =
-    user.kycStatus === KycStatus.SUCCESS && user.ethAddresses?.length > 0;
+  const purchasability = user.ethAddresses?.length > 0;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
@@ -102,7 +100,7 @@ const ProductBuying: FunctionComponent = () => {
         [
           {
             text: 'Cancel',
-            onPress: () => {},
+            onPress: () => { },
             style: 'cancel',
           },
           {
@@ -293,8 +291,8 @@ const ProductBuying: FunctionComponent = () => {
               state.product?.status === ProductStatus.TERMINATED
                 ? '#1c1c1c'
                 : user.provider === ProviderType.ETH || purchasability
-                ? '#3679B5'
-                : '#D0D8DF',
+                  ? '#3679B5'
+                  : '#D0D8DF',
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={submitButtonHandler}

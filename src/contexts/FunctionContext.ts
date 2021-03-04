@@ -10,7 +10,6 @@ import { CurrencyResponse } from '../types/CurrencyResponse';
 type FunctionContextType = {
   setLanguage: (input: LocaleType) => void;
   setCurrency: (input: CurrencyType) => void;
-  setKycStatus: () => void;
   signIn: () => void;
   signOut: (signInStatus: SignOut) => void;
   refreshUser: () => Promise<void>;
@@ -23,18 +22,17 @@ type FunctionContextType = {
 };
 
 const FunctionContext = createContext<FunctionContextType>({
-  setLanguage: () => {},
-  setCurrency: () => {},
-  setKycStatus: () => {},
-  signIn: async () => {},
-  signOut: async (_signInStatus: SignOut) => {},
-  refreshUser: async () => {},
-  setCurrencyPrice: (_currency: CurrencyResponse[]) => {},
-  setNotifications: (_notifications: Notification[]) => {},
-  setEthAddress: (_address: string) => {},
-  setUserExpoPushToken: (_expoPushToken: string) => {},
-  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => {},
-  Server: new Server(() => {}, ''),
+  setLanguage: () => { },
+  setCurrency: () => { },
+  signIn: async () => { },
+  signOut: async (_signInStatus: SignOut) => { },
+  refreshUser: async () => { },
+  setCurrencyPrice: (_currency: CurrencyResponse[]) => { },
+  setNotifications: (_notifications: Notification[]) => { },
+  setEthAddress: (_address: string) => { },
+  setUserExpoPushToken: (_expoPushToken: string) => { },
+  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
+  Server: new Server(() => { }, ''),
 });
 
 export default FunctionContext;
