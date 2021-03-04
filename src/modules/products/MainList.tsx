@@ -60,7 +60,7 @@ const MainList: FunctionComponent = () => {
   useScrollToTop(ref);
 
   useEffect(() => {
-    Server.storyList()
+    Server.storyList(user.language)
       .then((res) => {
         setState({ ...state, stories: res.data });
         Server.products().then((res) => {

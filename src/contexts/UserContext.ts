@@ -6,7 +6,7 @@ import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
-import { currentLocalization } from '../utiles/currentLocale';
+import currentLocalization from '../utiles/currentLocalization';
 
 type UserContextType = {
   signedIn: SignInStatus;

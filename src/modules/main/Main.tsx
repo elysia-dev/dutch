@@ -17,7 +17,6 @@ import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 
 const Icon = styled.Image`

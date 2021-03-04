@@ -72,12 +72,12 @@ export const Main: FunctionComponent = () => {
       case ProviderType.EMAIL:
         return user.firstName && user.lastName
           ? i18n.t('greeting', {
-              firstName: user.firstName,
-              lastName: user.lastName === null ? '' : user.lastName,
-            })
+            firstName: user.firstName,
+            lastName: user.lastName === null ? '' : user.lastName,
+          })
           : i18n.t('greeting_new', {
-              email: user.email,
-            });
+            email: user.email,
+          });
       default:
         return '';
     }
@@ -85,17 +85,6 @@ export const Main: FunctionComponent = () => {
 
   return (
     <>
-      <Modal visible={user.id === 0 || elPrice === 0} transparent={false}>
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#3679B5" />
-        </View>
-      </Modal>
       <ScrollView
         ref={ref}
         style={{

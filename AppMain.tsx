@@ -15,14 +15,13 @@ import {
   AppState,
   AppStateStatus,
 } from 'react-native';
-import * as Localization from 'expo-localization';
 import { More } from './src/modules/more/More';
 import { Products } from './src/modules/products/Products';
 import { Account } from './src/modules/account/Account';
 
 import LocaleType from './src/enums/LocaleType';
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
-import { currentLocalization } from './src/utiles/currentLocale';
+import currentLocalization from './src/utiles/currentLocalization';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Notification, { isNotification } from './src/types/Notification';
@@ -60,11 +59,11 @@ interface AppInformation {
     legacyEl: number;
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
+    legacyAsset2Value: number;
     provider: ProviderType;
   };
   ownerships: OwnershipResponse[];
   balance: string;
-  changeLanguage: () => void;
   notifications: Notification[];
   Server: Server;
   expoPushToken: string;
@@ -89,11 +88,11 @@ const defaultState = {
     legacyEl: 0,
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
+    legacyAsset2Value: 0,
     provider: ProviderType.GUEST,
   },
   ownerships: [],
   balance: '0',
-  changeLanguage: () => { },
   notifications: [],
   Server: new Server(() => { }, ''),
   expoPushToken: '',
@@ -126,6 +125,21 @@ const AppMain = () => {
     setState({ ...defaultState, signedIn: signInStatus });
   };
 
+  const guestSignIn = async () => {
+    const authServer = new Server(signOut, '');
+    const allCurrency = (await authServer.getAllCurrency()).data;
+
+    setState({
+      ...state,
+      signedIn: SignInStatus.SIGNIN,
+      elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
+      krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
+      Server: authServer,
+      cnyPrice:
+        allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
+    });
+  }
+
   const signIn = async () => {
     const token = await AsyncStorage.getItem('@token');
     const authServer = new Server(signOut, token !== null ? token : '');
@@ -133,7 +147,6 @@ const AppMain = () => {
       await authServer
         .me()
         .then(async (res) => {
-          console.log(res.data);
           i18n.locale = res.data.user.language;
           const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
@@ -178,6 +191,10 @@ const AppMain = () => {
   };
 
   const refreshUser = async () => {
+    if (state.user.provider === ProviderType.GUEST) {
+      return
+    }
+
     state.Server.me()
       .then(async (res) => {
         setState({
@@ -197,30 +214,6 @@ const AppMain = () => {
       });
   };
 
-  const setOnboardingNotifications = () => {
-    setState({
-      ...state,
-      notifications: [
-        {
-          id: 1,
-          userId: 0,
-          notificationType: NotificationType.ONBOARDING_CONNECT_WALLET,
-          status: NotificationStatus.UNREAD,
-          data: {} as NotificationData,
-          createdAt: new Date(),
-        },
-        {
-          id: 0,
-          userId: 0,
-          notificationType: NotificationType.ONBOARDING_NEW_USER,
-          status: NotificationStatus.UNREAD,
-          data: {} as NotificationData,
-          createdAt: new Date(),
-        },
-      ],
-    });
-  };
-
   const handleAppStateChange = (nextAppState: AppStateStatus) => {
     if (
       appState.current !== 'active' &&
@@ -235,19 +228,33 @@ const AppMain = () => {
   };
 
   useEffect(() => {
-    i18n.locale = state.user.language;
     signIn();
   }, []);
 
   useEffect(() => {
-    if (state.signedIn !== SignInStatus.SIGNIN) {
-      i18n.locale = Localization.locale;
-    }
-  }, [state.signedIn]);
-
-  useEffect(() => {
     if (state.user.provider === ProviderType.GUEST) {
-      setOnboardingNotifications();
+      // Guest Notifications
+      setState({
+        ...state,
+        notifications: [
+          {
+            id: 1,
+            userId: 0,
+            notificationType: NotificationType.ONBOARDING_CONNECT_WALLET,
+            status: NotificationStatus.UNREAD,
+            data: {} as NotificationData,
+            createdAt: new Date(),
+          },
+          {
+            id: 0,
+            userId: 0,
+            notificationType: NotificationType.ONBOARDING_NEW_USER,
+            status: NotificationStatus.UNREAD,
+            data: {} as NotificationData,
+            createdAt: new Date(),
+          },
+        ],
+      });
     }
   }, [state.signedIn]);
 
@@ -393,6 +400,7 @@ const AppMain = () => {
                 });
               },
               signIn,
+              guestSignIn,
               signOut,
               refreshUser,
               setCurrencyPrice: (currency: CurrencyResponse[]) => {

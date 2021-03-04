@@ -151,8 +151,8 @@ export default class Server {
     );
   };
 
-  storyList = (): Promise<AxiosResponse<Story[]>> => {
-    return this.authenticatedEspressoClient.get('/products/stories');
+  storyList = (language: LocaleType): Promise<AxiosResponse<Story[]>> => {
+    return this.authenticatedEspressoClient.get(`/products/stories?language=${language}`);
   };
 
   productInfo = async (id: number): Promise<AxiosResponse<Product>> => {

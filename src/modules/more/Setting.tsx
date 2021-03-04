@@ -136,7 +136,7 @@ const Setting: FunctionComponent = () => {
           [
             {
               text: 'Cancel',
-              onPress: () => {},
+              onPress: () => { },
               style: 'cancel',
             },
             {
@@ -158,7 +158,7 @@ const Setting: FunctionComponent = () => {
           [
             {
               text: 'Cancel',
-              onPress: () => {},
+              onPress: () => { },
               style: 'cancel',
             },
             {
@@ -193,48 +193,52 @@ const Setting: FunctionComponent = () => {
                 borderBottomColor: '#F6F6F8',
                 top: 22,
               }}>
-              <H3Text
-                label={i18n.t('more_label.notification_setting')}
-                style={{
-                  paddingLeft: '5%',
-                  paddingRight: '5%',
-                  fontSize: 18,
-                }}
-              />
-              <View
-                style={{
-                  paddingTop: 30,
-                  paddingBottom: 20,
-                  marginBottom: 30,
-                  borderBottomWidth: 5,
-                  borderBottomColor: '#F6F6F8',
-                }}>
-                <View
-                  style={{
-                    paddingLeft: '5%',
-                    paddingRight: '5%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignContent: 'center',
-                  }}>
-                  <P1Text
-                    label={i18n.t('more_label.push_notice')}
+              {
+                user.provider !== ProviderType.GUEST && <View>
+                  <H3Text
+                    label={i18n.t('more_label.notification_setting')}
                     style={{
-                      alignSelf: 'center',
+                      paddingLeft: '5%',
+                      paddingRight: '5%',
+                      fontSize: 18,
                     }}
                   />
-                  <Switch
-                    trackColor={{ false: '#767577', true: '#3679B5' }}
-                    thumbColor={state.hasPermission ? '#FFFFFF' : '#f4f3f4'}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={activityToggleButton}
-                    value={state.hasPermission}
+                  <View
                     style={{
-                      alignSelf: 'center',
-                    }}
-                  />
+                      paddingTop: 30,
+                      paddingBottom: 20,
+                      marginBottom: 30,
+                      borderBottomWidth: 5,
+                      borderBottomColor: '#F6F6F8',
+                    }}>
+                    <View
+                      style={{
+                        paddingLeft: '5%',
+                        paddingRight: '5%',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignContent: 'center',
+                      }}>
+                      <P1Text
+                        label={i18n.t('more_label.push_notice')}
+                        style={{
+                          alignSelf: 'center',
+                        }}
+                      />
+                      <Switch
+                        trackColor={{ false: '#767577', true: '#3679B5' }}
+                        thumbColor={state.hasPermission ? '#FFFFFF' : '#f4f3f4'}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={activityToggleButton}
+                        value={state.hasPermission}
+                        style={{
+                          alignSelf: 'center',
+                        }}
+                      />
+                    </View>
+                  </View>
                 </View>
-              </View>
+              }
               <View
                 style={{
                   paddingBottom: 20,
@@ -280,32 +284,32 @@ const Setting: FunctionComponent = () => {
                   getEnvironment().version,
                   state.latestVersion,
                 ) && (
-                  <TouchableOpacity
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginTop: 30,
-                      paddingLeft: '5%',
-                      paddingRight: '5%',
-                    }}
-                    onPress={() => {
-                      storeDeeplink('elysia/id1536733411', 'land.elysia');
-                    }}>
-                    <H3Text
-                      label={i18n.t('more_label.get_latest_version', {
-                        version: state.latestVersion,
-                      })}
-                      style={{ color: '#CC3743', fontSize: 15 }}
-                    />
-                    <Image
-                      source={require('./images/next_gray.png')}
+                    <TouchableOpacity
                       style={{
-                        width: 5,
-                        height: 8,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 30,
+                        paddingLeft: '5%',
+                        paddingRight: '5%',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        storeDeeplink('elysia/id1536733411', 'land.elysia');
+                      }}>
+                      <H3Text
+                        label={i18n.t('more_label.get_latest_version', {
+                          version: state.latestVersion,
+                        })}
+                        style={{ color: '#CC3743', fontSize: 15 }}
+                      />
+                      <Image
+                        source={require('./images/next_gray.png')}
+                        style={{
+                          width: 5,
+                          height: 8,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <H3Text
                 label={i18n.t('more_label.language')}
@@ -339,11 +343,15 @@ const Setting: FunctionComponent = () => {
                         ...state,
                         selectedLanguage: i18n.currentLocale(),
                       });
-                      await Server.resetLanguage(i18n.currentLocale()).catch(
-                        (e) => {
-                          alert(i18n.t('account_errors.server'));
-                        },
-                      );
+
+                      if (user.provider !== ProviderType.GUEST) {
+                        await Server.resetLanguage(i18n.currentLocale()).catch(
+                          (e) => {
+                            alert(i18n.t('account_errors.server'));
+                          },
+                        );
+                      }
+
                       setLanguage(i18n.currentLocale() as LocaleType);
                     }}>
                     <Picker.Item label={'한국어'} value="ko" key={0} />
@@ -351,27 +359,27 @@ const Setting: FunctionComponent = () => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      setState({ ...state, showLanguageModal: true });
-                    }}>
-                    <P1Text
-                      label={localeText()}
+                    <TouchableOpacity
                       style={{
-                        textAlign: 'center',
+                        width: '100%',
+                        height: 40,
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        setState({ ...state, showLanguageModal: true });
+                      }}>
+                      <P1Text
+                        label={localeText()}
+                        style={{
+                          textAlign: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <H3Text
                 label={i18n.t('more_label.currency')}
@@ -405,11 +413,15 @@ const Setting: FunctionComponent = () => {
                         ...state,
                         selectedCurrency: itemValue as CurrencyType,
                       });
-                      await Server.resetCurrency(itemValue as string).catch(
-                        (e) => {
-                          alert(i18n.t('account_errors.server'));
-                        },
-                      );
+
+                      if (user.provider !== ProviderType.GUEST) {
+                        await Server.resetCurrency(itemValue as string).catch(
+                          (e) => {
+                            alert(i18n.t('account_errors.server'));
+                          },
+                        );
+                      }
+
                       setCurrency(itemValue as CurrencyType);
                     }}>
                     <Picker.Item
@@ -429,27 +441,27 @@ const Setting: FunctionComponent = () => {
                     />
                   </Picker>
                 ) : (
-                  <TouchableOpacity
-                    style={{
-                      width: '100%',
-                      height: 40,
-                      backgroundColor: '#fff',
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => {
-                      setState({ ...state, showCurrencyModal: true });
-                    }}>
-                    <P1Text
-                      label={currencyText()}
+                    <TouchableOpacity
                       style={{
-                        textAlign: 'center',
+                        width: '100%',
+                        height: 40,
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
                       }}
-                    />
-                  </TouchableOpacity>
-                )}
+                      onPress={() => {
+                        setState({ ...state, showCurrencyModal: true });
+                      }}>
+                      <P1Text
+                        label={currencyText()}
+                        style={{
+                          textAlign: 'center',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
               </View>
               <View
                 style={{
@@ -487,9 +499,13 @@ const Setting: FunctionComponent = () => {
         modalVisible={state.showLanguageModal}
         doneHandler={async () => {
           changeI18n(state.selectedLanguage);
-          await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
-            alert(i18n.t('account_errors.server'));
-          });
+
+          if (user.provider !== ProviderType.GUEST) {
+            await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
+              alert(i18n.t('account_errors.server'));
+            });
+          }
+
           setLanguage(i18n.currentLocale() as LocaleType);
           setState({ ...state, showLanguageModal: false });
         }}
@@ -523,9 +539,12 @@ const Setting: FunctionComponent = () => {
       <IosPickerModal
         modalVisible={state.showCurrencyModal}
         doneHandler={async () => {
-          await Server.resetCurrency(state.selectedCurrency).catch((e) => {
-            alert(i18n.t('account_errors.server'));
-          });
+          if (user.provider !== ProviderType.GUEST) {
+            await Server.resetCurrency(state.selectedCurrency).catch((e) => {
+              alert(i18n.t('account_errors.server'));
+            });
+          }
+
           setCurrency(state.selectedCurrency);
           setState({ ...state, showCurrencyModal: false });
         }}

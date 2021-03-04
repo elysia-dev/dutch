@@ -12,7 +12,6 @@ import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
-import AsyncStorage from '@react-native-community/async-storage';
 import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import i18n from '../../i18n/i18n';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -20,7 +19,7 @@ import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
 import FunctionContext from '../../contexts/FunctionContext';
-import UserContext from '../../contexts/UserContext';
+import currentLocalization from '../../utiles/currentLocalization';
 
 const Circle = styled.View`
   width: 10px;
@@ -35,23 +34,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  const { user } = useContext(UserContext);
-  const { Server, signIn } = useContext(FunctionContext);
-
-  const storeToken = async (token: string) => {
-    await AsyncStorage.setItem('@token', token);
-  };
-
-  const callApi = () => {
-    Server.addGuestUser(user.language)
-      .then(async (res) => {
-        if (res.data.status === 'success' && res.data.token) {
-          await storeToken(res.data.token);
-          signIn();
-        }
-      })
-      .catch((_e) => alert(i18n.t('account_errors.server')));
-  };
+  const { guestSignIn } = useContext(FunctionContext);
 
   const viewPager = React.createRef<ViewPager>();
   const ReturnImageOrText = (imgNumber: number) => {
@@ -87,17 +70,17 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               }}
             />
           ) : (
-            <H1Text
-              style={{
-                fontSize: 42,
-                width: '90%',
-                marginHorizontal: '5%',
-                position: 'absolute',
-                bottom: Dimensions.get('window').height * 0.5,
-              }}
-              label={ReturnImageOrText(index)}
-            />
-          )}
+              <H1Text
+                style={{
+                  fontSize: 42,
+                  width: '90%',
+                  marginHorizontal: '5%',
+                  position: 'absolute',
+                  bottom: Dimensions.get('window').height * 0.5,
+                }}
+                label={ReturnImageOrText(index)}
+              />
+            )}
           {index > 0 && (
             <View style={{ top: '65%' }}>
               <H2Text
@@ -131,6 +114,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
         </TouchableOpacity>
       );
     });
+
   return (
     <SafeAreaView
       forceInset={{ top: 'always', bottom: 'always' }}
@@ -173,10 +157,10 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               outputRange: [
                 550,
                 Dimensions.get('window').width * 0.05 +
-                  // eslint-disable-next-line no-nested-ternary
-                  (i18n.currentLocale() === LocaleType.KO
-                    ? 200
-                    : i18n.currentLocale() === LocaleType.CH
+                // eslint-disable-next-line no-nested-ternary
+                (currentLocalization() === LocaleType.KO
+                  ? 200
+                  : currentLocalization() === LocaleType.CH
                     ? 180
                     : 230),
                 Platform.OS === 'ios'
@@ -272,7 +256,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             position: 'absolute',
             bottom: 40,
           }}
-          handler={() => callApi()}
+          handler={() => guestSignIn()}
         />
         <FlatButton
           title={i18n.t('account_label.existing_login')}
