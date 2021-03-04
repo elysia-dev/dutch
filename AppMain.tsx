@@ -11,17 +11,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 // import { AppLoading } from 'expo';
 import * as Notifications from 'expo-notifications';
 
-/* eslint-disable @typescript-eslint/camelcase */
 import {
-  useFonts,
-  Roboto_300Light,
-  Roboto_400Regular,
-  Roboto_700Bold,
-} from '@expo-google-fonts/roboto';
-
-import {
-  ActivityIndicator,
-  View,
   AppState,
   AppStateStatus,
 } from 'react-native';
@@ -125,14 +115,6 @@ const AppMain = () => {
   const navigationRef = useRef<NavigationContainerRef>(null);
 
   const appState = useRef(AppState.currentState);
-
-  /* eslint-disable @typescript-eslint/camelcase */
-  const [fontsLoaded] = useFonts({
-    Roboto_300Light,
-    Roboto_400Regular,
-    Roboto_700Bold,
-  });
-
   const [currencyState, setCurrencyState] = useState({
     currencyUnit: '$',
     currencyRatio: 1,
@@ -292,6 +274,10 @@ const AppMain = () => {
   }, [state.user.currency]);
 
   useEffect(() => {
+    if (state.user.provider === ProviderType.GUEST) {
+      return;
+    }
+
     AppState.addEventListener('change', handleAppStateChange);
 
     const isTransactionEnd = (type: NotificationType) => {
@@ -372,20 +358,6 @@ const AppMain = () => {
   }, []);
 
   const RootStack = createStackNavigator();
-
-  if (!fontsLoaded) {
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
-          alignSelf: 'center',
-        }}>
-        <ActivityIndicator size="large" color="#3679B5" />
-      </View>
-    );
-  }
 
   return (
     <NavigationContainer ref={navigationRef}>

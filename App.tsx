@@ -5,6 +5,13 @@ import React, { useEffect, useState } from 'react';
 import * as Sentry from 'sentry-expo';
 import * as Updates from 'expo-updates';
 
+import {
+  useFonts,
+  Roboto_300Light,
+  Roboto_400Regular,
+  Roboto_700Bold,
+} from '@expo-google-fonts/roboto';
+
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
 
@@ -16,6 +23,13 @@ Sentry.init({
 });
 
 const App = () => {
+  /* eslint-disable @typescript-eslint/camelcase */
+  const [fontsLoaded] = useFonts({
+    Roboto_300Light,
+    Roboto_400Regular,
+    Roboto_700Bold,
+  });
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const checkUpdateAndRefreshApp = async () => {
@@ -35,7 +49,7 @@ const App = () => {
     checkUpdateAndRefreshApp();
   }, []);
 
-  if (loading) {
+  if (loading || !fontsLoaded) {
     return <Loading />;
   } else {
     return <AppMain />;
