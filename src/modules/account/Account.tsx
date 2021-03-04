@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import InitializeEmail from './InitializeEmail';
-import Signup from './Signup';
 import Login from './Login';
 import LockAccount from './LockAccount';
 import CurrentPassword from './CurrentPassword';
 import RecoverPassword from './RecoverPassword';
-import CertifySignup from './CertifySignup';
 import { AccountPage } from '../../enums/pageEnum';
 import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
@@ -26,8 +24,8 @@ export const Account: FunctionComponent = () => {
         signedIn === SignInStatus.DELETE
           ? AccountPage.WithdrawnMember
           : signedIn === SignInStatus.EXPIRED
-          ? AccountPage.ExpiredAccount
-          : AccountPage.IntroduceElysia
+            ? AccountPage.ExpiredAccount
+            : AccountPage.IntroduceElysia
       }
       headerMode="none">
       <Stack.Screen
@@ -38,13 +36,6 @@ export const Account: FunctionComponent = () => {
         name={AccountPage.InitializeEmail}
         component={InitializeEmail}
       />
-      <Stack.Screen
-        name={AccountPage.Signup}
-        component={Signup}
-        options={{
-          gestureEnabled: false,
-        }}
-      />
       <Stack.Screen name={AccountPage.Login} component={Login} />
       <Stack.Screen name={AccountPage.LockAccount} component={LockAccount} />
       <Stack.Screen
@@ -54,10 +45,6 @@ export const Account: FunctionComponent = () => {
       <Stack.Screen
         name={AccountPage.RecoverPassword}
         component={RecoverPassword}
-      />
-      <Stack.Screen
-        name={AccountPage.CertifySignup}
-        component={CertifySignup}
       />
       <Stack.Screen
         name={AccountPage.CertifyRecover}

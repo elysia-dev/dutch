@@ -113,9 +113,8 @@ const Login: FunctionComponent = () => {
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('account_errors.password_do_not_match')} ${
-                    state.error
-                  }/5`
+                ? ` ${i18n.t('account_errors.password_do_not_match')} ${state.error
+                }/5`
                 : undefined
             }
             helperIcon={state.error !== 0 ? 'Error' : undefined}
@@ -124,7 +123,7 @@ const Login: FunctionComponent = () => {
             label={i18n.t('account_label.account_email')}
             value={route.params.email}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
           />
         </>
       }

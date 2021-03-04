@@ -43,11 +43,7 @@ const InitializeEmail: FunctionComponent = () => {
         }
       })
       .catch((e) => {
-        if (e.response.status === 400) {
-          alert(i18n.t('account.try_again_later'));
-        } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
+        alert(i18n.t('account_errors.unmatched_email'));
       });
   };
 
@@ -98,12 +94,12 @@ const InitializeEmail: FunctionComponent = () => {
               state.errorLength === 1
                 ? i18n.t('account.insert_account_email')
                 : state.errorReg === 1
-                ? i18n.t('account.check_email')
-                : i18n.t('account_label.continue')
+                  ? i18n.t('account.check_email')
+                  : i18n.t('account_label.continue')
             }
             handler={
               state.errorLength === 1 || state.errorReg === 1
-                ? () => {}
+                ? () => { }
                 : () => callEmailApi()
             }
             variant={
