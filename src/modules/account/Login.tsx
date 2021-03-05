@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -12,6 +11,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { TitleText } from '../../shared/components/Texts';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import { setToken } from '../../asyncStorages/token';
 
 type ParamList = {
   Login: {
@@ -29,10 +29,6 @@ const Login: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
   const { signIn, Server } = useContext(FunctionContext);
   const { user } = useContext(UserContext);
-
-  const storeToken = async (token: string) => {
-    await AsyncStorage.setItem('@token', token);
-  };
 
   const callRecoverApi = () => {
     Server.certifyEmail_recover(
@@ -73,7 +69,7 @@ const Login: FunctionComponent = () => {
               email: route.params.email,
             });
           } else if (res.data.status === 'success') {
-            await storeToken(res.data.token!);
+            await setToken(res.data.token!);
             signIn();
             // navigation.navigate('Main');
           }

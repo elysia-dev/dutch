@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import AsyncStorage from '@react-native-community/async-storage';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
@@ -17,6 +16,7 @@ import { CurrencyResponse } from '../types/CurrencyResponse';
 import getEnvironment from '../utiles/getEnvironment';
 import { SignOut } from '../enums/SignInStatus';
 import LocaleType from '../enums/LocaleType';
+import { removeToken } from '../asyncStorages/token';
 
 export default class Server {
   token: string;
@@ -120,7 +120,7 @@ export default class Server {
 
   logout = async () => {
     try {
-      await AsyncStorage.removeItem('@token');
+      await removeToken();
       return true;
     } catch (exception) {
       return false;

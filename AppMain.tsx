@@ -7,7 +7,6 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-community/async-storage';
 // import { AppLoading } from 'expo';
 import * as Notifications from 'expo-notifications';
 
@@ -42,6 +41,7 @@ import Loading from './src/modules/main/Loading';
 import NotificationStatus from './src/enums/NotificationStatus';
 import NotificationData from './src/types/NotificationData';
 import ProviderType from './src/enums/ProviderType';
+import { getToken, removeToken } from './src/asyncStorages/token';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -121,7 +121,7 @@ const AppMain = () => {
   const { currencyUnit, currencyRatio } = currencyState;
 
   const signOut = async (signInStatus: SignOut) => {
-    await AsyncStorage.removeItem('@token');
+    await removeToken();
     setState({ ...defaultState, signedIn: signInStatus });
   };
 
@@ -141,7 +141,7 @@ const AppMain = () => {
   }
 
   const signIn = async () => {
-    const token = await AsyncStorage.getItem('@token');
+    const token = await getToken();
     const authServer = new Server(signOut, token !== null ? token : '');
     if (token) {
       await authServer
