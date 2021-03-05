@@ -47,6 +47,7 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { getToken, setToken } from '../../asyncStorages/token';
 import { getRequestId, setRequestId } from '../../asyncStorages/reqeustId';
 import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAddress';
+import { Page, WalletPage } from '../../enums/pageEnum';
 
 interface Props {
   resetHandler: () => void;
@@ -524,6 +525,17 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               )
           ) : (
               <>
+                <WalletButton
+                  title={'Elysia'}
+                  selected={state.wallet === WalletType.ELYSIA}
+                  modeHandler={() => {
+                    setState({ ...state, wallet: WalletType.ELYSIA });
+                    navigation.navigate(Page.Wallet, {
+                      screen: WalletPage.NewPassword
+                    });
+                  }}
+                  type={WalletType.NEW}
+                />
                 <WalletButton
                   title={'MetaMask'}
                   selected={state.wallet === WalletType.METAMASK_MOBILE}

@@ -48,3 +48,16 @@ export enum DashboardPage {
   RemainingBalance = 'RemainingBalance',
   EventList = 'EventList',
 }
+
+export enum WalletPage {
+  NewPassword = 'NewPassword',
+  ConfirmPassword = 'ConfirmPassword',
+  SecureWalletNotice = 'SecureWalletNotice',
+  ShowSeedPharase = 'ShowSeedPharase',
+  ConfirmSeedPharase = 'ConfirmSeedPharase',
+  Congratulations = 'Congratulations'
+}
+
+export enum Page {
+  Wallet = 'Wallet',
+}
