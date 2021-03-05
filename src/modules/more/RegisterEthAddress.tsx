@@ -20,7 +20,6 @@ import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics';
 import Clipboard from 'expo-clipboard';
-import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../i18n/i18n';
 
 import {
@@ -45,6 +44,9 @@ import ProviderType from '../../enums/ProviderType';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
+import { getToken, setToken } from '../../asyncStorages/token';
+import { getRequestId, setRequestId } from '../../asyncStorages/reqeustId';
+import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAddress';
 
 interface Props {
   resetHandler: () => void;
@@ -143,44 +145,47 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       });
   };
 
-  const callApi = (type: string) => {
-    Server.requestEthAddressRegister()
-      .then(async (res) => {
-        await storeRequestId(res.data.id);
-        if (type === 'metamask') {
-          Linking.openURL(
-            `https://metamask.app.link/dapp/${
-              getEnvironment().dappUrl
-            }/ethAddress/${res.data.id}`,
-          ).catch((_e) => {
-            storeDeeplink('metamask/id1438144202', 'io.metamask');
-          });
-        } else if (type === 'imtoken') {
-          Linking.openURL(
-            `imtokenv2://navigate?screen=DappView&url=https://${
-              getEnvironment().dappUrl
-            }/ethAddress/${res.data.id}`,
-          ).catch((_e) => {
-            storeDeeplink(
-              'imtoken-btc-eth-wallet/id1384798940',
-              'im.token.app',
-            );
-          });
-        }
-      })
-      .catch((e) => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
+  const callApi = async (type: string) => {
+    const token = await getToken();
+
+    if (!token) {
+      const res = await createGuestAndRegisterAddress(user.language);
+      setRequestId(res.requestId);
+      openExternalWallet(type, res.requestId);
+      signIn();
+    } else {
+      const requestId = (await Server.requestEthAddressRegister()).data.id;
+      setRequestId(requestId);
+      openExternalWallet(type, requestId);
+    }
   };
+
+  const openExternalWallet = (type: string, requestId: string) => {
+    if (type === 'metamask') {
+      Linking.openURL(
+        `https://metamask.app.link/dapp/${getEnvironment().dappUrl
+        }/ethAddress/${requestId}`,
+      ).catch((_e) => {
+        storeDeeplink('metamask/id1438144202', 'io.metamask');
+      });
+    } else if (type === 'imtoken') {
+      Linking.openURL(
+        `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
+        }/ethAddress/${requestId}`,
+      ).catch((_e) => {
+        storeDeeplink(
+          'imtoken-btc-eth-wallet/id1384798940',
+          'im.token.app',
+        );
+      });
+    }
+  }
 
   const copyLink = () => {
     Server.requestEthAddressRegister()
       .then((res) => {
-        const url = `https://${getEnvironment().dappUrl}/ethAddress/${
-          res.data.id
-        }`;
+        const url = `https://${getEnvironment().dappUrl}/ethAddress/${res.data.id
+          }`;
         Clipboard.setString(url);
         alert(i18n.t('more_label.copied', { url }));
       })
@@ -189,21 +194,14 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       });
   };
 
-  const storeToken = async (token: string) => {
-    await AsyncStorage.setItem('@token', token);
-  };
-
-  const storeRequestId = async (id: string) => {
-    await AsyncStorage.setItem('@requestId', id);
-  };
-
   const checkGuestUserInfo = async () => {
-    const requestId = await AsyncStorage.getItem('@requestId');
+    const requestId = await getRequestId();
+
     if (requestId) {
       Server.checkEthAddressRegisteration(requestId)
         .then(async (res) => {
           if (res.data.status === 'success' && res.data.token) {
-            await storeToken(res.data.token);
+            await setToken(res.data.token);
             signIn();
           }
         })
@@ -341,13 +339,12 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   <View style={{ flexDirection: 'column', flex: 4 }}>
                     <H3Text
                       style={{ marginTop: 9, textAlign: 'right' }}
-                      label={`${
-                        state.balance
-                          ? commaFormatter(
-                              (parseFloat(state.balance) / 10 ** 18).toFixed(3),
-                            )
-                          : '-.--'
-                      }`}
+                      label={`${state.balance
+                        ? commaFormatter(
+                          (parseFloat(state.balance) / 10 ** 18).toFixed(3),
+                        )
+                        : '-.--'
+                        }`}
                     />
                     <P3Text
                       style={{
@@ -355,16 +352,15 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                         marginTop: 8,
                         textAlign: 'right',
                       }}
-                      label={`= ${
-                        state.balance
-                          ? currencyFormatter(
-                              '$',
-                              1,
-                              (elPrice * parseFloat(state.balance)) / 10 ** 18,
-                              2,
-                            )
-                          : '$ -.--'
-                      }`}
+                      label={`= ${state.balance
+                        ? currencyFormatter(
+                          '$',
+                          1,
+                          (elPrice * parseFloat(state.balance)) / 10 ** 18,
+                          2,
+                        )
+                        : '$ -.--'
+                        }`}
                     />
                   </View>
                 </View>
@@ -426,74 +422,74 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               </View>
             </>
           ) : (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-              }}>
               <View
                 style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  height: 140,
-                  flexDirection: 'column',
-                  padding: 20,
-                  backgroundColor: '#fff',
-                  elevation: 6,
-                  shadowColor: '#1C1C1C4D',
-                  shadowOffset: { width: 0, height: 0 },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 4,
-                  borderRadius: 10,
-                  marginTop: 20,
-                  top: 0,
-                  position: 'relative',
-                  marginBottom: 25,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
                 }}>
                 <View
                   style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+                    width: Dimensions.get('window').width * 0.9,
+                    height: 140,
+                    flexDirection: 'column',
+                    padding: 20,
+                    backgroundColor: '#fff',
+                    elevation: 6,
+                    shadowColor: '#1C1C1C4D',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 4,
+                    borderRadius: 10,
+                    marginTop: 20,
+                    top: 0,
+                    position: 'relative',
+                    marginBottom: 25,
                   }}>
-                  <P3Text
-                    label={'*  '}
+                  <View
                     style={{
-                      color: '#CC3743',
-                    }}
-                  />
-                  <P3Text
-                    label={i18n.t('more.check_1')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                  <P3Text
-                    label={i18n.t('more.check_2')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                  <P3Text
-                    label={i18n.t('more.check_3')}
-                    style={{ color: '#1C1C1C' }}
-                  />
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <P3Text
+                      label={'*  '}
+                      style={{
+                        color: '#CC3743',
+                      }}
+                    />
+                    <P3Text
+                      label={i18n.t('more.check_1')}
+                      style={{ color: '#1C1C1C' }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <P3Text label={'*  '} style={{ color: '#CC3743' }} />
+                    <P3Text
+                      label={i18n.t('more.check_2')}
+                      style={{ color: '#1C1C1C' }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                    <P3Text label={'*  '} style={{ color: '#CC3743' }} />
+                    <P3Text
+                      label={i18n.t('more.check_3')}
+                      style={{ color: '#1C1C1C' }}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          )
+            )
         }
         button={
           // eslint-disable-next-line no-nested-ternary
@@ -508,7 +504,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     [
                       {
                         text: 'Cancel',
-                        onPress: () => {},
+                        onPress: () => { },
                         style: 'cancel',
                       },
                       {
@@ -524,39 +520,39 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                 }}
               />
             ) : (
-              <></>
-            )
+                <></>
+              )
           ) : (
-            <>
-              <WalletButton
-                title={'MetaMask'}
-                selected={state.wallet === WalletType.METAMASK_MOBILE}
-                modeHandler={() => {
-                  setState({ ...state, wallet: WalletType.METAMASK_MOBILE });
-                  callApi('metamask');
-                }}
-                type={WalletType.METAMASK_MOBILE}
-              />
-              <WalletButton
-                title={'imToken'}
-                selected={state.wallet === WalletType.IMTOKEN_MOBILE}
-                modeHandler={() => {
-                  setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE });
-                  callApi('imtoken');
-                }}
-                type={WalletType.IMTOKEN_MOBILE}
-              />
-              <WalletButton
-                title={'Copy Link'}
-                selected={state.wallet === WalletType.METAMASK_PC}
-                modeHandler={() => {
-                  setState({ ...state, wallet: WalletType.METAMASK_PC });
-                  copyLink();
-                }}
-                type={WalletType.METAMASK_PC}
-              />
-            </>
-          )
+              <>
+                <WalletButton
+                  title={'MetaMask'}
+                  selected={state.wallet === WalletType.METAMASK_MOBILE}
+                  modeHandler={() => {
+                    setState({ ...state, wallet: WalletType.METAMASK_MOBILE });
+                    callApi('metamask');
+                  }}
+                  type={WalletType.METAMASK_MOBILE}
+                />
+                <WalletButton
+                  title={'imToken'}
+                  selected={state.wallet === WalletType.IMTOKEN_MOBILE}
+                  modeHandler={() => {
+                    setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE });
+                    callApi('imtoken');
+                  }}
+                  type={WalletType.IMTOKEN_MOBILE}
+                />
+                <WalletButton
+                  title={'Copy Link'}
+                  selected={state.wallet === WalletType.METAMASK_PC}
+                  modeHandler={() => {
+                    setState({ ...state, wallet: WalletType.METAMASK_PC });
+                    copyLink();
+                  }}
+                  type={WalletType.METAMASK_PC}
+                />
+              </>
+            )
         }
       />
       {state.confirmModal && (
