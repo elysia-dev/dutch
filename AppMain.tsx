@@ -43,6 +43,7 @@ import NotificationStatus from './src/enums/NotificationStatus';
 import NotificationData from './src/types/NotificationData';
 import ProviderType from './src/enums/ProviderType';
 import { getToken, removeToken } from './src/asyncStorages/token';
+import { Page } from './src/enums/pageEnum';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -452,25 +453,25 @@ const AppMain = () => {
             <RootStack.Navigator headerMode="none">
               {state.signedIn === SignInStatus.PENDING ? (
                 <RootStack.Screen
-                  name={'LoadingScreen'}
+                  name={Page.LoadingScreen}
                   component={Loading}
                   options={{ animationEnabled: false }}
                 />
               ) : state.signedIn === SignInStatus.SIGNIN ? (
                 <>
-                  <RootStack.Screen name={'Main'} component={Main} />
-                  <RootStack.Screen name={'Dashboard'} component={Dashboard} />
-                  <RootStack.Screen name={'More'} component={More} />
-                  <RootStack.Screen name={'Product'} component={Products} />
-                  <RootStack.Screen name={'Wallet'} component={Wallet} />
+                  <RootStack.Screen name={Page.Main} component={Main} />
+                  <RootStack.Screen name={Page.Dashboard} component={Dashboard} />
+                  <RootStack.Screen name={Page.More} component={More} />
+                  <RootStack.Screen name={Page.Product} component={Products} />
+                  <RootStack.Screen name={Page.Wallet} component={Wallet} />
                 </>
               ) : (
                     <>
-                      <RootStack.Screen name={'Account'} component={Account} />
+                      <RootStack.Screen name={Page.Account} component={Account} />
                     </>
                   )}
               <RootStack.Screen
-                name={'BlockScreen'}
+                name={Page.BlockScreen}
                 component={BlockScreen}
                 options={{ animationEnabled: false }}
               />

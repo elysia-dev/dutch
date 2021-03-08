@@ -1,3 +1,10 @@
+export enum MainPage {
+  DashboardMain = 'DashboardMain',
+  ProductsMain = 'ProductsMain',
+  NotificationMain = 'NotificationMain',
+  MoreMain = 'MoreMain',
+}
+
 export enum ProductPage {
   MainList = 'MainList',
   ProductStory = 'ProductStory',
@@ -59,5 +66,12 @@ export enum WalletPage {
 }
 
 export enum Page {
+  LoadingScreen = 'LoadingScreen',
+  Dashboard = 'DashBoard',
+  Main = 'Main',
+  More = 'More',
+  Product = 'Product',
+  Account = 'Account',
+  BlockScreen = 'BlockScreen',
   Wallet = 'Wallet',
 }

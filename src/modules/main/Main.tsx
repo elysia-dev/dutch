@@ -18,6 +18,7 @@ import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import UserContext from '../../contexts/UserContext';
+import { MainPage } from '../../enums/pageEnum';
 
 const Icon = styled.Image`
   position: absolute;
@@ -45,7 +46,7 @@ const Main: FunctionComponent = () => {
           },
         }}>
         <Tab.Screen
-          name="DashboardMain"
+          name={MainPage.DashboardMain}
           component={DashBoardMain}
           options={{
             tabBarLabel: '',
@@ -77,7 +78,7 @@ const Main: FunctionComponent = () => {
           }}
         />
         <Tab.Screen
-          name="ProductsMain"
+          name={MainPage.ProductsMain}
           component={MainList}
           options={{
             unmountOnBlur: true,
@@ -94,7 +95,7 @@ const Main: FunctionComponent = () => {
           }}
         />
         <Tab.Screen
-          name="NotificationMain"
+          name={MainPage.NotificationMain}
           component={Notifications}
           options={{
             tabBarLabel: '',
@@ -127,7 +128,7 @@ const Main: FunctionComponent = () => {
           }}
         />
         <Tab.Screen
-          name="MoreMain"
+          name={MainPage.MoreMain}
           component={MainInfo}
           options={{
             tabBarLabel: '',

@@ -8,6 +8,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import i18n from '../../i18n/i18n';
 import AccountLayout from '../../shared/components/AccountLayout';
 import FunctionContext from '../../contexts/FunctionContext';
+import { MainPage, Page } from '../../enums/pageEnum';
 
 type ParamList = {
   ResetPassword: {
@@ -44,7 +45,7 @@ const ResetPassword: FunctionComponent = () => {
           } else if (res.data.status === 'same') {
             alert(i18n.t('account.reset_current_same'));
           }
-          navigation.navigate('Main', { screen: 'MoreMain' });
+          navigation.navigate(Page.Main, { screen: MainPage.MoreMain });
         })
         .catch((e) => {
           if (e.response.status === 400) {
@@ -52,7 +53,7 @@ const ResetPassword: FunctionComponent = () => {
           } else if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
           }
-          navigation.navigate('Main', { screen: 'MoreMain' });
+          navigation.navigate(Page.Main, { screen: MainPage.MoreMain });
         });
     }
   };
@@ -106,7 +107,7 @@ const ResetPassword: FunctionComponent = () => {
               <TextField
                 label={i18n.t('account_label.new_password')}
                 value={state.password}
-                eventHandler={() => {}}
+                eventHandler={() => { }}
                 editable={false}
                 secure={true}
               />
@@ -119,7 +120,7 @@ const ResetPassword: FunctionComponent = () => {
               eventHandler={
                 state.step === 1
                   ? (input: string) => setState({ ...state, password: input })
-                  : () => {}
+                  : () => { }
               }
               secure={true}
               helperText={
@@ -137,7 +138,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextField
             label={i18n.t('account_label.current_password')}
             editable={false}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
             value={route.params.currentPassword}
             secure={true}
           />
@@ -163,11 +164,11 @@ const ResetPassword: FunctionComponent = () => {
               }}
             />
           ) : (
-            <SubmitButton
-              title={i18n.t('account_label.change')}
-              handler={() => callChangeApi()}
-            />
-          )}
+              <SubmitButton
+                title={i18n.t('account_label.change')}
+                handler={() => callChangeApi()}
+              />
+            )}
         </>
       }
     />
