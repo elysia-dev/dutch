@@ -5,6 +5,7 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 import PasswordLayout from './components/PasswordLayout';
 import PasswordDialPad from './components/PasswordDialPad';
 import { WalletPage } from '../../enums/pageEnum';
+import { setPassword } from '../../asyncStorages/password';
 
 type RouteParams = {
   ConfirmPassword: {
@@ -23,10 +24,9 @@ const ConfirmPassword: FunctionComponent = () => {
         <P1Text style={{ textAlign: 'center' }} label={'It used for authentication'} />
       </View>
       <PasswordDialPad
-        nextHandler={(password) => {
+        nextHandler={async (password) => {
           if (route.params.password === password) {
-            // save encrypted password
-            // next page
+            await setPassword(password)
             navigation.navigate(WalletPage.SecureWalletNotice)
           } else {
             alert(false)
