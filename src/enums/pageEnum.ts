@@ -60,7 +60,7 @@ export enum WalletPage {
   NewPassword = 'NewPassword',
   ConfirmPassword = 'ConfirmPassword',
   SecureWalletNotice = 'SecureWalletNotice',
-  ShowSeedPharase = 'ShowSeedPharase',
+  NewSeedPharase = 'NewSeedPharase',
   ConfirmSeedPharase = 'ConfirmSeedPharase',
   Congratulations = 'Congratulations'
 }
