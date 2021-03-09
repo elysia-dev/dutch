@@ -1,13 +1,25 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import PasswordLayout from './components/PasswordLayout';
 import { WalletPage } from '../../enums/pageEnum';
 import NextButton from './components/NextButton';
+import { Wallet } from 'ethers';
+import secureEthers from '../../utiles/secureEthers';
+import Loading from '../main/Loading';
 
 const SecureWalletNotice: FunctionComponent = () => {
   const navigation = useNavigation();
+  const [wallet, setWallet] = useState<Wallet>();
+
+  useEffect(() => {
+    setWallet(secureEthers.Wallet.createRandom());
+  }, [])
+
+  if (!wallet) {
+    return <Loading />
+  }
 
   return (
     <PasswordLayout>
@@ -22,7 +34,7 @@ const SecureWalletNotice: FunctionComponent = () => {
           marginRight: 0,
           width: '100%'
         }}
-        handler={() => navigation.navigate(WalletPage.NewSeedPharase)}
+        handler={() => navigation.navigate(WalletPage.BackupSeedPharase, { mnemonic: wallet.mnemonic.phrase })}
       />
     </PasswordLayout>
   );

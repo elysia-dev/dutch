@@ -23,7 +23,7 @@ import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
 import currentLocalization from './src/utiles/currentLocalization';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
-import Wallet from './src/modules/wallet/Wallet';
+import Wallet from './src/modules/wallet/WalletMain';
 import Notification, { isNotification } from './src/types/Notification';
 
 import UserContext from './src/contexts/UserContext';

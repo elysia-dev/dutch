@@ -6,14 +6,13 @@ import PasswordLayout from './components/PasswordLayout';
 import { WalletPage } from '../../enums/pageEnum';
 import NextButton from './components/NextButton';
 
-const NewSeedPharase: FunctionComponent = () => {
+const BackupSeedPharase: FunctionComponent = () => {
   const navigation = useNavigation();
-
   return (
     <PasswordLayout>
       <View style={{ length: 200, marginTop: 100, marginBottom: 50 }}>
         <H1Text style={{ textAlign: 'center' }} label={'New Seed Pharase'} />
-        <P1Text style={{ textAlign: 'center' }} label={'It used for authentication'} />
+        <P1Text style={{ textAlign: 'center' }} label={''} />
       </View>
       <NextButton
         title={'Next'}
@@ -23,4 +22,4 @@ const NewSeedPharase: FunctionComponent = () => {
   );
 };
 
-export default NewSeedPharase;
+export default BackupSeedPharase;
