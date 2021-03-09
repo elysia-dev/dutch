@@ -25,7 +25,7 @@ const PasswordDialPad: FunctionComponent<IPasswordDialPad> = (props) => {
       {
         [0, 1, 2].map((index) => {
           return (
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: 100 }}>
+            <View key={`DialLine${index}`} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', height: 100 }}>
               {
                 [0, 1, 2].map((index2) => {
                   const value = index * 3 + index2;
@@ -37,9 +37,9 @@ const PasswordDialPad: FunctionComponent<IPasswordDialPad> = (props) => {
         })
       }
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', height: 100, alignItems: 'center' }}>
-        <DialButton value={''} pressHandler={() => { }} />
-        <DialButton value={numbers[9].toString()} pressHandler={() => setPassword(password + numbers[9])} />
-        <DialButton value={'←'} pressHandler={() => setPassword(password.slice(0, -1))} />
+        <DialButton key={'dialNone'} value={''} pressHandler={() => { }} />
+        <DialButton key={'dialLast'} value={numbers[9].toString()} pressHandler={() => setPassword(password + numbers[9])} />
+        <DialButton key={'dialRemove'} value={'←'} pressHandler={() => setPassword(password.slice(0, -1))} />
       </View>
     </View>
   );
