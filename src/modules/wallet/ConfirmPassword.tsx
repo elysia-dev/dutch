@@ -5,7 +5,6 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 import PasswordLayout from './components/PasswordLayout';
 import PasswordDialPad from './components/PasswordDialPad';
 import { WalletPage } from '../../enums/pageEnum';
-import { setPassword } from '../../asyncStorages/password';
 
 type RouteParams = {
   ConfirmPassword: {
@@ -26,8 +25,7 @@ const ConfirmPassword: FunctionComponent = () => {
       <PasswordDialPad
         nextHandler={async (password) => {
           if (route.params.password === password) {
-            await setPassword(password)
-            navigation.navigate(WalletPage.SecureWalletNotice)
+            navigation.navigate(WalletPage.SecureWalletNotice, { password });
           } else {
             alert(false)
           }

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { H1Text, P1Text } from '../../shared/components/Texts';

@@ -1,23 +1,29 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import PasswordLayout from './components/PasswordLayout';
 import { WalletPage } from '../../enums/pageEnum';
 import NextButton from './components/NextButton';
-import { Wallet } from 'ethers';
-import secureEthers from '../../utiles/secureEthers';
+import WalletContext from '../../contexts/WalletContext';
 import Loading from '../main/Loading';
+
+type RouteParams = {
+  SecureWalletNotice: {
+    password: string;
+  };
+};
 
 const SecureWalletNotice: FunctionComponent = () => {
   const navigation = useNavigation();
-  const [wallet, setWallet] = useState<Wallet>();
+  const route = useRoute<RouteProp<RouteParams, WalletPage.SecureWalletNotice>>();
+  const { isUnlocked, createNewVaultAndKeychain } = useContext(WalletContext);
 
   useEffect(() => {
-    setWallet(secureEthers.Wallet.createRandom());
+    createNewVaultAndKeychain(route.params.password);
   }, [])
 
-  if (!wallet) {
+  if (!isUnlocked) {
     return <Loading />
   }
 
@@ -34,7 +40,7 @@ const SecureWalletNotice: FunctionComponent = () => {
           marginRight: 0,
           width: '100%'
         }}
-        handler={() => navigation.navigate(WalletPage.BackupSeedPharase, { mnemonic: wallet.mnemonic.phrase })}
+        handler={() => navigation.navigate(WalletPage.BackupSeedPharase)}
       />
     </PasswordLayout>
   );

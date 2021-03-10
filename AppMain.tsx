@@ -44,6 +44,7 @@ import NotificationData from './src/types/NotificationData';
 import ProviderType from './src/enums/ProviderType';
 import { getToken, removeToken } from './src/asyncStorages/token';
 import { Page } from './src/enums/pageEnum';
+import WalletProvider from './src/providers/WalletProvider';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -450,32 +451,34 @@ const AppMain = () => {
               },
               Server: state.Server,
             }}>
-            <RootStack.Navigator headerMode="none">
-              {state.signedIn === SignInStatus.PENDING ? (
+            <WalletProvider>
+              <RootStack.Navigator headerMode="none">
+                {state.signedIn === SignInStatus.PENDING ? (
+                  <RootStack.Screen
+                    name={Page.LoadingScreen}
+                    component={Loading}
+                    options={{ animationEnabled: false }}
+                  />
+                ) : state.signedIn === SignInStatus.SIGNIN ? (
+                  <>
+                    <RootStack.Screen name={Page.Main} component={Main} />
+                    <RootStack.Screen name={Page.Dashboard} component={Dashboard} />
+                    <RootStack.Screen name={Page.More} component={More} />
+                    <RootStack.Screen name={Page.Product} component={Products} />
+                    <RootStack.Screen name={Page.Wallet} component={Wallet} />
+                  </>
+                ) : (
+                      <>
+                        <RootStack.Screen name={Page.Account} component={Account} />
+                      </>
+                    )}
                 <RootStack.Screen
-                  name={Page.LoadingScreen}
-                  component={Loading}
+                  name={Page.BlockScreen}
+                  component={BlockScreen}
                   options={{ animationEnabled: false }}
                 />
-              ) : state.signedIn === SignInStatus.SIGNIN ? (
-                <>
-                  <RootStack.Screen name={Page.Main} component={Main} />
-                  <RootStack.Screen name={Page.Dashboard} component={Dashboard} />
-                  <RootStack.Screen name={Page.More} component={More} />
-                  <RootStack.Screen name={Page.Product} component={Products} />
-                  <RootStack.Screen name={Page.Wallet} component={Wallet} />
-                </>
-              ) : (
-                    <>
-                      <RootStack.Screen name={Page.Account} component={Account} />
-                    </>
-                  )}
-              <RootStack.Screen
-                name={Page.BlockScreen}
-                component={BlockScreen}
-                options={{ animationEnabled: false }}
-              />
-            </RootStack.Navigator>
+              </RootStack.Navigator>
+            </WalletProvider>
           </FunctionContext.Provider>
         </CurrencyContext.Provider>
       </UserContext.Provider>
