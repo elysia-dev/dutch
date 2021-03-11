@@ -19,6 +19,7 @@ type FunctionContextType = {
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
   setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
+  setIsWalletUser: (isWalletUser: boolean) => void;
   Server: Server;
 };
 
@@ -34,6 +35,7 @@ const FunctionContext = createContext<FunctionContextType>({
   setEthAddress: (_address: string) => { },
   setUserExpoPushToken: (_expoPushToken: string) => { },
   setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
+  setIsWalletUser: (isWalletUser: boolean) => { },
   Server: new Server(() => { }, ''),
 });
 

@@ -37,12 +37,12 @@ const InfoArrowImg = styled.Image`
 `;
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
-  const { user } = useContext(UserContext);
+  const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const isNewWalletUser =
+  const isPublicAddressUser =
     user.provider === ProviderType.GUEST || user.provider === ProviderType.ETH;
   const isLegacyAsset2Owner = user.legacyAsset2Value > 0;
 
@@ -176,51 +176,53 @@ const MainInfo: FunctionComponent = () => {
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.RegisterEthAddress,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View>
-                    <P1Text
-                      label={
-                        user.ethAddresses?.length > 0
-                          ? i18n.t('more_label.my_wallet')
-                          : i18n.t('more_label.wallet_connect')
-                      }
-                      style={{ lineHeight: 50, fontSize: 15 }}
-                    />
-                    {!(user.ethAddresses?.length > 0) && (
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: 10,
-                          right: -13,
-                          width: 8,
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: '#FC5C4F',
-                        }}
+            {!isWalletUser &&
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.RegisterEthAddress,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View>
+                      <P1Text
+                        label={
+                          user.ethAddresses?.length > 0
+                            ? i18n.t('more_label.my_wallet')
+                            : i18n.t('more_label.wallet_connect')
+                        }
+                        style={{ lineHeight: 50, fontSize: 15 }}
                       />
-                    )}
+                      {!(user.ethAddresses?.length > 0) && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: -13,
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: '#FC5C4F',
+                          }}
+                        />
+                      )}
+                    </View>
+                    <InfoArrowImg source={require('./images/next_gray.png')} />
                   </View>
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+              </View>
+            }
 
-            {!isNewWalletUser && (
+            {!isPublicAddressUser && (
               <View
                 style={{
                   height: 50,
@@ -363,7 +365,7 @@ const MainInfo: FunctionComponent = () => {
                 </View>
               </TouchableOpacity>
             </View>
-            {!isNewWalletUser && (
+            {!isPublicAddressUser && (
               <View
                 style={{
                   height: 50,

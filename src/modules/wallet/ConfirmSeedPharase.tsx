@@ -5,10 +5,12 @@ import { H1Text, P1Text } from '../../shared/components/Texts';
 import PasswordLayout from './components/PasswordLayout';
 import NextButton from './components/NextButton';
 import WalletContext from '../../contexts/WalletContext';
+import { MainPage } from '../../enums/pageEnum';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const ConfirmSeedPharase: FunctionComponent = () => {
   const navigation = useNavigation();
-
+  const { setIsWalletUser } = useContext(FunctionContext);
   const { wallet } = useContext(WalletContext);
 
   return (
@@ -19,7 +21,10 @@ const ConfirmSeedPharase: FunctionComponent = () => {
       </View>
       <NextButton
         title={'Next'}
-        handler={() => alert("Created!")}
+        handler={() => {
+          setIsWalletUser(true);
+          navigation.navigate(MainPage.DashboardMain)
+        }}
       />
     </PasswordLayout>
   );

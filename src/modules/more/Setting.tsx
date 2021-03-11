@@ -32,9 +32,11 @@ import checkLatestVersion from '../../utiles/checkLatestVersion';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
+import Wallet from '../../core/Wallet';
+import WalletStorage from '../../core/WalletStorage';
 
 const Setting: FunctionComponent = () => {
-  const { user, expoPushToken } = useContext(UserContext);
+  const { user, expoPushToken, isWalletUser } = useContext(UserContext);
   const {
     setLanguage,
     setCurrency,
@@ -115,6 +117,11 @@ const Setting: FunctionComponent = () => {
   };
 
   const buttonTitle = () => {
+    // TODO : 더욱 강력한 경고 문구로 삭제됨. 백업하지 않았으면, 해당 지갑을 복구 할 수 없음을 명시하기
+    if (isWalletUser) {
+      return i18n.t('more_label.disconnect_address');
+    }
+
     switch (user.provider) {
       case ProviderType.ETH:
         return i18n.t('more_label.disconnect_address');
@@ -128,6 +135,30 @@ const Setting: FunctionComponent = () => {
   };
 
   const confirmSignOut = () => {
+    // TODO : 더욱 강력한 경고 문구로 변경하기
+    if (isWalletUser) {
+      return Alert.alert(
+        i18n.t('more_label.disconnect'),
+        i18n.t('more.confirm_disconnect'),
+        [
+          {
+            text: 'Cancel',
+            onPress: () => { },
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              await WalletStorage.clear();
+              signOut(SignInStatus.SIGNOUT);
+            },
+            style: 'default',
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+
     switch (user.provider) {
       case ProviderType.ETH:
         return Alert.alert(
@@ -359,27 +390,27 @@ const Setting: FunctionComponent = () => {
                     <Picker.Item label={'简体中文'} value="zhHans" key={2} />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showLanguageModal: true });
+                    }}>
+                    <P1Text
+                      label={localeText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showLanguageModal: true });
-                      }}>
-                      <P1Text
-                        label={localeText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <H3Text
                 label={i18n.t('more_label.currency')}
@@ -441,27 +472,27 @@ const Setting: FunctionComponent = () => {
                     />
                   </Picker>
                 ) : (
-                    <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      width: '100%',
+                      height: 40,
+                      backgroundColor: '#fff',
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                      setState({ ...state, showCurrencyModal: true });
+                    }}>
+                    <P1Text
+                      label={currencyText()}
                       style={{
-                        width: '100%',
-                        height: 40,
-                        backgroundColor: '#fff',
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
+                        textAlign: 'center',
                       }}
-                      onPress={() => {
-                        setState({ ...state, showCurrencyModal: true });
-                      }}>
-                      <P1Text
-                        label={currencyText()}
-                        style={{
-                          textAlign: 'center',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
               <View
                 style={{

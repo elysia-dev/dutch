@@ -47,6 +47,7 @@ import { Page } from './src/enums/pageEnum';
 import WalletProvider from './src/providers/WalletProvider';
 import AsyncStorage from '@react-native-community/async-storage';
 import { IS_WALLET_USER } from './src/constants/storage';
+import { P1Text } from './src/shared/components/Texts';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -454,6 +455,12 @@ const AppMain = () => {
                     ...state.user,
                     expoPushTokens: expoPushToken ? [expoPushToken] : [],
                   },
+                });
+              },
+              setIsWalletUser: (isWalletUser: boolean) => {
+                setState({
+                  ...state,
+                  isWalletUser: true,
                 });
               },
               Server: state.Server,
