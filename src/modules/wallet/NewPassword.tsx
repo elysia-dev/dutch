@@ -1,22 +1,25 @@
-import React, { FunctionComponent } from 'react';
-import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { H1Text, P1Text } from '../../shared/components/Texts';
-import PasswordDialPad from './components/PasswordDialPad';
-import PasswordLayout from './components/PasswordLayout';
-import { WalletPage } from '../../enums/pageEnum';
+import React, { FunctionComponent, useContext } from 'react';
+import i18n from '../../i18n/i18n';
+import PasswordForm from '../account/PasswordForm';
+import FunctionContext from '../../contexts/FunctionContext';
+import WalletContext from '../../contexts/WalletContext';
+import { Keyboard } from 'react-native'
 
 const NewPassword: FunctionComponent = () => {
-  const navigation = useNavigation();
+  const { setIsWalletUser } = useContext(FunctionContext);
+  const { createNewWallet } = useContext(WalletContext);
 
   return (
-    <PasswordLayout>
-      <View style={{ length: 200, marginTop: 100, marginBottom: 50 }}>
-        <H1Text style={{ textAlign: 'center' }} label={'New Password'} />
-        <P1Text style={{ textAlign: 'center' }} label={'It used for authentication'} />
-      </View>
-      <PasswordDialPad nextHandler={(password) => { navigation.navigate(WalletPage.ConfirmPassword, { password }) }} />
-    </PasswordLayout>
+    <PasswordForm
+      submitButtonTitle={i18n.t('account_label.continue')}
+      submitHandler={(password: string) => {
+        Keyboard.dismiss();
+        createNewWallet(password);
+        setIsWalletUser(true);
+      }}
+      message1={i18n.t('account.create_password')}
+      message2={i18n.t('account.password_confirm')}
+    />
   );
 };
 

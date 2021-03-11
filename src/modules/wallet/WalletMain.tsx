@@ -1,22 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { WalletPage } from '../../enums/pageEnum';
 import NewPassword from './NewPassword';
-import ConfirmPassword from './ConfirmPassword';
 import SecureWalletNotice from './SecureWalletNotice';
 import BackupSeedPharase from './BackupSeedPharase';
 import ConfirmSeedPharase from './ConfirmSeedPharase';
+import UserContext from '../../contexts/UserContext';
+import WalletContext from '../../contexts/WalletContext';
+import Loading from '../main/Loading';
 
 const Stack = createStackNavigator();
 
 const WalletMain = () => {
+  const { isWalletUser } = useContext(UserContext);
+  const { isUnlocked } = useContext(WalletContext);
+
   return (
-    <Stack.Navigator initialRouteName={WalletPage.NewPassword} headerMode="none">
-      <Stack.Screen name={WalletPage.NewPassword} component={NewPassword} />
-      <Stack.Screen name={WalletPage.ConfirmPassword} component={ConfirmPassword} />
-      <Stack.Screen name={WalletPage.SecureWalletNotice} component={SecureWalletNotice} />
-      <Stack.Screen name={WalletPage.BackupSeedPharase} component={BackupSeedPharase} />
-      <Stack.Screen name={WalletPage.ConfirmSeedPharase} component={ConfirmSeedPharase} />
+    <Stack.Navigator
+      initialRouteName={WalletPage.NewPassword}
+      headerMode="none"
+    >
+      {
+        !isWalletUser && <>
+          <Stack.Screen name={WalletPage.NewPassword} component={NewPassword} />
+          <Stack.Screen name={WalletPage.SecureWalletNotice} component={SecureWalletNotice} />
+        </>
+      }
+      {
+        isWalletUser && !isUnlocked && <Stack.Screen name={WalletPage.CreatingWallet} component={Loading} />
+      }
+      {
+        isWalletUser && isUnlocked && <>
+          <Stack.Screen name={WalletPage.BackupSeedPharase} component={BackupSeedPharase} />
+          <Stack.Screen name={WalletPage.ConfirmSeedPharase} component={ConfirmSeedPharase} />
+        </>
+      }
     </Stack.Navigator>
   );
 };

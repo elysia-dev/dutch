@@ -34,6 +34,7 @@ import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import Wallet from '../../core/Wallet';
 import WalletStorage from '../../core/WalletStorage';
+import WalletContext from '../../contexts/WalletContext';
 
 const Setting: FunctionComponent = () => {
   const { user, expoPushToken, isWalletUser } = useContext(UserContext);
@@ -44,6 +45,7 @@ const Setting: FunctionComponent = () => {
     signOut,
     setUserExpoPushToken,
   } = useContext(FunctionContext);
+  const { setLock } = useContext(WalletContext);
   const navigation = useNavigation();
   const [state, setState] = useState({
     hasPermission: user.expoPushTokens?.includes(expoPushToken),
@@ -149,6 +151,7 @@ const Setting: FunctionComponent = () => {
           {
             text: 'OK',
             onPress: async () => {
+              setLock();
               await WalletStorage.clear();
               signOut(SignInStatus.SIGNOUT);
             },
