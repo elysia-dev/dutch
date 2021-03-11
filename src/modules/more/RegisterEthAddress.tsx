@@ -423,74 +423,74 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               </View>
             </>
           ) : (
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+              }}>
               <View
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
+                  width: Dimensions.get('window').width * 0.9,
+                  height: 140,
+                  flexDirection: 'column',
+                  padding: 20,
+                  backgroundColor: '#fff',
+                  elevation: 6,
+                  shadowColor: '#1C1C1C4D',
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 4,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  top: 0,
+                  position: 'relative',
+                  marginBottom: 25,
                 }}>
                 <View
                   style={{
-                    width: Dimensions.get('window').width * 0.9,
-                    height: 140,
-                    flexDirection: 'column',
-                    padding: 20,
-                    backgroundColor: '#fff',
-                    elevation: 6,
-                    shadowColor: '#1C1C1C4D',
-                    shadowOffset: { width: 0, height: 0 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 4,
-                    borderRadius: 10,
-                    marginTop: 20,
-                    top: 0,
-                    position: 'relative',
-                    marginBottom: 25,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}>
-                  <View
+                  <P3Text
+                    label={'*  '}
                     style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <P3Text
-                      label={'*  '}
-                      style={{
-                        color: '#CC3743',
-                      }}
-                    />
-                    <P3Text
-                      label={i18n.t('more.check_1')}
-                      style={{ color: '#1C1C1C' }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                    <P3Text
-                      label={i18n.t('more.check_2')}
-                      style={{ color: '#1C1C1C' }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}>
-                    <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                    <P3Text
-                      label={i18n.t('more.check_3')}
-                      style={{ color: '#1C1C1C' }}
-                    />
-                  </View>
+                      color: '#CC3743',
+                    }}
+                  />
+                  <P3Text
+                    label={i18n.t('more.check_1')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
+                  <P3Text
+                    label={i18n.t('more.check_2')}
+                    style={{ color: '#1C1C1C' }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
+                  <P3Text
+                    label={i18n.t('more.check_3')}
+                    style={{ color: '#1C1C1C' }}
+                  />
                 </View>
               </View>
-            )
+            </View>
+          )
         }
         button={
           // eslint-disable-next-line no-nested-ternary
@@ -521,50 +521,48 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                 }}
               />
             ) : (
-                <></>
-              )
-          ) : (
-              <>
-                <WalletButton
-                  title={'Elysia'}
-                  selected={state.wallet === WalletType.ELYSIA}
-                  modeHandler={() => {
-                    setState({ ...state, wallet: WalletType.ELYSIA });
-                    navigation.navigate(Page.Wallet, {
-                      screen: WalletPage.NewPassword
-                    });
-                  }}
-                  type={WalletType.NEW}
-                />
-                <WalletButton
-                  title={'MetaMask'}
-                  selected={state.wallet === WalletType.METAMASK_MOBILE}
-                  modeHandler={() => {
-                    setState({ ...state, wallet: WalletType.METAMASK_MOBILE });
-                    callApi('metamask');
-                  }}
-                  type={WalletType.METAMASK_MOBILE}
-                />
-                <WalletButton
-                  title={'imToken'}
-                  selected={state.wallet === WalletType.IMTOKEN_MOBILE}
-                  modeHandler={() => {
-                    setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE });
-                    callApi('imtoken');
-                  }}
-                  type={WalletType.IMTOKEN_MOBILE}
-                />
-                <WalletButton
-                  title={'Copy Link'}
-                  selected={state.wallet === WalletType.METAMASK_PC}
-                  modeHandler={() => {
-                    setState({ ...state, wallet: WalletType.METAMASK_PC });
-                    copyLink();
-                  }}
-                  type={WalletType.METAMASK_PC}
-                />
-              </>
+              <></>
             )
+          ) : (
+            <>
+              <WalletButton
+                title={'Elysia'}
+                selected={state.wallet === WalletType.ELYSIA}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.ELYSIA });
+                  navigation.navigate(Page.Wallet);
+                }}
+                type={WalletType.ELYSIA}
+              />
+              <WalletButton
+                title={'MetaMask'}
+                selected={state.wallet === WalletType.METAMASK_MOBILE}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.METAMASK_MOBILE });
+                  callApi('metamask');
+                }}
+                type={WalletType.METAMASK_MOBILE}
+              />
+              <WalletButton
+                title={'imToken'}
+                selected={state.wallet === WalletType.IMTOKEN_MOBILE}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.IMTOKEN_MOBILE });
+                  callApi('imtoken');
+                }}
+                type={WalletType.IMTOKEN_MOBILE}
+              />
+              <WalletButton
+                title={'Copy Link'}
+                selected={state.wallet === WalletType.METAMASK_PC}
+                modeHandler={() => {
+                  setState({ ...state, wallet: WalletType.METAMASK_PC });
+                  copyLink();
+                }}
+                type={WalletType.METAMASK_PC}
+              />
+            </>
+          )
         }
       />
       {state.confirmModal && (

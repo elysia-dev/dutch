@@ -7,13 +7,13 @@ const Layout: React.FC = (props) => {
       paddingTop: Platform.OS === 'android' ? 25 : 0,
       height: '100%',
       backgroundColor: 'white',
+      overflow: 'hidden'
     }}>
       <View
         style={{
-          paddingLeft: '5%',
-          paddingRight: '5%',
-          borderBottomWidth: 5,
-          paddingBottom: 60,
+          height: '100%',
+          marginRight: '5%',
+          marginLeft: '5%',
           backgroundColor: 'white'
         }}>
         {props.children}

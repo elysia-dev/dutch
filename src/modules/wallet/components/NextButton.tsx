@@ -27,9 +27,8 @@ const NextButton: FunctionComponent<INextButton> = ({
         borderRadius: 5,
         justifyContent: 'center',
         alignContent: 'center',
-        backgroundColor: AppColors.MAIN,
+        backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
         height: 50,
-
       }}
     >
       <Text
