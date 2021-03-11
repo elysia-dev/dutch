@@ -23,7 +23,6 @@ const WalletMain = () => {
       {
         !isWalletUser && <>
           <Stack.Screen name={WalletPage.NewPassword} component={NewPassword} />
-          <Stack.Screen name={WalletPage.SecureWalletNotice} component={SecureWalletNotice} />
         </>
       }
       {
@@ -31,6 +30,7 @@ const WalletMain = () => {
       }
       {
         isWalletUser && isUnlocked && <>
+          <Stack.Screen name={WalletPage.SecureWalletNotice} component={SecureWalletNotice} />
           <Stack.Screen name={WalletPage.BackupSeedPharase} component={BackupSeedPharase} />
           <Stack.Screen name={WalletPage.ConfirmSeedPharase} component={ConfirmSeedPharase} />
         </>

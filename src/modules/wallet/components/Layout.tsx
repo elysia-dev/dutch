@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 
-const PasswordLayout: React.FC = (props) => {
+const Layout: React.FC = (props) => {
   return (
     <View style={{
       paddingTop: Platform.OS === 'android' ? 25 : 0,
@@ -22,4 +22,4 @@ const PasswordLayout: React.FC = (props) => {
   );
 };
 
-export default PasswordLayout;
+export default Layout;

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { H1Text, P1Text } from '../../shared/components/Texts';
-import PasswordLayout from './components/PasswordLayout';
+import Layout from './components/Layout';
 import NextButton from './components/NextButton';
 import WalletContext from '../../contexts/WalletContext';
 import { MainPage } from '../../enums/pageEnum';
@@ -14,7 +14,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
 
   return (
-    <PasswordLayout>
+    <Layout>
       <View style={{ length: 200, marginTop: 100, marginBottom: 50 }}>
         <H1Text style={{ textAlign: 'center' }} label={'Confirm Seed Pharase'} />
         <P1Text style={{ textAlign: 'center' }} label={wallet?.getMnemonic() || ''} />
@@ -26,7 +26,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
           navigation.navigate(MainPage.DashboardMain)
         }}
       />
-    </PasswordLayout>
+    </Layout>
   );
 };
 
