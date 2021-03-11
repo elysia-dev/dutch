@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
+import React, { FunctionComponent, useContext, useEffect } from 'react';
 import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { H1Text, P1Text } from '../../shared/components/Texts';
@@ -17,10 +17,10 @@ type RouteParams = {
 const SecureWalletNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<RouteParams, WalletPage.SecureWalletNotice>>();
-  const { isUnlocked, createNewVaultAndKeychain } = useContext(WalletContext);
+  const { isUnlocked, createNewWallet } = useContext(WalletContext);
 
   useEffect(() => {
-    createNewVaultAndKeychain(route.params.password);
+    createNewWallet(route.params.password);
   }, [])
 
   if (!isUnlocked) {

@@ -1,33 +1,28 @@
 import { createContext } from 'react';
-
-export type Account = {
-  public: string,
-  private: string,
-  mnemonic: string,
-}
+import Wallet from '../core/Wallet';
 
 export type WalletContextType = {
   isUnlocked: boolean;
-  password: string | null;
-  accounts: Account[];
+  password: string | undefined;
+  wallet: Wallet | undefined;
   setLock: () => void;
   unlock: (password: string) => Promise<void>;
-  createNewVaultAndKeychain: (password: string) => Promise<void>;
-  createNewVaultAndRestore: (password: string, seed: string) => Promise<void>;
+  createNewWallet: (password: string) => Promise<void>;
+  restoreWallet: (password: string, seed: string) => Promise<void>;
 };
 
 export const staticWalletInitialState = {
   isUnlocked: false,
-  password: null,
-  accounts: [],
+  password: undefined,
+  wallet: undefined,
 }
 
 export const walletInitialState = {
   ...staticWalletInitialState,
   setLock: () => { },
   unlock: async (_password: string) => { },
-  createNewVaultAndKeychain: async (_password: string) => { },
-  createNewVaultAndRestore: async (_password: string, _seed: string) => { },
+  createNewWallet: async (_password: string) => { },
+  restoreWallet: async (_password: string, _seed: string) => { },
 }
 
 const WalletContext = createContext<WalletContextType>(walletInitialState);

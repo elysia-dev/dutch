@@ -1,10 +1,8 @@
 import React from 'react';
-import AsyncStorage from "@react-native-community/async-storage";
-import CryptoES from 'crypto-es';
 import { useState } from "react";
-import { ENCRYPTED_VAULT } from "../constants/storage";
 import WalletContext, { WalletContextType, walletInitialState, staticWalletInitialState } from "../contexts/WalletContext";
-import createNewWallet from '../utiles/createNewWallet';
+import Wallet from '../core/Wallet';
+import WalletStorage from '../core/WalletStorage';
 
 const WalletProvider: React.FC = (props) => {
   const [state, setState] = useState<WalletContextType>(walletInitialState)
@@ -17,48 +15,25 @@ const WalletProvider: React.FC = (props) => {
   }
 
   const unlock = async (password: string) => {
-    const encryptedVault = await AsyncStorage.getItem(ENCRYPTED_VAULT);
-
-    if (!encryptedVault) {
-      throw new Error('No previous vault.')
-    }
-
-    const decrypted = await CryptoES.AES.decrypt(encryptedVault, password);
-    const data = decrypted.toString(CryptoES.enc.Utf8);
-
-    if (!data) {
-      throw new Error('Invalid password')
-    }
-
-    const accounts = JSON.parse(data);
-
-    if (accounts.length <= 0) {
-      throw new Error('Invalid Vault')
-    }
+    const wallet = await WalletStorage.load(password);
 
     setState({
       ...state,
       isUnlocked: true,
-      accounts: accounts,
+      wallet,
+      password,
     })
   }
 
-  const createNewVaultAndKeychain = async (password: string) => {
-    const newWallet = await createNewWallet();
-
-    const newKeychain = [{
-      public: newWallet.public,
-      private: newWallet.private,
-      mnemonic: newWallet.mnemonic,
-    }]
-
-    const encryptedVault = await CryptoES.AES.encrypt(JSON.stringify(newKeychain), password);
-    await AsyncStorage.setItem(ENCRYPTED_VAULT, encryptedVault.toString());
+  const createNewWallet = async (password: string) => {
+    const newWallet = await Wallet.createNewWallet();
+    WalletStorage.save(newWallet, password);
 
     setState({
       ...state,
       isUnlocked: true,
       password: password,
+      wallet: newWallet,
     })
   }
 
@@ -68,7 +43,7 @@ const WalletProvider: React.FC = (props) => {
         ...state,
         setLock,
         unlock,
-        createNewVaultAndKeychain,
+        createNewWallet,
       }}
     >
       {props.children}
