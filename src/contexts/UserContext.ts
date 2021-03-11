@@ -31,6 +31,7 @@ type UserContextType = {
   balance: string;
   notifications: Notification[];
   expoPushToken: string;
+  isWalletUser: boolean;
 };
 
 const UserContext = createContext<UserContextType>({
@@ -56,6 +57,7 @@ const UserContext = createContext<UserContextType>({
   balance: '0',
   notifications: [] as Notification[],
   expoPushToken: '',
+  isWalletUser: false,
 });
 
 export default UserContext;

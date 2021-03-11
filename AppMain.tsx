@@ -45,6 +45,8 @@ import ProviderType from './src/enums/ProviderType';
 import { getToken, removeToken } from './src/asyncStorages/token';
 import { Page } from './src/enums/pageEnum';
 import WalletProvider from './src/providers/WalletProvider';
+import AsyncStorage from '@react-native-community/async-storage';
+import { IS_WALLET_USER } from './src/constants/storage';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -73,6 +75,7 @@ interface AppInformation {
   elPrice: number;
   krwPrice: number;
   cnyPrice: number;
+  isWalletUser: boolean;
 }
 
 const defaultState = {
@@ -102,6 +105,7 @@ const defaultState = {
   elPrice: 0,
   krwPrice: 0,
   cnyPrice: 0,
+  isWalletUser: false,
 };
 
 Notifications.setNotificationHandler({
@@ -131,6 +135,7 @@ const AppMain = () => {
   const guestSignIn = async () => {
     const authServer = new Server(signOut, '');
     const allCurrency = (await authServer.getAllCurrency()).data;
+    const isWalletUser = await AsyncStorage.getItem(IS_WALLET_USER);
 
     setState({
       ...state,
@@ -140,6 +145,7 @@ const AppMain = () => {
       Server: authServer,
       cnyPrice:
         allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
+      isWalletUser: isWalletUser === 'true',
     });
   }
 
@@ -379,6 +385,7 @@ const AppMain = () => {
           balance: state.balance,
           notifications: state.notifications,
           expoPushToken: state.expoPushToken,
+          isWalletUser: state.isWalletUser,
         }}>
         <CurrencyContext.Provider
           value={{
@@ -468,10 +475,10 @@ const AppMain = () => {
                     <RootStack.Screen name={Page.Wallet} component={Wallet} />
                   </>
                 ) : (
-                      <>
-                        <RootStack.Screen name={Page.Account} component={Account} />
-                      </>
-                    )}
+                  <>
+                    <RootStack.Screen name={Page.Account} component={Account} />
+                  </>
+                )}
                 <RootStack.Screen
                   name={Page.BlockScreen}
                   component={BlockScreen}

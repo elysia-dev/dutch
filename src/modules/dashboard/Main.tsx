@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -27,7 +27,7 @@ import CurrencyContext from '../../contexts/CurrencyContext';
 
 export const Main: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { user, ownerships, balance } = useContext(UserContext);
+  const { user, ownerships, balance, isWalletUser } = useContext(UserContext);
   const { elPrice } = useContext(CurrencyContext);
   const { refreshUser, Server } = useContext(FunctionContext);
   const legacyTotal: number | undefined = parseFloat(
