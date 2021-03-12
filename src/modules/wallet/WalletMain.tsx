@@ -3,11 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { WalletPage } from '../../enums/pageEnum';
 import NewPassword from './NewPassword';
 import SecureWalletNotice from './SecureWalletNotice';
-import BackupSeedPharase from './BackupSeedPharase';
-import ConfirmSeedPharase from './ConfirmSeedPharase';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import Loading from '../main/Loading';
+import SeedPharase from './components/SeedPharase';
 
 const Stack = createStackNavigator();
 
@@ -31,8 +30,7 @@ const WalletMain = () => {
       {
         isWalletUser && isUnlocked && <>
           <Stack.Screen name={WalletPage.SecureWalletNotice} component={SecureWalletNotice} />
-          <Stack.Screen name={WalletPage.BackupSeedPharase} component={BackupSeedPharase} />
-          <Stack.Screen name={WalletPage.ConfirmSeedPharase} component={ConfirmSeedPharase} />
+          <Stack.Screen name={WalletPage.SeedPharase} component={SeedPharase} />
         </>
       }
     </Stack.Navigator>

@@ -1,31 +1,111 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { H1Text, P1Text } from '../../shared/components/Texts';
+import { P2Text, TitleText } from '../../shared/components/Texts';
 import Layout from './components/Layout';
 import NextButton from './components/NextButton';
-import WalletContext from '../../contexts/WalletContext';
 import { MainPage } from '../../enums/pageEnum';
-import FunctionContext from '../../contexts/FunctionContext';
+import MnemonicQuize from './components/MnemonicQuize';
+import TouchableWordBox from './components/TouchableWordBox'
+import WalletContext from '../../contexts/WalletContext';
+import WalletStorage from '../../core/WalletStorage';
+
+type State = {
+  currentIndex: number,
+  selectedWords: [string, string, string, string],
+  selectedIndices: [number, number, number, number],
+  ramdomizedMnemonic: string[],
+}
 
 const ConfirmSeedPharase: FunctionComponent = () => {
-  const navigation = useNavigation();
-  const { setIsWalletUser } = useContext(FunctionContext);
   const { wallet } = useContext(WalletContext);
+  const navigation = useNavigation();
+  const [state, setState] = useState<State>({
+    currentIndex: 0,
+    selectedWords: ['', '', '', ''],
+    selectedIndices: [0, 0, 0, 0],
+    ramdomizedMnemonic: wallet!.getMnemonic().split(' ').sort(() => .5 - Math.random())
+  })
+
+  useEffect(() => {
+    const arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      .sort(() => .5 - Math.random())
+      .filter((_item, index) => index <= 3).sort((a, b) => a - b);
+
+    setState({
+      ...state,
+      selectedIndices: [arr[0], arr[1], arr[2], arr[3]]
+    })
+  }, [])
 
   return (
     <Layout>
-      <View style={{ length: 200, marginTop: 100, marginBottom: 50 }}>
-        <H1Text style={{ textAlign: 'center' }} label={'Confirm Seed Pharase'} />
-        <P1Text style={{ textAlign: 'center' }} label={wallet?.getMnemonic() || ''} />
-      </View>
-      <NextButton
-        title={'Next'}
-        handler={() => {
-          setIsWalletUser(true);
-          navigation.navigate(MainPage.DashboardMain)
+      <TitleText
+        style={{ marginTop: 50, lineHeight: 35, }}
+        label={'시드 문구를 확인해주세요.'}
+      />
+      <P2Text
+        style={{ marginTop: 10, marginBottom: 25 }}
+        label={'보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.'}
+      />
+      <MnemonicQuize
+        currentIndex={state.currentIndex}
+        selectedIndices={state.selectedIndices}
+        selectedWords={state.selectedWords}
+        clear={(index) => {
+          const newWords = state.selectedWords
+          newWords[index] = '';
+          setState({
+            ...state,
+            selectedWords: newWords,
+            currentIndex: index,
+          })
         }}
       />
+      <View
+        style={{
+          marginTop: 20,
+          height: 190,
+          display: 'flex',
+          alignContent: 'space-between',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+        }}
+      >
+        {
+          state.ramdomizedMnemonic.map((word, index) => {
+            return <TouchableWordBox
+              key={index}
+              word={word}
+              selected={!!state.selectedWords.find((selctedWord) => word === selctedWord)}
+              onPress={() => {
+                if (state.currentIndex >= 4) return
+
+                const newWords = state.selectedWords
+                newWords[state.currentIndex] = word;
+
+                setState({
+                  ...state,
+                  selectedWords: newWords,
+                  currentIndex: state.currentIndex + 1,
+                })
+              }}
+            />
+          })
+        }
+      </View>
+      <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
+        <NextButton
+          title={'확인 완료'}
+          disabled={
+            !state.selectedIndices.reduce((res, cur, index) => res && (state.selectedWords[index] === wallet?.getMnemonic().split(' ')[cur]), true)
+          }
+          handler={async () => {
+            await WalletStorage.completeBackup();
+            navigation.navigate(MainPage.DashboardMain)
+          }}
+        />
+      </View>
     </Layout>
   );
 };

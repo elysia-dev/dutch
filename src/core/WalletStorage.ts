@@ -1,4 +1,4 @@
-import { ENCRYPTED_WALLET, IS_WALLET_USER } from "../constants/storage";
+import { BACKUP_COMPLETE, ENCRYPTED_WALLET, IS_WALLET_USER } from "../constants/storage";
 import AsyncStorage from "@react-native-community/async-storage";
 import CryptoES from 'crypto-es';
 import Wallet from "./Wallet";
@@ -29,7 +29,16 @@ class WalletStorage {
 
   static async clear(): Promise<void> {
     await AsyncStorage.removeItem(ENCRYPTED_WALLET);
+    await AsyncStorage.removeItem(BACKUP_COMPLETE);
     await AsyncStorage.removeItem(IS_WALLET_USER);
+  }
+
+  static async completeBackup(): Promise<void> {
+    await AsyncStorage.setItem(BACKUP_COMPLETE, 'true');
+  }
+
+  static async isBackupComplete(): Promise<boolean> {
+    return (await AsyncStorage.getItem(BACKUP_COMPLETE)) === 'true';
   }
 }
 

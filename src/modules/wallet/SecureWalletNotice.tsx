@@ -48,7 +48,7 @@ const SecureWalletNotice: FunctionComponent = () => {
           style={{
             position: 'absolute',
           }}
-          handler={() => navigation.navigate(WalletPage.BackupSeedPharase)}
+          handler={() => navigation.navigate(WalletPage.SeedPharase)}
         />
       </View>
     </Layout>
