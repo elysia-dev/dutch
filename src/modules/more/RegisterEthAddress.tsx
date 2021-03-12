@@ -209,8 +209,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         .catch((e) => {
           if (e.response.status === 500) {
             alert(i18n.t('account_errors.server'));
-          } else if (e.response.status === 404) {
-            signIn();
           }
         });
     }
