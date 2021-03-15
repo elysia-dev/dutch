@@ -1,15 +1,14 @@
 import React from 'react';
 import { useState } from "react";
-import WalletContext, { WalletContextType, walletInitialState, staticWalletInitialState } from "../contexts/WalletContext";
+import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
 import Wallet from '../core/Wallet';
 import WalletStorage from '../core/WalletStorage';
 
 const WalletProvider: React.FC = (props) => {
-  const [state, setState] = useState<WalletContextType>(walletInitialState)
+  const [state, setState] = useState<WalletStateType>(staticWalletInitialState)
 
   const setLock = async () => {
     setState({
-      ...state,
       ...staticWalletInitialState
     })
   }
@@ -44,6 +43,7 @@ const WalletProvider: React.FC = (props) => {
         setLock,
         unlock,
         createNewWallet,
+        restoreWallet: async () => { },
       }}
     >
       {props.children}

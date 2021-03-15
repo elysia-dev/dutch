@@ -59,7 +59,6 @@ export enum DashboardPage {
 export enum WalletPage {
   NewPassword = 'NewPassword',
   SecureWalletNotice = 'SecureWalletNotice',
-  CreatingWallet = 'CreatingWallet',
   SeedPharase = 'SeedPharase',
   Congratulations = 'Congratulations'
 }

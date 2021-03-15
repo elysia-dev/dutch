@@ -11,6 +11,12 @@ export type WalletContextType = {
   restoreWallet: (password: string, seed: string) => Promise<void>;
 };
 
+export type WalletStateType = {
+  isUnlocked: boolean;
+  password: string | undefined;
+  wallet: Wallet | undefined;
+}
+
 export const staticWalletInitialState = {
   isUnlocked: false,
   password: undefined,
