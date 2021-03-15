@@ -1,8 +1,8 @@
-enum CurrencyIcon {
+enum CryptoType {
   EL = 'el',
   ETH = 'eth',
   BNB = 'bnb',
   ASSET = 'asset',
 }
 
-export default CurrencyIcon
+export default CryptoType

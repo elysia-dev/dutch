@@ -1,12 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
-import CurrencyIcon from '../../../enums/CurrencyIcon';
+import CryptoType from '../../../enums/CryptoType';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
 import AssetItem from './AssetItem';
 
 type Asset = {
-  icon: CurrencyIcon;
+  type: CryptoType;
   title: string;
   currencyValue: string;
   unitValue: string;

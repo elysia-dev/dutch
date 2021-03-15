@@ -1,17 +1,17 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import CurrencyIcon from '../../../enums/CurrencyIcon';
+import CryptoType from '../../../enums/CryptoType';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 
 interface IAssetItem {
-  icon: CurrencyIcon
+  type: CryptoType
   title: string
   currencyValue: string
   unitValue: string
 }
 
 export const AssetItem: React.FC<IAssetItem> = ({
-  icon,
+  type,
   title,
   currencyValue,
   unitValue,
@@ -20,11 +20,11 @@ export const AssetItem: React.FC<IAssetItem> = ({
     <View style={{ display: 'flex', flexDirection: 'row', height: 50, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}>
       <Image
         source={
-          icon === CurrencyIcon.EL ?
+          type === CryptoType.EL ?
             require('../images/el.png') :
-            icon === CurrencyIcon.ETH ?
+            type === CryptoType.ETH ?
               require('../images/eth.png') :
-              icon === CurrencyIcon.BNB ?
+              type === CryptoType.BNB ?
                 require('../images/bnb.png') :
                 require('../images/asset.png')
         }

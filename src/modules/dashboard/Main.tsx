@@ -7,19 +7,19 @@ import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
-import CurrencyIcon from '../../enums/CurrencyIcon';
+import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
 import { MorePage, Page } from '../../enums/pageEnum';
 
 const testAssets = [
-  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA1', icon: CurrencyIcon.ASSET },
-  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA1', icon: CurrencyIcon.ASSET },
+  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA1', type: CryptoType.ASSET },
+  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA1', type: CryptoType.ASSET },
 ]
 
 const testCurrencies = [
-  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', icon: CurrencyIcon.EL },
-  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', icon: CurrencyIcon.ETH },
-  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', icon: CurrencyIcon.BNB },
+  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', type: CryptoType.EL },
+  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', type: CryptoType.ETH },
+  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', type: CryptoType.BNB },
 ]
 
 export const Main: React.FC = () => {
