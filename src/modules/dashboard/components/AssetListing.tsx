@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import CurrencyIcon from '../../../enums/CurrencyIcon';
-import { H3Text } from '../../../shared/components/Texts';
+import { H3Text, P2Text } from '../../../shared/components/Texts';
 import AssetItem from './AssetItem';
 
 type Asset = {
@@ -44,6 +44,18 @@ export const AssetListing: React.FC<IAssetListing> = ({
             {...asset}
           />
         })
+      }
+      {
+        assets.length === 0 && <View
+          style={{
+            height: 100,
+          }}
+        >
+          <P2Text
+            style={{ textAlign: 'center', marginTop: 40 }}
+            label={'투자내역이 없습니다.'}
+          />
+        </View>
       }
       <View style={{
         height: 15,
