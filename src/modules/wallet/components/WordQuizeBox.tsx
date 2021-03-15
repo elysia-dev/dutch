@@ -22,7 +22,7 @@ const WordQuizeBox: React.FC<IWordQuizeBox> = ({ index, word, active, onPress })
           borderStyle: 'dashed',
           borderColor: active ? AppColors.MAIN : AppColors.GREY,
           width: 100,
-          height: 35,
+          height: 40,
           padding: 10,
         }}
         onPress={() => {
