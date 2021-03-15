@@ -67,7 +67,7 @@ const H4Title = styled.Text`
   color: #1c1c1c;
   font-size: 14px;
   text-align: left;
-  font-family: 'Roboto_400Regular';
+  font-family: 'Roboto_700Bold';
 `;
 
 export const H4Text: FunctionComponent<{

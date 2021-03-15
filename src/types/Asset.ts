@@ -5,6 +5,7 @@ type Asset = {
   title: string;
   currencyValue: string;
   unitValue: string;
+  unit: string;
 }
 
 export default Asset

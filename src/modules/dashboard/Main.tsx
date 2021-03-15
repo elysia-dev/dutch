@@ -9,17 +9,18 @@ import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import { MorePage, Page } from '../../enums/pageEnum';
+import { DashboardPage, MorePage, Page } from '../../enums/pageEnum';
+import Asset from '../../types/Asset';
 
 const testAssets = [
-  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA1', type: CryptoType.ASSET },
-  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA1', type: CryptoType.ASSET },
+  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA2', type: CryptoType.ASSET, unit: 'EA2' },
+  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA3', type: CryptoType.ASSET, unit: 'EA3' },
 ]
 
 const testCurrencies = [
-  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', type: CryptoType.EL },
-  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', type: CryptoType.ETH },
-  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', type: CryptoType.BNB },
+  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', type: CryptoType.EL, unit: 'EL' },
+  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', type: CryptoType.ETH, unit: 'ETH' },
+  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', type: CryptoType.BNB, unit: 'BNB' },
 ]
 
 export const Main: React.FC = () => {
@@ -27,6 +28,18 @@ export const Main: React.FC = () => {
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
+
+  const cryptoCurrencyDetailHandler = (asset: Asset) => {
+    navigation.navigate(
+      Page.Dashboard,
+      {
+        screen: DashboardPage.CryptoDetail,
+        params: {
+          asset
+        }
+      }
+    );
+  }
 
   return (
     <ScrollView
@@ -105,6 +118,7 @@ export const Main: React.FC = () => {
         <AssetListing
           title={'내 투자금'}
           assets={testAssets}
+          itemPressHandler={() => { }}
           totalValue={'$ 789,123,456,000'}
         />
         <View style={{ height: 25 }} />
@@ -112,6 +126,7 @@ export const Main: React.FC = () => {
           title={'내 지갑'}
           assets={testCurrencies}
           totalValue={'$ 50.23'}
+          itemPressHandler={cryptoCurrencyDetailHandler}
         />
       </BasicLayout>
     </ScrollView>

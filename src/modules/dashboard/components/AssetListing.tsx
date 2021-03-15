@@ -9,12 +9,14 @@ interface IAssetListing {
   title: string
   totalValue: string
   assets: Asset[]
+  itemPressHandler: (asset: Asset) => void
 }
 
 export const AssetListing: React.FC<IAssetListing> = ({
   title,
   totalValue,
   assets,
+  itemPressHandler,
 }) => {
   return (
     <View>
@@ -34,7 +36,8 @@ export const AssetListing: React.FC<IAssetListing> = ({
         assets.map((asset, index) => {
           return <AssetItem
             key={index}
-            {...asset}
+            asset={asset}
+            onPress={itemPressHandler}
           />
         })
       }
