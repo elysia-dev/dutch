@@ -1,236 +1,86 @@
-import React, { FunctionComponent, useContext, useEffect } from 'react';
+import React from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-  ActivityIndicator,
-  Modal,
-  Platform,
-  RefreshControl,
+  ScrollView, View, Image
 } from 'react-native';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
-import { BalanceCard } from './components/BalanceCard';
-import { WithdrawalCard } from './components/WithdrawalCard';
-import { Asset } from './components/Asset';
-import { DashboardPage } from '../../enums/pageEnum';
-import VirtualTab from '../../shared/components/VirtualTab';
-import { H2Text, H1Text } from '../../shared/components/Texts';
-import ProviderType from '../../enums/ProviderType';
-import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
-import CurrencyContext from '../../contexts/CurrencyContext';
+import { useScrollToTop } from '@react-navigation/native';
+import { H3Text, TitleText } from '../../shared/components/Texts';
+import BasicLayout from '../../shared/components/BasicLayout';
+import AssetListing from './components/AssetListing';
+import AppColors from '../../enums/AppColors';
+import CurrencyIcon from '../../enums/CurrencyIcon';
 
-export const Main: FunctionComponent = () => {
-  const navigation = useNavigation();
-  const { user, ownerships, balance, isWalletUser } = useContext(UserContext);
-  const { elPrice } = useContext(CurrencyContext);
-  const { refreshUser, Server } = useContext(FunctionContext);
-  const legacyTotal: number | undefined = parseFloat(
-    (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
-  );
-  const [refreshing, setRefreshing] = React.useState(false);
+const testAssets = [
+  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA1', icon: CurrencyIcon.ASSET },
+  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA1', icon: CurrencyIcon.ASSET },
+]
 
+const testCurrencies = [
+  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', icon: CurrencyIcon.EL },
+  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', icon: CurrencyIcon.ETH },
+  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', icon: CurrencyIcon.BNB },
+]
+
+export const Main: React.FC = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    refreshUser().then(() => setRefreshing(false));
-  }, [Server.token]);
-
-  const ownershipsList = ownerships.map((ownership, index) => (
-    <Asset
-      handler={() => {
-        navigation.navigate('Dashboard', {
-          screen: DashboardPage.OwnershipDetail,
-          params: { ownershipId: ownership.id },
-        });
-      }}
-      ownership={ownership}
-      key={index}
-    />
-  ));
-
-  const greeting = () => {
-    switch (user.provider) {
-      case ProviderType.GUEST:
-        return i18n.t('dashboard.connect_address');
-      case ProviderType.ETH:
-        return i18n.t('greeting_new', {
-          email: `${user.ethAddresses[0]?.substring(
-            0,
-            6,
-          )}...${user.ethAddresses[0]?.substring(
-            user.ethAddresses[0]?.length - 4,
-          )}`,
-        });
-      case ProviderType.EMAIL:
-        return user.firstName && user.lastName
-          ? i18n.t('greeting', {
-            firstName: user.firstName,
-            lastName: user.lastName === null ? '' : user.lastName,
-          })
-          : i18n.t('greeting_new', {
-            email: user.email,
-          });
-      default:
-        return '';
-    }
-  };
-
   return (
-    <>
-      <ScrollView
-        ref={ref}
-        style={{
-          width: '100%',
-          height: '100%',
-          top: 0,
-          backgroundColor: '#FAFCFF',
-        }}
-        refreshControl={
-          user.provider !== ProviderType.GUEST ? (
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          ) : undefined
-        }>
-        <SafeAreaView>
+    <ScrollView
+      ref={ref}
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'white',
+      }}
+    >
+      <BasicLayout >
+        <H3Text
+          style={{ marginTop: 50 }}
+          label={'총 자산'}
+        />
+        <View style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingBottom: 15,
+          borderBottomWidth: 1,
+          borderBottomColor: AppColors.GREY,
+          marginTop: 15,
+          marginBottom: 40,
+        }}>
           <View
             style={{
-              paddingTop: Platform.OS === 'android' ? 65 : 45,
-              height: '100%',
-              padding: 20,
-            }}>
-            <H1Text style={{ marginBottom: 40 }} label={greeting()} />
-            <BalanceCard
-              balance={balance}
-              handler={() =>
-                navigation.navigate('Dashboard', {
-                  screen: DashboardPage.SummaryReport,
-                })
-              }
-            />
-            {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-              [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
-                user.legacyWalletRefundStatus,
-              ) && (
-                <WithdrawalCard
-                  balance={legacyTotal}
-                  handler={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.RemainingBalance,
-                    })
-                  }
-                  redDot={
-                    user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
-                  }
-                />
-              )}
-            <View
+              shadowRadius: 3,
+              shadowColor: '#6F6F6F',
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 0.4,
+            }}
+          >
+            <Image
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-              }}>
-              {ownershipsList}
-              {ownerships.length > 0 && (
-                <TouchableOpacity
-                  style={{
-                    position: 'relative',
-                    width: '47%',
-                    height: 200,
-                    borderRadius: 10,
-                    backgroundColor: '#fff',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    shadowOffset: { width: 2, height: 2 },
-                    shadowColor: '#1C1C1C4D',
-                    shadowOpacity: 0.8,
-                    shadowRadius: 7,
-                    elevation: 6,
-                    marginBottom: 20,
-                  }}
-                  onPress={() =>
-                    navigation.navigate('ProductsMain', { refresh: true })
-                  }>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      fontFamily: 'Roboto_700Bold',
-                      fontSize: 25,
-                      color: '#838383',
-                    }}>
-                    {'+'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-            {ownerships.length === 0 && (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.InvestmentGuide,
-                    })
-                  }
-                  style={{
-                    marginBottom: 25,
-                    width: '100%',
-                    backgroundColor: '#fff',
-                    borderRadius: 10,
-                    shadowColor: '#3679B540',
-                    shadowOffset: { width: 1, height: 1 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
-                    elevation: 8,
-                  }}>
-                  <Image
-                    source={require('./images/investmentguide.png')}
-                    style={{ width: '100%', height: 416, borderRadius: 10 }}
-                  />
-                  <H2Text
-                    style={{ position: 'absolute', top: 30, left: 25 }}
-                    label={i18n.t('dashboard.investment_guide')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('ProductsMain', { refresh: true })
-                  }
-                  style={{
-                    marginBottom: 25,
-                    width: '100%',
-                    backgroundColor: '#fff',
-                    borderRadius: 10,
-                    shadowColor: '#3679B540',
-                    shadowOffset: { width: 1, height: 1 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
-                    elevation: 8,
-                  }}>
-                  <Image
-                    source={require('./images/newinvestment.png')}
-                    style={{ width: '100%', height: 250, borderRadius: 10 }}
-                  />
-                  <H2Text
-                    style={{
-                      position: 'absolute',
-                      top: 30,
-                      left: 25,
-                    }}
-                    label={i18n.t('dashboard.invest_first_asset')}
-                  />
-                </TouchableOpacity>
-              </>
-            )}
+                height: 50,
+                width: 50,
+              }}
+              source={require('./images/newWallet.png')}
+            />
           </View>
-          <VirtualTab />
-        </SafeAreaView>
-      </ScrollView>
-    </>
+          <TitleText
+            label={'$ 789,123,456,000'}
+            style={{ marginLeft: 20 }}
+          />
+        </View>
+        <AssetListing
+          title={'내 투자금'}
+          assets={testAssets}
+          totalValue={'$ 789,123,456,000'}
+        />
+        <View style={{ height: 25 }} />
+        <AssetListing
+          title={'내 지갑'}
+          assets={testCurrencies}
+          totalValue={'$ 50.23'}
+        />
+      </BasicLayout>
+    </ScrollView>
   );
 };

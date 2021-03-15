@@ -63,6 +63,22 @@ export const H3Text: FunctionComponent<{
   return <H3Title style={style} allowFontScaling={false}>{label}</H3Title>;
 };
 
+const H4Title = styled.Text`
+  color: #1c1c1c;
+  font-size: 14px;
+  text-align: left;
+  font-family: 'Roboto_400Regular';
+`;
+
+export const H4Text: FunctionComponent<{
+  label: string;
+  style?: StyleProp<TextStyle>;
+  // handler: (event: GestureResponderEvent) => void;
+}> = ({ label, style }) => {
+  return <H4Title style={style} allowFontScaling={false}>{label}</H4Title>;
+};
+
+
 const P2Title = styled.Text`
   color: #838383;
   font-size: 15px;
