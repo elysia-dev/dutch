@@ -2,15 +2,9 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import CryptoType from '../../../enums/CryptoType';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
+import Asset from '../../../types/Asset';
 
-interface IAssetItem {
-  type: CryptoType
-  title: string
-  currencyValue: string
-  unitValue: string
-}
-
-export const AssetItem: React.FC<IAssetItem> = ({
+export const AssetItem: React.FC<Asset> = ({
   type,
   title,
   currencyValue,

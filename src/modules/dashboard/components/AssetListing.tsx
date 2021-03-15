@@ -1,16 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
-import CryptoType from '../../../enums/CryptoType';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
+import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
-
-type Asset = {
-  type: CryptoType;
-  title: string;
-  currencyValue: string;
-  unitValue: string;
-}
 
 interface IAssetListing {
   title: string
