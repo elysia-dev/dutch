@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components/native';
 import { StyleProp, ViewStyle, TextStyle, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import AppColors from '../../../enums/AppColors';
-import AppFonts from '../../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
+import AppFonts from '../../enums/AppFonts';
 
 interface INextButton {
   title: string;
@@ -18,12 +17,14 @@ const NextButton: FunctionComponent<INextButton> = ({
   title,
   handler,
   disabled,
+  style,
 }) => {
   return (
     <TouchableOpacity
       onPress={handler}
       disabled={disabled}
       style={{
+        ...style as {},
         borderRadius: 5,
         justifyContent: 'center',
         alignContent: 'center',

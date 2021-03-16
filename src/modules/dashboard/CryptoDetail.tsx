@@ -10,6 +10,7 @@ import AssetGraph from './components/AssetGraph';
 import TransactionList from './components/TransactionList';
 import CryptoType from '../../enums/CryptoType';
 import AppColors from '../../enums/AppColors';
+import NextButton from '../../shared/components/NextButton';
 
 const now = Date.now();
 
@@ -45,42 +46,71 @@ const CryptoDetail: React.FC = () => {
   const [filter, setFilter] = useState<number>(0);
 
   return (
-    <WrapperLayout
-      title={`${route.params.asset.title} 보유수량`}
-      isScrolling={true}
-      backButtonHandler={() => navigation.goBack()}
-      body={
-        <BasicLayout>
-          <AssetItem
-            asset={route.params.asset}
-            touchable={false}
-          />
-          <View style={{ height: 30 }} />
-          <SelectBox
-            options={['1개월', '1년', '최대']}
-            selected={range}
-            select={(range) => setRange(range)}
-          />
-          <AssetGraph
-            data={graphData}
-            lineColor={
-              cryptoType === CryptoType.EL ?
-                AppColors.EL_BLUE :
-                cryptoType === CryptoType.ETH ?
-                  AppColors.ETH_BLUE :
-                  AppColors.BNB_YELLOW
-            }
-          />
-          <View style={{ height: 20 }} />
-          <SelectBox
-            options={['ALL', 'OUT', 'IN']}
-            selected={filter}
-            select={(filter) => setFilter(filter)}
-          />
-          <TransactionList data={testCryptoTx} unit={route.params.asset.unit} />
-        </BasicLayout>
-      }
-    />
+    <>
+      <WrapperLayout
+        title={`${route.params.asset.title} 보유수량`}
+        isScrolling={true}
+        backButtonHandler={() => navigation.goBack()}
+        body={
+          <BasicLayout>
+            <AssetItem
+              asset={route.params.asset}
+              touchable={false}
+            />
+            <View style={{ height: 30 }} />
+            <SelectBox
+              options={['1개월', '1년', '최대']}
+              selected={range}
+              select={(range) => setRange(range)}
+            />
+            <AssetGraph
+              data={graphData}
+              lineColor={
+                cryptoType === CryptoType.EL ?
+                  AppColors.EL_BLUE :
+                  cryptoType === CryptoType.ETH ?
+                    AppColors.ETH_BLUE :
+                    AppColors.BNB_YELLOW
+              }
+            />
+            <View style={{ height: 20 }} />
+            <SelectBox
+              options={['ALL', 'OUT', 'IN']}
+              selected={filter}
+              select={(filter) => setFilter(filter)}
+            />
+            <TransactionList data={testCryptoTx} unit={route.params.asset.unit} />
+            <View style={{ height: 100 }} />
+          </BasicLayout>
+        }
+      />
+      <View
+        style={{
+          marginLeft: '5%',
+          marginRight: '5%',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          position: 'absolute',
+          width: '90%',
+          bottom: 10
+        }}
+      >
+        <NextButton
+          style={{
+            width: 160,
+          }}
+          title={'입금하기'}
+          handler={() => { }}
+        />
+        <NextButton
+          style={{
+            width: 160,
+          }}
+          title={'출금하기'}
+          handler={() => { }}
+        />
+      </View>
+    </>
   );
 };
 

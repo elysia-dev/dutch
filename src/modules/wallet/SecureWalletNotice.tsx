@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Layout from './components/Layout';
 import { WalletPage } from '../../enums/pageEnum';
-import NextButton from './components/NextButton';
+import NextButton from '../../shared/components/NextButton';
 import ConfirmBox from './components/ConfirmBox';
 import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';

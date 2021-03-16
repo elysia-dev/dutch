@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { P1Text, P2Text, TitleText } from '../../shared/components/Texts';
 import Layout from './components/Layout';
-import NextButton from './components/NextButton';
+import NextButton from '../../shared/components/NextButton';
 import MnemonicView from './components/MnemonicView';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
