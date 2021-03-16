@@ -13,8 +13,8 @@ import { DashboardPage, MorePage, Page } from '../../enums/pageEnum';
 import Asset from '../../types/Asset';
 
 const testAssets = [
-  { title: 'ASSET#2', currencyValue: '$ 2,000,000', unitValue: '4 EA2', type: CryptoType.ASSET, unit: 'EA2' },
-  { title: 'ASSET#3', currencyValue: '$ 3,000,000', unitValue: '6 EA3', type: CryptoType.ASSET, unit: 'EA3' },
+  { title: 'ASSET#2', currencyValue: '$ 2,000', unitValue: '4 EA2', type: CryptoType.ASSET, unit: 'EA2' },
+  { title: 'ASSET#3', currencyValue: '$ 3,000', unitValue: '6 EA3', type: CryptoType.ASSET, unit: 'EA3' },
 ]
 
 const testCurrencies = [
@@ -64,7 +64,7 @@ export const Main: React.FC = () => {
         }}>
           {
             isWalletUser || user.ethAddresses[0] ? <TitleText
-              label={'$ 789,123,456,000'}
+              label={'$ 789,123'}
             /> :
               <TouchableOpacity
                 style={{
@@ -116,7 +116,7 @@ export const Main: React.FC = () => {
           title={'내 투자금'}
           assets={testAssets}
           itemPressHandler={(asset) => { navigateHandler(DashboardPage.AssetTokenDetail, asset) }}
-          totalValue={'$ 789,123,456,000'}
+          totalValue={'$ 789,123'}
         />
         <View style={{ height: 25 }} />
         <AssetListing

@@ -19,7 +19,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
     <TouchableOpacity
       onPress={() => onPress(asset)}
       disabled={!touchable}
-      style={{ display: 'flex', flexDirection: 'row', height: 50, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
+      style={{ display: 'flex', flexDirection: 'row', height: 60, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
     >
       <Image
         source={
