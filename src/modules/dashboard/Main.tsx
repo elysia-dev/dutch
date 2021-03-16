@@ -56,62 +56,59 @@ export const Main: React.FC = () => {
           label={'총 자산'}
         />
         <View style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
           paddingBottom: 15,
           borderBottomWidth: 1,
           borderBottomColor: AppColors.GREY,
           marginTop: 15,
           marginBottom: 40,
         }}>
-          <View
-            style={{
-              shadowRadius: 3,
-              shadowColor: '#6F6F6F',
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 0.4,
-            }}
-          >
-            <Image
-              style={{
-                height: 50,
-                width: 50,
-              }}
-              source={require('./images/newWallet.png')}
-            />
-          </View>
           {
             isWalletUser || user.ethAddresses[0] ? <TitleText
-              style={{ marginLeft: 20 }}
               label={'$ 789,123,456,000'}
             /> :
               <TouchableOpacity
                 style={{
-                  marginLeft: 20,
                   flex: 1,
                   flexDirection: 'row',
-                  height: 30,
+                  alignItems: 'center',
                 }}
                 onPress={() => {
                   navigation.navigate(Page.More, { screen: MorePage.RegisterEthAddress })
                 }}
               >
+                <View
+                  style={{
+                    shadowRadius: 3,
+                    shadowColor: '#6F6F6F',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.4,
+                  }}
+                >
+                  <Image
+                    style={{
+                      height: 50,
+                      width: 50,
+                    }}
+                    source={require('./images/newWallet.png')}
+                  />
+                </View>
                 <TitleText
                   label={'지갑을 연결해 주세요'}
-                  style={{ height: 30 }}
+                  style={{ height: 30, marginLeft: 20 }}
                 />
-                <Image
-                  source={require('./images/bluedownarrow.png')}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    position: 'absolute',
-                    right: 0,
-                    top: -2,
-                    transform: [{ rotate: '270deg' }],
-                  }}
-                />
+                <View style={{
+                  marginLeft: 'auto',
+                  marginBottom: 5,
+                }}>
+                  <Image
+                    source={require('./images/bluedownarrow.png')}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      transform: [{ rotate: '270deg' }],
+                    }}
+                  />
+                </View>
               </TouchableOpacity>
           }
         </View>
