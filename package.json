@@ -78,6 +78,7 @@
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-localize": "^1.4.2",
     "react-native-maps": "0.27.1",
+    "react-native-responsive-linechart": "^5.7.0",
     "react-native-screens": "^2.11.0",
     "react-native-svg": "12.1.0",
     "react-native-svg-charts": "^5.4.0",
