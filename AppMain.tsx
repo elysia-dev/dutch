@@ -9,6 +9,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 // import { AppLoading } from 'expo';
 import * as Notifications from 'expo-notifications';
+import FlashMessage from "react-native-flash-message";
 
 import {
   AppState,
@@ -491,6 +492,7 @@ const AppMain = () => {
                   options={{ animationEnabled: false }}
                 />
               </RootStack.Navigator>
+              <FlashMessage position="top" />
             </WalletProvider>
           </FunctionContext.Provider>
         </CurrencyContext.Provider>

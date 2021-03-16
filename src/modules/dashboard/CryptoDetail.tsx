@@ -5,12 +5,14 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import AssetItem from './components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
-import { View } from 'react-native';
+import { View, Modal } from 'react-native';
 import AssetGraph from './components/AssetGraph';
 import TransactionList from './components/TransactionList';
 import CryptoType from '../../enums/CryptoType';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
+import Deposit from './components/Deposit';
+import Withdrawal from './components/Withdrawal';
 
 const now = Date.now();
 
@@ -44,6 +46,8 @@ const CryptoDetail: React.FC = () => {
   const navigation = useNavigation();
   const [range, setRange] = useState<number>(0);
   const [filter, setFilter] = useState<number>(0);
+  const [depositModalVisible, setDepositModalVisible] = useState<boolean>(false);
+  const [withdrwalModalVisible, setWithdrawalModalVisible] = useState<boolean>(false);
 
   return (
     <>
@@ -100,16 +104,49 @@ const CryptoDetail: React.FC = () => {
             width: 160,
           }}
           title={'입금하기'}
-          handler={() => { }}
+          handler={() => { setDepositModalVisible(true) }}
         />
         <NextButton
           style={{
             width: 160,
           }}
           title={'출금하기'}
-          handler={() => { }}
+          handler={() => { setWithdrawalModalVisible(true) }}
         />
       </View>
+      {(depositModalVisible ||
+        withdrwalModalVisible) && (
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }} />
+        )}
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={depositModalVisible}
+        onRequestClose={() =>
+          setDepositModalVisible(false)
+        }>
+        <Deposit
+          modalHandler={() => setDepositModalVisible(false)}
+        />
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType={'slide'}
+        visible={withdrwalModalVisible}
+        onRequestClose={() =>
+          setWithdrawalModalVisible(false)
+        }>
+        <Withdrawal
+          modalHandler={() => setWithdrawalModalVisible(false)}
+          submitHandler={() => { }}
+        />
+      </Modal>
     </>
   );
 };
