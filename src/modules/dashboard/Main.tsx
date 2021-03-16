@@ -29,11 +29,11 @@ export const Main: React.FC = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const cryptoCurrencyDetailHandler = (asset: Asset) => {
+  const navigateHandler = (screen: DashboardPage, asset: Asset) => {
     navigation.navigate(
       Page.Dashboard,
       {
-        screen: DashboardPage.CryptoDetail,
+        screen: screen,
         params: {
           asset
         }
@@ -115,7 +115,7 @@ export const Main: React.FC = () => {
         <AssetListing
           title={'내 투자금'}
           assets={testAssets}
-          itemPressHandler={() => { }}
+          itemPressHandler={(asset) => { navigateHandler(DashboardPage.AssetTokenDetail, asset) }}
           totalValue={'$ 789,123,456,000'}
         />
         <View style={{ height: 25 }} />
@@ -123,7 +123,7 @@ export const Main: React.FC = () => {
           title={'내 지갑'}
           assets={testCurrencies}
           totalValue={'$ 50.23'}
-          itemPressHandler={cryptoCurrencyDetailHandler}
+          itemPressHandler={(asset) => { navigateHandler(DashboardPage.CryptoDetail, asset) }}
         />
       </BasicLayout>
     </ScrollView>

@@ -96,7 +96,8 @@ const CryptoDetail: React.FC = () => {
           justifyContent: 'space-between',
           position: 'absolute',
           width: '90%',
-          bottom: 10
+          bottom: 10,
+          backgroundColor: 'white',
         }}
       >
         <NextButton

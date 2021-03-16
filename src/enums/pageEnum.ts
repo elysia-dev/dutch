@@ -55,6 +55,7 @@ export enum DashboardPage {
   RemainingBalance = 'RemainingBalance',
   EventList = 'EventList',
   CryptoDetail = 'CryptoDetail',
+  AssetTokenDetail = 'AssetTokenDetail',
 }
 
 export enum WalletPage {
