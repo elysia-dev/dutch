@@ -3,28 +3,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import i18n from 'i18n-js';
 
 import {
-  NavigationContainer,
   NavigationContainerRef,
 } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-// import { AppLoading } from 'expo';
 import * as Notifications from 'expo-notifications';
-import FlashMessage from "react-native-flash-message";
 
 import {
   AppState,
   AppStateStatus,
 } from 'react-native';
-import { More } from './src/modules/more/More';
-import { Products } from './src/modules/products/Products';
-import { Account } from './src/modules/account/Account';
 
 import LocaleType from './src/enums/LocaleType';
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
 import currentLocalization from './src/utiles/currentLocalization';
-import { Dashboard } from './src/modules/dashboard/Dashboard';
-import Main from './src/modules/main/Main';
-import Wallet from './src/modules/wallet/WalletMain';
 import Notification, { isNotification } from './src/types/Notification';
 
 import UserContext from './src/contexts/UserContext';
@@ -36,18 +26,16 @@ import registerForPushNotificationsAsync from './src/utiles/registerForPushNotif
 import { SignInStatus, SignOut } from './src/enums/SignInStatus';
 import CurrencyType from './src/enums/CurrencyType';
 import { CurrencyResponse } from './src/types/CurrencyResponse';
-import BlockScreen from './src/modules/main/BlockScreen';
 import { OwnershipResponse } from './src/types/AccountResponse';
 import NotificationType from './src/enums/NotificationType';
-import Loading from './src/modules/main/Loading';
 import NotificationStatus from './src/enums/NotificationStatus';
 import NotificationData from './src/types/NotificationData';
 import ProviderType from './src/enums/ProviderType';
 import { getToken, removeToken } from './src/asyncStorages/token';
-import { Page } from './src/enums/pageEnum';
 import WalletProvider from './src/providers/WalletProvider';
 import AsyncStorage from '@react-native-community/async-storage';
 import { IS_WALLET_USER } from './src/constants/storage';
+import AppNavigator from './AppNavigator';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -151,6 +139,12 @@ const AppMain = () => {
   }
 
   const signIn = async () => {
+    const isWalletUser = await AsyncStorage.getItem(IS_WALLET_USER);
+
+    if (isWalletUser === 'true') {
+      return guestSignIn();
+    }
+
     const token = await getToken();
     const authServer = new Server(signOut, token !== null ? token : '');
     if (token) {
@@ -374,130 +368,100 @@ const AppMain = () => {
     };
   }, []);
 
-  const RootStack = createStackNavigator();
-
   return (
-    <NavigationContainer ref={navigationRef}>
-      <UserContext.Provider
+    <UserContext.Provider
+      value={{
+        signedIn: state.signedIn,
+        user: state.user,
+        ownerships: state.ownerships,
+        balance: state.balance,
+        notifications: state.notifications,
+        expoPushToken: state.expoPushToken,
+        isWalletUser: state.isWalletUser,
+      }}>
+      <CurrencyContext.Provider
         value={{
-          signedIn: state.signedIn,
-          user: state.user,
-          ownerships: state.ownerships,
-          balance: state.balance,
-          notifications: state.notifications,
-          expoPushToken: state.expoPushToken,
-          isWalletUser: state.isWalletUser,
+          elPrice: state.elPrice,
+          krwPrice: state.krwPrice,
+          cnyPrice: state.cnyPrice,
+          currencyUnit,
+          currencyRatio,
         }}>
-        <CurrencyContext.Provider
+        <FunctionContext.Provider
           value={{
-            elPrice: state.elPrice,
-            krwPrice: state.krwPrice,
-            cnyPrice: state.cnyPrice,
-            currencyUnit,
-            currencyRatio,
+            setLanguage: (newLanguage: LocaleType) => {
+              setState({
+                ...state,
+                user: { ...state.user, language: newLanguage },
+              });
+            },
+            setCurrency: (newCurrency: CurrencyType) => {
+              setState({
+                ...state,
+                user: { ...state.user, currency: newCurrency },
+              });
+            },
+            signIn,
+            guestSignIn,
+            signOut,
+            refreshUser,
+            setCurrencyPrice: (currency: CurrencyResponse[]) => {
+              const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
+              const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
+              const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
+              if (elPrice && krwPrice && cnyPrice) {
+                setState({
+                  ...state,
+                  elPrice,
+                  krwPrice,
+                  cnyPrice,
+                });
+              }
+            },
+            setNotifications: (notifications: Notification[]) => {
+              setState({
+                ...state,
+                notifications,
+              });
+            },
+            setEthAddress: (address: string) => {
+              setState({
+                ...state,
+                user: { ...state.user, ethAddresses: [address] },
+              });
+            },
+            setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+              setState({
+                ...state,
+                user: {
+                  ...state.user,
+                  legacyWalletRefundStatus: legacyRefundStatus,
+                },
+              });
+            },
+            setUserExpoPushToken: (expoPushToken: string) => {
+              setState({
+                ...state,
+                user: {
+                  ...state.user,
+                  expoPushTokens: expoPushToken ? [expoPushToken] : [],
+                },
+              });
+            },
+            setIsWalletUser: (isWalletUser: boolean) => {
+              setState({
+                ...state,
+                isWalletUser: isWalletUser,
+              });
+            },
+            Server: state.Server,
           }}>
-          <FunctionContext.Provider
-            value={{
-              setLanguage: (newLanguage: LocaleType) => {
-                setState({
-                  ...state,
-                  user: { ...state.user, language: newLanguage },
-                });
-              },
-              setCurrency: (newCurrency: CurrencyType) => {
-                setState({
-                  ...state,
-                  user: { ...state.user, currency: newCurrency },
-                });
-              },
-              signIn,
-              guestSignIn,
-              signOut,
-              refreshUser,
-              setCurrencyPrice: (currency: CurrencyResponse[]) => {
-                const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
-                const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
-                const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
-                if (elPrice && krwPrice && cnyPrice) {
-                  setState({
-                    ...state,
-                    elPrice,
-                    krwPrice,
-                    cnyPrice,
-                  });
-                }
-              },
-              setNotifications: (notifications: Notification[]) => {
-                setState({
-                  ...state,
-                  notifications,
-                });
-              },
-              setEthAddress: (address: string) => {
-                setState({
-                  ...state,
-                  user: { ...state.user, ethAddresses: [address] },
-                });
-              },
-              setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
-                setState({
-                  ...state,
-                  user: {
-                    ...state.user,
-                    legacyWalletRefundStatus: legacyRefundStatus,
-                  },
-                });
-              },
-              setUserExpoPushToken: (expoPushToken: string) => {
-                setState({
-                  ...state,
-                  user: {
-                    ...state.user,
-                    expoPushTokens: expoPushToken ? [expoPushToken] : [],
-                  },
-                });
-              },
-              setIsWalletUser: (isWalletUser: boolean) => {
-                setState({
-                  ...state,
-                  isWalletUser: isWalletUser,
-                });
-              },
-              Server: state.Server,
-            }}>
-            <WalletProvider>
-              <RootStack.Navigator headerMode="none">
-                {state.signedIn === SignInStatus.PENDING ? (
-                  <RootStack.Screen
-                    name={Page.LoadingScreen}
-                    component={Loading}
-                    options={{ animationEnabled: false }}
-                  />
-                ) : state.signedIn === SignInStatus.SIGNIN ? (
-                  <>
-                    <RootStack.Screen name={Page.Main} component={Main} />
-                    <RootStack.Screen name={Page.Dashboard} component={Dashboard} />
-                    <RootStack.Screen name={Page.More} component={More} />
-                    <RootStack.Screen name={Page.Product} component={Products} />
-                    <RootStack.Screen name={Page.Wallet} component={Wallet} />
-                  </>
-                ) : (
-                  <>
-                    <RootStack.Screen name={Page.Account} component={Account} />
-                  </>
-                )}
-                <RootStack.Screen
-                  name={Page.BlockScreen}
-                  component={BlockScreen}
-                  options={{ animationEnabled: false }}
-                />
-              </RootStack.Navigator>
-              <FlashMessage position="top" />
-            </WalletProvider>
-          </FunctionContext.Provider>
-        </CurrencyContext.Provider>
-      </UserContext.Provider>
-    </NavigationContainer>
+          <WalletProvider>
+            <AppNavigator navigationRef={navigationRef} />
+          </WalletProvider>
+        </FunctionContext.Provider>
+      </CurrencyContext.Provider>
+    </UserContext.Provider>
   );
 };
 
