@@ -5,7 +5,9 @@ import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
 
-const ExpiredAccount: FunctionComponent = () => {
+const ExpiredAccount: FunctionComponent<{ nextHandler?: () => void }> = ({
+  nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia) },
+}) => {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#3679B5' }}>
@@ -29,7 +31,7 @@ const ExpiredAccount: FunctionComponent = () => {
         label={i18n.t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate(AccountPage.IntroduceElysia)}
+        onPress={() => nextHandler()}
         style={{
           position: 'absolute',
           bottom: '20%',

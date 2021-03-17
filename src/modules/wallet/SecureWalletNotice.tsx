@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Layout from './components/Layout';
 import { WalletPage } from '../../enums/pageEnum';
 import NextButton from '../../shared/components/NextButton';
 import ConfirmBox from './components/ConfirmBox';
@@ -8,13 +7,14 @@ import { View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { P1Text } from '../../shared/components/Texts';
 import CheckIcon from './components/CheckIcon';
+import BasicLayout from '../../shared/components/BasicLayout';
 
 const SecureWalletNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const [confirmed, setConfirm] = useState<boolean[]>([false, false]);
 
   return (
-    <Layout>
+    <BasicLayout>
       <ConfirmBox
         style={{ marginTop: 50 }}
         confirmed={confirmed[0]}
@@ -45,13 +45,10 @@ const SecureWalletNotice: FunctionComponent = () => {
         <NextButton
           title={'다음'}
           disabled={!confirmed[0] || !confirmed[1]}
-          style={{
-            position: 'absolute',
-          }}
           handler={() => navigation.navigate(WalletPage.SeedPharase)}
         />
       </View>
-    </Layout>
+    </BasicLayout>
   );
 };
 

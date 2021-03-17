@@ -8,7 +8,6 @@ import Loading from '../main/Loading';
 
 const NewPassword: FunctionComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { setIsWalletUser } = useContext(FunctionContext);
   const { createNewWallet } = useContext(WalletContext);
 
   if (loading) {
@@ -18,11 +17,10 @@ const NewPassword: FunctionComponent = () => {
   return (
     <PasswordForm
       submitButtonTitle={i18n.t('account_label.continue')}
-      submitHandler={(password: string) => {
+      submitHandler={async (password: string) => {
         Keyboard.dismiss();
         setLoading(true);
-        setIsWalletUser(true);
-        createNewWallet(password);
+        await createNewWallet(password);
       }}
       message1={i18n.t('account.create_password')}
       message2={i18n.t('account.password_confirm')}

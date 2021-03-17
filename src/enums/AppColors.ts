@@ -9,7 +9,8 @@ enum AppColors {
   ETH_BLUE = '#6C85FF',
   EL_BLUE = '#008DED',
   BNB_YELLOW = '#FFC434',
-  WHITE = '#FFF'
+  WHITE = '#FFF',
+  RED = 'red',
 }
 
 export default AppColors

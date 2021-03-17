@@ -3,6 +3,7 @@ import Wallet from '../core/Wallet';
 
 export type WalletContextType = {
   isUnlocked: boolean;
+  isCreated: boolean;
   password: string | undefined;
   wallet: Wallet | undefined;
   setLock: () => void;
@@ -13,12 +14,14 @@ export type WalletContextType = {
 
 export type WalletStateType = {
   isUnlocked: boolean;
+  isCreated: boolean;
   password: string | undefined;
   wallet: Wallet | undefined;
 }
 
 export const staticWalletInitialState = {
   isUnlocked: false,
+  isCreated: false,
   password: undefined,
   wallet: undefined,
 }

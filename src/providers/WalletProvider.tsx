@@ -13,15 +13,18 @@ const WalletProvider: React.FC = (props) => {
     })
   }
 
-  const unlock = async (password: string) => {
-    const wallet = await WalletStorage.load(password);
-
-    setState({
-      ...state,
-      isUnlocked: true,
-      wallet,
-      password,
-    })
+  const unlock = async (password: string): Promise<void> => {
+    try {
+      const wallet = await WalletStorage.load(password);
+      setState({
+        ...state,
+        isUnlocked: true,
+        wallet,
+        password,
+      })
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   const createNewWallet = async (password: string) => {
@@ -31,6 +34,7 @@ const WalletProvider: React.FC = (props) => {
     setState({
       ...state,
       isUnlocked: true,
+      isCreated: true,
       password: password,
       wallet: newWallet,
     })

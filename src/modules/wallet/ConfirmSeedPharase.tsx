@@ -9,6 +9,7 @@ import MnemonicQuize from './components/MnemonicQuize';
 import TouchableWordBox from './components/TouchableWordBox'
 import WalletContext from '../../contexts/WalletContext';
 import WalletStorage from '../../core/WalletStorage';
+import FunctionContext from '../../contexts/FunctionContext';
 
 type State = {
   currentIndex: number,
@@ -19,6 +20,7 @@ type State = {
 
 const ConfirmSeedPharase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
+  const { setIsWalletUser } = useContext(FunctionContext);
   const navigation = useNavigation();
   const [state, setState] = useState<State>({
     currentIndex: 0,
@@ -102,6 +104,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
           }
           handler={async () => {
             await WalletStorage.completeBackup();
+            setIsWalletUser(true);
             navigation.navigate(MainPage.DashboardMain)
           }}
         />

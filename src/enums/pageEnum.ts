@@ -26,6 +26,8 @@ export enum AccountPage {
   ExpiredAccount = 'ExpiredAccount',
   WithdrawnMember = 'WithdrawnMember',
   IntroduceElysia = 'IntroduceElysia',
+  WalletLogin = 'WalletLogin',
+  WalletRecover = 'WalletRecover',
 }
 
 export enum MorePage {

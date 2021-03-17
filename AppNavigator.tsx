@@ -15,12 +15,16 @@ import Wallet from './src/modules/wallet/WalletMain';
 import { SignInStatus } from './src/enums/SignInStatus';
 import BlockScreen from './src/modules/main/BlockScreen';
 import Loading from './src/modules/main/Loading';
-import { Page } from './src/enums/pageEnum';
+import { AccountPage, Page } from './src/enums/pageEnum';
 import UserContext from './src/contexts/UserContext';
+import WalletContext from './src/contexts/WalletContext';
+import WalletLogin from './src/modules/account/WalletLogin';
+import WalletRecover from './src/modules/account/WalletRecover';
 
 const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> }> = ({ navigationRef }) => {
   const RootStack = createStackNavigator();
-  const { signedIn } = useContext(UserContext);
+  const { signedIn, isWalletUser } = useContext(UserContext);
+  const { isUnlocked } = useContext(WalletContext);
 
   return (
     <NavigationContainer ref={navigationRef}>
@@ -31,6 +35,11 @@ const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> 
             component={Loading}
             options={{ animationEnabled: false }}
           />
+        ) : isWalletUser && !isUnlocked ? (
+          <>
+            <RootStack.Screen name={Page.Account} component={WalletLogin} />
+            <RootStack.Screen name={AccountPage.WalletRecover} component={WalletRecover} />
+          </>
         ) : signedIn === SignInStatus.SIGNIN ? (
           <>
             <RootStack.Screen name={Page.Main} component={Main} />
