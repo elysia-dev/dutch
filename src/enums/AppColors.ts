@@ -11,6 +11,7 @@ enum AppColors {
   BNB_YELLOW = '#FFC434',
   WHITE = '#FFF',
   RED = 'red',
+  BLUE_2 = '#D0D8DF',
 }
 
 export default AppColors
