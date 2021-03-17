@@ -16,7 +16,7 @@ interface Props {
 
 const Deposit: FunctionComponent<Props> = props => {
   const { wallet } = useContext(WalletContext);
-  const address = wallet?.getRoot().address || '';
+  const address = wallet?.getNodes()[0].address || '';
 
   return (
     <View

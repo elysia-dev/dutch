@@ -61,10 +61,13 @@ export enum DashboardPage {
 }
 
 export enum WalletPage {
+  SelecteMethod = 'SelectMethod',
   NewPassword = 'NewPassword',
   SecureWalletNotice = 'SecureWalletNotice',
   SeedPharase = 'SeedPharase',
-  Congratulations = 'Congratulations'
+  Congratulations = 'Congratulations',
+  RecoverSeedPharase = 'RecoverSeedPharase',
+  RecoverWallet = 'RecoverWallet',
 }
 
 export enum Page {

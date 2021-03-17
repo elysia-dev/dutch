@@ -5,8 +5,8 @@ import WordQuizeBox from './WordQuizeBox';
 
 interface INemonicView {
   currentIndex: number
-  selectedIndices: [number, number, number, number]
-  selectedWords: [string, string, string, string]
+  selectedIndices: number[]
+  selectedWords: string[]
   clear: (number: number) => void
 }
 

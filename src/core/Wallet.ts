@@ -1,4 +1,4 @@
-import { HDNode, entropyToMnemonic, mnemonicToSeed } from "ethers/lib/utils";
+import { HDNode, entropyToMnemonic, mnemonicToSeed, defaultPath } from "ethers/lib/utils";
 import * as Random from 'expo-random';
 
 interface SerializedWallet {
@@ -10,11 +10,13 @@ class Wallet {
   private seed: string;
   private mnemonic: string;
   private root: HDNode;
+  private nodes: HDNode[];
 
   constructor(seed: string, mnemonic: string) {
     this.seed = seed;
     this.mnemonic = mnemonic;
     this.root = HDNode.fromSeed(seed);
+    this.nodes = [this.root.derivePath(defaultPath)]
   }
 
   serialize(): SerializedWallet {
@@ -28,6 +30,10 @@ class Wallet {
     return this.root;
   }
 
+  getNodes(): HDNode[] {
+    return this.nodes;
+  }
+
   getMnemonic(): string {
     return this.mnemonic
   }
@@ -39,6 +45,11 @@ class Wallet {
   static async createNewWallet(): Promise<Wallet> {
     const entropy = await Random.getRandomBytesAsync(16);
     const mnemonic = entropyToMnemonic(entropy);
+    const seed = mnemonicToSeed(mnemonic);
+    return new Wallet(seed, mnemonic);
+  }
+
+  static async restoreWallet(mnemonic: string): Promise<Wallet> {
     const seed = mnemonicToSeed(mnemonic);
     return new Wallet(seed, mnemonic);
   }

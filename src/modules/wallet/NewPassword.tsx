@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import i18n from '../../i18n/i18n';
 import PasswordForm from '../account/PasswordForm';
-import FunctionContext from '../../contexts/FunctionContext';
 import WalletContext from '../../contexts/WalletContext';
 import { Keyboard } from 'react-native'
 import Loading from '../main/Loading';
