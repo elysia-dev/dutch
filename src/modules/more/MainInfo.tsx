@@ -17,7 +17,7 @@ import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
-import { H3Text, H4Text } from '../../shared/components/Texts';
+import { H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import Setting from './Setting';
@@ -256,7 +256,7 @@ const MainInfo: FunctionComponent = () => {
                       justifyContent: 'space-between',
                     }}>
                     <View>
-                      <H4Text
+                      <H3Text
                         label={
                           user.ethAddresses?.length > 0
                             ? i18n.t('more_label.my_wallet')
@@ -300,7 +300,7 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <H4Text
+                    <H3Text
                       label={i18n.t('more_label.my_account')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
@@ -326,7 +326,7 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <H4Text
+                    <H3Text
                       label='My asset#2 ownership'
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
@@ -349,29 +349,6 @@ const MainInfo: FunctionComponent = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
-                    screen: MorePage.Faq,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <H4Text
-                    label={i18n.t('more_label.faq')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
                     screen: MorePage.Contact,
                   })
                 }>
@@ -380,7 +357,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <H4Text
+                  <H3Text
                     label={i18n.t('more_label.contact')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -403,7 +380,7 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <H4Text
+                  <H3Text
                     label={i18n.t('more_label.service_terms')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
@@ -427,7 +404,7 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <H4Text
+                    <H3Text
                       label={i18n.t('more_label.privacy_policy')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />

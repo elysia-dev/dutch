@@ -16,7 +16,7 @@ import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import i18n from '../../i18n/i18n';
-import { P1Text, H3Text, H4Text } from '../../shared/components/Texts';
+import { P1Text, H3Text } from '../../shared/components/Texts';
 import LocaleType from '../../enums/LocaleType';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
 import getEnvironment from '../../utiles/getEnvironment';
@@ -136,7 +136,7 @@ const Setting: FunctionComponent = () => {
                     justifyContent: 'space-between',
                     alignContent: 'center',
                   }}>
-                  <H4Text
+                  <H3Text
                     label={i18n.t('more_label.push_notice')}
                     style={{
                       alignSelf: 'center',
@@ -163,7 +163,7 @@ const Setting: FunctionComponent = () => {
               alignContent: 'center',
               marginTop: 20
             }}>
-            <H4Text
+            <H3Text
               label={i18n.t('more_label.language')}
               style={{
                 alignSelf: 'center',
@@ -235,7 +235,7 @@ const Setting: FunctionComponent = () => {
               alignContent: 'center',
               marginTop: 20
             }}>
-            <H4Text
+            <H3Text
               label={i18n.t('more_label.currency')}
               style={{
                 alignSelf: 'center',
@@ -334,7 +334,7 @@ const Setting: FunctionComponent = () => {
                   screen: MorePage.WhatsNew,
                 })
               }>
-              <H4Text
+              <H3Text
                 label={
                   i18n.t('more_label.version') +
                   ` ${getEnvironment().version}`
