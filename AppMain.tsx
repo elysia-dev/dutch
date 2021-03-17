@@ -236,7 +236,7 @@ const AppMain = () => {
   }, []);
 
   useEffect(() => {
-    if (state.user.provider === ProviderType.GUEST) {
+    if (state.user.provider === ProviderType.GUEST && !state.isWalletUser) {
       // Guest Notifications
       setState({
         ...state,
@@ -417,6 +417,13 @@ const AppMain = () => {
                   cnyPrice,
                 });
               }
+            },
+            newWalletUser: () => {
+              setState({
+                ...state,
+                isWalletUser: true,
+                notifications: []
+              })
             },
             setNotifications: (notifications: Notification[]) => {
               setState({
