@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 import React, {
-  FunctionComponent,
+  FunctionComponent, useContext,
 } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
@@ -8,6 +8,7 @@ import QRCode from 'react-native-qrcode-svg';
 import AppColors from '../../../enums/AppColors';
 import Clipboard from 'expo-clipboard';
 import { showMessage } from "react-native-flash-message";
+import WalletContext from '../../../contexts/WalletContext';
 import i18n from '../../../i18n/i18n';
 
 interface Props {
@@ -15,7 +16,9 @@ interface Props {
 }
 
 const Deposit: FunctionComponent<Props> = props => {
-  const address = '0xTEST`a850b5f0b1be04663d14f2b5576834aTEST'
+  const { wallet } = useContext(WalletContext);
+  const address = wallet?.getNodes()[0].address || '';
+
   return (
     <View
       style={{

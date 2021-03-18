@@ -11,7 +11,7 @@ import i18n from '../../../i18n/i18n';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
-import { DashboardPage, MorePage } from '../../../enums/pageEnum';
+import { DashboardPage, MainPage, MorePage, Page } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
@@ -70,18 +70,18 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const navigate = () => {
     switch (type) {
       case NotificationType.PRODUCT_NOTICE:
-        navigation.navigate('Dashboard', {
+        navigation.navigate(Page.Dashboard, {
           screen: DashboardPage.ProductNotice,
           params: { productId: data.productId },
         });
         break;
       case NotificationType.ONBOARDING_CONNECT_WALLET:
-        navigation.navigate('More', {
+        navigation.navigate(Page.More, {
           screen: MorePage.RegisterEthAddress,
         });
         break;
       case NotificationType.ONBOARDING_NEW_USER:
-        navigation.navigate('Dashboard', {
+        navigation.navigate(Page.Dashboard, {
           screen: DashboardPage.InvestmentGuide,
         });
         break;
@@ -108,7 +108,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           ...notification,
           status:
             notification.status === NotificationStatus.READ ||
-            notification.id === props.notification.id
+              notification.id === props.notification.id
               ? NotificationStatus.READ
               : NotificationStatus.UNREAD,
         })),
@@ -261,11 +261,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             {(type === NotificationType.PRODUCT_NOTICE ||
               type === NotificationType.ONBOARDING_NEW_USER ||
               type === NotificationType.ONBOARDING_CONNECT_WALLET) && (
-              <Image
-                style={{ left: 10, width: 6, height: 9 }}
-                source={images[9][status === 'read' ? 0 : 1]}
-              />
-            )}
+                <Image
+                  style={{ left: 10, width: 6, height: 9 }}
+                  source={images[9][status === 'read' ? 0 : 1]}
+                />
+              )}
           </View>
           {type === NotificationType.PENDING_TRANSACTION && (
             <View

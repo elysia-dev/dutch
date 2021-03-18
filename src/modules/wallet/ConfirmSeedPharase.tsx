@@ -21,7 +21,7 @@ type State = {
 
 const ConfirmSeedPharase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
-  const { setIsWalletUser } = useContext(FunctionContext);
+  const { newWalletUser } = useContext(FunctionContext);
   const navigation = useNavigation();
   const [state, setState] = useState<State>({
     currentIndex: 0,
@@ -105,7 +105,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
           }
           handler={async () => {
             await WalletStorage.completeBackup();
-            setIsWalletUser(true);
+            newWalletUser();
             navigation.navigate(MainPage.DashboardMain)
           }}
         />

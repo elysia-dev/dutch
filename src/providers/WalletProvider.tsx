@@ -34,9 +34,20 @@ const WalletProvider: React.FC = (props) => {
     setState({
       ...state,
       isUnlocked: true,
-      isCreated: true,
       password: password,
       wallet: newWallet,
+    })
+  }
+
+  const restoreWallet = async (mnemonic: string, password: string) => {
+    const wallet = await Wallet.restoreWallet(mnemonic);
+    WalletStorage.save(wallet, password);
+
+    setState({
+      ...state,
+      isUnlocked: true,
+      password: password,
+      wallet,
     })
   }
 
@@ -47,7 +58,7 @@ const WalletProvider: React.FC = (props) => {
         setLock,
         unlock,
         createNewWallet,
-        restoreWallet: async () => { },
+        restoreWallet
       }}
     >
       {props.children}

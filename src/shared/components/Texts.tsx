@@ -50,7 +50,7 @@ export const P1Text: FunctionComponent<{
 
 const H3Title = styled.Text`
   color: #1c1c1c;
-  font-size: 20px;
+  font-size: 17px;
   text-align: left;
   font-family: 'Roboto_700Bold';
 `;
