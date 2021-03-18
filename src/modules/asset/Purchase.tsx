@@ -1,7 +1,7 @@
 import React, {
   FunctionComponent, useContext, useEffect, useState,
 } from 'react';
-import { ActivityIndicator, Linking, Text, View } from 'react-native';
+import { Linking, Text, View } from 'react-native';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import CryptoType from '../../enums/CryptoType';
@@ -22,6 +22,7 @@ import TxStatus from '../../enums/TxStatus';
 import { utils } from 'ethers';
 import { showMessage } from "react-native-flash-message";
 import getEnvironment from '../../utiles/getEnvironment';
+import OverlayLoading from '../../shared/components/OverlayLoading';
 
 type ParamList = {
   Purchase: {
@@ -129,7 +130,6 @@ const Purchase: FunctionComponent<Props> = () => {
       default:
     }
   }, [state.step])
-
 
   useEffect(() => {
     if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
@@ -247,24 +247,7 @@ const Purchase: FunctionComponent<Props> = () => {
           }}
         />
       </View>
-      {[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(state.step) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <ActivityIndicator size="large" color="#ffff" />
-          </View>
-        </View>
-      )}
+      <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(state.step)} />
     </>
   );
 };
