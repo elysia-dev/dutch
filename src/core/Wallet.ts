@@ -1,5 +1,8 @@
+import { Signer } from "@ethersproject/abstract-signer";
 import { HDNode, entropyToMnemonic, mnemonicToSeed, defaultPath } from "ethers/lib/utils";
+import { provider } from '../utiles/getContract';
 import * as Random from 'expo-random';
+import * as ethers from 'ethers';
 
 interface SerializedWallet {
   seed: string;
@@ -36,6 +39,14 @@ class Wallet {
 
   getMnemonic(): string {
     return this.mnemonic
+  }
+
+  getFirstNode(): HDNode | undefined {
+    return this.nodes[0];
+  }
+
+  getFirstSigner(): Signer {
+    return new ethers.Wallet(this.nodes[0].privateKey, provider)
   }
 
   static deserialize(data: SerializedWallet): Wallet {

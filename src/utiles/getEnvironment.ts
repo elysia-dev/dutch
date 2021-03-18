@@ -7,6 +7,7 @@ type Environment = {
   dappUrl: string;
   version: string;
   infuraProjectId: string;
+  infuraSecret: string;
   elAddress: string;
   ethNetwork: string;
 };
@@ -22,6 +23,7 @@ function getEnvironment(): Environment {
       dappUrl: 'dapp.elysia.land',
       version: '1.4.1',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+      infuraSecret: '93fa08ee99aa4395a7ddc7523d7347ca', //!! Check the secret
       ethNetwork: 'mainnet',
       elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16',
     };
@@ -34,9 +36,10 @@ function getEnvironment(): Environment {
       apiUrl: 'https://staging-api.elysia.land',
       dappUrl: 'staging-dapp.elysia.land',
       version: '1.4.1',
-      infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+      infuraProjectId: '4f4e9528f1fb446abeb64e05ff08fdbe',
+      infuraSecret: '93fa08ee99aa4395a7ddc7523d7347ca',
       ethNetwork: 'kovan',
-      elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',
+      elAddress: '0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be',
     };
   }
 
@@ -50,9 +53,10 @@ function getEnvironment(): Environment {
     // dappUrl: 'localhost:3001',
     dappUrl: 'staging-dapp.elysia.land',
     version: '1.4.1',
-    infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+    infuraProjectId: '4f4e9528f1fb446abeb64e05ff08fdbe',
+    infuraSecret: '93fa08ee99aa4395a7ddc7523d7347ca',
     ethNetwork: 'kovan',
-    elAddress: '0x5735af25c6be1b5822ccd03cdad3c84eb1e0e9c8',
+    elAddress: '0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be',
   };
 }
 

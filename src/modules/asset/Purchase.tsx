@@ -1,7 +1,7 @@
 import React, {
-  FunctionComponent, useContext, useState,
+  FunctionComponent, useContext, useEffect, useState,
 } from 'react';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Text, View } from 'react-native';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import CryptoType from '../../enums/CryptoType';
@@ -13,6 +13,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import usePrices from '../../hooks/usePrice';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import currencyFormatter from '../../utiles/currencyFormatter';
+import { useAssetToken, useElysiaToken } from '../../hooks/useContract';
+import { BigNumber } from '@ethersproject/bignumber';
+import WalletContext from '../../contexts/WalletContext';
+import TxStep from '../../enums/TxStep';
+import { useWatingTx } from '../../hooks/useWatingTx';
+import TxStatus from '../../enums/TxStatus';
+import { utils } from 'ethers';
+import { showMessage } from "react-native-flash-message";
+import getEnvironment from '../../utiles/getEnvironment';
 
 type ParamList = {
   Purchase: {
@@ -30,20 +39,113 @@ interface Props {
   toCrypto: CryptoType,
 }
 
+const testContractAddress = '0xb09479b0ad2C939d59cB1Ea1C27C1b25F9B8A46E';
 // TODO
+// 1. when payment method is ETH
 // 1. Check Maximu value
 // 2. Modifiable toPrice
+// 3. Gas price exceiptions
 const Purchase: FunctionComponent<Props> = () => {
   const [values, setValues] = useState({
     from: '',
     to: ''
   })
+  const [state, setState] = useState({
+    txHash: '',
+    step: TxStep.None,
+  });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const { fromCrypto, fromTitle, toTitle, toCrypto } = useRoute<RouteProp<ParamList, 'Purchase'>>()?.params;
   const navigation = useNavigation();
   const toPrice = 5 // usd
   const { elPrice } = usePrices();
+  const assetTokenContract = useAssetToken(testContractAddress);
+  const elContract = useElysiaToken();
+  const { wallet } = useContext(WalletContext);
+  const txResult = useWatingTx(state.txHash);
+
+  useEffect(() => {
+    switch (state.step) {
+      case TxStep.CheckAllowance:
+        elContract?.allowance(
+          wallet?.getFirstNode()?.address, testContractAddress
+        ).then((res: BigNumber) => {
+          if (res.isZero()) {
+            setState({ ...state, step: TxStep.Approving })
+          } else {
+            setState({ ...state, step: TxStep.Creating })
+          }
+        }).catch((e: any) => {
+          setState({ ...state, step: TxStep.Failed })
+        })
+        break;
+
+      case TxStep.Approving:
+        elContract?.populateTransaction
+          .approve(testContractAddress, '1' + '0'.repeat(25))
+          .then(populatedTransaction => {
+            wallet?.getFirstSigner().sendTransaction({
+              to: populatedTransaction.to,
+              data: populatedTransaction.data,
+            }).then((tx: any) => {
+              alert(tx)
+              setState({ txHash: tx, step: TxStep.Creating })
+            }).catch((e) => {
+              alert(e)
+              setState({ ...state, step: TxStep.Failed })
+            })
+          })
+        break;
+
+      case TxStep.Creating:
+        assetTokenContract?.populateTransaction.purchase(
+          utils.parseEther(values.from)
+        ).then(populatedTransaction => {
+          wallet?.getFirstSigner().sendTransaction({
+            to: populatedTransaction.to,
+            data: populatedTransaction.data,
+          }).then((tx) => {
+            showMessage({
+              message: `트랜잭션 생성 요청을 완료했습니다.`,
+              description: tx.hash,
+              type: 'info',
+              onPress: () => {
+                Linking.openURL(
+                  getEnvironment().ethNetwork === 'main'
+                    ? `https://etherscan.io/tx/${tx.hash}`
+                    : `https://kovan.etherscan.io/tx/${tx.hash}`,
+                )
+              },
+              duration: 3000
+            });
+            navigation.goBack();
+          }).catch((e) => {
+            alert(e)
+            setState({ ...state, step: TxStep.Failed })
+          })
+        })
+        break;
+      default:
+    }
+  }, [state.step])
+
+
+  useEffect(() => {
+    if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
+
+    switch (state.step) {
+      case TxStep.Approving:
+        setState({
+          ...state,
+          step:
+            txResult.status === TxStatus.Success
+              ? TxStep.Creating
+              : TxStep.Failed,
+        });
+        break;
+    }
+  }, [txResult.status]);
 
   return (
     <>
@@ -137,9 +239,32 @@ const Purchase: FunctionComponent<Props> = () => {
         <NextButton
           disabled={!(parseFloat(values.from) > 0)}
           title={'다음'}
-          handler={() => { navigation.goBack() }}
+          handler={() => {
+            setState({
+              txHash: '',
+              step: TxStep.CheckAllowance,
+            })
+          }}
         />
       </View>
+      {[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(state.step) && (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ActivityIndicator size="large" color="#ffff" />
+          </View>
+        </View>
+      )}
     </>
   );
 };
