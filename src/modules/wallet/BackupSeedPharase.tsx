@@ -8,6 +8,7 @@ import MnemonicView from './components/MnemonicView';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
 import WalletContext from '../../contexts/WalletContext';
+import i18n from '../../i18n/i18n';
 
 interface IBackupSeedPharase {
   next: () => void;
@@ -22,11 +23,11 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
     <Layout>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
-        label={'고객님의 복구키입니다.\n반드시 보관해주세요.'}
+        label={i18n.t('recovery_key.backup_seed')}
       />
       <P2Text
         style={{ marginTop: 10, marginBottom: 25 }}
-        label={'아래의 복구키를 종이에 적어 안전한 곳에 보관해주세요.\n다음 단계에서 시드문구를 확인할 예정입니다.'}
+        label={i18n.t('recovery_key.backup_seed_notice')}
       />
       <MnemonicView mnemonic={wallet?.getMnemonic() || ''} />
       <TouchableOpacity
@@ -37,7 +38,7 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
       >
         <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
           <CheckIcon checked={confirmed} />
-          <P1Text style={{ marginLeft: 10 }} label={'위 시드문구를 보관하였으며, 다음 단게 진행에 동의함을 확인합니다.'} />
+          <P1Text style={{ marginLeft: 10 }} label={i18n.t('recovery_key.backup_seed_checkbox')} />
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>

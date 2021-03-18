@@ -4,6 +4,7 @@ import { P2Text } from '../../../shared/components/Texts';
 import { Chart, Line, HorizontalAxis, ChartDataPoint, } from 'react-native-responsive-linechart'
 import AppColors from '../../../enums/AppColors';
 import CustomChartTooltip from './CustomChartTooltip';
+import i18n from '../../../i18n/i18n';
 
 interface IAssetGraph {
   data: ChartDataPoint[],
@@ -32,7 +33,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={'거래내역이 없습니다.'} style={{ textAlign: 'center', width: '100%' }} />
+          <P2Text label={i18n.t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
         </View>
       }
       {
@@ -43,7 +44,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={'표시할 데이터가 충분하지 않습니다.'} style={{ textAlign: 'center', width: '100%' }} />
+          <P2Text label={i18n.t('assets.null_data')} style={{ textAlign: 'center', width: '100%' }} />
         </View>
       }
       {

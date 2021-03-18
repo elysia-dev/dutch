@@ -71,7 +71,7 @@ const AssetTokenDetail: FunctionComponent = () => {
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
           <H4Text
             style={{ marginTop: 20, color: AppColors.BLACK2 }}
-            label={`${asset.unit} 투자금`}
+            label={asset.unit + " " + i18n.t('main.assets')}
           />
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
@@ -80,9 +80,9 @@ const AssetTokenDetail: FunctionComponent = () => {
           <View style={{ marginTop: 20, height: 1, backgroundColor: AppColors.GREY }} />
           {
             [
-              { left: '상품명', right: asset.title },
-              { left: '보유량', right: asset.unitValue },
-              { left: '지분률', right: '6.28%' },
+              { left: i18n.t('main.assets_name'), right: asset.title },
+              { left: i18n.t('main.assets_value'), right: asset.unitValue },
+              { left: i18n.t('main.assets_stake'), right: '6.28%' },
             ].map((data, index) => {
               return (
                 <View
@@ -120,7 +120,7 @@ const AssetTokenDetail: FunctionComponent = () => {
           >
             <H4Text
               style={{ color: AppColors.BLACK }}
-              label={'총 누적수익금'}
+              label={i18n.t('main.total_assets_yield')}
             />
             <View>
               <H4Text
@@ -136,9 +136,9 @@ const AssetTokenDetail: FunctionComponent = () => {
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
               [
-                { title: '구매', icon: '+' },
-                { title: '환불', icon: '−' },
-                { title: '이자', icon: '⤴' },
+                { title: i18n.t('main.ownership'), icon: '+' },
+                { title: i18n.t('main.refund'), icon: '−' },
+                { title: i18n.t('main.return'), icon: '⤴' },
               ].map((data, index) => {
                 return (
                   <TouchableOpacity
@@ -171,7 +171,7 @@ const AssetTokenDetail: FunctionComponent = () => {
         </View>
         <View style={{ height: 15, backgroundColor: AppColors.BACKGROUND_GREY }} />
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-          <H2Text label={'거래기록'} style={{ marginTop: 20 }} />
+          <H2Text label={i18n.t('main.transaction_list')} style={{ marginTop: 20 }} />
           <View style={{ height: 20 }} />
           <SelectBox
             options={['ALL', 'OUT', 'IN']}

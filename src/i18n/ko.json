@@ -438,6 +438,60 @@
       "본 앱은 각 토큰의 정보만을 제공하고 교환의 편의성만 제공하며 실질적인 교환은 개개인의 지갑에서 이뤄지는 탈중앙 서비스입니다. 따라서 본 앱을 사용하기 위해서는 실제 교환을 진행할 개인 지갑 주소가 필요합니다."
     ]
   },
+  "main": {
+    "total_assets" : "총 자산",
+    "connect_wallet" : "지갑을 연결해 주세요",
+    "my_assets" : "내 투자금",
+    "my_wallet" : "내 지갑",
+    "assets" : "투자금",
+    "assets_name" : "상품명",
+    "assets_value" : "보유량",
+    "assets_stake" : "지분률",
+    "total_assets_yield" : "총 누적수익금",
+    "ownership" : "구매",
+    "refund" : "환불",
+    "return" : "이자",
+    "transaction_list" : "거래기록",
+    "my_address" : "내 입금주소",
+    "success_copy" : "복사가 성공했습니다."
+  },
+  "recovery_key": {
+    "keep" : "복구키 보관",
+    "keep_content" : "복구키의 경우, 물리적으로 보관을 하는 것이 안전합니다. 종이에 적어서 안전한 곳에 보관해주시길 바랍니다.",
+    "lost" : "복구키 분실",
+    "lost_content" : "복구키의 경우, 물리적으로 보관을 하는 것이 안전합니다. 종이에 적어서 안전한 곳에 보관해주시길 바랍니다.",
+    "checkbox" : "위 사항을 충분히 이해하며, 지갑 생성에 동의함을 확인합니다.",
+    "next" : "다음",
+    "backup_seed" : "고객님의 복구키입니다.\n반드시 보관해주세요.",
+    "backup_seed_notice" : "아래의 복구키를 종이에 적어 안전한 곳에 보관해주세요.\n다음 단계에서 시드문구를 확인할 예정입니다.",
+    "backup_seed_checkbox" : "위 시드문구를 보관하였으며, 다음 단게 진행에 동의함을 확인합니다.",
+    "check_seed" : "시드 문구를 확인해주세요.",
+    "check_seed_notice" : "보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.",
+    "seed_check_btn" : "확인 완료"
+  },
+  "wallet": {
+    "lost_password" : "비밀번호가 기억나지 않아요.",
+    "recover_infomation" : "경고 문구[미구현]",
+    "recover_check" : "위 사항을 충분히 이해하며, 동의하고 엘리시아를 처음부터 시작하겠습니다.",
+    "recover_button" : "동의하고, 처음부터 시작하기",
+    "deposit" : "입금하기",
+    "withdrawal" : "출금하기",
+    "withdrawal_address" : "출금주소",
+    "withdrawal_content" : "출금하실 지갑주소를 입력하세요.",
+    "send_value" : "보낼 수량",
+    "insert_value" : "수량 입력",
+    "full" : "최대",
+    "remaining_value" : "사용가능",
+    "crypto_value" : "보유수량",
+    "month" : "1개월",
+    "year" : "1년",
+    "all" : "최대"
+  },
+  "assets" : {
+    "null_transaction" : "거래내역이 없습니다.",
+    "null_data" : "표시할 데이터가 충분하지 않습니다.",
+    "null_investment" : "투자내역이 없습니다."
+  },
   "legacy": {
     "refund_notice": "기존 상품의 경우 지분 회수는 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."
   }

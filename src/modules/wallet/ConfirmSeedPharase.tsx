@@ -10,6 +10,7 @@ import TouchableWordBox from './components/TouchableWordBox'
 import WalletContext from '../../contexts/WalletContext';
 import WalletStorage from '../../core/WalletStorage';
 import FunctionContext from '../../contexts/FunctionContext';
+import i18n from '../../i18n/i18n'
 
 type State = {
   currentIndex: number,
@@ -44,11 +45,11 @@ const ConfirmSeedPharase: FunctionComponent = () => {
     <Layout>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
-        label={'시드 문구를 확인해주세요.'}
+        label={i18n.t('recovery_key.check_seed')}
       />
       <P2Text
         style={{ marginTop: 10, marginBottom: 25 }}
-        label={'보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.'}
+        label={i18n.t('recovery_key.check_seed_notice')}
       />
       <MnemonicQuize
         currentIndex={state.currentIndex}
@@ -98,7 +99,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
       </View>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={'확인 완료'}
+          title={i18n.t('recovery_key.seed_check_btn')}
           disabled={
             !state.selectedIndices.reduce((res, cur, index) => res && (state.selectedWords[index] === wallet?.getMnemonic().split(' ')[cur]), true)
           }

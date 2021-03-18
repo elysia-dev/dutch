@@ -8,6 +8,7 @@ import WalletStorage from '../../core/WalletStorage';
 import { TouchableOpacity, View } from 'react-native';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
+import i18n from '../../i18n/i18n';
 
 const WalletRecover: FunctionComponent = () => {
   const { setLock } = useContext(WalletContext);
@@ -20,7 +21,7 @@ const WalletRecover: FunctionComponent = () => {
       body={
         <>
           <P1Text
-            label={'경고문구 추가해야합니다.'}
+            label={i18n.t('wallet.recover_infomation')}
           />
           <TouchableOpacity
             style={{ marginTop: 20 }}
@@ -30,7 +31,7 @@ const WalletRecover: FunctionComponent = () => {
           >
             <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
               <CheckIcon checked={confirmed} />
-              <P1Text style={{ marginLeft: 10 }} label={'위 사항을 충분히 이해하며, 동의하고 엘리시아를 처음부터 시작하겠습니다.'} />
+              <P1Text style={{ marginLeft: 10 }} label={i18n.t('wallet.recover_check')} />
             </View>
           </TouchableOpacity>
         </>
@@ -39,7 +40,7 @@ const WalletRecover: FunctionComponent = () => {
         <>
           <NextButton
             style={{ marginTop: 'auto', marginLeft: '5%', marginRight: '5%' }}
-            title={'동의하고, 처음부터 시작하기'}
+            title={i18n.t('wallet.recover_button')}
             disabled={!confirmed}
             handler={async () => {
               setLock();

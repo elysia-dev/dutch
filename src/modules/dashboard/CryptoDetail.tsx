@@ -13,6 +13,7 @@ import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import Deposit from './components/Deposit';
 import Withdrawal from './components/Withdrawal';
+import i18n from '../../i18n/i18n';
 
 const now = Date.now();
 
@@ -52,7 +53,7 @@ const CryptoDetail: React.FC = () => {
   return (
     <>
       <WrapperLayout
-        title={`${route.params.asset.title} 보유수량`}
+        title={route.params.asset.title + " " + i18n.t('wallet.crypto_value')}
         isScrolling={true}
         backButtonHandler={() => navigation.goBack()}
         body={
@@ -63,7 +64,7 @@ const CryptoDetail: React.FC = () => {
             />
             <View style={{ height: 30 }} />
             <SelectBox
-              options={['1개월', '1년', '최대']}
+              options={[i18n.t('wallet.month'), i18n.t('wallet.year'), i18n.t('wallet.all')]}
               selected={range}
               select={(range) => setRange(range)}
             />
@@ -104,14 +105,14 @@ const CryptoDetail: React.FC = () => {
           style={{
             width: 160,
           }}
-          title={'입금하기'}
+          title={i18n.t('wallet.deposit')}
           handler={() => { setDepositModalVisible(true) }}
         />
         <NextButton
           style={{
             width: 160,
           }}
-          title={'출금하기'}
+          title={i18n.t('wallet.withdrawal')}
           handler={() => { setWithdrawalModalVisible(true) }}
         />
       </View>

@@ -4,6 +4,7 @@ import AppColors from '../../../enums/AppColors';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
+import i18n from '../../../i18n/i18n';
 
 interface IAssetListing {
   title: string
@@ -49,7 +50,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
         >
           <P2Text
             style={{ textAlign: 'center', marginTop: 40 }}
-            label={'투자내역이 없습니다.'}
+            label={i18n.t('assets.null_investment')}
           />
         </View>
       }

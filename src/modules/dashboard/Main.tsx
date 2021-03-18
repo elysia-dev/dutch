@@ -11,6 +11,7 @@ import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
 import { DashboardPage, MorePage, Page } from '../../enums/pageEnum';
 import Asset from '../../types/Asset';
+import i18n from '../../i18n/i18n';
 
 const testAssets = [
   { title: 'ASSET#2', currencyValue: '$ 2,000', unitValue: '4 EA2', type: CryptoType.ASSET, unit: 'EA2' },
@@ -53,7 +54,7 @@ export const Main: React.FC = () => {
       <BasicLayout >
         <H3Text
           style={{ marginTop: 50 }}
-          label={'총 자산'}
+          label={i18n.t('main.total_assets')}
         />
         <View style={{
           paddingBottom: 15,
@@ -93,7 +94,7 @@ export const Main: React.FC = () => {
                   />
                 </View>
                 <TitleText
-                  label={'지갑을 연결해 주세요'}
+                  label={i18n.t('main.connect_wallet')}
                   style={{ height: 30, marginLeft: 20 }}
                 />
                 <View style={{
@@ -113,14 +114,14 @@ export const Main: React.FC = () => {
           }
         </View>
         <AssetListing
-          title={'내 투자금'}
+          title={i18n.t('main.my_assets')}
           assets={testAssets}
           itemPressHandler={(asset) => { navigateHandler(DashboardPage.AssetTokenDetail, asset) }}
           totalValue={'$ 789,123'}
         />
         <View style={{ height: 25 }} />
         <AssetListing
-          title={'내 지갑'}
+          title={i18n.t('main.my_wallet')}
           assets={testCurrencies}
           totalValue={'$ 50.23'}
           itemPressHandler={(asset) => { navigateHandler(DashboardPage.CryptoDetail, asset) }}

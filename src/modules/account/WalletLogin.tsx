@@ -43,7 +43,7 @@ const WalletLogin: FunctionComponent = () => {
             }
             value={password}
             secure={true}
-            helperText={error ? '비밀번호가 올바르지 않습니다.' : undefined}
+            helperText={error ? i18n.t('account_errors.password_do_not_match') : undefined}
             helperIcon={error ? 'Error' : undefined}
           />
         </>
@@ -63,7 +63,7 @@ const WalletLogin: FunctionComponent = () => {
           />
           <BorderButton
             style={{ marginTop: 10, marginLeft: '5%', marginRight: '5%' }}
-            title={'비밀번호가 기억나지 않아요.'}
+            title={i18n.t('wallet.lost_password')}
             handler={() => {
               navigation.navigate(AccountPage.WalletRecover)
             }}

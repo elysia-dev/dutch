@@ -8,6 +8,7 @@ import QRCode from 'react-native-qrcode-svg';
 import AppColors from '../../../enums/AppColors';
 import Clipboard from 'expo-clipboard';
 import { showMessage } from "react-native-flash-message";
+import i18n from '../../../i18n/i18n';
 
 interface Props {
   modalHandler: () => void;
@@ -43,7 +44,7 @@ const Deposit: FunctionComponent<Props> = props => {
           }}
         />
       </TouchableOpacity>
-      <H3Text label={'내 입금 주소'} style={{ marginTop: 20 }} />
+      <H3Text label={i18n.t('main.my_address')} style={{ marginTop: 20 }} />
       <View style={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -67,7 +68,7 @@ const Deposit: FunctionComponent<Props> = props => {
           onPress={() => {
             Clipboard.setString(address);
             showMessage({
-              message: "성공적으로 복사했습니다.",
+              message: i18n.t('main.success_copy'),
             });
           }}
         >

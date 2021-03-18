@@ -6,6 +6,7 @@ import { View, Image, TouchableOpacity, TextInput, Keyboard } from 'react-native
 import AppColors from '../../../enums/AppColors';
 import NextButton from '../../../shared/components/NextButton';
 import { H3Text, P2Text, P3Text, P4Text } from '../../../shared/components/Texts';
+import i18n from '../../../i18n/i18n';
 
 interface Props {
   modalHandler: () => void;
@@ -64,8 +65,8 @@ const Withdrawal: FunctionComponent<Props> = props => {
           }}
         />
       </TouchableOpacity>
-      <H3Text label={'출금하기'} />
-      <P2Text label={'출금주소'} style={{ color: AppColors.BLACK, marginTop: 30 }} />
+      <H3Text label={i18n.t('wallet.withdrawal')} />
+      <P2Text label={i18n.t('wallet.withdrawal_address')} style={{ color: AppColors.BLACK, marginTop: 30 }} />
       <TextInput
         style={{
           height: 40,
@@ -77,9 +78,9 @@ const Withdrawal: FunctionComponent<Props> = props => {
         }}
         value={to}
         onChangeText={setTo}
-        placeholder={'출금하실 지갑주소를 입력하세요.'}
+        placeholder={i18n.t('wallet.withdrawal_content')}
       />
-      <P2Text label={'보낼 수량'} style={{ color: AppColors.BLACK, marginTop: 30 }} />
+      <P2Text label={i18n.t('wallet.send_value')} style={{ color: AppColors.BLACK, marginTop: 30 }} />
       <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
         <TextInput
           style={{
@@ -92,7 +93,7 @@ const Withdrawal: FunctionComponent<Props> = props => {
           }}
           value={value}
           onChangeText={setValue}
-          placeholder={'수량 입력'}
+          placeholder={i18n.t('wallet.insert_value')}
         />
         <TouchableOpacity
           style={{
@@ -105,12 +106,12 @@ const Withdrawal: FunctionComponent<Props> = props => {
             paddingTop: 12,
           }}
         >
-          <P3Text label={'최대'} style={{ color: AppColors.MAIN, textAlign: 'center' }} />
+          <P3Text label={i18n.t('wallet.full')} style={{ color: AppColors.MAIN, textAlign: 'center' }} />
         </TouchableOpacity>
       </View>
-      <P4Text label={`사용가능 : ${remains}`} style={{ marginTop: 5 }} />
+      <P4Text label={`${i18n.t('wallet.remaining_value')} : ${remains}`} style={{ marginTop: 5 }} />
       <NextButton
-        title={'출금하기'}
+        title={i18n.t('wallet.withdrawal')}
         style={{
           width: '100%',
           marginTop: 30,
