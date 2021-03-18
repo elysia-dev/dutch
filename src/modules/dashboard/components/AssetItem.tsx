@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import CryptoType from '../../../enums/CryptoType';
+import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 
@@ -21,21 +22,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
       disabled={!touchable}
       style={{ display: 'flex', flexDirection: 'row', height: 60, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
     >
-      <Image
-        source={
-          asset.type === CryptoType.EL ?
-            require('../images/el.png') :
-            asset.type === CryptoType.ETH ?
-              require('../images/eth.png') :
-              asset.type === CryptoType.BNB ?
-                require('../images/bnb.png') :
-                require('../images/asset.png')
-        }
-        style={{
-          width: 40,
-          height: 40
-        }}
-      />
+      <CryptoImage type={asset.type} />
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
         <P2Text label={asset.unitValue} />
