@@ -69,7 +69,7 @@ const Purchase: FunctionComponent<Props> = () => {
           height: '100%',
         }}>
         <CryptoInput
-          title={'투자금액'}
+          title={'투자 금액'}
           cryptoTitle={fromTitle}
           cryptoType={fromCrypto}
           style={{ marginTop: 20 }}

@@ -9,7 +9,7 @@ import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import { AssetPage, MorePage, Page } from '../../enums/pageEnum';
+import { AssetPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
 
 const testAssets = [
   { title: 'ASSET#2', currencyValue: '$ 2,000', unitValue: '4 EA2', type: CryptoType.ELA, unit: 'EA2' },
@@ -121,7 +121,7 @@ export const Main: React.FC = () => {
             navigation.navigate(
               Page.Dashboard,
               {
-                screen: screen,
+                screen: DashboardPage.CryptoDetail,
                 params: {
                   asset
                 }
