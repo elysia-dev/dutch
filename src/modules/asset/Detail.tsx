@@ -35,6 +35,43 @@ const Detail: FunctionComponent = () => {
   const asset = route.params.asset;
   const [filter, setFilter] = useState<number>(0);
 
+  const mainFeatures = [
+    {
+      title: '구매',
+      icon: '+',
+      handler: () => {
+        navigation.navigate(AssetPage.Purchase, {
+          fromCrypto: CryptoType.ETH,
+          fromTitle: 'ETH',
+          toCrypto: asset.type,
+          toTitle: asset.title,
+        })
+      }
+    },
+    {
+      title: '환불',
+      icon: '−',
+      handler: () => {
+        navigation.navigate(AssetPage.Refund, {
+          fromCrypto: asset.type,
+          fromTitle: asset.title,
+          toCrypto: CryptoType.ETH,
+          toTitle: 'ETH',
+        })
+      }
+    },
+    {
+      title: '이자',
+      icon: '⤴',
+      handler: () => {
+        navigation.navigate(AssetPage.Reward, {
+          toCrypto: CryptoType.ETH,
+          toTitle: 'ETH',
+        })
+      }
+    },
+  ]
+
   return (
     <>
       <ScrollView
@@ -132,22 +169,7 @@ const Detail: FunctionComponent = () => {
           </View>
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
-              [
-                {
-                  title: i18n.t('main.ownership'),
-                  icon: '+',
-                  handler: () => {
-                    navigation.navigate(AssetPage.Purchase, {
-                      fromCrypto: CryptoType.EL,
-                      fromTitle: 'EL',
-                      toCrypto: asset.type,
-                      toTitle: asset.title,
-                    })
-                  }
-                },
-                { title: i18n.t('main.refund'), icon: '−', handler: () => { } },
-                { title: i18n.t('main.return'), icon: '⤴', handler: () => { } },
-              ].map((data, index) => {
+              mainFeatures.map((data, index) => {
                 return (
                   <TouchableOpacity
                     key={index}

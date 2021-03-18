@@ -84,5 +84,7 @@ export enum Page {
 
 export enum AssetPage {
   Detail = 'Detail',
-  Purchase = 'Purchase'
+  Purchase = 'Purchase',
+  Refund = 'Refund',
+  Reward = 'Reward'
 }

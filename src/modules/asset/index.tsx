@@ -4,6 +4,8 @@ import { enableScreens } from 'react-native-screens'
 import Purchase from './Purchase';
 import Detail from './Detail';
 import { AssetPage } from '../../enums/pageEnum';
+import Refund from './Refund';
+import Reward from './Reward';
 
 enableScreens()
 
@@ -26,6 +28,14 @@ export const Main = () => {
       <RootStack.Screen
         name={AssetPage.Purchase}
         component={Purchase}
+      />
+      <RootStack.Screen
+        name={AssetPage.Refund}
+        component={Refund}
+      />
+      <RootStack.Screen
+        name={AssetPage.Reward}
+        component={Reward}
       />
     </RootStack.Navigator>
   );
