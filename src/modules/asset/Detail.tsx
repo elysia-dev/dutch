@@ -13,6 +13,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
+import CryptoType from '../../enums/CryptoType';
 
 const now = Date.now()
 
@@ -135,7 +136,14 @@ const Detail: FunctionComponent = () => {
                 {
                   title: '구매',
                   icon: '+',
-                  handler: () => { navigation.navigate(AssetPage.Purchase) }
+                  handler: () => {
+                    navigation.navigate(AssetPage.Purchase, {
+                      fromCrypto: CryptoType.EL,
+                      fromTitle: 'EL',
+                      toCrypto: asset.type,
+                      toTitle: asset.title,
+                    })
+                  }
                 },
                 { title: '환불', icon: '−', handler: () => { } },
                 { title: '이자', icon: '⤴', handler: () => { } },

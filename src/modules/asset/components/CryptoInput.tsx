@@ -2,7 +2,7 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { View, StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
-import { H3Text, H4Text } from '../../../shared/components/Texts';
+import { P1Text, H4Text, P3Text } from '../../../shared/components/Texts';
 import AppColors from '../../../enums/AppColors';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
@@ -11,6 +11,7 @@ interface Props {
   active: boolean
   title: string
   value: string
+  subValue?: string
   cryptoType: CryptoType
   cryptoTitle: string
   style?: StyleProp<ViewStyle>
@@ -21,6 +22,7 @@ const CryptoInput: FunctionComponent<Props> = ({
   active,
   title,
   value,
+  subValue,
   cryptoTitle,
   cryptoType,
   style,
@@ -41,10 +43,11 @@ const CryptoInput: FunctionComponent<Props> = ({
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <CryptoImage type={cryptoType} style={{ width: 20, height: 20 }} />
-          <H4Text label={cryptoTitle} style={{ marginLeft: 5 }} />
+          <P1Text label={cryptoTitle} style={{ marginLeft: 5 }} />
         </View>
         <View style={{ marginLeft: 'auto' }}>
-          <H3Text label={`${value} ${cryptoType}`} />
+          <P1Text label={`${value} ${cryptoType}`} style={{ textAlign: 'right' }} />
+          {subValue && <P3Text label={subValue} style={{ color: AppColors.BLACK2, textAlign: 'right' }} />}
         </View>
       </TouchableOpacity>
     </View>
