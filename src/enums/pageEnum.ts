@@ -79,4 +79,10 @@ export enum Page {
   Account = 'Account',
   BlockScreen = 'BlockScreen',
   Wallet = 'Wallet',
+  Asset = 'Asset',
+}
+
+export enum AssetPage {
+  Detail = 'Detail',
+  Purchase = 'Purchase'
 }

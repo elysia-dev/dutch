@@ -2,7 +2,7 @@ import React, {
   FunctionComponent,
   useState,
 } from 'react';
-import { View, ScrollView, Image, Modal, Text } from 'react-native';
+import { View, ScrollView, Image, Text } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { H2Text, H4Text, P1Text, TitleText } from '../../shared/components/Texts';
@@ -12,6 +12,7 @@ import TransactionList from './components/TransactionList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from '../../i18n/i18n';
 import AppColors from '../../enums/AppColors';
+import { AssetPage } from '../../enums/pageEnum';
 
 const now = Date.now()
 
@@ -22,21 +23,16 @@ const testCryptoTx = [
 ]
 
 type ParamList = {
-  AssetTokenDetail: {
+  Detail: {
     asset: Asset;
   };
 };
 
-const AssetTokenDetail: FunctionComponent = () => {
+const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'AssetTokenDetail'>>();
+  const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
   const [filter, setFilter] = useState<number>(0);
-  const [state, setState] = useState({
-    refundModalVisible: false,
-    purchaseModalVisible: false,
-    interestModalVisible: false,
-  });
 
   return (
     <>
@@ -136,14 +132,19 @@ const AssetTokenDetail: FunctionComponent = () => {
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
               [
-                { title: '구매', icon: '+' },
-                { title: '환불', icon: '−' },
-                { title: '이자', icon: '⤴' },
+                {
+                  title: '구매',
+                  icon: '+',
+                  handler: () => { navigation.navigate(AssetPage.Purchase) }
+                },
+                { title: '환불', icon: '−', handler: () => { } },
+                { title: '이자', icon: '⤴', handler: () => { } },
               ].map((data, index) => {
                 return (
                   <TouchableOpacity
                     key={index}
                     style={{ flexDirection: 'column', alignItems: 'center' }}
+                    onPress={data.handler}
                   >
                     <View
                       style={{
@@ -202,43 +203,8 @@ const AssetTokenDetail: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      {(state.purchaseModalVisible ||
-        state.refundModalVisible ||
-        state.interestModalVisible) && (
-          <View
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.5)',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-            }}></View>
-        )}
-      <Modal
-        transparent={true}
-        animationType={'slide'}
-        visible={state.refundModalVisible}
-        onRequestClose={() =>
-          setState({ ...state, refundModalVisible: false })
-        }>
-      </Modal>
-      <Modal
-        transparent={true}
-        animationType={'slide'}
-        visible={state.interestModalVisible}
-        onRequestClose={() =>
-          setState({ ...state, interestModalVisible: false })
-        }>
-      </Modal>
-      <Modal
-        transparent={true}
-        animationType={'slide'}
-        visible={state.purchaseModalVisible}
-        onRequestClose={() =>
-          setState({ ...state, purchaseModalVisible: false })
-        }>
-      </Modal>
     </>
   );
 };
 
-export default AssetTokenDetail;
+export default Detail;

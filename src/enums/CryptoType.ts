@@ -1,8 +1,8 @@
 enum CryptoType {
-  EL = 'el',
-  ETH = 'eth',
-  BNB = 'bnb',
-  ASSET = 'asset',
+  EL = 'EL',
+  ETH = 'ETH',
+  BNB = 'BNB',
+  ELA = 'ELA',
 }
 
 export default CryptoType
