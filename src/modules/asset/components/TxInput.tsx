@@ -26,6 +26,7 @@ interface ITxInput {
   values: { from: string, to: string }
   current: string
   step: TxStep
+  disabled: boolean
   setCurrent: Dispatch<SetStateAction<"from" | "to">>
   setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
   createTx: () => void
@@ -44,6 +45,7 @@ const TxInput: React.FC<ITxInput> = ({
   values,
   current,
   step,
+  disabled,
   setCurrent,
   setValues,
   createTx,
@@ -142,7 +144,7 @@ const TxInput: React.FC<ITxInput> = ({
           }}
         />
         <NextButton
-          disabled={!(parseFloat(values.from) > 0)}
+          disabled={disabled}
           title={title}
           handler={() => {
             createTx()

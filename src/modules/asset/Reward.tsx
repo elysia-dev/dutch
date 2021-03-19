@@ -28,27 +28,18 @@ type ParamList = {
   Reward: {
     toCrypto: CryptoType,
     toTitle: string,
+    productId: number,
+    contractAaddress: string,
   };
 };
 
-interface Props {
-  fromCrypto: CryptoType,
-  fromTitle: string,
-  toTitle: string,
-  toCrypto: CryptoType,
-}
-
-// EL - EA
-//const testContractAddress = '0xb09479b0ad2C939d59cB1Ea1C27C1b25F9B8A46E';
-// EL - ETH
-const testContractAddress = '0xFFBFF24cA3A03F1039f9AFc222A6F76105564b12'
-
-const Reward: FunctionComponent<Props> = () => {
+const Reward: FunctionComponent = () => {
   const [step, setStep] = useState(TxStep.None);
   const [interest, setInterest] = useState(0);
-  const { toCrypto, toTitle } = useRoute<RouteProp<ParamList, 'Reward'>>()?.params;
+  const route = useRoute<RouteProp<ParamList, 'Reward'>>()
+  const { toCrypto, toTitle, contractAaddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(testContractAddress);
+  const assetTokenContract = useAssetToken(contractAaddress);
   const { wallet } = useContext(WalletContext);
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const { isWalletUser, user } = useContext(UserContext);

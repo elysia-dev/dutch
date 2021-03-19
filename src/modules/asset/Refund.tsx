@@ -21,13 +21,10 @@ type ParamList = {
     fromTitle: string,
     toTitle: string,
     toCrypto: CryptoType,
+    productId: number,
+    contractAaddress: string,
   };
 };
-
-// EL - EA
-//const testContractAddress = '0xb09479b0ad2C939d59cB1Ea1C27C1b25F9B8A46E';
-// EL - ETH
-const testContractAddress = '0xFFBFF24cA3A03F1039f9AFc222A6F76105564b12'
 
 const Refund: FunctionComponent = () => {
   const [values, setValues] = useState({
@@ -41,9 +38,10 @@ const Refund: FunctionComponent = () => {
     stage: 0,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
-  const { fromCrypto, fromTitle, toTitle, toCrypto } = useRoute<RouteProp<ParamList, 'Refund'>>()?.params;
+  const route = useRoute<RouteProp<ParamList, 'Refund'>>();
+  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAaddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(testContractAddress);
+  const assetTokenContract = useAssetToken(contractAaddress);
   const { wallet } = useContext(WalletContext);
   const { isWalletUser } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
@@ -88,13 +86,14 @@ const Refund: FunctionComponent = () => {
         toPrice={toCrypto === CryptoType.ETH ? ethPrice : elPrice}
         current={current}
         step={state.step}
+        disabled={parseInt(values.from || '0') < 1}
         setCurrent={setCurrent}
         setValues={setValues}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })
           } else {
-            Server.requestTransaction(8, parseInt(values.from), 'refund')
+            Server.requestTransaction(route.params.productId, parseInt(values.from), 'refund')
               .then((res) => {
                 setState({
                   ...state,

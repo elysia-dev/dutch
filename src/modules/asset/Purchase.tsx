@@ -15,7 +15,6 @@ import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
-import { ProductPage } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
 import PaymentSelection from './components/PaymentSelection';
 
@@ -30,10 +29,6 @@ type ParamList = {
   };
 };
 
-// EL - EA
-//const testContractAddress = '0xb09479b0ad2C939d59cB1Ea1C27C1b25F9B8A46E';
-// EL - ETH
-// const testContractAddress = '0xFFBFF24cA3A03F1039f9AFc222A6F76105564b12'
 // TODO
 // 1. Check Maximu value gasFee & Price...
 // 2. toPrice는 5달러 고정이 아닐 수 도 있다.
@@ -165,12 +160,12 @@ const Purchase: FunctionComponent = () => {
         step={state.step}
         setCurrent={setCurrent}
         setValues={setValues}
+        disabled={parseInt(values.to || '0') < 1}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.CheckAllowance })
           } else {
-            //route.params.productId
-            Server.requestTransaction(8, parseInt(values.to), 'buying')
+            Server.requestTransaction(route.params.productId, parseInt(values.to), 'buying')
               .then((res) => {
                 setState({
                   ...state,
