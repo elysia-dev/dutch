@@ -7,7 +7,7 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import FlashMessage from "react-native-flash-message";
 import { More } from './src/modules/more/More';
-import { Products } from './src/modules/products/Products';
+import Products from './src/modules/products';
 import { Account } from './src/modules/account/Account';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
