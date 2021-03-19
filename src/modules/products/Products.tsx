@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-navigation';
 import { ProductPage } from '../../enums/pageEnum';
 import ProductBuying from './ProductBuying';
 import PaymentSelection from './PaymentSelection';
-import ProductStory from './ProductStory';
 
 const Stack = createStackNavigator();
 

@@ -70,17 +70,17 @@ const ProductBuying: FunctionComponent = () => {
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
   const { Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
+  const { user, isWalletUser } = useContext(UserContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
-  const purchasability = user.ethAddresses?.length > 0;
+  const purchasability = isWalletUser || user.ethAddresses?.length > 0;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
-    } else if (user.provider === ProviderType.GUEST) {
+    } else if (user.provider === ProviderType.GUEST && !purchasability) {
       return i18n.t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return i18n.t('product_label.non_purchasable');
@@ -93,7 +93,7 @@ const ProductBuying: FunctionComponent = () => {
   };
 
   const submitButtonHandler = () => {
-    if (user.provider === ProviderType.GUEST) {
+    if (ProviderType.GUEST && !purchasability) {
       return Alert.alert(
         i18n.t('product_label.need_wallet'),
         i18n.t('product.connect_wallet_confirm'),
