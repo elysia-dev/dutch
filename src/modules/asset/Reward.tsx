@@ -19,6 +19,7 @@ import { utils } from 'ethers';
 import currencyFormatter from '../../utiles/currencyFormatter';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
+import i18n from '../../i18n/i18n';
 
 type ParamList = {
   Reward: {
@@ -88,9 +89,9 @@ const Reward: FunctionComponent<Props> = () => {
         }}
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
+          <H4Text label={i18n.t('assets.cancel')} style={{ color: AppColors.MAIN }} />
         </TouchableOpacity>
-        <H3Text label={'이자 분배'} style={{}} />
+        <H3Text label={i18n.t('assets.yield_reward')} style={{}} />
         <View style={{ width: 20 }} />
       </View>
       <View
@@ -101,7 +102,7 @@ const Reward: FunctionComponent<Props> = () => {
           height: '100%',
         }}>
         <CryptoInput
-          title={'이자'}
+          title={i18n.t('assets.yield')}
           cryptoTitle={toTitle}
           cryptoType={toCrypto}
           style={{ marginTop: 20 }}
@@ -118,7 +119,7 @@ const Reward: FunctionComponent<Props> = () => {
         <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
           <NextButton
             disabled={!(interest > 0)}
-            title={'이자 분배'}
+            title={i18n.t('assets.yield_reward')}
             handler={() => {
               setStep(TxStep.Creating)
             }}

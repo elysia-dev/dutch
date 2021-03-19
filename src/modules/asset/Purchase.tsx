@@ -13,6 +13,7 @@ import { utils } from 'ethers';
 import TxInput from './components/TxInput';
 import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
+import i18n from '../../i18n/i18n';
 
 type ParamList = {
   Purchase: {
@@ -138,9 +139,9 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <TxInput
-      title={'구매하기'}
-      fromInputTitle={'투자 금액'}
-      toInputTitle={'받는 지분'}
+      title={i18n.t('assets.invest')}
+      fromInputTitle={i18n.t('assets.invest_value')}
+      toInputTitle={i18n.t('assets.invest_stake')}
       fromCrypto={fromCrypto}
       fromTitle={fromTitle}
       toCrypto={toCrypto}

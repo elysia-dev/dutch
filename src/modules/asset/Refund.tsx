@@ -10,6 +10,7 @@ import { utils } from 'ethers';
 import TxInput from './components/TxInput';
 import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
+import i18n from '../../i18n/i18n';
 
 type ParamList = {
   Refund: {
@@ -66,9 +67,9 @@ const Refund: FunctionComponent = () => {
 
   return (
     <TxInput
-      title={'환불하기'}
-      fromInputTitle={'환불 지분'}
-      toInputTitle={'받는 금액'}
+      title={i18n.t('assets.refund')}
+      fromInputTitle={i18n.t('assets.refund_stake')}
+      toInputTitle={i18n.t('assets.refund_value')}
       fromCrypto={fromCrypto}
       fromTitle={fromTitle}
       toCrypto={toCrypto}
