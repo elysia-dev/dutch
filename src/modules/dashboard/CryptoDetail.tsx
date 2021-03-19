@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import BasicLayout from '../../shared/components/BasicLayout';
 import Asset from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import AssetItem from './components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
-import { View, Modal } from 'react-native';
+import { View, Modal, Dimensions } from 'react-native';
 import AssetGraph from './components/AssetGraph';
 import TransactionList from './components/TransactionList';
 import CryptoType from '../../enums/CryptoType';
@@ -14,6 +14,7 @@ import NextButton from '../../shared/components/NextButton';
 import Deposit from './components/Deposit';
 import Withdrawal from './components/Withdrawal';
 import i18n from '../../i18n/i18n';
+import UserContext from '../../contexts/UserContext';
 
 const now = Date.now();
 
@@ -49,6 +50,7 @@ const CryptoDetail: React.FC = () => {
   const [filter, setFilter] = useState<number>(0);
   const [depositModalVisible, setDepositModalVisible] = useState<boolean>(false);
   const [withdrwalModalVisible, setWithdrawalModalVisible] = useState<boolean>(false);
+  const { isWalletUser } = useContext(UserContext);
 
   return (
     <>
@@ -96,25 +98,26 @@ const CryptoDetail: React.FC = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           position: 'absolute',
-          width: '90%',
           bottom: 10,
           backgroundColor: 'white',
         }}
       >
         <NextButton
           style={{
-            width: 160,
+            width: isWalletUser ? 160 : Dimensions.get('window').width * 0.9,
           }}
           title={i18n.t('wallet.deposit')}
           handler={() => { setDepositModalVisible(true) }}
         />
-        <NextButton
-          style={{
-            width: 160,
-          }}
-          title={i18n.t('wallet.withdrawal')}
-          handler={() => { setWithdrawalModalVisible(true) }}
-        />
+        {isWalletUser &&
+          <NextButton
+            style={{
+              width: 160,
+            }}
+            title={i18n.t('wallet.withdrawal')}
+            handler={() => { setWithdrawalModalVisible(true) }}
+          />
+        }
       </View>
       {(depositModalVisible ||
         withdrwalModalVisible) && (

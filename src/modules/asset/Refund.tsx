@@ -10,6 +10,9 @@ import { utils } from 'ethers';
 import TxInput from './components/TxInput';
 import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
+import PaymentSelection from './components/PaymentSelection';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
 import i18n from '../../i18n/i18n';
 
 type ParamList = {
@@ -18,13 +21,10 @@ type ParamList = {
     fromTitle: string,
     toTitle: string,
     toCrypto: CryptoType,
+    productId: number,
+    contractAaddress: string,
   };
 };
-
-// EL - EA
-//const testContractAddress = '0xb09479b0ad2C939d59cB1Ea1C27C1b25F9B8A46E';
-// EL - ETH
-const testContractAddress = '0xFFBFF24cA3A03F1039f9AFc222A6F76105564b12'
 
 const Refund: FunctionComponent = () => {
   const [values, setValues] = useState({
@@ -34,12 +34,17 @@ const Refund: FunctionComponent = () => {
   const [state, setState] = useState({
     txHash: '',
     step: TxStep.None,
+    espressoTxId: '',
+    stage: 0,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
-  const { fromCrypto, fromTitle, toTitle, toCrypto } = useRoute<RouteProp<ParamList, 'Refund'>>()?.params;
+  const route = useRoute<RouteProp<ParamList, 'Refund'>>();
+  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAaddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(testContractAddress);
+  const assetTokenContract = useAssetToken(contractAaddress);
   const { wallet } = useContext(WalletContext);
+  const { isWalletUser } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
   const { elPrice, ethPrice } = usePrices()
   const { afterTxFailed, afterTxCreated } = useTxHandler();
 
@@ -65,27 +70,53 @@ const Refund: FunctionComponent = () => {
     }
   }, [state.step])
 
+
+  if (state.stage === 0) {
+    return (
+      <TxInput
+        title={'환불하기'}
+        fromInputTitle={'환불 지분'}
+        toInputTitle={'받는 금액'}
+        fromCrypto={fromCrypto}
+        fromTitle={fromTitle}
+        toCrypto={toCrypto}
+        toTitle={toTitle}
+        values={values}
+        fromPrice={5} // 5 USD
+        toPrice={toCrypto === CryptoType.ETH ? ethPrice : elPrice}
+        current={current}
+        step={state.step}
+        disabled={parseInt(values.from || '0') < 1}
+        setCurrent={setCurrent}
+        setValues={setValues}
+        createTx={() => {
+          if (isWalletUser) {
+            setState({ ...state, step: TxStep.Creating })
+          } else {
+            Server.requestTransaction(route.params.productId, parseInt(values.from), 'refund')
+              .then((res) => {
+                setState({
+                  ...state,
+                  stage: 1,
+                  espressoTxId: res.data.id,
+                })
+              })
+              .catch((e) => {
+                if (e.response.status === 400) {
+                  alert(i18n.t('product.transaction_error'));
+                } else if (e.response.status === 500) {
+                  alert(i18n.t('account_errors.server'));
+                }
+              });
+          }
+        }}
+      />
+    );
+  }
+
   return (
-    <TxInput
-      title={i18n.t('assets.refund')}
-      fromInputTitle={i18n.t('assets.refund_stake')}
-      toInputTitle={i18n.t('assets.refund_value')}
-      fromCrypto={fromCrypto}
-      fromTitle={fromTitle}
-      toCrypto={toCrypto}
-      toTitle={toTitle}
-      values={values}
-      fromPrice={5} // 5 USD
-      toPrice={toCrypto === CryptoType.ETH ? ethPrice : elPrice}
-      current={current}
-      step={state.step}
-      setCurrent={setCurrent}
-      setValues={setValues}
-      createTx={() => {
-        setState({ ...state, step: TxStep.Creating })
-      }}
-    />
-  );
+    <PaymentSelection espressTxId={state.espressoTxId} />
+  )
 };
 
 export default Refund;

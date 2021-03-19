@@ -10,14 +10,16 @@ import Clipboard from 'expo-clipboard';
 import { showMessage } from "react-native-flash-message";
 import WalletContext from '../../../contexts/WalletContext';
 import i18n from '../../../i18n/i18n';
+import UserContext from '../../../contexts/UserContext';
 
 interface Props {
   modalHandler: () => void;
 }
 
 const Deposit: FunctionComponent<Props> = props => {
+  const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const address = wallet?.getNodes()[0].address || '';
+  const address = isWalletUser ? wallet?.getNodes()[0].address : user.ethAddresses[0];
 
   return (
     <View

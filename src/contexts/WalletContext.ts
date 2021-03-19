@@ -10,6 +10,7 @@ export type WalletContextType = {
   unlock: (password: string) => Promise<void>;
   createNewWallet: (password: string) => Promise<void>;
   restoreWallet: (password: string, seed: string) => Promise<void>;
+  validatePassword: (password: string) => boolean;
 };
 
 export type WalletStateType = {
@@ -32,6 +33,7 @@ export const walletInitialState = {
   unlock: async (_password: string) => { },
   createNewWallet: async (_password: string) => { },
   restoreWallet: async (_password: string, _seed: string) => { },
+  validatePassword: (_password: string) => { return false },
 }
 
 const WalletContext = createContext<WalletContextType>(walletInitialState);

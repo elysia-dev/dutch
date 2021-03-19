@@ -1,7 +1,5 @@
 import React, {
-  createRef,
   FunctionComponent,
-  useContext,
   useEffect,
   useState,
   useRef,
@@ -28,6 +26,7 @@ import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
+import { Page, ProductPage } from '../../../enums/pageEnum';
 
 interface Props {
   story: Story;
@@ -319,9 +318,11 @@ const ExpandedItem: FunctionComponent<Props> = ({
             title={i18n.t('product_label.more_info')}
             handler={() => {
               StatusBar.setHidden(false);
-              navigation.navigate('Product', {
-                screen: 'ProductBuying',
-                params: { productId: story.productId },
+              navigation.navigate(Page.Product, {
+                screen: ProductPage.ProductBuying,
+                params: {
+                  productId: story.productId,
+                }
               });
             }}
           />

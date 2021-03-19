@@ -253,7 +253,8 @@
     "return_initial": "回到之前界面",
     "disconnect": "解除绑定",
     "reply_email": "请输入邮箱地址。",
-    "disconnect_and_new": "绑定新的钱包地址。"
+    "disconnect_and_new": "绑定新的钱包地址。",
+    "backupseed": "시드 문구"
   },
   "more": {
     "no_transaction": "该期间内没有交易。",
@@ -469,7 +470,8 @@
     "wallet_select" : "혹시 기존에 사용하던\n지갑이 있으신가요?",
     "wallet_select_content" : "새로운 지갑을 만들거나 기존 지갑을 사용할 수 있습니다.",
     "existing_wallet" : "기존 지갑 사용하기",
-    "create_wallet" : "새로운 지갑 생성하기"
+    "create_wallet" : "새로운 지갑 생성하기",
+    "check_after_click": "눌러서 확인하기"
   },
   "wallet": {
     "lost_password": "비밀번호가 기억나지 않아요.",

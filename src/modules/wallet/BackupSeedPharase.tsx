@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
 import WalletContext from '../../contexts/WalletContext';
 import i18n from '../../i18n/i18n';
+import { BackButton } from '../../shared/components/BackButton';
 
 interface IBackupSeedPharase {
   next: () => void;
@@ -21,6 +22,9 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
   const navigation = useNavigation();
   return (
     <Layout>
+      <View style={{ position: 'absolute', padding: 20 }}>
+        <BackButton handler={() => navigation.goBack()} />
+      </View>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
         label={i18n.t('recovery_key.backup_seed')}

@@ -335,6 +335,32 @@ const MainInfo: FunctionComponent = () => {
               </View>
             )}
 
+            {isWalletUser && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.CheckMnemonic,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <H3Text
+                      label={i18n.t('more_label.backupseed')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
 
             <H3Text

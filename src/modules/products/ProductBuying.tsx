@@ -20,18 +20,18 @@ import styled from 'styled-components/native';
 import i18n from '../../i18n/i18n';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
-import Product, { defaultProduct } from '../../types/Product';
+import Product from '../../types/Product';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
-import SliderProductBuying from './SliderProductBuying';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
-import { MorePage } from '../../enums/pageEnum';
+import { MorePage, ProductPage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import CryptoType from '../../enums/CryptoType';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -47,7 +47,6 @@ type ParamList = {
 };
 
 interface State {
-  modalVisible: boolean;
   subscribed: boolean;
   product?: Product;
   loaded: boolean;
@@ -58,7 +57,6 @@ interface State {
 
 const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
-    modalVisible: false,
     subscribed: false,
     loaded: false,
     elPrice: 0,
@@ -70,17 +68,17 @@ const ProductBuying: FunctionComponent = () => {
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
   const { Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
+  const { user, isWalletUser } = useContext(UserContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
-  const purchasability = user.ethAddresses?.length > 0;
+  const purchasability = isWalletUser || user.ethAddresses?.length > 0;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
-    } else if (user.provider === ProviderType.GUEST) {
+    } else if (user.provider === ProviderType.GUEST && !purchasability) {
       return i18n.t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return i18n.t('product_label.non_purchasable');
@@ -93,7 +91,7 @@ const ProductBuying: FunctionComponent = () => {
   };
 
   const submitButtonHandler = () => {
-    if (user.provider === ProviderType.GUEST) {
+    if (ProviderType.GUEST && !purchasability) {
       return Alert.alert(
         i18n.t('product_label.need_wallet'),
         i18n.t('product.connect_wallet_confirm'),
@@ -120,7 +118,14 @@ const ProductBuying: FunctionComponent = () => {
       }
       return alert(i18n.t('product.non_purchasable'));
     } else {
-      setState({ ...state, modalVisible: true });
+      navigation.navigate(ProductPage.Purchase, {
+        fromCrypto: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+        fromTitle: state.product?.paymentMethod.toUpperCase(),
+        toCrypto: CryptoType.ELA,
+        toTitle: state.product?.tokenName,
+        contractAddress: state.product?.contractAddress,
+        productId: state.product?.id,
+      })
     }
   };
 
@@ -312,31 +317,7 @@ const ProductBuying: FunctionComponent = () => {
             <ActivityIndicator size="large" color="#3679B5" />
           </View>
         )}
-        <Modal
-          transparent={true}
-          animationType={'slide'}
-          visible={state.modalVisible}
-          onRequestClose={() => setState({ ...state, modalVisible: false })}>
-          <SliderProductBuying
-            product={state.product ? state.product : defaultProduct}
-            subscribed={state.subscribed}
-            setSubcribed={(input: boolean) =>
-              setState({ ...state, subscribed: input })
-            }
-            modalHandler={() => setState({ ...state, modalVisible: false })}
-          />
-        </Modal>
       </ProductInfoWrapper>
-      {state.modalVisible && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      )}
     </>
   );
 };

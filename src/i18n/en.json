@@ -256,7 +256,8 @@
     "return_initial": "Go back to main page",
     "disconnect": "Wallet disconnected",
     "reply_email": "Please enter your email",
-    "disconnect_and_new": "Connect new wallet"
+    "disconnect_and_new": "Connect new wallet",
+    "backupseed": "시드 문구"
   },
   "more": {
     "no_transaction": "No transaction history.",
@@ -476,7 +477,8 @@
     "wallet_select" : "혹시 기존에 사용하던\n지갑이 있으신가요?",
     "wallet_select_content" : "새로운 지갑을 만들거나 기존 지갑을 사용할 수 있습니다.",
     "existing_wallet" : "기존 지갑 사용하기",
-    "create_wallet" : "새로운 지갑 생성하기"
+    "create_wallet" : "새로운 지갑 생성하기",
+    "check_after_click": "눌러서 확인하기"
   },
   "wallet": {
     "lost_password": "비밀번호가 기억나지 않아요.",

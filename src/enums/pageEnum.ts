@@ -6,10 +6,12 @@ export enum MainPage {
 }
 
 export enum ProductPage {
+  Main = 'Main',
   MainList = 'MainList',
   ProductStory = 'ProductStory',
   ProductBuying = 'ProductBuying',
   SliderProductBuying = 'SliderProductBuying',
+  Purchase = 'Purchase',
   PaymentSelection = 'PaymentSelection',
 }
 
@@ -45,6 +47,7 @@ export enum MorePage {
   WhatsNew = 'WhatsNew',
   MembershipWithdrawl = 'MembershipWithdrawl',
   Asset2Ownership = 'Asset2Ownership',
+  CheckMnemonic = 'CheckMnemonic',
 }
 
 export enum DashboardPage {
