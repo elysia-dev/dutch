@@ -63,7 +63,7 @@
         "com.sec.android.provider.badge.permission.WRITE",
         "com.sonyericsson.home.permission.BROADCAST_BADGE"
       ],
-      "versionCode": 12,
+      "versionCode": 13,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json"
     },
