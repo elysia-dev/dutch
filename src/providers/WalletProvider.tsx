@@ -51,6 +51,10 @@ const WalletProvider: React.FC = (props) => {
     })
   }
 
+  const validatePassword = (password: string): boolean => {
+    return password === state.password;
+  }
+
   return (
     <WalletContext.Provider
       value={{
@@ -58,7 +62,8 @@ const WalletProvider: React.FC = (props) => {
         setLock,
         unlock,
         createNewWallet,
-        restoreWallet
+        restoreWallet,
+        validatePassword,
       }}
     >
       {props.children}

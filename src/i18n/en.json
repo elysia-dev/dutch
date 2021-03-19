@@ -256,7 +256,8 @@
     "return_initial": "Go back to main page",
     "disconnect": "Wallet disconnected",
     "reply_email": "Please enter your email",
-    "disconnect_and_new": "Connect new wallet"
+    "disconnect_and_new": "Connect new wallet",
+    "backupseed": "시드 문구"
   },
   "more": {
     "no_transaction": "No transaction history.",
@@ -470,7 +471,8 @@
     "backup_seed_checkbox": "위 시드문구를 보관하였으며, 다음 단게 진행에 동의함을 확인합니다.",
     "check_seed": "시드 문구를 확인해주세요.",
     "check_seed_notice": "보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.",
-    "seed_check_btn": "확인 완료"
+    "seed_check_btn": "확인 완료",
+    "check_after_click": "눌러서 확인하기"
   },
   "wallet": {
     "lost_password": "비밀번호가 기억나지 않아요.",

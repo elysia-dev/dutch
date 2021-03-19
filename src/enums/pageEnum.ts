@@ -45,6 +45,7 @@ export enum MorePage {
   WhatsNew = 'WhatsNew',
   MembershipWithdrawl = 'MembershipWithdrawl',
   Asset2Ownership = 'Asset2Ownership',
+  CheckMnemonic = 'CheckMnemonic',
 }
 
 export enum DashboardPage {

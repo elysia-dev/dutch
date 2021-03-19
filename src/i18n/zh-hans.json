@@ -253,7 +253,8 @@
     "return_initial": "回到之前界面",
     "disconnect": "解除绑定",
     "reply_email": "请输入邮箱地址。",
-    "disconnect_and_new": "绑定新的钱包地址。"
+    "disconnect_and_new": "绑定新的钱包地址。",
+    "backupseed": "시드 문구"
   },
   "more": {
     "no_transaction": "该期间内没有交易。",
@@ -463,7 +464,8 @@
     "backup_seed_checkbox": "위 시드문구를 보관하였으며, 다음 단게 진행에 동의함을 확인합니다.",
     "check_seed": "시드 문구를 확인해주세요.",
     "check_seed_notice": "보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.",
-    "seed_check_btn": "확인 완료"
+    "seed_check_btn": "확인 완료",
+    "check_after_click": "눌러서 확인하기"
   },
   "wallet": {
     "lost_password": "비밀번호가 기억나지 않아요.",
