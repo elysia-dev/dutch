@@ -100,6 +100,7 @@ const CryptoDetail: React.FC = () => {
           position: 'absolute',
           bottom: 10,
           backgroundColor: 'white',
+          width: '90%',
         }}
       >
         <NextButton
