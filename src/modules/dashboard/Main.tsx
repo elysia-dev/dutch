@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  ScrollView, View, Image, TouchableOpacity
+  ScrollView, View, Image, TouchableOpacity, RefreshControl
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { H3Text, TitleText } from '../../shared/components/Texts';
@@ -18,6 +18,7 @@ import usePrices from '../../hooks/usePrice';
 import currencyFormatter from '../../utiles/currencyFormatter';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
+import ProviderType from '../../enums/ProviderType';
 
 const defaultState = {
   assets: [
@@ -36,6 +37,8 @@ const symbolToCryptoType = (symbol: string): CryptoType => {
   };
 }
 
+// TODO
+// legacy user load ownerships & load currency balances
 export const Main: React.FC = () => {
   const { user, isWalletUser } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
@@ -45,6 +48,7 @@ export const Main: React.FC = () => {
   useScrollToTop(ref);
   const [state, setState] = useState<{ assets: Asset[], loading: boolean }>(defaultState);
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const loadV2UserBalances = async () => {
     try {
@@ -79,8 +83,14 @@ export const Main: React.FC = () => {
     }
   }, [])
 
-  // legacy user load ownerships & load currency balances
-  // wallet user load currencies
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    if (isWalletUser) {
+      loadV2UserBalances().then(() => setRefreshing(false));
+    } else {
+      setRefreshing(false)
+    }
+  }, []);
 
   return (
     <>
@@ -91,6 +101,11 @@ export const Main: React.FC = () => {
           height: '100%',
           backgroundColor: 'white',
         }}
+        refreshControl={
+          user.provider !== ProviderType.GUEST || isWalletUser ? (
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
       >
         <BasicLayout >
           <H3Text
