@@ -1,5 +1,6 @@
 import React, {
   FunctionComponent,
+  useContext,
   useState,
 } from 'react';
 import { View, ScrollView, Image, Text } from 'react-native';
@@ -14,6 +15,8 @@ import i18n from '../../i18n/i18n';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
+import currencyFormatter from '../../utiles/currencyFormatter';
+import CurrencyContext from '../../contexts/CurrencyContext';
 
 const now = Date.now()
 
@@ -29,10 +32,16 @@ type ParamList = {
   };
 };
 
+// TODO
+// 1. load 누적수익금
+// 2. load 지분률
+// 3. load txs...
+// productId?
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const [filter, setFilter] = useState<number>(0);
 
   const mainFeatures = [
@@ -109,13 +118,18 @@ const Detail: FunctionComponent = () => {
           />
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
-            label={asset.currencyValue}
+            label={currencyFormatter(
+              currencyUnit,
+              currencyRatio,
+              asset.currencyValue,
+              2,
+            )}
           />
           <View style={{ marginTop: 20, height: 1, backgroundColor: AppColors.GREY }} />
           {
             [
               { left: i18n.t('main.assets_name'), right: asset.title },
-              { left: i18n.t('main.assets_value'), right: asset.unitValue },
+              { left: i18n.t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
               { left: i18n.t('main.assets_stake'), right: '6.28%' },
             ].map((data, index) => {
               return (

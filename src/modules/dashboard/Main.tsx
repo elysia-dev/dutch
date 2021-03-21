@@ -19,6 +19,7 @@ import currencyFormatter from '../../utiles/currencyFormatter';
 import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
+import FunctionContext from '../../contexts/FunctionContext';
 
 const defaultState = {
   assets: [
@@ -40,7 +41,8 @@ const symbolToCryptoType = (symbol: string): CryptoType => {
 // TODO
 // legacy user load ownerships & load currency balances
 export const Main: React.FC = () => {
-  const { user, isWalletUser } = useContext(UserContext);
+  const { user, isWalletUser, ownerships, balance } = useContext(UserContext);
+  const { refreshUser } = useContext(FunctionContext)
   const { wallet } = useContext(WalletContext);
   const { elPrice, ethPrice } = usePrices();
   const navigation = useNavigation();
@@ -48,6 +50,7 @@ export const Main: React.FC = () => {
   useScrollToTop(ref);
   const [state, setState] = useState<{ assets: Asset[], loading: boolean }>(defaultState);
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const loadV2UserBalances = async () => {
@@ -77,9 +80,27 @@ export const Main: React.FC = () => {
     }
   }
 
+  const loadV1UserBalances = async () => {
+    setState({
+      ...state,
+      loading: false,
+      assets: ownerships.map((ownership) => {
+        return {
+          title: ownership.title,
+          currencyValue: ownership.tokenValue * 5, // * asset token is 5usd
+          unitValue: ownership.tokenValue,
+          type: CryptoType.ELA,
+          unit: CryptoType.ELA,
+        }
+      })
+    })
+  }
+
   useEffect(() => {
     if (isWalletUser) {
       loadV2UserBalances()
+    } else {
+      loadV1UserBalances()
     }
   }, [])
 
@@ -88,7 +109,7 @@ export const Main: React.FC = () => {
     if (isWalletUser) {
       loadV2UserBalances().then(() => setRefreshing(false));
     } else {
-      setRefreshing(false)
+      refreshUser().then(() => setRefreshing(false));
     }
   }, []);
 
