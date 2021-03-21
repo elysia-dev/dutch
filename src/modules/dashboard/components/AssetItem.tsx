@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
-import CryptoType from '../../../enums/CryptoType';
+import { View, TouchableOpacity } from 'react-native';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';

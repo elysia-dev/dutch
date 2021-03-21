@@ -83,6 +83,7 @@ export enum Page {
   BlockScreen = 'BlockScreen',
   Wallet = 'Wallet',
   Asset = 'Asset',
+  Crypto = 'Crypto',
 }
 
 export enum AssetPage {
@@ -90,4 +91,10 @@ export enum AssetPage {
   Purchase = 'Purchase',
   Refund = 'Refund',
   Reward = 'Reward'
+}
+
+export enum CryptoPage {
+  Detail = 'Detail',
+  Deposit = 'Deposit',
+  Withdrawal = 'Withdrawal'
 }

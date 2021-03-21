@@ -9,7 +9,6 @@ import {
   View,
   ScrollView,
   StatusBar,
-  Modal,
   ActivityIndicator,
   TouchableOpacity,
   Alert,

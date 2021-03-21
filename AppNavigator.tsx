@@ -21,6 +21,7 @@ import WalletContext from './src/contexts/WalletContext';
 import WalletLogin from './src/modules/account/WalletLogin';
 import WalletRecover from './src/modules/account/WalletRecover';
 import Asset from './src/modules/asset';
+import Crypto from './src/modules/crypto';
 
 const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> }> = ({ navigationRef }) => {
   const RootStack = createStackNavigator();
@@ -49,6 +50,7 @@ const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> 
             <RootStack.Screen name={Page.Product} component={Products} />
             <RootStack.Screen name={Page.Wallet} component={Wallet} />
             <RootStack.Screen name={Page.Asset} component={Asset} />
+            <RootStack.Screen name={Page.Crypto} component={Crypto} />
           </>
         ) : (
           <>
