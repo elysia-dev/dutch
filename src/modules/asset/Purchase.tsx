@@ -24,8 +24,8 @@ type ParamList = {
     fromTitle: string,
     toTitle: string,
     toCrypto: CryptoType,
+    contractAddress: string,
     productId: number, // legacy
-    contractAaddress: string,
   };
 };
 
@@ -46,10 +46,10 @@ const Purchase: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
-  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAaddress } = route.params;
+  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAaddress);
-  const assetTokenEthContract = useAssetTokenEth(contractAaddress);
+  const assetTokenContract = useAssetToken(contractAddress);
+  const assetTokenEthContract = useAssetTokenEth(contractAddress);
   const elContract = useElysiaToken();
   const { isWalletUser } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
@@ -62,7 +62,7 @@ const Purchase: FunctionComponent = () => {
     switch (state.step) {
       case TxStep.CheckAllowance:
         elContract?.allowance(
-          wallet?.getFirstNode()?.address, contractAaddress
+          wallet?.getFirstNode()?.address, contractAddress
         ).then((res: BigNumber) => {
           if (res.isZero()) {
             setState({ ...state, step: TxStep.Approving })
@@ -77,7 +77,7 @@ const Purchase: FunctionComponent = () => {
 
       case TxStep.Approving:
         elContract?.populateTransaction
-          .approve(contractAaddress, '1' + '0'.repeat(25))
+          .approve(contractAddress, '1' + '0'.repeat(25))
           .then(populatedTransaction => {
             wallet?.getFirstSigner().sendTransaction({
               to: populatedTransaction.to,
