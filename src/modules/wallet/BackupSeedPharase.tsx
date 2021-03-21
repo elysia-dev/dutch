@@ -47,7 +47,7 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
       </TouchableOpacity>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={'Next'}
+          title={i18n.t('recovery_key.next')}
           disabled={!confirmed}
           handler={next}
         />

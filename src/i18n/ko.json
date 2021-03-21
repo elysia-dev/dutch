@@ -469,6 +469,12 @@
     "check_seed": "시드 문구를 확인해주세요.",
     "check_seed_notice": "보관하신 시드문구를 확인하는 단계입니다.\n정확히 입력해주세요.",
     "seed_check_btn": "확인 완료",
+    "insert_seed" : "시드 문구를 입력해주세요.",
+    "insert_seed_btn" : "입력완료",
+    "wallet_select" : "혹시 기존에 사용하던\n지갑이 있으신가요?",
+    "wallet_select_content" : "새로운 지갑을 만들거나 기존 지갑을 사용할 수 있습니다.",
+    "existing_wallet" : "기존 지갑 사용하기",
+    "create_wallet" : "새로운 지갑 생성하기",
     "check_after_click": "눌러서 확인하기"
   },
   "wallet": {
@@ -492,7 +498,16 @@
   "assets": {
     "null_transaction": "거래내역이 없습니다.",
     "null_data": "표시할 데이터가 충분하지 않습니다.",
-    "null_investment": "투자내역이 없습니다."
+    "null_investment": "투자내역이 없습니다.",
+    "invest" : "구매하기",
+    "invest_value" : "투자 금액",
+    "invest_stake" : "받는 지분",
+    "refund" : "환불하기",
+    "refund_stake" : "환불 지분",
+    "refund_value" : "받는 금액",
+    "yield" : "이자",
+    "yield_reward" : "이자 분배",
+    "cancel" : "취소"
   },
   "legacy": {
     "refund_notice": "기존 상품의 경우 지분 회수는 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

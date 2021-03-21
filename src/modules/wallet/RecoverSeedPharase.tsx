@@ -7,6 +7,7 @@ import RecoverMnemonicView from './components/RecoverMnemonicView';
 import { isValidMnemonic } from '@ethersproject/hdnode';
 import { useNavigation } from '@react-navigation/native';
 import { WalletPage } from '../../enums/pageEnum';
+import i18n from '../../i18n/i18n';
 
 type State = {
   currentIndex: number,
@@ -26,7 +27,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
     <Layout>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, marginBottom: 20 }}
-        label={'시드 문구를 입력해주세요.'}
+        label={i18n.t('recovery_key.insert_seed')}
       />
       <RecoverMnemonicView
         mnemonic={state.mnemonic}
@@ -39,7 +40,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
       />
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={'입력완료'}
+          title={i18n.t('recovery_key.insert_seed_btn')}
           disabled={!isValidMnemonic(state.mnemonic.join(' '))}
           handler={async () => {
             navigation.navigate(WalletPage.RecoverWallet, {

@@ -12,6 +12,7 @@ import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
 import CryptoType from '../../../enums/CryptoType';
 import CurrencyContext from '../../../contexts/CurrencyContext';
+import i18n from '../../../i18n/i18n';
 
 interface ITxInput {
   title: string
@@ -65,7 +66,7 @@ const TxInput: React.FC<ITxInput> = ({
         }}
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
+          <H4Text label={i18n.t('assets.cancel')} style={{ color: AppColors.MAIN }} />
         </TouchableOpacity>
         <H3Text label={title} style={{}} />
         <View style={{ width: 20 }} />
