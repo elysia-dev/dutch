@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ScrollView, View, Image, TouchableOpacity
 } from 'react-native';
@@ -9,128 +9,190 @@ import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import { AssetPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
+import { AssetPage, CryptoPage, MorePage, Page } from '../../enums/pageEnum';
 import i18n from '../../i18n/i18n';
+import ExpressoV2 from '../../api/ExpressoV2';
+import WalletContext from '../../contexts/WalletContext';
+import Asset from '../../types/Asset';
+import usePrices from '../../hooks/usePrice';
+import currencyFormatter from '../../utiles/currencyFormatter';
+import CurrencyContext from '../../contexts/CurrencyContext';
+import OverlayLoading from '../../shared/components/OverlayLoading';
 
-const testAssets = [
-  { title: 'ASSET#2', currencyValue: '$ 2,000', unitValue: '4 EA2', type: CryptoType.ELA, unit: 'EA2' },
-  { title: 'ASSET#3', currencyValue: '$ 3,000', unitValue: '6 EA3', type: CryptoType.ELA, unit: 'EA3' },
-]
+const defaultState = {
+  assets: [
+    { title: 'ASSET#2', currencyValue: 0, unitValue: 0, type: CryptoType.ELA, unit: 'EA2' },
+    { title: 'EL', currencyValue: 0, unitValue: 0, type: CryptoType.EL, unit: 'EL' },
+    { title: 'ETH', currencyValue: 0, unitValue: 0, type: CryptoType.ETH, unit: 'ETH' },
+  ],
+  loading: true
+}
 
-const testCurrencies = [
-  { title: 'EL', currencyValue: '$ 15', unitValue: '300 EL', type: CryptoType.EL, unit: 'EL' },
-  { title: 'ETH', currencyValue: '$ 223', unitValue: '0.1 ETH', type: CryptoType.ETH, unit: 'ETH' },
-  { title: 'BNB', currencyValue: '$ 123', unitValue: '27 BNB', type: CryptoType.BNB, unit: 'BNB' },
-]
+const symbolToCryptoType = (symbol: string): CryptoType => {
+  if ([CryptoType.EL.toString(), CryptoType.ETH.toString()].includes(symbol)) {
+    return symbol as CryptoType;
+  } else {
+    return CryptoType.ELA
+  };
+}
 
 export const Main: React.FC = () => {
   const { user, isWalletUser } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
+  const { elPrice, ethPrice } = usePrices();
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
+  const [state, setState] = useState<{ assets: Asset[], loading: boolean }>(defaultState);
+  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+
+  const loadV2UserBalances = async () => {
+    try {
+      const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '');
+
+      setState({
+        ...state,
+        loading: false,
+        assets: data.message.map((item) => {
+          const price = item.symbol === CryptoType.ETH ? ethPrice : item.symbol === CryptoType.EL ? elPrice : 5
+          return {
+            title: item.name,
+            currencyValue: item.balance * price,
+            unitValue: item.balance,
+            type: symbolToCryptoType(item.symbol),
+            unit: item.symbol,
+          }
+        })
+      })
+    } catch {
+      alert('Server Error');
+      setState({
+        ...state,
+        loading: false
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (isWalletUser) {
+      loadV2UserBalances()
+    }
+  }, [])
+
+  // legacy user load ownerships & load currency balances
+  // wallet user load currencies
 
   return (
-    <ScrollView
-      ref={ref}
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'white',
-      }}
-    >
-      <BasicLayout >
-        <H3Text
-          style={{ marginTop: 50 }}
-          label={i18n.t('main.total_assets')}
-        />
-        <View style={{
-          paddingBottom: 15,
-          borderBottomWidth: 1,
-          borderBottomColor: AppColors.GREY,
-          marginTop: 15,
-          marginBottom: 40,
-        }}>
-          {
-            isWalletUser || user.ethAddresses[0] ? <TitleText
-              label={'$ 789,123'}
-            /> :
-              <TouchableOpacity
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  navigation.navigate(Page.More, { screen: MorePage.RegisterEthAddress })
-                }}
-              >
-                <View
+    <>
+      <ScrollView
+        ref={ref}
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'white',
+        }}
+      >
+        <BasicLayout >
+          <H3Text
+            style={{ marginTop: 50 }}
+            label={i18n.t('main.total_assets')}
+          />
+          <View style={{
+            paddingBottom: 15,
+            borderBottomWidth: 1,
+            borderBottomColor: AppColors.GREY,
+            marginTop: 15,
+            marginBottom: 40,
+          }}>
+            {
+              isWalletUser || user.ethAddresses[0] ? <TitleText
+                label={currencyFormatter(
+                  currencyUnit,
+                  currencyRatio,
+                  state.assets.reduce((res, cur) => res + cur.currencyValue, 0),
+                  2
+                )}
+              /> :
+                <TouchableOpacity
                   style={{
-                    shadowRadius: 3,
-                    shadowColor: '#6F6F6F',
-                    shadowOffset: { width: 0, height: 0 },
-                    shadowOpacity: 0.4,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    navigation.navigate(Page.More, { screen: MorePage.RegisterEthAddress })
                   }}
                 >
-                  <Image
+                  <View
                     style={{
-                      height: 50,
-                      width: 50,
+                      shadowRadius: 3,
+                      shadowColor: '#6F6F6F',
+                      shadowOffset: { width: 0, height: 0 },
+                      shadowOpacity: 0.4,
                     }}
-                    source={require('./images/newWallet.png')}
+                  >
+                    <Image
+                      style={{
+                        height: 50,
+                        width: 50,
+                      }}
+                      source={require('./images/newWallet.png')}
+                    />
+                  </View>
+                  <TitleText
+                    label={i18n.t('main.connect_wallet')}
+                    style={{ height: 30, marginLeft: 20 }}
                   />
-                </View>
-                <TitleText
-                  label={i18n.t('main.connect_wallet')}
-                  style={{ height: 30, marginLeft: 20 }}
-                />
-                <View style={{
-                  marginLeft: 'auto',
-                  marginBottom: 5,
-                }}>
-                  <Image
-                    source={require('./images/bluedownarrow.png')}
-                    style={{
-                      width: 30,
-                      height: 30,
-                      transform: [{ rotate: '270deg' }],
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
-          }
-        </View>
-        <AssetListing
-          title={i18n.t('main.my_assets')}
-          assets={testAssets}
-          itemPressHandler={(asset) => {
-            navigation.navigate(Page.Asset, {
-              screen: AssetPage.Detail,
-              params: {
-                asset,
-              }
-            })
-          }}
-          totalValue={'$ 789,123'}
-        />
-        <View style={{ height: 25 }} />
-        <AssetListing
-          title={i18n.t('main.my_wallet')}
-          assets={testCurrencies}
-          totalValue={'$ 50.23'}
-          itemPressHandler={(asset) => {
-            navigation.navigate(
-              Page.Dashboard,
-              {
-                screen: DashboardPage.CryptoDetail,
+                  <View style={{
+                    marginLeft: 'auto',
+                    marginBottom: 5,
+                  }}>
+                    <Image
+                      source={require('./images/bluedownarrow.png')}
+                      style={{
+                        width: 30,
+                        height: 30,
+                        transform: [{ rotate: '270deg' }],
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+            }
+          </View>
+          <AssetListing
+            title={i18n.t('main.my_assets')}
+            assets={
+              state.assets.filter((item) => {
+                return ![CryptoType.EL, CryptoType.ETH].includes(item.type) && item.unitValue > 0
+              })
+            }
+            itemPressHandler={(asset) => {
+              navigation.navigate(Page.Asset, {
+                screen: AssetPage.Detail,
                 params: {
-                  asset
+                  asset,
+                }
+              })
+            }}
+          />
+          <View style={{ height: 25 }} />
+          <AssetListing
+            title={i18n.t('main.my_wallet')}
+            assets={state.assets.filter((item) => [CryptoType.EL, CryptoType.ETH].includes(item.type))}
+            itemPressHandler={(asset) => {
+              navigation.navigate(
+                Page.Crypto, {
+                screen: CryptoPage.Detail,
+                params: {
+                  asset,
                 }
               }
-            );
-          }}
-        />
-      </BasicLayout>
-    </ScrollView>
+              );
+            }}
+          />
+        </BasicLayout>
+      </ScrollView>
+      <OverlayLoading visible={state.loading} />
+    </>
   );
 };

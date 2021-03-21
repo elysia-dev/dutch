@@ -3,8 +3,8 @@ import CryptoType from "../enums/CryptoType"
 type Asset = {
   type: CryptoType;
   title: string;
-  currencyValue: string;
-  unitValue: string;
+  currencyValue: number;
+  unitValue: number;
   unit: string;
 }
 
