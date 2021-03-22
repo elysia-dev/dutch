@@ -171,7 +171,7 @@ const Setting: FunctionComponent = () => {
             />
             <View
               style={{
-                width: 52,
+                width: Platform.OS === 'android' ? 80 : 52,
                 borderWidth: 1,
                 borderRadius: 20,
                 borderColor: AppColors.BLUE_2,
@@ -180,9 +180,20 @@ const Setting: FunctionComponent = () => {
               {Platform.OS === 'android' ? (
                 <Picker
                   style={{
+                    right: 15,
+                    width: 120,
                     height: 30,
                     marginVertical: 10,
+                    backgroundColor: 'transparent',
+                    transform: [
+                      { scaleX: 0.7 }, 
+                      { scaleY: 0.7 }
+                    ]
+                  }}
+                  itemStyle={{
+                    margin: 0,
                     padding: 0,
+                    alignItems: 'center'
                   }}
                   accessibilityLabel={'settings'}
                   selectedValue={i18n.currentLocale()}
@@ -243,7 +254,7 @@ const Setting: FunctionComponent = () => {
             />
             <View
               style={{
-                width: 52,
+                width: Platform.OS === 'android' ? 80 : 52,
                 borderWidth: 1,
                 borderRadius: 20,
                 borderColor: AppColors.BLUE_2,
@@ -252,9 +263,20 @@ const Setting: FunctionComponent = () => {
               {Platform.OS === 'android' ? (
                 <Picker
                   style={{
+                    right: 15,
+                    width: 120,
                     height: 30,
                     marginVertical: 10,
+                    backgroundColor: 'transparent',
+                    transform: [
+                      { scaleX: 0.7 }, 
+                      { scaleY: 0.7 }
+                    ]
+                  }}
+                  itemStyle={{
+                    margin: 0,
                     padding: 0,
+                    alignItems: 'center'
                   }}
                   accessibilityLabel={'settings'}
                   selectedValue={state.selectedCurrency}
