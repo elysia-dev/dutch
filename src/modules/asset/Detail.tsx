@@ -48,11 +48,11 @@ type State = {
   contractAddress: string,
   paymentMethod: CryptoType | 'none',
   legacyRefundStatus?: string,
+  image: string,
 }
 
 // TODO
 // v2 user!!`
-// image!
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
@@ -68,6 +68,7 @@ const Detail: FunctionComponent = () => {
     transactions: [],
     contractAddress: '',
     paymentMethod: CryptoType.EL,
+    image: '',
   })
   const [filter, setFilter] = useState<number>(0);
   const { elPrice, ethPrice } = usePrices();
@@ -85,7 +86,8 @@ const Detail: FunctionComponent = () => {
       transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
       contractAddress: res.data.product.contractAddress,
       paymentMethod: res.data.product.paymentMethod as CryptoType,
-      legacyRefundStatus: res.data.legacyRefundStatus
+      legacyRefundStatus: res.data.legacyRefundStatus,
+      image: res.data.product.data?.images[0],
     })
   }
 
@@ -170,18 +172,20 @@ const Detail: FunctionComponent = () => {
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
           }}>
-          <Image
-            source={{ uri: 'https://elysia.land/static/media/elysia-asset-6.033509fa.png' }}
-            style={{
-              borderBottomLeftRadius: 10,
-              borderBottomRightRadius: 10,
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 293,
-              resizeMode: 'cover',
-            }}
-          />
+          {
+            !!state.image && <Image
+              source={{ uri: state.image }}
+              style={{
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                height: 293,
+                resizeMode: 'cover',
+              }}
+            />
+          }
           <View style={{ position: 'absolute', padding: 20 }}>
             <BackButton handler={() => navigation.goBack()} />
           </View>
@@ -293,7 +297,7 @@ const Detail: FunctionComponent = () => {
           </View>
           {
             asset.isLegacyOwnership && <View
-              style={{ width: '100%' }}
+              style={{ width: '100%', marginBottom: 20 }}
             >
               <NextButton
                 disabled={state.legacyRefundStatus === 'pending'}
