@@ -6,6 +6,4 @@ type BalanceItem = {
   symbol: CryptoType | string,
 }
 
-export type WalletBalacneResponse = {
-  message: BalanceItem[]
-};
+export default BalanceItem

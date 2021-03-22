@@ -23,11 +23,10 @@ import FunctionContext from '../../contexts/FunctionContext';
 
 const defaultState = {
   assets: [
-    { title: 'ASSET#2', currencyValue: 0, unitValue: 0, type: CryptoType.ELA, unit: 'EA2' },
     { title: 'EL', currencyValue: 0, unitValue: 0, type: CryptoType.EL, unit: 'EL' },
     { title: 'ETH', currencyValue: 0, unitValue: 0, type: CryptoType.ETH, unit: 'ETH' },
   ],
-  loading: true
+  loading: true,
 }
 
 const symbolToCryptoType = (symbol: string): CryptoType => {
@@ -38,8 +37,6 @@ const symbolToCryptoType = (symbol: string): CryptoType => {
   };
 }
 
-// TODO
-// legacy user load ownerships & load currency balances
 export const Main: React.FC = () => {
   const { user, isWalletUser, ownerships, balance } = useContext(UserContext);
   const { refreshUser } = useContext(FunctionContext)
@@ -60,7 +57,7 @@ export const Main: React.FC = () => {
       setState({
         ...state,
         loading: false,
-        assets: data.message.map((item) => {
+        assets: data.map((item) => {
           const price = item.symbol === CryptoType.ETH ? ethPrice : item.symbol === CryptoType.EL ? elPrice : 5
           return {
             title: item.name,
@@ -81,37 +78,81 @@ export const Main: React.FC = () => {
   }
 
   const loadV1UserBalances = async () => {
-    setState({
-      ...state,
-      loading: false,
-      assets: ownerships.map((ownership) => {
-        return {
-          title: ownership.title,
-          currencyValue: ownership.tokenValue * 5, // * asset token is 5usd
-          unitValue: ownership.tokenValue,
-          type: CryptoType.ELA,
-          unit: CryptoType.ELA,
-        }
-      })
+    const assets = ownerships.map((ownership) => {
+      return {
+        title: ownership.title,
+        currencyValue: ownership.tokenValue * 5, // * asset token is 5usd
+        unitValue: ownership.tokenValue,
+        type: CryptoType.ELA,
+        unit: CryptoType.ELA,
+        ownerhipId: ownership.id,
+        isLegacyOwnership: ownership.isLegacy
+      } as Asset
     })
+
+    let elBalance = 0;
+    let ethBalance = 0;
+
+    try {
+      const { data } = await ExpressoV2.getBalances(user.ethAddresses[0] || '');
+
+      elBalance = data.find((item) => item.symbol === CryptoType.EL)?.balance || 0;
+      ethBalance = data.find((item) => item.symbol === CryptoType.ETH)?.balance || 0;
+    } finally {
+      assets.push({
+        title: 'ETH',
+        currencyValue: ethBalance,
+        unitValue: ethBalance * ethPrice,
+        type: CryptoType.ETH,
+        unit: CryptoType.ETH
+      })
+
+      assets.push({
+        title: 'EL',
+        currencyValue: elBalance * elPrice,
+        unitValue: elBalance,
+        type: CryptoType.EL,
+        unit: CryptoType.EL
+      })
+
+      setState({
+        ...state,
+        loading: false,
+        assets: assets,
+      })
+    }
   }
 
   useEffect(() => {
+    if (user.provider === ProviderType.GUEST && !isWalletUser) {
+      setState({
+        ...state,
+        loading: false,
+      })
+
+      return
+    };
+
     if (isWalletUser) {
       loadV2UserBalances()
     } else {
+      // Below is not work.. maybe
       loadV1UserBalances()
     }
   }, [])
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
+    if (user.provider === ProviderType.GUEST && !isWalletUser) return;
+
     setRefreshing(true);
     if (isWalletUser) {
-      loadV2UserBalances().then(() => setRefreshing(false));
+      loadV2UserBalances().then(() => {
+        setRefreshing(false)
+      });
     } else {
       refreshUser().then(() => setRefreshing(false));
     }
-  }, []);
+  };
 
   return (
     <>

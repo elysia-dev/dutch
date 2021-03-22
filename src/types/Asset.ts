@@ -6,6 +6,9 @@ type Asset = {
   currencyValue: number;
   unitValue: number;
   unit: string;
+  ownershipId?: string;
+  productId?: string;
+  isLegacyOwnership?: boolean;
 }
 
 export default Asset
