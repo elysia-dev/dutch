@@ -8,12 +8,11 @@ import { useTranslation } from 'react-i18next'
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { OwnershipResponse } from '../../types/Ownership';
-import currencyFormatter from '../../utiles/currencyFormatter';
 import { ProductPage } from '../../enums/pageEnum';
 import usePrices from '../../hooks/usePrice';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 interface Props {
   modalHandler: () => void;
@@ -28,7 +27,7 @@ const TextWrapper = styled.View`
 `;
 
 const SliderInterest: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
   const { t } = useTranslation();
@@ -131,8 +130,6 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
             />
             <P1Text
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(props.ownership.availableProfit),
                 2,
               )}

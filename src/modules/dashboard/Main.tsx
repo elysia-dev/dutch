@@ -15,11 +15,10 @@ import ExpressoV2 from '../../api/ExpressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import Asset from '../../types/Asset';
 import usePrices from '../../hooks/usePrice';
-import currencyFormatter from '../../utiles/currencyFormatter';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 const defaultState = {
   assets: [
@@ -46,7 +45,7 @@ export const Main: React.FC = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
   const [state, setState] = useState<{ assets: Asset[], loading: boolean }>(defaultState);
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 
   const [refreshing, setRefreshing] = React.useState(false);

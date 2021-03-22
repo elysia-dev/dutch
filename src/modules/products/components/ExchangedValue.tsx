@@ -1,16 +1,13 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
-import CurrencyContext from '../../../contexts/CurrencyContext';
-import FunctionContext from '../../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next'
 import { H3Text, P1Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
+import PreferenceContext from '../../../contexts/PreferenceContext';
+import usePrices from '../../../hooks/usePrice';
 
 const DesView = styled.View`
   flex: 1;
@@ -27,36 +24,11 @@ interface Props {
   hasEth?: boolean;
 }
 
-interface State {
-  ethPrice: number;
-}
-
 const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
-  const { Server } = useContext(FunctionContext);
-  const { currencyUnit, currencyRatio, elPrice } = useContext(CurrencyContext);
-  const [state, setState] = useState<State>({
-    ethPrice: 0,
-  });
+  const { elPrice, ethPrice } = usePrices();
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 
-  const loadCoinExchange = () => {
-    Server.coinPrice()
-      .then((res) => {
-        setState({
-          ...state,
-          ethPrice: res.data.ethereum.usd,
-        });
-      })
-      .catch((e: { response: { status: number } }) => {
-        if (e.response.status === 500) {
-          alert(t('account_errors.server'));
-        }
-      });
-  };
-
-  useEffect(() => {
-    loadCoinExchange();
-  }, []);
   return (
     <View
       style={{
@@ -81,8 +53,6 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 5.0 * props.tokenCount,
                 2,
               )}
@@ -115,8 +85,6 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 5.0 * props.tokenCount,
                 2,
               )}
@@ -146,7 +114,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               label={`ETH ${parseFloat(
-                `${(5 * props.tokenCount) / state.ethPrice}`,
+                `${(5 * props.tokenCount) / ethPrice}`,
               ).toFixed(6)}`}
               style={{ fontWeight: 'bold' }}
             />
@@ -177,8 +145,6 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             />
             <H3Text
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 0.01 * parseFloat(props.return!) * 5 * props.tokenCount,
                 2,
               )}

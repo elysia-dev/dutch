@@ -3,16 +3,12 @@ import Server from '../api/server';
 import { SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
-import CurrencyType from '../enums/CurrencyType';
-import { CurrencyResponse } from '../types/CurrencyResponse';
 
 type FunctionContextType = {
-  setCurrency: (input: CurrencyType) => void;
   signIn: () => void;
   guestSignIn: () => void;
   signOut: (signInStatus: SignOut) => void;
   refreshUser: () => Promise<void>;
-  setCurrencyPrice: (currency: CurrencyResponse[]) => void;
   setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
@@ -23,12 +19,10 @@ type FunctionContextType = {
 };
 
 const FunctionContext = createContext<FunctionContextType>({
-  setCurrency: () => { },
   signIn: async () => { },
   guestSignIn: async () => { },
   signOut: async (_signInStatus: SignOut) => { },
   refreshUser: async () => { },
-  setCurrencyPrice: (_currency: CurrencyResponse[]) => { },
   setNotifications: (_notifications: Notification[]) => { },
   setEthAddress: (_address: string) => { },
   setUserExpoPushToken: (_expoPushToken: string) => { },

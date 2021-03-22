@@ -16,13 +16,10 @@ import Notification, { isNotification } from './src/types/Notification';
 
 import UserContext from './src/contexts/UserContext';
 import FunctionContext from './src/contexts/FunctionContext';
-import CurrencyContext from './src/contexts/CurrencyContext';
 import Server from './src/api/server';
 
 import registerForPushNotificationsAsync from './src/utiles/registerForPushNotificationsAsync';
 import { SignInStatus, SignOut } from './src/enums/SignInStatus';
-import CurrencyType from './src/enums/CurrencyType';
-import { CurrencyResponse } from './src/types/CurrencyResponse';
 import { OwnershipResponse } from './src/types/AccountResponse';
 import NotificationType from './src/enums/NotificationType';
 import NotificationStatus from './src/enums/NotificationStatus';
@@ -43,7 +40,6 @@ interface AppInformation {
     firstName: string;
     lastName: string;
     gender: string;
-    currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
@@ -72,7 +68,6 @@ const defaultState = {
     firstName: '',
     lastName: '',
     gender: '',
-    currency: CurrencyType.USD,
     ethAddresses: [],
     expoPushTokens: [],
     nationality: 'South Korea, KOR',
@@ -106,11 +101,7 @@ const AppMain = () => {
   const navigationRef = useRef<NavigationContainerRef>(null);
 
   const appState = useRef(AppState.currentState);
-  const [currencyState, setCurrencyState] = useState({
-    currencyUnit: '$',
-    currencyRatio: 1,
-  });
-  const { currencyUnit, currencyRatio } = currencyState;
+
 
   const signOut = async (signInStatus: SignOut) => {
     await removeToken();
@@ -119,17 +110,12 @@ const AppMain = () => {
 
   const guestSignIn = async () => {
     const authServer = new Server(signOut, '');
-    const allCurrency = (await authServer.getAllCurrency()).data;
     const isWalletUser = await AsyncStorage.getItem(IS_WALLET_USER);
 
     setState({
       ...state,
       signedIn: SignInStatus.SIGNIN,
-      elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
-      krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
       Server: authServer,
-      cnyPrice:
-        allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
       isWalletUser: isWalletUser === 'true',
     });
   }
@@ -147,7 +133,6 @@ const AppMain = () => {
       await authServer
         .me()
         .then(async (res) => {
-          const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
             ...state,
             signedIn: SignInStatus.SIGNIN,
@@ -156,10 +141,6 @@ const AppMain = () => {
             ownerships: res.data.ownerships || [],
             balance: res.data.totalBalance,
             Server: authServer,
-            elPrice: allCurrency.find((cr) => cr.code === 'EL')?.rate || 0.003,
-            krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
-            cnyPrice:
-              allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
           });
           registerForPushNotificationsAsync().then((expoPushToken) => {
             if (token && expoPushToken) {
@@ -258,28 +239,6 @@ const AppMain = () => {
   }, [state.signedIn]);
 
   useEffect(() => {
-    if (state.user.currency === CurrencyType.KRW) {
-      setCurrencyState({
-        ...currencyState,
-        currencyUnit: '₩',
-        currencyRatio: state.krwPrice,
-      });
-    } else if (state.user.currency === CurrencyType.CNY) {
-      setCurrencyState({
-        ...currencyState,
-        currencyUnit: '¥',
-        currencyRatio: state.cnyPrice,
-      });
-    } else {
-      setCurrencyState({
-        ...currencyState,
-        currencyUnit: '$',
-        currencyRatio: 1,
-      });
-    }
-  }, [state.user.currency]);
-
-  useEffect(() => {
     if (state.user.provider === ProviderType.GUEST) {
       return;
     }
@@ -374,91 +333,63 @@ const AppMain = () => {
         expoPushToken: state.expoPushToken,
         isWalletUser: state.isWalletUser,
       }}>
-      <CurrencyContext.Provider
+      <FunctionContext.Provider
         value={{
-          elPrice: state.elPrice,
-          krwPrice: state.krwPrice,
-          cnyPrice: state.cnyPrice,
-          currencyUnit,
-          currencyRatio,
+          signIn,
+          guestSignIn,
+          signOut,
+          refreshUser,
+          newWalletUser: () => {
+            setState({
+              ...state,
+              isWalletUser: true,
+              notifications: []
+            })
+          },
+          setNotifications: (notifications: Notification[]) => {
+            setState({
+              ...state,
+              notifications,
+            });
+          },
+          setEthAddress: (address: string) => {
+            setState({
+              ...state,
+              user: { ...state.user, ethAddresses: [address] },
+            });
+          },
+          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+            setState({
+              ...state,
+              user: {
+                ...state.user,
+                legacyWalletRefundStatus: legacyRefundStatus,
+              },
+            });
+          },
+          setUserExpoPushToken: (expoPushToken: string) => {
+            setState({
+              ...state,
+              user: {
+                ...state.user,
+                expoPushTokens: expoPushToken ? [expoPushToken] : [],
+              },
+            });
+          },
+          setIsWalletUser: (isWalletUser: boolean) => {
+            setState({
+              ...state,
+              isWalletUser: isWalletUser,
+            });
+          },
+          Server: state.Server,
         }}>
-        <FunctionContext.Provider
-          value={{
-            setCurrency: (newCurrency: CurrencyType) => {
-              setState({
-                ...state,
-                user: { ...state.user, currency: newCurrency },
-              });
-            },
-            signIn,
-            guestSignIn,
-            signOut,
-            refreshUser,
-            setCurrencyPrice: (currency: CurrencyResponse[]) => {
-              const elPrice = currency.find((cr) => cr.code === 'EL')?.rate;
-              const krwPrice = currency.find((cr) => cr.code === 'KRW')?.rate;
-              const cnyPrice = currency.find((cr) => cr.code === 'CNY')?.rate;
-              if (elPrice && krwPrice && cnyPrice) {
-                setState({
-                  ...state,
-                  elPrice,
-                  krwPrice,
-                  cnyPrice,
-                });
-              }
-            },
-            newWalletUser: () => {
-              setState({
-                ...state,
-                isWalletUser: true,
-                notifications: []
-              })
-            },
-            setNotifications: (notifications: Notification[]) => {
-              setState({
-                ...state,
-                notifications,
-              });
-            },
-            setEthAddress: (address: string) => {
-              setState({
-                ...state,
-                user: { ...state.user, ethAddresses: [address] },
-              });
-            },
-            setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
-              setState({
-                ...state,
-                user: {
-                  ...state.user,
-                  legacyWalletRefundStatus: legacyRefundStatus,
-                },
-              });
-            },
-            setUserExpoPushToken: (expoPushToken: string) => {
-              setState({
-                ...state,
-                user: {
-                  ...state.user,
-                  expoPushTokens: expoPushToken ? [expoPushToken] : [],
-                },
-              });
-            },
-            setIsWalletUser: (isWalletUser: boolean) => {
-              setState({
-                ...state,
-                isWalletUser: isWalletUser,
-              });
-            },
-            Server: state.Server,
-          }}>
-          <WalletProvider>
-            <PreferenceProvider>
-              <AppNavigator navigationRef={navigationRef} />
-            </PreferenceProvider>
-          </WalletProvider>
-        </FunctionContext.Provider>
-      </CurrencyContext.Provider>
+        <WalletProvider>
+          <PreferenceProvider>
+            <AppNavigator navigationRef={navigationRef} />
+          </PreferenceProvider>
+        </WalletProvider>
+      </FunctionContext.Provider>
     </UserContext.Provider>
   );
 };

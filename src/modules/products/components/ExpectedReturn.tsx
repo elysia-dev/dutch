@@ -5,8 +5,7 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next'
 import Product from '../../../types/Product';
 import { P2Text, H3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   product: Product;
@@ -17,7 +16,8 @@ interface State {
 }
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
@@ -46,16 +46,12 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         }}>
         <H3Text
           label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
             state.tokenCount * 5,
             2,
           )}
         />
         <H3Text
           label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
             0.01 *
             parseFloat(props.product.expectedAnnualReturn) *
             5 *

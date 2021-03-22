@@ -12,10 +12,7 @@ import {
 } from '../../../shared/components/Texts';
 import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
-import UserContext from '../../../contexts/UserContext';
-import CurrencyContext from '../../../contexts/CurrencyContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
@@ -25,9 +22,7 @@ interface Props {
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
-  const { user } = useContext(UserContext);
-  const { language } = useContext(PreferenceContext);
+  const { language, currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
 
   const product = props.product;
@@ -67,8 +62,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 zIndex: 3,
               }}
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(product.totalValue) * product.usdPricePerToken,
                 0,
               )}
@@ -348,8 +341,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P1Text
                   label={` (${currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
                     5,
                     0,
                   )})`}
@@ -397,8 +388,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   />
                   <P1Text
                     label={` (${currencyFormatter(
-                      currencyUnit,
-                      currencyRatio,
                       5,
                       0,
                     )})`}

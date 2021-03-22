@@ -37,11 +37,9 @@ import { Modal } from '../../shared/components/Modal';
 import getEnvironment from '../../utiles/getEnvironment';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
-import currencyFormatter from '../../utiles/currencyFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
 import { SignInStatus } from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import { getToken, setToken } from '../../asyncStorages/token';
@@ -50,6 +48,8 @@ import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAd
 import { Page } from '../../enums/pageEnum';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
+import { usePermissions } from 'expo-permissions';
+import usePrices from '../../hooks/usePrice';
 
 interface Props {
   resetHandler: () => void;
@@ -123,7 +123,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const { Server, setEthAddress, signOut, signIn } = useContext(
     FunctionContext,
   );
-  const { elPrice } = useContext(CurrencyContext);
+  const { elPrice } = usePrices();
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 
@@ -357,8 +358,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                       }}
                       label={`= ${state.balance
                         ? currencyFormatter(
-                          '$',
-                          1,
                           (elPrice * parseFloat(state.balance)) / 10 ** 18,
                           2,
                         )

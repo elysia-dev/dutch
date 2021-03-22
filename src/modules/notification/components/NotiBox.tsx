@@ -14,12 +14,11 @@ import images from '../Images';
 import Notification from '../../../types/Notification';
 import { DashboardPage, MorePage, Page } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
-import CurrencyContext from '../../../contexts/CurrencyContext';
 import UserContext from '../../../contexts/UserContext';
 import FunctionContext from '../../../contexts/FunctionContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   notification: Notification;
@@ -27,7 +26,7 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { notifications } = useContext(UserContext);
   const { setNotifications } = useContext(FunctionContext);
   const [showTx, setShowTx] = useState(false);
@@ -163,8 +162,6 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 week: data.week,
                 device: data.message,
                 profit: currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(data.message),
                   4,
                 ),

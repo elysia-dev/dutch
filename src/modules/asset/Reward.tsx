@@ -16,13 +16,12 @@ import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import { BigNumber } from '@ethersproject/bignumber';
 import { utils } from 'ethers';
-import currencyFormatter from '../../utiles/currencyFormatter';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 type ParamList = {
   Reward: {
@@ -41,7 +40,7 @@ const Reward: FunctionComponent = () => {
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAaddress);
   const { wallet } = useContext(WalletContext);
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
   const { elPrice, ethPrice } = usePrices()
@@ -113,8 +112,6 @@ const Reward: FunctionComponent = () => {
             style={{ marginTop: 20 }}
             value={(interest / (toCrypto === CryptoType.ETH ? ethPrice : elPrice)).toFixed(4)}
             subValue={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               interest,
               4
             )}

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import React, { useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useState } from "react";
 import { CURRENCY, LANGUAGE } from '../constants/storage';
 import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
@@ -7,14 +7,19 @@ import CurrencyType from '../enums/CurrencyType';
 import LocaleType from '../enums/LocaleType';
 import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
+import currencyFormatter from '../utiles/currencyFormatter';
+import FunctionContext from '../contexts/FunctionContext';
 
 const PreferenceProvider: React.FC = (props) => {
   const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
+  const { Server } = useContext(FunctionContext);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
-    const currency: CurrencyType | null = await AsyncStorage.getItem(CURRENCY) as CurrencyType;
+    const currency: CurrencyType | null = await AsyncStorage.getItem(CURRENCY) as CurrencyType || CurrencyType.USD;
     let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
+
+    const allCurrency = (await Server.getAllCurrency()).data;
 
     if (!language) {
       language = currentLocalization();
@@ -23,6 +28,9 @@ const PreferenceProvider: React.FC = (props) => {
     i18n.changeLanguage(language)
 
     setState({
+      ...state,
+      krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
+      cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
       currency: currency,
       language: language,
     })
@@ -45,6 +53,15 @@ const PreferenceProvider: React.FC = (props) => {
     })
   }
 
+  const currencyFormattHandler = useCallback((value: number, fix?: number) => {
+    return currencyFormatter(
+      state.currency === CurrencyType.KRW ? '₩' : state.currency === CurrencyType.CNY ? '¥' : '$',
+      state.currency === CurrencyType.KRW ? state.krwPrice : state.currency === CurrencyType.CNY ? state.cnyPrice : 1,
+      value,
+      fix || 2,
+    );
+  }, [state.currency])
+
   useEffect(() => {
     loadPreferences();
   }, [])
@@ -55,6 +72,7 @@ const PreferenceProvider: React.FC = (props) => {
         ...state,
         setLanguage,
         setCurrency,
+        currencyFormatter: currencyFormattHandler,
       }}
     >
       {props.children}

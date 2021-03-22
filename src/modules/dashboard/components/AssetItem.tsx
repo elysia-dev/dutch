@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface IAssetItem {
   asset: Asset,
@@ -17,7 +16,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
   onPress = () => { },
   touchable = true,
 }) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
 
   return (
     <TouchableOpacity
@@ -33,8 +32,6 @@ export const AssetItem: React.FC<IAssetItem> = ({
       <P1Text
         style={{ marginLeft: 'auto' }}
         label={currencyFormatter(
-          currencyUnit,
-          currencyRatio,
           asset.currencyValue,
           2
         )}

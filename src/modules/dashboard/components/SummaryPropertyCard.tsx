@@ -3,15 +3,14 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   summary: SummaryReportResponse['summary'];
 }
 
 export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 
   return (
@@ -38,8 +37,6 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
       <H2Text
         style={{ marginBottom: 18 }}
         label={currencyFormatter(
-          currencyUnit,
-          currencyRatio,
           parseFloat(props.summary.totalBalance),
           4,
         )}
@@ -66,8 +63,6 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.totalRealEstateValue),
               4,
             )}
@@ -84,8 +79,6 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.totalInterest),
               4,
             )}
@@ -102,8 +95,6 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.withdrawnInterest),
               4,
             )}
@@ -120,8 +111,6 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.withdrawableInterest),
               4,
             )}

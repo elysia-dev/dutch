@@ -3,10 +3,9 @@ import { View, Dimensions, Text } from 'react-native';
 import { BarChart, Grid, YAxis } from 'react-native-svg-charts';
 import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import { P1Text } from '../../../shared/components/Texts';
 import dayFormatter from '../../../utiles/dayFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   content: SummaryReportResponse['content'];
@@ -20,7 +19,7 @@ type Profit = {
 };
 
 export const AssetProfitCard: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const today = new Date().getDay();
   const { t } = useTranslation();
 
@@ -97,14 +96,10 @@ export const AssetProfitCard: FunctionComponent<Props> = (props) => {
           formatLabel={(value: string) =>
             `${maxProfit > 10
               ? currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(value),
                 0,
               )
               : currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(value),
                 3,
               )

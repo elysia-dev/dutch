@@ -12,17 +12,16 @@ import {
   P2Text,
 } from '../../../shared/components/Texts';
 import LocaleType from '../../../enums/LocaleType';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import UserContext from '../../../contexts/UserContext';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 type props = React.PropsWithChildren<{ ownership: OwnershipResponse }>;
 
 const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const navigation = useNavigation();
   const ownership = props.ownership;
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter, language } = useContext(PreferenceContext)
   const { user } = useContext(UserContext);
   const { t } = useTranslation();
 
@@ -110,10 +109,10 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               style={{ flex: 1, textAlign: 'right' }}
               label={
                 parseFloat(ownership.stake) < 0.01
-                  ? `${user.language !== LocaleType.KO
+                  ? `${language !== LocaleType.KO
                     ? t('dashboard_label.less')
                     : ''
-                  } 0.01%${user.language === LocaleType.KO
+                  } 0.01%${language === LocaleType.KO
                     ? t('dashboard_label.less')
                     : ''
                   }`
@@ -134,8 +133,6 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
             />
             <P1Text
               label={currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(ownership.expectProfit),
                 4,
               )}
@@ -155,8 +152,6 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               />
               <P1Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(ownership.availableProfit),
                   4,
                 )}

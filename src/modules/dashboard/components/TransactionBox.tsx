@@ -10,16 +10,15 @@ import {
   P4Text,
   H3Text,
 } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   transaction: Transaction;
 }
 
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 
   const [state, setState] = useState({
@@ -109,14 +108,10 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
                 props.transaction.transactionType === 'close' ||
                 props.transaction.transactionType === 'profit'
                 ? `- ${currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(props.transaction.value),
                   2,
                 )}`
                 : currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(props.transaction.value),
                   2,
                 )

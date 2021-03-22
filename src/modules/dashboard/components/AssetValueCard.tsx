@@ -4,17 +4,16 @@ import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import { Circle } from 'react-native-svg';
 import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import { P1Text } from '../../../shared/components/Texts';
 import dayFormatter from '../../../utiles/dayFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 type Props = {
   content: SummaryReportResponse['content'];
 };
 
 export const AssetValueCard: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
 
   const today = new Date().getDay();
 
@@ -100,14 +99,10 @@ export const AssetValueCard: FunctionComponent<Props> = (props) => {
           formatLabel={(value) =>
             `${maxValue > 10
               ? currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(value),
                 0,
               )
               : currencyFormatter(
-                currencyUnit,
-                currencyRatio,
                 parseFloat(value),
                 3,
               )

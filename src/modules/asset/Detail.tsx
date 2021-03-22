@@ -15,8 +15,7 @@ import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
-import currencyFormatter from '../../utiles/currencyFormatter';
-import CurrencyContext from '../../contexts/CurrencyContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 const now = Date.now()
 
@@ -41,8 +40,8 @@ const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const [filter, setFilter] = useState<number>(0);
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
 
   const mainFeatures = [
@@ -120,8 +119,6 @@ const Detail: FunctionComponent = () => {
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               asset.currencyValue,
               2,
             )}

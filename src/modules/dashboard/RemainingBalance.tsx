@@ -12,8 +12,8 @@ import SliderWithdrawal from './SliderWithdrawal';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import AcceptedImg from '../account/images/accepted.png';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import UserContext from '../../contexts/UserContext';
+import usePrices from '../../hooks/usePrice';
 
 const Accepted = styled.Image`
   width: 140px;
@@ -36,7 +36,7 @@ export const RemainingBalance: FunctionComponent<{}> = () => {
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
   };
   const { user } = useContext(UserContext);
-  const { elPrice } = useContext(CurrencyContext);
+  const { elPrice } = usePrices();
   const navigation = useNavigation();
   const [state, setState] = useState({
     user: defaultUser,

@@ -6,13 +6,12 @@ import CryptoInput from '..//components/CryptoInput';
 import { H4Text, H3Text } from '../../../shared/components/Texts';
 import AppColors from '../../../enums/AppColors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
 import CryptoType from '../../../enums/CryptoType';
-import CurrencyContext from '../../../contexts/CurrencyContext';
 import { useTranslation } from 'react-i18next';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface ITxInput {
   title: string
@@ -52,7 +51,7 @@ const TxInput: React.FC<ITxInput> = ({
   createTx,
 }) => {
   const navigation = useNavigation();
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const fromToRatio = fromPrice / toPrice;
   const { t } = useTranslation();
 
@@ -87,8 +86,6 @@ const TxInput: React.FC<ITxInput> = ({
           value={values.from || '0'}
           subValue={
             currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(values.from || '0') * fromPrice,
               2,
             )}

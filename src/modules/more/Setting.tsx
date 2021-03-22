@@ -34,15 +34,14 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 const Setting: FunctionComponent = () => {
   const { user, expoPushToken } = useContext(UserContext);
   const {
-    setCurrency,
     Server,
     setUserExpoPushToken,
   } = useContext(FunctionContext);
   const navigation = useNavigation();
-  const { language, currency, setLanguage } = useContext(PreferenceContext);
+  const { language, currency, setLanguage, setCurrency } = useContext(PreferenceContext);
   const [state, setState] = useState({
     hasPermission: user.expoPushTokens?.includes(expoPushToken),
-    selectedCurrency: user.currency,
+    selectedCurrency: currency || CurrencyType.USD,
     showLanguageModal: false,
     showCurrencyModal: false,
     selectedLanguage: language || LocaleType.EN,
@@ -52,6 +51,10 @@ const Setting: FunctionComponent = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
+    if (user.provider === ProviderType.GUEST) {
+      return
+    }
+
     loadData();
   }, []);
 
@@ -59,6 +62,7 @@ const Setting: FunctionComponent = () => {
     try {
       const token = await Notifications.getExpoPushTokenAsync();
       const version = await Server.checkLatestVersion(Platform.OS);
+
       setState({
         ...state,
         hasPermission: user.expoPushTokens?.includes(token.data),
@@ -90,9 +94,9 @@ const Setting: FunctionComponent = () => {
   };
 
   const currencyText = () => {
-    if (user.currency === CurrencyType.KRW) {
+    if (currency === CurrencyType.KRW) {
       return '₩';
-    } else if (user.currency === CurrencyType.CNY) {
+    } else if (currency === CurrencyType.CNY) {
       return '¥';
     } else {
       return '$';
@@ -241,18 +245,10 @@ const Setting: FunctionComponent = () => {
                   onValueChange={async (itemValue) => {
                     setState({
                       ...state,
-                      selectedCurrency: itemValue as CurrencyType,
+                      selectedCurrency: itemValue.toString() as CurrencyType,
                     });
 
-                    if (user.provider !== ProviderType.GUEST) {
-                      await Server.resetCurrency(itemValue as string).catch(
-                        (e) => {
-                          alert(t('account_errors.server'));
-                        },
-                      );
-                    }
-
-                    setCurrency(itemValue as CurrencyType);
+                    setCurrency(itemValue.toString() as CurrencyType);
                   }}>
                   <Picker.Item
                     label={'KRW (₩)'}
@@ -356,8 +352,8 @@ const Setting: FunctionComponent = () => {
       <IosPickerModal
         modalVisible={state.showLanguageModal}
         doneHandler={async () => {
-          setLanguage(state.selectedLanguage)
           setState({ ...state, showLanguageModal: false });
+          setLanguage(state.selectedLanguage)
         }}
         cancelHandler={() => {
           setState({
@@ -388,14 +384,8 @@ const Setting: FunctionComponent = () => {
       <IosPickerModal
         modalVisible={state.showCurrencyModal}
         doneHandler={async () => {
-          if (user.provider !== ProviderType.GUEST) {
-            await Server.resetCurrency(state.selectedCurrency).catch((e) => {
-              alert(t('account_errors.server'));
-            });
-          }
-
-          setCurrency(state.selectedCurrency);
           setState({ ...state, showCurrencyModal: false });
+          setCurrency(state.selectedCurrency);
         }}
         cancelHandler={() => {
           setState({
@@ -410,11 +400,11 @@ const Setting: FunctionComponent = () => {
               top: 35,
             }}
             accessibilityLabel={'settings'}
-            selectedValue={state.selectedCurrency}
+            selectedValue={state.selectedCurrency?.toString()}
             onValueChange={async (itemValue) => {
               setState({
                 ...state,
-                selectedCurrency: itemValue as CurrencyType,
+                selectedCurrency: itemValue.toString() as CurrencyType,
               });
             }}>
             <Picker.Item label={'KRW (₩)'} value={CurrencyType.KRW} key={0} />

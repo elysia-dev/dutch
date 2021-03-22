@@ -4,10 +4,7 @@ import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import commaFormatter from '../../../utiles/commaFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
-import UserContext from '../../../contexts/UserContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
 import moment from 'moment';
@@ -25,15 +22,12 @@ interface Props {
 
 const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
   const { t } = useTranslation();
-  const { language } = useContext(PreferenceContext);
+  const { language, currencyFormatter } = useContext(PreferenceContext);
   const [state, setState] = useState({
     financial: false,
     highlight: false,
     abstract: false,
   });
-
-  const { user } = useContext(UserContext);
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
@@ -166,8 +160,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                         parseFloat(product.data.propertyPrice),
                       )}`
                       : currencyFormatter(
-                        currencyUnit,
-                        currencyRatio,
                         parseFloat(product.data.propertyPrice),
                         0,
                       )
@@ -183,8 +175,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   />
                   <P3Text
                     label={currencyFormatter(
-                      currencyUnit,
-                      currencyRatio,
                       parseFloat(product.data.netDeposit),
                       0,
                     )}
@@ -203,8 +193,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
                     parseFloat(product.data.netRentPerYear),
                     0,
                   )}
@@ -222,8 +210,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                     isLoan
                       ? `₩ ${commaFormatter(parseFloat(product.data.bankLoan))}`
                       : currencyFormatter(
-                        currencyUnit,
-                        currencyRatio,
                         parseFloat(product.data.bankLoan),
                         0,
                       )

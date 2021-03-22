@@ -3,8 +3,6 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import Product from '../../../types/product';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
 import { useTranslation } from 'react-i18next'
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
@@ -27,8 +25,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
-  const { language } = useContext(PreferenceContext);
+  const { language, currencyFormatter } = useContext(PreferenceContext);
   const product = props.product;
   const productDescription = product.data.descriptions[language || LocaleType.EN];
   const { t } = useTranslation();
@@ -129,8 +126,6 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.propertyPrice),
                   0,
                 )}
@@ -145,8 +140,6 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.netDeposit),
                   0,
                 )}
@@ -161,8 +154,6 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.netRentPerYear),
                   0,
                 )}
