@@ -27,7 +27,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
       <CryptoImage type={asset.type} />
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
-        <P2Text label={`${asset.unitValue} ${asset.unit}`} />
+        <P2Text label={`${asset.unitValue.toFixed(2)} ${asset.unit}`} />
       </View>
       <P1Text
         style={{ marginLeft: 'auto' }}

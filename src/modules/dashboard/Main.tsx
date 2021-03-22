@@ -37,7 +37,7 @@ const symbolToCryptoType = (symbol: string): CryptoType => {
 }
 
 export const Main: React.FC = () => {
-  const { user, isWalletUser, ownerships, balance } = useContext(UserContext);
+  const { user, isWalletUser, ownerships } = useContext(UserContext);
   const { refreshUser } = useContext(FunctionContext)
   const { wallet } = useContext(WalletContext);
   const { elPrice, ethPrice } = usePrices();
@@ -54,16 +54,26 @@ export const Main: React.FC = () => {
     try {
       const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '');
 
-      const assets = data.tokens.map((token) => {
-        const price = token.symbol === CryptoType.ETH ? ethPrice : token.symbol === CryptoType.EL ? elPrice : 5
-        return {
-          title: token.name,
-          currencyValue: token.balance * price,
-          unitValue: token.balance,
-          type: symbolToCryptoType(token.symbol),
-          unit: token.symbol,
-        }
-      })
+      const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL].includes(token.symbol as CryptoType))
+        .map((token) => {
+          return {
+            title: token.name,
+            currencyValue: token.balance * 5,
+            unitValue: token.balance,
+            type: symbolToCryptoType(token.symbol),
+            unit: token.symbol,
+          }
+        })
+
+      const elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0
+
+      assets.push({
+        title: 'Elysia',
+        currencyValue: elBalance * ethPrice,
+        unitValue: elBalance,
+        type: CryptoType.EL,
+        unit: CryptoType.EL,
+      });
 
       assets.push({
         title: 'ETH',
@@ -112,8 +122,8 @@ export const Main: React.FC = () => {
     } finally {
       assets.push({
         title: 'ETH',
-        currencyValue: ethBalance,
-        unitValue: ethBalance * ethPrice,
+        currencyValue: ethBalance * ethPrice,
+        unitValue: ethBalance,
         type: CryptoType.ETH,
         unit: CryptoType.ETH
       })

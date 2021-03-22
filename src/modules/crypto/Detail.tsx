@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import BasicLayout from '../../shared/components/BasicLayout';
 import Asset from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -6,34 +6,20 @@ import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
 import { View, Dimensions } from 'react-native';
-import AssetGraph from './components/AssetGraph';
 import TransactionList from './components/TransactionList';
-import CryptoType from '../../enums/CryptoType';
-import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import { CryptoPage } from '../../enums/pageEnum';
-
-const now = Date.now();
-
-const testCryptoTx = [
-  { type: 'in', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'out', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'in', value: '100', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now }
-]
-
-const graphData = [
-  { y: 7, x: now - 8 * 86400000 },
-  { y: 8, x: now - 7 * 86400000 },
-  { y: 9, x: now - 6 * 86400000 },
-  { y: 15, x: now - 5 * 86400000 },
-  { y: 0, x: now - 4 * 86400000 },
-  { y: 1, x: now - 3 * 86400000 },
-  { y: 2, x: now - 2 * 86400000 },
-  { y: 3, x: now - 86400000 },
-  { y: 20, x: now },
-]
+import WalletContext from '../../contexts/WalletContext';
+import CryptoType from '../../enums/CryptoType';
+import ExpressoV2 from '../../api/ExpressoV2';
+import CryptoTransaction from '../../types/CryptoTransaction';
+import { BigNumber, utils } from 'ethers';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import AppColors from '../../enums/AppColors';
+import { P1Text } from '../../shared/components/Texts';
+import getEnvironment from '../../utiles/getEnvironment';
 
 type ParamList = {
   CryptoDetail: {
@@ -43,12 +29,69 @@ type ParamList = {
 
 const Detail: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'CryptoDetail'>>();
-  const cryptoType = route.params.asset.type;
+  const asset = route.params.asset
   const navigation = useNavigation();
-  const [range, setRange] = useState<number>(0);
   const [filter, setFilter] = useState<number>(0);
   const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
+  const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, }>({
+    page: 1,
+    transactions: [],
+    lastPage: !isWalletUser || !!user.ethAddresses[0],
+  })
+
+  const loadTxs = async () => {
+    const address = isWalletUser ? wallet?.getFirstNode()?.address || '' : user.ethAddresses[0];
+
+    let newTxs: CryptoTransaction[] = [];
+
+    try {
+      if (asset.type === CryptoType.ETH) {
+        const res = await ExpressoV2.getEthTransaction(address, state.page);
+        newTxs = res.data.tx.map((tx) => {
+          const type = tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out'
+          return {
+            type,
+            value: type === 'in' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice).add(tx.value)),
+            txHash: tx.hash,
+            createdAt: tx.timestamp
+          }
+        })
+      } else {
+        const res = await ExpressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
+        newTxs = res.data.tx.map((tx) => {
+          return {
+            type: tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out',
+            value: tx.value !== '0' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice)),
+            txHash: tx.hash,
+            createdAt: tx.timestamp
+          }
+        })
+      }
+    } catch {
+      if (state.page !== 1) {
+        alert(t('dashboard.last_transaction'))
+      }
+    } finally {
+      if (newTxs.length !== 0) {
+        setState({
+          ...state,
+          page: state.page + 1,
+          transactions: [...state.transactions, ...newTxs],
+        })
+      } else {
+        setState({
+          ...state,
+          lastPage: true,
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    loadTxs();
+  }, [])
 
   return (
     <>
@@ -64,28 +107,46 @@ const Detail: React.FC = () => {
             />
             <View style={{ height: 30 }} />
             <SelectBox
-              options={[t('wallet.month'), t('wallet.year'), t('wallet.all')]}
-              selected={range}
-              select={(range) => setRange(range)}
-            />
-            <AssetGraph
-              data={graphData}
-              lineColor={
-                cryptoType === CryptoType.EL ?
-                  AppColors.EL_BLUE :
-                  cryptoType === CryptoType.ETH ?
-                    AppColors.ETH_BLUE :
-                    AppColors.BNB_YELLOW
-              }
-            />
-            <View style={{ height: 20 }} />
-            <SelectBox
               options={['ALL', 'OUT', 'IN']}
               selected={filter}
               select={(filter) => setFilter(filter)}
             />
-            <TransactionList data={testCryptoTx} unit={route.params.asset.unit} />
-            <View style={{ height: 100 }} />
+            <TransactionList
+              data={
+                filter === 0 ? state.transactions : state.transactions.filter((tx) =>
+                  (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
+                )
+              }
+              unit={route.params.asset.unit}
+            />
+            <View style={{ height: 50 }} />
+            {
+              !state.lastPage && <TouchableOpacity
+                style={{
+                  width: '100%',
+                  height: 50,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: AppColors.MAIN,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginTop: 15,
+                  marginBottom: 70
+                }}
+                onPress={() => {
+                  loadTxs()
+                }}
+              >
+                <P1Text
+                  style={{
+                    color: AppColors.MAIN,
+                    fontSize: 17,
+                    textAlign: 'center',
+                  }}
+                  label={t('dashboard_label.more_transactions')}
+                />
+              </TouchableOpacity>
+            }
           </BasicLayout>
         }
       />

@@ -206,7 +206,7 @@ const Detail: FunctionComponent = () => {
           {
             [
               { left: t('main.assets_name'), right: asset.title },
-              { left: t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
+              { left: t('main.assets_value'), right: `${asset.unitValue.toFixed(2)} ${asset.unit}` },
               { left: t('main.assets_stake'), right: `${(asset.unitValue / state.totalSupply * 100).toFixed(2)}%` },
             ].map((data, index) => {
               return (
