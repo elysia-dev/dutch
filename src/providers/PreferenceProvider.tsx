@@ -16,13 +16,11 @@ const PreferenceProvider: React.FC = (props) => {
     const currency: CurrencyType | null = await AsyncStorage.getItem(CURRENCY) as CurrencyType;
     let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
 
-    currentLocalization()
-
     if (!language) {
       language = currentLocalization();
     }
 
-    //i18n.changeLanguage(language)
+    i18n.changeLanguage(language)
 
     setState({
       currency: currency,
