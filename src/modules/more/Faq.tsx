@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import WrapperLayoutAvoidingKeyboard from '../../shared/components/WrapperLayoutAvoidingKeyboard';
 import { FaqItem } from './components/FaqItem';
 
@@ -9,6 +9,7 @@ const Faq: FunctionComponent = () => {
   const [state, setState] = useState({
     selectNumber: 0,
   });
+  const { t } = useTranslation();
 
   const setQuestionNumber = (arrayNum: number) => {
     // eslint-disable-next-line no-unused-expressions
@@ -25,8 +26,8 @@ const Faq: FunctionComponent = () => {
           key={`FAQ_${index}`}
           faqId={index + 1}
           handler={() => setQuestionNumber(index)}
-          question={i18n.t('FAQ.question.' + index)}
-          answer={i18n.t('FAQ.answer.' + index)}
+          question={t('FAQ.question.' + index)}
+          answer={t('FAQ.answer.' + index)}
           isSelected={state.selectNumber === index}
         />
       );
@@ -38,7 +39,7 @@ const Faq: FunctionComponent = () => {
       backButtonHandler={() => {
         navigation.goBack();
       }}
-      title={i18n.t('more_label.faq')}
+      title={t('more_label.faq')}
       body={
         ItemListing
       }

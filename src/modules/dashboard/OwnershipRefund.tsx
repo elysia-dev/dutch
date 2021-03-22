@@ -2,7 +2,7 @@
 import React, { useState, useContext, FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { Calculator } from '../products/components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from '../products/components/ExchangedValue';
@@ -20,6 +20,7 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
   const { Server } = useContext(FunctionContext);
   const product = props.ownership.product;
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const callApi = () => {
     Server.requestTransaction(product.id, tokenCount, 'refund')
@@ -36,9 +37,9 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
       )
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('product.transaction_error'));
+          alert(t('product.transaction_error'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -109,7 +110,7 @@ const OwnershipRefund: FunctionComponent<Props> = (props) => {
             props.modalHandler();
             callApi();
           }}
-          title={i18n.t('product_label.refund', {
+          title={t('product_label.refund', {
             paymentMethod: props.ownership.product.paymentMethod.toUpperCase(),
           })}
         />

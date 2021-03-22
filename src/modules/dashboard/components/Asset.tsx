@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import Dash from 'react-native-dash';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 
 interface Props {
   ownership: {
@@ -17,10 +16,8 @@ interface Props {
 }
 
 export const Asset: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const ownershipValue = currencyFormatter(
-    currencyUnit,
-    currencyRatio,
     props.ownership.value,
     2,
   );
@@ -99,8 +96,6 @@ export const Asset: FunctionComponent<Props> = (props: Props) => {
         <View style={{ flexDirection: 'row', flex: 2 }}>
           <P1Text
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               props.ownership.profit,
               2,
             )}

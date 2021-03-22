@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import styled from 'styled-components/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text, H3Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -25,12 +25,14 @@ const CountButton = styled.TouchableOpacity`
 `;
 
 export const Calculator: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
+
   return (
     <View style={{ width: '100%', height: 180, position: 'relative', top: 0 }}>
       <P1Text
         label={props.type === 'refund'
-        ? i18n.t('product_label.refund_token_count')
-        : i18n.t('product_label.token_count')}
+          ? t('product_label.refund_token_count')
+          : t('product_label.token_count')}
         style={{ marginBottom: 10 }} />
       <View style={{ flexDirection: 'row', alignContent: 'center' }}>
         <H2Text label={Math.round(props.tokenCount).toString()} style={{ color: "#3679b5" }} />

@@ -1,18 +1,17 @@
 import React, { FunctionComponent, useContext } from 'react';
-
 import { View } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   summary: SummaryReportResponse['summary'];
 }
 
 export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+  const { t } = useTranslation();
 
   return (
     <View
@@ -32,14 +31,12 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
         marginRight: 3,
       }}>
       <P1Text
-        label={i18n.t('dashboard_label.total_balance')}
+        label={t('dashboard_label.total_balance')}
         style={{ marginBottom: 10 }}
       />
       <H2Text
         style={{ marginBottom: 18 }}
         label={currencyFormatter(
-          currencyUnit,
-          currencyRatio,
           parseFloat(props.summary.totalBalance),
           4,
         )}
@@ -62,12 +59,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={i18n.t('dashboard_label.total_property')} />
+          <P2Text label={t('dashboard_label.total_property')} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.totalRealEstateValue),
               4,
             )}
@@ -80,12 +75,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={i18n.t('dashboard_label.total_interest')} />
+          <P2Text label={t('dashboard_label.total_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.totalInterest),
               4,
             )}
@@ -98,12 +91,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={i18n.t('dashboard_label.withdrawn_interest')} />
+          <P2Text label={t('dashboard_label.withdrawn_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.withdrawnInterest),
               4,
             )}
@@ -116,12 +107,10 @@ export const SummaryPropertyCard: FunctionComponent<Props> = (props: Props) => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={i18n.t('dashboard_label.available_interest')} />
+          <P2Text label={t('dashboard_label.available_interest')} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(props.summary.withdrawableInterest),
               4,
             )}

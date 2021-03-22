@@ -2,7 +2,6 @@ import { AxiosResponse } from "axios";
 import { AccountResponse } from "../types/AccountResponse";
 import { TransactionRequestResponse } from "../types/TransactionRequest";
 import { espressoClient, authenticatedEspressoClient } from '../api/axiosInstances';
-import i18n from "../i18n/i18n";
 import { setToken } from "../asyncStorages/token";
 
 interface ITokenAndRequestId {
@@ -26,7 +25,7 @@ const createGuestAndRegisterAddress = async (language: string): Promise<ITokenAn
       requestId: ethAddressRes.data.id
     }
   } catch {
-    alert(i18n.t('account_errors.server'));
+    alert('Error');
 
     return {
       requestId: ''

@@ -4,9 +4,8 @@ import AppColors from '../../../enums/AppColors';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
-import i18n from '../../../i18n/i18n';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import { useTranslation } from 'react-i18next'
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface IAssetListing {
   title: string
@@ -19,7 +18,8 @@ export const AssetListing: React.FC<IAssetListing> = ({
   assets,
   itemPressHandler,
 }) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -35,8 +35,6 @@ export const AssetListing: React.FC<IAssetListing> = ({
         <H3Text label={title} />
         <H3Text
           label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
             assets.reduce((res, cur) => cur.currencyValue + res, 0),
             2
           )}
@@ -59,7 +57,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
         >
           <P2Text
             style={{ textAlign: 'center', marginTop: 40 }}
-            label={i18n.t('assets.null_investment')}
+            label={t('assets.null_investment')}
           />
         </View>
       }

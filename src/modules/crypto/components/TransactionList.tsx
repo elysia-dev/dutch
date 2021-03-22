@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { P2Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import TransactionItem from './TransactionItem';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface ITransactionList {
   data: CryptoTransaction[],
@@ -14,6 +14,7 @@ const TransactionList: React.FC<ITransactionList> = ({
   data,
   unit
 }) => {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -28,7 +29,7 @@ const TransactionList: React.FC<ITransactionList> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={i18n.t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
+          <P2Text label={t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
         </View>
       }
       { data.map((tx, index) => {

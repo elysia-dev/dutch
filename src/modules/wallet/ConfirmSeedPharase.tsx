@@ -10,7 +10,7 @@ import TouchableWordBox from './components/TouchableWordBox'
 import WalletContext from '../../contexts/WalletContext';
 import WalletStorage from '../../core/WalletStorage';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n'
+import { useTranslation } from 'react-i18next'
 
 type State = {
   currentIndex: number,
@@ -22,6 +22,7 @@ type State = {
 const ConfirmSeedPharase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
   const { newWalletUser } = useContext(FunctionContext);
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [state, setState] = useState<State>({
     currentIndex: 0,
@@ -45,11 +46,11 @@ const ConfirmSeedPharase: FunctionComponent = () => {
     <Layout>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
-        label={i18n.t('recovery_key.check_seed')}
+        label={t('recovery_key.check_seed')}
       />
       <P2Text
         style={{ marginTop: 10, marginBottom: 25 }}
-        label={i18n.t('recovery_key.check_seed_notice')}
+        label={t('recovery_key.check_seed_notice')}
       />
       <MnemonicQuize
         currentIndex={state.currentIndex}
@@ -99,7 +100,7 @@ const ConfirmSeedPharase: FunctionComponent = () => {
       </View>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={i18n.t('recovery_key.seed_check_btn')}
+          title={t('recovery_key.seed_check_btn')}
           disabled={
             !state.selectedIndices.reduce((res, cur, index) => res && (state.selectedWords[index] === wallet?.getMnemonic().split(' ')[cur]), true)
           }

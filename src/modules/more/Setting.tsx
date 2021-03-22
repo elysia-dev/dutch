@@ -15,7 +15,7 @@ import {
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import LocaleType from '../../enums/LocaleType';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
@@ -29,26 +29,32 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import AppColors from '../../enums/AppColors';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 const Setting: FunctionComponent = () => {
   const { user, expoPushToken } = useContext(UserContext);
   const {
-    setLanguage,
-    setCurrency,
     Server,
     setUserExpoPushToken,
   } = useContext(FunctionContext);
   const navigation = useNavigation();
+  const { language, currency, setLanguage, setCurrency } = useContext(PreferenceContext);
   const [state, setState] = useState({
     hasPermission: user.expoPushTokens?.includes(expoPushToken),
-    selectedLanguage: i18n.currentLocale(),
-    selectedCurrency: user.currency,
+    selectedCurrency: currency || CurrencyType.USD,
     showLanguageModal: false,
     showCurrencyModal: false,
+    selectedLanguage: language || LocaleType.EN,
+    selctedCurrency: currency,
     latestVersion: getEnvironment().version,
   });
+  const { t } = useTranslation();
 
   useEffect(() => {
+    if (user.provider === ProviderType.GUEST) {
+      return
+    }
+
     loadData();
   }, []);
 
@@ -56,6 +62,7 @@ const Setting: FunctionComponent = () => {
     try {
       const token = await Notifications.getExpoPushTokenAsync();
       const version = await Server.checkLatestVersion(Platform.OS);
+
       setState({
         ...state,
         hasPermission: user.expoPushTokens?.includes(token.data),
@@ -63,7 +70,7 @@ const Setting: FunctionComponent = () => {
       });
     } catch (e) {
       if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
+        alert(t('account_errors.server'));
       }
     }
   };
@@ -86,24 +93,10 @@ const Setting: FunctionComponent = () => {
     }
   };
 
-  const changeI18n = async (value: string) => {
-    i18n.locale = value;
-  };
-
-  const localeText = () => {
-    if (i18n.currentLocale() === LocaleType.KO) {
-      return 'ko';
-    } else if (i18n.currentLocale() === LocaleType.CH) {
-      return 'ch';
-    } else {
-      return 'en';
-    }
-  };
-
   const currencyText = () => {
-    if (user.currency === CurrencyType.KRW) {
+    if (currency === CurrencyType.KRW) {
       return '₩';
-    } else if (user.currency === CurrencyType.CNY) {
+    } else if (currency === CurrencyType.CNY) {
       return '¥';
     } else {
       return '$';
@@ -121,7 +114,7 @@ const Setting: FunctionComponent = () => {
             top: 22,
           }}>
           <H3Text
-            label={i18n.t('more_label.app_setting')}
+            label={t('more_label.app_setting')}
             style={{ color: AppColors.BLACK2 }}
           />
           {
@@ -137,7 +130,7 @@ const Setting: FunctionComponent = () => {
                     alignContent: 'center',
                   }}>
                   <H3Text
-                    label={i18n.t('more_label.push_notice')}
+                    label={t('more_label.push_notice')}
                     style={{
                       alignSelf: 'center',
                     }}
@@ -164,7 +157,7 @@ const Setting: FunctionComponent = () => {
               marginTop: 20
             }}>
             <H3Text
-              label={i18n.t('more_label.language')}
+              label={t('more_label.language')}
               style={{
                 alignSelf: 'center',
               }}
@@ -196,26 +189,17 @@ const Setting: FunctionComponent = () => {
                     alignItems: 'center'
                   }}
                   accessibilityLabel={'settings'}
-                  selectedValue={i18n.currentLocale()}
+                  selectedValue={state.selectedLanguage?.toString()}
                   onValueChange={async (itemValue) => {
-                    changeI18n(itemValue.toString());
                     setState({
                       ...state,
-                      selectedLanguage: i18n.currentLocale(),
-                    });
-
-                    if (user.provider !== ProviderType.GUEST) {
-                      await Server.resetLanguage(i18n.currentLocale()).catch(
-                        (e) => {
-                          alert(i18n.t('account_errors.server'));
-                        },
-                      );
-                    }
-                    setLanguage(i18n.currentLocale() as LocaleType);
+                      selectedLanguage: itemValue.toString() as LocaleType,
+                    })
+                    setLanguage(itemValue.toString() as LocaleType);
                   }}>
-                  <Picker.Item label={'한국어'} value="ko" key={0} />
-                  <Picker.Item label={'English'} value="en" key={1} />
-                  <Picker.Item label={'简体中文'} value="zhHans" key={2} />
+                  <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
+                  <Picker.Item label={'English'} value={LocaleType.EN} key={1} />
+                  <Picker.Item label={'简体中文'} value={LocaleType.CH} key={2} />
                 </Picker>
               ) : (
                 <TouchableOpacity
@@ -230,7 +214,7 @@ const Setting: FunctionComponent = () => {
                     setState({ ...state, showLanguageModal: true });
                   }}>
                   <P1Text
-                    label={localeText()}
+                    label={state.selectedLanguage === LocaleType.KO ? 'ko' : state.selectedLanguage === LocaleType.EN ? 'en' : 'ch'}
                     style={{
                       textAlign: 'center',
                     }}
@@ -247,7 +231,7 @@ const Setting: FunctionComponent = () => {
               marginTop: 20
             }}>
             <H3Text
-              label={i18n.t('more_label.currency')}
+              label={t('more_label.currency')}
               style={{
                 alignSelf: 'center',
               }}
@@ -283,18 +267,10 @@ const Setting: FunctionComponent = () => {
                   onValueChange={async (itemValue) => {
                     setState({
                       ...state,
-                      selectedCurrency: itemValue as CurrencyType,
+                      selectedCurrency: itemValue.toString() as CurrencyType,
                     });
 
-                    if (user.provider !== ProviderType.GUEST) {
-                      await Server.resetCurrency(itemValue as string).catch(
-                        (e) => {
-                          alert(i18n.t('account_errors.server'));
-                        },
-                      );
-                    }
-
-                    setCurrency(itemValue as CurrencyType);
+                    setCurrency(itemValue.toString() as CurrencyType);
                   }}>
                   <Picker.Item
                     label={'KRW (₩)'}
@@ -340,7 +316,7 @@ const Setting: FunctionComponent = () => {
               marginTop: 30,
             }}>
             <H3Text
-              label={i18n.t('more_label.app_info')}
+              label={t('more_label.app_info')}
               style={{
                 color: AppColors.SUB_BLACK
               }}
@@ -358,7 +334,7 @@ const Setting: FunctionComponent = () => {
               }>
               <H3Text
                 label={
-                  i18n.t('more_label.version') +
+                  t('more_label.version') +
                   ` ${getEnvironment().version}`
                 }
               />
@@ -377,7 +353,7 @@ const Setting: FunctionComponent = () => {
                     storeDeeplink('elysia/id1536733411', 'land.elysia');
                   }}>
                   <H3Text
-                    label={i18n.t('more_label.get_latest_version', {
+                    label={t('more_label.get_latest_version', {
                       version: state.latestVersion,
                     })}
                     style={{ color: '#CC3743', fontSize: 15 }}
@@ -398,21 +374,12 @@ const Setting: FunctionComponent = () => {
       <IosPickerModal
         modalVisible={state.showLanguageModal}
         doneHandler={async () => {
-          changeI18n(state.selectedLanguage);
-
-          if (user.provider !== ProviderType.GUEST) {
-            await Server.resetLanguage(i18n.currentLocale()).catch((e) => {
-              alert(i18n.t('account_errors.server'));
-            });
-          }
-
-          setLanguage(i18n.currentLocale() as LocaleType);
           setState({ ...state, showLanguageModal: false });
+          setLanguage(state.selectedLanguage)
         }}
         cancelHandler={() => {
           setState({
             ...state,
-            selectedLanguage: i18n.currentLocale(),
             showLanguageModal: false,
           });
         }}
@@ -423,30 +390,24 @@ const Setting: FunctionComponent = () => {
               top: 35,
             }}
             accessibilityLabel={'settings'}
-            selectedValue={state.selectedLanguage}
+            selectedValue={state.selectedLanguage?.toString()}
             onValueChange={async (itemValue) => {
               setState({
                 ...state,
-                selectedLanguage: itemValue.toString(),
+                selectedLanguage: itemValue.toString() as LocaleType,
               });
             }}>
-            <Picker.Item label={'한국어'} value="ko" key={0} />
-            <Picker.Item label={'English'} value="en" key={1} />
-            <Picker.Item label={'简体中文'} value="zhHans" key={2} />
+            <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
+            <Picker.Item label={'English'} value={LocaleType.EN} key={1} />
+            <Picker.Item label={'简体中文'} value={LocaleType.CH} key={2} />
           </Picker>
         }
       />
       <IosPickerModal
         modalVisible={state.showCurrencyModal}
         doneHandler={async () => {
-          if (user.provider !== ProviderType.GUEST) {
-            await Server.resetCurrency(state.selectedCurrency).catch((e) => {
-              alert(i18n.t('account_errors.server'));
-            });
-          }
-
-          setCurrency(state.selectedCurrency);
           setState({ ...state, showCurrencyModal: false });
+          setCurrency(state.selectedCurrency);
         }}
         cancelHandler={() => {
           setState({
@@ -461,11 +422,11 @@ const Setting: FunctionComponent = () => {
               top: 35,
             }}
             accessibilityLabel={'settings'}
-            selectedValue={state.selectedCurrency}
+            selectedValue={state.selectedCurrency?.toString()}
             onValueChange={async (itemValue) => {
               setState({
                 ...state,
-                selectedCurrency: itemValue as CurrencyType,
+                selectedCurrency: itemValue.toString() as CurrencyType,
               });
             }}>
             <Picker.Item label={'KRW (₩)'} value={CurrencyType.KRW} key={0} />

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { TextArea } from './components/TextArea';
 import { SubTitleText, P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayoutAvoidingKeyboard';
@@ -10,11 +10,15 @@ import { TextField } from '../../shared/components/TextField';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import LocaleType from '../../enums/LocaleType';
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
   const { Server } = useContext(FunctionContext);
   const { user } = useContext(UserContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
 
   const [state, setState] = useState({
     email: '',
@@ -24,14 +28,14 @@ const Contact: FunctionComponent = () => {
 
   const callApi = () => {
     if (state.contactRestriction) {
-      return alert(i18n.t('more.contact_restriction'));
+      return alert(t('more.contact_restriction'));
     } else if (
       user.provider === ProviderType.GUEST ||
       user.provider === ProviderType.ETH
     ) {
-      Server.sendQuestionWithEmail(state.email, state.contents, user.language)
+      Server.sendQuestionWithEmail(state.email, state.contents, language || LocaleType.EN)
         .then((_res) => {
-          alert(i18n.t('more.question_submitted'));
+          alert(t('more.question_submitted'));
           setState({
             ...state,
             email: '',
@@ -47,15 +51,15 @@ const Contact: FunctionComponent = () => {
         })
         .catch((e) => {
           if (e.response.status === 400) {
-            alert(i18n.t('accout.invalid_email'));
+            alert(t('accout.invalid_email'));
           } else if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     } else {
       Server.sendQuestion(state.contents)
         .then((res) => {
-          alert(i18n.t('more.question_submitted'));
+          alert(t('more.question_submitted'));
           setState({ ...state, contactRestriction: true, contents: '' });
           setTimeout(() => {
             setState({
@@ -66,7 +70,7 @@ const Contact: FunctionComponent = () => {
         })
         .catch((e) => {
           if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     }
@@ -83,11 +87,11 @@ const Contact: FunctionComponent = () => {
       }}
       subTitle={
         <SubTitleText
-          label={i18n.t('more.contact_text')}
+          label={t('more.contact_text')}
           style={{ marginBottom: 10, color: '#5c5b5b' }}
         />
       }
-      title={i18n.t('more_label.contact')}
+      title={t('more_label.contact')}
       body={
         <View
           style={{
@@ -111,7 +115,7 @@ const Contact: FunctionComponent = () => {
             user.provider === ProviderType.ETH) && (
               <TextField
                 value={state.email}
-                label={i18n.t('more_label.reply_email')}
+                label={t('more_label.reply_email')}
                 eventHandler={(input: string) =>
                   setState({ ...state, email: input })
                 }
@@ -143,7 +147,7 @@ const Contact: FunctionComponent = () => {
                 ? '#D0D8DF'
                 : '#3679B5',
           }}
-          title={i18n.t('button.submit')}
+          title={t('button.submit')}
           handler={() => callApi()}
         />
       }

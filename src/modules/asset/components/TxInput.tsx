@@ -6,13 +6,12 @@ import CryptoInput from '..//components/CryptoInput';
 import { H4Text, H3Text } from '../../../shared/components/Texts';
 import AppColors from '../../../enums/AppColors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
 import CryptoType from '../../../enums/CryptoType';
-import CurrencyContext from '../../../contexts/CurrencyContext';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface ITxInput {
   title: string
@@ -52,13 +51,14 @@ const TxInput: React.FC<ITxInput> = ({
   createTx,
 }) => {
   const navigation = useNavigation();
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const fromToRatio = fromPrice / toPrice;
-  let tempMaxElValue = 100000;
-  let tempMaxAssetValue = 100;
+  const tempMaxElValue = 100000;
+  const tempMaxAssetValue = 100;
   const [state, setState] = useState({
     errorValue: 0
   });
+  const { t } = useTranslation();
 
   return (
     <>
@@ -71,7 +71,7 @@ const TxInput: React.FC<ITxInput> = ({
         }}
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <H4Text label={i18n.t('assets.cancel')} style={{ color: AppColors.MAIN }} />
+          <H4Text label={t('assets.cancel')} style={{ color: AppColors.MAIN }} />
         </TouchableOpacity>
         <H3Text label={title} style={{}} />
         <View style={{ width: 20 }} />
@@ -91,8 +91,6 @@ const TxInput: React.FC<ITxInput> = ({
           value={values.from || '0'}
           subValue={
             currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               parseFloat(values.from || '0') * fromPrice,
               2,
             )}

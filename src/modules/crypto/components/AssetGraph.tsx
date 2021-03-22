@@ -4,7 +4,7 @@ import { P2Text } from '../../../shared/components/Texts';
 import { Chart, Line, HorizontalAxis, ChartDataPoint, } from 'react-native-responsive-linechart'
 import AppColors from '../../../enums/AppColors';
 import CustomChartTooltip from './CustomChartTooltip';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface IAssetGraph {
   data: ChartDataPoint[],
@@ -16,6 +16,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
   lineColor,
 }) => {
   const maxY = data.reduce((res, cur) => cur.y >= res ? cur.y : res, 0);
+  const { t } = useTranslation();
 
   return (
     <View
@@ -33,7 +34,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={i18n.t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
+          <P2Text label={t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
         </View>
       }
       {
@@ -44,7 +45,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={i18n.t('assets.null_data')} style={{ textAlign: 'center', width: '100%' }} />
+          <P2Text label={t('assets.null_data')} style={{ textAlign: 'center', width: '100%' }} />
         </View>
       }
       {

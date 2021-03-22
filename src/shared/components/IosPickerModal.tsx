@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Modal } from 'react-native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text } from './Texts';
 
 type Props = React.PropsWithChildren<{
@@ -11,6 +11,8 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       visible={props.modalVisible}
@@ -41,14 +43,14 @@ const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
           {props.buttonNumber === 2 && (
             <TouchableOpacity onPress={props.cancelHandler}>
               <P1Text
-                label={i18n.t('more_label.close')}
+                label={t('more_label.close')}
                 style={{ color: '#626368' }}
               />
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={props.doneHandler}>
             <P1Text
-              label={i18n.t('more_label.done')}
+              label={t('more_label.done')}
               style={{ color: '#3679B5' }}
             />
           </TouchableOpacity>

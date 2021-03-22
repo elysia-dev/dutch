@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { View } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -27,7 +28,7 @@ export const AverageReturnCard: FunctionComponent<Props> = (props: Props) => {
       }}>
       <P1Text
         style={{ marginBottom: 10 }}
-        label={i18n.t('dashboard_label.average_return')}
+        label={t('dashboard_label.average_return')}
       />
       <H2Text
         style={{ marginBottom: 18 }}

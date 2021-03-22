@@ -8,7 +8,7 @@ import QRCode from 'react-native-qrcode-svg';
 import AppColors from '../../enums/AppColors';
 import Clipboard from 'expo-clipboard';
 import WalletContext from '../../contexts/WalletContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 
@@ -20,10 +20,11 @@ const Deposit: FunctionComponent<Props> = props => {
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser ? wallet?.getNodes()[0].address : user.ethAddresses[0];
+  const { t } = useTranslation();
 
   return (
     <>
-      <SheetHeader title={i18n.t('main.my_address')} />
+      <SheetHeader title={t('main.my_address')} />
       <View
         style={{
           paddingLeft: 20,

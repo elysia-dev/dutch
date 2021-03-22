@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
@@ -14,6 +14,7 @@ import UserContext from '../../contexts/UserContext';
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships } = useContext(UserContext);
   const { signOut, Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
@@ -32,19 +33,19 @@ const MembershipWithdrawl: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('account_errors.password_do_not_match'));
+          alert(t('account_errors.password_do_not_match'));
         }
       });
   };
 
   const confirmWithdrawl = () => {
     Alert.alert(
-      i18n.t('more_label.account_withdrawl'),
-      i18n.t('more.withdrawl_confirm'),
+      t('more_label.account_withdrawl'),
+      t('more.withdrawl_confirm'),
       [
         {
           text: 'Cancel',
-          onPress: () => {},
+          onPress: () => { },
           style: 'cancel',
         },
         {
@@ -65,7 +66,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
             handler={() => navigation.goBack()}
             style={{ width: 30 }}
           />
-          <H2Text label={i18n.t('more_label.leave_elysia')} />
+          <H2Text label={t('more_label.leave_elysia')} />
         </>
       }
       body={
@@ -76,7 +77,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
             height: '100%',
           }}>
           <TextField
-            label={i18n.t('account.insert_password')}
+            label={t('account.insert_password')}
             eventHandler={(input: string) => setPassword(input)}
             secure={true}
             value={password}
@@ -113,7 +114,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                   }}
                 />
                 <P3Text
-                  label={i18n.t('more.withdrawl_check_1', { legacyOwnerships })}
+                  label={t('more.withdrawl_check_1', { legacyOwnerships })}
                   style={{ color: '#1C1C1C', lineHeight: 18 }}
                 />
               </View>
@@ -132,7 +133,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                   }}
                 />
                 <P3Text
-                  label={i18n.t('more.withdrawl_check_2', {
+                  label={t('more.withdrawl_check_2', {
                     legacyEl: user.legacyUsd,
                     legacyUsd: user.legacyUsd,
                   })}
@@ -153,7 +154,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 }}
               />
               <P3Text
-                label={i18n.t('more.withdrawl_check_3')}
+                label={t('more.withdrawl_check_3')}
                 style={{ color: '#1C1C1C', lineHeight: 18 }}
               />
             </View>
@@ -170,7 +171,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 }}
               />
               <P3Text
-                label={i18n.t('more.withdrawl_check_4')}
+                label={t('more.withdrawl_check_4')}
                 style={{ color: '#1C1C1C', lineHeight: 18 }}
               />
             </View>
@@ -179,7 +180,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
       }
       button={
         <SubmitButton
-          title={i18n.t('more_label.agree_withdrawl')}
+          title={t('more_label.agree_withdrawl')}
           handler={confirmWithdrawl}
           style={{
             backgroundColor: password ? '#3679B5' : '#D0D8DF',

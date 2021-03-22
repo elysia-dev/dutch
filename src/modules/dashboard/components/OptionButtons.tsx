@@ -1,7 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const OptionButtons: FunctionComponent<Props> = (props: Props) => {
-  const navigation = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View
@@ -48,7 +47,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           source={require('../images/purchase.png')}></Image>
         <P1Text
           style={{ textAlign: 'center' }}
-          label={i18n.t('dashboard_label.purchase')}
+          label={t('dashboard_label.purchase')}
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -76,7 +75,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           source={require('../images/stakeWithdraw.png')}></Image>
         <P1Text
           style={{ textAlign: 'center' }}
-          label={i18n.t('dashboard_label.withdraw_stake', {
+          label={t('dashboard_label.withdraw_stake', {
             paymentMethod: props.paymentMethod.toUpperCase(),
           })}
         />
@@ -107,7 +106,7 @@ const OptionButtons: FunctionComponent<Props> = (props: Props) => {
           source={require('../images/withdraw_interest.png')}></Image>
         <P1Text
           style={{ textAlign: 'center' }}
-          label={i18n.t('dashboard_label.withdraw_profit')}
+          label={t('dashboard_label.withdraw_profit')}
         />
       </TouchableOpacity>
     </View>

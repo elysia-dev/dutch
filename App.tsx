@@ -1,7 +1,7 @@
+import './i18n'
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 
-// import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
 import * as Updates from 'expo-updates';
 

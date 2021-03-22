@@ -15,7 +15,7 @@ import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 
 type ParamList = {
@@ -57,6 +57,7 @@ const Purchase: FunctionComponent = () => {
   const txResult = useWatingTx(state.txHash);
   const { elPrice, ethPrice } = usePrices()
   const { afterTxFailed, afterTxCreated } = useTxHandler();
+  const { t } = useTranslation();
 
   useEffect(() => {
     switch (state.step) {
@@ -175,9 +176,9 @@ const Purchase: FunctionComponent = () => {
               })
               .catch((e) => {
                 if (e.response.status === 400) {
-                  alert(i18n.t('product.transaction_error'));
+                  alert(t('product.transaction_error'));
                 } else if (e.response.status === 500) {
-                  alert(i18n.t('account_errors.server'));
+                  alert(t('account_errors.server'));
                 }
               });
           }

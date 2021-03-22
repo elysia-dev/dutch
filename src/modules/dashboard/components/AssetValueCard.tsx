@@ -2,21 +2,22 @@ import React, { FunctionComponent, useContext } from 'react';
 import { View, Dimensions, Text } from 'react-native';
 import { Grid, LineChart, YAxis } from 'react-native-svg-charts';
 import { Circle } from 'react-native-svg';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import { P1Text } from '../../../shared/components/Texts';
 import dayFormatter from '../../../utiles/dayFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 type Props = {
   content: SummaryReportResponse['content'];
 };
 
 export const AssetValueCard: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
 
   const today = new Date().getDay();
+
+  const { t } = useTranslation();
 
   const day = Array(7)
     .fill(0)
@@ -27,7 +28,7 @@ export const AssetValueCard: FunctionComponent<Props> = (props) => {
       allowFontScaling={false}
       key={index}
       style={{ color: '#A7A7A7', fontSize: 12, textAlign: 'center' }}>
-      {i18n.t(`day.${value}`)}
+      {t(`day.${value}`)}
     </Text>
   ));
 
@@ -73,7 +74,7 @@ export const AssetValueCard: FunctionComponent<Props> = (props) => {
         marginLeft: 3,
         marginRight: 3,
       }}>
-      <P1Text label={i18n.t('dashboard_label.total_property')} />
+      <P1Text label={t('dashboard_label.total_property')} />
       <View
         style={{
           height: 200,
@@ -96,20 +97,15 @@ export const AssetValueCard: FunctionComponent<Props> = (props) => {
           }}
           numberOfTicks={4}
           formatLabel={(value) =>
-            `${
-              maxValue > 10
-                ? currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(value),
-                    0,
-                  )
-                : currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(value),
-                    3,
-                  )
+            `${maxValue > 10
+              ? currencyFormatter(
+                parseFloat(value),
+                0,
+              )
+              : currencyFormatter(
+                parseFloat(value),
+                3,
+              )
             }`
           }
         />

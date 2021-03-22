@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import { View, ScrollView, Image, Text } from 'react-native';
@@ -8,23 +9,30 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { H2Text, H4Text, P1Text, TitleText } from '../../shared/components/Texts';
 import Asset from '../../types/Asset';
-import SelectBox from './components/SelectBox';
 import TransactionList from './components/TransactionList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
-import currencyFormatter from '../../utiles/currencyFormatter';
-import CurrencyContext from '../../contexts/CurrencyContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
+import CryptoTransaction from '../../types/CryptoTransaction';
+import usePrices from '../../hooks/usePrice';
+import { Transaction } from '../../types/Transaction';
+import SelectBox from './components/SelectBox';
+import NextButton from '../../shared/components/NextButton';
 
-const now = Date.now()
-
-const testCryptoTx = [
-  { type: 'in', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'out', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'in', value: '100', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now }
-]
+const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
+  return {
+    type: ['ownership', 'expectedProfit'].includes(tx.transactionType) ? 'in' : 'out',
+    legacyType: tx.transactionType,
+    value: tx.value,
+    txHash: tx.hash,
+    createdAt: tx.createdAt,
+  }
+}
 
 type ParamList = {
   Detail: {
@@ -32,17 +40,86 @@ type ParamList = {
   };
 };
 
+type State = {
+  page: number,
+  totalSupply: number,
+  reward: number,
+  transactions: CryptoTransaction[],
+  contractAddress: string,
+  paymentMethod: CryptoType | 'none',
+  legacyRefundStatus?: string,
+  image: string,
+}
+
 // TODO
-// 1. load 누적수익금
-// 2. load 지분률
-// 3. load txs...
-// productId?
+// v2 user!!`
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext);
+  const { isWalletUser } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
+  const [state, setState] = useState<State>({
+    page: 1,
+    totalSupply: 0,
+    reward: 0,
+    transactions: [],
+    contractAddress: '',
+    paymentMethod: CryptoType.EL,
+    image: '',
+  })
   const [filter, setFilter] = useState<number>(0);
+  const { elPrice, ethPrice } = usePrices();
+
+  const laodV1OwnershipDetail = async () => {
+    if (!asset.ownershipId) return;
+
+    const res = await Server.ownershipDetail(asset.ownershipId)
+    const txRes = await Server.getTransaction(asset.ownershipId, state.page)
+
+    setState({
+      page: 1,
+      totalSupply: parseFloat(res.data.product.totalValue),
+      reward: parseFloat(res.data.expectProfit),
+      transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
+      contractAddress: res.data.product.contractAddress,
+      paymentMethod: res.data.product.paymentMethod as CryptoType,
+      legacyRefundStatus: res.data.legacyRefundStatus,
+      image: res.data.product.data?.images[0],
+    })
+  }
+
+  const loadV1TxsMore = async () => {
+    if (!asset.ownershipId) return;
+
+    try {
+      const txRes = await Server.getTransaction(asset.ownershipId, state.page);
+      const nextTxs = txRes.data.map((tx) => legacyTxToCryptoTx(tx));
+
+      if (nextTxs.length === 0) {
+        alert(t('dashboard.last_transaction'))
+        return
+      }
+
+      setState({
+        ...state,
+        page: state.page + 1,
+        transactions: [...state.transactions, ...nextTxs]
+      })
+    } catch {
+      alert(t('dashboard.last_transaction'))
+    }
+  }
+
+  useEffect(() => {
+    if (isWalletUser) {
+      // v2User
+    } else {
+      laodV1OwnershipDetail();
+    }
+  }, [])
 
   const mainFeatures = [
     {
@@ -95,18 +172,20 @@ const Detail: FunctionComponent = () => {
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
           }}>
-          <Image
-            source={{ uri: 'https://elysia.land/static/media/elysia-asset-6.033509fa.png' }}
-            style={{
-              borderBottomLeftRadius: 10,
-              borderBottomRightRadius: 10,
-              position: 'absolute',
-              top: 0,
-              width: '100%',
-              height: 293,
-              resizeMode: 'cover',
-            }}
-          />
+          {
+            !!state.image && <Image
+              source={{ uri: state.image }}
+              style={{
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                height: 293,
+                resizeMode: 'cover',
+              }}
+            />
+          }
           <View style={{ position: 'absolute', padding: 20 }}>
             <BackButton handler={() => navigation.goBack()} />
           </View>
@@ -114,13 +193,11 @@ const Detail: FunctionComponent = () => {
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
           <H4Text
             style={{ marginTop: 20, color: AppColors.BLACK2 }}
-            label={asset.unit + " " + i18n.t('main.assets')}
+            label={asset.unit + " " + t('main.assets')}
           />
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
             label={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               asset.currencyValue,
               2,
             )}
@@ -128,9 +205,9 @@ const Detail: FunctionComponent = () => {
           <View style={{ marginTop: 20, height: 1, backgroundColor: AppColors.GREY }} />
           {
             [
-              { left: i18n.t('main.assets_name'), right: asset.title },
-              { left: i18n.t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
-              { left: i18n.t('main.assets_stake'), right: '6.28%' },
+              { left: t('main.assets_name'), right: asset.title },
+              { left: t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
+              { left: t('main.assets_stake'), right: `${(asset.unitValue / state.totalSupply * 100).toFixed(2)}%` },
             ].map((data, index) => {
               return (
                 <View
@@ -168,22 +245,27 @@ const Detail: FunctionComponent = () => {
           >
             <H4Text
               style={{ color: AppColors.BLACK }}
-              label={i18n.t('main.total_assets_yield')}
+              label={t('main.total_assets_yield')}
             />
             <View>
               <H4Text
                 style={{ color: AppColors.MAIN, textAlign: 'right' }}
-                label={'$ 5.1'}
+                label={currencyFormatter(
+                  state.reward,
+                  2,
+                )}
               />
-              <H4Text
-                style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                label={'0.123 ETH'}
-              />
+              {
+                state.paymentMethod !== 'none' && <H4Text
+                  style={{ color: AppColors.BLACK2, textAlign: 'right' }}
+                  label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                />
+              }
             </View>
           </View>
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
-              mainFeatures.map((data, index) => {
+              !asset.isLegacyOwnership && mainFeatures.map((data, index) => {
                 return (
                   <TouchableOpacity
                     key={index}
@@ -213,17 +295,43 @@ const Detail: FunctionComponent = () => {
               })
             }
           </View>
+          {
+            asset.isLegacyOwnership && <View
+              style={{ width: '100%', marginBottom: 20 }}
+            >
+              <NextButton
+                disabled={state.legacyRefundStatus === 'pending'}
+                title={t(
+                  state.legacyRefundStatus === 'pending' ?
+                    'dashboard_label.withdraw_stake_pending' :
+                    'dashboard_label.withdraw_stake_legacy'
+                )}
+                handler={() => {
+                  navigation.navigate(AssetPage.LegacyOwnershipRefund, {
+                    ownershipId: asset.ownershipId,
+                  })
+                }}
+              />
+            </View>
+          }
         </View>
         <View style={{ height: 15, backgroundColor: AppColors.BACKGROUND_GREY }} />
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-          <H2Text label={i18n.t('main.transaction_list')} style={{ marginTop: 20 }} />
+          <H2Text label={t('main.transaction_list')} style={{ marginTop: 20 }} />
           <View style={{ height: 20 }} />
           <SelectBox
             options={['ALL', 'OUT', 'IN']}
             selected={filter}
             select={(filter) => setFilter(filter)}
           />
-          <TransactionList data={testCryptoTx} unit={route.params.asset.unit} />
+          <TransactionList
+            data={
+              filter === 0 ? state.transactions : state.transactions.filter((tx) =>
+                (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
+              )
+            }
+            unit={route.params.asset.unit}
+          />
           <TouchableOpacity
             style={{
               width: '100%',
@@ -235,14 +343,22 @@ const Detail: FunctionComponent = () => {
               alignContent: 'center',
               marginTop: 15,
               marginBottom: 15
-            }}>
+            }}
+            onPress={() => {
+              if (isWalletUser) {
+
+              } else {
+                loadV1TxsMore()
+              }
+            }}
+          >
             <P1Text
               style={{
                 color: AppColors.MAIN,
                 fontSize: 17,
                 textAlign: 'center',
               }}
-              label={i18n.t('dashboard_label.more_transactions')}
+              label={t('dashboard_label.more_transactions')}
             />
           </TouchableOpacity>
         </View>

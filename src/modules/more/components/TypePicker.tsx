@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, View, Platform, StyleProp, ViewStyle } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   dispatch: React.Dispatch<any>;
@@ -10,31 +10,33 @@ interface Props {
 }
 
 export const TypePicker: FunctionComponent<Props> = (props) => {
+  const { t } = useTranslation();
+
   const TypesList = [
-    <Picker.Item key={0} label={i18n.t('more_label.type_')} value={''} />,
+    <Picker.Item key={0} label={t('more_label.type_')} value={''} />,
     <Picker.Item
       key={1}
-      label={i18n.t('more_label.type_ownership')}
+      label={t('more_label.type_ownership')}
       value={'ownership'}
     />,
     <Picker.Item
       key={2}
-      label={i18n.t('more_label.type_refund')}
+      label={t('more_label.type_refund')}
       value={'refund'}
     />,
     <Picker.Item
       key={3}
-      label={i18n.t('more_label.type_close')}
+      label={t('more_label.type_close')}
       value={'close'}
     />,
     <Picker.Item
       key={4}
-      label={i18n.t('more_label.type_expectedProfit')}
+      label={t('more_label.type_expectedProfit')}
       value={'expectedProfit'}
     />,
     <Picker.Item
       key={5}
-      label={i18n.t('more_label.type_profit')}
+      label={t('more_label.type_profit')}
       value={'profit'}
     />,
   ];

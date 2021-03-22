@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -17,14 +17,14 @@ const InfoArrowImg = styled.Image`
 
 const MyPage: FunctionComponent = () => {
   const { user } = useContext(UserContext);
-  const { signOut } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
   return (
     <WrapperLayout
       isScrolling={false}
-      title={i18n.t('more_label.my_account')}
+      title={t('more_label.my_account')}
       backButtonHandler={() => navigation.goBack()}
       body={
         <>
@@ -36,7 +36,7 @@ const MyPage: FunctionComponent = () => {
               borderBottomColor: '#F6F6F8',
             }}>
             <P1Text
-              label={i18n.t('account_label.account_email')}
+              label={t('account_label.account_email')}
               style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
             />
             <P1Text label={user.email} style={{ fontSize: 15 }} />
@@ -57,7 +57,7 @@ const MyPage: FunctionComponent = () => {
                     justifyContent: 'space-between',
                   }}>
                   <P1Text
-                    label={i18n.t('more_label.reset_password')}
+                    label={t('more_label.reset_password')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
                   <InfoArrowImg source={require('./images/next_gray.png')} />
@@ -88,11 +88,11 @@ const MyPage: FunctionComponent = () => {
                     flexDirection: 'column',
                   }}>
                   <H3Text
-                    label={i18n.t('more_label.leave_elysia')}
+                    label={t('more_label.leave_elysia')}
                     style={{ fontSize: 15, lineHeight: 25, color: '#CC3743' }}
                   />
                   <P3Text
-                    label={i18n.t('more.delete_info')}
+                    label={t('more.delete_info')}
                     style={{ color: '#a7a7a7' }}
                   />
                 </View>

@@ -9,20 +9,17 @@ import TxStep from '../../enums/TxStep';
 import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
 import { View } from 'react-native';
-import AppColors from '../../enums/AppColors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { H3Text, H4Text } from '../../shared/components/Texts';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import { BigNumber } from '@ethersproject/bignumber';
 import { utils } from 'ethers';
-import currencyFormatter from '../../utiles/currencyFormatter';
-import CurrencyContext from '../../contexts/CurrencyContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import SheetHeader from '../../shared/components/SheetHeader';
 
 type ParamList = {
   Reward: {
@@ -41,7 +38,7 @@ const Reward: FunctionComponent = () => {
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAaddress);
   const { wallet } = useContext(WalletContext);
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
   const { elPrice, ethPrice } = usePrices()
@@ -49,6 +46,7 @@ const Reward: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
   });
+  const { t } = useTranslation()
 
   const { afterTxFailed, afterTxCreated } = useTxHandler();
 
@@ -84,20 +82,7 @@ const Reward: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <View style={{}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: AppColors.BACKGROUND_GREY,
-            padding: 20,
-          }}
-        >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
-          </TouchableOpacity>
-          <H3Text label={'이자 분배'} style={{}} />
-          <View style={{ width: 20 }} />
-        </View>
+        <SheetHeader title={'이자분배'} />
         <View
           style={{
             paddingLeft: 20,
@@ -112,8 +97,6 @@ const Reward: FunctionComponent = () => {
             style={{ marginTop: 20 }}
             value={(interest / (toCrypto === CryptoType.ETH ? ethPrice : elPrice)).toFixed(4)}
             subValue={currencyFormatter(
-              currencyUnit,
-              currencyRatio,
               interest,
               4
             )}
@@ -138,9 +121,9 @@ const Reward: FunctionComponent = () => {
                     })
                     .catch((e) => {
                       if (e.response.status === 400) {
-                        alert(i18n.t('product.transaction_error'));
+                        alert(t('product.transaction_error'));
                       } else if (e.response.status === 500) {
-                        alert(i18n.t('account_errors.server'));
+                        alert(t('account_errors.server'));
                       }
                     });
                 }

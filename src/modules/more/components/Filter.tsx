@@ -10,13 +10,14 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
+import moment from 'moment';
 import { SafeAreaView } from 'react-navigation';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { TypePicker } from './TypePicker';
 import DateInput from './DateInput';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
-import { H3Text, P1Text, P2Text } from '../../../shared/components/Texts';
+import { H3Text, P1Text } from '../../../shared/components/Texts';
 import IosPickerModal from '../../../shared/components/IosPickerModal';
 
 type ButtonProps = {
@@ -68,6 +69,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
     startDateModalVisible: false,
     endDateModalVisible: false,
   });
+  const { t } = useTranslation();
 
   return (
     <>
@@ -105,7 +107,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
           <ScrollView style={{ paddingHorizontal: 15, paddingTop: 30 }}>
             <View style={{ width: '100%', position: 'relative' }}>
               <H3Text
-                label={i18n.t('more_label.period')}
+                label={t('more_label.period')}
                 style={{ fontSize: 16, marginBottom: 10 }}
               />
               <View
@@ -118,7 +120,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                 <Button
                   on={props.filter.period === '30'}
                   style={{ width: '31%' }}
-                  title={i18n.t('more_label.30_day')}
+                  title={t('more_label.30_day')}
                   handler={() => {
                     props.dispatch({ type: 'UPDATE_PERIOD', period: '30' });
                     props.dispatch({ type: 'UPDATE_STARTDATE', start: '' });
@@ -128,7 +130,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                 <Button
                   on={props.filter.period === '90'}
                   style={{ width: '31%' }}
-                  title={i18n.t('more_label.90_day')}
+                  title={t('more_label.90_day')}
                   handler={() => {
                     props.dispatch({ type: 'UPDATE_PERIOD', period: '90' });
                     props.dispatch({ type: 'UPDATE_STARTDATE', start: '' });
@@ -138,7 +140,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                 <Button
                   on={props.filter.period === ''}
                   style={{ width: '31%' }}
-                  title={i18n.t('more_label._day')}
+                  title={t('more_label._day')}
                   handler={() =>
                     props.dispatch({ type: 'UPDATE_PERIOD', period: '' })
                   }
@@ -180,7 +182,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                           />
                         ) : (
                           <P1Text
-                            label={i18n.strftime(new Date(), '%Y-%m-%d')}
+                            label={moment().format('%Y-%m-%d')}
                             style={{
                               color: '#A7A7A7',
                               fontSize: 13,
@@ -236,7 +238,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                           />
                         ) : (
                           <P1Text
-                            label={i18n.strftime(new Date(), '%Y-%m-%d')}
+                            label={moment().format('%Y-%m-%d')}
                             style={{
                               color: '#A7A7A7',
                               fontSize: 13,
@@ -262,7 +264,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
 
               <H3Text
                 style={{ marginTop: 30, fontSize: 16, marginBottom: 10 }}
-                label={i18n.t('more_label.types')}
+                label={t('more_label.types')}
               />
               {Platform.OS === 'android' ? (
                 <TypePicker
@@ -288,7 +290,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                     setState({ ...state, typeModalVisible: true });
                   }}>
                   <H3Text
-                    label={i18n.t(`more_label.type_${props.filter.type}`)}
+                    label={t(`more_label.type_${props.filter.type}`)}
                     style={{
                       fontSize: 13,
                       textAlign: 'center',
@@ -298,7 +300,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
               )}
               <H3Text
                 style={{ fontSize: 16, marginBottom: 10 }}
-                label={i18n.t('more_label.product')}
+                label={t('more_label.product')}
               />
               {Platform.OS === 'android' ? (
                 props.children
@@ -340,10 +342,10 @@ const Filter: FunctionComponent<props> = (props: props) => {
               marginRight: 15,
               alignSelf: 'center',
             }}
-            title={i18n.t('more_label.retrieve')}
+            title={t('more_label.retrieve')}
             handler={() => {
               if (new Date(props.filter.start) > new Date(props.filter.end)) {
-                return alert(i18n.t('more.invalid_date'));
+                return alert(t('more.invalid_date'));
               }
               props.filterTransactions();
               props.dispatch({ type: 'MODAL_CONTROL', modal: false });
@@ -357,15 +359,15 @@ const Filter: FunctionComponent<props> = (props: props) => {
             state.productModalVisible ||
             state.startDateModalVisible ||
             state.endDateModalVisible) && (
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-              }}
-            />
-          )}
+              <View
+                style={{
+                  backgroundColor: 'rgba(0,0,0,0.3)',
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            )}
           <IosPickerModal
             modalVisible={state.typeModalVisible}
             doneHandler={() => {

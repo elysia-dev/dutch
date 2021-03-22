@@ -1,12 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import i18n from '../../../i18n/i18n';
 import Product from '../../../types/product';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import UserContext from '../../../contexts/UserContext';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import { useTranslation } from 'react-i18next'
+import PreferenceContext from '../../../contexts/PreferenceContext';
+import LocaleType from '../../../enums/LocaleType';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -26,10 +25,10 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
     abstract: false,
   });
 
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
-  const { user } = useContext(UserContext);
+  const { language, currencyFormatter } = useContext(PreferenceContext);
   const product = props.product;
-  const productDescription = product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[language || LocaleType.EN];
+  const { t } = useTranslation();
 
   return (
     <View style={{ width: '100%', paddingBottom: 0 }}>
@@ -44,7 +43,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <P1Text label={i18n.t('product_label.financials')} />
+            <P1Text label={t('product_label.financials')} />
             <Image
               source={require('../images/downbutton.png')}
               style={[
@@ -62,7 +61,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
           <View style={{ paddingBottom: 20 }}>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.expected_annual_return')}
+                label={t('product_financial.expected_annual_return')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -72,7 +71,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.return_rent')}
+                label={t('product_financial.return_rent')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -82,7 +81,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.return_sale')}
+                label={t('product_financial.return_sale')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -92,7 +91,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.rent_distribution')}
+                label={t('product_financial.rent_distribution')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -102,7 +101,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.lockup_period')}
+                label={t('product_financial.lockup_period')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -112,7 +111,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.expected_sale_date')}
+                label={t('product_financial.expected_sale_date')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -122,13 +121,11 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
             </DesView>
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.price')}
+                label={t('product_financial.price')}
                 style={{ color: '#626368' }}
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.propertyPrice),
                   0,
                 )}
@@ -138,13 +135,11 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.net_deposit')}
+                label={t('product_financial.net_deposit')}
                 style={{ color: '#626368' }}
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.netDeposit),
                   0,
                 )}
@@ -154,13 +149,11 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.net_rent_year')}
+                label={t('product_financial.net_rent_year')}
                 style={{ color: '#626368' }}
               />
               <P3Text
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(product.data.netRentPerYear),
                   0,
                 )}
@@ -170,7 +163,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
             <DesView>
               <P3Text
-                label={i18n.t('product_financial.bankloan')}
+                label={t('product_financial.bankloan')}
                 style={{ color: '#626368' }}
               />
               <P3Text
@@ -192,7 +185,7 @@ const OwnershipWrappedInfo: FunctionComponent<Props> = (props: Props) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <P1Text label={i18n.t('dashboard_label.property_abstract')} />
+            <P1Text label={t('dashboard_label.property_abstract')} />
             <Image
               source={require('../images/downbutton.png')}
               style={[

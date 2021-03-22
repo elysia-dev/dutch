@@ -7,7 +7,7 @@ import RecoverMnemonicView from './components/RecoverMnemonicView';
 import { isValidMnemonic } from '@ethersproject/hdnode';
 import { useNavigation } from '@react-navigation/native';
 import { WalletPage } from '../../enums/pageEnum';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 
 type State = {
   currentIndex: number,
@@ -16,6 +16,7 @@ type State = {
 
 const RecoverSeedPharase: FunctionComponent = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const [state, setState] = useState<State>({
     currentIndex: 0,
     mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
@@ -27,7 +28,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
     <Layout>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, marginBottom: 20 }}
-        label={i18n.t('recovery_key.insert_seed')}
+        label={t('recovery_key.insert_seed')}
       />
       <RecoverMnemonicView
         mnemonic={state.mnemonic}
@@ -40,7 +41,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
       />
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={i18n.t('recovery_key.insert_seed_btn')}
+          title={t('recovery_key.insert_seed_btn')}
           disabled={!isValidMnemonic(state.mnemonic.join(' '))}
           handler={async () => {
             navigation.navigate(WalletPage.RecoverWallet, {

@@ -1,17 +1,16 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
-import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
-import { Timer } from './components/Timer';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
-import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
+import currentLocalization from '../../utiles/currentLocalization';
 
 type ParamList = {
   CertifyRecover: {
@@ -27,34 +26,34 @@ const CertifyRecover: FunctionComponent<{}> = () => {
   });
 
   const navigation = useNavigation();
-  const { user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
   const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
+  const { t } = useTranslation()
 
   const callResendApi: () => void = () => {
     Server.certifyEmail_recover(
       route.params.email,
       'recoverPassword',
-      user.language,
+      currentLocalization(),
     )
       .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId! });
-        alert(i18n.t('account.resend_verification'));
+        alert(t('account.resend_verification'));
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('account.invalid_email'));
+          alert(t('account.invalid_email'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         } else {
-          alert(i18n.t('account.try_again_later'));
+          alert(t('account.try_again_later'));
         }
       });
   };
 
   const callCertifyApi = () => {
     if (!state.code) {
-      alert(i18n.t('account.authentication_recover'));
+      alert(t('account.authentication_recover'));
       return;
     }
     Server.certifyEmail(
@@ -73,12 +72,12 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                 : state.verificationId,
           });
         } else if (res.data.status === 'expired') {
-          alert(i18n.t('account.expired_verification'));
+          alert(t('account.expired_verification'));
 
           //   navigation.navigate(AccountPage.InitializeEmail);
         } else {
           alert(
-            i18n.t('account.unmatched_verification', {
+            t('account.unmatched_verification', {
               error: res.data.counts,
             }),
           );
@@ -86,9 +85,9 @@ const CertifyRecover: FunctionComponent<{}> = () => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('account.authentication_recover'));
+          alert(t('account.authentication_recover'));
         } else if (e.response.status === 404) {
-          alert(i18n.t('account.expired_verification'));
+          alert(t('account.expired_verification'));
           navigation.navigate(AccountPage.InitializeEmail);
         }
       });
@@ -103,28 +102,28 @@ const CertifyRecover: FunctionComponent<{}> = () => {
           />
           <H1Text
             style={{ marginBottom: 10 }}
-            label={i18n.t('account.authentication_recover')}
+            label={t('account.authentication_recover')}
           />
-          <P1Text label={i18n.t('account.authentication_recover_label')} />
+          <P1Text label={t('account.authentication_recover_label')} />
         </>
       }
       body={
         <>
           <TextField
-            label={i18n.t('account_label.account_email')}
+            label={t('account_label.account_email')}
             editable={false}
             value={route.params.email}
-            eventHandler={() => {}}
+            eventHandler={() => { }}
           />
           <TextField
-            label={i18n.t('account_label.authentication_code')}
+            label={t('account_label.authentication_code')}
             eventHandler={(value) => {
               setState({ ...state, code: value });
             }}
           />
           <View style={{ bottom: 10, flexDirection: 'row-reverse' }}>
             <BorderFlatButton
-              title={i18n.t('account_label.resend')}
+              title={t('account_label.resend')}
               handler={() => callResendApi()}
             />
             <View style={{ flexDirection: 'row', width: '100%' }}>
@@ -135,16 +134,15 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                   height: 21,
                   color: '#1c1c1c',
                 }}
-                label={`${i18n.t('account.expiration_time')}`}
+                label={`${t('account.expiration_time')}`}
               />
-              <Timer verif={state.verificationId} />
             </View>
           </View>
         </>
       }
       button={
         <SubmitButton
-          title={i18n.t('account_label.certify')}
+          title={t('account_label.certify')}
           handler={() => callCertifyApi()}
         />
       }

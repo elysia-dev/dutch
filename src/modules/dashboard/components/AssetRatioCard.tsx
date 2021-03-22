@@ -1,11 +1,10 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   ownerships: SummaryReportResponse['content']['ownerships'];
@@ -13,12 +12,14 @@ interface Props {
 
 export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = React.useState({ profit: true });
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
 
   const data = props.ownerships.map((value, index) => parseFloat(value[1]));
   const totalValue = data.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;
   }, 0);
+
+  const { t } = useTranslation();
 
   const color = [
     '#3679B5',
@@ -88,8 +89,6 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
           textAlign: 'right',
         }}
         label={currencyFormatter(
-          currencyUnit,
-          currencyRatio,
           parseFloat(value[1]),
           4,
         )}
@@ -159,7 +158,7 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
         }}>
         <P1Text
           style={{ marginBottom: 20 }}
-          label={i18n.t('dashboard_label.asset_value_graph')}
+          label={t('dashboard_label.asset_value_graph')}
         />
         <View
           style={{
@@ -201,7 +200,7 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
           />
           <P1Text
             style={{ marginTop: 25, textAlign: 'center' }}
-            label={i18n.t('dashboard.no_ownership')}
+            label={t('dashboard.no_ownership')}
           />
         </>
       ) : (

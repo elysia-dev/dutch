@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import PasswordForm from '../account/PasswordForm';
 import WalletContext from '../../contexts/WalletContext';
 import { Keyboard } from 'react-native'
@@ -11,11 +11,12 @@ const NewPassword: FunctionComponent = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { createNewWallet } = useContext(WalletContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <>
       <PasswordForm
-        submitButtonTitle={i18n.t('account_label.continue')}
+        submitButtonTitle={t('account_label.continue')}
         submitHandler={async (password: string) => {
           Keyboard.dismiss();
           setLoading(true);
@@ -23,8 +24,8 @@ const NewPassword: FunctionComponent = () => {
           setLoading(false);
           navigation.navigate(WalletPage.SecureWalletNotice)
         }}
-        message1={i18n.t('account.create_password')}
-        message2={i18n.t('account.password_confirm')}
+        message1={t('account.create_password')}
+        message2={t('account.password_confirm')}
       />
       <OverlayLoading visible={loading} />
     </>

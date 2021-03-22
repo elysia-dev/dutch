@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text, H1Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 export const EventCard: FunctionComponent<Props> = (props) => {
+  const { t } = useTranslation();
   return (
     <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
       <View
@@ -46,14 +47,14 @@ export const EventCard: FunctionComponent<Props> = (props) => {
               marginTop: 3,
             }}>
             <P1Text
-              label={i18n.t('dashboard.how_get_EL')}
+              label={t('dashboard.how_get_EL')}
               style={{
                 color: '#FFFFFF',
                 fontSize: 15,
               }}
             />
             <H1Text
-              label={i18n.t('dashboard.participate_event')}
+              label={t('dashboard.participate_event')}
               style={{
                 color: '#FFFFFF',
                 fontSize: 25,

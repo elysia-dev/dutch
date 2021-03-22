@@ -8,18 +8,11 @@ import React, {
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
 import { Notice } from '../dashboard/ProductNotice';
 
-const GText = styled.Text`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-`;
 const PText = styled.Text`
   margin-top: 10px;
   margin-bottom: 10px;
@@ -38,13 +31,14 @@ const ElysiaNotice: FunctionComponent = () => {
     postList: [],
   });
   const { Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const loadElysiaNotice = () => {
     Server.elysiaPost()
       .then((res) => setState({ ...state, postList: res.data }))
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };

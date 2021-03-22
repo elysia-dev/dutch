@@ -6,6 +6,7 @@ import Detail from './Detail';
 import { AssetPage } from '../../enums/pageEnum';
 import Refund from './Refund';
 import Reward from './Reward';
+import LegacyOwnershipRefund from './LagacyOwnershipRefund';
 
 enableScreens()
 
@@ -14,7 +15,6 @@ const RootStack = createNativeStackNavigator()
 export const Main = () => {
   return (
     <RootStack.Navigator
-      mode="modal"
       screenOptions={{
         headerShown: false,
         stackPresentation: 'formSheet'
@@ -36,6 +36,10 @@ export const Main = () => {
       <RootStack.Screen
         name={AssetPage.Reward}
         component={Reward}
+      />
+      <RootStack.Screen
+        name={AssetPage.LegacyOwnershipRefund}
+        component={LegacyOwnershipRefund}
       />
     </RootStack.Navigator>
   );

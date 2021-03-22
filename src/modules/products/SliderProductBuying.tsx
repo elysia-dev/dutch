@@ -6,11 +6,10 @@ import React, {
   useState,
   useContext,
   FunctionComponent,
-  useEffect,
 } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { Calculator } from './components/Calculator';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import ExchangedValue from './components/ExchangedValue';
@@ -36,6 +35,7 @@ interface State {
 const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
   const { Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
   const [state, setState] = useState<State>({
     tokenCount: 10,
     paymentMethod: 'el',
@@ -72,9 +72,9 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       props.product.status === ProductStatus.SALE ||
       props.from === 'ownershipDetail'
     ) {
-      return i18n.t('product_label.purchase_now');
+      return t('product_label.purchase_now');
     }
-    return i18n.t('product_label.non_purchasable');
+    return t('product_label.non_purchasable');
   };
 
   const submitButtonHandler = () => {
@@ -116,9 +116,9 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('product.transaction_error'));
+          alert(t('product.transaction_error'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -194,7 +194,7 @@ const SliderProductBuying: FunctionComponent<Props> = (props) => {
         {hasChildProduct && (
           <>
             <P3Text
-              label={i18n.t('product_label.payment_method')}
+              label={t('product_label.payment_method')}
               style={{ marginBottom: 10 }}
             />
             <View style={{ width: '100%', flexDirection: 'row' }}>

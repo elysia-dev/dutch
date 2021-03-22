@@ -2,11 +2,10 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import Slider from '@react-native-community/slider';
 import { View } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import Product from '../../../types/Product';
 import { P2Text, H3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   product: Product;
@@ -17,7 +16,9 @@ interface State {
 }
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+
+  const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
     tokenCount: 10,
@@ -34,8 +35,8 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           justifyContent: 'space-between',
           marginBottom: 5,
         }}>
-        <P2Text label={i18n.t('product_label.investment')} />
-        <P2Text label={i18n.t('product_label.expected_return')} />
+        <P2Text label={t('product_label.investment')} />
+        <P2Text label={t('product_label.expected_return')} />
       </View>
       <View
         style={{
@@ -45,20 +46,16 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         }}>
         <H3Text
           label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
             state.tokenCount * 5,
             2,
           )}
         />
         <H3Text
           label={currencyFormatter(
-            currencyUnit,
-            currencyRatio,
             0.01 *
-              parseFloat(props.product.expectedAnnualReturn) *
-              5 *
-              state.tokenCount,
+            parseFloat(props.product.expectedAnnualReturn) *
+            5 *
+            state.tokenCount,
             2,
           )}
           style={{ color: '#3679b5' }}

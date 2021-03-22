@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import commaFormatter from '../../../utiles/commaFormatter';
-import CurrencyContext from '../../../contexts/CurrencyContext';
-import UserContext from '../../../contexts/UserContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
+import LocaleType from '../../../enums/LocaleType';
+import moment from 'moment';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -21,18 +21,17 @@ interface Props {
 }
 
 const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
+  const { language, currencyFormatter } = useContext(PreferenceContext);
   const [state, setState] = useState({
     financial: false,
     highlight: false,
     abstract: false,
   });
 
-  const { user } = useContext(UserContext);
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
-
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
   const isLoan = product.financeType === 'loan';
 
@@ -45,7 +44,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           borderBottomWidth: 5,
         }}>
         <H3Text
-          label={i18n.t('product_label.property_info')}
+          label={t('product_label.property_info')}
           style={{ marginBottom: 15 }}
         />
         <View style={{ marginBottom: 10 }}>
@@ -57,7 +56,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 justifyContent: 'space-between',
               }}>
               <P1Text
-                label={i18n.t('product_label.financials')}
+                label={t('product_label.financials')}
                 style={{ marginVertical: 10 }}
               />
               <Image
@@ -79,7 +78,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
             <View style={{ paddingBottom: 20 }}>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.expected_annual_return')}
+                  label={t('product_financial.expected_annual_return')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -89,7 +88,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t(
+                  label={t(
                     isLoan
                       ? 'product_financial.apr'
                       : 'product_financial.return_rent',
@@ -103,7 +102,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.return_sale')}
+                  label={t('product_financial.return_sale')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -113,7 +112,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t(
+                  label={t(
                     isLoan
                       ? 'product_financial.distribution_date'
                       : 'product_financial.rent_distribution',
@@ -127,7 +126,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.lockup_period')}
+                  label={t('product_financial.lockup_period')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -137,7 +136,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t(
+                  label={t(
                     isLoan
                       ? 'product_financial.expiry'
                       : 'product_financial.expected_sale_date',
@@ -151,21 +150,19 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.price')}
+                  label={t('product_financial.price')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
                   label={
                     isLoan
                       ? `₩ ${commaFormatter(
-                          parseFloat(product.data.propertyPrice),
-                        )}`
+                        parseFloat(product.data.propertyPrice),
+                      )}`
                       : currencyFormatter(
-                          currencyUnit,
-                          currencyRatio,
-                          parseFloat(product.data.propertyPrice),
-                          0,
-                        )
+                        parseFloat(product.data.propertyPrice),
+                        0,
+                      )
                   }
                   style={{ color: '#1c1c1c' }}
                 />
@@ -173,13 +170,11 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               {!isLoan && (
                 <DesView>
                   <P3Text
-                    label={i18n.t('product_financial.net_deposit')}
+                    label={t('product_financial.net_deposit')}
                     style={{ color: '#626368' }}
                   />
                   <P3Text
                     label={currencyFormatter(
-                      currencyUnit,
-                      currencyRatio,
                       parseFloat(product.data.netDeposit),
                       0,
                     )}
@@ -189,7 +184,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               )}
               <DesView>
                 <P3Text
-                  label={i18n.t(
+                  label={t(
                     isLoan
                       ? 'product_financial.annual_return'
                       : 'product_financial.net_rent_year',
@@ -198,8 +193,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
                     parseFloat(product.data.netRentPerYear),
                     0,
                   )}
@@ -209,7 +202,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
               <DesView>
                 <P3Text
-                  label={i18n.t('product_financial.bankloan')}
+                  label={t('product_financial.bankloan')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -217,11 +210,9 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                     isLoan
                       ? `₩ ${commaFormatter(parseFloat(product.data.bankLoan))}`
                       : currencyFormatter(
-                          currencyUnit,
-                          currencyRatio,
-                          parseFloat(product.data.bankLoan),
-                          0,
-                        )
+                        parseFloat(product.data.bankLoan),
+                        0,
+                      )
                   }
                   style={{ color: '#1c1c1c' }}
                 />
@@ -238,7 +229,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 justifyContent: 'space-between',
               }}>
               <P1Text
-                label={i18n.t('product_label.property_highlightes')}
+                label={t('product_label.property_highlightes')}
                 style={{ marginVertical: 10 }}
               />
               <Image
@@ -260,7 +251,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
             <View style={{ paddingBottom: 20 }}>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.type')}
+                  label={t('product_highlight.type')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -270,7 +261,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.ground')}
+                  label={t('product_highlight.ground')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -280,7 +271,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.underground')}
+                  label={t('product_highlight.underground')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -291,7 +282,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               {productDescription.unit && (
                 <DesView>
                   <P3Text
-                    label={i18n.t('product_highlight.unit')}
+                    label={t('product_highlight.unit')}
                     style={{ color: '#626368' }}
                   />
                   <P3Text
@@ -302,7 +293,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               )}
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.bedroom')}
+                  label={t('product_highlight.bedroom')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -312,20 +303,19 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.completion_date')}
+                  label={t('product_highlight.completion_date')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={i18n.strftime(
-                    new Date(product.data.buildingCompletionDate),
-                    '%Y-%m-%d',
-                  )}
+                  label={
+                    moment(product.data.buildingCompletionDate).format('%Y-%m-%d')
+                  }
                   style={{ color: '#1c1c1c' }}
                 />
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.total_parking_available')}
+                  label={t('product_highlight.total_parking_available')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -335,7 +325,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.air_conditioning')}
+                  label={t('product_highlight.air_conditioning')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -345,7 +335,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.heating')}
+                  label={t('product_highlight.heating')}
                   style={{ color: '#626368' }}
                 />
                 <P3Text
@@ -355,7 +345,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               </DesView>
               <DesView>
                 <P3Text
-                  label={i18n.t('product_highlight.security_facilities')}
+                  label={t('product_highlight.security_facilities')}
                   style={{ color: '#626368', flex: 1 }}
                 />
                 <P3Text
@@ -375,7 +365,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           marginBottom: 20,
         }}>
         <H3Text
-          label={i18n.t('product_label.product_info')}
+          label={t('product_label.product_info')}
           style={{ marginBottom: 15 }}
         />
         <View>
@@ -387,7 +377,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 justifyContent: 'space-between',
               }}>
               <P1Text
-                label={i18n.t('product_label.abstract')}
+                label={t('product_label.abstract')}
                 style={{ marginVertical: 10 }}
               />
               <Image

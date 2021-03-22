@@ -16,7 +16,7 @@ import {
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
 import Product from '../../types/Product';
@@ -31,6 +31,7 @@ import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -68,6 +69,8 @@ const ProductBuying: FunctionComponent = () => {
   const viewPager = useRef<ViewPager>(null);
   const { Server } = useContext(FunctionContext);
   const { user, isWalletUser } = useContext(UserContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
@@ -78,13 +81,13 @@ const ProductBuying: FunctionComponent = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
     } else if (user.provider === ProviderType.GUEST && !purchasability) {
-      return i18n.t('product_label.need_wallet');
+      return t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
-      return i18n.t('product_label.non_purchasable');
+      return t('product_label.non_purchasable');
     } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
-      return i18n.t('product_label.restricted_country');
+      return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
-      return i18n.t('product_label.invest');
+      return t('product_label.invest');
     }
     return '';
   };
@@ -92,8 +95,8 @@ const ProductBuying: FunctionComponent = () => {
   const submitButtonHandler = () => {
     if (ProviderType.GUEST && !purchasability) {
       return Alert.alert(
-        i18n.t('product_label.need_wallet'),
-        i18n.t('product.connect_wallet_confirm'),
+        t('product_label.need_wallet'),
+        t('product.connect_wallet_confirm'),
         [
           {
             text: 'Cancel',
@@ -113,9 +116,9 @@ const ProductBuying: FunctionComponent = () => {
       );
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
-        return alert(i18n.t('product.restricted_country'));
+        return alert(t('product.restricted_country'));
       }
-      return alert(i18n.t('product.non_purchasable'));
+      return alert(t('product.non_purchasable'));
     } else {
       navigation.navigate(ProductPage.Purchase, {
         fromCrypto: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
@@ -142,7 +145,7 @@ const ProductBuying: FunctionComponent = () => {
       });
     } catch (e) {
       if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
+        alert(t('account_errors.server'));
       } else if (e.response.status) {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
@@ -201,7 +204,7 @@ const ProductBuying: FunctionComponent = () => {
 
   useEffect(() => {
     loadProductAndPrice();
-  }, [user.language, productId]);
+  }, [language, productId]);
 
   return (
     <>

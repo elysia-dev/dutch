@@ -30,21 +30,23 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           marginLeft: 10,
           width: 20,
           height: 20,
-          transform: transaction.type === 'in' ? [{ rotate: '180deg' }] : []
+          transform: transaction.type === 'out' ? [] : [{ rotate: '180deg' }]
         }}
         source={require('../images/blackCircleArrow.png')}
       />
       <View style={{ marginLeft: 10 }}>
-        <P3Text
-          label={`${transaction.txHash.slice(0, 6)}...${transaction.txHash.slice(-6)}`}
-          style={{ color: AppColors.BLACK }}
-        />
+        {
+          transaction.txHash && <P3Text
+            label={`${transaction.txHash.slice(0, 6)}...${transaction.txHash.slice(-6)}`}
+            style={{ color: AppColors.BLACK }}
+          />
+        }
         <P3Text
           label={moment(transaction.createdAt).format('YYYY-MM-DD | HH:MM:SS')}
         />
       </View>
       <View style={{ marginLeft: 'auto' }}>
-        <P1Text label={`${transaction.type === 'in' ? '+' : '-'} ${transaction.value} ${unit}`} />
+        <P1Text label={`${transaction.type === 'out' ? '-' : '+'} ${transaction.value} ${unit}`} />
       </View>
     </View>
   );

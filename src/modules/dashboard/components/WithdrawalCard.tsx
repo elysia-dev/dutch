@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { P1Text, H1Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 }
 
 export const WithdrawalCard: FunctionComponent<Props> = (props) => {
+  const { t } = useTranslation();
   return (
     <TouchableOpacity onPress={props.handler} style={{ elevation: 10 }}>
       <View
@@ -36,7 +37,7 @@ export const WithdrawalCard: FunctionComponent<Props> = (props) => {
             marginTop: 3,
           }}>
             <P1Text
-              label={i18n.t("dashboard.remaining_balance_withdraw")}
+              label={t("dashboard.remaining_balance_withdraw")}
               style={{
                 color: '#FFFFFF',
                 fontSize: 15,

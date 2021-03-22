@@ -12,7 +12,7 @@ import { defaultOwnershipResponse } from '../../types/Ownership';
 import OwnershipBasicInfo from './components/OwnershipBasicInfo';
 import { Transaction } from '../../types/Transaction';
 import { TransactionBox } from './components/TransactionBox';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import OwnershipRefund from './OwnershipRefund';
 import OptionButtons from './components/OptionButtons';
 import LegacyOptionButtons from './components/LegacyOptionButtons';
@@ -49,6 +49,7 @@ const OwnershipDetail: FunctionComponent = () => {
     purchaseModalVisible: false,
     interestModalVisible: false,
   });
+  const { t } = useTranslation();
   const transactionList = state.transactions.map((transaction, index) => (
     <TransactionBox transaction={transaction} key={index} />
   ));
@@ -57,7 +58,7 @@ const OwnershipDetail: FunctionComponent = () => {
     Server.getTransaction(ownershipId, state.transactionCount)
       .then((res) => {
         if (res.data.length === 0 && state.transactionCount > 1) {
-          alert(i18n.t('dashboard.last_transaction'));
+          alert(t('dashboard.last_transaction'));
         } else {
           setState({
             ...state,
@@ -68,9 +69,9 @@ const OwnershipDetail: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('dashboard.ownership_error'));
+          alert(t('dashboard.ownership_error'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -89,9 +90,9 @@ const OwnershipDetail: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 404) {
-          alert(i18n.t('dashboard.ownership_error'));
+          alert(t('dashboard.ownership_error'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -111,9 +112,9 @@ const OwnershipDetail: FunctionComponent = () => {
       });
     } catch (e) {
       if (e.response.status === 400) {
-        alert(i18n.t('dashboard.ownership_error'));
+        alert(t('dashboard.ownership_error'));
       } else if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
+        alert(t('account_errors.server'));
       }
     }
   };
@@ -201,7 +202,7 @@ const OwnershipDetail: FunctionComponent = () => {
         </OwnershipBasicInfo>
         <View style={{ padding: 20 }}>
           <H3Text
-            label={i18n.t('dashboard_label.transaction')}
+            label={t('dashboard_label.transaction')}
             style={{ marginTop: 5, marginBottom: 20 }}
           />
           {transactionList}
@@ -223,7 +224,7 @@ const OwnershipDetail: FunctionComponent = () => {
                 fontSize: 17,
                 textAlign: 'center',
               }}
-              label={i18n.t('dashboard_label.more_transactions')}
+              label={t('dashboard_label.more_transactions')}
             />
           </TouchableOpacity>
         </View>
@@ -232,14 +233,14 @@ const OwnershipDetail: FunctionComponent = () => {
         state.refundModalVisible ||
         state.legacyRefundModalVisible ||
         state.interestModalVisible) && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}></View>
-      )}
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}></View>
+        )}
       <Modal
         transparent={true}
         animationType={'slide'}

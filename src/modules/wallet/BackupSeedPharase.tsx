@@ -8,7 +8,7 @@ import MnemonicView from './components/MnemonicView';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
 import WalletContext from '../../contexts/WalletContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 
 interface IBackupSeedPharase {
@@ -18,6 +18,7 @@ interface IBackupSeedPharase {
 const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
   const [confirmed, confirm] = useState<boolean>(false);
   const { wallet } = useContext(WalletContext);
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
   return (
@@ -27,11 +28,11 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
       </View>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
-        label={i18n.t('recovery_key.backup_seed')}
+        label={t('recovery_key.backup_seed')}
       />
       <P2Text
         style={{ marginTop: 10, marginBottom: 25 }}
-        label={i18n.t('recovery_key.backup_seed_notice')}
+        label={t('recovery_key.backup_seed_notice')}
       />
       <MnemonicView mnemonic={wallet?.getMnemonic() || ''} />
       <TouchableOpacity
@@ -42,12 +43,12 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
       >
         <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
           <CheckIcon checked={confirmed} />
-          <P1Text style={{ marginLeft: 10 }} label={i18n.t('recovery_key.backup_seed_checkbox')} />
+          <P1Text style={{ marginLeft: 10 }} label={t('recovery_key.backup_seed_checkbox')} />
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
-          title={i18n.t('recovery_key.next')}
+          title={t('recovery_key.next')}
           disabled={!confirmed}
           handler={next}
         />

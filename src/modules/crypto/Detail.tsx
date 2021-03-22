@@ -11,7 +11,7 @@ import TransactionList from './components/TransactionList';
 import CryptoType from '../../enums/CryptoType';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import { CryptoPage } from '../../enums/pageEnum';
 
@@ -48,11 +48,12 @@ const Detail: React.FC = () => {
   const [range, setRange] = useState<number>(0);
   const [filter, setFilter] = useState<number>(0);
   const { isWalletUser } = useContext(UserContext);
+  const { t } = useTranslation();
 
   return (
     <>
       <WrapperLayout
-        title={route.params.asset.title + " " + i18n.t('wallet.crypto_value')}
+        title={route.params.asset.title + " " + t('wallet.crypto_value')}
         isScrolling={true}
         backButtonHandler={() => navigation.goBack()}
         body={
@@ -63,7 +64,7 @@ const Detail: React.FC = () => {
             />
             <View style={{ height: 30 }} />
             <SelectBox
-              options={[i18n.t('wallet.month'), i18n.t('wallet.year'), i18n.t('wallet.all')]}
+              options={[t('wallet.month'), t('wallet.year'), t('wallet.all')]}
               selected={range}
               select={(range) => setRange(range)}
             />
@@ -105,7 +106,7 @@ const Detail: React.FC = () => {
             // width: isWalletUser ? 160 : ,
             width: Dimensions.get('window').width * 0.9
           }}
-          title={i18n.t('wallet.deposit')}
+          title={t('wallet.deposit')}
           handler={() => {
             navigation.navigate(CryptoPage.Deposit)
           }}
