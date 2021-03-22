@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Text, View } from 'react-native';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -53,6 +53,11 @@ const TxInput: React.FC<ITxInput> = ({
   const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
   const fromToRatio = fromPrice / toPrice;
+  const tempMaxElValue = 100000;
+  const tempMaxAssetValue = 100;
+  const [state, setState] = useState({
+    errorValue: 0
+  });
   const { t } = useTranslation();
 
   return (
@@ -92,7 +97,12 @@ const TxInput: React.FC<ITxInput> = ({
           active={current === 'from'}
           onPress={() => setCurrent('from')}
         />
-        <Text style={{ textAlign: 'center', fontSize: 20, color: AppColors.MAIN, marginTop: 5, marginBottom: 5 }}>↓</Text>
+        <View>
+          <Text style={{ textAlign: 'center', fontSize: 20, color: AppColors.MAIN, marginTop: 5, marginBottom: 5 }}>↓</Text>
+          {state.errorValue === 1 && (
+            <Text style={{ fontSize: 10, right: 0, position: "absolute", color: AppColors.RED, marginTop: 3, marginBottom: 5 }}>EL이 부족합니다!</Text>
+          )}
+        </View>
         <CryptoInput
           title={toInputTitle}
           cryptoTitle={toTitle}
@@ -102,6 +112,11 @@ const TxInput: React.FC<ITxInput> = ({
           active={current === 'to'}
           onPress={() => setCurrent('to')}
         />
+        <View>
+          {state.errorValue === 2 && (
+            <Text style={{ fontSize: 10, right: 0, position: "absolute", bottom: 10, color: AppColors.RED }}>최대 {toTitle} 공급량을 초과했습니다!</Text>
+          )}
+        </View>
         <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />
         <NumberPad
           addValue={(text) => {
@@ -146,7 +161,14 @@ const TxInput: React.FC<ITxInput> = ({
           disabled={disabled}
           title={title}
           handler={() => {
-            createTx()
+            if (parseInt(values.from, 10) > tempMaxElValue) { // 최대 보유개수가 100,000개라고 가정
+              setState({ ...state, errorValue: 1 });
+            } else if (parseInt(values.to, 10) > tempMaxAssetValue) { // 남은 ELA 토큰이 100개라고 가정
+              setState({ ...state, errorValue: 2 });
+            } else {
+              setState({ ...state, errorValue: 0 });
+              createTx()
+            }
           }}
         />
       </View>
