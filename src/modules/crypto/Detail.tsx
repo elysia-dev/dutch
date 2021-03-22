@@ -16,6 +16,7 @@ import CryptoType from '../../enums/CryptoType';
 import ExpressoV2 from '../../api/ExpressoV2';
 import CryptoTransaction from '../../types/CryptoTransaction';
 import { BigNumber, utils } from 'ethers';
+import Bignumberjs from 'bignumber.js';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
@@ -45,30 +46,24 @@ const Detail: React.FC = () => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address || '' : user.ethAddresses[0];
 
     let newTxs: CryptoTransaction[] = [];
+    let res;
 
     try {
       if (asset.type === CryptoType.ETH) {
-        const res = await ExpressoV2.getEthTransaction(address, state.page);
-        newTxs = res.data.tx.map((tx) => {
-          const type = tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out'
-          return {
-            type,
-            value: type === 'in' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice).add(tx.value)),
-            txHash: tx.hash,
-            createdAt: tx.timestamp
-          }
-        })
+        res = await ExpressoV2.getEthTransaction(address, state.page);
       } else {
-        const res = await ExpressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
-        newTxs = res.data.tx.map((tx) => {
-          return {
-            type: tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out',
-            value: tx.value !== '0' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice)),
-            txHash: tx.hash,
-            createdAt: tx.timestamp
-          }
-        })
+        res = await ExpressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
       }
+
+      newTxs = res.data.tx.map((tx) => {
+        const value = tx.value !== '0' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice))
+        return {
+          type: tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out',
+          value: value.length > 12 ? (new Bignumberjs(value)).toFixed(2) : value,
+          txHash: tx.hash,
+          createdAt: tx.timestamp
+        }
+      })
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'))
@@ -151,7 +146,7 @@ const Detail: React.FC = () => {
         }
       />
       {
-        user.ethAddresses[0] || isWalletUser &&
+        !!user.ethAddresses[0] || isWalletUser &&
         <View
           style={{
             marginLeft: '5%',
