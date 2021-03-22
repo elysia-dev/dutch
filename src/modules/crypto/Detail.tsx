@@ -47,7 +47,7 @@ const Detail: React.FC = () => {
   const navigation = useNavigation();
   const [range, setRange] = useState<number>(0);
   const [filter, setFilter] = useState<number>(0);
-  const { isWalletUser } = useContext(UserContext);
+  const { isWalletUser, user } = useContext(UserContext);
   const { t } = useTranslation();
 
   return (
@@ -89,29 +89,32 @@ const Detail: React.FC = () => {
           </BasicLayout>
         }
       />
-      <View
-        style={{
-          marginLeft: '5%',
-          marginRight: '5%',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          position: 'absolute',
-          bottom: 10,
-          backgroundColor: 'white',
-          width: '90%',
-        }}
-      >
-        <NextButton
+      {
+        user.ethAddresses[0] || isWalletUser &&
+        <View
           style={{
-            // width: isWalletUser ? 160 : ,
-            width: Dimensions.get('window').width * 0.9
+            marginLeft: '5%',
+            marginRight: '5%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            position: 'absolute',
+            bottom: 10,
+            backgroundColor: 'white',
+            width: '90%',
           }}
-          title={t('wallet.deposit')}
-          handler={() => {
-            navigation.navigate(CryptoPage.Deposit)
-          }}
-        />
-      </View>
+        >
+          <NextButton
+            style={{
+              // width: isWalletUser ? 160 : ,
+              width: Dimensions.get('window').width * 0.9
+            }}
+            title={t('wallet.deposit')}
+            handler={() => {
+              navigation.navigate(CryptoPage.Deposit)
+            }}
+          />
+        </View>
+      }
     </>
   );
 };
