@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import { View, ScrollView, Image, Text } from 'react-native';
@@ -8,7 +9,6 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { H2Text, H4Text, P1Text, TitleText } from '../../shared/components/Texts';
 import Asset from '../../types/Asset';
-import SelectBox from './components/SelectBox';
 import TransactionList from './components/TransactionList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -16,14 +16,22 @@ import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import UserContext from '../../contexts/UserContext';
+import FunctionContext from '../../contexts/FunctionContext';
+import CryptoTransaction from '../../types/CryptoTransaction';
+import usePrices from '../../hooks/usePrice';
+import { Transaction } from '../../types/Transaction';
+import SelectBox from './components/SelectBox';
 
-const now = Date.now()
-
-const testCryptoTx = [
-  { type: 'in', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'out', value: '10', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now },
-  { type: 'in', value: '100', txHash: '0x949857f121c55c2ed4b32e8e9eace1d38a9d59ddef11956e65854bb12288995e', createdAt: now }
-]
+const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
+  return {
+    type: ['ownership', 'expectedProfit'].includes(tx.transactionType) ? 'in' : 'out',
+    legacyType: tx.transactionType,
+    value: tx.value,
+    txHash: tx.hash,
+    createdAt: tx.createdAt,
+  }
+}
 
 type ParamList = {
   Detail: {
@@ -31,18 +39,81 @@ type ParamList = {
   };
 };
 
+type State = {
+  page: number,
+  totalSupply: number,
+  reward: number,
+  transactions: CryptoTransaction[],
+  contractAddress: string,
+  paymentMethod: CryptoType,
+}
+
 // TODO
-// 1. load 누적수익금
-// 2. load 지분률
-// 3. load txs...
-// productId?
+// v2 user!!`
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
-  const [filter, setFilter] = useState<number>(0);
   const { currencyFormatter } = useContext(PreferenceContext);
+  const { isWalletUser } = useContext(UserContext);
+  const { Server } = useContext(FunctionContext);
   const { t } = useTranslation();
+  const [state, setState] = useState<State>({
+    page: 1,
+    totalSupply: 0,
+    reward: 0,
+    transactions: [],
+    contractAddress: '',
+    paymentMethod: CryptoType.EL,
+  })
+  const [filter, setFilter] = useState<number>(0);
+  const { elPrice, ethPrice } = usePrices();
+
+  const laodV1OwnershipDetail = async () => {
+    if (!asset.ownershipId) return;
+
+    const res = await Server.ownershipDetail(asset.ownershipId)
+    const txRes = await Server.getTransaction(asset.ownershipId, state.page)
+
+    setState({
+      page: 1,
+      totalSupply: parseFloat(res.data.product.totalValue),
+      reward: parseFloat(res.data.expectProfit),
+      transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
+      contractAddress: res.data.product.contractAddress,
+      paymentMethod: res.data.product.paymentMethod as CryptoType,
+    })
+  }
+
+  const loadV1TxsMore = async () => {
+    if (!asset.ownershipId) return;
+
+    try {
+      const txRes = await Server.getTransaction(asset.ownershipId, state.page);
+      const nextTxs = txRes.data.map((tx) => legacyTxToCryptoTx(tx));
+
+      if (nextTxs.length === 0) {
+        alert(t('dashboard.last_transaction'))
+        return
+      }
+
+      setState({
+        ...state,
+        page: state.page + 1,
+        transactions: [...state.transactions, ...nextTxs]
+      })
+    } catch {
+      alert(t('dashboard.last_transaction'))
+    }
+  }
+
+  useEffect(() => {
+    if (isWalletUser) {
+      // v2User
+    } else {
+      laodV1OwnershipDetail();
+    }
+  }, [])
 
   const mainFeatures = [
     {
@@ -128,7 +199,7 @@ const Detail: FunctionComponent = () => {
             [
               { left: t('main.assets_name'), right: asset.title },
               { left: t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
-              { left: t('main.assets_stake'), right: '6.28%' },
+              { left: t('main.assets_stake'), right: `${(asset.unitValue / state.totalSupply * 100).toFixed(2)}%` },
             ].map((data, index) => {
               return (
                 <View
@@ -171,11 +242,14 @@ const Detail: FunctionComponent = () => {
             <View>
               <H4Text
                 style={{ color: AppColors.MAIN, textAlign: 'right' }}
-                label={'$ 5.1'}
+                label={currencyFormatter(
+                  state.reward,
+                  2,
+                )}
               />
               <H4Text
                 style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                label={'0.123 ETH'}
+                label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
               />
             </View>
           </View>
@@ -221,7 +295,14 @@ const Detail: FunctionComponent = () => {
             selected={filter}
             select={(filter) => setFilter(filter)}
           />
-          <TransactionList data={testCryptoTx} unit={route.params.asset.unit} />
+          <TransactionList
+            data={
+              filter === 0 ? state.transactions : state.transactions.filter((tx) =>
+                (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
+              )
+            }
+            unit={route.params.asset.unit}
+          />
           <TouchableOpacity
             style={{
               width: '100%',
@@ -233,7 +314,15 @@ const Detail: FunctionComponent = () => {
               alignContent: 'center',
               marginTop: 15,
               marginBottom: 15
-            }}>
+            }}
+            onPress={() => {
+              if (isWalletUser) {
+
+              } else {
+                loadV1TxsMore()
+              }
+            }}
+          >
             <P1Text
               style={{
                 color: AppColors.MAIN,

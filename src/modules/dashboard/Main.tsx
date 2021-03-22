@@ -54,19 +54,29 @@ export const Main: React.FC = () => {
     try {
       const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '');
 
+      const assets = data.tokens.map((token) => {
+        const price = token.symbol === CryptoType.ETH ? ethPrice : token.symbol === CryptoType.EL ? elPrice : 5
+        return {
+          title: token.name,
+          currencyValue: token.balance * price,
+          unitValue: token.balance,
+          type: symbolToCryptoType(token.symbol),
+          unit: token.symbol,
+        }
+      })
+
+      assets.push({
+        title: 'ETH',
+        currencyValue: data.ethBalance * ethPrice,
+        unitValue: data.ethBalance,
+        type: CryptoType.ETH,
+        unit: CryptoType.ETH,
+      })
+
       setState({
         ...state,
         loading: false,
-        assets: data.map((item) => {
-          const price = item.symbol === CryptoType.ETH ? ethPrice : item.symbol === CryptoType.EL ? elPrice : 5
-          return {
-            title: item.name,
-            currencyValue: item.balance * price,
-            unitValue: item.balance,
-            type: symbolToCryptoType(item.symbol),
-            unit: item.symbol,
-          }
-        })
+        assets: assets,
       })
     } catch {
       alert('Server Error');
@@ -85,7 +95,7 @@ export const Main: React.FC = () => {
         unitValue: ownership.tokenValue,
         type: CryptoType.ELA,
         unit: CryptoType.ELA,
-        ownerhipId: ownership.id,
+        ownershipId: ownership.id,
         isLegacyOwnership: ownership.isLegacy
       } as Asset
     })
@@ -96,8 +106,9 @@ export const Main: React.FC = () => {
     try {
       const { data } = await ExpressoV2.getBalances(user.ethAddresses[0] || '');
 
-      elBalance = data.find((item) => item.symbol === CryptoType.EL)?.balance || 0;
-      ethBalance = data.find((item) => item.symbol === CryptoType.ETH)?.balance || 0;
+      elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0;
+      ethBalance = data.ethBalance || 0;
+
     } finally {
       assets.push({
         title: 'ETH',

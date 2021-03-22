@@ -1,8 +1,9 @@
 type CryptoTransaction = {
-  type: 'in' | 'out',
+  type: 'in' | 'out' | 'reward',
+  legacyType?: 'ownership' | 'refund' | 'profit' | 'expectedProfit' | 'close' | string,
   value: string,
-  txHash: string,
-  createdAt: Date,
+  txHash?: string,
+  createdAt: string,
 }
 
 export default CryptoTransaction
