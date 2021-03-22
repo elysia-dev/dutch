@@ -19,7 +19,7 @@ import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
 import FunctionContext from '../../contexts/FunctionContext';
-import currentLocalization from '../../utiles/currentLocalization';
+import PreferenceContext from '../../contexts/PreferenceContext';
 
 const Circle = styled.View`
   width: 10px;
@@ -35,6 +35,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
   const { guestSignIn } = useContext(FunctionContext);
+  const { language } = useContext(PreferenceContext);
   const { t } = useTranslation();
 
   const viewPager = React.createRef<ViewPager>();
@@ -159,9 +160,9 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                 550,
                 Dimensions.get('window').width * 0.05 +
                 // eslint-disable-next-line no-nested-ternary
-                (currentLocalization() === LocaleType.KO
+                (language === LocaleType.KO
                   ? 200
-                  : currentLocalization() === LocaleType.CH
+                  : language === LocaleType.CH
                     ? 180
                     : 230),
                 Platform.OS === 'ios'
