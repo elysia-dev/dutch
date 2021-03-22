@@ -24,6 +24,7 @@ import { TextField } from '../../../shared/components/TextField';
 import FunctionContext from '../../../contexts/FunctionContext';
 import UserContext from '../../../contexts/UserContext';
 import AppColors from '../../../enums/AppColors';
+import SheetHeader from '../../../shared/components/SheetHeader';
 
 type ButtonProps = {
   title: string;
@@ -188,20 +189,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
       style={{
         backgroundColor: '#fff',
       }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: AppColors.BACKGROUND_GREY,
-          padding: 20,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
-        </TouchableOpacity>
-        <H3Text label={t('product.select_payment')} style={{}} />
-        <View style={{ width: 20 }} />
-      </View>
+      <SheetHeader title={t('product.select_payment')} />
       <View
         style={{
           paddingLeft: 20,

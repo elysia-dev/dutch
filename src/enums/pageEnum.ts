@@ -90,7 +90,8 @@ export enum AssetPage {
   Detail = 'Detail',
   Purchase = 'Purchase',
   Refund = 'Refund',
-  Reward = 'Reward'
+  Reward = 'Reward',
+  LegacyOwnershipRefund = 'LegacyOwnershipRefund'
 }
 
 export enum CryptoPage {

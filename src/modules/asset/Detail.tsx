@@ -22,6 +22,7 @@ import CryptoTransaction from '../../types/CryptoTransaction';
 import usePrices from '../../hooks/usePrice';
 import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
+import NextButton from '../../shared/components/NextButton';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -45,11 +46,13 @@ type State = {
   reward: number,
   transactions: CryptoTransaction[],
   contractAddress: string,
-  paymentMethod: CryptoType,
+  paymentMethod: CryptoType | 'none',
+  legacyRefundStatus?: string,
 }
 
 // TODO
 // v2 user!!`
+// image!
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
@@ -82,6 +85,7 @@ const Detail: FunctionComponent = () => {
       transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
       contractAddress: res.data.product.contractAddress,
       paymentMethod: res.data.product.paymentMethod as CryptoType,
+      legacyRefundStatus: res.data.legacyRefundStatus
     })
   }
 
@@ -247,15 +251,17 @@ const Detail: FunctionComponent = () => {
                   2,
                 )}
               />
-              <H4Text
-                style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
-              />
+              {
+                state.paymentMethod !== 'none' && <H4Text
+                  style={{ color: AppColors.BLACK2, textAlign: 'right' }}
+                  label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                />
+              }
             </View>
           </View>
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
-              mainFeatures.map((data, index) => {
+              !asset.isLegacyOwnership && mainFeatures.map((data, index) => {
                 return (
                   <TouchableOpacity
                     key={index}
@@ -285,6 +291,25 @@ const Detail: FunctionComponent = () => {
               })
             }
           </View>
+          {
+            asset.isLegacyOwnership && <View
+              style={{ width: '100%' }}
+            >
+              <NextButton
+                disabled={state.legacyRefundStatus === 'pending'}
+                title={t(
+                  state.legacyRefundStatus === 'pending' ?
+                    'dashboard_label.withdraw_stake_pending' :
+                    'dashboard_label.withdraw_stake_legacy'
+                )}
+                handler={() => {
+                  navigation.navigate(AssetPage.LegacyOwnershipRefund, {
+                    ownershipId: asset.ownershipId,
+                  })
+                }}
+              />
+            </View>
+          }
         </View>
         <View style={{ height: 15, backgroundColor: AppColors.BACKGROUND_GREY }} />
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
