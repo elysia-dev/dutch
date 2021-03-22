@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useRef, useState } from 'react';
-import i18n from 'i18n-js';
 
 import {
   NavigationContainerRef,
@@ -12,9 +11,7 @@ import {
   AppStateStatus,
 } from 'react-native';
 
-import LocaleType from './src/enums/LocaleType';
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
-import currentLocalization from './src/utiles/currentLocalization';
 import Notification, { isNotification } from './src/types/Notification';
 
 import UserContext from './src/contexts/UserContext';
@@ -36,6 +33,7 @@ import WalletProvider from './src/providers/WalletProvider';
 import AsyncStorage from '@react-native-community/async-storage';
 import { IS_WALLET_USER } from './src/constants/storage';
 import AppNavigator from './AppNavigator';
+import PreferenceProvider from './src/providers/PreferenceProvider';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -45,7 +43,6 @@ interface AppInformation {
     firstName: string;
     lastName: string;
     gender: string;
-    language: LocaleType;
     currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
@@ -75,7 +72,6 @@ const defaultState = {
     firstName: '',
     lastName: '',
     gender: '',
-    language: currentLocalization(),
     currency: CurrencyType.USD,
     ethAddresses: [],
     expoPushTokens: [],
@@ -151,7 +147,6 @@ const AppMain = () => {
       await authServer
         .me()
         .then(async (res) => {
-          i18n.locale = res.data.user.language;
           const allCurrency = (await authServer.getAllCurrency()).data;
           setState({
             ...state,
@@ -389,12 +384,6 @@ const AppMain = () => {
         }}>
         <FunctionContext.Provider
           value={{
-            setLanguage: (newLanguage: LocaleType) => {
-              setState({
-                ...state,
-                user: { ...state.user, language: newLanguage },
-              });
-            },
             setCurrency: (newCurrency: CurrencyType) => {
               setState({
                 ...state,
@@ -464,7 +453,9 @@ const AppMain = () => {
             Server: state.Server,
           }}>
           <WalletProvider>
-            <AppNavigator navigationRef={navigationRef} />
+            <PreferenceProvider>
+              <AppNavigator navigationRef={navigationRef} />
+            </PreferenceProvider>
           </WalletProvider>
         </FunctionContext.Provider>
       </CurrencyContext.Provider>

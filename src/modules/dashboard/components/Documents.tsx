@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { DocsResponse } from '../../../types/Docs';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 
@@ -49,6 +49,7 @@ const documentButton = (title: string, handler: () => void) => {
 };
 
 const Documents: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
   const shareholderCertificate = [
     {
       url: props.docs.shareholderCertificate,
@@ -96,7 +97,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         paddingTop: 20,
         elevation: 2,
       }}>
-      <H3Text label={i18n.t('dashboard_label.document')} />
+      <H3Text label={t('dashboard_label.document')} />
       <View
         style={{
           marginTop: 20,
@@ -106,7 +107,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         {props.docs.shareholderCertificate !== '' && (
           <View>
             {documentButton(
-              i18n.t('dashboard_label.shareholder_document'),
+              t('dashboard_label.shareholder_document'),
               () => setState({ ...state, showShareholderCertificate: true }),
             )}
             <Modal
@@ -183,8 +184,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                        <View />
-                      )
+                      <View />
+                    )
                   }
                 />
               </View>
@@ -193,7 +194,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         )}
         {props.docs.leaseContract !== '' && (
           <View>
-            {documentButton(i18n.t('dashboard_label.lease_document'), () =>
+            {documentButton(t('dashboard_label.lease_document'), () =>
               setState({ ...state, showLeaseContract: true }),
             )}
             <Modal visible={state.showLeaseContract} transparent={false}>
@@ -264,8 +265,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                        <View />
-                      )
+                      <View />
+                    )
                   }
                 />
               </View>
@@ -274,7 +275,7 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
         )}
         {props.docs.stakeCertificate !== '' && (
           <View>
-            {documentButton(i18n.t('dashboard_label.stake_document'), () =>
+            {documentButton(t('dashboard_label.stake_document'), () =>
               setState({ ...state, showStakeCertificate: true }),
             )}
             <Modal visible={state.showStakeCertificate} transparent={false}>
@@ -345,8 +346,8 @@ const Documents: FunctionComponent<Props> = (props: Props) => {
                         />
                       </TouchableOpacity>
                     ) : (
-                        <View />
-                      )
+                      <View />
+                    )
                   }
                 />
               </View>

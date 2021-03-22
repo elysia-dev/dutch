@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ScrollView } from 'react-native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import { defaultSummaryReportResponse } from '../../types/SummaryReport';
 import { AssetValueCard } from './components/AssetValueCard';
@@ -21,6 +21,7 @@ export const SummaryReport: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const { Server } = useContext(FunctionContext);
   const [report, setReport] = useState(defaultSummaryReportResponse);
+  const { t } = useTranslation();
 
   const callSummaryApi = () => {
     Server.getSummaryReport()
@@ -29,7 +30,7 @@ export const SummaryReport: FunctionComponent<{}> = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -54,7 +55,7 @@ export const SummaryReport: FunctionComponent<{}> = () => {
 
       <TitleText
         style={{ marginTop: 10, marginBottom: 30 }}
-        label={i18n.t('dashboard_label.asset_report')}
+        label={t('dashboard_label.asset_report')}
       />
       <SummaryPropertyCard summary={report.summary} />
       <AverageReturnCard return={report.summary.averageAnnualReturn} />

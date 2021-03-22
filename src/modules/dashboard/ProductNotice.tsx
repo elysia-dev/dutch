@@ -6,11 +6,12 @@ import React, {
   useState,
 } from 'react';
 import { ScrollView, View, TouchableOpacity, Image } from 'react-native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
 import { TitleText, P1Text, P3Text } from '../../shared/components/Texts';
 import FunctionContext from '../../contexts/FunctionContext';
+import moment from 'moment';
 
 type ParamList = {
   ProductNotice: {
@@ -26,6 +27,8 @@ export const Notice: FunctionComponent<Props> = (props) => {
   const [state, setState] = useState({
     content: false,
   });
+  const { t } = useTranslation();
+
   return (
     <TouchableOpacity
       onPress={() => setState({ ...state, content: !state.content })}>
@@ -36,7 +39,7 @@ export const Notice: FunctionComponent<Props> = (props) => {
           justifyContent: 'space-between',
         }}>
         <P1Text
-          label={i18n.strftime(new Date(props.post.createdAt), '%Y-%m-%d')}
+          label={moment(props.post.createdAt).format('%Y-%m-%d')}
           style={{
             marginTop: 10,
             marginBottom: 10,
@@ -77,6 +80,7 @@ const ProductNotice: FunctionComponent = () => {
     full: false,
     posts: [] as PostResponse[],
   });
+  const { t } = useTranslation();
 
   const fullPostsList = state.posts.map((post, index) => (
     <Notice post={post} key={index} />
@@ -91,7 +95,7 @@ const ProductNotice: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -112,7 +116,7 @@ const ProductNotice: FunctionComponent = () => {
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <TitleText label={i18n.t('dashboard_label.notice')} />
+        <TitleText label={t('dashboard_label.notice')} />
         <View
           style={{
             marginTop: 40,
@@ -127,7 +131,7 @@ const ProductNotice: FunctionComponent = () => {
             shadowOpacity: 0.6,
           }}>
           <P1Text
-            label={i18n.t('dashboard_label.notice')}
+            label={t('dashboard_label.notice')}
             style={{
               marginTop: 10,
               marginBottom: 10,
@@ -145,7 +149,7 @@ const ProductNotice: FunctionComponent = () => {
             {state.full ? fullPostsList : previewPostsList}
             {fullPostsList.length === 0 && (
               <P1Text
-                label={i18n.t('dashboard.no_notice')}
+                label={t('dashboard.no_notice')}
                 style={{
                   textAlign: 'center',
                   marginVertical: 20,

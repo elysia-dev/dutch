@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View, TextInput } from 'react-native';
 import { P3Text } from '../../../shared/components/Texts';
-
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   eventHandler: (input: string) => void;
@@ -13,6 +12,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState({
     focus: false,
   });
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -22,7 +22,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
           textAlign: 'left',
           marginBottom: 15,
         }}
-        label={i18n.t('more_label.contact_contents')}
+        label={t('more_label.contact_contents')}
       />
       <TextInput
         value={props.contents}

@@ -6,13 +6,15 @@ import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import LockAccountPng from './images/lockaccount.png';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import LocaleType from '../../enums/LocaleType';
 
 const LockAccountImg = styled.Image`
   width: 100%;
@@ -39,23 +41,25 @@ const LockAccount: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
   const { user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
+  const { language } = useContext(PreferenceContext);
+  const { t } = useTranslation();
 
   const callResendApi = () => {
     Server.certifyEmail_recover(
       route.params.email,
       'recoverAccount',
-      user.language,
+      language || LocaleType.EN,
     )
       .then((res) => {
         setState({ ...state, verificationId: res.data.verificationId! });
-        alert(i18n.t('account.resend_verification'));
+        alert(t('account.resend_verification'));
       })
-      .catch((e) => alert(i18n.t('account.try_again_later')));
+      .catch((e) => alert(t('account.try_again_later')));
   };
 
   const callCertifyApi = () => {
     if (!state.code) {
-      alert(i18n.t('account.authentication_recover'));
+      alert(t('account.authentication_recover'));
       return;
     }
     Server.certifyEmail(
@@ -69,10 +73,10 @@ const LockAccount: FunctionComponent = () => {
             email: route.params.email,
           });
         } else if (res.data.status === 'expired') {
-          alert(i18n.t('account.expired_verification'));
+          alert(t('account.expired_verification'));
         } else {
           alert(
-            i18n.t('account.unmatched_verification', {
+            t('account.unmatched_verification', {
               error: res.data.counts,
             }),
           );
@@ -80,9 +84,9 @@ const LockAccount: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 404) {
-          alert(i18n.t('resigter.expired_verification'));
+          alert(t('resigter.expired_verification'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -103,15 +107,15 @@ const LockAccount: FunctionComponent = () => {
           <View>
             <H1Text
               style={{ marginTop: 10, textAlign: 'center' }}
-              label={i18n.t('account.lockdown')}
+              label={t('account.lockdown')}
             />
             <P1Text
               style={{ marginTop: 10, color: '#626368' }}
-              label={i18n.t('account.lockdown_text')}
+              label={t('account.lockdown_text')}
             />
             <View style={{ marginTop: 20 }} />
             <TextField
-              label={i18n.t('account_label.authentication_code')}
+              label={t('account_label.authentication_code')}
               eventHandler={(value) => setState({ ...state, code: value })}
               autoFocus={true}
               focusHandler={(value) => setState({ ...state, focusing: value })}
@@ -127,11 +131,11 @@ const LockAccount: FunctionComponent = () => {
                   lineHeight: 21,
                   height: 21,
                 }}
-                label={i18n.t('account.resending_code_mail_label')}
+                label={t('account.resending_code_mail_label')}
               />
               <BorderFlatButton
                 handler={() => callResendApi()}
-                title={i18n.t('account_label.resend_2')}
+                title={t('account_label.resend_2')}
               />
             </View>
           </View>
@@ -139,7 +143,7 @@ const LockAccount: FunctionComponent = () => {
       }
       button={
         <SubmitButton
-          title={i18n.t('account_label.certify')}
+          title={t('account_label.certify')}
           handler={() => callCertifyApi()}
         />
       }

@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { MorePage } from '../../enums/pageEnum';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
@@ -42,6 +42,7 @@ const MainInfo: FunctionComponent = () => {
   const { setLock } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
@@ -52,16 +53,16 @@ const MainInfo: FunctionComponent = () => {
   const buttonTitle = () => {
     // TODO : 더욱 강력한 경고 문구로 삭제됨. 백업하지 않았으면, 해당 지갑을 복구 할 수 없음을 명시하기
     if (isWalletUser) {
-      return i18n.t('more_label.disconnect_address');
+      return t('more_label.disconnect_address');
     }
 
     switch (user.provider) {
       case ProviderType.ETH:
-        return i18n.t('more_label.disconnect_address');
+        return t('more_label.disconnect_address');
       case ProviderType.GUEST:
-        return i18n.t('more_label.return_initial');
+        return t('more_label.return_initial');
       case ProviderType.EMAIL:
-        return i18n.t('more_label.logout');
+        return t('more_label.logout');
       default:
         return '';
     }
@@ -71,8 +72,8 @@ const MainInfo: FunctionComponent = () => {
     // TODO : 더욱 강력한 경고 문구로 변경하기
     if (isWalletUser) {
       return Alert.alert(
-        i18n.t('more_label.disconnect'),
-        i18n.t('more.confirm_disconnect'),
+        t('more_label.disconnect'),
+        t('more.confirm_disconnect'),
         [
           {
             text: 'Cancel',
@@ -96,8 +97,8 @@ const MainInfo: FunctionComponent = () => {
     switch (user.provider) {
       case ProviderType.ETH:
         return Alert.alert(
-          i18n.t('more_label.disconnect'),
-          i18n.t('more.confirm_disconnect'),
+          t('more_label.disconnect'),
+          t('more.confirm_disconnect'),
           [
             {
               text: 'Cancel',
@@ -118,8 +119,8 @@ const MainInfo: FunctionComponent = () => {
         return signOut(SignInStatus.SIGNOUT);
       case ProviderType.EMAIL:
         return Alert.alert(
-          i18n.t('more_label.logout'),
-          i18n.t('more.confirm_logout'),
+          t('more_label.logout'),
+          t('more.confirm_logout'),
           [
             {
               text: 'Cancel',
@@ -210,7 +211,7 @@ const MainInfo: FunctionComponent = () => {
                 textAlign: 'left',
                 fontFamily: 'Roboto_700Bold',
               }}>
-              {i18n.t('more_label.more')}
+              {t('more_label.more')}
             </Animated.Text>
           </View>
         </Animated.View>
@@ -235,7 +236,7 @@ const MainInfo: FunctionComponent = () => {
           <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 10 }}>
             <Setting />
             <H3Text
-              label={i18n.t('more_label.my_info')}
+              label={t('more_label.my_info')}
               style={{ marginTop: 60, color: AppColors.BLACK2 }}
             />
             {!isWalletUser &&
@@ -259,8 +260,8 @@ const MainInfo: FunctionComponent = () => {
                       <H3Text
                         label={
                           user.ethAddresses?.length > 0
-                            ? i18n.t('more_label.my_wallet')
-                            : i18n.t('more_label.wallet_connect')
+                            ? t('more_label.my_wallet')
+                            : t('more_label.wallet_connect')
                         }
                         style={{ lineHeight: 50, fontSize: 15 }}
                       />
@@ -301,7 +302,7 @@ const MainInfo: FunctionComponent = () => {
                       justifyContent: 'space-between',
                     }}>
                     <H3Text
-                      label={i18n.t('more_label.my_account')}
+                      label={t('more_label.my_account')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
                   </View>
@@ -353,7 +354,7 @@ const MainInfo: FunctionComponent = () => {
                       justifyContent: 'space-between',
                     }}>
                     <H3Text
-                      label={i18n.t('more_label.backupseed')}
+                      label={t('more_label.backupseed')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
                   </View>
@@ -364,7 +365,7 @@ const MainInfo: FunctionComponent = () => {
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
 
             <H3Text
-              label={i18n.t('more_label.service_center')}
+              label={t('more_label.service_center')}
               style={{ marginTop: 30, color: AppColors.BLACK2 }}
             />
             <View
@@ -384,7 +385,7 @@ const MainInfo: FunctionComponent = () => {
                     justifyContent: 'space-between',
                   }}>
                   <H3Text
-                    label={i18n.t('more_label.contact')}
+                    label={t('more_label.contact')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
                 </View>
@@ -407,7 +408,7 @@ const MainInfo: FunctionComponent = () => {
                     justifyContent: 'space-between',
                   }}>
                   <H3Text
-                    label={i18n.t('more_label.service_terms')}
+                    label={t('more_label.service_terms')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
                 </View>
@@ -431,7 +432,7 @@ const MainInfo: FunctionComponent = () => {
                       justifyContent: 'space-between',
                     }}>
                     <H3Text
-                      label={i18n.t('more_label.privacy_policy')}
+                      label={t('more_label.privacy_policy')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
                   </View>
@@ -442,7 +443,7 @@ const MainInfo: FunctionComponent = () => {
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
 
             <H3Text
-              label={i18n.t('more_label.el_exchange')}
+              label={t('more_label.el_exchange')}
               style={{
                 marginTop: 10,
                 paddingTop: 25,

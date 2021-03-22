@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import PasswordForm from '../account/PasswordForm';
 import WalletContext from '../../contexts/WalletContext';
 import { Keyboard } from 'react-native'
@@ -20,6 +20,7 @@ const RecoverWallet: FunctionComponent = () => {
   const { newWalletUser } = useContext(FunctionContext);
   const { restoreWallet } = useContext(WalletContext);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const route = useRoute<RouteProp<ParamList, 'RecoverWallet'>>();
 
@@ -29,7 +30,7 @@ const RecoverWallet: FunctionComponent = () => {
 
   return (
     <PasswordForm
-      submitButtonTitle={i18n.t('account_label.continue')}
+      submitButtonTitle={t('account_label.continue')}
       submitHandler={async (password: string) => {
         Keyboard.dismiss();
         setLoading(true);
@@ -38,8 +39,8 @@ const RecoverWallet: FunctionComponent = () => {
         newWalletUser();
         navigation.navigate(MainPage.DashboardMain)
       }}
-      message1={i18n.t('account.create_password')}
-      message2={i18n.t('account.password_confirm')}
+      message1={t('account.create_password')}
+      message2={t('account.password_confirm')}
     />
   );
 };

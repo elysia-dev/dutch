@@ -2,7 +2,8 @@ import React, { FunctionComponent } from 'react';
 import { View, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 interface Props {
   date: string;
@@ -11,6 +12,7 @@ interface Props {
 
 const DateInput: FunctionComponent<Props> = (props: Props) => {
   const currentDate = new Date();
+  const { t } = useTranslation();
 
   return (
     <View style={{ width: '100%', paddingTop: 20 }}>
@@ -20,7 +22,7 @@ const DateInput: FunctionComponent<Props> = (props: Props) => {
           display="spinner"
           mode="date"
           onChange={(_event, date) =>
-            props.eventHandler(i18n.strftime(date, '%Y-%m-%d'))
+            props.eventHandler(moment(date).format('%Y-%m-%d'))
           }
           neutralButtonLabel="clear"
           minimumDate={new Date(1900, 1, 1)}
@@ -41,12 +43,12 @@ const DateInput: FunctionComponent<Props> = (props: Props) => {
           }}
           mode="date"
           androidMode="spinner"
-          placeholder={i18n.strftime(currentDate, '%Y-%m-%d')}
+          placeholder={moment(currentDate).format('%Y-%m-%d')}
           format="YYYY-MM-DD"
           minDate={'2000-01-01'}
           maxDate={currentDate}
-          confirmBtnText={i18n.t('more_label.done')}
-          cancelBtnText={i18n.t('more_label.close')}
+          confirmBtnText={t('more_label.done')}
+          cancelBtnText={t('more_label.close')}
           customStyles={{
             btnTextConfirm: {
               color: '#3679B5',

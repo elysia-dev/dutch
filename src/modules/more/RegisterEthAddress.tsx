@@ -20,7 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics';
 import Clipboard from 'expo-clipboard';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 
 import {
   P1Text,
@@ -47,7 +47,9 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { getToken, setToken } from '../../asyncStorages/token';
 import { getRequestId, setRequestId } from '../../asyncStorages/reqeustId';
 import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAddress';
-import { Page, WalletPage } from '../../enums/pageEnum';
+import { Page } from '../../enums/pageEnum';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import LocaleType from '../../enums/LocaleType';
 
 interface Props {
   resetHandler: () => void;
@@ -122,6 +124,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     FunctionContext,
   );
   const { elPrice } = useContext(CurrencyContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
 
   const [state, setState] = useState<State>({
     confirmModal: false,
@@ -141,7 +145,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -150,7 +154,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     const token = await getToken();
 
     if (!token) {
-      const res = await createGuestAndRegisterAddress(user.language);
+      const res = await createGuestAndRegisterAddress(language || LocaleType.EN);
       setRequestId(res.requestId);
       openExternalWallet(type, res.requestId);
       signIn();
@@ -188,10 +192,10 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         const url = `https://${getEnvironment().dappUrl}/ethAddress/${res.data.id
           }`;
         Clipboard.setString(url);
-        alert(i18n.t('more_label.copied', { url }));
+        alert(t('more_label.copied', { url }));
       })
       .catch((e) => {
-        alert(i18n.t('account_errors.server'));
+        alert(t('account_errors.server'));
       });
   };
 
@@ -208,7 +212,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         })
         .catch((e) => {
           if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     }
@@ -224,7 +228,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -271,8 +275,8 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               style={{ paddingTop: 10 }}
               label={
                 user.ethAddresses?.length > 0
-                  ? i18n.t('more_label.my_wallet')
-                  : i18n.t('more_label.wallet_connect')
+                  ? t('more_label.my_wallet')
+                  : t('more_label.wallet_connect')
               }
             />
           </>
@@ -458,7 +462,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     }}
                   />
                   <P3Text
-                    label={i18n.t('more.check_1')}
+                    label={t('more.check_1')}
                     style={{ color: '#1C1C1C' }}
                   />
                 </View>
@@ -470,7 +474,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   }}>
                   <P3Text label={'*  '} style={{ color: '#CC3743' }} />
                   <P3Text
-                    label={i18n.t('more.check_2')}
+                    label={t('more.check_2')}
                     style={{ color: '#1C1C1C' }}
                   />
                 </View>
@@ -482,7 +486,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   }}>
                   <P3Text label={'*  '} style={{ color: '#CC3743' }} />
                   <P3Text
-                    label={i18n.t('more.check_3')}
+                    label={t('more.check_3')}
                     style={{ color: '#1C1C1C' }}
                   />
                 </View>
@@ -495,11 +499,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
           user.ethAddresses?.length > 0 ? (
             user.provider === ProviderType.ETH ? (
               <SubmitButton
-                title={i18n.t('more_label.disconnect_and_new')}
+                title={t('more_label.disconnect_and_new')}
                 handler={() => {
                   return Alert.alert(
-                    i18n.t('more_label.disconnect'),
-                    i18n.t('more.confirm_disconnect_and_new'),
+                    t('more_label.disconnect'),
+                    t('more.confirm_disconnect_and_new'),
                     [
                       {
                         text: 'Cancel',
@@ -587,11 +591,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                 marginRight: 'auto',
               }}></Image>
             <H2Text
-              label={i18n.t('more.connected')}
+              label={t('more.connected')}
               style={{ marginTop: 10 }}
             />
             <P2Text
-              label={i18n.t('more.find_more')}
+              label={t('more.find_more')}
               style={{
                 color: '#626368',
                 textAlign: 'center',

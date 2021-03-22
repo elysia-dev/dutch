@@ -4,7 +4,7 @@ import { Image, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { OwnershipResponse } from '../../types/Ownership';
@@ -31,6 +31,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const { user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const prices = usePrices();
   const navigation = useNavigation();
@@ -58,9 +59,9 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
       )
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('product.transaction_error'));
+          alert(t('product.transaction_error'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -97,7 +98,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           />
         </TouchableOpacity>
         <H1Text
-          label={i18n.t('dashboard_label.interest_withdraw')}
+          label={t('dashboard_label.interest_withdraw')}
           style={{ fontSize: 25 }}></H1Text>
         <View
           style={{
@@ -114,7 +115,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           }}>
           <TextWrapper>
             <P1Text
-              label={i18n.t('dashboard_label.token_amount')}
+              label={t('dashboard_label.token_amount')}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
@@ -124,9 +125,8 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t('dashboard_label.expected_profit')} (${
-                user.currency
-              })`}
+              label={`${t('dashboard_label.expected_profit')} (${user.currency
+                })`}
               style={{ color: '#838383', fontSize: 15 }}
             />
             <P1Text
@@ -141,7 +141,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
           <TextWrapper>
             <P1Text
-              label={`${i18n.t(
+              label={`${t(
                 'dashboard_label.expected_profit',
               )} (${props.ownership.product.paymentMethod.toUpperCase()})`}
               style={{ color: '#838383', fontSize: 15 }}
@@ -153,7 +153,7 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
           </TextWrapper>
         </View>
         <SubmitButton
-          title={i18n.t('account_label.continue')}
+          title={t('account_label.continue')}
           handler={() => {
             callApi();
           }}

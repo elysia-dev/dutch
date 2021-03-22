@@ -4,7 +4,7 @@ import AppColors from '../../../enums/AppColors';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import CurrencyContext from '../../../contexts/CurrencyContext';
 
@@ -20,6 +20,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
   itemPressHandler,
 }) => {
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { t } = useTranslation();
 
   return (
     <View>
@@ -59,7 +60,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
         >
           <P2Text
             style={{ textAlign: 'center', marginTop: 40 }}
-            label={i18n.t('assets.null_investment')}
+            label={t('assets.null_investment')}
           />
         </View>
       }

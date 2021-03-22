@@ -1,13 +1,11 @@
 import React, {
   FunctionComponent,
   useContext,
-  useEffect,
-  useState,
 } from 'react';
 import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
 import CurrencyContext from '../../../contexts/CurrencyContext';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
 import currencyFormatter from '../../../utiles/currencyFormatter';
@@ -66,6 +64,7 @@ type Props = {
 
 const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
   const { elPrice, currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { t } = useTranslation();
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);
@@ -85,15 +84,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t('product.from')}
+              {t('product.from')}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t('product.to')}
+              {t('product.to')}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t('product.value')}
+              {t('product.value')}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -110,10 +109,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t('product.you')}
+              {t('product.you')}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t('product.elysia')}
+              {t('product.elysia')}
             </BlackText>
             <View
               style={{
@@ -124,7 +123,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
               <BlackText
                 allowFontScaling={false}
                 style={{ textAlign: 'right' }}>
-                {i18n.t('product.el')}
+                {t('product.el')}
               </BlackText>
               <BlackText
                 allowFontScaling={false}
@@ -152,15 +151,15 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <GrayText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t('product.from')}
+              {t('product.from')}
             </GrayText>
             <GrayText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t('product.to')}
+              {t('product.to')}
             </GrayText>
             <GrayText
               allowFontScaling={false}
               style={{ flex: 3, textAlign: 'right' }}>
-              {i18n.t('product.value')}
+              {t('product.value')}
             </GrayText>
           </TextWrapper>
           <View style={{ flex: 1 }}>
@@ -177,10 +176,10 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
             <BlackText
               allowFontScaling={false}
               style={{ flex: 1, textAlign: 'left' }}>
-              {i18n.t('product.elysia')}
+              {t('product.elysia')}
             </BlackText>
             <BlackText allowFontScaling={false} style={{ flex: 1 }}>
-              {i18n.t('product.you')}
+              {t('product.you')}
             </BlackText>
             <View
               style={{
@@ -211,7 +210,7 @@ const BuyingSummary: FunctionComponent<Props> = (props: Props) => {
         }}>
         <H1Text
           style={{ fontSize: 15 }}
-          label={i18n.t('product_label.expected_return')}></H1Text>
+          label={t('product_label.expected_return')}></H1Text>
         <H1Text
           style={{ fontSize: 15 }}
           label={currencyFormatter(

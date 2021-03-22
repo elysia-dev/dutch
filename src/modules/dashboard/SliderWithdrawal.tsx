@@ -2,7 +2,7 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
@@ -33,6 +33,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
     errorReturn: 0,
   });
   const [focusing, setFocusing] = useState(false);
+  const { t } = useTranslation();
 
   const refundLegacyWallet = () => {
     Server.setRefundLegacyWallet(state.inputWallet, state.inputEmail)
@@ -41,26 +42,26 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(i18n.t('dashboard.already_pending'));
+          alert(t('dashboard.already_pending'));
         } else if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         } else {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
   const checkWithdrawInput = () => {
     if (state.inputEmail === '' && state.inputWallet === '') {
-      alert(i18n.t('dashboard.checking_withdraw_error.0'));
+      alert(t('dashboard.checking_withdraw_error.0'));
       return false;
     }
     if (props.el === 0 && props.usd === 0) {
-      alert(i18n.t('account_errors.server'));
+      alert(t('account_errors.server'));
       return false;
     }
 
     if (state.inputWallet !== '' && state.inputEmail === '' && props.el === 0) {
-      alert(i18n.t('dashboard.checking_withdraw_error.1'));
+      alert(t('dashboard.checking_withdraw_error.1'));
       return false;
     } else if (
       props.usd > 0 &&
@@ -68,7 +69,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       state.inputWallet !== '' &&
       state.inputEmail === ''
     ) {
-      alert(i18n.t('dashboard.checking_withdraw_error.2'));
+      alert(t('dashboard.checking_withdraw_error.2'));
       return false;
     } else if (
       state.inputWallet !== '' &&
@@ -76,7 +77,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       props.usd === 0 &&
       props.el > 0
     ) {
-      alert(i18n.t('dashboard.checking_withdraw_error.3'));
+      alert(t('dashboard.checking_withdraw_error.3'));
       return false;
     }
 
@@ -85,7 +86,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       state.inputWallet === '' &&
       props.usd === 0
     ) {
-      alert(i18n.t('dashboard.checking_withdraw_error.4'));
+      alert(t('dashboard.checking_withdraw_error.4'));
       return false;
     } else if (
       props.usd > 0 &&
@@ -93,7 +94,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       state.inputWallet === '' &&
       state.inputEmail !== ''
     ) {
-      alert(i18n.t('dashboard.checking_withdraw_error.5'));
+      alert(t('dashboard.checking_withdraw_error.5'));
       return false;
     } else if (
       state.inputWallet !== '' &&
@@ -101,7 +102,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
       props.el === 0 &&
       props.usd > 0
     ) {
-      alert(i18n.t('dashboard.checking_withdraw_error.6'));
+      alert(t('dashboard.checking_withdraw_error.6'));
       return false;
     }
     return true;
@@ -140,14 +141,14 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         </TouchableOpacity>
         <View style={{ paddingTop: 40 }} />
         <TextField
-          label={i18n.t('dashboard_label.withdraw_paypal')}
+          label={t('dashboard_label.withdraw_paypal')}
           eventHandler={(input: string) => {
             setState({ ...state, inputEmail: input });
           }}
           focusHandler={(value) => setFocusing(value)}
         />
         <TextField
-          label={i18n.t('dashboard_label.withdraw_eth')}
+          label={t('dashboard_label.withdraw_eth')}
           eventHandler={(input: string) => {
             setState({ ...state, inputWallet: input });
           }}
@@ -170,21 +171,21 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
             }}>
             <InformationCircle />
             <P1Text
-              label={i18n.t('dashboard.remaining_text.0')}
+              label={t('dashboard.remaining_text.0')}
               style={{ fontSize: 13, lineHeight: 17 }}
             />
           </View>
           <View style={{ flexDirection: 'row', marginRight: '5%' }}>
             <InformationCircle />
             <P1Text
-              label={i18n.t('dashboard.remaining_text.1')}
+              label={t('dashboard.remaining_text.1')}
               style={{ fontSize: 13, lineHeight: 17 }}
             />
           </View>
         </View>
         {!focusing && (
           <SubmitButton
-            title={i18n.t('dashboard_label.remaining_withdraw')}
+            title={t('dashboard_label.remaining_withdraw')}
             style={{
               position: 'absolute',
               bottom: 0,

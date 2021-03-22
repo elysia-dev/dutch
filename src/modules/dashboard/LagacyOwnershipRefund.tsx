@@ -3,7 +3,7 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
 
@@ -13,6 +13,7 @@ interface Props {
 }
 
 const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -59,7 +60,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
         }}
       >
         <P1Text
-          label={i18n.t('legacy.refund_notice')}
+          label={t('legacy.refund_notice')}
         />
       </View>
       <SubmitButton
@@ -73,7 +74,7 @@ const LegacyOwnershipRefund: FunctionComponent<Props> = props => {
           marginTop: 20,
         }}
         handler={props.submitHandler}
-        title={i18n.t('product_label.legacy_refund')}
+        title={t('product_label.legacy_refund')}
       />
     </View>
   );

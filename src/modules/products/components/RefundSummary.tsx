@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext } from 'react';
 import { View, Image } from 'react-native';
 import styled from 'styled-components/native';
 import CurrencyContext from '../../../contexts/CurrencyContext';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
 import currencyFormatter from '../../../utiles/currencyFormatter';
@@ -61,6 +61,7 @@ type Props = {
 
 const RefundSummary: FunctionComponent<Props> = (props: Props) => {
   const { elPrice, currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { t } = useTranslation();
 
   const expectedUsdValue =
     (props.tokenCount || 0) * parseFloat(`${props.product.usdPricePerToken}`);
@@ -206,7 +207,7 @@ const RefundSummary: FunctionComponent<Props> = (props: Props) => {
         }}>
         <H1Text
           style={{ fontSize: 15 }}
-          label={i18n.t('product_label.expected_return')}></H1Text>
+          label={t('product_label.expected_return')}></H1Text>
         <H1Text
           style={{ fontSize: 15 }}
           label={currencyFormatter(

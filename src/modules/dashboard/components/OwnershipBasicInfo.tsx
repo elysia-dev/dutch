@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { OwnershipResponse } from '../../../types/Ownership';
 import { DashboardPage } from '../../../enums/pageEnum';
 import {
@@ -24,6 +24,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
   const ownership = props.ownership;
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const { user } = useContext(UserContext);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -40,9 +41,8 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
           <View>
             <P2Text
               style={{ color: '#626368' }}
-              label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${
-                ownership.isLegacy ? ownership.legacyPaymentMethod : ''
-              }`}
+              label={`ELYSIA co.Ltd  |  ${ownership.product.title} ${ownership.isLegacy ? ownership.legacyPaymentMethod : ''
+                }`}
             />
             <H2Text
               style={{
@@ -76,7 +76,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 alignContent: 'center',
               }}>
               <P1Text
-                label={i18n.t('dashboard_label.token_contract')}
+                label={t('dashboard_label.token_contract')}
                 style={{ textAlign: 'center', fontSize: 13 }}
               />
             </TouchableOpacity>
@@ -103,22 +103,20 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <P1Text
-              label={i18n.t('dashboard_label.stake')}
+              label={t('dashboard_label.stake')}
               style={{ color: '#626368', flex: 1 }}
             />
             <P1Text
               style={{ flex: 1, textAlign: 'right' }}
               label={
                 parseFloat(ownership.stake) < 0.01
-                  ? `${
-                      user.language !== LocaleType.KO
-                        ? i18n.t('dashboard_label.less')
-                        : ''
-                    } 0.01%${
-                      user.language === LocaleType.KO
-                        ? i18n.t('dashboard_label.less')
-                        : ''
-                    }`
+                  ? `${user.language !== LocaleType.KO
+                    ? t('dashboard_label.less')
+                    : ''
+                  } 0.01%${user.language === LocaleType.KO
+                    ? t('dashboard_label.less')
+                    : ''
+                  }`
                   : `${parseFloat(ownership.stake).toFixed(2)}%`
               }
             />
@@ -131,7 +129,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               alignItems: 'center',
             }}>
             <P1Text
-              label={i18n.t('dashboard_label.total_interest')}
+              label={t('dashboard_label.total_interest')}
               style={{ color: '#626368' }}
             />
             <P1Text
@@ -152,7 +150,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
                 alignItems: 'center',
               }}>
               <P1Text
-                label={i18n.t('dashboard_label.available_interest')}
+                label={t('dashboard_label.available_interest')}
                 style={{ color: '#626368' }}
               />
               <P1Text
@@ -176,7 +174,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
           borderBottomWidth: 5,
         }}>
         <H3Text
-          label={i18n.t('dashboard_label.product_info')}
+          label={t('dashboard_label.product_info')}
           style={{ marginTop: 5, marginBottom: 20 }}
         />
         <TouchableOpacity
@@ -192,7 +190,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               height: 60,
               alignItems: 'center',
             }}>
-            <P1Text label={i18n.t('dashboard_label.documents')} />
+            <P1Text label={t('dashboard_label.documents')} />
             <Image source={require('../images/graynextbutton.png')} />
           </View>
         </TouchableOpacity>
@@ -209,7 +207,7 @@ const OwnershipBasicInfo: FunctionComponent<props> = (props: props) => {
               height: 60,
               alignItems: 'center',
             }}>
-            <P1Text label={i18n.t('dashboard_label.notice')} />
+            <P1Text label={t('dashboard_label.notice')} />
             <Image source={require('../images/graynextbutton.png')} />
           </View>
         </TouchableOpacity>

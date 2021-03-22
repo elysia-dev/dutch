@@ -11,7 +11,7 @@ import Asset from '../../types/Asset';
 import SelectBox from './components/SelectBox';
 import TransactionList from './components/TransactionList';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
@@ -43,6 +43,7 @@ const Detail: FunctionComponent = () => {
   const asset = route.params.asset;
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const [filter, setFilter] = useState<number>(0);
+  const { t } = useTranslation();
 
   const mainFeatures = [
     {
@@ -114,7 +115,7 @@ const Detail: FunctionComponent = () => {
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
           <H4Text
             style={{ marginTop: 20, color: AppColors.BLACK2 }}
-            label={asset.unit + " " + i18n.t('main.assets')}
+            label={asset.unit + " " + t('main.assets')}
           />
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
@@ -128,9 +129,9 @@ const Detail: FunctionComponent = () => {
           <View style={{ marginTop: 20, height: 1, backgroundColor: AppColors.GREY }} />
           {
             [
-              { left: i18n.t('main.assets_name'), right: asset.title },
-              { left: i18n.t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
-              { left: i18n.t('main.assets_stake'), right: '6.28%' },
+              { left: t('main.assets_name'), right: asset.title },
+              { left: t('main.assets_value'), right: `${asset.unitValue} ${asset.unit}` },
+              { left: t('main.assets_stake'), right: '6.28%' },
             ].map((data, index) => {
               return (
                 <View
@@ -168,7 +169,7 @@ const Detail: FunctionComponent = () => {
           >
             <H4Text
               style={{ color: AppColors.BLACK }}
-              label={i18n.t('main.total_assets_yield')}
+              label={t('main.total_assets_yield')}
             />
             <View>
               <H4Text
@@ -216,7 +217,7 @@ const Detail: FunctionComponent = () => {
         </View>
         <View style={{ height: 15, backgroundColor: AppColors.BACKGROUND_GREY }} />
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-          <H2Text label={i18n.t('main.transaction_list')} style={{ marginTop: 20 }} />
+          <H2Text label={t('main.transaction_list')} style={{ marginTop: 20 }} />
           <View style={{ height: 20 }} />
           <SelectBox
             options={['ALL', 'OUT', 'IN']}
@@ -242,7 +243,7 @@ const Detail: FunctionComponent = () => {
                 fontSize: 17,
                 textAlign: 'center',
               }}
-              label={i18n.t('dashboard_label.more_transactions')}
+              label={t('dashboard_label.more_transactions')}
             />
           </TouchableOpacity>
         </View>

@@ -2,7 +2,7 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import Slider from '@react-native-community/slider';
 import { View } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import Product from '../../../types/Product';
 import { P2Text, H3Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
@@ -18,6 +18,7 @@ interface State {
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
     tokenCount: 10,
@@ -34,8 +35,8 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           justifyContent: 'space-between',
           marginBottom: 5,
         }}>
-        <P2Text label={i18n.t('product_label.investment')} />
-        <P2Text label={i18n.t('product_label.expected_return')} />
+        <P2Text label={t('product_label.investment')} />
+        <P2Text label={t('product_label.expected_return')} />
       </View>
       <View
         style={{
@@ -56,9 +57,9 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
             currencyUnit,
             currencyRatio,
             0.01 *
-              parseFloat(props.product.expectedAnnualReturn) *
-              5 *
-              state.tokenCount,
+            parseFloat(props.product.expectedAnnualReturn) *
+            5 *
+            state.tokenCount,
             2,
           )}
           style={{ color: '#3679b5' }}

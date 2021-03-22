@@ -13,7 +13,7 @@ import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
 import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';
@@ -35,12 +35,13 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
   const { guestSignIn } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const viewPager = React.createRef<ViewPager>();
   const ReturnImageOrText = (imgNumber: number) => {
     switch (imgNumber) {
       case 0:
-        return i18n.t('account.introduction_title');
+        return t('account.introduction_title');
       case 1:
         return require('./images/intro_image_1.png');
       case 2:
@@ -70,25 +71,25 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               }}
             />
           ) : (
-              <H1Text
-                style={{
-                  fontSize: 42,
-                  width: '90%',
-                  marginHorizontal: '5%',
-                  position: 'absolute',
-                  bottom: Dimensions.get('window').height * 0.5,
-                }}
-                label={ReturnImageOrText(index)}
-              />
-            )}
+            <H1Text
+              style={{
+                fontSize: 42,
+                width: '90%',
+                marginHorizontal: '5%',
+                position: 'absolute',
+                bottom: Dimensions.get('window').height * 0.5,
+              }}
+              label={ReturnImageOrText(index)}
+            />
+          )}
           {index > 0 && (
             <View style={{ top: '65%' }}>
               <H2Text
-                label={i18n.t('account.introduction_header.' + (index - 1))}
+                label={t('account.introduction_header.' + (index - 1))}
                 style={{ fontSize: 25, textAlign: 'center' }}
               />
               <P1Text
-                label={i18n.t('account.introduction_text.' + (index - 1))}
+                label={t('account.introduction_text.' + (index - 1))}
                 style={{ marginTop: 20, textAlign: 'center' }}
               />
             </View>
@@ -249,7 +250,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           {ButtonListing}
         </View>
         <SubmitButton
-          title={i18n.t('account_label.start_service')}
+          title={t('account_label.start_service')}
           style={{
             width: '90%',
             marginHorizontal: '5%',
@@ -259,7 +260,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           handler={() => guestSignIn()}
         />
         <FlatButton
-          title={i18n.t('account_label.existing_login')}
+          title={t('account_label.existing_login')}
           style={{
             position: 'absolute',
             bottom: 10,

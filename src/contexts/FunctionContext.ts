@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 import Server from '../api/server';
-import LocaleType from '../enums/LocaleType';
 import { SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
@@ -8,7 +7,6 @@ import CurrencyType from '../enums/CurrencyType';
 import { CurrencyResponse } from '../types/CurrencyResponse';
 
 type FunctionContextType = {
-  setLanguage: (input: LocaleType) => void;
   setCurrency: (input: CurrencyType) => void;
   signIn: () => void;
   guestSignIn: () => void;
@@ -25,7 +23,6 @@ type FunctionContextType = {
 };
 
 const FunctionContext = createContext<FunctionContextType>({
-  setLanguage: () => { },
   setCurrency: () => { },
   signIn: async () => { },
   guestSignIn: async () => { },

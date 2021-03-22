@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import NotiBox from './components/NotiBox';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
@@ -22,6 +22,7 @@ import UserContext from '../../contexts/UserContext';
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
+  const { t } = useTranslation()
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -37,7 +38,7 @@ const Notifications: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
 
@@ -61,7 +62,7 @@ const Notifications: FunctionComponent = () => {
         .then((_res) => loadNotifications())
         .catch((e) => {
           if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     }
@@ -93,7 +94,7 @@ const Notifications: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -168,7 +169,7 @@ const Notifications: FunctionComponent = () => {
               justifyContent: 'flex-start',
               alignSelf: 'flex-start',
             }}>
-            {i18n.t('notification_label.notification')}
+            {t('notification_label.notification')}
           </Animated.Text>
         </Animated.View>
       </Animated.View>
@@ -202,7 +203,7 @@ const Notifications: FunctionComponent = () => {
                 textAlign: 'center',
                 fontSize: 15,
               }}
-              label={i18n.t('notification.no_notification')}
+              label={t('notification.no_notification')}
             />
           </View>
         ) : (
@@ -215,7 +216,7 @@ const Notifications: FunctionComponent = () => {
                     marginBottom: 30,
                     textAlign: 'center',
                   }}
-                  label={i18n.t('notification.read_all_notifications', {
+                  label={t('notification.read_all_notifications', {
                     number: countUnreadNotifications(),
                   })}
                 />
@@ -237,7 +238,7 @@ const Notifications: FunctionComponent = () => {
                   marginBottom: 75,
                   textAlign: 'center',
                 }}
-                label={i18n.t('notification.saved_90days')}
+                label={t('notification.saved_90days')}
               />
             )}
           </>

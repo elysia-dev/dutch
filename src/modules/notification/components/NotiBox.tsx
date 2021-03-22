@@ -7,11 +7,12 @@ import {
   Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
+import moment from 'moment';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
-import { DashboardPage, MainPage, MorePage, Page } from '../../../enums/pageEnum';
+import { DashboardPage, MorePage, Page } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
@@ -30,6 +31,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const { notifications } = useContext(UserContext);
   const { setNotifications } = useContext(FunctionContext);
   const [showTx, setShowTx] = useState(false);
+  const { t } = useTranslation();
 
   const type = props.notification.notificationType;
   const typeId = () => {
@@ -147,7 +149,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 fontSize: 13,
                 marginBottom: 6,
               }}
-              label={i18n.t(`notification_label.${type}`)}
+              label={t(`notification_label.${type}`)}
             />
             <P1Text
               style={{
@@ -156,7 +158,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
                 marginBottom: 6,
               }}
-              label={i18n.t(`notification.${type}`, {
+              label={t(`notification.${type}`, {
                 month: data.month,
                 week: data.week,
                 device: data.message,
@@ -201,8 +203,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                       style={{ color: '#fff', textAlign: 'center' }}
                       label={
                         showTx
-                          ? i18n.t('dashboard_label.fold')
-                          : i18n.t('dashboard_label.transaction')
+                          ? t('dashboard_label.fold')
+                          : t('dashboard_label.transaction')
                       }
                     />
                     <Image
@@ -246,10 +248,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 fontSize: 13,
                 marginBottom: 6,
               }}
-              label={i18n.strftime(
-                new Date(props.notification.createdAt),
-                i18n.t('notification_label.date_format'),
-              )}
+              label={moment(props.notification.createdAt).format('MM.DD')}
             />
           </View>
           <View

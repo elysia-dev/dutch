@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { SummaryReportResponse } from '../../../types/SummaryReport';
 import { P1Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
@@ -19,6 +19,8 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
   const totalValue = data.reduce((accumulator, currentValue) => {
     return accumulator + currentValue;
   }, 0);
+
+  const { t } = useTranslation();
 
   const color = [
     '#3679B5',
@@ -159,7 +161,7 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
         }}>
         <P1Text
           style={{ marginBottom: 20 }}
-          label={i18n.t('dashboard_label.asset_value_graph')}
+          label={t('dashboard_label.asset_value_graph')}
         />
         <View
           style={{
@@ -201,7 +203,7 @@ export const AssetRatioCard: FunctionComponent<Props> = (props: Props) => {
           />
           <P1Text
             style={{ marginTop: 25, textAlign: 'center' }}
-            label={i18n.t('dashboard.no_ownership')}
+            label={t('dashboard.no_ownership')}
           />
         </>
       ) : (

@@ -18,7 +18,7 @@ import {
   useScrollToTop,
 } from '@react-navigation/native';
 import base64 from 'base-64';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { Item } from './components/Item';
 import { PostItem } from './components/PostItem';
 import Product, { Story } from '../../types/product';
@@ -26,7 +26,8 @@ import ExpandedCard from './components/ExpandedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { H1Text } from '../../shared/components/Texts';
 import FunctionContext from '../../contexts/FunctionContext';
-import UserContext from '../../contexts/UserContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import LocaleType from '../../enums/LocaleType';
 
 interface State {
   stories: Story[];
@@ -53,14 +54,15 @@ const MainList: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'MainList'>>();
   const refresh = route.params;
-  const { user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
 
   const ref = React.useRef<ScrollView>(null);
   useScrollToTop(ref);
 
   useEffect(() => {
-    Server.storyList(user.language)
+    Server.storyList(language || LocaleType.EN)
       .then((res) => {
         setState({ ...state, stories: res.data });
         Server.products().then((res) => {
@@ -76,10 +78,10 @@ const MainList: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
-  }, [user.language]);
+  }, [language]);
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -130,7 +132,7 @@ const MainList: FunctionComponent = () => {
                   textAlign: 'left',
                   marginBottom: 30,
                 }}
-                label={i18n.t('product_label.product')}
+                label={t('product_label.product')}
               />
             </View>
             {state.stories.map((story, index) => (

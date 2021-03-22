@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { TextField } from '../../shared/components/TextField';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { TitleText } from '../../shared/components/Texts';
 import NextButton from '../../shared/components/NextButton';
 import ExpiredAccount from './ExpiredAccount';
@@ -16,6 +16,7 @@ const WalletLogin: FunctionComponent = () => {
   const [error, setError] = useState(0);
   const { unlock } = useContext(WalletContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   if (stage === 0) {
     return (
@@ -30,20 +31,20 @@ const WalletLogin: FunctionComponent = () => {
       title={
         <TitleText
           style={{ marginTop: 50 }}
-          label={i18n.t('account.insert_password')}
+          label={t('account.insert_password')}
         />
       }
       body={
         <>
           <TextField
             style={{ marginTop: 20 }}
-            label={i18n.t('account_label.account_password')}
+            label={t('account_label.account_password')}
             eventHandler={(input: string) =>
               setPassword(input)
             }
             value={password}
             secure={true}
-            helperText={error ? i18n.t('account_errors.password_do_not_match') : undefined}
+            helperText={error ? t('account_errors.password_do_not_match') : undefined}
             helperIcon={error ? 'Error' : undefined}
           />
         </>
@@ -52,7 +53,7 @@ const WalletLogin: FunctionComponent = () => {
         <>
           <NextButton
             style={{ marginTop: 'auto', marginLeft: '5%', marginRight: '5%' }}
-            title={i18n.t('account_label.login')}
+            title={t('account_label.login')}
             handler={async () => {
               try {
                 await unlock(password)
@@ -63,7 +64,7 @@ const WalletLogin: FunctionComponent = () => {
           />
           <BorderButton
             style={{ marginTop: 10, marginLeft: '5%', marginRight: '5%' }}
-            title={i18n.t('wallet.lost_password')}
+            title={t('wallet.lost_password')}
             handler={() => {
               navigation.navigate(AccountPage.WalletRecover)
             }}

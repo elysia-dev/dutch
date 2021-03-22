@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import LocaleType from '../../../enums/LocaleType';
 import {
@@ -16,6 +16,7 @@ import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import UserContext from '../../../contexts/UserContext';
 import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   product: Product;
@@ -26,10 +27,12 @@ interface Props {
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
   const { user } = useContext(UserContext);
+  const { language } = useContext(PreferenceContext);
+  const { t } = useTranslation();
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
   const hasChildProduct =
     product?.childProducts && product?.childProducts.length > 0;
@@ -96,7 +99,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 alignContent: 'center',
               }}>
               <P1Text
-                label={i18n.t('dashboard_label.token_contract')}
+                label={t('dashboard_label.token_contract')}
                 style={{ textAlign: 'center', fontSize: 13 }}
               />
             </TouchableOpacity>
@@ -126,11 +129,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             style={{
               marginTop: 4,
               paddingRight: 10,
-              fontSize: user.language === LocaleType.EN ? 15 : 18,
+              fontSize: language === LocaleType.EN ? 15 : 18,
               borderRightWidth: 1,
               borderColor: '#CCCCCC',
             }}
-            label={`${i18n.t('product_label.expected_annual_return', {
+            label={`${t('product_label.expected_annual_return', {
               return: product.expectedAnnualReturn,
             })}`}
           />
@@ -139,7 +142,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               paddingLeft: 10,
               marginTop: 4,
               marginLeft: 'auto',
-              fontSize: user.language === LocaleType.EN ? 15 : 18,
+              fontSize: language === LocaleType.EN ? 15 : 18,
             }}
             label={productDescription.propertyType}
           />
@@ -162,7 +165,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 alignItems: 'center',
               }}>
               <P1Text
-                label={i18n.t('product_highlight.type')}
+                label={t('product_highlight.type')}
                 style={{ color: '#838383' }}
               />
               <View
@@ -170,7 +173,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   flexDirection: 'row',
                   justifyContent: 'flex-end',
                 }}>
-                <P1Text label={i18n.t('product_label.loan')} />
+                <P1Text label={t('product_label.loan')} />
               </View>
             </View>
           )}
@@ -185,7 +188,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 alignItems: 'center',
               }}>
               <P1Text
-                label={i18n.t('product_label.available_token')}
+                label={t('product_label.available_token')}
                 style={{ flex: 1.2, color: '#838383' }}
               />
               <View
@@ -283,7 +286,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 alignItems: 'center',
               }}>
               <P1Text
-                label={i18n.t('product_label.available_token')}
+                label={t('product_label.available_token')}
                 style={{ flex: 1.2, color: '#838383' }}
               />
               <View
@@ -314,7 +317,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               alignItems: 'center',
             }}>
             <P1Text
-              label={i18n.t('product_label.price_per_token')}
+              label={t('product_label.price_per_token')}
               style={{ color: '#838383', flex: 1.2 }}
             />
             <View

@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import CurrencyContext from '../../../contexts/CurrencyContext';
 import FunctionContext from '../../../contexts/FunctionContext';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import currencyFormatter from '../../../utiles/currencyFormatter';
 
@@ -37,6 +37,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
   const [state, setState] = useState<State>({
     ethPrice: 0,
   });
+  const { t } = useTranslation();
 
   const loadCoinExchange = () => {
     Server.coinPrice()
@@ -48,7 +49,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
       })
       .catch((e: { response: { status: number } }) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -75,7 +76,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
         <>
           <DesView>
             <P1Text
-              label={i18n.t('product_label.recovery')}
+              label={t('product_label.recovery')}
               style={{ color: '#626368' }}
             />
             <P1Text
@@ -92,8 +93,8 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             <P1Text
               label={
                 props.hasEth
-                  ? i18n.t('product_label.expected_eth_price')
-                  : i18n.t('product_label.expected_el_price')
+                  ? t('product_label.expected_eth_price')
+                  : t('product_label.expected_el_price')
               }
               style={{ flex: 1, color: '#626368' }}
             />
@@ -109,7 +110,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
         <>
           <DesView>
             <P1Text
-              label={i18n.t('product_label.investment')}
+              label={t('product_label.investment')}
               style={{ color: '#626368' }}
             />
             <P1Text
@@ -124,7 +125,7 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
           </DesView>
           <DesView>
             <P1Text
-              label={i18n.t('product_label.expected_el_price')}
+              label={t('product_label.expected_el_price')}
               style={{ color: '#626368' }}
             />
             <P1Text
@@ -138,8 +139,8 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
             <P1Text
               label={
                 props.hasEth
-                  ? i18n.t('product_label.expected_eth_price')
-                  : i18n.t('product_label.eth_price')
+                  ? t('product_label.expected_eth_price')
+                  : t('product_label.eth_price')
               }
               style={{ color: '#626368' }}
             />
@@ -170,8 +171,8 @@ const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
               style={{ color: '#1C1C1C' }}
               label={
                 props.type === 'buy'
-                  ? i18n.t('product_label.expected_return')
-                  : i18n.t('product_label.expected_refund')
+                  ? t('product_label.expected_return')
+                  : t('product_label.expected_refund')
               }
             />
             <H3Text

@@ -22,7 +22,7 @@ import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 type ParamList = {
   Reward: {
@@ -49,6 +49,7 @@ const Reward: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
   });
+  const { t } = useTranslation()
 
   const { afterTxFailed, afterTxCreated } = useTxHandler();
 
@@ -138,9 +139,9 @@ const Reward: FunctionComponent = () => {
                     })
                     .catch((e) => {
                       if (e.response.status === 400) {
-                        alert(i18n.t('product.transaction_error'));
+                        alert(t('product.transaction_error'));
                       } else if (e.response.status === 500) {
-                        alert(i18n.t('account_errors.server'));
+                        alert(t('account_errors.server'));
                       }
                     });
                 }

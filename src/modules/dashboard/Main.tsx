@@ -10,7 +10,7 @@ import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
 import { AssetPage, CryptoPage, MorePage, Page } from '../../enums/pageEnum';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import ExpressoV2 from '../../api/ExpressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import Asset from '../../types/Asset';
@@ -47,6 +47,7 @@ export const Main: React.FC = () => {
   useScrollToTop(ref);
   const [state, setState] = useState<{ assets: Asset[], loading: boolean }>(defaultState);
   const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { t } = useTranslation();
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -172,7 +173,7 @@ export const Main: React.FC = () => {
         <BasicLayout >
           <H3Text
             style={{ marginTop: 50 }}
-            label={i18n.t('main.total_assets')}
+            label={t('main.total_assets')}
           />
           <View style={{
             paddingBottom: 15,
@@ -217,7 +218,7 @@ export const Main: React.FC = () => {
                     />
                   </View>
                   <TitleText
-                    label={i18n.t('main.connect_wallet')}
+                    label={t('main.connect_wallet')}
                     style={{ height: 30, marginLeft: 20 }}
                   />
                   <View style={{
@@ -237,7 +238,7 @@ export const Main: React.FC = () => {
             }
           </View>
           <AssetListing
-            title={i18n.t('main.my_assets')}
+            title={t('main.my_assets')}
             assets={
               state.assets.filter((item) => {
                 return ![CryptoType.EL, CryptoType.ETH].includes(item.type) && item.unitValue > 0
@@ -254,7 +255,7 @@ export const Main: React.FC = () => {
           />
           <View style={{ height: 25 }} />
           <AssetListing
-            title={i18n.t('main.my_wallet')}
+            title={t('main.my_wallet')}
             assets={state.assets.filter((item) => [CryptoType.EL, CryptoType.ETH].includes(item.type))}
             itemPressHandler={(asset) => {
               navigation.navigate(

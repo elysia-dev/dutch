@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import * as Linking from 'expo-linking';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import getEnvironment from '../../../utiles/getEnvironment';
@@ -98,6 +98,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
   const { wallet, emailRestriction, email } = state;
   const { user } = useContext(UserContext);
   const { Server, refreshUser } = useContext(FunctionContext);
+  const { t } = useTranslation();
 
   const appState = useAppState();
 
@@ -132,16 +133,16 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         break;
       case WalletType.METAMASK_PC:
         if (emailRestriction) {
-          return alert(i18n.t('product.email_restriction'));
+          return alert(t('product.email_restriction'));
         }
         if (user.provider === ProviderType.ETH) {
           if (!email) {
-            return alert(i18n.t('account.check_email'));
+            return alert(t('account.check_email'));
           } else {
             Server.sendEmailForTransaction(espressTxId, email)
               .then((_res) => {
                 setState({ ...state, emailRestriction: true });
-                alert(i18n.t('product.send_purchase_link'));
+                alert(t('product.send_purchase_link'));
                 setTimeout(() => {
                   setState({
                     ...state,
@@ -152,7 +153,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
               })
               .catch((e) => {
                 if (e.response.status === 500) {
-                  alert(i18n.t('account_errors.server'));
+                  alert(t('account_errors.server'));
                 }
               });
           }
@@ -160,7 +161,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
           Server.sendEmailForTransaction(espressTxId)
             .then((_res) => {
               setState({ ...state, emailRestriction: true });
-              alert(i18n.t('product.send_purchase_link'));
+              alert(t('product.send_purchase_link'));
               setTimeout(() => {
                 setState({
                   ...state,
@@ -172,13 +173,13 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
             })
             .catch((e) => {
               if (e.response.status === 500) {
-                alert(i18n.t('account_errors.server'));
+                alert(t('account_errors.server'));
               }
             });
         }
         break;
       default:
-        alert(i18n.t('product.select_metamask'));
+        alert(t('product.select_metamask'));
     }
   };
 
@@ -198,7 +199,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
         </TouchableOpacity>
-        <H3Text label={i18n.t('product.select_payment')} style={{}} />
+        <H3Text label={t('product.select_payment')} style={{}} />
         <View style={{ width: 20 }} />
       </View>
       <View
@@ -210,7 +211,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         }}>
         <View style={{ marginTop: 40 }}>
           <MetaMaskButton
-            title={i18n.t('product.metamask_mobile')}
+            title={t('product.metamask_mobile')}
             type={WalletType.METAMASK_MOBILE}
             selected={wallet === WalletType.METAMASK_MOBILE}
             modeHandler={() =>
@@ -218,7 +219,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
             }
           />
           <MetaMaskButton
-            title={i18n.t('product.metamask_pc')}
+            title={t('product.metamask_pc')}
             type={WalletType.METAMASK_PC}
             selected={wallet === WalletType.METAMASK_PC}
             modeHandler={() =>
@@ -233,14 +234,14 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
                     setState({ ...state, email: input })
                   }
                   value={email}
-                  label={i18n.t('account.insert_account_email')}
-                  placeHolder={'* ' + i18n.t('product.link_will_be_sent')}
+                  label={t('account.insert_account_email')}
+                  placeHolder={'* ' + t('product.link_will_be_sent')}
                 />
               )}
             </>
           )}
           <MetaMaskButton
-            title={i18n.t('product.imtoken_mobile')}
+            title={t('product.imtoken_mobile')}
             type={WalletType.IMTOKEN_MOBILE}
             selected={wallet === WalletType.IMTOKEN_MOBILE}
             modeHandler={() =>
@@ -249,7 +250,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
           />
         </View>
         <SubmitButton
-          title={i18n.t('account_label.continue')}
+          title={t('account_label.continue')}
           // eslint-disable-next-line no-nested-ternary
           style={{
             position: 'absolute',

@@ -21,7 +21,7 @@ import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
 
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
@@ -70,6 +70,7 @@ const AutoSizedImage: FunctionComponent<{
 }> = (props: { style?: ImageStyle; source: { uri: string } }) => {
   const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
   const windowWidth = Dimensions.get('window').width;
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (props.style?.width || props.style?.height) {
@@ -120,6 +121,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     scrollEnabled: true,
     backgroundColor: true,
   });
+  const { t } = useTranslation();
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
   const scrollRef = useRef<ScrollView>(null);
@@ -315,7 +317,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         !state.closed && state.scrollY > 50 && (
           <SubmitButton
             style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-            title={i18n.t('product_label.more_info')}
+            title={t('product_label.more_info')}
             handler={() => {
               StatusBar.setHidden(false);
               navigation.navigate(Page.Product, {

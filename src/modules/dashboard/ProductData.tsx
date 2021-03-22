@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { ScrollView, View } from 'react-native';
 import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import { H1Text } from '../../shared/components/Texts';
 import { defaultDocsResponse } from '../../types/Docs';
@@ -32,6 +32,7 @@ const ProductData: FunctionComponent = () => {
     docs.leaseContract === '' &&
     docs.shareholderCertificate === '' &&
     docs.stakeCertificate === '';
+  const { t } = useTranslation();
 
   const callDocsApi = () => {
     Server.productDocs(product.id)
@@ -40,7 +41,7 @@ const ProductData: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -61,7 +62,7 @@ const ProductData: FunctionComponent = () => {
           handler={() => navigation.goBack()}
           style={{ marginTop: 20 }}
         />
-        <H1Text label={i18n.t('dashboard_label.documents')} />
+        <H1Text label={t('dashboard_label.documents')} />
         <View
           style={{
             marginTop: 40,
