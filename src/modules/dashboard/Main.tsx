@@ -184,8 +184,6 @@ export const Main: React.FC = () => {
             {
               isWalletUser || user.ethAddresses[0] ? <TitleText
                 label={currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   state.assets.reduce((res, cur) => res + cur.currencyValue, 0),
                   2
                 )}
