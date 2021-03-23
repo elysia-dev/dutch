@@ -55,6 +55,7 @@ type State = {
   paymentMethod: CryptoType | 'none',
   legacyRefundStatus?: string,
   image: string,
+  productId: number,
 }
 
 const Detail: FunctionComponent = () => {
@@ -74,6 +75,7 @@ const Detail: FunctionComponent = () => {
     contractAddress: '',
     paymentMethod: CryptoType.EL,
     image: '',
+    productId: 0, //for v1 user
   })
   const [filter, setFilter] = useState<number>(0);
   const { elPrice, ethPrice } = useContext(PriceContext);
@@ -140,6 +142,7 @@ const Detail: FunctionComponent = () => {
       paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
       legacyRefundStatus: res.data.legacyRefundStatus,
       image: res.data.product.data?.images[0],
+      productId: res.data.product.id,
     })
   }
 
@@ -291,6 +294,7 @@ const Detail: FunctionComponent = () => {
                       toCrypto: asset.type,
                       toTitle: asset.title,
                       contractAddress: state.contractAddress,
+                      productId: state.productId,
                     })
                   }}
                 />
@@ -304,6 +308,7 @@ const Detail: FunctionComponent = () => {
                       toCrypto: state.paymentMethod,
                       toTitle: state.paymentMethod.toUpperCase(),
                       contractAddress: state.contractAddress,
+                      productId: state.productId,
                     })
                   }}
                 />
@@ -315,6 +320,7 @@ const Detail: FunctionComponent = () => {
                       toCrypto: state.paymentMethod,
                       toTitle: state.paymentMethod.toUpperCase(),
                       contractAddress: state.contractAddress,
+                      productId: state.productId,
                     })
                   }}
                 />
