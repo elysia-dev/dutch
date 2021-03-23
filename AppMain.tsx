@@ -112,19 +112,6 @@ const AppMain = () => {
       Server: authServer,
       isWalletUser: isWalletUser === 'true',
     });
-
-    registerForPushNotificationsAsync().then((expoPushToken) => {
-      // TODO Call expo push token!!
-      setState((state) => {
-        return {
-          ...state,
-          user: {
-            ...state.user,
-            expoPushTokens: [expoPushToken || ''],
-          }
-        }
-      })
-    })
   }
 
   const signIn = async () => {
@@ -377,13 +364,13 @@ const AppMain = () => {
           },
           Server: state.Server,
         }}>
-        <WalletProvider>
-          <PreferenceProvider>
-            <PriceProvider>
+        <PreferenceProvider>
+          <PriceProvider>
+            <WalletProvider>
               <AppNavigator navigationRef={navigationRef} />
-            </PriceProvider>
-          </PreferenceProvider>
-        </WalletProvider>
+            </WalletProvider>
+          </PriceProvider>
+        </PreferenceProvider>
       </FunctionContext.Provider>
     </UserContext.Provider>
   );

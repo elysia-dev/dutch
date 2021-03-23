@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useState } from "react";
-import { CURRENCY, LANGUAGE } from '../constants/storage';
+import { CURRENCY, LANGUAGE, NOTIFICATION } from '../constants/storage';
 import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
 import CurrencyType from '../enums/CurrencyType';
 import LocaleType from '../enums/LocaleType';
@@ -17,6 +17,7 @@ const PreferenceProvider: React.FC = (props) => {
 
   const loadPreferences = async () => {
     const currency: CurrencyType | null = await AsyncStorage.getItem(CURRENCY) as CurrencyType || CurrencyType.USD;
+    const notification: boolean = (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
     let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
 
     const allCurrency = (await Server.getAllCurrency()).data;
@@ -31,8 +32,9 @@ const PreferenceProvider: React.FC = (props) => {
       ...state,
       krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
       cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
-      currency: currency,
-      language: language,
+      currency,
+      language,
+      notification,
     })
   }
 
@@ -50,6 +52,14 @@ const PreferenceProvider: React.FC = (props) => {
     setState({
       ...state,
       currency
+    })
+  }
+
+  const setNotification = async (notification: boolean) => {
+    await AsyncStorage.setItem(NOTIFICATION, notification.toString());
+    setState({
+      ...state,
+      notification,
     })
   }
 
@@ -72,6 +82,7 @@ const PreferenceProvider: React.FC = (props) => {
         ...state,
         setLanguage,
         setCurrency,
+        setNotification,
         currencyFormatter: currencyFormattHandler,
       }}
     >

@@ -30,17 +30,20 @@ import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import AppColors from '../../enums/AppColors';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import ExpressoV2 from '../../api/ExpressoV2';
+import WalletContext from '../../contexts/WalletContext';
 
 const Setting: FunctionComponent = () => {
-  const { user, expoPushToken } = useContext(UserContext);
+  const { user, expoPushToken, isWalletUser } = useContext(UserContext);
   const {
     Server,
     setUserExpoPushToken,
   } = useContext(FunctionContext);
   const navigation = useNavigation();
-  const { language, currency, setLanguage, setCurrency } = useContext(PreferenceContext);
+  const { language, currency, notification, setLanguage, setCurrency, setNotification } = useContext(PreferenceContext);
+  const { wallet } = useContext(WalletContext);
   const [state, setState] = useState({
-    hasPermission: user.expoPushTokens?.includes(expoPushToken),
+    hasPermission: user.expoPushTokens?.includes(expoPushToken) || (isWalletUser && notification),
     selectedCurrency: currency || CurrencyType.USD,
     showLanguageModal: false,
     showCurrencyModal: false,
@@ -51,21 +54,15 @@ const Setting: FunctionComponent = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (user.provider === ProviderType.GUEST) {
-      return
-    }
-
-    loadData();
+    loadVersion();
   }, []);
 
-  const loadData = async () => {
+  const loadVersion = async () => {
     try {
-      const token = await Notifications.getExpoPushTokenAsync();
       const version = await Server.checkLatestVersion(Platform.OS);
 
       setState({
         ...state,
-        hasPermission: user.expoPushTokens?.includes(token.data),
         latestVersion: version.data,
       });
     } catch (e) {
@@ -81,13 +78,23 @@ const Setting: FunctionComponent = () => {
     if (!state.hasPermission) {
       registerForPushNotificationsAsync().then((expoPushToken) => {
         if (expoPushToken) {
-          Server.registerExpoPushToken(expoPushToken);
+          if (isWalletUser) {
+            ExpressoV2.putExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+          } else {
+            Server.registerExpoPushToken(expoPushToken);
+          }
+          setNotification(true);
           setUserExpoPushToken(expoPushToken);
         }
       });
     } else {
       Notifications.getExpoPushTokenAsync().then((token) => {
-        Server.deleteExpoPushToken(token.data);
+        if (isWalletUser) {
+          ExpressoV2.removeExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+        } else {
+          Server.deleteExpoPushToken(token.data);
+        }
+        setNotification(false);
         setUserExpoPushToken('');
       });
     }
@@ -108,8 +115,6 @@ const Setting: FunctionComponent = () => {
       <>
         <View
           style={{
-            // paddingBottom: 20,
-            // borderBottomWidth: 5,
             borderBottomColor: '#F6F6F8',
             top: 22,
           }}>
@@ -118,7 +123,7 @@ const Setting: FunctionComponent = () => {
             style={{ color: AppColors.BLACK2 }}
           />
           {
-            user.provider !== ProviderType.GUEST && <View>
+            (user.provider !== ProviderType.GUEST || isWalletUser) && <View>
               <View
                 style={{
                   marginTop: 30,
@@ -179,7 +184,7 @@ const Setting: FunctionComponent = () => {
                     marginVertical: 10,
                     backgroundColor: 'transparent',
                     transform: [
-                      { scaleX: 0.7 }, 
+                      { scaleX: 0.7 },
                       { scaleY: 0.7 }
                     ]
                   }}
@@ -253,7 +258,7 @@ const Setting: FunctionComponent = () => {
                     marginVertical: 10,
                     backgroundColor: 'transparent',
                     transform: [
-                      { scaleX: 0.7 }, 
+                      { scaleX: 0.7 },
                       { scaleY: 0.7 }
                     ]
                   }}

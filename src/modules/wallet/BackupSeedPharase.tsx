@@ -9,7 +9,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
 import WalletContext from '../../contexts/WalletContext';
 import { useTranslation } from 'react-i18next'
-import { BackButton } from '../../shared/components/BackButton';
 
 interface IBackupSeedPharase {
   next: () => void;
@@ -20,12 +19,8 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
   const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
 
-  const navigation = useNavigation();
   return (
     <Layout>
-      <View style={{ position: 'absolute', padding: 20 }}>
-        <BackButton handler={() => navigation.goBack()} />
-      </View>
       <TitleText
         style={{ marginTop: 50, lineHeight: 35, }}
         label={t('recovery_key.backup_seed')}

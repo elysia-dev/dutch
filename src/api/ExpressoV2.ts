@@ -25,4 +25,20 @@ export default class ExpressoV2 {
       `${baseURL}wallet/${address}/${tokenAddress}/tx?page=${page}`,
     )
   }
+
+  static createUser = async (address: string, expoPushToken?: string): Promise<void> => {
+    return Promise.resolve();
+  }
+
+  static putExpoPushToken = async (address: string, expoPushToken: string): Promise<void> => {
+    return Promise.resolve();
+  }
+
+  static removeExpoPushToken = async (address: string, expoPushToken: string): Promise<void> => {
+    return Promise.resolve();
+  }
+
+  static getProduct = async (producId: number): Promise<void> => {
+    return Promise.resolve();
+  }
 }

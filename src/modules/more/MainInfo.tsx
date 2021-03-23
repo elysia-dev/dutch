@@ -23,7 +23,6 @@ import Setting from './Setting';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import FunctionContext from '../../contexts/FunctionContext';
 import WalletContext from '../../contexts/WalletContext';
-import WalletStorage from '../../core/WalletStorage';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
@@ -39,7 +38,7 @@ const MainInfo: FunctionComponent = () => {
   const {
     signOut,
   } = useContext(FunctionContext);
-  const { setLock } = useContext(WalletContext);
+  const { setLock, clearWallet } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -84,7 +83,7 @@ const MainInfo: FunctionComponent = () => {
             text: 'OK',
             onPress: async () => {
               setLock();
-              await WalletStorage.clear();
+              await clearWallet();
               signOut(SignInStatus.SIGNOUT);
             },
             style: 'default',

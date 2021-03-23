@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from "react";
+import ExpressoV2 from '../api/ExpressoV2';
+import PreferenceContext from '../contexts/PreferenceContext';
 import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
 import Wallet from '../core/Wallet';
 import WalletStorage from '../core/WalletStorage';
+import registerForPushNotificationsAsync from '../utiles/registerForPushNotificationsAsync';
 
 const WalletProvider: React.FC = (props) => {
-  const [state, setState] = useState<WalletStateType>(staticWalletInitialState)
+  const [state, setState] = useState<WalletStateType>(staticWalletInitialState);
+  const { setNotification } = useContext(PreferenceContext);
 
   const setLock = async () => {
     setState({
@@ -31,6 +35,14 @@ const WalletProvider: React.FC = (props) => {
     const newWallet = await Wallet.createNewWallet();
     WalletStorage.save(newWallet, password);
 
+    registerForPushNotificationsAsync().then((token) => {
+      alert(token)
+      if (token) {
+        ExpressoV2.createUser(newWallet?.getFirstNode()?.address || '', token)
+        setNotification(true);
+      }
+    })
+
     setState({
       ...state,
       isUnlocked: true,
@@ -43,12 +55,24 @@ const WalletProvider: React.FC = (props) => {
     const wallet = await Wallet.restoreWallet(mnemonic);
     WalletStorage.save(wallet, password);
 
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) {
+        ExpressoV2.createUser(wallet?.getFirstNode()?.address || '', token)
+        setNotification(true);
+      }
+    })
+
     setState({
       ...state,
       isUnlocked: true,
       password: password,
       wallet,
     })
+  }
+
+  const clearWallet = async () => {
+    await setNotification(false);
+    await WalletStorage.clear();
   }
 
   const validatePassword = (password: string): boolean => {
@@ -64,6 +88,7 @@ const WalletProvider: React.FC = (props) => {
         createNewWallet,
         restoreWallet,
         validatePassword,
+        clearWallet,
       }}
     >
       {props.children}

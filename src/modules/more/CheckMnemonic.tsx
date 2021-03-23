@@ -38,7 +38,7 @@ const CheckMnemonic: FunctionComponent = () => {
         body={
           <>
             <TextField
-              style={{ marginTop: 20 }}
+              style={{ marginTop: 40 }}
               label={t('account_label.account_password')}
               eventHandler={(input: string) =>
                 setPassword(input)

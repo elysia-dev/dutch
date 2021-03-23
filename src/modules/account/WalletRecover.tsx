@@ -4,14 +4,13 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import WalletContext from '../../contexts/WalletContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import SignInStatus from '../../enums/SignInStatus';
-import WalletStorage from '../../core/WalletStorage';
 import { TouchableOpacity, View } from 'react-native';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
 import { useTranslation } from 'react-i18next';
 
 const WalletRecover: FunctionComponent = () => {
-  const { setLock } = useContext(WalletContext);
+  const { setLock, clearWallet } = useContext(WalletContext);
   const { signOut } = useContext(FunctionContext);
   const [confirmed, setConfirm] = useState(false);
   const { t } = useTranslation();
@@ -45,7 +44,7 @@ const WalletRecover: FunctionComponent = () => {
             disabled={!confirmed}
             handler={async () => {
               setLock();
-              await WalletStorage.clear();
+              await clearWallet();
               signOut(SignInStatus.SIGNOUT)
             }}
           />
