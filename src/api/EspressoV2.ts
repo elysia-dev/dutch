@@ -41,7 +41,7 @@ export default class EspressoV2 {
 
   static getProduct = async (address: string): Promise<AxiosResponse<Product>> => {
     return axios.get(
-      `${baseURL}/product?contractAddress=${address}`,
+      `${baseURL}/products?contractAddress=${address}`,
     )
   }
 }

@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, ScrollView, Image, Text } from 'react-native';
+import { View, ScrollView, Image } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { H2Text, H4Text, P1Text, TitleText } from '../../shared/components/Texts';
@@ -82,7 +82,7 @@ const Detail: FunctionComponent = () => {
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
     const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
-    const productData = await Ex
+    const productData = await EspressoV2.getProduct(asset.address || '');
     const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
 
     setState({
@@ -91,6 +91,8 @@ const Detail: FunctionComponent = () => {
       reward,
       contractAddress: asset.address || '',
       transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
+      image: productData.data.data.images[0] || '',
+      totalSupply: parseFloat(productData.data.totalValue),
     });
   }
 
