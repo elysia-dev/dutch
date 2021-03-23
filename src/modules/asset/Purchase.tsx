@@ -17,7 +17,6 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
-import EspressoV2 from '../../api/EspressoV2';
 
 type ParamList = {
   Purchase: {
@@ -60,18 +59,6 @@ const Purchase: FunctionComponent = () => {
   const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-
-  /*
-  useEffect(() => {
-    EspressoV2.createPendingTxNotification(
-      wallet?.getFirstAddress() || '',
-      contractAddress,
-      'test'
-    ).catch((e) => {
-      alert(e)
-    })
-  }, [])
-  */
 
   useEffect(() => {
     if (isWalletUser) {
