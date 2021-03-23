@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import CryptoTxsResponse from '../types/CryptoTxsResponse';
+import Notification from '../types/Notification';
 import Product from '../types/Product';
 import WalletBalanceResponse from '../types/WalletBalanceResponse';
 import getEnvironment from '../utiles/getEnvironment';
@@ -59,6 +60,39 @@ export default class EspressoV2 {
   static getProduct = async (address: string): Promise<AxiosResponse<Product>> => {
     return axios.get(
       `${baseURL}/products?contractAddress=${address}`,
+    )
+  }
+
+  static createPendingTxNotification = async (
+    address: string,
+    contractAddress: string,
+    txHash: string
+  ): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `${baseURL}/transactionRequests/pendingTx`,
+      {
+        address,
+        contractAddress,
+        txHash,
+      }
+    )
+  }
+
+  static getNoficiations = async (address: string): Promise<AxiosResponse<Notification[]>> => {
+    return axios.get(
+      `${baseURL}/notifications/${address}`,
+    )
+  }
+
+  static readNotification = async (address: string, id: number): Promise<AxiosResponse<void>> => {
+    return axios.put(
+      `${baseURL}/notifications/${id}/${address}`,
+    )
+  }
+
+  static readAllNotifications = async (address: string): Promise<AxiosResponse<void>> => {
+    return axios.patch(
+      `${baseURL}/notifications/readAll/${address}`,
     )
   }
 }

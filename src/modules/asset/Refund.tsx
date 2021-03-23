@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken } from '../../hooks/useContract';
+import { useAssetToken, useAssetTokenEth } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { utils } from 'ethers';
@@ -52,16 +52,14 @@ const Refund: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
-        from: wallet?.getFirstNode()?.address
+      assetTokenContract?.estimateGas.refund(utils.parseEther('100'), {
+        from: wallet?.getFirstAddress(),
       }).then((res) => {
         setState({
           ...state,
           estimateGas: utils.formatEther(res.mul(gasPrice)),
         })
-      }).catch((e) => {
-        alert(e)
-      })
+      }).catch((e) => { })
     }
   }, [])
 
@@ -75,7 +73,7 @@ const Refund: FunctionComponent = () => {
             to: populatedTransaction.to,
             data: populatedTransaction.data,
           }).then((tx) => {
-            afterTxCreated(tx.hash)
+            afterTxCreated(wallet.getFirstAddress() || '', contractAddress, tx.hash)
             navigation.goBack();
           }).catch(() => {
             afterTxFailed();

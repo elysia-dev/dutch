@@ -93,6 +93,7 @@ const Detail: FunctionComponent = () => {
       transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
       image: productData.data.data.images[0] || '',
       totalSupply: parseFloat(productData.data.totalValue),
+      paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType
     });
   }
 
@@ -136,7 +137,7 @@ const Detail: FunctionComponent = () => {
       reward: parseFloat(res.data.expectProfit),
       transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
       contractAddress: res.data.product.contractAddress,
-      paymentMethod: res.data.product.paymentMethod as CryptoType,
+      paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
       legacyRefundStatus: res.data.legacyRefundStatus,
       image: res.data.product.data?.images[0],
     })

@@ -54,15 +54,14 @@ const Reward: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+      assetTokenContract?.estimateGas.claimReward({
         from: wallet?.getFirstNode()?.address
       }).then((res) => {
         setState({
           ...state,
           estimateGas: utils.formatEther(res.mul(gasPrice)),
         })
-      }).catch((e) => {
-        alert(e)
+      }).catch(() => {
       })
     }
   }, [])
@@ -83,7 +82,7 @@ const Reward: FunctionComponent = () => {
             to: populatedTransaction.to,
             data: populatedTransaction.data,
           }).then((tx) => {
-            afterTxCreated(tx.hash)
+            afterTxCreated(wallet.getFirstAddress() || '', contractAddress, tx.hash)
             navigation.goBack();
           }).catch(() => {
             afterTxFailed();

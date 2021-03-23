@@ -18,6 +18,8 @@ import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
+import WalletContext from '../../contexts/WalletContext';
+import EspressoV2 from '../../api/EspressoV2';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -28,9 +30,11 @@ const Notifications: FunctionComponent = () => {
   useScrollToTop(ref);
 
   const { Server, setNotifications } = useContext(FunctionContext);
-  const { user, notifications } = useContext(UserContext);
+  const { user, notifications, isWalletUser } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext)
+  const address = wallet?.getFirstAddress() || ''
 
-  const loadNotifications = () =>
+  const loadNotifications = () => {
     Server.notification()
       .then((res) => {
         setNotifications(res.data);
@@ -41,15 +45,44 @@ const Notifications: FunctionComponent = () => {
           alert(t('account_errors.server'));
         }
       });
+  }
+
+  const loadV2UserNotifications = () => {
+    EspressoV2.getNoficiations(address).then((res) => {
+      setNotifications(res.data);
+      setRefreshing(false);
+    }).catch((e) => {
+      if (e.response.status === 500) {
+        alert(t('account_errors.server'));
+      }
+    });
+  }
 
   const onRefresh = React.useCallback(() => {
-    if (user.provider !== ProviderType.GUEST) {
+    if (isWalletUser) {
+      loadV2UserNotifications()
       setRefreshing(true);
-      loadNotifications();
+      return
     }
+
+    if (user.provider === ProviderType.GUEST) return
+
+    setRefreshing(true);
+    loadNotifications();
   }, []);
 
   const readAllNotification = () => {
+    if (isWalletUser) {
+      EspressoV2.readAllNotifications(address)
+        .then((_res) => loadV2UserNotifications())
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(t('account_errors.server'));
+          }
+        });
+      return
+    }
+
     if (user.provider === ProviderType.GUEST) {
       setNotifications(
         notifications.map((notification, _index) => ({
@@ -77,26 +110,49 @@ const Notifications: FunctionComponent = () => {
   const readNotification = (notification: Notification) => {
     if (notification.status === NotificationStatus.READ) return;
 
-    Server.read(notification.id)
-      .then(() => {
-        setNotifications(
-          notifications.map((n) => {
-            if (n.id === notification.id) {
-              return {
-                ...n,
-                status: NotificationStatus.READ,
-              };
-            } else {
-              return n;
-            }
-          }),
-        );
-      })
-      .catch((e) => {
-        if (e.response.status === 500) {
-          alert(t('account_errors.server'));
-        }
-      });
+    if (isWalletUser) {
+      EspressoV2.readNotification(address, notification.id)
+        .then(() => {
+          setNotifications(
+            notifications.map((n) => {
+              if (n.id === notification.id) {
+                return {
+                  ...n,
+                  status: NotificationStatus.READ,
+                };
+              } else {
+                return n;
+              }
+            }),
+          );
+        })
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(t('account_errors.server'));
+          }
+        });
+    } else {
+      Server.read(notification.id)
+        .then(() => {
+          setNotifications(
+            notifications.map((n) => {
+              if (n.id === notification.id) {
+                return {
+                  ...n,
+                  status: NotificationStatus.READ,
+                };
+              } else {
+                return n;
+              }
+            }),
+          );
+        })
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(t('account_errors.server'));
+          }
+        });
+    }
   };
 
   return (

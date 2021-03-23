@@ -27,7 +27,6 @@ import { IS_WALLET_USER } from './src/constants/storage';
 import AppNavigator from './AppNavigator';
 import PreferenceProvider from './src/providers/PreferenceProvider';
 import PriceProvider from './src/providers/PriceProvider';
-import { View, Text } from 'react-native';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -223,7 +222,7 @@ const AppMain = () => {
   }, [state.signedIn]);
 
   useEffect(() => {
-    if (state.user.provider === ProviderType.GUEST) {
+    if (state.user.provider === ProviderType.GUEST && !state.isWalletUser) {
       return;
     }
 
@@ -245,7 +244,9 @@ const AppMain = () => {
                 .notificationType as NotificationType,
             )
           ) {
-            signIn();
+            if (!state.isWalletUser) {
+              signIn();
+            }
           } else {
             setState((state) => {
               return {
@@ -275,7 +276,9 @@ const AppMain = () => {
                 .notificationType as NotificationType,
             )
           ) {
-            signIn();
+            if (!state.isWalletUser) {
+              signIn();
+            }
           } else {
             setState((state) => {
               return {
@@ -300,7 +303,7 @@ const AppMain = () => {
         addNotificationResponseReceivedListener,
       );
     };
-  }, []);
+  }, [state.isWalletUser]);
 
   return (
     <UserContext.Provider

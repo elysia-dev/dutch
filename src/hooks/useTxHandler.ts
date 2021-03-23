@@ -1,14 +1,18 @@
 import { Linking } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import EspressoV2 from '../api/EspressoV2';
 import getEnvironment from '../utiles/getEnvironment';
 
 type TxHandlers = {
-  afterTxCreated: (txHash: string) => void;
+  afterTxCreated: (address: string, contractAddress: string, txHash: string) => void;
   afterTxFailed: () => void;
 };
 
 function useTxHandler(): TxHandlers {
-  const afterTxCreated = (txHash: string) => {
+  const afterTxCreated = (address: string, contractAddress: string, txHash: string) => {
+    EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
+      JSON.stringify(res)
+    ))
     showMessage({
       message: `트랜잭션 생성 요청을 완료했습니다.`,
       description: txHash,

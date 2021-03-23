@@ -17,6 +17,7 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
+import EspressoV2 from '../../api/EspressoV2';
 
 type ParamList = {
   Purchase: {
@@ -60,18 +61,41 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
 
+  /*
+  useEffect(() => {
+    EspressoV2.createPendingTxNotification(
+      wallet?.getFirstAddress() || '',
+      contractAddress,
+      'test'
+    ).catch((e) => {
+      alert(e)
+    })
+  }, [])
+  */
+
   useEffect(() => {
     if (isWalletUser) {
-      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
-        from: wallet?.getFirstNode()?.address
-      }).then((res) => {
-        setState({
-          ...state,
-          estimateGas: utils.formatEther(res.mul(gasPrice)),
+      if (fromCrypto === CryptoType.ETH) {
+        assetTokenEthContract?.estimateGas.purchase({
+          from: wallet?.getFirstAddress(),
+          value: utils.parseEther('0.5').toHexString()
+        }).then((res) => {
+          setState({
+            ...state,
+            estimateGas: utils.formatEther(res.mul(gasPrice)),
+          })
+        }).catch((e) => { })
+      } else {
+        assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+          from: wallet?.getFirstNode()?.address
+        }).then((res) => {
+          setState({
+            ...state,
+            estimateGas: utils.formatEther(res.mul(gasPrice)),
+          })
+        }).catch((e) => {
         })
-      }).catch((e) => {
-        alert(e)
-      })
+      }
     }
   }, [])
 
@@ -93,8 +117,13 @@ const Purchase: FunctionComponent = () => {
         break;
 
       case TxStep.Approving:
+        if (fromCrypto === CryptoType.ETH) {
+          setState({ ...state, step: TxStep.Creating })
+          return
+        }
+
         elContract?.populateTransaction
-          .approve(contractAddress, '1' + '0'.repeat(25))
+          .approve(contractAddress, '1' + '0'.repeat(30))
           .then(populatedTransaction => {
             wallet?.getFirstSigner().sendTransaction({
               to: populatedTransaction.to,
@@ -117,9 +146,9 @@ const Purchase: FunctionComponent = () => {
               data: populatedTransaction.data,
               value: utils.parseEther(values.from).toHexString(),
             }).then((tx) => {
-              afterTxCreated(tx.hash)
+              afterTxCreated(wallet.getFirstAddress() || '', contractAddress, tx.hash)
               navigation.goBack();
-            }).catch(() => {
+            }).catch((e) => {
               afterTxFailed();
               navigation.goBack();
             })
@@ -132,10 +161,12 @@ const Purchase: FunctionComponent = () => {
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx) => {
-              afterTxCreated(tx.hash)
+              afterTxCreated(wallet.getFirstAddress() || '', contractAddress, tx.hash)
               navigation.goBack();
-            }).catch(() => {
+            }).catch((e) => {
+              alert(e)
               afterTxFailed();
+              navigation.goBack();
             })
           })
         }

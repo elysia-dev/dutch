@@ -45,6 +45,10 @@ class Wallet {
     return this.nodes[0];
   }
 
+  getFirstAddress(): string {
+    return this.nodes[0]?.address || ''
+  }
+
   getFirstSigner(): Signer {
     return new ethers.Wallet(this.nodes[0].privateKey, provider)
   }
