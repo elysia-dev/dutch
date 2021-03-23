@@ -6,11 +6,6 @@ import {
 } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 
-import {
-  AppState,
-  AppStateStatus,
-} from 'react-native';
-
 import LegacyRefundStatus from './src/enums/LegacyRefundStatus';
 import Notification, { isNotification } from './src/types/Notification';
 
@@ -32,6 +27,7 @@ import { IS_WALLET_USER } from './src/constants/storage';
 import AppNavigator from './AppNavigator';
 import PreferenceProvider from './src/providers/PreferenceProvider';
 import PriceProvider from './src/providers/PriceProvider';
+import { View, Text } from 'react-native';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -101,9 +97,6 @@ const AppMain = () => {
   const [state, setState] = useState<AppInformation>(defaultState);
   const navigationRef = useRef<NavigationContainerRef>(null);
 
-  const appState = useRef(AppState.currentState);
-
-
   const signOut = async (signInStatus: SignOut) => {
     await removeToken();
     setState({ ...defaultState, signedIn: signInStatus });
@@ -119,6 +112,19 @@ const AppMain = () => {
       Server: authServer,
       isWalletUser: isWalletUser === 'true',
     });
+
+    registerForPushNotificationsAsync().then((expoPushToken) => {
+      // TODO Call expo push token!!
+      setState((state) => {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            expoPushTokens: [expoPushToken || ''],
+          }
+        }
+      })
+    })
   }
 
   const signIn = async () => {
@@ -198,19 +204,6 @@ const AppMain = () => {
       });
   };
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (
-      appState.current !== 'active' &&
-      nextAppState === 'active' &&
-      navigationRef.current?.getCurrentRoute()?.name !== 'NotificationMain'
-    ) {
-      navigationRef.current?.goBack();
-    } else if (appState.current === 'active' && nextAppState !== 'active') {
-      navigationRef.current?.navigate('BlockScreen');
-    }
-    appState.current = nextAppState;
-  };
-
   useEffect(() => {
     signIn();
   }, []);
@@ -246,8 +239,6 @@ const AppMain = () => {
     if (state.user.provider === ProviderType.GUEST) {
       return;
     }
-
-    AppState.addEventListener('change', handleAppStateChange);
 
     const isTransactionEnd = (type: NotificationType) => {
       return [
@@ -315,8 +306,6 @@ const AppMain = () => {
     );
 
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
-
       Notifications.removeNotificationSubscription(
         addNotificationReceivedListener,
       );

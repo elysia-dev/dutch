@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
 
-const ExpiredAccount: FunctionComponent<{ nextHandler?: () => void }> = ({
+const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
   nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia) },
 }) => {
   const navigation = useNavigation();
@@ -33,7 +33,7 @@ const ExpiredAccount: FunctionComponent<{ nextHandler?: () => void }> = ({
         label={t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => nextHandler()}
+        onPress={() => { nextHandler() }}
         style={{
           position: 'absolute',
           bottom: '20%',

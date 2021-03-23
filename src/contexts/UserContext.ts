@@ -1,9 +1,7 @@
 import { createContext } from 'react';
-import LocaleType from '../enums/LocaleType';
 import { SignInStatus } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
-import CurrencyType from '../enums/CurrencyType';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
 
@@ -15,7 +13,6 @@ type UserContextType = {
     firstName: string;
     lastName: string;
     gender: string;
-    currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
@@ -42,7 +39,6 @@ const UserContext = createContext<UserContextType>({
     gender: '',
     ethAddresses: [],
     expoPushTokens: [],
-    currency: CurrencyType.USD,
     nationality: 'South Korea, KOR',
     legacyEl: 0,
     legacyUsd: 0,

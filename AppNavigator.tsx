@@ -23,8 +23,9 @@ import WalletRecover from './src/modules/account/WalletRecover';
 import Asset from './src/modules/asset';
 import Crypto from './src/modules/crypto';
 
+const RootStack = createStackNavigator();
+
 const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> }> = ({ navigationRef }) => {
-  const RootStack = createStackNavigator();
   const { signedIn, isWalletUser } = useContext(UserContext);
   const { isUnlocked } = useContext(WalletContext);
 
@@ -39,7 +40,7 @@ const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> 
           />
         ) : isWalletUser && !isUnlocked ? (
           <>
-            <RootStack.Screen name={Page.Account} component={WalletLogin} />
+            <RootStack.Screen name={AccountPage.WalletLogin} component={WalletLogin} />
             <RootStack.Screen name={AccountPage.WalletRecover} component={WalletRecover} />
           </>
         ) : signedIn === SignInStatus.SIGNIN ? (

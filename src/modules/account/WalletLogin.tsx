@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TextField } from '../../shared/components/TextField';
 import { useTranslation } from 'react-i18next';
 import { TitleText } from '../../shared/components/Texts';
@@ -10,7 +10,7 @@ import BorderButton from '../../shared/components/BorderButton';
 import { useNavigation } from '@react-navigation/native';
 import { AccountPage } from '../../enums/pageEnum';
 
-const WalletLogin: FunctionComponent = () => {
+const WalletLogin: React.FC = () => {
   const [stage, setStage] = useState(0);
   const [password, setPassword] = useState('');
   const [error, setError] = useState(0);
@@ -25,7 +25,7 @@ const WalletLogin: FunctionComponent = () => {
       />
     )
   }
-  // TODO : 계정 초기화 버튼
+
   return (
     <AccountLayout
       title={

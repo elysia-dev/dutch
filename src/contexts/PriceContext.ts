@@ -1,6 +1,4 @@
 import { createContext } from 'react';
-import CurrencyType from '../enums/CurrencyType';
-import LocaleType from '../enums/LocaleType';
 
 export interface IPriceContext {
   elPrice: number;
