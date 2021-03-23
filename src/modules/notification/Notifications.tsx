@@ -5,7 +5,6 @@ import {
   RefreshControl,
   Dimensions,
   SafeAreaView,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
@@ -18,6 +17,7 @@ import { P1Text, P3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -107,72 +107,7 @@ const Notifications: FunctionComponent = () => {
         top: 0,
         backgroundColor: '#FFF',
       }}>
-      <Animated.View
-        style={{
-          overflow: 'hidden',
-          backgroundColor: 'transparent',
-          paddingBottom: 1,
-        }}>
-        <Animated.View
-          style={{
-            backgroundColor: '#fff',
-            elevation: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 5, 5],
-            }),
-            shadowOffset: { width: 1, height: 1 },
-            shadowColor: '#00000033',
-            shadowOpacity: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 0.5, 0.5],
-            }),
-            paddingTop: Platform.OS === 'android' ? 65 : 45,
-            paddingBottom: 10,
-            paddingLeft: 20,
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [-1000, 0, 50, 1000],
-                  outputRange: [0, 0, -5, -5],
-                }),
-              },
-            ],
-          }}>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'relative',
-              left: 0,
-              paddingLeft: 0,
-              width: '100%',
-              color: '#1c1c1c',
-              fontSize: 28,
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [0, 0, -20, -20],
-                  }),
-                },
-                {
-                  translateY: 0,
-                },
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [1, 1, 0.9, 0.9],
-                  }),
-                },
-              ],
-              fontFamily: 'Roboto_700Bold',
-              textAlign: 'left',
-              justifyContent: 'flex-start',
-              alignSelf: 'flex-start',
-            }}>
-            {t('notification_label.notification')}
-          </Animated.Text>
-        </Animated.View>
-      </Animated.View>
+      <AnimatedMainHeader title={t('notification_label.notification')} scrollY={scrollY} />
       <Animated.ScrollView
         ref={ref}
         scrollEventThrottle={16}
