@@ -4,8 +4,8 @@ import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import { H1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/Product';
-import usePrices from '../../../hooks/usePrice';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
 
 const GrayBox = styled.View`
   display: flex;
@@ -60,7 +60,7 @@ type Props = {
 };
 
 const RefundSummary: FunctionComponent<Props> = (props: Props) => {
-  const { elPrice } = usePrices();
+  const { elPrice } = useContext(PriceContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 

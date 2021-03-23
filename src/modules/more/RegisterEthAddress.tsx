@@ -48,8 +48,7 @@ import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAd
 import { Page } from '../../enums/pageEnum';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
-import { usePermissions } from 'expo-permissions';
-import usePrices from '../../hooks/usePrice';
+import PriceContext from '../../contexts/PriceContext';
 
 interface Props {
   resetHandler: () => void;
@@ -123,7 +122,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const { Server, setEthAddress, signOut, signIn } = useContext(
     FunctionContext,
   );
-  const { elPrice } = usePrices();
+  const { elPrice } = useContext(PriceContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);

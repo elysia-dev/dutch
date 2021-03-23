@@ -14,11 +14,11 @@ import { useTranslation } from 'react-i18next';
 import ExpressoV2 from '../../api/ExpressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import Asset from '../../types/Asset';
-import usePrices from '../../hooks/usePrice';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import PriceContext from '../../contexts/PriceContext';
 
 const defaultState = {
   assets: [
@@ -40,7 +40,7 @@ export const Main: React.FC = () => {
   const { user, isWalletUser, ownerships } = useContext(UserContext);
   const { refreshUser } = useContext(FunctionContext)
   const { wallet } = useContext(WalletContext);
-  const { elPrice, ethPrice } = usePrices();
+  const { elPrice, ethPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);

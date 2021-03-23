@@ -31,6 +31,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { IS_WALLET_USER } from './src/constants/storage';
 import AppNavigator from './AppNavigator';
 import PreferenceProvider from './src/providers/PreferenceProvider';
+import PriceProvider from './src/providers/PriceProvider';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -386,7 +387,9 @@ const AppMain = () => {
         }}>
         <WalletProvider>
           <PreferenceProvider>
-            <AppNavigator navigationRef={navigationRef} />
+            <PriceProvider>
+              <AppNavigator navigationRef={navigationRef} />
+            </PriceProvider>
           </PreferenceProvider>
         </WalletProvider>
       </FunctionContext.Provider>

@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import PreferenceContext from '../../../contexts/PreferenceContext';
-import usePrices from '../../../hooks/usePrice';
+import PriceContext from '../../../contexts/PriceContext';
 
 const DesView = styled.View`
   flex: 1;
@@ -25,7 +25,7 @@ interface Props {
 }
 
 const ExchangedValue: FunctionComponent<Props> = (props: Props) => {
-  const { elPrice, ethPrice } = usePrices();
+  const { elPrice, ethPrice } = useContext(PriceContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
 

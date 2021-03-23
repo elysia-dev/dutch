@@ -9,10 +9,10 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { H1Text, P1Text } from '../../shared/components/Texts';
 import { OwnershipResponse } from '../../types/Ownership';
 import { ProductPage } from '../../enums/pageEnum';
-import usePrices from '../../hooks/usePrice';
 import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import PriceContext from '../../contexts/PriceContext';
 
 interface Props {
   modalHandler: () => void;
@@ -32,13 +32,13 @@ const SliderInterest: FunctionComponent<Props> = (props) => {
   const { Server } = useContext(FunctionContext);
   const { t } = useTranslation();
 
-  const prices = usePrices();
+  const { elPrice, ethPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const interest = (
     parseFloat(props.ownership.availableProfit) /
     (props.ownership.product.paymentMethod === 'eth'
-      ? prices.ethPrice
-      : prices.elPrice)
+      ? ethPrice
+      : elPrice)
   ).toFixed(props.ownership.product.paymentMethod === 'eth' ? 4 : 2);
 
   const callApi = () => {

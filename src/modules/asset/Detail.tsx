@@ -19,10 +19,10 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import CryptoTransaction from '../../types/CryptoTransaction';
-import usePrices from '../../hooks/usePrice';
 import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
 import NextButton from '../../shared/components/NextButton';
+import PriceContext from '../../contexts/PriceContext';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -71,7 +71,7 @@ const Detail: FunctionComponent = () => {
     image: '',
   })
   const [filter, setFilter] = useState<number>(0);
-  const { elPrice, ethPrice } = usePrices();
+  const { elPrice, ethPrice } = useContext(PriceContext);
 
   const laodV1OwnershipDetail = async () => {
     if (!asset.ownershipId) return;

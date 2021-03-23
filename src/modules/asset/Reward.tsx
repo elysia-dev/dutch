@@ -6,7 +6,6 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useAssetToken } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
-import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
 import { View } from 'react-native';
 import CryptoInput from './components/CryptoInput';
@@ -20,6 +19,7 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
+import PriceContext from '../../contexts/PriceContext';
 
 type ParamList = {
   Reward: {
@@ -41,7 +41,7 @@ const Reward: FunctionComponent = () => {
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
-  const { elPrice, ethPrice } = usePrices()
+  const { elPrice, ethPrice } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',
     stage: 0,

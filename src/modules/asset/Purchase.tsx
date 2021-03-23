@@ -11,12 +11,12 @@ import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import { utils } from 'ethers';
 import TxInput from './components/TxInput';
-import usePrices from '../../hooks/usePrice';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
+import PriceContext from '../../contexts/PriceContext';
 
 type ParamList = {
   Purchase: {
@@ -55,7 +55,7 @@ const Purchase: FunctionComponent = () => {
   const { Server } = useContext(FunctionContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(state.txHash);
-  const { elPrice, ethPrice } = usePrices()
+  const { elPrice, ethPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
 
