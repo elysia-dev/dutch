@@ -50,9 +50,9 @@ export const Main: React.FC = () => {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-  const loadV2UserBalances = async () => {
+  const loadV2UserBalances = async (noCache?: boolean) => {
     try {
-      const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '');
+      const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '', noCache);
 
       const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL].includes(token.symbol as CryptoType))
         .map((token) => {
@@ -97,7 +97,7 @@ export const Main: React.FC = () => {
     }
   }
 
-  const loadV1UserBalances = async () => {
+  const loadV1UserBalances = async (noCache?: boolean) => {
     const assets = ownerships.map((ownership) => {
       return {
         title: ownership.title,
@@ -114,7 +114,7 @@ export const Main: React.FC = () => {
     let ethBalance = 0;
 
     try {
-      const { data } = await ExpressoV2.getBalances(user.ethAddresses[0] || '');
+      const { data } = await ExpressoV2.getBalances(user.ethAddresses[0] || '', noCache);
 
       elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0;
       ethBalance = data.ethBalance || 0;
@@ -167,11 +167,15 @@ export const Main: React.FC = () => {
 
     setRefreshing(true);
     if (isWalletUser) {
-      loadV2UserBalances().then(() => {
+      loadV2UserBalances(true).then(() => {
         setRefreshing(false)
       });
     } else {
-      refreshUser().then(() => setRefreshing(false));
+      refreshUser().then(async () => {
+        await loadV1UserBalances(true)
+      }).finally(() => {
+        setRefreshing(false)
+      });
     }
   };
 

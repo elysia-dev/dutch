@@ -6,10 +6,12 @@ import getEnvironment from '../utiles/getEnvironment';
 const baseURL = `${getEnvironment().apiUrl}/v2/`;
 
 export default class ExpressoV2 {
-  static getBalances = async (address: string): Promise<AxiosResponse<WalletBalanceResponse>> => {
-    return axios.get(
-      `${baseURL}wallet/${address}/balance`,
-    );
+  static getBalances = async (address: string, noCache?: boolean): Promise<AxiosResponse<WalletBalanceResponse>> => {
+    return axios.get(`${baseURL}wallet/${address}/balance`, {
+      headers: {
+        'Cache-Control': noCache ? 'no-cache' : null
+      }
+    });
   }
 
   static getEthTransaction = async (address: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
