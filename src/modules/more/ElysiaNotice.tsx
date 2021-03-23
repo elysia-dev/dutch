@@ -11,7 +11,8 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
-import { Notice } from '../dashboard/ProductNotice';
+import { P1Text, P3Text } from '../../shared/components/Texts';
+import moment from 'moment';
 
 const PText = styled.Text`
   margin-top: 10px;
@@ -23,6 +24,54 @@ interface State {
   full: boolean;
   postList: PostResponse[];
 }
+
+const Notice: FunctionComponent<{ post: PostResponse }> = (props) => {
+  const [state, setState] = useState({
+    content: false,
+  });
+  const { t } = useTranslation();
+
+  return (
+    <TouchableOpacity
+      onPress={() => setState({ ...state, content: !state.content })}>
+      <View
+        style={{
+          paddingVertical: 5,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <P1Text
+          label={moment(props.post.createdAt).format('%Y-%m-%d')}
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            color: '#626368',
+          }}
+        />
+        <P1Text
+          label={props.post.title}
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        />
+      </View>
+      {state.content && (
+        <View>
+          <P3Text
+            style={{
+              color: '#A7A7A7',
+              marginTop: 0,
+              marginBottom: 10,
+              fontSize: 15,
+            }}
+            label={props.post.body}
+          />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
 
 const ElysiaNotice: FunctionComponent = () => {
   const navigation = useNavigation();
