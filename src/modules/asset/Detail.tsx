@@ -23,7 +23,7 @@ import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
 import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
-import ExpressoV2 from '../../api/ExpressoV2';
+import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import { useAssetToken } from '../../hooks/useContract';
 import { utils } from 'ethers';
@@ -81,7 +81,8 @@ const Detail: FunctionComponent = () => {
 
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
-    const txRes = await ExpressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    const productData = await Ex
     const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
 
     setState({
@@ -99,7 +100,7 @@ const Detail: FunctionComponent = () => {
     let res;
 
     try {
-      res = await ExpressoV2.getErc20Transaction(address, asset.address || '', state.page);
+      res = await EspressoV2.getErc20Transaction(address, asset.address || '', state.page);
 
       newTxs = res.data.tx.map((tx) => {
         return txResponseToTx(tx, address)

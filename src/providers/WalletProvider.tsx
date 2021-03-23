@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useState } from "react";
-import ExpressoV2 from '../api/ExpressoV2';
+import EspressoV2 from '../api/EspressoV2';
 import PreferenceContext from '../contexts/PreferenceContext';
 import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
 import Wallet from '../core/Wallet';
@@ -38,7 +38,7 @@ const WalletProvider: React.FC = (props) => {
     registerForPushNotificationsAsync().then((token) => {
       alert(token)
       if (token) {
-        ExpressoV2.createUser(newWallet?.getFirstNode()?.address || '', token)
+        EspressoV2.createUser(newWallet?.getFirstNode()?.address || '', token)
         setNotification(true);
       }
     })
@@ -57,7 +57,7 @@ const WalletProvider: React.FC = (props) => {
 
     registerForPushNotificationsAsync().then((token) => {
       if (token) {
-        ExpressoV2.createUser(wallet?.getFirstNode()?.address || '', token)
+        EspressoV2.createUser(wallet?.getFirstNode()?.address || '', token)
         setNotification(true);
       }
     })

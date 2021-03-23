@@ -13,7 +13,7 @@ import UserContext from '../../contexts/UserContext';
 import { CryptoPage } from '../../enums/pageEnum';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
-import ExpressoV2 from '../../api/ExpressoV2';
+import EspressoV2 from '../../api/EspressoV2';
 import CryptoTransaction from '../../types/CryptoTransaction';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
@@ -49,9 +49,9 @@ const Detail: React.FC = () => {
 
     try {
       if (asset.type === CryptoType.ETH) {
-        res = await ExpressoV2.getEthTransaction(address, state.page);
+        res = await EspressoV2.getEthTransaction(address, state.page);
       } else {
-        res = await ExpressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
+        res = await EspressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
       }
 
       newTxs = res.data.tx.map((tx) => {

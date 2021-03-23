@@ -11,7 +11,7 @@ import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
 import { AssetPage, CryptoPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
 import { useTranslation } from 'react-i18next';
-import ExpressoV2 from '../../api/ExpressoV2';
+import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import Asset from '../../types/Asset';
 import OverlayLoading from '../../shared/components/OverlayLoading';
@@ -47,7 +47,7 @@ export const Main: React.FC = () => {
 
   const loadV2UserBalances = async (noCache?: boolean) => {
     try {
-      const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '', noCache);
+      const { data } = await EspressoV2.getBalances(wallet?.getFirstNode()?.address || '', noCache);
 
       const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL, CryptoType.BNB].includes(token.symbol as CryptoType))
         .map((token) => {
@@ -110,7 +110,7 @@ export const Main: React.FC = () => {
     let ethBalance = 0;
 
     try {
-      const { data } = await ExpressoV2.getBalances(user.ethAddresses[0] || '', noCache);
+      const { data } = await EspressoV2.getBalances(user.ethAddresses[0] || '', noCache);
 
       elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0;
       ethBalance = data.ethBalance || 0;

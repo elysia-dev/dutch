@@ -30,7 +30,7 @@ import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import AppColors from '../../enums/AppColors';
 import PreferenceContext from '../../contexts/PreferenceContext';
-import ExpressoV2 from '../../api/ExpressoV2';
+import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 
 const Setting: FunctionComponent = () => {
@@ -79,7 +79,7 @@ const Setting: FunctionComponent = () => {
       registerForPushNotificationsAsync().then((expoPushToken) => {
         if (expoPushToken) {
           if (isWalletUser) {
-            ExpressoV2.putExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+            EspressoV2.putExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
           } else {
             Server.registerExpoPushToken(expoPushToken);
           }
@@ -90,7 +90,7 @@ const Setting: FunctionComponent = () => {
     } else {
       Notifications.getExpoPushTokenAsync().then((token) => {
         if (isWalletUser) {
-          ExpressoV2.removeExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+          EspressoV2.removeExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
         } else {
           Server.deleteExpoPushToken(token.data);
         }
