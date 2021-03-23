@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
+import FunctionContext from '../contexts/FunctionContext';
 import PreferenceContext from '../contexts/PreferenceContext';
 import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
 import Wallet from '../core/Wallet';
@@ -10,11 +11,19 @@ import registerForPushNotificationsAsync from '../utiles/registerForPushNotifica
 const WalletProvider: React.FC = (props) => {
   const [state, setState] = useState<WalletStateType>(staticWalletInitialState);
   const { setNotification } = useContext(PreferenceContext);
+  const { setNotifications } = useContext(FunctionContext);
 
   const setLock = async () => {
     setState({
       ...staticWalletInitialState
     })
+  }
+
+  const loadNotifications = async () => {
+    EspressoV2.getNoficiations(state?.wallet?.getFirstAddress() || '').then((res) => {
+      setNotifications(res.data);
+    }).catch((_e) => {
+    });
   }
 
   const unlock = async (password: string): Promise<void> => {
@@ -82,6 +91,12 @@ const WalletProvider: React.FC = (props) => {
   const validatePassword = (password: string): boolean => {
     return password === state.password;
   }
+
+  useEffect(() => {
+    if (state.isUnlocked) {
+      loadNotifications()
+    }
+  }, [state.isUnlocked])
 
   return (
     <WalletContext.Provider

@@ -80,19 +80,19 @@ export default class EspressoV2 {
 
   static getNoficiations = async (address: string): Promise<AxiosResponse<Notification[]>> => {
     return axios.get(
-      `${baseURL}/notifications/${address}`,
+      `${baseURL}/v2/notifications/${address}`,
     )
   }
 
   static readNotification = async (address: string, id: number): Promise<AxiosResponse<void>> => {
     return axios.put(
-      `${baseURL}/notifications/${id}/${address}`,
+      `${baseURL}/v2/notifications/${id}/${address}`,
     )
   }
 
   static readAllNotifications = async (address: string): Promise<AxiosResponse<void>> => {
     return axios.patch(
-      `${baseURL}/notifications/readAll/${address}`,
+      `${baseURL}/v2/notifications/readAll/${address}`,
     )
   }
 }

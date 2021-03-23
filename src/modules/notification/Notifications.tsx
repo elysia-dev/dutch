@@ -76,14 +76,12 @@ const Notifications: FunctionComponent = () => {
       EspressoV2.readAllNotifications(address)
         .then((_res) => loadV2UserNotifications())
         .catch((e) => {
+          alert(e)
           if (e.response.status === 500) {
             alert(t('account_errors.server'));
           }
         });
-      return
-    }
-
-    if (user.provider === ProviderType.GUEST) {
+    } else if (user.provider === ProviderType.GUEST) {
       setNotifications(
         notifications.map((notification, _index) => ({
           ...notification,
@@ -127,9 +125,7 @@ const Notifications: FunctionComponent = () => {
           );
         })
         .catch((e) => {
-          if (e.response.status === 500) {
-            alert(t('account_errors.server'));
-          }
+          alert(t('account_errors.server'));
         });
     } else {
       Server.read(notification.id)
