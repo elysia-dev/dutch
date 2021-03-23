@@ -45,7 +45,6 @@ const WalletProvider: React.FC = (props) => {
     WalletStorage.save(newWallet, password);
 
     registerForPushNotificationsAsync().then((token) => {
-      alert(token)
       if (token) {
         EspressoV2.subscribe(newWallet?.getFirstNode()?.address || '', token)
         setNotification(true);
