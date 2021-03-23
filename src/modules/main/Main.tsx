@@ -51,29 +51,13 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <>
-                <Icon
-                  source={focused ? DashboardBlackPng : DashboardPng}
-                  style={{
-                    width: 30,
-                    height: 30,
-                  }}
-                />
-                {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-                  user.legacyWalletRefundStatus === LegacyRefundStatus.NONE && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 25,
-                        width: 8,
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: '#FC5C4F',
-                      }}
-                    />
-                  )}
-              </>
+              <Icon
+                source={focused ? DashboardBlackPng : DashboardPng}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
+              />
             ),
           }}
         />
