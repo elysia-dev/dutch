@@ -22,7 +22,7 @@ type ParamList = {
     toTitle: string,
     toCrypto: CryptoType,
     productId: number,
-    contractAaddress: string,
+    contractAddress: string,
   };
 };
 
@@ -36,18 +36,34 @@ const Refund: FunctionComponent = () => {
     step: TxStep.None,
     espressoTxId: '',
     stage: 0,
+    estimateGas: '',
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAaddress } = route.params;
+  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAaddress);
+  const assetTokenContract = useAssetToken(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { isWalletUser } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
-  const { elPrice, ethPrice } = useContext(PriceContext);
+  const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (isWalletUser) {
+      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+        from: wallet?.getFirstNode()?.address
+      }).then((res) => {
+        setState({
+          ...state,
+          estimateGas: utils.formatEther(res.mul(gasPrice)),
+        })
+      }).catch((e) => {
+        alert(e)
+      })
+    }
+  }, [])
 
   useEffect(() => {
     switch (state.step) {
@@ -90,6 +106,7 @@ const Refund: FunctionComponent = () => {
         disabled={parseInt(values.from || '0') < 1}
         setCurrent={setCurrent}
         setValues={setValues}
+        estimateGas={state.estimateGas}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })

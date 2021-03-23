@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
 import CryptoInput from '..//components/CryptoInput';
-import { H4Text, H3Text } from '../../../shared/components/Texts';
+import { H4Text, H3Text, P3Text } from '../../../shared/components/Texts';
 import AppColors from '../../../enums/AppColors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import TxStep from '../../../enums/TxStep';
@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import CryptoType from '../../../enums/CryptoType';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
 
 interface ITxInput {
   title: string
@@ -27,6 +28,7 @@ interface ITxInput {
   current: string
   step: TxStep
   disabled: boolean
+  estimateGas?: string
   setCurrent: Dispatch<SetStateAction<"from" | "to">>
   setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
   createTx: () => void
@@ -46,15 +48,17 @@ const TxInput: React.FC<ITxInput> = ({
   current,
   step,
   disabled,
+  estimateGas,
   setCurrent,
   setValues,
   createTx,
 }) => {
   const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
+  const { ethPrice } = useContext(PriceContext)
   const fromToRatio = fromPrice / toPrice;
-  const tempMaxElValue = 100000;
-  const tempMaxAssetValue = 100;
+  const fromMax = 100000;
+  const toMax = 100000;
   const [state, setState] = useState({
     errorValue: 0
   });
@@ -112,6 +116,10 @@ const TxInput: React.FC<ITxInput> = ({
           active={current === 'to'}
           onPress={() => setCurrent('to')}
         />
+        {!!estimateGas && <P3Text
+          label={`Transaction Fee: ${estimateGas} ETH (${currencyFormatter(parseFloat(estimateGas) * ethPrice)})`}
+          style={{ textAlign: 'center', marginBottom: 10 }}
+        />}
         <View>
           {state.errorValue === 2 && (
             <Text style={{ fontSize: 10, right: 0, position: "absolute", bottom: 10, color: AppColors.RED }}>최대 {toTitle} 공급량을 초과했습니다!</Text>
@@ -161,9 +169,9 @@ const TxInput: React.FC<ITxInput> = ({
           disabled={disabled}
           title={title}
           handler={() => {
-            if (parseInt(values.from, 10) > tempMaxElValue) { // 최대 보유개수가 100,000개라고 가정
+            if (parseFloat(values.from) > fromMax) { // 최대 보유개수가 100,000개라고 가정
               setState({ ...state, errorValue: 1 });
-            } else if (parseInt(values.to, 10) > tempMaxAssetValue) { // 남은 ELA 토큰이 100개라고 가정
+            } else if (parseFloat(values.to) > toMax) { // 남은 ELA 토큰이 100개라고 가정
               setState({ ...state, errorValue: 2 });
             } else {
               setState({ ...state, errorValue: 0 });

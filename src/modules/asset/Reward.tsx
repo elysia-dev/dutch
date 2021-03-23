@@ -20,13 +20,14 @@ import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
+import { P3Text } from '../../shared/components/Texts';
 
 type ParamList = {
   Reward: {
     toCrypto: CryptoType,
     toTitle: string,
     productId: number,
-    contractAaddress: string,
+    contractAddress: string,
   };
 };
 
@@ -34,21 +35,37 @@ const Reward: FunctionComponent = () => {
   const [step, setStep] = useState(TxStep.None);
   const [interest, setInterest] = useState(0);
   const route = useRoute<RouteProp<ParamList, 'Reward'>>()
-  const { toCrypto, toTitle, contractAaddress } = route.params;
+  const { toCrypto, toTitle, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAaddress);
+  const assetTokenContract = useAssetToken(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
-  const { elPrice, ethPrice } = useContext(PriceContext);
+  const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',
     stage: 0,
+    estimateGas: '',
   });
   const { t } = useTranslation()
 
   const { afterTxFailed, afterTxCreated } = useTxHandler();
+
+  useEffect(() => {
+    if (isWalletUser) {
+      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+        from: wallet?.getFirstNode()?.address
+      }).then((res) => {
+        setState({
+          ...state,
+          estimateGas: utils.formatEther(res.mul(gasPrice)),
+        })
+      }).catch((e) => {
+        alert(e)
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0]
@@ -103,6 +120,10 @@ const Reward: FunctionComponent = () => {
             active={true}
             onPress={() => { }}
           />
+          {!!state.estimateGas && <P3Text
+            label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * ethPrice)})`}
+            style={{ textAlign: 'center', marginTop: 10 }}
+          />}
           <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
             <NextButton
               disabled={!(interest > 0)}

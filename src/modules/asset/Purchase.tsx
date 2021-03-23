@@ -43,6 +43,7 @@ const Purchase: FunctionComponent = () => {
     step: TxStep.None,
     espressoTxId: '',
     stage: 0,
+    estimateGas: '',
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
@@ -55,9 +56,24 @@ const Purchase: FunctionComponent = () => {
   const { Server } = useContext(FunctionContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(state.txHash);
-  const { elPrice, ethPrice } = useContext(PriceContext);
+  const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (isWalletUser) {
+      assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+        from: wallet?.getFirstNode()?.address
+      }).then((res) => {
+        setState({
+          ...state,
+          estimateGas: utils.formatEther(res.mul(gasPrice)),
+        })
+      }).catch((e) => {
+        alert(e)
+      })
+    }
+  }, [])
 
   useEffect(() => {
     switch (state.step) {
@@ -162,6 +178,7 @@ const Purchase: FunctionComponent = () => {
         setCurrent={setCurrent}
         setValues={setValues}
         disabled={parseInt(values.to || '0') < 1}
+        estimateGas={state.estimateGas}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.CheckAllowance })
