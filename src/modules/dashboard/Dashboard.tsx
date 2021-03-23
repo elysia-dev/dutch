@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { DashboardPage } from '../../enums/pageEnum';
 import { Main } from './Main';
 import InvestmentGuide from './InvestmentGuide';
+import RemainingBalance from './RemainingBalance';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,10 @@ export const Dashboard = () => {
       <Stack.Screen
         name={DashboardPage.InvestmentGuide}
         component={InvestmentGuide}
+      />
+      <Stack.Screen
+        name={DashboardPage.RemainingBalance}
+        component={RemainingBalance}
       />
     </Stack.Navigator>
   );

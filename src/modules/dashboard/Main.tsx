@@ -9,7 +9,7 @@ import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import { AssetPage, CryptoPage, MorePage, Page } from '../../enums/pageEnum';
+import { AssetPage, CryptoPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
 import { useTranslation } from 'react-i18next';
 import ExpressoV2 from '../../api/ExpressoV2';
 import WalletContext from '../../contexts/WalletContext';
@@ -19,6 +19,8 @@ import ProviderType from '../../enums/ProviderType';
 import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import PriceContext from '../../contexts/PriceContext';
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import LegacyWallet from './components/LegacyWallet';
 
 const defaultState = {
   assets: [
@@ -290,6 +292,17 @@ export const Main: React.FC = () => {
               );
             }}
           />
+          {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
+            [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
+              user.legacyWalletRefundStatus,
+            ) && (
+              <LegacyWallet
+                balance={(user.legacyEl * elPrice + user.legacyUsd)}
+                handler={() =>
+                  navigation.navigate(Page.Dashboard, { screen: DashboardPage.RemainingBalance })
+                }
+              />
+            )}
         </BasicLayout>
       </ScrollView>
       <OverlayLoading visible={state.loading} />

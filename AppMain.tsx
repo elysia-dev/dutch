@@ -137,7 +137,10 @@ const AppMain = () => {
           setState({
             ...state,
             signedIn: SignInStatus.SIGNIN,
-            user: res.data.user,
+            user: {
+              ...res.data.user,
+              ethAddresses: res.data.user.ethAddresses || [],
+            },
             notifications: res.data.notifications || [],
             ownerships: res.data.ownerships || [],
             balance: res.data.totalBalance,
@@ -359,15 +362,6 @@ const AppMain = () => {
               user: { ...state.user, ethAddresses: [address] },
             });
           },
-          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
-            setState({
-              ...state,
-              user: {
-                ...state.user,
-                legacyWalletRefundStatus: legacyRefundStatus,
-              },
-            });
-          },
           setUserExpoPushToken: (expoPushToken: string) => {
             setState({
               ...state,
@@ -381,6 +375,15 @@ const AppMain = () => {
             setState({
               ...state,
               isWalletUser: isWalletUser,
+            });
+          },
+          setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => {
+            setState({
+              ...state,
+              user: {
+                ...state.user,
+                legacyWalletRefundStatus: legacyRefundStatus,
+              },
             });
           },
           Server: state.Server,
