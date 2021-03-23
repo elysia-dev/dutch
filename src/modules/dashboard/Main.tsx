@@ -121,19 +121,19 @@ export const Main: React.FC = () => {
 
     } finally {
       assets.push({
+        title: 'Elysia',
+        currencyValue: elBalance * elPrice,
+        unitValue: elBalance,
+        type: CryptoType.EL,
+        unit: CryptoType.EL
+      })
+
+      assets.push({
         title: 'ETH',
         currencyValue: ethBalance * ethPrice,
         unitValue: ethBalance,
         type: CryptoType.ETH,
         unit: CryptoType.ETH
-      })
-
-      assets.push({
-        title: 'EL',
-        currencyValue: elBalance * elPrice,
-        unitValue: elBalance,
-        type: CryptoType.EL,
-        unit: CryptoType.EL
       })
 
       setState({
