@@ -52,7 +52,7 @@ const Refund: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      assetTokenContract?.estimateGas.refund(utils.parseEther('100'), {
+      assetTokenContract?.estimateGas.refund(utils.parseEther('10'), {
         from: wallet?.getFirstAddress(),
       }).then((res) => {
         setState({

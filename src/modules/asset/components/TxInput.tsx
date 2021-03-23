@@ -111,7 +111,7 @@ const TxInput: React.FC<ITxInput> = ({
           title={toInputTitle}
           cryptoTitle={toTitle}
           cryptoType={toCrypto}
-          style={{ marginBottom: 30 }}
+          style={{ marginBottom: estimateGas ? 10 : 30 }}
           value={values.to || '0'}
           active={current === 'to'}
           onPress={() => setCurrent('to')}
