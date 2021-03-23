@@ -4,6 +4,7 @@ type TokenBalance = {
   name: string,
   balance: number,
   symbol: CryptoType | string,
+  address: string,
 }
 
 type WalletBalanceResponse = {

@@ -9,6 +9,7 @@ type Asset = {
   ownershipId?: number;
   productId?: number;
   isLegacyOwnership?: boolean;
+  address?: string;
 }
 
 export default Asset

@@ -21,6 +21,7 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 import PriceContext from '../../contexts/PriceContext';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
+import assetTokenNamePrettier from '../../utiles/assetTokenNamePrettier';
 
 const defaultState = {
   assets: [
@@ -28,14 +29,6 @@ const defaultState = {
     { title: 'ETH', currencyValue: 0, unitValue: 0, type: CryptoType.ETH, unit: 'ETH' },
   ],
   loading: true,
-}
-
-const symbolToCryptoType = (symbol: string): CryptoType => {
-  if ([CryptoType.EL.toString(), CryptoType.ETH.toString()].includes(symbol)) {
-    return symbol as CryptoType;
-  } else {
-    return CryptoType.ELA
-  };
 }
 
 export const Main: React.FC = () => {
@@ -56,15 +49,16 @@ export const Main: React.FC = () => {
     try {
       const { data } = await ExpressoV2.getBalances(wallet?.getFirstNode()?.address || '', noCache);
 
-      const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL].includes(token.symbol as CryptoType))
+      const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL, CryptoType.BNB].includes(token.symbol as CryptoType))
         .map((token) => {
           return {
-            title: token.name,
+            title: assetTokenNamePrettier(token.name),
             currencyValue: token.balance * 5,
             unitValue: token.balance,
-            type: symbolToCryptoType(token.symbol),
+            type: CryptoType.ELA,
             unit: token.symbol,
-          }
+            address: token.address,
+          } as Asset
         })
 
       const elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0

@@ -53,8 +53,8 @@ const TransactionItem: React.FC<ITransactionItem> = ({
             onPress={() => {
               Linking.openURL(
                 getEnvironment().envName === 'PRODUCTION'
-                  ? `https://etherscan.io/tx/${transaction.hash}`
-                  : `https://kovan.etherscan.io/tx/${transaction.hash}`,
+                  ? `https://etherscan.io/tx/${transaction.txHash}`
+                  : `https://kovan.etherscan.io/tx/${transaction.txHash}`,
               );
             }}
           >

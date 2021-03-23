@@ -23,6 +23,12 @@ import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
 import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
+import ExpressoV2 from '../../api/ExpressoV2';
+import WalletContext from '../../contexts/WalletContext';
+import { useAssetToken } from '../../hooks/useContract';
+import { utils } from 'ethers';
+import txResponseToTx from '../../utiles/txResponseToTx';
+import CircleButton from './components/CircleButton';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -51,8 +57,6 @@ type State = {
   image: string,
 }
 
-// TODO
-// v2 user!!`
 const Detail: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
@@ -60,6 +64,7 @@ const Detail: FunctionComponent = () => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { isWalletUser } = useContext(UserContext);
   const { Server } = useContext(FunctionContext);
+  const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
   const [state, setState] = useState<State>({
     page: 1,
@@ -72,6 +77,49 @@ const Detail: FunctionComponent = () => {
   })
   const [filter, setFilter] = useState<number>(0);
   const { elPrice, ethPrice } = useContext(PriceContext);
+  const assetTokenContract = useAssetToken(asset.address || '');
+
+  const loadV2Detail = async () => {
+    const userAddress = wallet?.getFirstNode()?.address || '';
+    const txRes = await ExpressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+
+    setState({
+      ...state,
+      page: 2,
+      reward,
+      contractAddress: asset.address || '',
+      transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
+    });
+  }
+
+  const loadV2More = async () => {
+    const address = wallet?.getFirstNode()?.address || '';
+    let newTxs: CryptoTransaction[] = [];
+    let res;
+
+    try {
+      res = await ExpressoV2.getErc20Transaction(address, asset.address || '', state.page);
+
+      newTxs = res.data.tx.map((tx) => {
+        return txResponseToTx(tx, address)
+      })
+    } catch {
+      if (state.page !== 1) {
+        alert(t('dashboard.last_transaction'))
+      }
+    } finally {
+      if (newTxs.length !== 0) {
+        setState({
+          ...state,
+          page: state.page + 1,
+          transactions: [...state.transactions, ...newTxs],
+        })
+      } else {
+        alert(t('dashboard.last_transaction'))
+      }
+    }
+  }
 
   const laodV1OwnershipDetail = async () => {
     if (!asset.ownershipId) return;
@@ -115,48 +163,11 @@ const Detail: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      // v2User
+      loadV2Detail();
     } else {
       laodV1OwnershipDetail();
     }
   }, [])
-
-  const mainFeatures = [
-    {
-      title: '구매',
-      icon: '+',
-      handler: () => {
-        navigation.navigate(AssetPage.Purchase, {
-          fromCrypto: CryptoType.ETH,
-          fromTitle: 'ETH',
-          toCrypto: asset.type,
-          toTitle: asset.title,
-        })
-      }
-    },
-    {
-      title: '환불',
-      icon: '−',
-      handler: () => {
-        navigation.navigate(AssetPage.Refund, {
-          fromCrypto: asset.type,
-          fromTitle: asset.title,
-          toCrypto: CryptoType.ETH,
-          toTitle: 'ETH',
-        })
-      }
-    },
-    {
-      title: '이자',
-      icon: '⤴',
-      handler: () => {
-        navigation.navigate(AssetPage.Reward, {
-          toCrypto: CryptoType.ETH,
-          toTitle: 'ETH',
-        })
-      }
-    },
-  ]
 
   return (
     <>
@@ -265,34 +276,45 @@ const Detail: FunctionComponent = () => {
           </View>
           <View style={{ marginTop: 20, marginBottom: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
             {
-              !asset.isLegacyOwnership && mainFeatures.map((data, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    style={{ flexDirection: 'column', alignItems: 'center' }}
-                    onPress={data.handler}
-                  >
-                    <View
-                      style={{
-                        width: 55,
-                        height: 55,
-                        borderRadius: 27.5,
-                        backgroundColor: AppColors.MAIN,
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: AppColors.WHITE,
-                          fontSize: 27,
-                          textAlign: 'center'
-                        }}
-                      >{data.icon}</Text>
-                    </View>
-                    <H4Text label={data.title} style={{ marginTop: 10 }} />
-                  </TouchableOpacity>
-                )
-              })
+              !asset.isLegacyOwnership && <>
+                <CircleButton
+                  title={'구매'}
+                  icon={'+'}
+                  handler={() => {
+                    navigation.navigate(AssetPage.Purchase, {
+                      fromCrypto: state.paymentMethod,
+                      fromTitle: state.paymentMethod.toUpperCase(),
+                      toCrypto: asset.type,
+                      toTitle: asset.title,
+                      contractAddress: state.contractAddress,
+                    })
+                  }}
+                />
+                <CircleButton
+                  title={'환불'}
+                  icon={'-'}
+                  handler={() => {
+                    navigation.navigate(AssetPage.Refund, {
+                      fromCrypto: asset.type,
+                      fromTitle: asset.title,
+                      toCrypto: state.paymentMethod,
+                      toTitle: state.paymentMethod.toUpperCase(),
+                      contractAddress: state.contractAddress,
+                    })
+                  }}
+                />
+                <CircleButton
+                  title={'이자'}
+                  icon={'⤴'}
+                  handler={() => {
+                    navigation.navigate(AssetPage.Reward, {
+                      toCrypto: state.paymentMethod,
+                      toTitle: state.paymentMethod.toUpperCase(),
+                      contractAddress: state.contractAddress,
+                    })
+                  }}
+                />
+              </>
             }
           </View>
           {
@@ -346,7 +368,7 @@ const Detail: FunctionComponent = () => {
             }}
             onPress={() => {
               if (isWalletUser) {
-
+                loadV2More()
               } else {
                 loadV1TxsMore()
               }

@@ -1,4 +1,4 @@
-type Transaction = {
+export type Transaction = {
   blocknumber: string,
   timestamp: string,
   hash: string,

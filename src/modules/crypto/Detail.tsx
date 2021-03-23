@@ -6,7 +6,7 @@ import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
 import { View, Dimensions } from 'react-native';
-import TransactionList from './components/TransactionList';
+import TransactionList from '../asset/components/TransactionList';
 import NextButton from '../../shared/components/NextButton';
 import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
@@ -15,12 +15,11 @@ import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import ExpressoV2 from '../../api/ExpressoV2';
 import CryptoTransaction from '../../types/CryptoTransaction';
-import { BigNumber, utils } from 'ethers';
-import Bignumberjs from 'bignumber.js';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
 import getEnvironment from '../../utiles/getEnvironment';
+import txResponseToTx from '../../utiles/txResponseToTx';
 
 type ParamList = {
   CryptoDetail: {
@@ -56,13 +55,7 @@ const Detail: React.FC = () => {
       }
 
       newTxs = res.data.tx.map((tx) => {
-        const value = tx.value !== '0' ? utils.formatEther(tx.value) : utils.formatEther(BigNumber.from(tx.gasUsed).mul(tx.gasPrice))
-        return {
-          type: tx.to.toUpperCase() === address.toUpperCase() ? 'in' : 'out',
-          value: value.length > 12 ? (new Bignumberjs(value)).toFixed(2) : value,
-          txHash: tx.hash,
-          createdAt: tx.timestamp
-        }
+        return txResponseToTx(tx, address)
       })
     } catch {
       if (state.page !== 1) {
