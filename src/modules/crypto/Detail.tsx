@@ -39,7 +39,7 @@ const Detail: React.FC = () => {
   const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, }>({
     page: 1,
     transactions: [],
-    lastPage: !isWalletUser || !!user.ethAddresses[0],
+    lastPage: true,
   })
 
   const loadTxs = async () => {
@@ -73,6 +73,7 @@ const Detail: React.FC = () => {
         setState({
           ...state,
           page: state.page + 1,
+          lastPage: false,
           transactions: [...state.transactions, ...newTxs],
         })
       } else {
