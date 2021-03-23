@@ -79,7 +79,7 @@ const Setting: FunctionComponent = () => {
       registerForPushNotificationsAsync().then((expoPushToken) => {
         if (expoPushToken) {
           if (isWalletUser) {
-            EspressoV2.putExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+            EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', expoPushToken);
           } else {
             Server.registerExpoPushToken(expoPushToken);
           }
@@ -90,7 +90,7 @@ const Setting: FunctionComponent = () => {
     } else {
       Notifications.getExpoPushTokenAsync().then((token) => {
         if (isWalletUser) {
-          EspressoV2.removeExpoPushToken(wallet?.getFirstNode()?.address || '', expoPushToken);
+          EspressoV2.unsubsribe(wallet?.getFirstNode()?.address || '', expoPushToken);
         } else {
           Server.deleteExpoPushToken(token.data);
         }

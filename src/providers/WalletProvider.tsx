@@ -38,7 +38,7 @@ const WalletProvider: React.FC = (props) => {
     registerForPushNotificationsAsync().then((token) => {
       alert(token)
       if (token) {
-        EspressoV2.createUser(newWallet?.getFirstNode()?.address || '', token)
+        EspressoV2.subscribe(newWallet?.getFirstNode()?.address || '', token)
         setNotification(true);
       }
     })
@@ -57,7 +57,11 @@ const WalletProvider: React.FC = (props) => {
 
     registerForPushNotificationsAsync().then((token) => {
       if (token) {
-        EspressoV2.createUser(wallet?.getFirstNode()?.address || '', token)
+        try {
+          EspressoV2.subscribe(wallet?.getFirstNode()?.address || '', token)
+        } catch {
+          EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', token)
+        }
         setNotification(true);
       }
     })

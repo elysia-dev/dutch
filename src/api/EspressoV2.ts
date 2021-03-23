@@ -27,16 +27,33 @@ export default class EspressoV2 {
     )
   }
 
-  static createUser = async (address: string, expoPushToken?: string): Promise<void> => {
-    return Promise.resolve();
+  static subscribe = async (address: string, token?: string): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `${baseURL}/v2/wallet/${address}/token`,
+      {
+        token,
+      }
+    )
   }
 
-  static putExpoPushToken = async (address: string, expoPushToken: string): Promise<void> => {
-    return Promise.resolve();
+  static subscribeExisted = async (address: string, token?: string): Promise<AxiosResponse<void>> => {
+    return axios.put(
+      `${baseURL}/v2/wallet/${address}/token`,
+      {
+        token,
+      }
+    )
   }
 
-  static removeExpoPushToken = async (address: string, expoPushToken: string): Promise<void> => {
-    return Promise.resolve();
+  static unsubsribe = async (address: string, token?: string): Promise<AxiosResponse<void>> => {
+    return axios.delete(
+      `${baseURL}/v2/wallet/${address}/token`,
+      {
+        data: {
+          token,
+        }
+      }
+    )
   }
 
   static getProduct = async (address: string): Promise<AxiosResponse<Product>> => {
