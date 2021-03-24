@@ -27,6 +27,7 @@ import { IS_WALLET_USER } from './src/constants/storage';
 import AppNavigator from './AppNavigator';
 import PreferenceProvider from './src/providers/PreferenceProvider';
 import PriceProvider from './src/providers/PriceProvider';
+import AssetProvider from './src/providers/AssetProvider';
 
 interface AppInformation {
   signedIn: SignInStatus;
@@ -370,7 +371,9 @@ const AppMain = () => {
         <PreferenceProvider>
           <PriceProvider>
             <WalletProvider>
-              <AppNavigator navigationRef={navigationRef} />
+              <AssetProvider>
+                <AppNavigator navigationRef={navigationRef} />
+              </AssetProvider>
             </WalletProvider>
           </PriceProvider>
         </PreferenceProvider>
