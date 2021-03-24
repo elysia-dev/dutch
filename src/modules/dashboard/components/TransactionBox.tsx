@@ -50,7 +50,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               textAlign: 'left',
               marginBottom: 5,
             }}
-            label={moment(props.transaction.createdAt).format('%m.%d')}
+            label={moment(props.transaction.createdAt).format('MM.DD')}
           />
           {props.transaction.hash?.length > 0 && (
             <TouchableOpacity

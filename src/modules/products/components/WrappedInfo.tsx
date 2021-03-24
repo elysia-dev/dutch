@@ -308,7 +308,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={
-                    moment(product.data.buildingCompletionDate).format('%Y-%m-%d')
+                    moment(product.data.buildingCompletionDate).format('YYYY-MM-DD')
                   }
                   style={{ color: '#1c1c1c' }}
                 />

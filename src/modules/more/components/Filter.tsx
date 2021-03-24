@@ -182,7 +182,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                           />
                         ) : (
                           <P1Text
-                            label={moment().format('%Y-%m-%d')}
+                            label={moment().format('YYYY-MM-DD')}
                             style={{
                               color: '#A7A7A7',
                               fontSize: 13,
@@ -238,7 +238,7 @@ const Filter: FunctionComponent<props> = (props: props) => {
                           />
                         ) : (
                           <P1Text
-                            label={moment().format('%Y-%m-%d')}
+                            label={moment().format('YYYY-MM-DD')}
                             style={{
                               color: '#A7A7A7',
                               fontSize: 13,
