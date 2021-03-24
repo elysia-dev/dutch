@@ -285,7 +285,7 @@ const Detail: FunctionComponent = () => {
             {
               !asset.isLegacyOwnership && <>
                 <CircleButton
-                  title={'구매'}
+                  title={t('main.ownership')}
                   icon={'+'}
                   handler={() => {
                     navigation.navigate(AssetPage.Purchase, {
@@ -299,7 +299,7 @@ const Detail: FunctionComponent = () => {
                   }}
                 />
                 <CircleButton
-                  title={'환불'}
+                  title={t('main.refund')}
                   icon={'-'}
                   handler={() => {
                     navigation.navigate(AssetPage.Refund, {
@@ -313,7 +313,7 @@ const Detail: FunctionComponent = () => {
                   }}
                 />
                 <CircleButton
-                  title={'이자'}
+                  title={t('main.return')}
                   icon={'⤴'}
                   handler={() => {
                     navigation.navigate(AssetPage.Reward, {

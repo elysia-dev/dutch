@@ -181,9 +181,9 @@ const Purchase: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
-        title={'구매하기'}
-        fromInputTitle={'투자 금액'}
-        toInputTitle={'받는 지분'}
+        title={t('assets.invest')}
+        fromInputTitle={t('assets.invest_value')}
+        toInputTitle={t('assets.invest_stake')}
         fromCrypto={fromCrypto}
         fromTitle={fromTitle}
         toCrypto={toCrypto}

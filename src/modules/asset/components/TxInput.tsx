@@ -104,7 +104,7 @@ const TxInput: React.FC<ITxInput> = ({
         <View>
           <Text style={{ textAlign: 'center', fontSize: 20, color: AppColors.MAIN, marginTop: 5, marginBottom: 5 }}>↓</Text>
           {state.errorValue === 1 && (
-            <Text style={{ fontSize: 10, right: 0, position: "absolute", color: AppColors.RED, marginTop: 3, marginBottom: 5 }}>EL이 부족합니다!</Text>
+            <P3Text label={t('assets.not_enough_quantity')} style={{ fontSize: 10, right: 0, position: "absolute", color: AppColors.RED, marginTop: 3, marginBottom: 5 }} />
           )}
         </View>
         <CryptoInput
@@ -117,12 +117,15 @@ const TxInput: React.FC<ITxInput> = ({
           onPress={() => setCurrent('to')}
         />
         {!!estimateGas && <P3Text
-          label={`Transaction Fee: ${estimateGas} ETH (${currencyFormatter(parseFloat(estimateGas) * ethPrice)})`}
-          style={{ textAlign: 'center', marginBottom: 10 }}
+          label={t('assets.transaction_fee', { 
+            ethValue: estimateGas,
+            usdValue: currencyFormatter(parseFloat(estimateGas) * ethPrice)
+          })}
+          style={{ textAlign: 'center', marginBottom: 10, top: 5, marginTop: 10 }}
         />}
         <View>
           {state.errorValue === 2 && (
-            <Text style={{ fontSize: 10, right: 0, position: "absolute", bottom: 10, color: AppColors.RED }}>최대 {toTitle} 공급량을 초과했습니다!</Text>
+            <P3Text label={t('assets.not_enough_values', { toTitle })} style={{ fontSize: 10, right: 0, position: "absolute", bottom: 25, color: AppColors.RED }} />
           )}
         </View>
         <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />

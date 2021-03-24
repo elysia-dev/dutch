@@ -454,7 +454,7 @@ const MainInfo: FunctionComponent = () => {
                 style={{
                   width: '100%',
                   alignSelf: 'center',
-                  backgroundColor: '#767577',
+                  backgroundColor: (user.provider === ProviderType.ETH || isWalletUser) ? '#c4302b' : '#767577',
                 }}
               />
             </View>

@@ -16,8 +16,8 @@ const TouchableWordBox: React.FC<ITouchableWordBox> = ({ selected, word, onPress
         borderColor: selected ? AppColors.GREY : AppColors.MAIN,
         borderWidth: 1,
         borderRadius: 5,
-        width: 90,
-        padding: 10,
+        width: 110,
+        padding: 8,
       }}
       onPress={() => {
         !selected && onPress()

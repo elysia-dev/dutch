@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { H3Text, H4Text } from './Texts';
@@ -13,6 +14,7 @@ const SheetHeader: React.FC<Iprops> = ({
   title
 }) => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View
@@ -24,7 +26,7 @@ const SheetHeader: React.FC<Iprops> = ({
       }}
     >
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <H4Text label={'취소'} style={{ color: AppColors.MAIN }} />
+        <H4Text label={t('assets.cancel')} style={{ color: AppColors.MAIN }} />
       </TouchableOpacity>
       <H3Text label={title} style={{}} />
       <View style={{ width: 20 }} />

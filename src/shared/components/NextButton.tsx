@@ -24,11 +24,11 @@ const NextButton: FunctionComponent<INextButton> = ({
       onPress={handler}
       disabled={disabled}
       style={{
+        backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
         ...style as {},
         borderRadius: 5,
         justifyContent: 'center',
         alignContent: 'center',
-        backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
         height: 50,
       }}
     >

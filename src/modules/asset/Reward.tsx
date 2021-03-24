@@ -98,7 +98,7 @@ const Reward: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <View style={{}}>
-        <SheetHeader title={'이자분배'} />
+        <SheetHeader title={t('assets.yield_reward')} />
         <View
           style={{
             paddingLeft: 20,
@@ -107,7 +107,7 @@ const Reward: FunctionComponent = () => {
             height: '100%',
           }}>
           <CryptoInput
-            title={'이자'}
+            title={t('assets.yield')}
             cryptoTitle={toTitle}
             cryptoType={toCrypto}
             style={{ marginTop: 20 }}
@@ -126,7 +126,7 @@ const Reward: FunctionComponent = () => {
           <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
             <NextButton
               disabled={!(interest > 0)}
-              title={'이자 분배'}
+              title={t('assets.yield_reward')}
               handler={() => {
                 if (isWalletUser) {
                   setStep(TxStep.Creating)

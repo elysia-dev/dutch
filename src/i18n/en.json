@@ -461,9 +461,9 @@
     },
     "recovery_key": {
       "keep": "복구키 보관",
-      "keep_content": "복구키의 경우, 물리적으로 보관을 하는 것이 안전합니다. 종이에 적어서 안전한 곳에 보관해주시길 바랍니다.",
+      "keep_content": "복구키는 반드시 별도로 보관해 주세요.별도의 종이에 적어놓을 것을 권장합니다.",
       "lost": "복구키 분실",
-      "lost_content": "복구키의 경우, 물리적으로 보관을 하는 것이 안전합니다. 종이에 적어서 안전한 곳에 보관해주시길 바랍니다.",
+      "lost_content": "비밀번호 및 복구키를 모두 잃어버릴 경우 해당 지갑을 복구 할 수 없습니다. 분실한 경우 그 누구도 도와드릴 수 없습니다.",
       "checkbox": "위 사항을 충분히 이해하며, 지갑 생성에 동의함을 확인합니다.",
       "next": "다음",
       "backup_seed": "고객님의 복구키입니다.\n반드시 보관해주세요.",
@@ -481,8 +481,8 @@
       "check_after_click": "눌러서 확인하기"
     },
     "wallet": {
-      "lost_password": "비밀번호가 기억나지 않아요.",
-      "recover_infomation": "경고 문구[미구현]",
+      "lost_password": "비밀번호가 기억나지 않아요",
+      "recover_infomation": "비밀번호를 초기화 하시면, 해당 앱에서 고객님의 지갑 주소로 연결할 수 있는 비밀번호를 완전히 초기화합니다.\n해당 과정은 복구키를 이용해 고객님의 비밀번호를 초기화 후 재생성하는 과정이므로 반드시 고객님이 복구키를 알고 있다는 가정하에 진행해주시길 바라며, \n만약 복구키도 분실하셨다면, 고객님이 연결하셨던 지갑주소는 그 누구도 복구해 드릴 수 없습니다.",
       "recover_check": "위 사항을 충분히 이해하며, 동의하고 엘리시아를 처음부터 시작하겠습니다.",
       "recover_button": "동의하고, 처음부터 시작하기",
       "deposit": "입금하기",
@@ -510,7 +510,10 @@
       "refund_value": "받는 금액",
       "yield": "이자",
       "yield_reward": "이자 분배",
-      "cancel": "취소"
+      "cancel": "취소",
+      "not_enough_quantity" : "EL이 부족합니다",
+      "not_enough_values" : "최대 {{toTitle}} 공급량을 초과했습니다!",
+      "transaction_fee" : "토큰 교환 수수료: {{ethValue}} ETH ({{usdValue}})"
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."

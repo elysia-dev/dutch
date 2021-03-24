@@ -14,8 +14,8 @@ const WordBox: React.FC<IWordBox> = ({ index, word }) => {
         borderWidth: 1,
         borderRadius: 5,
         borderColor: AppColors.MAIN,
-        width: 120,
-        padding: 10,
+        width: 150,
+        padding: 8,
       }}
     >
       <Text style={{ textAlign: 'center' }}>{`${index}. ${word}`}</Text>

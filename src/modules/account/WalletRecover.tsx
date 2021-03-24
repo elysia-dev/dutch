@@ -39,7 +39,7 @@ const WalletRecover: FunctionComponent = () => {
       button={
         <>
           <NextButton
-            style={{ marginTop: 'auto', marginLeft: '5%', marginRight: '5%' }}
+            style={{ marginTop: 'auto', marginLeft: '5%', marginRight: '5%', backgroundColor: '#c4302b' }}
             title={t('wallet.recover_button')}
             disabled={!confirmed}
             handler={async () => {

@@ -89,9 +89,9 @@ const Refund: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
-        title={'환불하기'}
-        fromInputTitle={'환불 지분'}
-        toInputTitle={'받는 금액'}
+        title={t('assets.refund')}
+        fromInputTitle={t('assets.refund_stake')}
+        toInputTitle={t('assets.refund_value')}
         fromCrypto={fromCrypto}
         fromTitle={fromTitle}
         toCrypto={toCrypto}
