@@ -70,7 +70,6 @@ const AutoSizedImage: FunctionComponent<{
 }> = (props: { style?: ImageStyle; source: { uri: string } }) => {
   const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
   const windowWidth = Dimensions.get('window').width;
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (props.style?.width || props.style?.height) {
