@@ -176,36 +176,31 @@ const Setting: FunctionComponent = () => {
                 backgroundColor: AppColors.BACKGROUND_GREY,
               }}>
               {Platform.OS === 'android' ? (
-                <Picker
-                  style={{
-                    right: 15,
-                    width: 120,
-                    height: 30,
-                    marginVertical: 10,
-                    backgroundColor: 'transparent',
-                    transform: [
-                      { scaleX: 0.7 },
-                      { scaleY: 0.7 }
-                    ]
-                  }}
-                  itemStyle={{
-                    margin: 0,
-                    padding: 0,
-                    alignItems: 'center'
-                  }}
-                  accessibilityLabel={'settings'}
-                  selectedValue={state.selectedLanguage?.toString()}
-                  onValueChange={async (itemValue) => {
-                    setState({
-                      ...state,
-                      selectedLanguage: itemValue.toString() as LocaleType,
-                    })
-                    setLanguage(itemValue.toString() as LocaleType);
-                  }}>
-                  <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
-                  <Picker.Item label={'English'} value={LocaleType.EN} key={1} />
-                  <Picker.Item label={'简体中文'} value={LocaleType.CH} key={2} />
-                </Picker>
+                <View style={{ padding: 5 }}>
+                  <P1Text
+                    style={{ position: 'absolute', textAlign: 'center', width: 80, top: 3 }}
+                    label={state.selectedLanguage === LocaleType.KO ? 'ko' : state.selectedLanguage === LocaleType.EN ? 'en' : 'ch'}
+                  />
+                  <Picker
+                    style={{
+                      opacity: 0,
+                      height: 20,
+                      backgroundColor: 'transparent',
+                    }}
+                    accessibilityLabel={'settings'}
+                    selectedValue={state.selectedLanguage?.toString()}
+                    onValueChange={async (itemValue) => {
+                      setState({
+                        ...state,
+                        selectedLanguage: itemValue.toString() as LocaleType,
+                      })
+                      setLanguage(itemValue.toString() as LocaleType);
+                    }}>
+                    <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
+                    <Picker.Item label={'English'} value={LocaleType.EN} key={1} />
+                    <Picker.Item label={'简体中文'} value={LocaleType.CH} key={2} />
+                  </Picker>
+                </View>
               ) : (
                 <TouchableOpacity
                   style={{
@@ -250,49 +245,49 @@ const Setting: FunctionComponent = () => {
                 backgroundColor: AppColors.BACKGROUND_GREY,
               }}>
               {Platform.OS === 'android' ? (
-                <Picker
-                  style={{
-                    right: 15,
-                    width: 120,
-                    height: 30,
-                    marginVertical: 10,
-                    backgroundColor: 'transparent',
-                    transform: [
-                      { scaleX: 0.7 },
-                      { scaleY: 0.7 }
-                    ]
-                  }}
-                  itemStyle={{
-                    margin: 0,
-                    padding: 0,
-                    alignItems: 'center'
-                  }}
-                  accessibilityLabel={'settings'}
-                  selectedValue={state.selectedCurrency}
-                  onValueChange={async (itemValue) => {
-                    setState({
-                      ...state,
-                      selectedCurrency: itemValue.toString() as CurrencyType,
-                    });
+                <View style={{ padding: 5 }}>
+                  <P1Text
+                    style={{ position: 'absolute', textAlign: 'center', width: 80, top: 3 }}
+                    label={currencyText()}
+                  />
+                  <Picker
+                    style={{
+                      opacity: 0,
+                      height: 20,
+                      backgroundColor: 'transparent',
+                    }}
+                    itemStyle={{
+                      margin: 0,
+                      padding: 0,
+                      alignItems: 'center'
+                    }}
+                    accessibilityLabel={'settings'}
+                    selectedValue={state.selectedCurrency}
+                    onValueChange={async (itemValue) => {
+                      setState({
+                        ...state,
+                        selectedCurrency: itemValue.toString() as CurrencyType,
+                      });
 
-                    setCurrency(itemValue.toString() as CurrencyType);
-                  }}>
-                  <Picker.Item
-                    label={'KRW (₩)'}
-                    value={CurrencyType.KRW}
-                    key={0}
-                  />
-                  <Picker.Item
-                    label={'USD ($)'}
-                    value={CurrencyType.USD}
-                    key={1}
-                  />
-                  <Picker.Item
-                    label={'CNY (¥)'}
-                    value={CurrencyType.CNY}
-                    key={2}
-                  />
-                </Picker>
+                      setCurrency(itemValue.toString() as CurrencyType);
+                    }}>
+                    <Picker.Item
+                      label={'KRW (₩)'}
+                      value={CurrencyType.KRW}
+                      key={0}
+                    />
+                    <Picker.Item
+                      label={'USD ($)'}
+                      value={CurrencyType.USD}
+                      key={1}
+                    />
+                    <Picker.Item
+                      label={'CNY (¥)'}
+                      value={CurrencyType.CNY}
+                      key={2}
+                    />
+                  </Picker>
+                </View>
               ) : (
                 <TouchableOpacity
                   style={{
