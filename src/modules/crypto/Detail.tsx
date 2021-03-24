@@ -140,7 +140,7 @@ const Detail: React.FC = () => {
         }
       />
       {
-        !!user.ethAddresses[0] || isWalletUser &&
+        (!!user.ethAddresses[0] || isWalletUser) &&
         <View
           style={{
             marginLeft: '5%',

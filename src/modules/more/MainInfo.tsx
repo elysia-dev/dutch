@@ -173,7 +173,7 @@ const MainInfo: FunctionComponent = () => {
               label={t('more_label.my_info')}
               style={{ marginTop: 60, color: AppColors.BLACK2 }}
             />
-            {!isWalletUser &&
+            {(!isWalletUser && !user.ethAddresses[0]) &&
               <View
                 style={{
                   height: 50,
@@ -192,11 +192,7 @@ const MainInfo: FunctionComponent = () => {
                     }}>
                     <View>
                       <H3Text
-                        label={
-                          user.ethAddresses?.length > 0
-                            ? t('more_label.my_wallet')
-                            : t('more_label.wallet_connect')
-                        }
+                        label={t('more_label.wallet_connect')}
                         style={{ lineHeight: 50, fontSize: 15 }}
                       />
                       {!(user.ethAddresses?.length > 0) && (

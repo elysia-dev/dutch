@@ -29,7 +29,7 @@ const Icon = styled.Image`
 const Tab = createBottomTabNavigator();
 
 const Main: FunctionComponent = () => {
-  const { notifications, user } = useContext(UserContext);
+  const { notifications, user, isWalletUser } = useContext(UserContext);
 
   return (
     <SafeAreaView
@@ -125,7 +125,7 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {!(user.ethAddresses?.length > 0) && (
+                {(!isWalletUser && !(user.ethAddresses?.length > 0)) && (
                   <View
                     style={{
                       position: 'absolute',
