@@ -65,7 +65,7 @@ export const Main: React.FC = () => {
 
       assets.push({
         title: 'Elysia',
-        currencyValue: elBalance * ethPrice,
+        currencyValue: elBalance * elPrice,
         unitValue: elBalance,
         type: CryptoType.EL,
         unit: CryptoType.EL,
