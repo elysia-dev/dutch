@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { H3Text, H4Text } from './Texts';
@@ -21,6 +21,7 @@ const SheetHeader: React.FC<Iprops> = ({
         justifyContent: 'space-between',
         backgroundColor: AppColors.BACKGROUND_GREY,
         padding: 20,
+        paddingTop: Platform.OS === 'android' ? 70 : 20
       }}
     >
       <TouchableOpacity onPress={() => navigation.goBack()}>
