@@ -65,6 +65,7 @@ const MainList: FunctionComponent = () => {
     Server.storyList(language || LocaleType.EN)
       .then((res) => {
         setState({ ...state, stories: res.data });
+
         Server.products().then((res) => {
           setState((state) => {
             return {
@@ -90,6 +91,13 @@ const MainList: FunctionComponent = () => {
   //     }
   //   }, []),
   // );
+
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarVisible: !state.activeStory,
+    })
+    StatusBar.setHidden(!!state.activeStory);
+  }, [state.activeStory])
 
   useEffect(() => {
     if (refresh) {
@@ -140,10 +148,6 @@ const MainList: FunctionComponent = () => {
                 story={story}
                 key={`item-${index}`}
                 activateCard={(xOffset, yOffset) => {
-                  StatusBar.setHidden(true);
-                  navigation.setOptions({
-                    tabBarVisible: false,
-                  });
                   setState({
                     ...state,
                     activeStory: story,
