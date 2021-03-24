@@ -525,15 +525,18 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             )
           ) : (
             <>
-              <WalletButton
-                title={'Elysia'}
-                selected={state.wallet === WalletType.ELYSIA}
-                modeHandler={() => {
-                  setState({ ...state, wallet: WalletType.ELYSIA });
-                  navigation.navigate(Page.Wallet);
-                }}
-                type={WalletType.ELYSIA}
-              />
+              {
+                user.provider === ProviderType.GUEST &&
+                <WalletButton
+                  title={'Elysia'}
+                  selected={state.wallet === WalletType.ELYSIA}
+                  modeHandler={() => {
+                    setState({ ...state, wallet: WalletType.ELYSIA });
+                    navigation.navigate(Page.Wallet);
+                  }}
+                  type={WalletType.ELYSIA}
+                />
+              }
               <WalletButton
                 title={'MetaMask'}
                 selected={state.wallet === WalletType.METAMASK_MOBILE}
