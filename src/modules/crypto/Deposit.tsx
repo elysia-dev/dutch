@@ -2,11 +2,10 @@
 import React, {
   FunctionComponent, useContext,
 } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, Share } from 'react-native';
 import { P2Text } from '../../shared/components/Texts';
 import QRCode from 'react-native-qrcode-svg';
 import AppColors from '../../enums/AppColors';
-import Clipboard from 'expo-clipboard';
 import WalletContext from '../../contexts/WalletContext';
 import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
@@ -19,7 +18,7 @@ interface Props {
 const Deposit: FunctionComponent<Props> = props => {
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const address = isWalletUser ? wallet?.getNodes()[0].address : user.ethAddresses[0];
+  const address = isWalletUser ? wallet?.getNodes()[0].address || '' : user.ethAddresses[0];
   const { t } = useTranslation();
 
   return (
@@ -53,7 +52,11 @@ const Deposit: FunctionComponent<Props> = props => {
               paddingRight: 20,
             }}
             onPress={() => {
-              Clipboard.setString(address);
+              if (address) {
+                Share.share({
+                  message: address,
+                });
+              }
             }}
           >
             <P2Text label={address} style={{ color: 'white', flex: 1 }} />
