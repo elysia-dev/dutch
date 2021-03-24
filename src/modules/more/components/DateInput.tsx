@@ -22,7 +22,7 @@ const DateInput: FunctionComponent<Props> = (props: Props) => {
           display="spinner"
           mode="date"
           onChange={(_event, date) =>
-            props.eventHandler(moment(date).format('%Y-%m-%d'))
+            props.eventHandler(moment(date).format('YYYY-MM-DD'))
           }
           neutralButtonLabel="clear"
           minimumDate={new Date(1900, 1, 1)}
@@ -43,7 +43,7 @@ const DateInput: FunctionComponent<Props> = (props: Props) => {
           }}
           mode="date"
           androidMode="spinner"
-          placeholder={moment(currentDate).format('%Y-%m-%d')}
+          placeholder={moment(currentDate).format('YYYY-MM-DD')}
           format="YYYY-MM-DD"
           minDate={'2000-01-01'}
           maxDate={currentDate}

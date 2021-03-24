@@ -41,7 +41,7 @@ const Notice: FunctionComponent<{ post: PostResponse }> = (props) => {
           justifyContent: 'space-between',
         }}>
         <P1Text
-          label={moment(props.post.createdAt).format('%Y-%m-%d')}
+          label={moment(props.post.createdAt).format('YYYY-MM-DD')}
           style={{
             marginTop: 10,
             marginBottom: 10,
