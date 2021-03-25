@@ -11,7 +11,7 @@ interface Props {
 }
 
 const DateInput: FunctionComponent<Props> = (props: Props) => {
-  const currentDate = new Date();
+  const currentDate = moment().toDate();
   const { t } = useTranslation();
 
   return (

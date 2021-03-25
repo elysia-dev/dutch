@@ -9,8 +9,8 @@ import MnemonicQuize from './components/MnemonicQuize';
 import TouchableWordBox from './components/TouchableWordBox'
 import WalletContext from '../../contexts/WalletContext';
 import WalletStorage from '../../core/WalletStorage';
-import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next'
+import UserContext from '../../contexts/UserContext';
 
 type State = {
   currentIndex: number,
@@ -21,7 +21,7 @@ type State = {
 
 const ConfirmSeedPharase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
-  const { newWalletUser } = useContext(FunctionContext);
+  const { newWalletUser } = useContext(UserContext);
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [state, setState] = useState<State>({

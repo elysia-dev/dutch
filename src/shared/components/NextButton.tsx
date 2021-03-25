@@ -36,7 +36,7 @@ const NextButton: FunctionComponent<INextButton> = ({
         style={{
           fontSize: 16,
           textAlign: 'center',
-          fontFamily: AppFonts.BOLD,
+          fontFamily: AppFonts.Bold,
           color: 'white'
         }}
         allowFontScaling={false}>

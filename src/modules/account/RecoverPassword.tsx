@@ -8,7 +8,7 @@ import AcceptedImg from './images/accepted.png';
 import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
-import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 const Accepted = styled.Image`
   width: 140px;
@@ -30,7 +30,7 @@ const RecoverPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'RecoverPassword'>>();
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { t } = useTranslation();
 
   const callChangeApi = (password: string) => {

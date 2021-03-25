@@ -17,8 +17,8 @@ import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
 import UserContext from '../../../contexts/UserContext';
-import FunctionContext from '../../../contexts/FunctionContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   notification: Notification;
@@ -27,8 +27,7 @@ interface Props {
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const { currencyFormatter } = useContext(PreferenceContext)
-  const { notifications } = useContext(UserContext);
-  const { setNotifications } = useContext(FunctionContext);
+  const { notifications, setNotifications } = useContext(UserContext);
   const [showTx, setShowTx] = useState(false);
   const { t } = useTranslation();
 
@@ -154,7 +153,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               style={{
                 color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
                 fontFamily:
-                  status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
+                  status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,
               }}
               label={t(`notification.${type}`, {

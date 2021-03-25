@@ -11,7 +11,6 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
 import { SignInStatus } from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 
 const InitializeEmail: FunctionComponent = () => {
@@ -22,8 +21,7 @@ const InitializeEmail: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { signedIn } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { signedIn, Server } = useContext(UserContext);
   const { t } = useTranslation();
 
   const callEmailApi = () => {

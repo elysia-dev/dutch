@@ -20,8 +20,8 @@ const RecoverSeedPharase: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     currentIndex: 0,
     mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
-    // for test
-    //mnemonic: ['legend', 'guilt', 'quick', 'rice', 'lava', 'patch', 'exile', 'course', 'elegant', 'vault', 'chat', 'hill'],
+    //for test
+    //mnemonic: ['conduct', 'come', 'lobster', 'cliff', 'harsh', 'journey', 'inner', 'airport', 'awkward', 'weapon', 'sibling', 'borrow'],
   })
 
   return (

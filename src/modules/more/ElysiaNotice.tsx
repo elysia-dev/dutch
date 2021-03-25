@@ -7,12 +7,12 @@ import React, {
 } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
 import { P1Text, P3Text } from '../../shared/components/Texts';
 import moment from 'moment';
+import UserContext from '../../contexts/UserContext';
 
 const PText = styled.Text`
   margin-top: 10px;
@@ -29,7 +29,6 @@ const Notice: FunctionComponent<{ post: PostResponse }> = (props) => {
   const [state, setState] = useState({
     content: false,
   });
-  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -79,7 +78,7 @@ const ElysiaNotice: FunctionComponent = () => {
     full: false,
     postList: [],
   });
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { t } = useTranslation();
 
   const loadElysiaNotice = () => {

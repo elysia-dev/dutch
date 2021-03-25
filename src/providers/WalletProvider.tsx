@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
-import FunctionContext from '../contexts/FunctionContext';
 import PreferenceContext from '../contexts/PreferenceContext';
+import UserContext from '../contexts/UserContext';
 import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
 import Wallet from '../core/Wallet';
 import WalletStorage from '../core/WalletStorage';
@@ -11,7 +11,7 @@ import registerForPushNotificationsAsync from '../utiles/registerForPushNotifica
 const WalletProvider: React.FC = (props) => {
   const [state, setState] = useState<WalletStateType>(staticWalletInitialState);
   const { setNotification } = useContext(PreferenceContext);
-  const { setNotifications } = useContext(FunctionContext);
+  const { setNotifications } = useContext(UserContext);
 
   const setLock = async () => {
     setState({
@@ -42,7 +42,7 @@ const WalletProvider: React.FC = (props) => {
 
   const createNewWallet = async (password: string) => {
     const newWallet = await Wallet.createNewWallet();
-    WalletStorage.save(newWallet, password);
+    await WalletStorage.save(newWallet, password);
 
     registerForPushNotificationsAsync().then((token) => {
       if (token) {
@@ -61,7 +61,8 @@ const WalletProvider: React.FC = (props) => {
 
   const restoreWallet = async (mnemonic: string, password: string) => {
     const wallet = await Wallet.restoreWallet(mnemonic);
-    WalletStorage.save(wallet, password);
+    await WalletStorage.save(wallet, password);
+    await WalletStorage.completeBackup();
 
     registerForPushNotificationsAsync().then((token) => {
       if (token) {

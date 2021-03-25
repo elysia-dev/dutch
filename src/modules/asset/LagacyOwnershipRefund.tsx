@@ -7,9 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
 import SheetHeader from '../../shared/components/SheetHeader';
-import FunctionContext from '../../contexts/FunctionContext';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   LegacyOwnershipRefund: {
@@ -21,7 +21,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
   const { t } = useTranslation();
   const route = useRoute<RouteProp<ParamList, 'LegacyOwnershipRefund'>>()
   const navigation = useNavigation();
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
 
   const callApi = () => {
     Server.ownershipLegacyRefund(route.params.ownershipId)

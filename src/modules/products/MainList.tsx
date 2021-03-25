@@ -25,9 +25,9 @@ import Product, { Story } from '../../types/product';
 import ExpandedCard from './components/ExpandedCard';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { H1Text } from '../../shared/components/Texts';
-import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
+import UserContext from '../../contexts/UserContext';
 
 interface State {
   stories: Story[];
@@ -54,7 +54,7 @@ const MainList: FunctionComponent = () => {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'MainList'>>();
   const refresh = route.params;
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 

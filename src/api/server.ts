@@ -12,7 +12,6 @@ import { SummaryReportResponse } from '../types/SummaryReport';
 import { CoinPriceResponse } from '../types/CoinPrice';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
-import { CurrencyResponse } from '../types/CurrencyResponse';
 import getEnvironment from '../utiles/getEnvironment';
 import { SignOut } from '../enums/SignInStatus';
 import LocaleType from '../enums/LocaleType';
@@ -163,12 +162,6 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/products`);
   };
 
-  coinPrice = async (): Promise<AxiosResponse<CoinPriceResponse>> => {
-    return axios.get(
-      'https://api.coingecko.com/api/v3/simple/price?ids=elysia,ethereum&vs_currencies=usd',
-    );
-  };
-
   productPost = async (id: number): Promise<AxiosResponse<PostResponse[]>> => {
     return this.authenticatedEspressoClient.get(`/posts/products?id=${id}`);
   };
@@ -204,12 +197,6 @@ export default class Server {
     });
   };
 
-  getSummaryReport = async (): Promise<
-    AxiosResponse<SummaryReportResponse>
-  > => {
-    return this.authenticatedEspressoClient.get('/reports/summary');
-  };
-
   getTransaction = async (
     id: number,
     page: number,
@@ -230,12 +217,6 @@ export default class Server {
     return this.authenticatedEspressoClient.get(
       `/transactions/history?productId=${productId}&start=${start}&end=${end}&period=${period}&type=${type}&page=${page}`,
     );
-  };
-
-  resetLanguage = async (language: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put('/users/language', {
-      language,
-    });
   };
 
   requestTransaction = async (
@@ -297,24 +278,8 @@ export default class Server {
     });
   };
 
-  getAllCurrency = async (): Promise<AxiosResponse<CurrencyResponse[]>> => {
-    return espressoClient.get('/currency/');
-  };
-
-  getCurrency = async (
-    code: string,
-  ): Promise<AxiosResponse<CurrencyResponse>> => {
-    return espressoClient.get(`/currency/${code}`);
-  };
-
   getTransactionRequest = async (id: string): Promise<AxiosResponse<void>> => {
     return espressoClient.get(`transactionRequests/${id}`);
-  };
-
-  resetCurrency = async (currency: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put('/currency/', {
-      currency,
-    });
   };
 
   deleteUser = async (password: string): Promise<AxiosResponse> => {

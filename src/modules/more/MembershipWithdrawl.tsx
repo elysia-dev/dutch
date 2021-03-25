@@ -8,12 +8,11 @@ import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
 import { SignInStatus } from '../../enums/SignInStatus';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships } = useContext(UserContext);
-  const { signOut, Server } = useContext(FunctionContext);
+  const { signOut, Server } = useContext(UserContext);
   const { t } = useTranslation();
 
   const navigation = useNavigation();

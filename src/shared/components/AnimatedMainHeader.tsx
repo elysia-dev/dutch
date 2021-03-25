@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, View, Animated } from 'react-native';
+import AppFonts from '../../enums/AppFonts';
 
 const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> = ({
   title,
@@ -65,7 +66,7 @@ const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> =
                 },
               ],
               textAlign: 'left',
-              fontFamily: 'Roboto_700Bold',
+              fontFamily: AppFonts.Bold,
             }}>
             {title}
           </Animated.Text>

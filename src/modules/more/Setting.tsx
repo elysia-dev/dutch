@@ -27,18 +27,13 @@ import storeDeeplink from '../../utiles/storeDeeplink';
 import checkLatestVersion from '../../utiles/checkLatestVersion';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import AppColors from '../../enums/AppColors';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 
 const Setting: FunctionComponent = () => {
-  const { user, expoPushToken, isWalletUser } = useContext(UserContext);
-  const {
-    Server,
-    setUserExpoPushToken,
-  } = useContext(FunctionContext);
+  const { user, expoPushToken, isWalletUser, Server, setUserExpoPushToken } = useContext(UserContext);
   const navigation = useNavigation();
   const { language, currency, notification, setLanguage, setCurrency, setNotification } = useContext(PreferenceContext);
   const { wallet } = useContext(WalletContext);
@@ -138,6 +133,7 @@ const Setting: FunctionComponent = () => {
                     label={t('more_label.push_notice')}
                     style={{
                       alignSelf: 'center',
+                      fontSize: 15,
                     }}
                   />
                   <Switch
@@ -165,6 +161,7 @@ const Setting: FunctionComponent = () => {
               label={t('more_label.language')}
               style={{
                 alignSelf: 'center',
+                fontSize: 15,
               }}
             />
             <View
@@ -234,6 +231,7 @@ const Setting: FunctionComponent = () => {
               label={t('more_label.currency')}
               style={{
                 alignSelf: 'center',
+                fontSize: 15
               }}
             />
             <View
@@ -337,6 +335,7 @@ const Setting: FunctionComponent = () => {
                   t('more_label.version') +
                   ` ${getEnvironment().version}`
                 }
+                style={{ fontSize: 15 }}
               />
             </TouchableOpacity>
             {checkLatestVersion(

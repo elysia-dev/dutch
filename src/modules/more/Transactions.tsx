@@ -26,7 +26,8 @@ import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
-import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
+import AppFonts from '../../enums/AppFonts';
 
 export const initialState = {
   page: 1,
@@ -50,7 +51,7 @@ const Transactions: FunctionComponent = () => {
     ],
   });
 
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
       <TransactionBox transaction={transaction} key={index} />
@@ -241,7 +242,7 @@ const Transactions: FunctionComponent = () => {
                   color: '#4E4E4E',
                   fontSize: 17,
                   textAlign: 'center',
-                  fontFamily: 'Roboto_400Regular',
+                  fontFamily: AppFonts.Regular,
                 }}>
                 {t('dashboard_label.more_transactions')}
               </Text>

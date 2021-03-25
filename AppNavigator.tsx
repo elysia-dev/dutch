@@ -25,12 +25,12 @@ import Crypto from './src/modules/crypto';
 
 const RootStack = createStackNavigator();
 
-const AppNavigator: React.FC<{ navigationRef: React.Ref<NavigationContainerRef> }> = ({ navigationRef }) => {
+const AppNavigator: React.FC = () => {
   const { signedIn, isWalletUser } = useContext(UserContext);
   const { isUnlocked } = useContext(WalletContext);
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer>
       <RootStack.Navigator headerMode="none">
         {signedIn === SignInStatus.PENDING ? (
           <RootStack.Screen

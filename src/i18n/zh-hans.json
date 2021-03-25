@@ -251,6 +251,7 @@
       "update_text": "最新版本已推出，请更新后体验最新功能。",
       "update": "更新",
       "disconnect_address": "解除钱包地址绑定",
+      "delete_address": "删除钱包",
       "return_initial": "回到之前界面",
       "disconnect": "解除绑定",
       "reply_email": "请输入邮箱地址。",
@@ -279,7 +280,8 @@
       "withdrawl_check_3": "您的个人信息（包括邮箱地址和验证记录）将会被全部删除。",
       "withdrawl_check_4": "在删除账号后，您将承担房地产所有权相关的所有潜在经济损失。",
       "confirm_disconnect": "您要解除钱包地址绑定吗？\n 您的资产所有权保持不变，可以通过重新绑定钱包进行查看。",
-      "confirm_disconnect_and_new": "在绑定新的钱包地址前，您需要解除已绑定的钱包地址。\n解除绑定后，将保留现有钱包地址的资产所有权。\n 请问要解除已绑定的钱包地址吗？"
+      "confirm_disconnect_and_new": "在绑定新的钱包地址前，您需要解除已绑定的钱包地址。\n解除绑定后，将保留现有钱包地址的资产所有权。\n 请问要解除已绑定的钱包地址吗？",
+      "confirm_delete": "您确定想要从该应用程序中永久删除钱包吗？ 这个钱包只能用恢复键来恢复。 埃莉西亚没有你的修复键。 输入 'delete' 永久删除当前钱包 。"
     },
     "dashboard_label": {
       "total_balance": "总额",

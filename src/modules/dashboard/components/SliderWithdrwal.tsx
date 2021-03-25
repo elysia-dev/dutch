@@ -3,7 +3,7 @@ import React, { useState, FunctionComponent, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
-import FunctionContext from '../../../contexts/FunctionContext';
+import UserContext from '../../../contexts/UserContext';
 import LegacyRefundStatus from '../../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { TextField } from '../../../shared/components/TextField';
@@ -26,7 +26,7 @@ const InformationCircle = styled.View`
 `;
 
 const SliderWithdrawal: FunctionComponent<Props> = (props) => {
-  const { Server, setRefundStatus } = useContext(FunctionContext);
+  const { Server, setRefundStatus } = useContext(UserContext);
   const [state, setState] = useState({
     inputEmail: '',
     inputWallet: '',

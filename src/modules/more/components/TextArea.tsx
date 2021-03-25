@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { View, TextInput } from 'react-native';
 import { P3Text } from '../../../shared/components/Texts';
 import { useTranslation } from 'react-i18next'
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   eventHandler: (input: string) => void;
@@ -38,7 +39,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
           height: 150,
           fontSize: 14,
           padding: 10,
-          fontFamily: 'Roboto_400Regular',
+          fontFamily: AppFonts.Regular,
         }}
         scrollEnabled={true}
         textAlignVertical={'top'}

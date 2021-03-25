@@ -9,14 +9,12 @@ import WrapperLayout from '../../shared/components/WrapperLayoutAvoidingKeyboard
 import { TextField } from '../../shared/components/TextField';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
+  const { user, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 

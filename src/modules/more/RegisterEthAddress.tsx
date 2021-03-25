@@ -41,7 +41,6 @@ import storeDeeplink from '../../utiles/storeDeeplink';
 import { SignInStatus } from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import { getToken, setToken } from '../../asyncStorages/token';
 import { getRequestId, setRequestId } from '../../asyncStorages/reqeustId';
 import createGuestAndRegisterAddress from '../../utiles/createGuestAndRegisterAddress';
@@ -118,9 +117,8 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
-  const { user } = useContext(UserContext);
-  const { Server, setEthAddress, signOut, signIn } = useContext(
-    FunctionContext,
+  const { user, Server, setEthAddress, signOut, signIn } = useContext(
+    UserContext,
   );
   const { elPrice } = useContext(PriceContext);
   const { currencyFormatter } = useContext(PreferenceContext)

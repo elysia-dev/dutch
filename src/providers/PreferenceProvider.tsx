@@ -8,11 +8,14 @@ import LocaleType from '../enums/LocaleType';
 import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
 import currencyFormatter from '../utiles/currencyFormatter';
-import FunctionContext from '../contexts/FunctionContext';
+import EspressoV1 from '../api/EspressoV1';
+import UserContext from '../contexts/UserContext';
+import WalletContext from '../contexts/WalletContext';
 
 const PreferenceProvider: React.FC = (props) => {
   const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
-  const { Server } = useContext(FunctionContext);
+  const { isWalletUser, signedIn } = useContext(UserContext);
+  const { isUnlocked } = useContext(WalletContext);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
@@ -20,7 +23,7 @@ const PreferenceProvider: React.FC = (props) => {
     const notification: boolean = (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
     let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
 
-    const allCurrency = (await Server.getAllCurrency()).data;
+    const allCurrency = (await EspressoV1.getAllCurrency()).data;
 
     if (!language) {
       language = currentLocalization();
@@ -74,7 +77,7 @@ const PreferenceProvider: React.FC = (props) => {
 
   useEffect(() => {
     loadPreferences();
-  }, [])
+  }, [isWalletUser, isUnlocked, signedIn])
 
   return (
     <PreferenceContext.Provider

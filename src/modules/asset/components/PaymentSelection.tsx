@@ -21,7 +21,6 @@ import WalletType from '../../../enums/WalletType';
 import storeDeeplink from '../../../utiles/storeDeeplink';
 import ProviderType from '../../../enums/ProviderType';
 import { TextField } from '../../../shared/components/TextField';
-import FunctionContext from '../../../contexts/FunctionContext';
 import UserContext from '../../../contexts/UserContext';
 import AppColors from '../../../enums/AppColors';
 import SheetHeader from '../../../shared/components/SheetHeader';
@@ -97,8 +96,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     email: '',
   });
   const { wallet, emailRestriction, email } = state;
-  const { user } = useContext(UserContext);
-  const { Server, refreshUser } = useContext(FunctionContext);
+  const { user, Server, refreshUser } = useContext(UserContext);
   const { t } = useTranslation();
 
   const appState = useAppState();

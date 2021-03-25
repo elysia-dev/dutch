@@ -21,7 +21,6 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import Setting from './Setting';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import FunctionContext from '../../contexts/FunctionContext';
 import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
@@ -37,7 +36,7 @@ const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const {
     signOut,
-  } = useContext(FunctionContext);
+  } = useContext(UserContext);
   const { setLock, clearWallet } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
@@ -52,7 +51,7 @@ const MainInfo: FunctionComponent = () => {
   const buttonTitle = () => {
     // TODO : 더욱 강력한 경고 문구로 삭제됨. 백업하지 않았으면, 해당 지갑을 복구 할 수 없음을 명시하기
     if (isWalletUser) {
-      return t('more_label.disconnect_address');
+      return t('more_label.delete_address');
     }
 
     switch (user.provider) {
@@ -70,26 +69,16 @@ const MainInfo: FunctionComponent = () => {
   const confirmSignOut = () => {
     // TODO : 더욱 강력한 경고 문구로 변경하기
     if (isWalletUser) {
-      return Alert.alert(
-        t('more_label.disconnect'),
-        t('more.confirm_disconnect'),
-        [
-          {
-            text: 'Cancel',
-            onPress: () => { },
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: async () => {
-              setLock();
-              await clearWallet();
-              signOut(SignInStatus.SIGNOUT);
-            },
-            style: 'default',
-          },
-        ],
-        { cancelable: false },
+      return Alert.prompt(
+        t('more_label.delete_address'),
+        t('more.confirm_delete'),
+        (res) => {
+          if (res === 'delete') {
+            setLock();
+            clearWallet();
+            signOut(SignInStatus.SIGNOUT);
+          }
+        },
       );
     }
 

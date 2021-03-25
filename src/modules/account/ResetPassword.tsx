@@ -7,8 +7,8 @@ import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { useTranslation } from 'react-i18next';
 import AccountLayout from '../../shared/components/AccountLayout';
-import FunctionContext from '../../contexts/FunctionContext';
 import { MainPage, Page } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   ResetPassword: {
@@ -25,7 +25,7 @@ const ResetPassword: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ResetPassword'>>();
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { t } = useTranslation();
 
   const callChangeApi = () => {

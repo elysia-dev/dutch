@@ -254,6 +254,7 @@
       "update_text": "New version is released. Update and see what's new!",
       "update": "Update",
       "disconnect_address": "Disconnect wallet",
+      "delete_address": "Delete wallet",
       "return_initial": "Go back to main page",
       "disconnect": "Wallet disconnected",
       "reply_email": "Please enter your email",
@@ -282,7 +283,8 @@
       "withdrawl_check_3": "Your personal information including email will be deleted completely.",
       "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account.",
       "confirm_disconnect": "Do you want to disconnect your wallet?\nYour funds will remain in your wallet",
-      "confirm_disconnect_and_new": "In order to connect a new wallet,\nplease disconnect your previous wallet.\nWould you like to disconnect your wallet?"
+      "confirm_disconnect_and_new": "In order to connect a new wallet,\nplease disconnect your previous wallet.\nWould you like to disconnect your wallet?",
+      "confirm_delete": "Do you want to delete your wallet from this app permanently? You can ONLY recover this wallet with your Recovery Pharse. Elysia dose not have your recovery pharase. Type 'delete' to erase current wallet permanently."
     },
     "dashboard_label": {
       "total_balance": "Balance",

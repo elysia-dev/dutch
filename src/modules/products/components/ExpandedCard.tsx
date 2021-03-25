@@ -27,6 +27,7 @@ import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 import { Page, ProductPage } from '../../../enums/pageEnum';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   story: Story;
@@ -43,7 +44,7 @@ const htmlStyles = StyleSheet.create({
     lineHeight: 25,
     marginLeft: '5%',
     marginRight: '5%',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: AppFonts.Regular,
   },
   p: {
     fontSize: 15,
@@ -52,7 +53,7 @@ const htmlStyles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: '5%',
     marginRight: '5%',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: AppFonts.Regular,
   },
 });
 const defaultTextProps = {

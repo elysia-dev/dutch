@@ -4,6 +4,7 @@ import Slider from '@react-native-community/slider';
 import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import { P1Text, H3Text, H2Text } from '../../../shared/components/Texts';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   sliderHandler: (value: number) => void;
@@ -66,7 +67,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
               color: '#3679B5',
               fontSize: 14,
               textAlign: 'center',
-              fontFamily: 'Roboto_400Regular',
+              fontFamily: AppFonts.Regular,
             }}>
             {'+ 01 T'}
           </Text>
@@ -84,7 +85,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
                 color: '#3679B5',
                 fontSize: 14,
                 textAlign: 'center',
-                fontFamily: 'Roboto_400Regular',
+                fontFamily: AppFonts.Regular,
               }}>
               {'+ 10 T'}
             </Text>
@@ -103,7 +104,7 @@ export const Calculator: FunctionComponent<Props> = (props: Props) => {
                 color: '#3679B5',
                 fontSize: 14,
                 textAlign: 'center',
-                fontFamily: 'Roboto_400Regular',
+                fontFamily: AppFonts.Regular,
               }}>
               {'+ 100 T'}
             </Text>

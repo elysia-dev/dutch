@@ -12,6 +12,7 @@ import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
+import AppFonts from '../../enums/AppFonts';
 
 const Wrapper = styled.SafeAreaView`
   padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
@@ -89,37 +90,37 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             style={[
               props.backButtonHandler !== undefined
                 ? {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, 10, 10],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  }
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, 10, 10],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                }
                 : {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -34, -34],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  },
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -34, -34],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                },
             ]}>
             <Animated.Text
               allowFontScaling={false}
@@ -127,7 +128,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
               style={{
                 position: 'absolute',
                 fontSize: 22,
-                fontFamily: 'Roboto_700Bold',
+                fontFamily: AppFonts.Bold,
                 transform: [
                   {
                     scale: scrollY.interpolate({
@@ -144,7 +145,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
               style={{
                 position: 'absolute',
                 top: 40,
-                fontFamily: 'Roboto_400Regular',
+                fontFamily: AppFonts.Regular,
                 transform: [
                   {
                     translateX: scrollY.interpolate({
@@ -168,44 +169,44 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             style={[
               props.backButtonHandler !== undefined
                 ? {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, 30, 30],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  }
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, 30, 30],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                }
                 : {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -17, -17],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  },
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -17, -17],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                },
             ]}>
             <Animated.Text
               allowFontScaling={false}
               style={{
                 position: 'absolute',
                 fontSize: 25,
-                fontFamily: 'Roboto_700Bold',
+                fontFamily: AppFonts.Bold,
                 transform: [
                   {
                     scale: scrollY.interpolate({
@@ -222,7 +223,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
               style={{
                 position: 'absolute',
                 top: 40,
-                fontFamily: 'Roboto_400Regular',
+                fontFamily: AppFonts.Regular,
                 transform: [
                   {
                     translateX: scrollY.interpolate({

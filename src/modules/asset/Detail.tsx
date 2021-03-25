@@ -17,7 +17,6 @@ import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import CryptoTransaction from '../../types/CryptoTransaction';
 import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
@@ -64,8 +63,7 @@ const Detail: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
   const { currencyFormatter } = useContext(PreferenceContext);
-  const { isWalletUser } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
   const [state, setState] = useState<State>({
