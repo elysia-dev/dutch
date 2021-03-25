@@ -110,7 +110,7 @@ export const Main: React.FC = () => {
                   </View>
                   <TitleText
                     label={t('main.connect_wallet')}
-                    style={{ height: 30, marginLeft: 20 }}
+                    style={{ height: 30, marginLeft: 15 }}
                   />
                   <View style={{
                     marginLeft: 'auto',
