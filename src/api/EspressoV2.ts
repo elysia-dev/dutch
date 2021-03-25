@@ -17,15 +17,20 @@ export default class EspressoV2 {
   }
 
   static getEthTransaction = async (address: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
-    return axios.get(
-      `${baseURL}/v2/wallet/${address}/tx?page=${page}`,
-    )
+    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      }
+    })
   }
 
   static getErc20Transaction = async (address: string, tokenAddress: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
     return axios.get(
-      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}`,
-    )
+      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      }
+    })
   }
 
   static subscribe = async (address: string, token?: string): Promise<AxiosResponse<void>> => {
