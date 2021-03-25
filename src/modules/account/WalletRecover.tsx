@@ -3,7 +3,7 @@ import NextButton from '../../shared/components/NextButton';
 import AccountLayout from '../../shared/components/AccountLayout';
 import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
-import { Alert, TouchableOpacity, View } from 'react-native';
+import { Alert, TouchableOpacity, View, Platform } from 'react-native';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
 import { useTranslation } from 'react-i18next';
@@ -43,17 +43,41 @@ const WalletRecover: FunctionComponent = () => {
             title={t('wallet.recover_button')}
             disabled={!confirmed}
             handler={async () => {
-              Alert.prompt(
-                t('more_label.delete_address'),
-                t('more.confirm_delete'),
-                async (res) => {
-                  if (res === 'delete') {
-                    setLock();
-                    await clearWallet();
-                    signOut(SignInStatus.SIGNOUT);
-                  }
-                },
-              );
+              if (Platform.OS !== "android") {
+                Alert.prompt(
+                  t('more_label.delete_address'),
+                  t('more.confirm_delete'),
+                  async (res) => {
+                    if (res === 'delete') {
+                      setLock();
+                      await clearWallet();
+                      signOut(SignInStatus.SIGNOUT);
+                    }
+                  },
+                );
+              } else {
+                Alert.alert(
+                  t('more_label.delete_address'),
+                  t('more.confirm_delete_android'),
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => { },
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        setLock();
+                        clearWallet();
+                        signOut(SignInStatus.SIGNOUT);
+                      },
+                      style: 'default',
+                    },
+                  ],
+                  { cancelable: false },
+                );
+              }
             }}
           />
         </>

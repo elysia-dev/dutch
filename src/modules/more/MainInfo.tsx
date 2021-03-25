@@ -5,6 +5,7 @@ import {
   Animated,
   SafeAreaView,
   Alert,
+  Platform
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
@@ -69,17 +70,41 @@ const MainInfo: FunctionComponent = () => {
   const confirmSignOut = () => {
     // TODO : 더욱 강력한 경고 문구로 변경하기
     if (isWalletUser) {
-      return Alert.prompt(
-        t('more_label.delete_address'),
-        t('more.confirm_delete'),
-        (res) => {
-          if (res === 'delete') {
-            setLock();
-            clearWallet();
-            signOut(SignInStatus.SIGNOUT);
-          }
-        },
-      );
+      if (Platform.OS !== "android") {
+        return Alert.prompt(
+          t('more_label.delete_address'),
+          t('more.confirm_delete'),
+          (res) => {
+            if (res === 'delete') {
+              setLock();
+              clearWallet();
+              signOut(SignInStatus.SIGNOUT);
+            }
+          },
+        );
+      } else {
+        return Alert.alert(
+          t('more_label.delete_address'),
+          t('more.confirm_disconnect'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => { },
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                setLock();
+                clearWallet();
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      }
     }
 
     switch (user.provider) {
