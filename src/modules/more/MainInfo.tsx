@@ -52,7 +52,7 @@ const MainInfo: FunctionComponent = () => {
   const buttonTitle = () => {
     // TODO : 더욱 강력한 경고 문구로 삭제됨. 백업하지 않았으면, 해당 지갑을 복구 할 수 없음을 명시하기
     if (isWalletUser) {
-      return t('more_label.disconnect_address');
+      return t('more_label.delete_address');
     }
 
     switch (user.provider) {
@@ -70,26 +70,16 @@ const MainInfo: FunctionComponent = () => {
   const confirmSignOut = () => {
     // TODO : 더욱 강력한 경고 문구로 변경하기
     if (isWalletUser) {
-      return Alert.alert(
-        t('more_label.disconnect'),
-        t('more.confirm_disconnect'),
-        [
-          {
-            text: 'Cancel',
-            onPress: () => { },
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: async () => {
-              setLock();
-              await clearWallet();
-              signOut(SignInStatus.SIGNOUT);
-            },
-            style: 'default',
-          },
-        ],
-        { cancelable: false },
+      return Alert.prompt(
+        t('more_label.delete_address'),
+        t('more.confirm_delete'),
+        (res) => {
+          if (res === 'delete') {
+            setLock();
+            clearWallet();
+            signOut(SignInStatus.SIGNOUT);
+          }
+        },
       );
     }
 
