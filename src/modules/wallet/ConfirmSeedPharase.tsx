@@ -42,6 +42,26 @@ const ConfirmSeedPharase: FunctionComponent = () => {
     })
   }, [])
 
+  const wordListing = state.ramdomizedMnemonic.map((word, index) => {
+      return <TouchableWordBox
+        key={index}
+        word={word}
+        selected={!!state.selectedWords.find((selctedWord) => word === selctedWord)}
+        onPress={() => {
+          if (state.currentIndex >= 4) return
+
+          const newWords = state.selectedWords
+          newWords[state.currentIndex] = word;
+
+          setState({
+            ...state,
+            selectedWords: newWords,
+            currentIndex: state.currentIndex + 1,
+          })
+        }}
+      />
+    })
+
   return (
     <Layout>
       <TitleText
@@ -71,32 +91,48 @@ const ConfirmSeedPharase: FunctionComponent = () => {
           marginTop: 20,
           height: 190,
           display: 'flex',
+          flexDirection: "row",
           alignContent: 'space-between',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
         }}
       >
-        {
-          state.ramdomizedMnemonic.map((word, index) => {
-            return <TouchableWordBox
-              key={index}
-              word={word}
-              selected={!!state.selectedWords.find((selctedWord) => word === selctedWord)}
-              onPress={() => {
-                if (state.currentIndex >= 4) return
-
-                const newWords = state.selectedWords
-                newWords[state.currentIndex] = word;
-
-                setState({
-                  ...state,
-                  selectedWords: newWords,
-                  currentIndex: state.currentIndex + 1,
-                })
-              }}
-            />
-          })
-        }
+        <View 
+          style={{
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flex: 1
+        }}>
+          {wordListing[0]}
+          {wordListing[1]}
+          {wordListing[2]}
+          {wordListing[3]}
+        </View>
+        <View 
+          style={{
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flex: 1
+        }}>
+          {wordListing[4]}
+          {wordListing[5]}
+          {wordListing[6]}
+          {wordListing[7]}
+        </View> 
+        <View 
+          style={{
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flex: 1
+        }}>
+          {wordListing[8]}
+          {wordListing[9]}
+          {wordListing[10]}
+          {wordListing[11]}
+        </View> 
       </View>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
         <NextButton
