@@ -15,7 +15,7 @@ interface Props {
   subValue?: string
   cryptoType: CryptoType
   cryptoTitle: string
-  invalid: boolean
+  invalid?: boolean
   style?: StyleProp<ViewStyle>
   onPress: () => void
 }

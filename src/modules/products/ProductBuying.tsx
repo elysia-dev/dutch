@@ -28,7 +28,6 @@ import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
 import { MorePage, ProductPage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
@@ -67,8 +66,7 @@ const ProductBuying: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
-  const { Server } = useContext(FunctionContext);
-  const { user, isWalletUser } = useContext(UserContext);
+  const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 

@@ -7,7 +7,7 @@ import Loading from '../main/Loading';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MainPage } from '../../enums/pageEnum';
 import WalletStorage from '../../core/WalletStorage';
-import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   RecoverWallet: {
@@ -17,7 +17,7 @@ type ParamList = {
 
 const RecoverWallet: FunctionComponent = () => {
   const navigation = useNavigation();
-  const { newWalletUser } = useContext(FunctionContext);
+  const { newWalletUser } = useContext(UserContext);
   const { restoreWallet } = useContext(WalletContext);
   const [loading, setLoading] = useState<boolean>(false);
   const { t } = useTranslation();

@@ -13,7 +13,6 @@ import { utils } from 'ethers';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
@@ -52,8 +51,7 @@ const Purchase: FunctionComponent = () => {
   const assetTokenContract = useAssetToken(contractAddress);
   const assetTokenEthContract = useAssetTokenEth(contractAddress);
   const elContract = useElysiaToken();
-  const { isWalletUser } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(state.txHash);
   const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);

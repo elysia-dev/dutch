@@ -18,8 +18,8 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
-import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import UserContext from '../../contexts/UserContext';
 
 const Circle = styled.View`
   width: 10px;
@@ -34,7 +34,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  const { guestSignIn } = useContext(FunctionContext);
+  const { guestSignIn } = useContext(UserContext);
   const { language } = useContext(PreferenceContext);
   const { t } = useTranslation();
 

@@ -15,7 +15,6 @@ import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { P1Text, P3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import WalletContext from '../../contexts/WalletContext';
@@ -29,8 +28,7 @@ const Notifications: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const { Server, setNotifications } = useContext(FunctionContext);
-  const { user, notifications, isWalletUser } = useContext(UserContext);
+  const { user, notifications, isWalletUser, Server, setNotifications } = useContext(UserContext);
   const { wallet } = useContext(WalletContext)
   const address = wallet?.getFirstAddress() || ''
 

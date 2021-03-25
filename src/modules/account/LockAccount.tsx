@@ -12,7 +12,6 @@ import { AccountPage } from '../../enums/pageEnum';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import AccountLayout from '../../shared/components/AccountLayout';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 
@@ -39,8 +38,7 @@ const LockAccount: FunctionComponent = () => {
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'LockAccount'>>();
-  const { user } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { user, Server } = useContext(UserContext);
   const { language } = useContext(PreferenceContext);
   const { t } = useTranslation();
 

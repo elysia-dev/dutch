@@ -17,7 +17,6 @@ import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
 import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
 import UserContext from '../../../contexts/UserContext';
-import FunctionContext from '../../../contexts/FunctionContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
@@ -27,8 +26,7 @@ interface Props {
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const { currencyFormatter } = useContext(PreferenceContext)
-  const { notifications } = useContext(UserContext);
-  const { setNotifications } = useContext(FunctionContext);
+  const { notifications, setNotifications } = useContext(UserContext);
   const [showTx, setShowTx] = useState(false);
   const { t } = useTranslation();
 

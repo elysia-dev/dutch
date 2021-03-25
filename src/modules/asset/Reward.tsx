@@ -15,7 +15,6 @@ import { utils } from 'ethers';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -40,8 +39,7 @@ const Reward: FunctionComponent = () => {
   const assetTokenContract = useAssetToken(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
-  const { isWalletUser, user } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { isWalletUser, user, Server } = useContext(UserContext);
   const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',

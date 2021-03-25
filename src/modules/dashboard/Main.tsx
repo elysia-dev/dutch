@@ -13,7 +13,6 @@ import { AssetPage, CryptoPage, DashboardPage, MorePage, Page } from '../../enum
 import { useTranslation } from 'react-i18next';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
-import FunctionContext from '../../contexts/FunctionContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import PriceContext from '../../contexts/PriceContext';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
@@ -21,8 +20,7 @@ import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 
 export const Main: React.FC = () => {
-  const { user, isWalletUser } = useContext(UserContext);
-  const { refreshUser } = useContext(FunctionContext)
+  const { user, isWalletUser, refreshUser } = useContext(UserContext);
   const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
   const { elPrice, } = useContext(PriceContext);
   const navigation = useNavigation();

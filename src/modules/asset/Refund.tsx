@@ -11,7 +11,6 @@ import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
@@ -43,8 +42,7 @@ const Refund: FunctionComponent = () => {
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAddress);
   const { wallet } = useContext(WalletContext);
-  const { isWalletUser } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { isWalletUser, Server } = useContext(UserContext);
   const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();

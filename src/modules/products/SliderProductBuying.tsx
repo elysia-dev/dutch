@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable radix */
 import React, {
-  Component,
   useState,
   useContext,
   FunctionComponent,
@@ -16,8 +15,8 @@ import ExchangedValue from './components/ExchangedValue';
 import { ProductPage } from '../../enums/pageEnum';
 import Product from '../../types/Product';
 import ProductStatus from '../../enums/ProductStatus';
-import { H3Text, P2Text, P3Text } from '../../shared/components/Texts';
-import FunctionContext from '../../contexts/FunctionContext';
+import { H3Text, P3Text } from '../../shared/components/Texts';
+import UserContext from '../../contexts/UserContext';
 
 interface Props {
   product: Product;
@@ -34,7 +33,7 @@ interface State {
 
 const SliderProductBuying: FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { t } = useTranslation();
   const [state, setState] = useState<State>({
     tokenCount: 10,

@@ -7,7 +7,6 @@ import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
 
 const InfoArrowImg = styled.Image`
   width: 5px;

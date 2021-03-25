@@ -1,11 +1,12 @@
 import { createContext } from 'react';
-import { SignInStatus } from '../enums/SignInStatus';
+import { SignInStatus, SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
+import Server from '../api/server';
 
-type UserContextType = {
+export type UserContextState = {
   signedIn: SignInStatus;
   user: {
     id: number;
@@ -27,9 +28,23 @@ type UserContextType = {
   notifications: Notification[];
   expoPushToken: string;
   isWalletUser: boolean;
+  Server: Server;
 };
 
-const UserContext = createContext<UserContextType>({
+export interface IUserContext extends UserContextState {
+  signIn: () => void;
+  guestSignIn: () => void;
+  signOut: (signInStatus: SignOut) => void;
+  refreshUser: () => Promise<void>;
+  setNotifications: (notifications: Notification[]) => void;
+  setEthAddress: (address: string) => void;
+  setUserExpoPushToken: (expoPushToken: string) => void;
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
+  setIsWalletUser: (isWalletUser: boolean) => void;
+  newWalletUser: () => void;
+}
+
+export const initialUserState: UserContextState = {
   signedIn: SignInStatus.PENDING,
   user: {
     id: 0,
@@ -51,6 +66,21 @@ const UserContext = createContext<UserContextType>({
   notifications: [] as Notification[],
   expoPushToken: '',
   isWalletUser: false,
+  Server: new Server(() => { }, '')
+}
+
+const UserContext = createContext<IUserContext>({
+  ...initialUserState,
+  signIn: async () => { },
+  guestSignIn: async () => { },
+  signOut: async (_signInStatus: SignOut) => { },
+  refreshUser: async () => { },
+  setNotifications: (_notifications: Notification[]) => { },
+  setEthAddress: (_address: string) => { },
+  setUserExpoPushToken: (_expoPushToken: string) => { },
+  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
+  setIsWalletUser: (_isWalletUser: boolean) => { },
+  newWalletUser: () => { },
 });
 
 export default UserContext;

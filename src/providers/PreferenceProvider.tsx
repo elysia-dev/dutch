@@ -8,11 +8,11 @@ import LocaleType from '../enums/LocaleType';
 import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
 import currencyFormatter from '../utiles/currencyFormatter';
-import FunctionContext from '../contexts/FunctionContext';
+import UserContext from '../contexts/UserContext';
 
 const PreferenceProvider: React.FC = (props) => {
   const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {

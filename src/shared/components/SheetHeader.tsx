@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';

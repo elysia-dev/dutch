@@ -21,7 +21,6 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import Setting from './Setting';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import FunctionContext from '../../contexts/FunctionContext';
 import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
@@ -37,7 +36,7 @@ const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const {
     signOut,
-  } = useContext(FunctionContext);
+  } = useContext(UserContext);
   const { setLock, clearWallet } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();

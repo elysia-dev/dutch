@@ -9,8 +9,8 @@ import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
-import FunctionContext from '../../contexts/FunctionContext';
 import currentLocalization from '../../utiles/currentLocalization';
+import UserContext from '../../contexts/UserContext';
 
 type ParamList = {
   CertifyRecover: {
@@ -26,7 +26,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
   });
 
   const navigation = useNavigation();
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
   const { t } = useTranslation()
 

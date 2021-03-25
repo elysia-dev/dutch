@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { TitleText } from '../../shared/components/Texts';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 import { setToken } from '../../asyncStorages/token';
 import PreferenceContext from '../../contexts/PreferenceContext';
@@ -29,8 +28,7 @@ const Login: FunctionComponent = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
-  const { signIn, Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
+  const { user, signIn, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 
