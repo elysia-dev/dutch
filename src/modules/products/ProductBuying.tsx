@@ -31,6 +31,7 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import PriceContext from '../../contexts/PriceContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -49,8 +50,6 @@ interface State {
   subscribed: boolean;
   product?: Product;
   loaded: boolean;
-  ethPrice: number;
-  elPrice: number;
   selectedImage: number;
 }
 
@@ -58,8 +57,6 @@ const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     subscribed: false,
     loaded: false,
-    elPrice: 0,
-    ethPrice: 0,
     selectedImage: 0,
   });
   const navigation = useNavigation();
@@ -69,6 +66,7 @@ const ProductBuying: FunctionComponent = () => {
   const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
+  const { elPrice, ethPrice } = useContext(PriceContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
@@ -138,14 +136,10 @@ const ProductBuying: FunctionComponent = () => {
   const loadProductAndPrice = async () => {
     try {
       const product = await Server.productInfo(productId);
-      const elPrice = await Server.getCurrency('el');
-      const ethPrice = await Server.coinPrice();
       setState({
         ...state,
         product: product.data,
         loaded: true,
-        elPrice: elPrice.data.rate,
-        ethPrice: ethPrice.data.ethereum.usd,
       });
     } catch (e) {
       if (e.response.status === 500) {
@@ -153,15 +147,11 @@ const ProductBuying: FunctionComponent = () => {
       } else if (e.response.status) {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
-          const elPrice = await Server.getCurrency('el');
-          const ethPrice = await Server.coinPrice();
           setState({
             ...state,
             product: product.data,
             subscribed: false,
             loaded: true,
-            elPrice: elPrice.data.rate,
-            ethPrice: ethPrice.data.ethereum.usd,
           });
         }
       }
@@ -266,8 +256,8 @@ const ProductBuying: FunctionComponent = () => {
           {state.product && (
             <BasicInfo
               product={state.product}
-              elPrice={state.elPrice}
-              ethPrice={state.ethPrice}
+              elPrice={elPrice}
+              ethPrice={ethPrice}
             />
           )}
           {state.product && state.product?.status !== ProductStatus.TERMINATED && (
@@ -310,7 +300,7 @@ const ProductBuying: FunctionComponent = () => {
           title={submitButtonTitle()}
         />
 
-        {!state.elPrice && (
+        {!elPrice && (
           <View
             style={{
               backgroundColor: '#fff',

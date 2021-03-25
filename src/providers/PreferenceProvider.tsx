@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from "react";
 import { CURRENCY, LANGUAGE, NOTIFICATION } from '../constants/storage';
 import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
@@ -8,11 +8,10 @@ import LocaleType from '../enums/LocaleType';
 import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
 import currencyFormatter from '../utiles/currencyFormatter';
-import UserContext from '../contexts/UserContext';
+import EspressoV1 from '../api/EspressoV1';
 
 const PreferenceProvider: React.FC = (props) => {
   const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
-  const { Server } = useContext(UserContext);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
@@ -20,7 +19,7 @@ const PreferenceProvider: React.FC = (props) => {
     const notification: boolean = (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
     let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
 
-    const allCurrency = (await Server.getAllCurrency()).data;
+    const allCurrency = (await EspressoV1.getAllCurrency()).data;
 
     if (!language) {
       language = currentLocalization();
