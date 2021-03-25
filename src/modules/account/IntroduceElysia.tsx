@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, { FunctionComponent, useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,14 +12,13 @@ import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
-import AsyncStorage from '@react-native-community/async-storage';
 import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
-import FunctionContext from '../../contexts/FunctionContext';
+import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
 
 const Circle = styled.View`
@@ -35,29 +34,15 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
-  const { user } = useContext(UserContext);
-  const { Server, signIn } = useContext(FunctionContext);
-
-  const storeToken = async (token: string) => {
-    await AsyncStorage.setItem('@token', token);
-  };
-
-  const callApi = () => {
-    Server.addGuestUser(user.language)
-      .then(async (res) => {
-        if (res.data.status === 'success' && res.data.token) {
-          await storeToken(res.data.token);
-          signIn();
-        }
-      })
-      .catch((_e) => alert(i18n.t('account_errors.server')));
-  };
+  const { guestSignIn } = useContext(UserContext);
+  const { language } = useContext(PreferenceContext);
+  const { t } = useTranslation();
 
   const viewPager = React.createRef<ViewPager>();
   const ReturnImageOrText = (imgNumber: number) => {
     switch (imgNumber) {
       case 0:
-        return i18n.t('account.introduction_title');
+        return t('account.introduction_title');
       case 1:
         return require('./images/intro_image_1.png');
       case 2:
@@ -101,11 +86,11 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           {index > 0 && (
             <View style={{ top: '65%' }}>
               <H2Text
-                label={i18n.t('account.introduction_header.' + (index - 1))}
+                label={t('account.introduction_header.' + (index - 1))}
                 style={{ fontSize: 25, textAlign: 'center' }}
               />
               <P1Text
-                label={i18n.t('account.introduction_text.' + (index - 1))}
+                label={t('account.introduction_text.' + (index - 1))}
                 style={{ marginTop: 20, textAlign: 'center' }}
               />
             </View>
@@ -131,6 +116,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
         </TouchableOpacity>
       );
     });
+
   return (
     <SafeAreaView
       forceInset={{ top: 'always', bottom: 'always' }}
@@ -173,12 +159,12 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               outputRange: [
                 550,
                 Dimensions.get('window').width * 0.05 +
-                  // eslint-disable-next-line no-nested-ternary
-                  (i18n.currentLocale() === LocaleType.KO
-                    ? 200
-                    : i18n.currentLocale() === LocaleType.CH
+                // eslint-disable-next-line no-nested-ternary
+                (language === LocaleType.KO
+                  ? 220
+                  : language === LocaleType.CH
                     ? 180
-                    : 230),
+                    : 240),
                 Platform.OS === 'ios'
                   ? Dimensions.get('window').width * 0.52
                   : Dimensions.get('window').width * 0.433,
@@ -265,17 +251,17 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           {ButtonListing}
         </View>
         <SubmitButton
-          title={i18n.t('account_label.start_service')}
+          title={t('account_label.start_service')}
           style={{
             width: '90%',
             marginHorizontal: '5%',
             position: 'absolute',
             bottom: 40,
           }}
-          handler={() => callApi()}
+          handler={() => guestSignIn()}
         />
         <FlatButton
-          title={i18n.t('account_label.existing_login')}
+          title={t('account_label.existing_login')}
           style={{
             position: 'absolute',
             bottom: 10,

@@ -4,7 +4,7 @@ import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TitleText } from '../../shared/components/Texts';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkPassword from '../../utiles/checkPassword';
 
@@ -26,6 +26,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
   });
 
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <AccountLayout
@@ -53,7 +54,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
           {state.step === 2 && (
             <>
               <TextField
-                label={i18n.t('account_label.account_password_confirm')}
+                label={t('account_label.account_password_confirm')}
                 eventHandler={(input: string) => {
                   setState({
                     ...state,
@@ -64,7 +65,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
                 secure={true}
                 helperText={
                   state.step === 2 && state.errorLength === 2
-                    ? i18n.t('account_errors.password_do_not_match')
+                    ? t('account_errors.password_do_not_match')
                     : undefined
                 }
                 helperIcon={
@@ -76,7 +77,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
             </>
           )}
           <TextField
-            label={i18n.t('account_label.account_password')}
+            label={t('account_label.account_password')}
             editable={state.step === 1}
             eventHandler={(input: string) => {
               setState({
@@ -89,9 +90,9 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
             helperText={
               // eslint-disable-next-line no-nested-ternary
               state.errorLength === 1
-                ? i18n.t('account_errors.password_too_short')
+                ? t('account_errors.password_too_short')
                 : state.errorLength === 0 && state.errorReg === 1
-                  ? i18n.t('account_errors.simple_password')
+                  ? t('account_errors.simple_password')
                   : undefined
             }
             helperIcon={
@@ -104,7 +105,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
           />
           {props.email && (
             <TextField
-              label={i18n.t('account_label.account_email')}
+              label={t('account_label.account_email')}
               editable={false}
               eventHandler={() => { }}
               value={props.email}
@@ -116,10 +117,10 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
         <>
           {state.step === 1 ? (
             <SubmitButton
-              title={i18n.t('account_label.continue')}
+              title={t('account_label.continue')}
               handler={() => {
                 if (state.password.length < 8) {
-                  alert(i18n.t('account_errors.password_too_short'));
+                  alert(t('account_errors.password_too_short'));
                   return;
                 }
                 setState({ ...state, step: 2 });
@@ -132,23 +133,23 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               }
             />
           ) : (
-              <SubmitButton
-                title={props.submitButtonTitle}
-                handler={() => props.submitHandler(state.password)}
-                disabled={
-                  !state.passwordConfirmation ||
+            <SubmitButton
+              title={props.submitButtonTitle}
+              handler={() => props.submitHandler(state.password)}
+              disabled={
+                !state.passwordConfirmation ||
+                state.errorLength !== 0 ||
+                state.errorReg !== 0
+              }
+              variant={
+                !state.passwordConfirmation ||
                   state.errorLength !== 0 ||
                   state.errorReg !== 0
-                }
-                variant={
-                  !state.passwordConfirmation ||
-                    state.errorLength !== 0 ||
-                    state.errorReg !== 0
-                    ? 'GrayTheme'
-                    : undefined
-                }
-              />
-            )}
+                  ? 'GrayTheme'
+                  : undefined
+              }
+            />
+          )}
         </>
       }
     />

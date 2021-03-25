@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { View } from 'react-native';
-import i18n from '../../../i18n/i18n';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation()
   return (
     <View
       style={{
@@ -29,7 +30,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
         marginRight: 3,
       }}>
       <P1Text
-        label={i18n.t('dashboard_label.total_balance')}
+        label={t('dashboard_label.total_balance')}
         style={{ marginBottom: 10 }}
       />
       <H2Text
@@ -58,7 +59,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             alignItems: 'center',
             paddingBottom: 12,
           }}>
-          <P2Text label={i18n.t("dashboard_label.remaining_usd")} />
+          <P2Text label={t("dashboard_label.remaining_usd")} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={`$ ${(props.usd).toFixed(
@@ -73,7 +74,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={i18n.t("dashboard_label.remaining_el")} />
+          <P2Text label={t("dashboard_label.remaining_el")} />
           <P1Text
             style={{ textAlign: 'right' }}
             label={`EL ${(props.el).toFixed(

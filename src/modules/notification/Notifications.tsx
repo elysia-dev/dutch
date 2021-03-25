@@ -5,31 +5,34 @@ import {
   RefreshControl,
   Dimensions,
   SafeAreaView,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import NotiBox from './components/NotiBox';
 import Notification from '../../types/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 import VirtualTab from '../../shared/components/VirtualTab';
 import { P1Text, P3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
+import WalletContext from '../../contexts/WalletContext';
+import EspressoV2 from '../../api/EspressoV2';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
+  const { t } = useTranslation()
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const { Server, setNotifications } = useContext(FunctionContext);
-  const { user, notifications } = useContext(UserContext);
+  const { user, notifications, isWalletUser, Server, setNotifications } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext)
+  const address = wallet?.getFirstAddress() || ''
 
-  const loadNotifications = () =>
+  const loadNotifications = () => {
     Server.notification()
       .then((res) => {
         setNotifications(res.data);
@@ -37,19 +40,46 @@ const Notifications: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
+  }
+
+  const loadV2UserNotifications = () => {
+    EspressoV2.getNoficiations(address).then((res) => {
+      setNotifications(res.data);
+      setRefreshing(false);
+    }).catch((e) => {
+      if (e.response.status === 500) {
+        alert(t('account_errors.server'));
+      }
+    });
+  }
 
   const onRefresh = React.useCallback(() => {
-    if (user.provider !== ProviderType.GUEST) {
+    if (isWalletUser) {
+      loadV2UserNotifications()
       setRefreshing(true);
-      loadNotifications();
+      return
     }
+
+    if (user.provider === ProviderType.GUEST) return
+
+    setRefreshing(true);
+    loadNotifications();
   }, []);
 
   const readAllNotification = () => {
-    if (user.provider === ProviderType.GUEST) {
+    if (isWalletUser) {
+      EspressoV2.readAllNotifications(address)
+        .then((_res) => loadV2UserNotifications())
+        .catch((e) => {
+          alert(e)
+          if (e.response.status === 500) {
+            alert(t('account_errors.server'));
+          }
+        });
+    } else if (user.provider === ProviderType.GUEST) {
       setNotifications(
         notifications.map((notification, _index) => ({
           ...notification,
@@ -61,7 +91,7 @@ const Notifications: FunctionComponent = () => {
         .then((_res) => loadNotifications())
         .catch((e) => {
           if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     }
@@ -76,26 +106,47 @@ const Notifications: FunctionComponent = () => {
   const readNotification = (notification: Notification) => {
     if (notification.status === NotificationStatus.READ) return;
 
-    Server.read(notification.id)
-      .then(() => {
-        setNotifications(
-          notifications.map((n) => {
-            if (n.id === notification.id) {
-              return {
-                ...n,
-                status: NotificationStatus.READ,
-              };
-            } else {
-              return n;
-            }
-          }),
-        );
-      })
-      .catch((e) => {
-        if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
-        }
-      });
+    if (isWalletUser) {
+      EspressoV2.readNotification(address, notification.id)
+        .then(() => {
+          setNotifications(
+            notifications.map((n) => {
+              if (n.id === notification.id) {
+                return {
+                  ...n,
+                  status: NotificationStatus.READ,
+                };
+              } else {
+                return n;
+              }
+            }),
+          );
+        })
+        .catch((e) => {
+          alert(t('account_errors.server'));
+        });
+    } else {
+      Server.read(notification.id)
+        .then(() => {
+          setNotifications(
+            notifications.map((n) => {
+              if (n.id === notification.id) {
+                return {
+                  ...n,
+                  status: NotificationStatus.READ,
+                };
+              } else {
+                return n;
+              }
+            }),
+          );
+        })
+        .catch((e) => {
+          if (e.response.status === 500) {
+            alert(t('account_errors.server'));
+          }
+        });
+    }
   };
 
   return (
@@ -106,72 +157,7 @@ const Notifications: FunctionComponent = () => {
         top: 0,
         backgroundColor: '#FFF',
       }}>
-      <Animated.View
-        style={{
-          overflow: 'hidden',
-          backgroundColor: 'transparent',
-          paddingBottom: 1,
-        }}>
-        <Animated.View
-          style={{
-            backgroundColor: '#fff',
-            elevation: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 5, 5],
-            }),
-            shadowOffset: { width: 1, height: 1 },
-            shadowColor: '#00000033',
-            shadowOpacity: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 0.5, 0.5],
-            }),
-            paddingTop: Platform.OS === 'android' ? 65 : 45,
-            paddingBottom: 10,
-            paddingLeft: 20,
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [-1000, 0, 50, 1000],
-                  outputRange: [0, 0, -5, -5],
-                }),
-              },
-            ],
-          }}>
-          <Animated.Text
-            allowFontScaling={false}
-            style={{
-              position: 'relative',
-              left: 0,
-              paddingLeft: 0,
-              width: '100%',
-              color: '#1c1c1c',
-              fontSize: 28,
-              transform: [
-                {
-                  translateX: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [0, 0, -20, -20],
-                  }),
-                },
-                {
-                  translateY: 0,
-                },
-                {
-                  scale: scrollY.interpolate({
-                    inputRange: [-1000, 0, 15, 1000],
-                    outputRange: [1, 1, 0.9, 0.9],
-                  }),
-                },
-              ],
-              fontFamily: 'Roboto_700Bold',
-              textAlign: 'left',
-              justifyContent: 'flex-start',
-              alignSelf: 'flex-start',
-            }}>
-            {i18n.t('notification_label.notification')}
-          </Animated.Text>
-        </Animated.View>
-      </Animated.View>
+      <AnimatedMainHeader title={t('notification_label.notification')} scrollY={scrollY} />
       <Animated.ScrollView
         ref={ref}
         scrollEventThrottle={16}
@@ -202,7 +188,7 @@ const Notifications: FunctionComponent = () => {
                 textAlign: 'center',
                 fontSize: 15,
               }}
-              label={i18n.t('notification.no_notification')}
+              label={t('notification.no_notification')}
             />
           </View>
         ) : (
@@ -215,7 +201,7 @@ const Notifications: FunctionComponent = () => {
                     marginBottom: 30,
                     textAlign: 'center',
                   }}
-                  label={i18n.t('notification.read_all_notifications', {
+                  label={t('notification.read_all_notifications', {
                     number: countUnreadNotifications(),
                   })}
                 />
@@ -237,7 +223,7 @@ const Notifications: FunctionComponent = () => {
                   marginBottom: 75,
                   textAlign: 'center',
                 }}
-                label={i18n.t('notification.saved_90days')}
+                label={t('notification.saved_90days')}
               />
             )}
           </>

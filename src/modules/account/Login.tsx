@@ -1,17 +1,18 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { FlatButton } from '../../shared/components/FlatButton';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { TitleText } from '../../shared/components/Texts';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import { setToken } from '../../asyncStorages/token';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import LocaleType from '../../enums/LocaleType';
 
 type ParamList = {
   Login: {
@@ -27,18 +28,15 @@ const Login: FunctionComponent = () => {
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Login'>>();
-  const { signIn, Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
-
-  const storeToken = async (token: string) => {
-    await AsyncStorage.setItem('@token', token);
-  };
+  const { user, signIn, Server } = useContext(UserContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
 
   const callRecoverApi = () => {
     Server.certifyEmail_recover(
       route.params.email,
       'recoverPassword',
-      user.language,
+      language || LocaleType.EN,
     )
       .then((res) =>
         navigation.navigate(AccountPage.CertifyRecover, {
@@ -49,18 +47,18 @@ const Login: FunctionComponent = () => {
       )
       .catch((e) => {
         if (e.response && e.response.status === 400) {
-          alert(i18n.t('account.invalid_email'));
+          alert(t('account.invalid_email'));
         } else {
-          alert(i18n.t('account.try_again_later'));
+          alert(t('account.try_again_later'));
         }
       });
   };
 
   const callLoginApi = () => {
     if (state.password === '') {
-      alert(i18n.t('account.insert_password'));
+      alert(t('account.insert_password'));
     } else if (state.password.length < 8) {
-      alert(i18n.t('account_errors.password_too_short'));
+      alert(t('account_errors.password_too_short'));
     } else {
       Server.login(route.params.email, state.password)
         .then(async (res) => {
@@ -73,7 +71,7 @@ const Login: FunctionComponent = () => {
               email: route.params.email,
             });
           } else if (res.data.status === 'success') {
-            await storeToken(res.data.token!);
+            await setToken(res.data.token!);
             signIn();
             // navigation.navigate('Main');
           }
@@ -81,11 +79,11 @@ const Login: FunctionComponent = () => {
         .catch((e) => {
           setState({ ...state, error: e.response.data.counts });
           if (e.response.status === 400) {
-            alert(i18n.t('account.insert_password'));
+            alert(t('account.insert_password'));
           } else if (e.response.status === 404) {
-            alert(i18n.t('account_errors.wrong_email'));
+            alert(t('account_errors.wrong_email'));
           } else if (e.response.status === 500) {
-            alert(i18n.t('account_errors.server'));
+            alert(t('account_errors.server'));
           }
         });
     }
@@ -100,27 +98,27 @@ const Login: FunctionComponent = () => {
               navigation.goBack();
             }}
           />
-          <TitleText label={i18n.t('account.insert_password')} />
+          <TitleText label={t('account.insert_password')} />
         </>
       }
       body={
         <>
           <TextField
-            label={i18n.t('account_label.account_password')}
+            label={t('account_label.account_password')}
             eventHandler={(input: string) =>
               setState({ ...state, password: input })
             }
             secure={true}
             helperText={
               state.error !== 0
-                ? ` ${i18n.t('account_errors.password_do_not_match')} ${state.error
+                ? ` ${t('account_errors.password_do_not_match')} ${state.error
                 }/5`
                 : undefined
             }
             helperIcon={state.error !== 0 ? 'Error' : undefined}
           />
           <TextField
-            label={i18n.t('account_label.account_email')}
+            label={t('account_label.account_email')}
             value={route.params.email}
             editable={false}
             eventHandler={() => { }}
@@ -130,12 +128,12 @@ const Login: FunctionComponent = () => {
       button={
         <>
           <SubmitButton
-            title={i18n.t('account_label.login')}
+            title={t('account_label.login')}
             handler={() => callLoginApi()}
           />
           <View style={{ height: 15 }} />
           <FlatButton
-            title={i18n.t('account.forget_password_link')}
+            title={t('account.forget_password_link')}
             handler={() => callRecoverApi()}
           />
         </>

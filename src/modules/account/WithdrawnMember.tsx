@@ -1,12 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
 
 const WithdrawnMember: FunctionComponent = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
+
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#3679B5' }}>
       <Image
@@ -26,7 +28,7 @@ const WithdrawnMember: FunctionComponent = () => {
           color: '#fff',
           textAlign: 'center',
         }}
-        label={i18n.t('account.withdrawl_complete')}
+        label={t('account.withdrawl_complete')}
       />
       <TouchableOpacity
         onPress={() => navigation.navigate(AccountPage.IntroduceElysia)}
@@ -47,7 +49,7 @@ const WithdrawnMember: FunctionComponent = () => {
             fontSize: 16,
             textAlign: 'center',
           }}
-          label={i18n.t('account_label.move')}
+          label={t('account_label.move')}
         />
       </TouchableOpacity>
     </View>

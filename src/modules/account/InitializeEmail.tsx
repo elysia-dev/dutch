@@ -5,13 +5,12 @@ import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TitleText } from '../../shared/components/Texts';
 
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
 import { SignInStatus } from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
 
 const InitializeEmail: FunctionComponent = () => {
@@ -22,12 +21,12 @@ const InitializeEmail: FunctionComponent = () => {
   });
 
   const navigation = useNavigation();
-  const { signedIn } = useContext(UserContext);
-  const { Server } = useContext(FunctionContext);
+  const { signedIn, Server } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const callEmailApi = () => {
     if (!state.email) {
-      alert(i18n.t('account.insert_account_email'));
+      alert(t('account.insert_account_email'));
       return;
     }
 
@@ -39,11 +38,11 @@ const InitializeEmail: FunctionComponent = () => {
             email: state.email,
           });
         } else {
-          alert(i18n.t('account_errors.unmatched_email'));
+          alert(t('account_errors.unmatched_email'));
         }
       })
       .catch((e) => {
-        alert(i18n.t('account_errors.unmatched_email'));
+        alert(t('account_errors.unmatched_email'));
       });
   };
 
@@ -70,13 +69,13 @@ const InitializeEmail: FunctionComponent = () => {
             />
             <TitleText
               // style={{ paddingTop: 53 }}
-              label={i18n.t('account.insert_account_email')}
+              label={t('account.insert_account_email')}
             />
           </>
         }
         body={
           <TextField
-            label={i18n.t('account_label.account_email')}
+            label={t('account_label.account_email')}
             eventHandler={(input: string) => {
               setState({
                 email: input,
@@ -92,10 +91,10 @@ const InitializeEmail: FunctionComponent = () => {
             title={
               // eslint-disable-next-line no-nested-ternary
               state.errorLength === 1
-                ? i18n.t('account.insert_account_email')
+                ? t('account.insert_account_email')
                 : state.errorReg === 1
-                  ? i18n.t('account.check_email')
-                  : i18n.t('account_label.continue')
+                  ? t('account.check_email')
+                  : t('account_label.continue')
             }
             handler={
               state.errorLength === 1 || state.errorReg === 1

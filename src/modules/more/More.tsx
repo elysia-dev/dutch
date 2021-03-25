@@ -16,6 +16,7 @@ import PrivacyPolicy from './PrivacyPolicy';
 import WhatsNew from './WhatsNew';
 import MembershipWithdrawl from './MembershipWithdrawl';
 import Asset2Ownership from './Asset2Ownership';
+import CheckMnemonic from './CheckMnemonic';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,7 @@ export const More = () => {
         name={MorePage.MembershipWithdrawl}
         component={MembershipWithdrawl}
       />
+      <Stack.Screen name={MorePage.CheckMnemonic} component={CheckMnemonic} />
     </Stack.Navigator>
   );
 };

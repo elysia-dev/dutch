@@ -1,12 +1,16 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
 
-const ExpiredAccount: FunctionComponent = () => {
+const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
+  nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia) },
+}) => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
+
   return (
     <View style={{ width: '100%', height: '100%', backgroundColor: '#3679B5' }}>
       <Image
@@ -26,10 +30,10 @@ const ExpiredAccount: FunctionComponent = () => {
           color: '#fff',
           textAlign: 'center',
         }}
-        label={i18n.t('account.expired_logout')}
+        label={t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate(AccountPage.IntroduceElysia)}
+        onPress={() => { nextHandler() }}
         style={{
           position: 'absolute',
           bottom: '20%',
@@ -47,7 +51,7 @@ const ExpiredAccount: FunctionComponent = () => {
             fontSize: 16,
             textAlign: 'center',
           }}
-          label={i18n.t('account.login_again')}
+          label={t('account.login_again')}
         />
       </TouchableOpacity>
     </View>

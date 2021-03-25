@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { View, Text, Image } from 'react-native';
 import styled from 'styled-components/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 
 const GText = styled.Text`
   color: #838383;
@@ -21,6 +21,8 @@ interface Props {
 }
 
 export const OwnershipItem: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -46,15 +48,15 @@ export const OwnershipItem: FunctionComponent<Props> = (props: Props) => {
           flexDirection: 'column',
         }}>
         <Item>
-          <GText>{i18n.t('more_label.product_name')}</GText>
+          <GText>{t('more_label.product_name')}</GText>
           <Text>{props.name}</Text>
         </Item>
         <Item>
-          <GText>{i18n.t('more_label.entire_profit')}</GText>
+          <GText>{t('more_label.entire_profit')}</GText>
           <Text>{`${props.rate}%`}</Text>
         </Item>
         <Item>
-          <GText>{i18n.t('more_label.expectd_sale_profit')}</GText>
+          <GText>{t('more_label.expectd_sale_profit')}</GText>
           <Text>{`${props.expectedSale}%`}</Text>
         </Item>
       </View>

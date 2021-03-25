@@ -1,8 +1,17 @@
+export enum MainPage {
+  DashboardMain = 'DashboardMain',
+  ProductsMain = 'ProductsMain',
+  NotificationMain = 'NotificationMain',
+  MoreMain = 'MoreMain',
+}
+
 export enum ProductPage {
+  Main = 'Main',
   MainList = 'MainList',
   ProductStory = 'ProductStory',
   ProductBuying = 'ProductBuying',
   SliderProductBuying = 'SliderProductBuying',
+  Purchase = 'Purchase',
   PaymentSelection = 'PaymentSelection',
 }
 
@@ -19,6 +28,8 @@ export enum AccountPage {
   ExpiredAccount = 'ExpiredAccount',
   WithdrawnMember = 'WithdrawnMember',
   IntroduceElysia = 'IntroduceElysia',
+  WalletLogin = 'WalletLogin',
+  WalletRecover = 'WalletRecover',
 }
 
 export enum MorePage {
@@ -36,6 +47,7 @@ export enum MorePage {
   WhatsNew = 'WhatsNew',
   MembershipWithdrawl = 'MembershipWithdrawl',
   Asset2Ownership = 'Asset2Ownership',
+  CheckMnemonic = 'CheckMnemonic',
 }
 
 export enum DashboardPage {
@@ -47,4 +59,43 @@ export enum DashboardPage {
   InvestmentGuide = 'InvestmentGuide',
   RemainingBalance = 'RemainingBalance',
   EventList = 'EventList',
+  CryptoDetail = 'CryptoDetail',
+  AssetTokenDetail = 'AssetTokenDetail',
+}
+
+export enum WalletPage {
+  SelecteMethod = 'SelectMethod',
+  NewPassword = 'NewPassword',
+  SecureWalletNotice = 'SecureWalletNotice',
+  SeedPharase = 'SeedPharase',
+  Congratulations = 'Congratulations',
+  RecoverSeedPharase = 'RecoverSeedPharase',
+  RecoverWallet = 'RecoverWallet',
+}
+
+export enum Page {
+  LoadingScreen = 'LoadingScreen',
+  Dashboard = 'DashBoard',
+  Main = 'Main',
+  More = 'More',
+  Product = 'Product',
+  Account = 'Account',
+  BlockScreen = 'BlockScreen',
+  Wallet = 'Wallet',
+  Asset = 'Asset',
+  Crypto = 'Crypto',
+}
+
+export enum AssetPage {
+  Detail = 'Detail',
+  Purchase = 'Purchase',
+  Refund = 'Refund',
+  Reward = 'Reward',
+  LegacyOwnershipRefund = 'LegacyOwnershipRefund'
+}
+
+export enum CryptoPage {
+  Detail = 'Detail',
+  Deposit = 'Deposit',
+  Withdrawal = 'Withdrawal'
 }

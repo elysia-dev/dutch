@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import i18n from '../../i18n/i18n';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { TitleText, H3Text } from '../../shared/components/Texts';
@@ -12,6 +12,7 @@ const CurrentPassword: FunctionComponent = () => {
   const [state, setState] = useState({
     password: '',
   });
+  const { t } = useTranslation();
 
   const navigation = useNavigation();
 
@@ -20,23 +21,23 @@ const CurrentPassword: FunctionComponent = () => {
       title={
         <>
           <BackButton handler={() => navigation.goBack()} />
-          <TitleText label={i18n.t('account_label.change_password')} />
-          <H3Text label={i18n.t('account.insert_current_password')} />
+          <TitleText label={t('account_label.change_password')} />
+          <H3Text label={t('account.insert_current_password')} />
         </>
       }
       body={
         <TextField
-          label={i18n.t('account_label.current_password')}
+          label={t('account_label.current_password')}
           eventHandler={(input: string) => setState({ password: input })}
           secure={true}
         />
       }
       button={
         <SubmitButton
-          title={i18n.t('account_label.continue')}
+          title={t('account_label.continue')}
           handler={() => {
             if (state.password === "") {
-              return (alert(i18n.t('more.invalid_password')));
+              return (alert(t('more.invalid_password')));
             }
             navigation.navigate(AccountPage.ResetPassword, {
               currentPassword: state.password,

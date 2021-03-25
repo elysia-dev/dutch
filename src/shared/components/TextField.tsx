@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle, Keyboard } from 'react-native';
 import styled from 'styled-components/native';
+import AppFonts from '../../enums/AppFonts';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
 
@@ -39,7 +40,7 @@ const HelperIcon = styled.Image`
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
   autocapitalize = 'none',
-  focusHandler = () => {},
+  focusHandler = () => { },
   ...props
 }) => {
   const [focusing, setFocus] = useState(onFocused);
@@ -70,9 +71,9 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-              ? '#3679B5'
-              : '#A7A7A7',
-          fontFamily: 'Roboto_400Regular',
+                ? '#3679B5'
+                : '#A7A7A7',
+          fontFamily: AppFonts.Regular,
         }}
       />
       <TextInput
@@ -82,11 +83,11 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-              ? '#3679B5'
-              : '#D0D8DF',
+                ? '#3679B5'
+                : '#D0D8DF',
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
-          fontFamily: 'Roboto_400Regular',
+          fontFamily: AppFonts.Regular,
         }}
         allowFontScaling={false}
         defaultValue={props.value}

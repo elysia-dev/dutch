@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import styled from 'styled-components/native';
+import AppFonts from '../../enums/AppFonts';
 
 const H1Title = styled.Text`
   color: #1c1c1c;
   font-size: 28px;
   text-align: left;
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
 `;
 
 export const H1Text: FunctionComponent<{
@@ -21,7 +22,7 @@ const H2Title = styled.Text`
   color: #1c1c1c;
   font-size: 25px;
   text-align: left;
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
 `;
 
 export const H2Text: FunctionComponent<{
@@ -36,7 +37,7 @@ const P1Title = styled.Text`
   color: #1c1c1c;
   font-size: 15px;
   text-align: left;
-  font-family: 'Roboto_400Regular';
+  font-family: '${AppFonts.Regular}';
   line-height: 20px;
 `;
 
@@ -50,9 +51,9 @@ export const P1Text: FunctionComponent<{
 
 const H3Title = styled.Text`
   color: #1c1c1c;
-  font-size: 20px;
+  font-size: 17px;
   text-align: left;
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
 `;
 
 export const H3Text: FunctionComponent<{
@@ -63,11 +64,27 @@ export const H3Text: FunctionComponent<{
   return <H3Title style={style} allowFontScaling={false}>{label}</H3Title>;
 };
 
+const H4Title = styled.Text`
+  color: #1c1c1c;
+  font-size: 14px;
+  text-align: left;
+  font-family: '${AppFonts.Bold}';
+`;
+
+export const H4Text: FunctionComponent<{
+  label: string;
+  style?: StyleProp<TextStyle>;
+  // handler: (event: GestureResponderEvent) => void;
+}> = ({ label, style }) => {
+  return <H4Title style={style} allowFontScaling={false}>{label}</H4Title>;
+};
+
+
 const P2Title = styled.Text`
   color: #838383;
   font-size: 15px;
   text-align: left;
-  font-family: 'Roboto_300Light';
+  font-family: '${AppFonts.Light}';
 `;
 
 export const P2Text: FunctionComponent<{
@@ -82,7 +99,7 @@ const P3Title = styled.Text`
   color: #A7A7A7;
   font-size: 12px;
   text-align: left;
-  font-family: 'Roboto_400Regular';
+  font-family: '${AppFonts.Regular}';
 `;
 
 export const P3Text: FunctionComponent<{
@@ -97,7 +114,7 @@ const P4Title = styled.Text`
   color: #A7A7A7;
   font-size: 10px;
   text-align: left;
-  font-family: 'Roboto_400Regular';
+  font-family: '${AppFonts.Regular}';
 `;
 
 export const P4Text: FunctionComponent<{
@@ -113,7 +130,7 @@ const Title = styled.Text`
   color: #1c1c1c;
   font-size: 25px;
   text-align: left;
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
   line-height: 28px;
 `;
 
@@ -129,7 +146,7 @@ const SubTitle = styled.Text`
   color: #626368;
   font-size: 15px;
   text-align: left;
-  font-family: 'Roboto_400Regular';
+  font-family: '${AppFonts.Regular}';
   line-height: 20px;
 `;
 

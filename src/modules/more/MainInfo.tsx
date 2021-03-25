@@ -2,49 +2,158 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import {
   View,
   TouchableOpacity,
-  Platform,
   Animated,
   SafeAreaView,
+  Alert,
+  Platform
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { MorePage } from '../../enums/pageEnum';
 import ExchangeBithumbPng from './images/bithumb_logo.png';
 import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
 import ExchangebobooPng from './images/boboo_logo.png';
 import ExchangeGopaxPng from './images/gopax.png';
 import ExchangeXtPng from './images/xt_logo.png';
-import { P1Text, H3Text } from '../../shared/components/Texts';
+import { H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
+import Setting from './Setting';
+import { SubmitButton } from '../../shared/components/SubmitButton';
+import WalletContext from '../../contexts/WalletContext';
+import SignInStatus from '../../enums/SignInStatus';
+import AppColors from '../../enums/AppColors';
+import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 
 const ExchangeImg = styled.Image`
   width: 100%;
   height: 60px;
   resize-mode: contain;
 `;
-const InfoHeaderSettingImg = styled.Image`
-  margin-top: 5px;
-  width: 21px;
-  height: 21px;
-`;
-const InfoArrowImg = styled.Image`
-  width: 5px;
-  height: 8px;
-  margin: 20px 20px;
-`;
+
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
-  const { user } = useContext(UserContext);
+  const {
+    signOut,
+  } = useContext(UserContext);
+  const { setLock, clearWallet } = useContext(WalletContext);
+  const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
+  const { t } = useTranslation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const isNewWalletUser =
+  const isPublicAddressUser =
     user.provider === ProviderType.GUEST || user.provider === ProviderType.ETH;
   const isLegacyAsset2Owner = user.legacyAsset2Value > 0;
+
+  const buttonTitle = () => {
+    // TODO : 더욱 강력한 경고 문구로 삭제됨. 백업하지 않았으면, 해당 지갑을 복구 할 수 없음을 명시하기
+    if (isWalletUser) {
+      return t('more_label.delete_address');
+    }
+
+    switch (user.provider) {
+      case ProviderType.ETH:
+        return t('more_label.disconnect_address');
+      case ProviderType.GUEST:
+        return t('more_label.return_initial');
+      case ProviderType.EMAIL:
+        return t('more_label.logout');
+      default:
+        return '';
+    }
+  };
+
+  const confirmSignOut = () => {
+    // TODO : 더욱 강력한 경고 문구로 변경하기
+    if (isWalletUser) {
+      if (Platform.OS !== "android") {
+        return Alert.prompt(
+          t('more_label.delete_address'),
+          t('more.confirm_delete'),
+          (res) => {
+            if (res === 'delete') {
+              setLock();
+              clearWallet();
+              signOut(SignInStatus.SIGNOUT);
+            }
+          },
+        );
+      } else {
+        return Alert.alert(
+          t('more_label.delete_address'),
+          t('more.confirm_disconnect'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => { },
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                setLock();
+                clearWallet();
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      }
+    }
+
+    switch (user.provider) {
+      case ProviderType.ETH:
+        return Alert.alert(
+          t('more_label.disconnect'),
+          t('more.confirm_disconnect'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => { },
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      case ProviderType.GUEST:
+        return signOut(SignInStatus.SIGNOUT);
+      case ProviderType.EMAIL:
+        return Alert.alert(
+          t('more_label.logout'),
+          t('more.confirm_logout'),
+          [
+            {
+              text: 'Cancel',
+              onPress: () => { },
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                signOut(SignInStatus.SIGNOUT);
+              },
+              style: 'default',
+            },
+          ],
+          { cancelable: false },
+        );
+      default:
+        break;
+    }
+  };
 
   return (
     <SafeAreaView
@@ -54,79 +163,7 @@ const MainInfo: FunctionComponent = () => {
         top: 0,
         backgroundColor: '#FFF',
       }}>
-      <Animated.View
-        style={{
-          overflow: 'hidden',
-          backgroundColor: 'transparent',
-          paddingBottom: 1,
-        }}>
-        <Animated.View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: '#fff',
-            elevation: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 5, 5],
-            }),
-            shadowOffset: { width: 1, height: 1 },
-            shadowColor: '#00000033',
-            shadowOpacity: scrollY.interpolate({
-              inputRange: [-1000, 0, 15, 1000],
-              outputRange: [0, 0, 0.5, 0.5],
-            }),
-            paddingTop: Platform.OS === 'android' ? 65 : 45,
-            paddingBottom: 10,
-            paddingLeft: '5%',
-            paddingRight: '5%',
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [-1000, 0, 15, 1000],
-                  outputRange: [0, 0, -5, -5],
-                }),
-              },
-            ],
-          }}>
-          <View>
-            <Animated.Text
-              allowFontScaling={false}
-              style={{
-                color: '#1c1c1c',
-                fontSize: 28,
-                left: 0,
-                paddingLeft: 0,
-                transform: [
-                  {
-                    translateX: scrollY.interpolate({
-                      inputRange: [-1000, 0, 15, 1000],
-                      outputRange: [0, 0, -5, -5],
-                    }),
-                  },
-                  {
-                    translateY: 0,
-                  },
-                  {
-                    scale: scrollY.interpolate({
-                      inputRange: [-1000, 0, 15, 1000],
-                      outputRange: [1, 1, 0.9, 0.9],
-                    }),
-                  },
-                ],
-                textAlign: 'left',
-                fontFamily: 'Roboto_700Bold',
-              }}>
-              {i18n.t('more_label.more')}
-            </Animated.Text>
-          </View>
-          <TouchableOpacity
-            style={{ marginLeft: 'auto' }}
-            onPress={() => {
-              navigation.navigate('More', { screen: MorePage.Setting });
-            }}>
-            <InfoHeaderSettingImg source={require('./images/setting.png')} />
-          </TouchableOpacity>
-        </Animated.View>
-      </Animated.View>
+      <AnimatedMainHeader title={t('more_label.more')} scrollY={scrollY} />
       <Animated.ScrollView
         ref={ref}
         scrollEventThrottle={16}
@@ -140,87 +177,58 @@ const MainInfo: FunctionComponent = () => {
         )}>
         <View
           style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
             // height: 350,
             marginTop: 10,
             paddingBottom: 10,
           }}>
           <View style={{ marginLeft: '5%', marginRight: '5%', paddingTop: 10 }}>
+            <Setting />
             <H3Text
-              label={i18n.t('more_label.my_info')}
-              style={{ marginBottom: 15, fontSize: 18 }}
+              label={t('more_label.my_info')}
+              style={{ marginTop: 60, color: AppColors.BLACK2 }}
             />
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.Transactions,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <P1Text
-                    label={i18n.t('more_label.transaction_history')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.RegisterEthAddress,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View>
-                    <P1Text
-                      label={
-                        user.ethAddresses?.length > 0
-                          ? i18n.t('more_label.my_wallet')
-                          : i18n.t('more_label.wallet_connect')
-                      }
-                      style={{ lineHeight: 50, fontSize: 15 }}
-                    />
-                    {!(user.ethAddresses?.length > 0) && (
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: 10,
-                          right: -13,
-                          width: 8,
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: '#FC5C4F',
-                        }}
+            {(!isWalletUser && !user.ethAddresses[0]) &&
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.RegisterEthAddress,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View>
+                      <H3Text
+                        label={t('more_label.wallet_connect')}
+                        style={{ lineHeight: 50, fontSize: 15 }}
                       />
-                    )}
+                      {!(user.ethAddresses?.length > 0) && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: -13,
+                            width: 8,
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: '#FC5C4F',
+                          }}
+                        />
+                      )}
+                    </View>
                   </View>
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
+                </TouchableOpacity>
+              </View>
+            }
 
-            {!isNewWalletUser && (
+            {!isPublicAddressUser && (
               <View
                 style={{
                   height: 50,
@@ -237,11 +245,10 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <P1Text
-                      label={i18n.t('more_label.my_account')}
+                    <H3Text
+                      label={t('more_label.my_account')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
-                    <InfoArrowImg source={require('./images/next_gray.png')} />
                   </View>
                 </TouchableOpacity>
               </View>
@@ -264,57 +271,47 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <P1Text
+                    <H3Text
                       label='My asset#2 ownership'
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
-                    <InfoArrowImg source={require('./images/next_gray.png')} />
                   </View>
                 </TouchableOpacity>
               </View>
             )}
-          </View>
-        </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <View
-            style={{
-              marginLeft: '5%',
-              marginRight: '5%',
-              paddingTop: 25,
-              paddingBottom: 15,
-            }}>
+
+            {isWalletUser && (
+              <View
+                style={{
+                  height: 50,
+                  marginTop: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('More', {
+                      screen: MorePage.CheckMnemonic,
+                    })
+                  }>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <H3Text
+                      label={t('more_label.backupseed')}
+                      style={{ lineHeight: 50, fontSize: 15 }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+
             <H3Text
-              label={i18n.t('more_label.service_center')}
-              style={{ marginBottom: 15, fontSize: 18 }}
+              label={t('more_label.service_center')}
+              style={{ marginTop: 30, color: AppColors.BLACK2 }}
             />
-            <View
-              style={{
-                height: 50,
-                marginTop: 10,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('More', {
-                    screen: MorePage.Faq,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <P1Text
-                    label={i18n.t('more_label.faq')}
-                    style={{ lineHeight: 50, fontSize: 15 }}
-                  />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
-                </View>
-              </TouchableOpacity>
-            </View>
             <View
               style={{
                 height: 50,
@@ -331,11 +328,10 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <P1Text
-                    label={i18n.t('more_label.contact')}
+                  <H3Text
+                    label={t('more_label.contact')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
@@ -355,15 +351,14 @@ const MainInfo: FunctionComponent = () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                   }}>
-                  <P1Text
-                    label={i18n.t('more_label.service_terms')}
+                  <H3Text
+                    label={t('more_label.service_terms')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
                 </View>
               </TouchableOpacity>
             </View>
-            {!isNewWalletUser && (
+            {!isPublicAddressUser && (
               <View
                 style={{
                   height: 50,
@@ -380,99 +375,105 @@ const MainInfo: FunctionComponent = () => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <P1Text
-                      label={i18n.t('more_label.privacy_policy')}
+                    <H3Text
+                      label={t('more_label.privacy_policy')}
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
-                    <InfoArrowImg source={require('./images/next_gray.png')} />
                   </View>
                 </TouchableOpacity>
               </View>
             )}
+
+            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+
+            <H3Text
+              label={t('more_label.el_exchange')}
+              style={{
+                marginTop: 10,
+                paddingTop: 25,
+                paddingBottom: 30,
+                color: AppColors.BLACK2
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'column',
+                marginBottom: 30,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 20,
+                }}>
+                <TouchableOpacity
+                  style={{ width: '50%' }}
+                  onPress={() => Linking.openURL('https://www.bithumb.com')}>
+                  <ExchangeImg source={ExchangeBithumbPng} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ width: '50%' }}
+                  onPress={() =>
+                    Linking.openURL('https://www.bithumb.pro/en-us')
+                  }>
+                  <ExchangeImg source={ExchangeBithumbGlobalPng} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '50%',
+                    paddingHorizontal: '3%',
+                  }}
+                  onPress={() => Linking.openURL('https://www.boboo.com')}>
+                  <ExchangeImg source={ExchangebobooPng} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: '50%',
+                    paddingHorizontal: '5%',
+                  }}
+                  onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
+                  <ExchangeImg source={ExchangeGopaxPng} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{
+                    width: '50%',
+                    paddingHorizontal: '5%',
+                  }}
+                  onPress={() => Linking.openURL('https://www.xt.com')}>
+                  <ExchangeImg source={ExchangeXtPng} />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+
+            <View
+              style={{
+                height: 125,
+                paddingTop: 25,
+                paddingBottom: 25,
+              }}>
+              <SubmitButton
+                title={buttonTitle()}
+                handler={confirmSignOut}
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  backgroundColor: (user.provider === ProviderType.ETH || isWalletUser) ? '#c4302b' : '#767577',
+                }}
+              />
+            </View>
           </View>
         </View>
-        <View
-          style={{
-            borderBottomColor: '#F6F6F8',
-            borderBottomWidth: 5,
-          }}>
-          <H3Text
-            label={i18n.t('more_label.el_exchange')}
-            style={{
-              marginTop: 10,
-              marginLeft: '5%',
-              marginRight: '5%',
-              paddingTop: 25,
-              paddingBottom: 30,
-              fontSize: 18,
-            }}
-          />
-          <View
-            style={{
-              flexDirection: 'column',
-              marginBottom: 30,
-              paddingHorizontal: '3%',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginBottom: 20,
-              }}>
-              <TouchableOpacity
-                style={{ width: '50%' }}
-                onPress={() => Linking.openURL('https://www.bithumb.com')}>
-                <ExchangeImg source={ExchangeBithumbPng} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ width: '50%' }}
-                onPress={() =>
-                  Linking.openURL('https://www.bithumb.pro/en-us')
-                }>
-                <ExchangeImg source={ExchangeBithumbGlobalPng} />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                style={{
-                  width: '50%',
-                  paddingHorizontal: '3%',
-                }}
-                onPress={() => Linking.openURL('https://www.boboo.com')}>
-                <ExchangeImg source={ExchangebobooPng} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: '50%',
-                  paddingHorizontal: '5%',
-                }}
-                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
-                <ExchangeImg source={ExchangeGopaxPng} />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                style={{
-                  width: '50%',
-                  paddingHorizontal: '5%',
-                }}
-                onPress={() => Linking.openURL('https://www.xt.com')}>
-                <ExchangeImg source={ExchangeXtPng} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            height: 100,
-            backgroundColor: '#F6F6F8',
-          }}
-        />
       </Animated.ScrollView>
     </SafeAreaView>
   );

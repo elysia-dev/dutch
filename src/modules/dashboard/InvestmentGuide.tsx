@@ -14,7 +14,7 @@ import investmentGuide3 from './images/investmentGuide3.png';
 import investmentGuide4 from './images/investmentGuide4.png';
 import { H2Text, P1Text } from '../../shared/components/Texts';
 import QuitIcon from '../products/images/quitbutton.png';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 const GuideImage = styled.Image`
   width: 90%;
@@ -33,6 +33,7 @@ const Circle = styled.View`
 const InvestmentGuide: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(0);
+  const { t } = useTranslation();
   const viewPager = React.createRef<ViewPager>();
   const ReturnImage = (imgNumber: number) => {
     switch (imgNumber) {
@@ -54,11 +55,11 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
           <GuideImage source={ReturnImage(index)} />
           <View style={{ marginTop: 'auto', marginBottom: '35%' }}>
             <H2Text
-              label={i18n.t('dashboard.investment_guide_header.' + index)}
+              label={t('dashboard.investment_guide_header.' + index)}
               style={{ fontSize: 25, textAlign: 'center' }}
             />
             <P1Text
-              label={i18n.t('dashboard.investment_guide_text.' + index)}
+              label={t('dashboard.investment_guide_text.' + index)}
               style={{ marginTop: 20, textAlign: 'center' }}
             />
           </View>
