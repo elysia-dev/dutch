@@ -284,7 +284,8 @@
       "withdrawl_check_4": "We will not be responsible for any funds lost after you have deleted your account.",
       "confirm_disconnect": "Do you want to disconnect your wallet?\nYour funds will remain in your wallet",
       "confirm_disconnect_and_new": "In order to connect a new wallet,\nplease disconnect your previous wallet.\nWould you like to disconnect your wallet?",
-      "confirm_delete": "Do you want to delete your wallet from this app permanently? You can ONLY recover this wallet with your Recovery Pharse. Elysia dose not have your recovery pharase. Type 'delete' to erase current wallet permanently."
+      "confirm_delete": "Do you want to delete your wallet from this app permanently?\nYou can ONLY recover this wallet with your Recovery Pharse.\nElysia dose not have your recovery pharase.\nType 'delete' to erase current wallet permanently.",
+      "confirm_delete_android": "Do you want to delete your wallet from this app permanently?\nYou can ONLY recover this wallet with your Recovery Pharse.\nElysia dose not have your recovery pharase."
     },
     "dashboard_label": {
       "total_balance": "Balance",
@@ -468,7 +469,7 @@
       "lost_content": "This application is a decentralized application and never stores passwords, recovery keys, etc. in the Elysia database.\nSo, if you lose both your password and recovery key, your wallet cannot be recovered, and even if you contact Elysia, we cannot help.",
       "checkbox": "I confirm that I fully understand the above and agree to create a wallet.",
       "next": "Next",
-      "backup_seed": "This is your recovery key. Please keep it.",
+      "backup_seed": "This is your recovery key.\nPlease keep it.",
       "backup_seed_notice": "Write the recovery key below on a piece of paper and keep it in a safe place. We will check the seed phrase in the next step.",
       "backup_seed_checkbox": "I have kept the above seed phrase and confirm that I agree to the next step.",
       "check_seed": "Please check the seed phrase.",
@@ -484,8 +485,8 @@
     },
     "wallet": {
       "lost_password": "I can't remember my password",
-      "recover_infomation": "Before resetting your password, please check the following.\nWe currently keep a separate recovery key for this wallet.\nIf the recovery key is lost and initialized, no one can recover the wallet.",
-      "recover_check": "I fully understand and agree with the above, and I will proceed with the password reset.",
+      "recover_infomation": "Before resetting your password, please check the following.\n\n・We currently keep a separate recovery key for this wallet.\n・If the recovery key is lost and initialized, no one can recover the wallet.",
+      "recover_check": "I fully understand and agree with the above,\nand I will proceed with the password reset.",
       "recover_button": "Agree, start from scratch",
       "deposit": "Deposit",
       "withdrawal": "Withdrawal",

@@ -85,7 +85,7 @@ const MainInfo: FunctionComponent = () => {
       } else {
         return Alert.alert(
           t('more_label.delete_address'),
-          t('more.confirm_delete'),
+          t('more.confirm_disconnect'),
           [
             {
               text: 'Cancel',
