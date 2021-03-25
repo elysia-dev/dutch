@@ -4,22 +4,26 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../../enums/AppColors';
 import { H4Text } from '../../../shared/components/Texts';
 
-const CircleButton: React.FC<{ handler: () => void, icon: string, title: string }> = ({
+const CircleButton: React.FC<{ handler: () => void, icon: string, title: string, disabled?: boolean }> = ({
   handler,
   icon,
   title,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
       style={{ flexDirection: 'column', alignItems: 'center' }}
-      onPress={() => { handler() }}
+      disabled={disabled}
+      onPress={() => {
+        handler()
+      }}
     >
       <View
         style={{
           width: 55,
           height: 55,
           borderRadius: 27.5,
-          backgroundColor: AppColors.MAIN,
+          backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
           justifyContent: 'center'
         }}
       >

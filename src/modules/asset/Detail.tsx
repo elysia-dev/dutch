@@ -28,6 +28,7 @@ import { useAssetToken } from '../../hooks/useContract';
 import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
+import ProductStatus from '../../enums/ProductStatus';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -56,6 +57,7 @@ type State = {
   legacyRefundStatus?: string,
   image: string,
   productId: number,
+  productStatus: ProductStatus,
 }
 
 const Detail: FunctionComponent = () => {
@@ -76,6 +78,7 @@ const Detail: FunctionComponent = () => {
     paymentMethod: CryptoType.EL,
     image: '',
     productId: 0, //for v1 user
+    productStatus: ProductStatus.SALE
   })
   const [filter, setFilter] = useState<number>(0);
   const { elPrice, ethPrice } = useContext(PriceContext);
@@ -96,7 +99,8 @@ const Detail: FunctionComponent = () => {
       image: productData.data.data.images[0] || '',
       totalSupply: parseFloat(productData.data.totalValue),
       presentSupply: parseFloat(productData.data.presentValue),
-      paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType
+      paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType,
+      productStatus: productData.data.status as ProductStatus,
     });
   }
 
@@ -145,6 +149,7 @@ const Detail: FunctionComponent = () => {
       legacyRefundStatus: res.data.legacyRefundStatus,
       image: res.data.product.data?.images[0],
       productId: res.data.product.id,
+      productStatus: res.data.product.status as ProductStatus,
     })
   }
 
@@ -289,6 +294,7 @@ const Detail: FunctionComponent = () => {
                 <CircleButton
                   title={t('main.ownership')}
                   icon={'+'}
+                  disabled={state.productStatus !== ProductStatus.SALE}
                   handler={() => {
                     navigation.navigate(AssetPage.Purchase, {
                       from: { type: state.paymentMethod, title: state.paymentMethod.toUpperCase(), unit: state.paymentMethod.toUpperCase() },
