@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
 import AssetContext, { initialAssetState, AssetStateType } from '../contexts/AssetContext';
@@ -127,12 +127,17 @@ const AssetProvider: React.FC = (props) => {
     }
   }
 
+  const getBalance = (unit: string): number => {
+    return state.assets.find((asset) => asset.unit === unit)?.unitValue || 0
+  }
+
   return (
     <AssetContext.Provider
       value={{
         ...state,
         loadV1UserBalances,
         loadV2UserBalances,
+        getBalance,
       }}
     >
       {props.children}

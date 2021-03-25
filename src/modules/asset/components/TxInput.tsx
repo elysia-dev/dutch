@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 import { Text, View } from 'react-native';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -9,26 +9,29 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
-import CryptoType from '../../../enums/CryptoType';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
+import Asset from '../../../types/Asset';
+import AssetContext from '../../../contexts/AssetContext';
+import commaFormatter from '../../../utiles/commaFormatter';
+import CryptoType from '../../../enums/CryptoType';
+import { parse } from 'expo-linking';
 
 interface ITxInput {
   title: string
   fromInputTitle: string
   toInputTitle: string
-  fromCrypto: CryptoType
-  fromTitle: string
-  toCrypto: CryptoType
-  toTitle: string
+  from: Asset
+  to: Asset
+  toMax?: number
   fromPrice: number
   toPrice: number
   values: { from: string, to: string }
   current: string
   step: TxStep
-  disabled: boolean
   estimateGas?: string
+  disabled: boolean
   setCurrent: Dispatch<SetStateAction<"from" | "to">>
   setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
   createTx: () => void
@@ -38,17 +41,16 @@ const TxInput: React.FC<ITxInput> = ({
   title,
   fromInputTitle,
   toInputTitle,
-  fromCrypto,
-  fromTitle,
+  from,
+  to,
+  toMax,
   fromPrice,
   toPrice,
-  toCrypto,
-  toTitle,
   values,
   current,
   step,
+  estimateGas = '0',
   disabled,
-  estimateGas,
   setCurrent,
   setValues,
   createTx,
@@ -56,13 +58,14 @@ const TxInput: React.FC<ITxInput> = ({
   const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
   const { ethPrice } = useContext(PriceContext)
+  const { getBalance } = useContext(AssetContext);
   const fromToRatio = fromPrice / toPrice;
-  const fromMax = 100000;
-  const toMax = 100000;
-  const [state, setState] = useState({
-    errorValue: 0
-  });
   const { t } = useTranslation();
+  const isFromInvalid = parseFloat(values.from) > (from.unitValue ? from.unitValue : getBalance(from.unit));
+  const isToInvalid = toMax ? (parseFloat(values.to) > toMax) : false;
+  const insufficientEth = from.type === CryptoType.ETH ?
+    getBalance(CryptoType.ETH) < parseFloat(estimateGas) + parseFloat(values.from)
+    : getBalance(CryptoType.ETH) < parseFloat(estimateGas);
 
   return (
     <>
@@ -89,8 +92,10 @@ const TxInput: React.FC<ITxInput> = ({
         }}>
         <CryptoInput
           title={fromInputTitle}
-          cryptoTitle={fromTitle}
-          cryptoType={fromCrypto}
+          cryptoTitle={from.title}
+          cryptoType={from.type}
+          balanceTitle={`${t('more_label.balance')}: ${commaFormatter(from.unitValue ? from.unitValue.toFixed(2) : getBalance(from.type).toFixed(2))} ${from.type}`}
+          invalid={isFromInvalid}
           style={{ marginTop: 20 }}
           value={values.from || '0'}
           subValue={
@@ -103,31 +108,31 @@ const TxInput: React.FC<ITxInput> = ({
         />
         <View>
           <Text style={{ textAlign: 'center', fontSize: 20, color: AppColors.MAIN, marginTop: 5, marginBottom: 5 }}>↓</Text>
-          {state.errorValue === 1 && (
-            <P3Text label={t('assets.not_enough_quantity')} style={{ fontSize: 10, right: 0, position: "absolute", color: AppColors.RED, marginTop: 3, marginBottom: 5 }} />
-          )}
         </View>
         <CryptoInput
           title={toInputTitle}
-          cryptoTitle={toTitle}
-          cryptoType={toCrypto}
+          cryptoTitle={to.title}
+          cryptoType={to.type}
+          balanceTitle={toMax ? `${t('product_label.available_token')}: ${toMax} ${to.type}` : ''}
+          invalid={isToInvalid}
           style={{ marginBottom: estimateGas ? 10 : 30 }}
           value={values.to || '0'}
           active={current === 'to'}
           onPress={() => setCurrent('to')}
         />
-        {!!estimateGas && <P3Text
-          label={t('assets.transaction_fee', { 
-            ethValue: estimateGas,
-            usdValue: currencyFormatter(parseFloat(estimateGas) * ethPrice)
-          })}
-          style={{ textAlign: 'center', marginBottom: 10, top: 5, marginTop: 10 }}
-        />}
-        <View>
-          {state.errorValue === 2 && (
-            <P3Text label={t('assets.not_enough_values', { toTitle })} style={{ fontSize: 10, right: 0, position: "absolute", bottom: 25, color: AppColors.RED }} />
-          )}
-        </View>
+        {
+          !!estimateGas && <>
+            <P3Text
+              label={`${t('assets.transaction_fee')}: ${estimateGas} ETH (${currencyFormatter(parseFloat(estimateGas) * ethPrice)})`}
+              style={{ textAlign: 'center', marginBottom: insufficientEth ? 5 : 10 }}
+            />
+            <View>
+              {insufficientEth && (
+                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}> {t('assets.insufficient_eth')} </Text>
+              )}
+            </View>
+          </>
+        }
         <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />
         <NumberPad
           addValue={(text) => {
@@ -169,17 +174,10 @@ const TxInput: React.FC<ITxInput> = ({
           }}
         />
         <NextButton
-          disabled={disabled}
+          disabled={isToInvalid || isFromInvalid || disabled || insufficientEth}
           title={title}
           handler={() => {
-            if (parseFloat(values.from) > fromMax) { // 최대 보유개수가 100,000개라고 가정
-              setState({ ...state, errorValue: 1 });
-            } else if (parseFloat(values.to) > toMax) { // 남은 ELA 토큰이 100개라고 가정
-              setState({ ...state, errorValue: 2 });
-            } else {
-              setState({ ...state, errorValue: 0 });
-              createTx()
-            }
+            createTx()
           }}
         />
       </View>

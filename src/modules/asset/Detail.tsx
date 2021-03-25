@@ -49,6 +49,7 @@ type ParamList = {
 type State = {
   page: number,
   totalSupply: number,
+  presentSupply: number,
   reward: number,
   transactions: CryptoTransaction[],
   contractAddress: string,
@@ -70,6 +71,7 @@ const Detail: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     page: 1,
     totalSupply: 0,
+    presentSupply: 0,
     reward: 0,
     transactions: [],
     contractAddress: '',
@@ -95,6 +97,7 @@ const Detail: FunctionComponent = () => {
       transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
       image: productData.data.data.images[0] || '',
       totalSupply: parseFloat(productData.data.totalValue),
+      presentSupply: parseFloat(productData.data.presentValue),
       paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType
     });
   }
@@ -136,6 +139,7 @@ const Detail: FunctionComponent = () => {
     setState({
       page: 1,
       totalSupply: parseFloat(res.data.product.totalValue),
+      presentSupply: parseFloat(res.data.product.presentValue),
       reward: parseFloat(res.data.expectProfit),
       transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
       contractAddress: res.data.product.contractAddress,
@@ -289,12 +293,11 @@ const Detail: FunctionComponent = () => {
                   icon={'+'}
                   handler={() => {
                     navigation.navigate(AssetPage.Purchase, {
-                      fromCrypto: state.paymentMethod,
-                      fromTitle: state.paymentMethod.toUpperCase(),
-                      toCrypto: asset.type,
-                      toTitle: asset.title,
+                      from: { type: state.paymentMethod, title: state.paymentMethod.toUpperCase(), unit: state.paymentMethod.toUpperCase() },
+                      to: asset,
                       contractAddress: state.contractAddress,
                       productId: state.productId,
+                      toMax: state.presentSupply,
                     })
                   }}
                 />
@@ -303,10 +306,8 @@ const Detail: FunctionComponent = () => {
                   icon={'-'}
                   handler={() => {
                     navigation.navigate(AssetPage.Refund, {
-                      fromCrypto: asset.type,
-                      fromTitle: asset.title,
-                      toCrypto: state.paymentMethod,
-                      toTitle: state.paymentMethod.toUpperCase(),
+                      from: asset,
+                      to: { type: state.paymentMethod, title: state.paymentMethod.toUpperCase(), unit: state.paymentMethod.toUpperCase() },
                       contractAddress: state.contractAddress,
                       productId: state.productId,
                     })

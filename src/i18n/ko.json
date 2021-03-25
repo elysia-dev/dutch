@@ -508,9 +508,8 @@
       "yield": "이자",
       "yield_reward": "이자 분배",
       "cancel": "취소",
-      "not_enough_quantity" : "EL이 부족합니다",
-      "not_enough_values" : "최대 {{toTitle}} 공급량을 초과했습니다!",
-      "transaction_fee" : "토큰 교환 수수료: {{ethValue}} ETH ({{usdValue}})"
+      "transaction_fee": "네트워크 수수료",
+      "insufficient_eth": "ETH가 부족합니다."
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 지분 회수는 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

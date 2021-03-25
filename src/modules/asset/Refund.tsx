@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken, useAssetTokenEth } from '../../hooks/useContract';
+import { useAssetToken } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { utils } from 'ethers';
@@ -14,13 +14,12 @@ import UserContext from '../../contexts/UserContext';
 import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PriceContext from '../../contexts/PriceContext';
+import Asset from '../../types/Asset';
 
 type ParamList = {
   Refund: {
-    fromCrypto: CryptoType,
-    fromTitle: string,
-    toTitle: string,
-    toCrypto: CryptoType,
+    from: Asset,
+    to: Asset,
     productId: number,
     contractAddress: string,
   };
@@ -40,7 +39,7 @@ const Refund: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAddress } = route.params;
+  const { from, to, contractAddress } = route.params;
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAddress);
   const { wallet } = useContext(WalletContext);
@@ -52,7 +51,7 @@ const Refund: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      assetTokenContract?.estimateGas.refund(utils.parseEther('10'), {
+      assetTokenContract?.estimateGas.refund(utils.parseEther('1'), {
         from: wallet?.getFirstAddress(),
       }).then((res) => {
         setState({
@@ -92,13 +91,11 @@ const Refund: FunctionComponent = () => {
         title={t('assets.refund')}
         fromInputTitle={t('assets.refund_stake')}
         toInputTitle={t('assets.refund_value')}
-        fromCrypto={fromCrypto}
-        fromTitle={fromTitle}
-        toCrypto={toCrypto}
-        toTitle={toTitle}
+        from={from}
+        to={to}
         values={values}
         fromPrice={5} // 5 USD
-        toPrice={toCrypto === CryptoType.ETH ? ethPrice : elPrice}
+        toPrice={to.type === CryptoType.ETH ? ethPrice : elPrice}
         current={current}
         step={state.step}
         disabled={parseInt(values.from || '0') < 1}

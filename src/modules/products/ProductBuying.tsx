@@ -121,10 +121,16 @@ const ProductBuying: FunctionComponent = () => {
       return alert(t('product.non_purchasable'));
     } else {
       navigation.navigate(ProductPage.Purchase, {
-        fromCrypto: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
-        fromTitle: state.product?.paymentMethod.toUpperCase(),
-        toCrypto: CryptoType.ELA,
-        toTitle: state.product?.tokenName,
+        from: {
+          type: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          unit: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          title: state.product?.paymentMethod.toUpperCase(),
+        },
+        to: {
+          type: CryptoType.ELA,
+          title: state.product?.tokenName,
+        },
+        toMax: state.product?.presentValue,
         contractAddress: state.product?.contractAddress,
         productId: state.product?.id,
       })

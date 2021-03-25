@@ -504,9 +504,8 @@
       "yield": "이자",
       "yield_reward": "이자 분배",
       "cancel": "취소",
-      "not_enough_quantity" : "EL이 부족합니다",
-      "not_enough_values" : "최대 {{toTitle}} 공급량을 초과했습니다!",
-      "transaction_fee" : "토큰 교환 수수료: {{ethValue}} ETH ({{usdValue}})"
+      "transaction_fee": "手续费",
+      "insufficient_eth": "你的体液平衡不够。"
     },
     "legacy": {
       "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"

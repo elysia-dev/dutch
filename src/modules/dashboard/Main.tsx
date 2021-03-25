@@ -41,7 +41,6 @@ export const Main: React.FC = () => {
     }
   }, [])
 
-
   const onRefresh = () => {
     if (user.provider === ProviderType.GUEST && !isWalletUser) return;
 

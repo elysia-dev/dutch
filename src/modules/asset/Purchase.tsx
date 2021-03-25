@@ -17,13 +17,13 @@ import FunctionContext from '../../contexts/FunctionContext';
 import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
+import Asset from '../../types/Asset';
 
 type ParamList = {
   Purchase: {
-    fromCrypto: CryptoType,
-    fromTitle: string,
-    toTitle: string,
-    toCrypto: CryptoType,
+    from: Asset,
+    to: Asset,
+    toMax: number,
     contractAddress: string,
     productId: number, // legacy
   };
@@ -47,7 +47,7 @@ const Purchase: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
-  const { fromCrypto, fromTitle, toTitle, toCrypto, contractAddress } = route.params;
+  const { from, to, toMax, contractAddress } = route.params;
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAddress);
   const assetTokenEthContract = useAssetTokenEth(contractAddress);
@@ -62,7 +62,7 @@ const Purchase: FunctionComponent = () => {
 
   useEffect(() => {
     if (isWalletUser) {
-      if (fromCrypto === CryptoType.ETH) {
+      if (from.type === CryptoType.ETH) {
         assetTokenEthContract?.estimateGas.purchase({
           from: wallet?.getFirstAddress(),
           value: utils.parseEther('0.5').toHexString()
@@ -104,7 +104,7 @@ const Purchase: FunctionComponent = () => {
         break;
 
       case TxStep.Approving:
-        if (fromCrypto === CryptoType.ETH) {
+        if (from.type === CryptoType.ETH) {
           setState({ ...state, step: TxStep.Creating })
           return
         }
@@ -125,7 +125,7 @@ const Purchase: FunctionComponent = () => {
         break;
 
       case TxStep.Creating:
-        if (fromCrypto === CryptoType.ETH) {
+        if (from.type === CryptoType.ETH) {
           assetTokenEthContract?.populateTransaction.purchase(
           ).then(populatedTransaction => {
             wallet?.getFirstSigner().sendTransaction({
@@ -184,12 +184,11 @@ const Purchase: FunctionComponent = () => {
         title={t('assets.invest')}
         fromInputTitle={t('assets.invest_value')}
         toInputTitle={t('assets.invest_stake')}
-        fromCrypto={fromCrypto}
-        fromTitle={fromTitle}
-        toCrypto={toCrypto}
-        toTitle={toTitle}
+        from={from}
+        to={to}
+        toMax={toMax}
         values={values}
-        fromPrice={fromCrypto === CryptoType.ETH ? ethPrice : elPrice}
+        fromPrice={from.type === CryptoType.ETH ? ethPrice : elPrice}
         toPrice={5} // 5 USD
         current={current}
         step={state.step}

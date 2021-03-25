@@ -10,10 +10,12 @@ import CryptoType from '../../../enums/CryptoType';
 interface Props {
   active: boolean
   title: string
-  value: string
+  balanceTitle?: string
+  value: string,
   subValue?: string
   cryptoType: CryptoType
   cryptoTitle: string
+  invalid: boolean
   style?: StyleProp<ViewStyle>
   onPress: () => void
 }
@@ -21,22 +23,28 @@ interface Props {
 const CryptoInput: FunctionComponent<Props> = ({
   active,
   title,
+  balanceTitle,
   value,
   subValue,
   cryptoTitle,
   cryptoType,
+  invalid,
   style,
   onPress,
 }) => {
   return (
     <View style={style}>
-      <H4Text label={title} style={{ marginBottom: 10 }} />
+      <View style={{ flexDirection: 'row' }}>
+        <H4Text label={title} style={{ marginBottom: 10 }} />
+        {!!balanceTitle && <P3Text label={balanceTitle} style={{ marginLeft: 'auto' }} />}
+      </View>
       <TouchableOpacity
         style={{
-          borderColor: active ? AppColors.MAIN : AppColors.BLUE_2,
+          borderColor: invalid ? AppColors.RED : active ? AppColors.MAIN : AppColors.BLUE_2,
           borderRadius: 5,
           borderWidth: 1,
           padding: 10,
+          height: 50,
           flexDirection: 'row'
         }}
         onPress={onPress}
@@ -45,7 +53,7 @@ const CryptoInput: FunctionComponent<Props> = ({
           <CryptoImage type={cryptoType} style={{ width: 20, height: 20 }} />
           <P1Text label={cryptoTitle} style={{ marginLeft: 5 }} />
         </View>
-        <View style={{ marginLeft: 'auto' }}>
+        <View style={{ marginLeft: 'auto', justifyContent: 'center' }}>
           <P1Text label={`${value} ${cryptoType}`} style={{ textAlign: 'right' }} />
           {subValue && <P3Text label={subValue} style={{ color: AppColors.BLACK2, textAlign: 'right' }} />}
         </View>

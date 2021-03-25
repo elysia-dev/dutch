@@ -10,6 +10,7 @@ export type AssetStateType = {
 export interface IAssetContext extends AssetStateType {
   loadV2UserBalances: (cacheControl?: boolean) => Promise<void>
   loadV1UserBalances: (cacheControl?: boolean) => Promise<void>
+  getBalance: (unit: string) => number
 }
 
 export const initialAssetState = {
@@ -24,6 +25,7 @@ export const initialAssetContext = {
   ...initialAssetState,
   loadV2UserBalances: async () => { },
   loadV1UserBalances: async () => { },
+  getBalance: () => { return 0 },
 }
 
 const AssetContext = createContext<IAssetContext>(initialAssetContext);
