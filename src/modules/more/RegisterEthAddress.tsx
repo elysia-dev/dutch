@@ -76,6 +76,8 @@ const buttonImage = (type: string) => {
       return require('./images/metamask_pc.png');
     case WalletType.IMTOKEN_MOBILE:
       return require('./images/imToken_logo.png');
+    case WalletType.ELYSIA:
+      return require('./images/eth.png')
     default:
   }
 };
@@ -97,7 +99,7 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         marginBottom: 15,
       }}>
       <Image
-        style={{ alignSelf: 'center' }}
+        style={{ alignSelf: 'center', width: 30, height: 30 }}
         source={buttonImage(props.type)}></Image>
       <P1Text
         style={{
@@ -526,7 +528,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               {
                 user.provider === ProviderType.GUEST &&
                 <WalletButton
-                  title={'Elysia'}
+                  title={'Ethereum Wallet'}
                   selected={state.wallet === WalletType.ELYSIA}
                   modeHandler={() => {
                     setState({ ...state, wallet: WalletType.ELYSIA });
