@@ -27,6 +27,7 @@ import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
 import UserContext from '../../contexts/UserContext';
+import AppFonts from '../../enums/AppFonts';
 
 export const initialState = {
   page: 1,
@@ -241,7 +242,7 @@ const Transactions: FunctionComponent = () => {
                   color: '#4E4E4E',
                   fontSize: 17,
                   textAlign: 'center',
-                  fontFamily: 'Roboto_400Regular',
+                  fontFamily: AppFonts.Regular,
                 }}>
                 {t('dashboard_label.more_transactions')}
               </Text>

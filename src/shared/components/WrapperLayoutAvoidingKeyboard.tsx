@@ -9,6 +9,7 @@ import {
   Keyboard,
 } from 'react-native';
 import styled from 'styled-components/native';
+import AppFonts from '../../enums/AppFonts';
 import { BackButton } from './BackButton';
 
 const Wrapper = styled.SafeAreaView`
@@ -87,44 +88,44 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             style={[
               props.backButtonHandler !== undefined
                 ? {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, 30, 30],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  }
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, 30, 30],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                }
                 : {
-                    transform: [
-                      {
-                        translateX: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -17, -17],
-                        }),
-                      },
-                      {
-                        translateY: scrollY.interpolate({
-                          inputRange: [-1000, 0, 50, 1000],
-                          outputRange: [0, 0, -57, -57],
-                        }),
-                      },
-                    ],
-                  },
+                  transform: [
+                    {
+                      translateX: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -17, -17],
+                      }),
+                    },
+                    {
+                      translateY: scrollY.interpolate({
+                        inputRange: [-1000, 0, 50, 1000],
+                        outputRange: [0, 0, -57, -57],
+                      }),
+                    },
+                  ],
+                },
             ]}>
             <Animated.Text
               allowFontScaling={false}
               style={{
                 position: 'absolute',
                 fontSize: 25,
-                fontFamily: 'Roboto_700Bold',
+                fontFamily: AppFonts.Bold,
                 transform: [
                   {
                     scale: scrollY.interpolate({
@@ -141,7 +142,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
               style={{
                 position: 'absolute',
                 top: 40,
-                fontFamily: 'Roboto_400Regular',
+                fontFamily: AppFonts.Regular,
                 transform: [
                   {
                     translateX: scrollY.interpolate({

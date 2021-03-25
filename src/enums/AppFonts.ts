@@ -1,7 +1,9 @@
 enum AppFonts {
-  LIGHT = 'Roboto_300Light',
-  REGULAR = 'Roboto_400Regular',
-  BOLD = 'Roboto_700Bold',
+  Thin = 'SpoqaHanSansNeoThin',
+  Light = 'SpoqaHanSansNeoLight',
+  Regular = 'SpoqaHanSansNeoRegular',
+  Medium = 'SpoqaHanSansNeoMedium',
+  Bold = 'SpoqaHanSansNeoBold',
 }
 
 export default AppFonts

@@ -133,6 +133,7 @@ const Setting: FunctionComponent = () => {
                     label={t('more_label.push_notice')}
                     style={{
                       alignSelf: 'center',
+                      fontSize: 15,
                     }}
                   />
                   <Switch
@@ -160,6 +161,7 @@ const Setting: FunctionComponent = () => {
               label={t('more_label.language')}
               style={{
                 alignSelf: 'center',
+                fontSize: 15,
               }}
             />
             <View
@@ -229,6 +231,7 @@ const Setting: FunctionComponent = () => {
               label={t('more_label.currency')}
               style={{
                 alignSelf: 'center',
+                fontSize: 15
               }}
             />
             <View
@@ -332,6 +335,7 @@ const Setting: FunctionComponent = () => {
                   t('more_label.version') +
                   ` ${getEnvironment().version}`
                 }
+                style={{ fontSize: 15 }}
               />
             </TouchableOpacity>
             {checkLatestVersion(

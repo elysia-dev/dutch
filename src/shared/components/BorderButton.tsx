@@ -37,7 +37,7 @@ const BorderButton: FunctionComponent<IBorderButton> = ({
         style={{
           fontSize: 16,
           textAlign: 'center',
-          fontFamily: AppFonts.BOLD,
+          fontFamily: AppFonts.Bold,
           color: disabled ? AppColors.GREY : AppColors.MAIN,
         }}
         allowFontScaling={false}>

@@ -1,13 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import styled from 'styled-components/native';
+import AppFonts from '../../enums/AppFonts';
 
 const Title = styled.Text`
   color: #1c1c1c;
   font-size: 28px;
   font-weight: bold;
   text-align: left;
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
   line-height: 28px;
 `;
 

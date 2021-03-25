@@ -19,6 +19,7 @@ import DateInput from './DateInput';
 import { State } from '../../../hooks/reducers/TransactionFilterReducer';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import IosPickerModal from '../../../shared/components/IosPickerModal';
+import AppFonts from '../../../enums/AppFonts';
 
 type ButtonProps = {
   title: string;
@@ -53,7 +54,7 @@ const Button: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
             color: props.on ? '#1C1C1C' : '#A7A7A7',
             fontSize: 13,
             textAlign: 'center',
-            fontFamily: props.on ? 'Roboto_700Bold' : 'Roboto_400Regular',
+            fontFamily: props.on ? AppFonts.Bold : AppFonts.Regular,
           }}
           label={props.title}
         />

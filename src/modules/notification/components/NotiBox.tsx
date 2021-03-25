@@ -18,6 +18,7 @@ import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
 import UserContext from '../../../contexts/UserContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   notification: Notification;
@@ -152,7 +153,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
               style={{
                 color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
                 fontFamily:
-                  status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
+                  status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,
               }}
               label={t(`notification.${type}`, {

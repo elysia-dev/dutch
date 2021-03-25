@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useContext } from 'react';
+import React, { FunctionComponent, useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -161,10 +161,10 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
                 Dimensions.get('window').width * 0.05 +
                 // eslint-disable-next-line no-nested-ternary
                 (language === LocaleType.KO
-                  ? 200
+                  ? 220
                   : language === LocaleType.CH
                     ? 180
-                    : 230),
+                    : 240),
                 Platform.OS === 'ios'
                   ? Dimensions.get('window').width * 0.52
                   : Dimensions.get('window').width * 0.433,
