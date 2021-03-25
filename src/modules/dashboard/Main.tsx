@@ -65,7 +65,7 @@ export const Main: React.FC = () => {
       >
         <BasicLayout >
           <H3Text
-            style={{ marginTop: 50 }}
+            style={{ marginTop: 70 }}
             label={t('main.total_assets')}
           />
           <View style={{

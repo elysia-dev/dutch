@@ -13,6 +13,7 @@ import NotificationData from '../types/NotificationData';
 import registerForPushNotificationsAsync from '../utiles/registerForPushNotificationsAsync';
 import Notification, { isNotification } from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
+import moment from 'moment';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -132,7 +133,7 @@ const UserProvider: React.FC = (props) => {
             notificationType: NotificationType.ONBOARDING_CONNECT_WALLET,
             status: NotificationStatus.UNREAD,
             data: {} as NotificationData,
-            createdAt: new Date(),
+            createdAt: moment().toDate(),
           },
           {
             id: 0,
@@ -140,7 +141,7 @@ const UserProvider: React.FC = (props) => {
             notificationType: NotificationType.ONBOARDING_NEW_USER,
             status: NotificationStatus.UNREAD,
             data: {} as NotificationData,
-            createdAt: new Date(),
+            createdAt: moment().toDate(),
           },
         ],
       });
