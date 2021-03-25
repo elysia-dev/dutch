@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useState } from "react";
 import { CURRENCY, LANGUAGE, NOTIFICATION } from '../constants/storage';
 import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
@@ -9,9 +9,13 @@ import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
 import currencyFormatter from '../utiles/currencyFormatter';
 import EspressoV1 from '../api/EspressoV1';
+import UserContext from '../contexts/UserContext';
+import WalletContext from '../contexts/WalletContext';
 
 const PreferenceProvider: React.FC = (props) => {
   const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
+  const { isWalletUser, signedIn } = useContext(UserContext);
+  const { isUnlocked } = useContext(WalletContext);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
@@ -73,7 +77,7 @@ const PreferenceProvider: React.FC = (props) => {
 
   useEffect(() => {
     loadPreferences();
-  }, [])
+  }, [isWalletUser, isUnlocked, signedIn])
 
   return (
     <PreferenceContext.Provider

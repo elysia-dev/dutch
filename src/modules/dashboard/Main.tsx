@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import {
   ScrollView, View, Image, TouchableOpacity, RefreshControl
 } from 'react-native';
@@ -30,14 +30,6 @@ export const Main: React.FC = () => {
   const { t } = useTranslation();
 
   const [refreshing, setRefreshing] = React.useState(false);
-
-  useEffect(() => {
-    if (isWalletUser) {
-      loadV2UserBalances()
-    } else {
-      loadV1UserBalances()
-    }
-  }, [])
 
   const onRefresh = () => {
     if (user.provider === ProviderType.GUEST && !isWalletUser) return;
@@ -84,7 +76,7 @@ export const Main: React.FC = () => {
             marginBottom: 40,
           }}>
             {
-              isWalletUser || user.ethAddresses[0] ? <TitleText
+              (isWalletUser || user.ethAddresses[0]) ? <TitleText
                 label={currencyFormatter(
                   assets.reduce((res, cur) => res + cur.currencyValue, 0),
                   2

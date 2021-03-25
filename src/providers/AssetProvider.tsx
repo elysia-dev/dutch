@@ -1,18 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
 import AssetContext, { initialAssetState, AssetStateType } from '../contexts/AssetContext';
 import PriceContext from '../contexts/PriceContext';
-import UserContext from '../contexts/UserContext';
+import UserContext, { initialUserState } from '../contexts/UserContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
 import ProviderType from '../enums/ProviderType';
+import SignInStatus from '../enums/SignInStatus';
 import Asset from '../types/Asset';
 import assetTokenNamePrettier from '../utiles/assetTokenNamePrettier';
 
 const AssetProvider: React.FC = (props) => {
-  const { user, isWalletUser, ownerships } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
+  const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
+  const { wallet, isUnlocked } = useContext(WalletContext);
   const { elPrice, ethPrice } = useContext(PriceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
@@ -126,6 +127,20 @@ const AssetProvider: React.FC = (props) => {
       })
     }
   }
+
+  useEffect(() => {
+    if (signedIn !== SignInStatus.SIGNIN) {
+      setState(initialAssetState)
+      return;
+    };
+
+    if (isWalletUser && isUnlocked) {
+      loadV2UserBalances()
+      return;
+    }
+
+    loadV1UserBalances()
+  }, [signedIn, isWalletUser, isUnlocked])
 
   const getBalance = (unit: string): number => {
     return state.assets.find((asset) => asset.unit === unit)?.unitValue || 0

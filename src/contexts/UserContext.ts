@@ -40,7 +40,6 @@ export interface IUserContext extends UserContextState {
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
   setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
-  setIsWalletUser: (isWalletUser: boolean) => void;
   newWalletUser: () => void;
 }
 
@@ -79,7 +78,6 @@ const UserContext = createContext<IUserContext>({
   setEthAddress: (_address: string) => { },
   setUserExpoPushToken: (_expoPushToken: string) => { },
   setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
-  setIsWalletUser: (_isWalletUser: boolean) => { },
   newWalletUser: () => { },
 });
 

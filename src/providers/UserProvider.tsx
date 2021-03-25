@@ -33,7 +33,6 @@ const UserProvider: React.FC = (props) => {
   const guestSignIn = async () => {
     const authServer = new Server(signOut, '');
     const isWalletUser = await AsyncStorage.getItem(IS_WALLET_USER);
-
     setState({
       ...state,
       signedIn: SignInStatus.SIGNIN,
@@ -62,7 +61,6 @@ const UserProvider: React.FC = (props) => {
               ...res.data.user,
               ethAddresses: res.data.user.ethAddresses || [],
             },
-            notifications: res.data.notifications || [],
             ownerships: res.data.ownerships || [],
             balance: res.data.totalBalance,
             Server: authServer,
@@ -107,7 +105,6 @@ const UserProvider: React.FC = (props) => {
           user: res.data.user,
           ownerships: res.data.ownerships,
           balance: res.data.totalBalance,
-          notifications: res.data.notifications || [],
           signedIn: SignInStatus.SIGNIN,
         });
       })
@@ -231,54 +228,57 @@ const UserProvider: React.FC = (props) => {
         addNotificationResponseReceivedListener,
       );
     };
-  }, [state.isWalletUser])
+  }, [state.isWalletUser, state.signedIn])
 
   const newWalletUser = () => {
-    setState({
-      ...state,
-      isWalletUser: true,
-      notifications: []
+    setState((state) => {
+      return {
+        ...state,
+        isWalletUser: true,
+        notifications: []
+      }
     })
   }
 
   const setNotifications = (notifications: Notification[]) => {
-    setState({
-      ...state,
-      notifications,
+    setState((state) => {
+      return {
+        ...state,
+        notifications,
+      }
     });
   }
 
   const setEthAddress = (address: string) => {
-    setState({
-      ...state,
-      user: { ...state.user, ethAddresses: [address] },
+    setState((state) => {
+      return {
+        ...state,
+        user: { ...state.user, ethAddresses: [address] },
+      }
     });
   }
 
   const setUserExpoPushToken = (expoPushToken: string) => {
-    setState({
-      ...state,
-      user: {
-        ...state.user,
-        expoPushTokens: expoPushToken ? [expoPushToken] : [],
-      },
-    });
-  }
-
-  const setIsWalletUser = (isWalletUser: boolean) => {
-    setState({
-      ...state,
-      isWalletUser: isWalletUser,
+    setState((state) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          expoPushTokens: expoPushToken ? [expoPushToken] : [],
+        },
+      }
     });
   }
 
   const setRefundStatus = (legacyRefundStatus: LegacyRefundStatus) => {
-    setState({
-      ...state,
-      user: {
-        ...state.user,
-        legacyWalletRefundStatus: legacyRefundStatus,
-      },
+    setState((state) => {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          legacyWalletRefundStatus: legacyRefundStatus,
+        },
+      }
     });
   }
 
@@ -293,7 +293,6 @@ const UserProvider: React.FC = (props) => {
         setNotifications,
         setEthAddress,
         setUserExpoPushToken,
-        setIsWalletUser,
         setRefundStatus,
         newWalletUser,
       }}

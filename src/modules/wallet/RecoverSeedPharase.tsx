@@ -19,9 +19,9 @@ const RecoverSeedPharase: FunctionComponent = () => {
   const { t } = useTranslation();
   const [state, setState] = useState<State>({
     currentIndex: 0,
-    //mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
-    // for test
-    mnemonic: ['conduct', 'come', 'lobster', 'cliff', 'harsh', 'journey', 'inner', 'airport', 'awkward', 'weapon', 'sibling', 'borrow'],
+    mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
+    //for test
+    //mnemonic: ['conduct', 'come', 'lobster', 'cliff', 'harsh', 'journey', 'inner', 'airport', 'awkward', 'weapon', 'sibling', 'borrow'],
   })
 
   return (
