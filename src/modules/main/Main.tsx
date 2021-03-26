@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,9 +16,8 @@ import MainInfo from '../more/MainInfo';
 import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
-import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
-import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
+import { MainPage } from '../../enums/pageEnum';
 
 const Icon = styled.Image`
   position: absolute;
@@ -30,7 +29,7 @@ const Icon = styled.Image`
 const Tab = createBottomTabNavigator();
 
 const Main: FunctionComponent = () => {
-  const { notifications, user } = useContext(UserContext);
+  const { notifications, user, isWalletUser } = useContext(UserContext);
 
   return (
     <SafeAreaView
@@ -46,39 +45,23 @@ const Main: FunctionComponent = () => {
           },
         }}>
         <Tab.Screen
-          name="DashboardMain"
+          name={MainPage.DashboardMain}
           component={DashBoardMain}
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <>
-                <Icon
-                  source={focused ? DashboardBlackPng : DashboardPng}
-                  style={{
-                    width: 30,
-                    height: 30,
-                  }}
-                />
-                {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-                  user.legacyWalletRefundStatus === LegacyRefundStatus.NONE && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 25,
-                        width: 8,
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: '#FC5C4F',
-                      }}
-                    />
-                  )}
-              </>
+              <Icon
+                source={focused ? DashboardBlackPng : DashboardPng}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
+              />
             ),
           }}
         />
         <Tab.Screen
-          name="ProductsMain"
+          name={MainPage.ProductsMain}
           component={MainList}
           options={{
             unmountOnBlur: true,
@@ -95,7 +78,7 @@ const Main: FunctionComponent = () => {
           }}
         />
         <Tab.Screen
-          name="NotificationMain"
+          name={MainPage.NotificationMain}
           component={Notifications}
           options={{
             tabBarLabel: '',
@@ -128,7 +111,7 @@ const Main: FunctionComponent = () => {
           }}
         />
         <Tab.Screen
-          name="MoreMain"
+          name={MainPage.MoreMain}
           component={MainInfo}
           options={{
             tabBarLabel: '',
@@ -142,7 +125,7 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {!(user.ethAddresses?.length > 0) && (
+                {(!isWalletUser && !(user.ethAddresses?.length > 0)) && (
                   <View
                     style={{
                       position: 'absolute',

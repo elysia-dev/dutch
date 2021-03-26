@@ -7,19 +7,13 @@ import React, {
 } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import FunctionContext from '../../contexts/FunctionContext';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import { PostResponse } from '../../types/PostResponse';
-import { Notice } from '../dashboard/ProductNotice';
+import { P1Text, P3Text } from '../../shared/components/Texts';
+import moment from 'moment';
+import UserContext from '../../contexts/UserContext';
 
-const GText = styled.Text`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: #626368;
-  font-size: 15px;
-  text-align: left;
-`;
 const PText = styled.Text`
   margin-top: 10px;
   margin-bottom: 10px;
@@ -31,20 +25,68 @@ interface State {
   postList: PostResponse[];
 }
 
+const Notice: FunctionComponent<{ post: PostResponse }> = (props) => {
+  const [state, setState] = useState({
+    content: false,
+  });
+
+  return (
+    <TouchableOpacity
+      onPress={() => setState({ ...state, content: !state.content })}>
+      <View
+        style={{
+          paddingVertical: 5,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <P1Text
+          label={moment(props.post.createdAt).format('YYYY-MM-DD')}
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            color: '#626368',
+          }}
+        />
+        <P1Text
+          label={props.post.title}
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        />
+      </View>
+      {state.content && (
+        <View>
+          <P3Text
+            style={{
+              color: '#A7A7A7',
+              marginTop: 0,
+              marginBottom: 10,
+              fontSize: 15,
+            }}
+            label={props.post.body}
+          />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+};
+
 const ElysiaNotice: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, setState] = useState<State>({
     full: false,
     postList: [],
   });
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
+  const { t } = useTranslation();
 
   const loadElysiaNotice = () => {
     Server.elysiaPost()
       .then((res) => setState({ ...state, postList: res.data }))
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };

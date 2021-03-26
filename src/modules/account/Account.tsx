@@ -17,17 +17,22 @@ const Stack = createStackNavigator();
 export const Account: FunctionComponent = () => {
   const { signedIn } = useContext(UserContext);
 
+  const initialRouteName = () => {
+    switch (signedIn) {
+      case SignInStatus.DELETE:
+        return AccountPage.WithdrawnMember
+      case SignInStatus.EXPIRED:
+        return AccountPage.ExpiredAccount
+      default:
+        return AccountPage.IntroduceElysia
+    }
+  }
+
   return (
     <Stack.Navigator
-      initialRouteName={
-        // eslint-disable-next-line no-nested-ternary
-        signedIn === SignInStatus.DELETE
-          ? AccountPage.WithdrawnMember
-          : signedIn === SignInStatus.EXPIRED
-            ? AccountPage.ExpiredAccount
-            : AccountPage.IntroduceElysia
-      }
-      headerMode="none">
+      initialRouteName={initialRouteName()}
+      headerMode="none"
+    >
       <Stack.Screen
         name={AccountPage.IntroduceElysia}
         component={IntroduceElysia}

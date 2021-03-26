@@ -1,14 +1,12 @@
 import { createContext } from 'react';
-import LocaleType from '../enums/LocaleType';
-import { SignInStatus } from '../enums/SignInStatus';
+import { SignInStatus, SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
-import CurrencyType from '../enums/CurrencyType';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
-import { currentLocalization } from '../utiles/currentLocale';
+import Server from '../api/server';
 
-type UserContextType = {
+export type UserContextState = {
   signedIn: SignInStatus;
   user: {
     id: number;
@@ -16,8 +14,6 @@ type UserContextType = {
     firstName: string;
     lastName: string;
     gender: string;
-    language: LocaleType;
-    currency: CurrencyType;
     ethAddresses: string[];
     expoPushTokens: string[];
     nationality: string;
@@ -31,9 +27,23 @@ type UserContextType = {
   balance: string;
   notifications: Notification[];
   expoPushToken: string;
+  isWalletUser: boolean;
+  Server: Server;
 };
 
-const UserContext = createContext<UserContextType>({
+export interface IUserContext extends UserContextState {
+  signIn: () => void;
+  guestSignIn: () => void;
+  signOut: (signInStatus: SignOut) => void;
+  refreshUser: () => Promise<void>;
+  setNotifications: (notifications: Notification[]) => void;
+  setEthAddress: (address: string) => void;
+  setUserExpoPushToken: (expoPushToken: string) => void;
+  setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
+  newWalletUser: () => void;
+}
+
+export const initialUserState: UserContextState = {
   signedIn: SignInStatus.PENDING,
   user: {
     id: 0,
@@ -43,8 +53,6 @@ const UserContext = createContext<UserContextType>({
     gender: '',
     ethAddresses: [],
     expoPushTokens: [],
-    language: currentLocalization(),
-    currency: CurrencyType.USD,
     nationality: 'South Korea, KOR',
     legacyEl: 0,
     legacyUsd: 0,
@@ -56,6 +64,21 @@ const UserContext = createContext<UserContextType>({
   balance: '0',
   notifications: [] as Notification[],
   expoPushToken: '',
+  isWalletUser: false,
+  Server: new Server(() => { }, '')
+}
+
+const UserContext = createContext<IUserContext>({
+  ...initialUserState,
+  signIn: async () => { },
+  guestSignIn: async () => { },
+  signOut: async (_signInStatus: SignOut) => { },
+  refreshUser: async () => { },
+  setNotifications: (_notifications: Notification[]) => { },
+  setEthAddress: (_address: string) => { },
+  setUserExpoPushToken: (_expoPushToken: string) => { },
+  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
+  newWalletUser: () => { },
 });
 
 export default UserContext;

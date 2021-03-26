@@ -9,7 +9,6 @@ import {
   View,
   ScrollView,
   StatusBar,
-  Modal,
   ActivityIndicator,
   TouchableOpacity,
   Alert,
@@ -17,21 +16,22 @@ import {
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import styled from 'styled-components/native';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
-import Product, { defaultProduct } from '../../types/Product';
+import Product from '../../types/Product';
 import BasicInfo from './components/BasicInfo';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
-import SliderProductBuying from './SliderProductBuying';
 import ProductStatus from '../../enums/ProductStatus';
 import CachedImage from '../../shared/components/CachedImage';
-import { MorePage } from '../../enums/pageEnum';
+import { MorePage, ProductPage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
-import FunctionContext from '../../contexts/FunctionContext';
 import UserContext from '../../contexts/UserContext';
+import CryptoType from '../../enums/CryptoType';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import PriceContext from '../../contexts/PriceContext';
 
 const ProductInfoWrapper = styled.SafeAreaView`
   background-color: #fff;
@@ -47,56 +47,52 @@ type ParamList = {
 };
 
 interface State {
-  modalVisible: boolean;
   subscribed: boolean;
   product?: Product;
   loaded: boolean;
-  ethPrice: number;
-  elPrice: number;
   selectedImage: number;
 }
 
 const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
-    modalVisible: false,
     subscribed: false,
     loaded: false,
-    elPrice: 0,
-    ethPrice: 0,
     selectedImage: 0,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
   const viewPager = useRef<ViewPager>(null);
-  const { Server } = useContext(FunctionContext);
-  const { user } = useContext(UserContext);
+  const { user, isWalletUser, Server } = useContext(UserContext);
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
+  const { elPrice, ethPrice } = useContext(PriceContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
-  const purchasability = user.ethAddresses?.length > 0;
+  const purchasability = isWalletUser || user.ethAddresses?.length > 0;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
       return 'Sold Out';
-    } else if (user.provider === ProviderType.GUEST) {
-      return i18n.t('product_label.need_wallet');
+    } else if (user.provider === ProviderType.GUEST && !purchasability) {
+      return t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
-      return i18n.t('product_label.non_purchasable');
+      return t('product_label.non_purchasable');
     } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
-      return i18n.t('product_label.restricted_country');
+      return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
-      return i18n.t('product_label.invest');
+      return t('product_label.invest');
     }
     return '';
   };
 
   const submitButtonHandler = () => {
-    if (user.provider === ProviderType.GUEST) {
+    if (ProviderType.GUEST && !purchasability) {
       return Alert.alert(
-        i18n.t('product_label.need_wallet'),
-        i18n.t('product.connect_wallet_confirm'),
+        t('product_label.need_wallet'),
+        t('product.connect_wallet_confirm'),
         [
           {
             text: 'Cancel',
@@ -116,41 +112,46 @@ const ProductBuying: FunctionComponent = () => {
       );
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
-        return alert(i18n.t('product.restricted_country'));
+        return alert(t('product.restricted_country'));
       }
-      return alert(i18n.t('product.non_purchasable'));
+      return alert(t('product.non_purchasable'));
     } else {
-      setState({ ...state, modalVisible: true });
+      navigation.navigate(ProductPage.Purchase, {
+        from: {
+          type: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          unit: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          title: state.product?.paymentMethod.toUpperCase(),
+        },
+        to: {
+          type: CryptoType.ELA,
+          title: state.product?.tokenName,
+        },
+        toMax: state.product?.presentValue,
+        contractAddress: state.product?.contractAddress,
+        productId: state.product?.id,
+      })
     }
   };
 
   const loadProductAndPrice = async () => {
     try {
       const product = await Server.productInfo(productId);
-      const elPrice = await Server.getCurrency('el');
-      const ethPrice = await Server.coinPrice();
       setState({
         ...state,
         product: product.data,
         loaded: true,
-        elPrice: elPrice.data.rate,
-        ethPrice: ethPrice.data.ethereum.usd,
       });
     } catch (e) {
       if (e.response.status === 500) {
-        alert(i18n.t('account_errors.server'));
+        alert(t('account_errors.server'));
       } else if (e.response.status) {
         if (e.response.status === 404) {
           const product = await Server.productInfo(productId);
-          const elPrice = await Server.getCurrency('el');
-          const ethPrice = await Server.coinPrice();
           setState({
             ...state,
             product: product.data,
             subscribed: false,
             loaded: true,
-            elPrice: elPrice.data.rate,
-            ethPrice: ethPrice.data.ethereum.usd,
           });
         }
       }
@@ -197,7 +198,7 @@ const ProductBuying: FunctionComponent = () => {
 
   useEffect(() => {
     loadProductAndPrice();
-  }, [user.language, productId]);
+  }, [language, productId]);
 
   return (
     <>
@@ -255,8 +256,8 @@ const ProductBuying: FunctionComponent = () => {
           {state.product && (
             <BasicInfo
               product={state.product}
-              elPrice={state.elPrice}
-              ethPrice={state.ethPrice}
+              elPrice={elPrice}
+              ethPrice={ethPrice}
             />
           )}
           {state.product && state.product?.status !== ProductStatus.TERMINATED && (
@@ -299,7 +300,7 @@ const ProductBuying: FunctionComponent = () => {
           title={submitButtonTitle()}
         />
 
-        {!state.elPrice && (
+        {!elPrice && (
           <View
             style={{
               backgroundColor: '#fff',
@@ -312,31 +313,7 @@ const ProductBuying: FunctionComponent = () => {
             <ActivityIndicator size="large" color="#3679B5" />
           </View>
         )}
-        <Modal
-          transparent={true}
-          animationType={'slide'}
-          visible={state.modalVisible}
-          onRequestClose={() => setState({ ...state, modalVisible: false })}>
-          <SliderProductBuying
-            product={state.product ? state.product : defaultProduct}
-            subscribed={state.subscribed}
-            setSubcribed={(input: boolean) =>
-              setState({ ...state, subscribed: input })
-            }
-            modalHandler={() => setState({ ...state, modalVisible: false })}
-          />
-        </Modal>
       </ProductInfoWrapper>
-      {state.modalVisible && (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      )}
     </>
   );
 };

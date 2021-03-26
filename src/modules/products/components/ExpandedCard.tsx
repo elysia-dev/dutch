@@ -1,7 +1,5 @@
 import React, {
-  createRef,
   FunctionComponent,
-  useContext,
   useEffect,
   useState,
   useRef,
@@ -23,11 +21,13 @@ import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
 
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
+import { Page, ProductPage } from '../../../enums/pageEnum';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   story: Story;
@@ -44,7 +44,7 @@ const htmlStyles = StyleSheet.create({
     lineHeight: 25,
     marginLeft: '5%',
     marginRight: '5%',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: AppFonts.Regular,
   },
   p: {
     fontSize: 15,
@@ -53,7 +53,7 @@ const htmlStyles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: '5%',
     marginRight: '5%',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: AppFonts.Regular,
   },
 });
 const defaultTextProps = {
@@ -121,6 +121,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
     scrollEnabled: true,
     backgroundColor: true,
   });
+  const { t } = useTranslation();
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
   const scrollRef = useRef<ScrollView>(null);
@@ -316,12 +317,14 @@ const ExpandedItem: FunctionComponent<Props> = ({
         !state.closed && state.scrollY > 50 && (
           <SubmitButton
             style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
-            title={i18n.t('product_label.more_info')}
+            title={t('product_label.more_info')}
             handler={() => {
               StatusBar.setHidden(false);
-              navigation.navigate('Product', {
-                screen: 'ProductBuying',
-                params: { productId: story.productId },
+              navigation.navigate(Page.Product, {
+                screen: ProductPage.ProductBuying,
+                params: {
+                  productId: story.productId,
+                }
               });
             }}
           />

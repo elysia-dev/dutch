@@ -1,16 +1,20 @@
-import React, { Component, FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import UserContext from '../../../contexts/UserContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
+import LocaleType from '../../../enums/LocaleType';
 
 interface Props {
   product: Product;
 }
 
 export const Map: FunctionComponent<Props> = (props: Props) => {
+  const { t } = useTranslation();
+  const { language } = useContext(PreferenceContext);
   const markerCord = {
     latitude: parseFloat(props.product.data.latitude),
     longitude: parseFloat(props.product.data.longitude),
@@ -18,12 +22,12 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
   const { user } = useContext(UserContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[user.language];
+  const productDescription = product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
 
   return (
     <View>
-      <H3Text label={i18n.t('product_label.address')} />
+      <H3Text label={t('product_label.address')} />
       <View
         style={{
           width: '100%',
@@ -47,7 +51,7 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
             marginBottom: 10,
           }}>
           <P1Text
-            label={i18n.t('product_label.location')}
+            label={t('product_label.location')}
             style={{ flex: 1, color: '#626368' }}
           />
           <P1Text

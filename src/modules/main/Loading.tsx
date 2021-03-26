@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
-const Loading: FunctionComponent = () => {
+const Loading: React.FC = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#3679B5' }}>
       <View

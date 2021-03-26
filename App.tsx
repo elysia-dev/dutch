@@ -1,9 +1,11 @@
+import './i18n'
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 
-// import { AppLoading } from 'expo';
 import * as Sentry from 'sentry-expo';
 import * as Updates from 'expo-updates';
+
+import { useFonts } from 'expo-font';
 
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
@@ -16,6 +18,15 @@ Sentry.init({
 });
 
 const App = () => {
+  /* eslint-disable @typescript-eslint/camelcase */
+  const [fontsLoaded] = useFonts({
+    'SpoqaHanSansNeoThin': require('./src/shared/assets/fonts/SpoqaHanSansNeoThin.otf'),
+    'SpoqaHanSansNeoLight': require('./src/shared/assets/fonts/SpoqaHanSansNeoLight.otf'),
+    'SpoqaHanSansNeoRegular': require('./src/shared/assets/fonts/SpoqaHanSansNeoRegular.otf'),
+    'SpoqaHanSansNeoMedium': require('./src/shared/assets/fonts/SpoqaHanSansNeoMedium.otf'),
+    'SpoqaHanSansNeoBold': require('./src/shared/assets/fonts/SpoqaHanSansNeoBold.otf'),
+  });
+
   const [loading, setLoading] = useState<boolean>(true);
 
   const checkUpdateAndRefreshApp = async () => {
@@ -35,7 +46,7 @@ const App = () => {
     checkUpdateAndRefreshApp();
   }, []);
 
-  if (loading) {
+  if (loading || !fontsLoaded) {
     return <Loading />;
   } else {
     return <AppMain />;

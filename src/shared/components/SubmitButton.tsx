@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components/native';
 import { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import AppFonts from '../../enums/AppFonts';
 
 type ButtonProps = {
   theme: string;
@@ -43,7 +44,7 @@ const ButtonLabel = styled.Text`
   text-align: center;
   line-height: 40px;
   font-family: ${(props: ButtonProps) =>
-    props.theme === 'GrayTheme' ? 'Roboto_400Regular' : 'Roboto_700Bold'};
+    props.theme === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold};
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
 `;
@@ -53,14 +54,14 @@ const DuplicateUpperLabel = styled.Text`
   margin-left: 6%;
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-family: 'Roboto_400Regular';
+  font-family: '${AppFonts.Regular}';
 `;
 const DuplicateLabel = styled.Text`
   font-size: 16px;
   text-align: left;
   color: ${(props: ButtonProps) =>
     props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-family: 'Roboto_700Bold';
+  font-family: '${AppFonts.Bold}';
 `;
 interface SubmitButtonProps {
   title: string;
@@ -89,14 +90,14 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
           {title}
         </ButtonLabel>
       ) : (
-          <DuplicateUpperLabel theme={variant} allowFontScaling={false}>
-            {duplicateTitle}
-            <DuplicateLabel theme={variant} allowFontScaling={false}>
-              {'\n'}
-              {title}
-            </DuplicateLabel>
-          </DuplicateUpperLabel>
-        )}
+        <DuplicateUpperLabel theme={variant} allowFontScaling={false}>
+          {duplicateTitle}
+          <DuplicateLabel theme={variant} allowFontScaling={false}>
+            {'\n'}
+            {title}
+          </DuplicateLabel>
+        </DuplicateUpperLabel>
+      )}
     </Button>
   );
 };

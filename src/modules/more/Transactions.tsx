@@ -18,7 +18,7 @@ import {
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
-import i18n from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
 import Filter from './components/Filter';
 import { Transaction } from '../../types/Transaction';
@@ -26,7 +26,8 @@ import { TransactionBox } from '../dashboard/components/TransactionBox';
 import { reducer } from '../../hooks/reducers/TransactionFilterReducer';
 import { H1Text, P1Text, TitleText } from '../../shared/components/Texts';
 import { ProductPicker } from './components/ProductPicker';
-import FunctionContext from '../../contexts/FunctionContext';
+import UserContext from '../../contexts/UserContext';
+import AppFonts from '../../enums/AppFonts';
 
 export const initialState = {
   page: 1,
@@ -42,14 +43,15 @@ export const initialState = {
 const Transactions: FunctionComponent = () => {
   const navigation = useNavigation();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { t } = useTranslation();
   const [productState, setState] = useState({
-    iosList: [{ label: i18n.t('more_label.type_'), value: '0', key: 0 }],
+    iosList: [{ label: t('more_label.type_'), value: '0', key: 0 }],
     andList: [
-      <Picker.Item key={0} label={i18n.t('more_label.type_')} value={'0'} />,
+      <Picker.Item key={0} label={t('more_label.type_')} value={'0'} />,
     ],
   });
 
-  const { Server } = useContext(FunctionContext);
+  const { Server } = useContext(UserContext);
   const historyList = state.transactions.map(
     (transaction: Transaction, index: number) => (
       <TransactionBox transaction={transaction} key={index} />
@@ -74,7 +76,7 @@ const Transactions: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -90,7 +92,7 @@ const Transactions: FunctionComponent = () => {
     )
       .then((res) => {
         if (res.data.length === 0 && state.page > 1) {
-          return alert(i18n.t('dashboard.last_transaction'));
+          return alert(t('dashboard.last_transaction'));
         }
         dispatch({ type: 'UPDATE_PAGE', page: state.page + 1 });
         dispatch({
@@ -100,7 +102,7 @@ const Transactions: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   };
@@ -130,7 +132,7 @@ const Transactions: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert(i18n.t('account_errors.server'));
+          alert(t('account_errors.server'));
         }
       });
   }, []);
@@ -162,16 +164,16 @@ const Transactions: FunctionComponent = () => {
         />
         <TitleText
           style={{ marginBottom: 25 }}
-          label={i18n.t('dashboard_label.transaction')}
+          label={t('dashboard_label.transaction')}
         />
         <TouchableOpacity
           onPress={() => dispatch({ type: 'MODAL_CONTROL', modal: true })}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
           <P1Text
             style={{ color: '#838383' }}
-            label={`${i18n.t(`more_label.${state.period}_day`)} · ${i18n.t(
+            label={`${t(`more_label.${state.period}_day`)} · ${t(
               `more_label.type_${state.type}`,
-            )} · ${i18n.t('more_label.latest')}`}
+            )} · ${t('more_label.latest')}`}
           />
           <Image
             source={require('./images/graydownbutton.png')}
@@ -213,7 +215,7 @@ const Transactions: FunctionComponent = () => {
                 textAlign: 'center',
                 fontSize: 15,
               }}
-              label={i18n.t('more.no_transaction')}
+              label={t('more.no_transaction')}
             />
           </View>
         ) : (
@@ -240,9 +242,9 @@ const Transactions: FunctionComponent = () => {
                   color: '#4E4E4E',
                   fontSize: 17,
                   textAlign: 'center',
-                  fontFamily: 'Roboto_400Regular',
+                  fontFamily: AppFonts.Regular,
                 }}>
-                {i18n.t('dashboard_label.more_transactions')}
+                {t('dashboard_label.more_transactions')}
               </Text>
             </TouchableOpacity>
           </>

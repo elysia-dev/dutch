@@ -1,3 +1,9 @@
+// ! important
+// https://github.com/ethers-io/ethers.js/issues/993
+// arrayBuffer not work on all platform. react-native has not implemented this method yet:
+// So always provicer fetch return missing response!
+// ethersproject/shims is requires!
+import "@ethersproject/shims";
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
@@ -12,7 +18,7 @@ function isAddress(value: any): string | false {
   }
 }
 
-const provider = new InfuraProvider(
+export const provider = new InfuraProvider(
   getEnvironment().ethNetwork,
   getEnvironment().infuraProjectId,
 );

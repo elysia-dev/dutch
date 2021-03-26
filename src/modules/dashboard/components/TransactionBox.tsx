@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next'
 import * as Linking from 'expo-linking';
-import i18n from '../../../i18n/i18n';
+import moment from 'moment';
 import { Transaction } from '../../../types/Transaction';
 import {
   P1Text,
@@ -9,16 +10,16 @@ import {
   P4Text,
   H3Text,
 } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
-import CurrencyContext from '../../../contexts/CurrencyContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 interface Props {
   transaction: Transaction;
 }
 
 export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+  const { t } = useTranslation();
 
   const [state, setState] = useState({
     show: false,
@@ -38,7 +39,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
             style={{
               marginBottom: 5,
             }}
-            label={i18n.t(
+            label={t(
               `dashboard_label.${props.transaction.transactionType}`,
             )}
           />
@@ -49,10 +50,7 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               textAlign: 'left',
               marginBottom: 5,
             }}
-            label={i18n.strftime(
-              new Date(props.transaction.createdAt),
-              '%m.%d',
-            )}
+            label={moment(props.transaction.createdAt).format('MM.DD')}
           />
           {props.transaction.hash?.length > 0 && (
             <TouchableOpacity
@@ -70,8 +68,8 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#fff', textAlign: 'center' }}
                   label={
                     state.show
-                      ? i18n.t('dashboard_label.fold')
-                      : i18n.t('dashboard_label.transaction')
+                      ? t('dashboard_label.fold')
+                      : t('dashboard_label.transaction')
                   }
                 />
                 <Image
@@ -100,27 +98,23 @@ export const TransactionBox: FunctionComponent<Props> = (props: Props) => {
               textAlign: 'right',
               color:
                 props.transaction.transactionType === 'refund' ||
-                props.transaction.transactionType === 'close' ||
-                props.transaction.transactionType === 'profit'
+                  props.transaction.transactionType === 'close' ||
+                  props.transaction.transactionType === 'profit'
                   ? '#1C1C1C'
                   : '#3679B5',
             }}
             label={
               props.transaction.transactionType === 'refund' ||
-              props.transaction.transactionType === 'close' ||
-              props.transaction.transactionType === 'profit'
+                props.transaction.transactionType === 'close' ||
+                props.transaction.transactionType === 'profit'
                 ? `- ${currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(props.transaction.value),
-                    2,
-                  )}`
+                  parseFloat(props.transaction.value),
+                  2,
+                )}`
                 : currencyFormatter(
-                    currencyUnit,
-                    currencyRatio,
-                    parseFloat(props.transaction.value),
-                    2,
-                  )
+                  parseFloat(props.transaction.value),
+                  2,
+                )
             }
           />
         </View>

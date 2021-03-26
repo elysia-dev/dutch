@@ -7,18 +7,18 @@ import {
   Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../../i18n/i18n';
+import { useTranslation } from 'react-i18next'
+import moment from 'moment';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
 import Notification from '../../../types/Notification';
-import { DashboardPage, MorePage } from '../../../enums/pageEnum';
+import { DashboardPage, MorePage, Page } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
-import currencyFormatter from '../../../utiles/currencyFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
-import CurrencyContext from '../../../contexts/CurrencyContext';
 import UserContext from '../../../contexts/UserContext';
-import FunctionContext from '../../../contexts/FunctionContext';
+import PreferenceContext from '../../../contexts/PreferenceContext';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   notification: Notification;
@@ -26,10 +26,10 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyUnit, currencyRatio } = useContext(CurrencyContext);
-  const { notifications } = useContext(UserContext);
-  const { setNotifications } = useContext(FunctionContext);
+  const { currencyFormatter } = useContext(PreferenceContext)
+  const { notifications, setNotifications } = useContext(UserContext);
   const [showTx, setShowTx] = useState(false);
+  const { t } = useTranslation();
 
   const type = props.notification.notificationType;
   const typeId = () => {
@@ -70,18 +70,18 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   const navigate = () => {
     switch (type) {
       case NotificationType.PRODUCT_NOTICE:
-        navigation.navigate('Dashboard', {
+        navigation.navigate(Page.Dashboard, {
           screen: DashboardPage.ProductNotice,
           params: { productId: data.productId },
         });
         break;
       case NotificationType.ONBOARDING_CONNECT_WALLET:
-        navigation.navigate('More', {
+        navigation.navigate(Page.More, {
           screen: MorePage.RegisterEthAddress,
         });
         break;
       case NotificationType.ONBOARDING_NEW_USER:
-        navigation.navigate('Dashboard', {
+        navigation.navigate(Page.Dashboard, {
           screen: DashboardPage.InvestmentGuide,
         });
         break;
@@ -108,7 +108,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           ...notification,
           status:
             notification.status === NotificationStatus.READ ||
-            notification.id === props.notification.id
+              notification.id === props.notification.id
               ? NotificationStatus.READ
               : NotificationStatus.UNREAD,
         })),
@@ -147,22 +147,20 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 fontSize: 13,
                 marginBottom: 6,
               }}
-              label={i18n.t(`notification_label.${type}`)}
+              label={t(`notification_label.${type}`)}
             />
             <P1Text
               style={{
                 color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
                 fontFamily:
-                  status === 'read' ? 'Roboto_400Regular' : 'Roboto_700Bold',
+                  status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,
               }}
-              label={i18n.t(`notification.${type}`, {
+              label={t(`notification.${type}`, {
                 month: data.month,
                 week: data.week,
                 device: data.message,
                 profit: currencyFormatter(
-                  currencyUnit,
-                  currencyRatio,
                   parseFloat(data.message),
                   4,
                 ),
@@ -201,8 +199,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                       style={{ color: '#fff', textAlign: 'center' }}
                       label={
                         showTx
-                          ? i18n.t('dashboard_label.fold')
-                          : i18n.t('dashboard_label.transaction')
+                          ? t('dashboard_label.fold')
+                          : t('dashboard_label.transaction')
                       }
                     />
                     <Image
@@ -246,10 +244,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 fontSize: 13,
                 marginBottom: 6,
               }}
-              label={i18n.strftime(
-                new Date(props.notification.createdAt),
-                i18n.t('notification_label.date_format'),
-              )}
+              label={moment(props.notification.createdAt).format('MM.DD')}
             />
           </View>
           <View
@@ -261,11 +256,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             {(type === NotificationType.PRODUCT_NOTICE ||
               type === NotificationType.ONBOARDING_NEW_USER ||
               type === NotificationType.ONBOARDING_CONNECT_WALLET) && (
-              <Image
-                style={{ left: 10, width: 6, height: 9 }}
-                source={images[9][status === 'read' ? 0 : 1]}
-              />
-            )}
+                <Image
+                  style={{ left: 10, width: 6, height: 9 }}
+                  source={images[9][status === 'read' ? 0 : 1]}
+                />
+              )}
           </View>
           {type === NotificationType.PENDING_TRANSACTION && (
             <View

@@ -1,247 +1,178 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-  ActivityIndicator,
-  Modal,
-  Platform,
-  RefreshControl,
+  ScrollView, View, Image, TouchableOpacity, RefreshControl
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import i18n from '../../i18n/i18n';
-import { BalanceCard } from './components/BalanceCard';
-import { WithdrawalCard } from './components/WithdrawalCard';
-import { Asset } from './components/Asset';
-import { DashboardPage } from '../../enums/pageEnum';
-import VirtualTab from '../../shared/components/VirtualTab';
-import { H2Text, H1Text } from '../../shared/components/Texts';
-import ProviderType from '../../enums/ProviderType';
-import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import { H3Text, TitleText } from '../../shared/components/Texts';
+import BasicLayout from '../../shared/components/BasicLayout';
+import AssetListing from './components/AssetListing';
+import AppColors from '../../enums/AppColors';
+import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import FunctionContext from '../../contexts/FunctionContext';
-import CurrencyContext from '../../contexts/CurrencyContext';
+import { AssetPage, CryptoPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
+import { useTranslation } from 'react-i18next';
+import OverlayLoading from '../../shared/components/OverlayLoading';
+import ProviderType from '../../enums/ProviderType';
+import PreferenceContext from '../../contexts/PreferenceContext';
+import PriceContext from '../../contexts/PriceContext';
+import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
+import LegacyWallet from './components/LegacyWallet';
+import AssetContext from '../../contexts/AssetContext';
 
-export const Main: FunctionComponent = () => {
+export const Main: React.FC = () => {
+  const { user, isWalletUser, refreshUser } = useContext(UserContext);
+  const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
+  const { elPrice, } = useContext(PriceContext);
   const navigation = useNavigation();
-  const { user, ownerships, balance } = useContext(UserContext);
-  const { elPrice } = useContext(CurrencyContext);
-  const { refreshUser, Server } = useContext(FunctionContext);
-  const legacyTotal: number | undefined = parseFloat(
-    (user.legacyEl * elPrice + user.legacyUsd).toFixed(2),
-  );
-  const [refreshing, setRefreshing] = React.useState(false);
-
   const ref = React.useRef(null);
   useScrollToTop(ref);
+  const { currencyFormatter } = useContext(PreferenceContext)
+  const { t } = useTranslation();
 
-  const onRefresh = React.useCallback(() => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = () => {
+    if (user.provider === ProviderType.GUEST && !isWalletUser) return;
+
     setRefreshing(true);
-    refreshUser().then(() => setRefreshing(false));
-  }, [Server.token]);
-
-  const ownershipsList = ownerships.map((ownership, index) => (
-    <Asset
-      handler={() => {
-        navigation.navigate('Dashboard', {
-          screen: DashboardPage.OwnershipDetail,
-          params: { ownershipId: ownership.id },
-        });
-      }}
-      ownership={ownership}
-      key={index}
-    />
-  ));
-
-  const greeting = () => {
-    switch (user.provider) {
-      case ProviderType.GUEST:
-        return i18n.t('dashboard.connect_address');
-      case ProviderType.ETH:
-        return i18n.t('greeting_new', {
-          email: `${user.ethAddresses[0]?.substring(
-            0,
-            6,
-          )}...${user.ethAddresses[0]?.substring(
-            user.ethAddresses[0]?.length - 4,
-          )}`,
-        });
-      case ProviderType.EMAIL:
-        return user.firstName && user.lastName
-          ? i18n.t('greeting', {
-              firstName: user.firstName,
-              lastName: user.lastName === null ? '' : user.lastName,
-            })
-          : i18n.t('greeting_new', {
-              email: user.email,
-            });
-      default:
-        return '';
+    if (isWalletUser) {
+      loadV2UserBalances(true).then(() => {
+        setRefreshing(false)
+      });
+    } else {
+      refreshUser().then(async () => {
+        await loadV1UserBalances(true)
+      }).finally(() => {
+        setRefreshing(false)
+      });
     }
   };
 
   return (
     <>
-      <Modal visible={user.id === 0 || elPrice === 0} transparent={false}>
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#3679B5" />
-        </View>
-      </Modal>
       <ScrollView
         ref={ref}
         style={{
           width: '100%',
           height: '100%',
-          top: 0,
-          backgroundColor: '#FAFCFF',
+          backgroundColor: 'white',
         }}
         refreshControl={
-          user.provider !== ProviderType.GUEST ? (
+          user.provider !== ProviderType.GUEST || isWalletUser ? (
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           ) : undefined
-        }>
-        <SafeAreaView>
-          <View
-            style={{
-              paddingTop: Platform.OS === 'android' ? 65 : 45,
-              height: '100%',
-              padding: 20,
-            }}>
-            <H1Text style={{ marginBottom: 40 }} label={greeting()} />
-            <BalanceCard
-              balance={balance}
-              handler={() =>
-                navigation.navigate('Dashboard', {
-                  screen: DashboardPage.SummaryReport,
-                })
-              }
-            />
-            {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
-              [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
-                user.legacyWalletRefundStatus,
-              ) && (
-                <WithdrawalCard
-                  balance={legacyTotal}
-                  handler={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.RemainingBalance,
-                    })
-                  }
-                  redDot={
-                    user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
-                  }
-                />
-              )}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-              }}>
-              {ownershipsList}
-              {ownerships.length > 0 && (
+        }
+      >
+        <BasicLayout >
+          <H3Text
+            style={{ marginTop: 70 }}
+            label={t('main.total_assets')}
+          />
+          <View style={{
+            paddingBottom: 15,
+            borderBottomWidth: 1,
+            borderBottomColor: AppColors.GREY,
+            marginTop: 15,
+            marginBottom: 40,
+          }}>
+            {
+              (isWalletUser || user.ethAddresses[0]) ? <TitleText
+                label={currencyFormatter(
+                  assets.reduce((res, cur) => res + cur.currencyValue, 0),
+                  2
+                )}
+              /> :
                 <TouchableOpacity
                   style={{
-                    position: 'relative',
-                    width: '47%',
-                    height: 200,
-                    borderRadius: 10,
-                    backgroundColor: '#fff',
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    shadowOffset: { width: 2, height: 2 },
-                    shadowColor: '#1C1C1C4D',
-                    shadowOpacity: 0.8,
-                    shadowRadius: 7,
-                    elevation: 6,
-                    marginBottom: 20,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
                   }}
-                  onPress={() =>
-                    navigation.navigate('ProductsMain', { refresh: true })
-                  }>
-                  <Text
+                  onPress={() => {
+                    navigation.navigate(Page.More, { screen: MorePage.RegisterEthAddress })
+                  }}
+                >
+                  <View
                     style={{
-                      textAlign: 'center',
-                      fontFamily: 'Roboto_700Bold',
-                      fontSize: 25,
-                      color: '#838383',
-                    }}>
-                    {'+'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-            {ownerships.length === 0 && (
-              <>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Dashboard', {
-                      screen: DashboardPage.InvestmentGuide,
-                    })
-                  }
-                  style={{
-                    marginBottom: 25,
-                    width: '100%',
-                    backgroundColor: '#fff',
-                    borderRadius: 10,
-                    shadowColor: '#3679B540',
-                    shadowOffset: { width: 1, height: 1 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
-                    elevation: 8,
-                  }}>
-                  <Image
-                    source={require('./images/investmentguide.png')}
-                    style={{ width: '100%', height: 416, borderRadius: 10 }}
-                  />
-                  <H2Text
-                    style={{ position: 'absolute', top: 30, left: 25 }}
-                    label={i18n.t('dashboard.investment_guide')}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('ProductsMain', { refresh: true })
-                  }
-                  style={{
-                    marginBottom: 25,
-                    width: '100%',
-                    backgroundColor: '#fff',
-                    borderRadius: 10,
-                    shadowColor: '#3679B540',
-                    shadowOffset: { width: 1, height: 1 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 8,
-                    elevation: 8,
-                  }}>
-                  <Image
-                    source={require('./images/newinvestment.png')}
-                    style={{ width: '100%', height: 250, borderRadius: 10 }}
-                  />
-                  <H2Text
-                    style={{
-                      position: 'absolute',
-                      top: 30,
-                      left: 25,
+                      shadowRadius: 3,
+                      shadowColor: '#6F6F6F',
+                      shadowOffset: { width: 0, height: 0 },
+                      shadowOpacity: 0.4,
                     }}
-                    label={i18n.t('dashboard.invest_first_asset')}
+                  >
+                    <Image
+                      style={{
+                        height: 50,
+                        width: 50,
+                      }}
+                      source={require('./images/newWallet.png')}
+                    />
+                  </View>
+                  <TitleText
+                    label={t('main.connect_wallet')}
+                    style={{ height: 30, marginLeft: 15 }}
                   />
+                  <View style={{
+                    marginLeft: 'auto',
+                    marginBottom: 5,
+                  }}>
+                    <Image
+                      source={require('./images/bluedownarrow.png')}
+                      style={{
+                        width: 30,
+                        height: 30,
+                        transform: [{ rotate: '270deg' }],
+                      }}
+                    />
+                  </View>
                 </TouchableOpacity>
-              </>
-            )}
+            }
           </View>
-          <VirtualTab />
-        </SafeAreaView>
+          <AssetListing
+            title={t('main.my_assets')}
+            assets={
+              assets.filter((item) => {
+                return ![CryptoType.EL, CryptoType.ETH].includes(item.type) && item.unitValue > 0
+              })
+            }
+            itemPressHandler={(asset) => {
+              navigation.navigate(Page.Asset, {
+                screen: AssetPage.Detail,
+                params: {
+                  asset,
+                }
+              })
+            }}
+          />
+          <View style={{ height: 25 }} />
+          <AssetListing
+            title={t('main.my_wallet')}
+            assets={assets.filter((item) => [CryptoType.EL, CryptoType.ETH].includes(item.type))}
+            itemPressHandler={(asset) => {
+              navigation.navigate(
+                Page.Crypto, {
+                screen: CryptoPage.Detail,
+                params: {
+                  asset,
+                }
+              }
+              );
+            }}
+          />
+          {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
+            [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
+              user.legacyWalletRefundStatus,
+            ) && (
+              <LegacyWallet
+                balance={(user.legacyEl * elPrice + user.legacyUsd)}
+                handler={() =>
+                  navigation.navigate(Page.Dashboard, { screen: DashboardPage.RemainingBalance })
+                }
+              />
+            )}
+        </BasicLayout>
       </ScrollView>
+      <OverlayLoading visible={!assetLoaded} />
     </>
   );
 };
