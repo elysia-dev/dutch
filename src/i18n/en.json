@@ -479,8 +479,8 @@
       "insert_seed_btn": "Input completed",
       "wallet_select": "Do you have any existing wallets?",
       "wallet_select_content": "You can create a new wallet or use an existing wallet.",
-      "existing_wallet": "Using an existing wallet",
-      "create_wallet": "Creating a new wallet",
+      "existing_wallet": "Use existing wallet",
+      "create_wallet": "Create new wallet",
       "check_after_click": "Tap to confirm"
     },
     "wallet": {
