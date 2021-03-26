@@ -62,6 +62,7 @@ const UserProvider: React.FC = (props) => {
               ...res.data.user,
               ethAddresses: res.data.user.ethAddresses || [],
             },
+            notifications: res.data.notifications || [],
             ownerships: res.data.ownerships || [],
             balance: res.data.totalBalance,
             Server: authServer,

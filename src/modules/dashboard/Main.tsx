@@ -22,7 +22,7 @@ import AssetContext from '../../contexts/AssetContext';
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
   const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
-  const { elPrice, } = useContext(PriceContext);
+  const { elPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);

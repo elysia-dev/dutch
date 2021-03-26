@@ -14,7 +14,7 @@ import assetTokenNamePrettier from '../utiles/assetTokenNamePrettier';
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
   const { wallet, isUnlocked } = useContext(WalletContext);
-  const { elPrice, ethPrice } = useContext(PriceContext);
+  const { elPrice, ethPrice, priceLoaded } = useContext(PriceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -129,7 +129,7 @@ const AssetProvider: React.FC = (props) => {
   }
 
   useEffect(() => {
-    if (signedIn !== SignInStatus.SIGNIN) {
+    if (signedIn !== SignInStatus.SIGNIN || !priceLoaded) {
       setState(initialAssetState)
       return;
     };
@@ -140,7 +140,7 @@ const AssetProvider: React.FC = (props) => {
     }
 
     loadV1UserBalances()
-  }, [signedIn, isWalletUser, isUnlocked])
+  }, [signedIn, isWalletUser, isUnlocked, priceLoaded])
 
   const getBalance = (unit: string): number => {
     return state.assets.find((asset) => asset.unit === unit)?.unitValue || 0

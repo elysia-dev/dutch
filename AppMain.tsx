@@ -8,17 +8,17 @@ import UserProvider from './src/providers/UserProvider';
 
 const AppMain = () => {
   return (
-    <UserProvider>
-      <PreferenceProvider>
-        <PriceProvider>
+    <PriceProvider>
+      <UserProvider>
+        <PreferenceProvider>
           <WalletProvider>
             <AssetProvider>
               <AppNavigator />
             </AssetProvider>
           </WalletProvider>
-        </PriceProvider>
-      </PreferenceProvider>
-    </UserProvider>
+        </PreferenceProvider>
+      </UserProvider>
+    </PriceProvider>
   );
 };
 

@@ -32,7 +32,6 @@ const PriceProvider: React.FC = (props) => {
       ethPrice = priceData.data.ethereum.usd;
       elPrice = priceData.data.elysia.usd;
       gasPrice = (await provider.getGasPrice()).toString();
-
     } finally {
       await AsyncStorage.setItem(PRICE_DATA, JSON.stringify({ ethPrice, elPrice, gasPrice }))
 
@@ -40,6 +39,7 @@ const PriceProvider: React.FC = (props) => {
         ethPrice,
         elPrice,
         gasPrice,
+        priceLoaded: true,
       })
     }
   }
