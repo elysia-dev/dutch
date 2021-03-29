@@ -513,7 +513,7 @@
       "refund_value": "Amount received",
       "yield": "interest",
       "yield_reward": "Interest distribution",
-      "cancel": "cancel",
+      "cancel": "Cancel",
       "transaction_fee": "Transaction fee",
       "insufficient_eth": "Your ETH balance is insufficient."
     },
