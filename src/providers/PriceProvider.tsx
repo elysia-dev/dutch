@@ -4,18 +4,22 @@ import { useState } from "react";
 import CoingeckoClient from '../api/CoingeckoClient';
 import { PRICE_DATA } from '../constants/storage';
 import PriceContext, { IPriceContext, initialPriceContext } from '../contexts/PriceContext';
-import { provider } from '../utiles/getContract';
+import { provider, bscProvider } from '../utiles/getContract';
 
 interface PriceData {
   ethPrice: number
   elPrice: number
+  bnbPrice: number
   gasPrice: string
+  bscGasPrice: string
 }
 
 const defaultPrices = {
   ethPrice: 1679251,
   elPrice: 0.009799,
+  bnbPrice: 276.64,
   gasPrice: '6800000000',
+  bscGasPrice: '19950000000'
 }
 
 const PriceProvider: React.FC = (props) => {
@@ -23,22 +27,21 @@ const PriceProvider: React.FC = (props) => {
 
   const loadPrices = async () => {
     let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(defaultPrices)) as PriceData;
-    let ethPrice = priceData.ethPrice;
-    let elPrice = priceData.elPrice;
-    let gasPrice = priceData.gasPrice;
 
     try {
-      const priceData = await CoingeckoClient.getElAndEthPrice();
-      ethPrice = priceData.data.ethereum.usd;
-      elPrice = priceData.data.elysia.usd;
-      gasPrice = (await provider.getGasPrice()).toString();
+      const priceRes = await CoingeckoClient.getElAndEthPrice();
+      priceData = {
+        ethPrice: priceRes.data.ethereum.usd,
+        elPrice: priceRes.data.elysia.usd,
+        bnbPrice: priceRes.data.binancecoin.usd,
+        gasPrice: (await provider.getGasPrice()).toString(),
+        bscGasPrice: (await bscProvider.getGasPrice()).toString(),
+      }
     } finally {
-      await AsyncStorage.setItem(PRICE_DATA, JSON.stringify({ ethPrice, elPrice, gasPrice }))
+      await AsyncStorage.setItem(PRICE_DATA, JSON.stringify(priceData))
 
       setState({
-        ethPrice,
-        elPrice,
-        gasPrice,
+        ...priceData,
         priceLoaded: true,
       })
     }
