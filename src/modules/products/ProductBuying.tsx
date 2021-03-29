@@ -118,8 +118,8 @@ const ProductBuying: FunctionComponent = () => {
     } else {
       navigation.navigate(ProductPage.Purchase, {
         from: {
-          type: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
-          unit: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          type: state.product?.paymentMethod.toUpperCase() as CryptoType,
+          unit: state.product?.paymentMethod.toUpperCase() as CryptoType,
           title: state.product?.paymentMethod.toUpperCase(),
         },
         to: {
@@ -133,28 +133,18 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
-  const loadProductAndPrice = async () => {
+  const loadProduct = async () => {
     try {
       const product = await Server.productInfo(productId);
       setState({
         ...state,
-        product: product.data,
+        product: {
+          ...product.data,
+        },
         loaded: true,
       });
     } catch (e) {
-      if (e.response.status === 500) {
-        alert(t('account_errors.server'));
-      } else if (e.response.status) {
-        if (e.response.status === 404) {
-          const product = await Server.productInfo(productId);
-          setState({
-            ...state,
-            product: product.data,
-            subscribed: false,
-            loaded: true,
-          });
-        }
-      }
+      alert(t('account_errors.server'));
     }
   };
 
@@ -197,7 +187,7 @@ const ProductBuying: FunctionComponent = () => {
     });
 
   useEffect(() => {
-    loadProductAndPrice();
+    loadProduct();
   }, [language, productId]);
 
   return (

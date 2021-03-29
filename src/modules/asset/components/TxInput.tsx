@@ -11,12 +11,10 @@ import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
-import PriceContext from '../../../contexts/PriceContext';
 import Asset from '../../../types/Asset';
 import AssetContext from '../../../contexts/AssetContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
-import { parse } from 'expo-linking';
 
 interface ITxInput {
   title: string
@@ -57,7 +55,6 @@ const TxInput: React.FC<ITxInput> = ({
 }) => {
   const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
-  const { ethPrice } = useContext(PriceContext)
   const { getBalance } = useContext(AssetContext);
   const fromToRatio = fromPrice / toPrice;
   const { t } = useTranslation();
@@ -123,7 +120,7 @@ const TxInput: React.FC<ITxInput> = ({
         {
           !!estimateGas && <>
             <P3Text
-              label={`${t('assets.transaction_fee')}: ${estimateGas} ETH (${currencyFormatter(parseFloat(estimateGas) * ethPrice)})`}
+              label={`${t('assets.transaction_fee')}: ${estimateGas} ${from.unit} (${currencyFormatter(parseFloat(estimateGas) * fromPrice)})`}
               style={{ textAlign: 'center', marginBottom: insufficientEth ? 5 : 10 }}
             />
             <View>

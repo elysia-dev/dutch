@@ -1,8 +1,9 @@
 import { Signer } from "@ethersproject/abstract-signer";
 import { HDNode, entropyToMnemonic, mnemonicToSeed, defaultPath } from "ethers/lib/utils";
-import { provider } from '../utiles/getContract';
+import { bscProvider, provider } from '../utiles/getContract';
 import * as Random from 'expo-random';
 import * as ethers from 'ethers';
+import NetworkType from "../enums/NetworkType";
 
 interface SerializedWallet {
   seed: string;
@@ -49,8 +50,8 @@ class Wallet {
     return this.nodes[0]?.address || ''
   }
 
-  getFirstSigner(): Signer {
-    return new ethers.Wallet(this.nodes[0].privateKey, provider)
+  getFirstSigner(networkType?: NetworkType): Signer {
+    return new ethers.Wallet(this.nodes[0].privateKey, networkType === NetworkType.BSC ? bscProvider : provider)
   }
 
   static deserialize(data: SerializedWallet): Wallet {

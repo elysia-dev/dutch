@@ -1,27 +1,29 @@
 import { Linking } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import EspressoV2 from '../api/EspressoV2';
+import NetworkType from '../enums/NetworkType';
 import getEnvironment from '../utiles/getEnvironment';
 
 type TxHandlers = {
-  afterTxCreated: (address: string, contractAddress: string, txHash: string) => void;
+  afterTxCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
   afterTxFailed: () => void;
 };
 
 function useTxHandler(): TxHandlers {
-  const afterTxCreated = (address: string, contractAddress: string, txHash: string) => {
+  const afterTxCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
     EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
       JSON.stringify(res)
     ))
+
     showMessage({
       message: `트랜잭션 생성 요청을 완료했습니다.`,
       description: txHash,
       type: 'info',
       onPress: () => {
         Linking.openURL(
-          getEnvironment().ethNetwork === 'main'
-            ? `https://etherscan.io/tx/${txHash}`
-            : `https://kovan.etherscan.io/tx/${txHash}`,
+          networkType && networkType === NetworkType.BSC ?
+            `https://${getEnvironment().ethNetwork === 'main' ? '' : 'testnet.'}bscscan.com/tx/${txHash}`
+            : `https://${getEnvironment().ethNetwork === 'main' ? '' : 'kovan.'}etherscan.io/tx/${txHash}`
         )
       },
       duration: 3000
