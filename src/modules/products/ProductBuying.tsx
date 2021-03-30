@@ -72,6 +72,7 @@ const ProductBuying: FunctionComponent = () => {
     ? user.nationality.split(', ')[1]
     : '';
   const purchasability = isWalletUser || user.ethAddresses?.length > 0;
+  const isBnbProductAndCannotPurchase = !isWalletUser && state.product?.paymentMethod.toUpperCase() === CryptoType.BNB
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
@@ -80,6 +81,8 @@ const ProductBuying: FunctionComponent = () => {
       return t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return t('product_label.non_purchasable');
+    } else if (isBnbProductAndCannotPurchase) {
+      return t('product_label.required_eth_wallet');
     } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
@@ -110,6 +113,8 @@ const ProductBuying: FunctionComponent = () => {
         ],
         { cancelable: false },
       );
+    } else if (isBnbProductAndCannotPurchase) {
+      return alert(t('product.required_eth_wallet'));
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
         return alert(t('product.restricted_country'));

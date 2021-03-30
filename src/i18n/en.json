@@ -101,7 +101,8 @@
       "imtoken_mobile": "imToken Mobile",
       "select_payment": "Choose your wallet",
       "connect_wallet": "Wallet connection required",
-      "connect_wallet_confirm": "Wallet connection required.\nConnect now?"
+      "connect_wallet_confirm": "Wallet connection required.\nConnect now?",
+      "required_eth_wallet": "You can't swap it with your current wallet."
     },
     "product_financial": {
       "expected_annual_return": "Estimated annual return",
@@ -158,7 +159,8 @@
       "available_token": "Real estate tokens available",
       "loan": "Decentralized loans",
       "restricted_country": "Swap is unavailable in the country",
-      "need_wallet": "Wallet connection required"
+      "need_wallet": "Wallet connection required",
+      "required_eth_wallet": "Ethereum Wallet Only"
     },
     "more_label": {
       "more": "More",

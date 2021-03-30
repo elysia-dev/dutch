@@ -98,7 +98,8 @@
       "imtoken_mobile": "imToken钱包手机App",
       "select_payment": "请选择钱包。",
       "connect_wallet": "需要绑定钱包地址。",
-      "connect_wallet_confirm": "需要绑定钱包地址。\n现在绑定吗？"
+      "connect_wallet_confirm": "需要绑定钱包地址。\n现在绑定吗？",
+      "required_eth_wallet": "你用皮夹子买不到。"
     },
     "product_financial": {
       "expected_annual_return": "预期年收益",
@@ -155,7 +156,8 @@
       "available_token": "可投资的房地产代币数量",
       "loan": "去中心化贷款债券型商品",
       "restricted_country": "所在国家/地区不能交易。",
-      "need_wallet": "需要绑定钱包地址"
+      "need_wallet": "需要绑定钱包地址",
+      "required_eth_wallet": "必备的ETH钱包"
     },
     "more_label": {
       "more": "更多",

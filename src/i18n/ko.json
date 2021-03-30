@@ -98,7 +98,8 @@
       "imtoken_mobile": "imToken Mobile",
       "select_payment": "지갑을 선택해 주세요.",
       "connect_wallet": "지갑 주소 연결이 필요합니다.",
-      "connect_wallet_confirm": "지갑 주소 연결이 필요합니다.\n지금 연결하시겠어요?"
+      "connect_wallet_confirm": "지갑 주소 연결이 필요합니다.\n지금 연결하시겠어요?",
+      "required_eth_wallet": "현재 연결한 지갑으로는 구매할 수 없습니다."
     },
     "product_financial": {
       "expected_annual_return": "예상 연 적립률",
@@ -155,7 +156,8 @@
       "available_token": "투자가능 부동산토큰 수량",
       "loan": "탈중앙 대출채권형 상품",
       "restricted_country": "현재 국가에서 교환 불가",
-      "need_wallet": "지갑 연결 필요"
+      "need_wallet": "지갑 연결 필요",
+      "required_eth_wallet": "Ethereum Wallet만 구매 가능"
     },
     "more_label": {
       "more": "더 보기",
