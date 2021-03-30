@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import EspressoV2 from '../api/EspressoV2';
@@ -6,17 +7,19 @@ import getEnvironment from '../utiles/getEnvironment';
 
 type TxHandlers = {
   afterTxCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
-  afterTxFailed: () => void;
+  afterTxFailed: (description?: string) => void;
 };
 
-function useTxHandler(): TxHandlers {
+const useTxHandler = (): TxHandlers => {
+  const { t } = useTranslation();
+
   const afterTxCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
     EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
       JSON.stringify(res)
     ))
 
     showMessage({
-      message: `트랜잭션 생성 요청을 완료했습니다.`,
+      message: t('transaction.pending'),
       description: txHash,
       type: 'info',
       onPress: () => {
@@ -30,9 +33,10 @@ function useTxHandler(): TxHandlers {
     });
   }
 
-  const afterTxFailed = () => {
+  const afterTxFailed = (description?: string) => {
     showMessage({
-      message: `트랜잭션 생성에 실패했습니다.`,
+      message: t('transaction.fail'),
+      description,
       type: 'danger',
       duration: 3000
     });

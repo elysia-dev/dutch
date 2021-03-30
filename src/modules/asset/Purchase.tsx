@@ -148,7 +148,7 @@ const Purchase: FunctionComponent = () => {
         from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
       )
     } catch (e) {
-      afterTxFailed();
+      afterTxFailed(e.message);
     } finally {
       navigation.goBack();
     }
@@ -170,8 +170,8 @@ const Purchase: FunctionComponent = () => {
           } else {
             setState({ ...state, step: TxStep.Creating })
           }
-        }).catch(() => {
-          afterTxFailed();
+        }).catch((e: any) => {
+          afterTxFailed(e.message);
           navigation.goBack();
         })
         break;
@@ -185,8 +185,8 @@ const Purchase: FunctionComponent = () => {
               data: populatedTransaction.data,
             }).then((tx: any) => {
               setState({ ...state, txHash: tx, step: TxStep.Creating })
-            }).catch(() => {
-              afterTxFailed();
+            }).catch((e) => {
+              afterTxFailed(e.message);
               navigation.goBack();
             })
           })

@@ -426,6 +426,10 @@
       "onboardingNewUser": "엘리시아 온보딩",
       "onboardingConnectWallet": "엘리시아 온보딩"
     },
+    "transaction": {
+      "pending": "대기중인 트랜잭션이 있습니다.",
+      "fail": "트랜잭션이 실패했습니다."
+    },
     "FAQ": {
       "question": [
         "이 앱으로 무엇을 할 수 있나요?",
@@ -512,7 +516,7 @@
       "yield_reward": "이자 분배",
       "cancel": "취소",
       "transaction_fee": "네트워크 수수료",
-      "insufficient_eth": "ETH가 부족합니다."
+      "insufficient_eth": "{{crypto}}가 부족합니다."
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 지분 회수는 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

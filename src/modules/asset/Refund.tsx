@@ -107,14 +107,12 @@ const Refund: FunctionComponent = () => {
         })
       }
     } catch (e) {
-      alert(e)
+      afterTxFailed(e);
     } finally {
       if (txRes) {
         afterTxCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
-        navigation.goBack();
-      } else {
-        afterTxFailed();
       }
+      navigation.goBack();
     }
   }
 

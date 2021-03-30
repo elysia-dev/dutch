@@ -119,12 +119,11 @@ const Reward: FunctionComponent = () => {
           data: populatedTransaction.data,
         })
       }
-    } catch {
+    } catch (e) {
+      afterTxFailed(e.message);
     } finally {
       if (txRes) {
         afterTxCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
-      } else {
-        afterTxFailed();
       }
       navigation.goBack();
     }

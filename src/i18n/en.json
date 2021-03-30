@@ -429,6 +429,10 @@
       "onboardingNewUser": "Elysia onboarding",
       "onboardingConnectWallet": "Elysia onboarding"
     },
+    "transaction": {
+      "pending": "Transaction now in progress.",
+      "fail": "Transaction failed"
+    },
     "FAQ": {
       "question": [
         "What can I do with the Elysia app?",
@@ -515,7 +519,7 @@
       "yield_reward": "Interest distribution",
       "cancel": "Cancel",
       "transaction_fee": "Transaction fee",
-      "insufficient_eth": "Your ETH balance is insufficient."
+      "insufficient_eth": "Your {{crypto}} balance is insufficient."
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."

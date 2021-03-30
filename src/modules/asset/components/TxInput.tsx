@@ -60,9 +60,9 @@ const TxInput: React.FC<ITxInput> = ({
   const { t } = useTranslation();
   const isFromInvalid = parseFloat(values.from) > (from.unitValue ? from.unitValue : getBalance(from.unit));
   const isToInvalid = toMax ? (parseFloat(values.to) > toMax) : false;
-  const insufficientEth = from.type === CryptoType.ETH ?
-    getBalance(CryptoType.ETH) < parseFloat(estimateGas) + parseFloat(values.from)
-    : getBalance(CryptoType.ETH) < parseFloat(estimateGas);
+  const insufficientBalance = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
+    getBalance(from.type) < parseFloat(estimateGas) + parseFloat(values.from)
+    : getBalance(to.type) < parseFloat(estimateGas);
 
   return (
     <>
@@ -121,11 +121,11 @@ const TxInput: React.FC<ITxInput> = ({
           !!estimateGas && <>
             <P3Text
               label={`${t('assets.transaction_fee')}: ${estimateGas} ${from.unit} (${currencyFormatter(parseFloat(estimateGas) * fromPrice)})`}
-              style={{ textAlign: 'center', marginBottom: insufficientEth ? 5 : 10 }}
+              style={{ textAlign: 'center', marginBottom: insufficientBalance ? 5 : 10 }}
             />
             <View>
-              {insufficientEth && (
-                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}> {t('assets.insufficient_eth')} </Text>
+              {insufficientBalance && (
+                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}> {t('assets.insufficient_eth', { crypto: from.type })} </Text>
               )}
             </View>
           </>
@@ -171,7 +171,7 @@ const TxInput: React.FC<ITxInput> = ({
           }}
         />
         <NextButton
-          disabled={isToInvalid || isFromInvalid || disabled || insufficientEth}
+          disabled={isToInvalid || isFromInvalid || disabled || insufficientBalance}
           title={title}
           handler={() => {
             createTx()

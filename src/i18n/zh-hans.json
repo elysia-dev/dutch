@@ -422,6 +422,10 @@
       "failTransaction": "交易失败",
       "onboardingConnectWallet": "爱立厦(ELYSIA)自主发行"
     },
+    "transaction": {
+      "pending": "交易正在进行中。",
+      "fail": "交易失败。"
+    },
     "FAQ": {
       "question": [
         "我可以用这个应用程序（App)做什么？",
@@ -508,7 +512,7 @@
       "yield_reward": "利息分配",
       "cancel": "取消",
       "transaction_fee": "手续费",
-      "insufficient_eth": "你的体液平衡不够。"
+      "insufficient_eth": "{{crypto}} 余额不足。"
     },
     "legacy": {
       "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"
