@@ -33,12 +33,8 @@ export enum AccountPage {
 
 export enum MorePage {
   MainInfo = 'MainInfo',
-  MyPage = 'MyPage',
   Contact = 'Contact',
-  Faq = 'Faq',
-  Transactions = 'Transactions',
   Filter = 'Filter',
-  ElysiaNotice = 'ElysiaNotice',
   Setting = 'Setting',
   RegisterEthAddress = 'RegisterEthAddress',
   TermsOfUse = 'TermsOfUse',
