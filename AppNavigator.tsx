@@ -2,7 +2,6 @@
 import React, { useContext } from 'react';
 import {
   NavigationContainer,
-  NavigationContainerRef,
 } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import FlashMessage from "react-native-flash-message";
