@@ -10,7 +10,6 @@ export enum ProductPage {
   MainList = 'MainList',
   ProductStory = 'ProductStory',
   ProductBuying = 'ProductBuying',
-  SliderProductBuying = 'SliderProductBuying',
   Purchase = 'Purchase',
   PaymentSelection = 'PaymentSelection',
 }
