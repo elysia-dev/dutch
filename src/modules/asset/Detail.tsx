@@ -24,7 +24,7 @@ import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
-import { useAssetToken } from '../../hooks/useContract';
+import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
@@ -83,12 +83,19 @@ const Detail: FunctionComponent = () => {
   const [filter, setFilter] = useState<number>(0);
   const { elPrice, ethPrice } = useContext(PriceContext);
   const assetTokenContract = useAssetToken(asset.address || '');
+  const assetTokenBnbContract = useAssetTokenBnb(asset.address || '');
 
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
     const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
     const productData = await EspressoV2.getProduct(asset.address || '');
-    const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+    let reward: number;
+
+    if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
+      reward = parseFloat(utils.formatEther(await assetTokenBnbContract?.getReward(userAddress)));
+    } else {
+      reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+    }
 
     setState({
       ...state,

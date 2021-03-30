@@ -3,7 +3,7 @@ import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
 import AssetContext, { initialAssetState, AssetStateType } from '../contexts/AssetContext';
 import PriceContext from '../contexts/PriceContext';
-import UserContext, { initialUserState } from '../contexts/UserContext';
+import UserContext from '../contexts/UserContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
 import ProviderType from '../enums/ProviderType';

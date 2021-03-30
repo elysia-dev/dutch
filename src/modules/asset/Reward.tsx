@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken } from '../../hooks/useContract';
+import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import useTxHandler from '../../hooks/useTxHandler';
@@ -11,7 +11,7 @@ import { View } from 'react-native';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import { BigNumber } from '@ethersproject/bignumber';
-import { utils } from 'ethers';
+import { ethers, utils } from 'ethers';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
@@ -20,6 +20,7 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
 import { P3Text } from '../../shared/components/Texts';
+import NetworkType from '../../enums/NetworkType';
 
 type ParamList = {
   Reward: {
@@ -37,6 +38,7 @@ const Reward: FunctionComponent = () => {
   const { toCrypto, toTitle, contractAddress } = route.params;
   const navigation = useNavigation();
   const assetTokenContract = useAssetToken(contractAddress);
+  const assetTokenBnbContract = useAssetTokenBnb(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user, Server } = useContext(UserContext);
@@ -66,32 +68,60 @@ const Reward: FunctionComponent = () => {
 
   useEffect(() => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0]
-    assetTokenContract?.getReward(address).then((res: BigNumber) => {
-      setInterest(parseFloat(utils.formatEther(res)));
-    });
+
+    if (toCrypto === CryptoType.BNB) {
+      assetTokenBnbContract?.getReward(address).then((res: BigNumber) => {
+        setInterest(parseFloat(utils.formatEther(res)));
+      });
+    } else {
+      assetTokenContract?.getReward(address).then((res: BigNumber) => {
+        setInterest(parseFloat(utils.formatEther(res)));
+      });
+    }
   }, [])
+
+  const createTx = async () => {
+    let txRes: ethers.providers.TransactionResponse | undefined;
+
+    try {
+      if (toCrypto === CryptoType.BNB) {
+        const populatedTransaction = await assetTokenBnbContract?.populateTransaction.claimReward()
+
+        if (!populatedTransaction) return;
+
+        txRes = await wallet?.getFirstSigner(NetworkType.BSC).sendTransaction({
+          to: populatedTransaction.to,
+          data: populatedTransaction.data,
+        })
+      } else {
+        const populatedTransaction = await assetTokenContract?.populateTransaction.claimReward()
+
+        if (!populatedTransaction) return;
+
+        txRes = await wallet?.getFirstSigner().sendTransaction({
+          to: populatedTransaction.to,
+          data: populatedTransaction.data,
+        })
+      }
+    } catch {
+    } finally {
+      if (txRes) {
+        afterTxCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
+      } else {
+        afterTxFailed();
+      }
+      navigation.goBack();
+    }
+  }
 
   useEffect(() => {
     switch (step) {
       case TxStep.Creating:
-        assetTokenContract?.populateTransaction.claimReward(
-        ).then(populatedTransaction => {
-          wallet?.getFirstSigner().sendTransaction({
-            to: populatedTransaction.to,
-            data: populatedTransaction.data,
-          }).then((tx) => {
-            afterTxCreated(wallet.getFirstAddress() || '', contractAddress, tx.hash)
-            navigation.goBack();
-          }).catch(() => {
-            afterTxFailed();
-            navigation.goBack();
-          })
-        })
+        createTx()
         break;
       default:
     }
   }, [step])
-
 
   if (state.stage === 0) {
     return (

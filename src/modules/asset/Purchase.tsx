@@ -148,7 +148,6 @@ const Purchase: FunctionComponent = () => {
         from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
       )
     } catch (e) {
-      alert(e)
       afterTxFailed();
     } finally {
       navigation.goBack();
