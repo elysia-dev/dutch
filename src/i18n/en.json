@@ -198,7 +198,6 @@
       "my_account": "My account",
       "service_center": "Service center",
       "notice": "Notice",
-      "faq": "FAQ",
       "contact": "Contact",
       "service_terms": "Terms of Service",
       "privacy_policy": "Privacy Policy",
@@ -432,22 +431,6 @@
     "transaction": {
       "pending": "Transaction now in progress.",
       "fail": "Transaction failed"
-    },
-    "FAQ": {
-      "question": [
-        "What can I do with the Elysia app?",
-        "What are rewards and how is it distributed?",
-        "How do I own real estate tokens?",
-        "What is an Ethereum wallet address and how can I install one?",
-        "Why register an Ethereum wallet address?"
-      ],
-      "answer": [
-        "You can buy real estate ERC20 tokens, which represent ownership interest of an actual property. After completing your identity verification , you may deposit EL tokens into your wallet and swap for real estate tokens. You will receive daily rewards based on how many real estate tokens you own proportional to its monthly rental income. If the property is sold, you will also receive rewards from sales proceeds with discounted rates (the longer you hold, the more rewards)",
-        "You may receive additional EL tokens depending on how much and how many real estate tokens you own. The rewards are calculated from the moment you hold the represented token. The number of tokens may be differ each real estate token, so make sure you check the property information.",
-        "On the main page, you can check the types of tokens you currently own, or select and enter the tokens you wish to swap. You may swap real estate tokens with EL tokens by pressing the'Swap' button on the page.",
-        "An Ethereum wallet is a tool for managing your Ethereum or ERC20 tokens. It can be created through various service providers such as Metamask (https://metamask.io/) or MyEtherWallet (https://www.myetherwallet.com/). Please refer to each service description on how to create your own wallet.",
-        "Elysia is a decentralized peer-to-peer marketplace and only provides information related to real estate tokens and the tools for swapping it with other tokens. The actual transaction is conducted between wallets and Elysia does not have any authority or custody over your funds. In this regard, we require you to register your own personal wallet address to perform swaps."
-      ]
     },
     "main": {
       "total_assets": "Total assets",
