@@ -42,7 +42,7 @@ const Reward: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user, Server } = useContext(UserContext);
-  const { elPrice, ethPrice, gasPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',
     stage: 0,
@@ -52,17 +52,33 @@ const Reward: FunctionComponent = () => {
 
   const { afterTxFailed, afterTxCreated } = useTxHandler();
 
-  useEffect(() => {
-    if (isWalletUser) {
-      assetTokenContract?.estimateGas.claimReward({
-        from: wallet?.getFirstNode()?.address
-      }).then((res) => {
+  const estimateGas = async () => {
+    let estimateGas: BigNumber | undefined;
+
+    try {
+      if (toCrypto === CryptoType.BNB) {
+        estimateGas = await assetTokenBnbContract?.estimateGas.claimReward({
+          from: wallet?.getFirstNode()?.address
+        })
+      } else {
+        estimateGas = await assetTokenContract?.estimateGas.claimReward({
+          from: wallet?.getFirstNode()?.address
+        })
+      }
+    } catch {
+    } finally {
+      if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(res.mul(gasPrice)),
+          estimateGas: utils.formatEther(estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)),
         })
-      }).catch(() => {
-      })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isWalletUser) {
+      estimateGas();
     }
   }, [])
 
@@ -139,7 +155,7 @@ const Reward: FunctionComponent = () => {
             cryptoTitle={toTitle}
             cryptoType={toCrypto}
             style={{ marginTop: 20 }}
-            value={(interest / (toCrypto === CryptoType.ETH ? ethPrice : elPrice)).toFixed(4)}
+            value={(interest / (getCryptoPrice(toCrypto))).toFixed(4)}
             subValue={currencyFormatter(
               interest,
               4
@@ -148,7 +164,7 @@ const Reward: FunctionComponent = () => {
             onPress={() => { }}
           />
           {!!state.estimateGas && <P3Text
-            label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * ethPrice)})`}
+            label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
             style={{ textAlign: 'center', marginTop: 10 }}
           />}
           <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>

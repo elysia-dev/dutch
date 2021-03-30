@@ -81,7 +81,7 @@ const Detail: FunctionComponent = () => {
     productStatus: ProductStatus.SALE
   })
   const [filter, setFilter] = useState<number>(0);
-  const { elPrice, ethPrice } = useContext(PriceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const assetTokenContract = useAssetToken(asset.address || '');
   const assetTokenBnbContract = useAssetTokenBnb(asset.address || '');
 
@@ -290,7 +290,7 @@ const Detail: FunctionComponent = () => {
               {
                 state.paymentMethod !== 'none' && <H4Text
                   style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                  label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                  label={`${((state.reward / getCryptoPrice(state.paymentMethod)).toFixed(2))} ${state.paymentMethod.toUpperCase()}`}
                 />
               }
             </View>

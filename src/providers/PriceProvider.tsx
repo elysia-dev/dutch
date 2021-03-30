@@ -3,39 +3,27 @@ import React, { useEffect } from 'react';
 import { useState } from "react";
 import CoingeckoClient from '../api/CoingeckoClient';
 import { PRICE_DATA } from '../constants/storage';
-import PriceContext, { IPriceContext, initialPriceContext } from '../contexts/PriceContext';
+import PriceContext, { PriceState, initialPriceState } from '../contexts/PriceContext';
+import CryptoType from '../enums/CryptoType';
+import NetworkType from '../enums/NetworkType';
 import { provider, bscProvider } from '../utiles/getContract';
 
-interface PriceData {
-  ethPrice: number
-  elPrice: number
-  bnbPrice: number
-  gasPrice: string
-  bscGasPrice: string
-}
-
-const defaultPrices = {
-  ethPrice: 1679251,
-  elPrice: 0.009799,
-  bnbPrice: 276.64,
-  gasPrice: '6800000000',
-  bscGasPrice: '19950000000'
-}
-
 const PriceProvider: React.FC = (props) => {
-  const [state, setState] = useState<IPriceContext>(initialPriceContext)
+  const [state, setState] = useState<PriceState>(initialPriceState)
 
   const loadPrices = async () => {
-    let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(defaultPrices)) as PriceData;
+    let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(initialPriceState)) as PriceState;
 
     try {
       const priceRes = await CoingeckoClient.getElAndEthPrice();
+
       priceData = {
         ethPrice: priceRes.data.ethereum.usd,
         elPrice: priceRes.data.elysia.usd,
         bnbPrice: priceRes.data.binancecoin.usd,
         gasPrice: (await provider.getGasPrice()).toString(),
         bscGasPrice: (await bscProvider.getGasPrice()).toString(),
+        priceLoaded: true,
       }
     } finally {
       await AsyncStorage.setItem(PRICE_DATA, JSON.stringify(priceData))
@@ -47,6 +35,22 @@ const PriceProvider: React.FC = (props) => {
     }
   }
 
+  const getCryptoPrice = (cryptoType: CryptoType): number => {
+    switch (cryptoType) {
+      case CryptoType.BNB:
+        return state.bnbPrice
+      case CryptoType.EL:
+        return state.elPrice
+      case CryptoType.ETH:
+        return state.ethPrice
+      case CryptoType.ELA:
+        // Fix ELA $5
+        return 5
+      default:
+        return 0
+    }
+  }
+
   useEffect(() => {
     loadPrices();
   }, [])
@@ -54,7 +58,8 @@ const PriceProvider: React.FC = (props) => {
   return (
     <PriceContext.Provider
       value={{
-        ...state
+        ...state,
+        getCryptoPrice
       }}
     >
       {props.children}

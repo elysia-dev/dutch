@@ -45,7 +45,7 @@ const Refund: FunctionComponent = () => {
   const assetTokenBnbContract = useAssetTokenBnb(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server } = useContext(UserContext);
-  const { elPrice, ethPrice, bnbPrice, gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
 
@@ -137,8 +137,8 @@ const Refund: FunctionComponent = () => {
         from={from}
         to={to}
         values={values}
-        fromPrice={5} // 5 USD
-        toPrice={to.type === CryptoType.ETH ? ethPrice : to.type === CryptoType.BNB ? bnbPrice : elPrice}
+        fromPrice={getCryptoPrice(CryptoType.ELA)}
+        toPrice={getCryptoPrice(to.type)}
         current={current}
         step={state.step}
         disabled={parseInt(values.from || '0') < 0.01}

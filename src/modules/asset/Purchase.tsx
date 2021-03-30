@@ -56,7 +56,7 @@ const Purchase: FunctionComponent = () => {
   const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(state.txHash);
-  const { elPrice, ethPrice, bnbPrice, gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
 
@@ -224,8 +224,8 @@ const Purchase: FunctionComponent = () => {
         to={to}
         toMax={toMax}
         values={values}
-        fromPrice={from.type === CryptoType.ETH ? ethPrice : from.type === CryptoType.BNB ? bnbPrice : elPrice}
-        toPrice={5} // 5 USD
+        fromPrice={getCryptoPrice(from.type)}
+        toPrice={getCryptoPrice(CryptoType.ELA)}
         current={current}
         step={state.step}
         setCurrent={setCurrent}
