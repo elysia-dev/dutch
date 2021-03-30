@@ -320,7 +320,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 justifyContent: 'space-between',
               }}>
               <H3Text
-                label={'EL'}
+                label={product.paymentMethod.toUpperCase()}
                 style={{
                   flex: 1,
                   alignSelf: 'center',
