@@ -132,7 +132,7 @@ export const Main: React.FC = () => {
             title={t('main.my_assets')}
             assets={
               assets.filter((item) => {
-                return ![CryptoType.EL, CryptoType.ETH].includes(item.type) && item.unitValue > 0
+                return [CryptoType.ELA].includes(item.type) && item.unitValue > 0
               })
             }
             itemPressHandler={(asset) => {
@@ -147,7 +147,7 @@ export const Main: React.FC = () => {
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
-            assets={assets.filter((item) => [CryptoType.EL, CryptoType.ETH].includes(item.type))}
+            assets={assets.filter((item) => [CryptoType.EL, CryptoType.ETH, CryptoType.BNB].includes(item.type))}
             itemPressHandler={(asset) => {
               navigation.navigate(
                 Page.Crypto, {
