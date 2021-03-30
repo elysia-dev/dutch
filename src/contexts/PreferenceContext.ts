@@ -8,6 +8,7 @@ export interface IStatePreferenceContext {
   notification: boolean
   krwPrice: number
   cnyPrice: number
+  loaded: boolean
 }
 
 export interface IPreferenceContext extends IStatePreferenceContext {
@@ -22,7 +23,8 @@ export const statePreferenceInitialState = {
   currency: CurrencyType.USD,
   krwPrice: 1080,
   cnyPrice: 6.53324,
-  notification: false
+  notification: false,
+  loaded: false,
 }
 
 export const preferenceInitialState = {

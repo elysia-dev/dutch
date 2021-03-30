@@ -5,7 +5,6 @@ import CoingeckoClient from '../api/CoingeckoClient';
 import { PRICE_DATA } from '../constants/storage';
 import PriceContext, { PriceState, initialPriceState } from '../contexts/PriceContext';
 import CryptoType from '../enums/CryptoType';
-import NetworkType from '../enums/NetworkType';
 import { provider, bscProvider } from '../utiles/getContract';
 
 const PriceProvider: React.FC = (props) => {
