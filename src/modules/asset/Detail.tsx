@@ -29,6 +29,7 @@ import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
 import ProductStatus from '../../enums/ProductStatus';
+import NetworkType from '../../enums/NetworkType';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -381,6 +382,7 @@ const Detail: FunctionComponent = () => {
               )
             }
             unit={route.params.asset.unit}
+            networkType={state.paymentMethod === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
           />
           <TouchableOpacity
             style={{

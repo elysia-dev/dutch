@@ -3,7 +3,7 @@ import { Linking } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import EspressoV2 from '../api/EspressoV2';
 import NetworkType from '../enums/NetworkType';
-import getEnvironment from '../utiles/getEnvironment';
+import getTxScanLink from '../utiles/getTxScanLink';
 
 type TxHandlers = {
   afterTxCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
@@ -24,9 +24,7 @@ const useTxHandler = (): TxHandlers => {
       type: 'info',
       onPress: () => {
         Linking.openURL(
-          networkType && networkType === NetworkType.BSC ?
-            `https://${getEnvironment().ethNetwork === 'main' ? '' : 'testnet.'}bscscan.com/tx/${txHash}`
-            : `https://${getEnvironment().ethNetwork === 'main' ? '' : 'kovan.'}etherscan.io/tx/${txHash}`
+          getTxScanLink(txHash, networkType)
         )
       },
       duration: 3000

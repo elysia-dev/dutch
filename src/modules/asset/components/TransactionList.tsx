@@ -4,15 +4,18 @@ import { P2Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import TransactionItem from './TransactionItem';
 import { useTranslation } from 'react-i18next';
+import NetworkType from '../../../enums/NetworkType';
 
 interface ITransactionList {
   data: CryptoTransaction[],
   unit: string,
+  networkType: NetworkType,
 }
 
 const TransactionList: React.FC<ITransactionList> = ({
   data,
-  unit
+  unit,
+  networkType
 }) => {
   const { t } = useTranslation();
 
@@ -38,6 +41,7 @@ const TransactionList: React.FC<ITransactionList> = ({
           key={index}
           transaction={tx}
           unit={unit}
+          networkType={networkType}
         />
       })}
     </View >

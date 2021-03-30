@@ -20,6 +20,7 @@ import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
 import getEnvironment from '../../utiles/getEnvironment';
 import txResponseToTx from '../../utiles/txResponseToTx';
+import NetworkType from '../../enums/NetworkType';
 
 type ParamList = {
   CryptoDetail: {
@@ -109,6 +110,7 @@ const Detail: React.FC = () => {
                 )
               }
               unit={route.params.asset.unit}
+              networkType={asset.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
             />
             <View style={{ height: 50 }} />
             {
