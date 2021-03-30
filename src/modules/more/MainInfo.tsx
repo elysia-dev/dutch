@@ -12,11 +12,11 @@ import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import { useTranslation } from 'react-i18next'
 import { MorePage } from '../../enums/pageEnum';
-import ExchangeBithumbPng from './images/bithumb_logo.png';
-import ExchangeBithumbGlobalPng from './images/bithumb_global_logo.png';
-import ExchangebobooPng from './images/boboo_logo.png';
-import ExchangeGopaxPng from './images/gopax.png';
-import ExchangeXtPng from './images/xt_logo.png';
+import Exchange00 from './images/bithumb_logo.png';
+import Exchange01 from './images/bithumb_global_logo.png';
+import Exchange02 from './images/boboo_logo.png';
+import Exchange03 from './images/gopax.png';
+import Exchange04 from './images/xt_logo.png';
 import { H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
@@ -26,10 +26,11 @@ import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ExchangeImg = styled.Image`
-  width: 100%;
-  height: 60px;
+  width: 95px;
+  height: 95px;
   resize-mode: contain;
 `;
 
@@ -395,64 +396,56 @@ const MainInfo: FunctionComponent = () => {
                 color: AppColors.BLACK2
               }}
             />
-            <View
-              style={{
-                flexDirection: 'column',
-                marginBottom: 30,
-              }}>
-              <View
+              <ScrollView
+                horizontal={true}
                 style={{
                   flexDirection: 'row',
-                  marginBottom: 20,
+                  marginBottom: 20
                 }}>
                 <TouchableOpacity
-                  style={{ width: '50%' }}
+                  style={{ 
+                    width: 100,
+                    marginHorizontal: 5
+                   }}
                   onPress={() => Linking.openURL('https://www.bithumb.com')}>
-                  <ExchangeImg source={ExchangeBithumbPng} />
+                  <ExchangeImg source={Exchange00} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: '50%' }}
+                  style={{ 
+                    width: 100,
+                    marginHorizontal: 5
+                   }}
                   onPress={() =>
                     Linking.openURL('https://www.bithumb.pro/en-us')
                   }>
-                  <ExchangeImg source={ExchangeBithumbGlobalPng} />
+                  <ExchangeImg source={Exchange01} />
                 </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
                 <TouchableOpacity
                   style={{
-                    width: '50%',
-                    paddingHorizontal: '3%',
+                    width: 100,
+                    marginHorizontal: 5
                   }}
                   onPress={() => Linking.openURL('https://www.boboo.com')}>
-                  <ExchangeImg source={ExchangebobooPng} />
+                  <ExchangeImg source={Exchange02} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{
-                    width: '50%',
-                    paddingHorizontal: '5%',
+                    width: 100,
+                    marginHorizontal: 5
                   }}
                   onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
-                  <ExchangeImg source={ExchangeGopaxPng} />
+                  <ExchangeImg source={Exchange03} />
                 </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
                 <TouchableOpacity
                   style={{
-                    width: '50%',
-                    paddingHorizontal: '5%',
+                    width: 100,
+                    marginHorizontal: 5
                   }}
                   onPress={() => Linking.openURL('https://www.xt.com')}>
-                  <ExchangeImg source={ExchangeXtPng} />
+                  <ExchangeImg source={Exchange04} />
                 </TouchableOpacity>
-              </View>
-            </View>
+                
+            </ScrollView>
 
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
 
