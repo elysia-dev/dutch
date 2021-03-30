@@ -7,7 +7,7 @@ import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import useTxHandler from '../../hooks/useTxHandler';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import { BigNumber } from '@ethersproject/bignumber';
@@ -21,6 +21,8 @@ import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
 import { P3Text } from '../../shared/components/Texts';
 import NetworkType from '../../enums/NetworkType';
+import AssetContext from '../../contexts/AssetContext';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   Reward: {
@@ -42,15 +44,17 @@ const Reward: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user, Server } = useContext(UserContext);
-  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
+  const { getBalance } = useContext(AssetContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice, } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
   });
   const { t } = useTranslation()
-
   const { afterTxFailed, afterTxCreated } = useTxHandler();
+  const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
+  const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -162,13 +166,23 @@ const Reward: FunctionComponent = () => {
             active={true}
             onPress={() => { }}
           />
-          {!!state.estimateGas && <P3Text
-            label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
-            style={{ textAlign: 'center', marginTop: 10 }}
-          />}
+          {!!state.estimateGas && <>
+            <P3Text
+              label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
+              style={{ textAlign: 'center', marginTop: 10 }}
+            />
+            <View>
+              {insufficientGas && (
+                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
+                  {t('assets.insufficient_eth', { crypto: gasCrypto })}
+                </Text>
+              )}
+            </View>
+          </>
+          }
           <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
             <NextButton
-              disabled={!(interest > 0)}
+              disabled={!(interest > 0) || insufficientGas}
               title={t('assets.yield_reward')}
               handler={() => {
                 if (isWalletUser) {
