@@ -43,7 +43,6 @@ const AssetProvider: React.FC = (props) => {
         })
 
       const elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0
-      const bnbBalance = data.tokens.find((token) => token.symbol === CryptoType.BNB)?.balance || 0
 
       assets.push(
         {
@@ -62,8 +61,8 @@ const AssetProvider: React.FC = (props) => {
         },
         {
           title: 'BNB (BSC)',
-          currencyValue: bnbBalance * bnbPrice,
-          unitValue: bnbBalance,
+          currencyValue: data.bnbBalance * bnbPrice,
+          unitValue: data.bnbBalance,
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
         }
