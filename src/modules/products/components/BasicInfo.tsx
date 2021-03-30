@@ -14,15 +14,16 @@ import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
+import CryptoType from '../../../enums/CryptoType';
 
 interface Props {
   product: Product;
-  elPrice: number;
-  ethPrice: number;
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const { language, currencyFormatter } = useContext(PreferenceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
   const product = props.product;
@@ -170,136 +171,36 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               </View>
             </View>
           )}
-          {hasChildProduct ? (
+          <View
+            style={{
+              marginVertical: 2,
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 10,
+              alignItems: 'center',
+            }}>
+            <P1Text
+              label={t('product_label.available_token')}
+              style={{ flex: 1.2, color: '#838383' }}
+            />
             <View
               style={{
-                marginVertical: 2,
                 flex: 1,
                 flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
+                justifyContent: 'flex-end',
               }}>
               <P1Text
-                label={t('product_label.available_token')}
-                style={{ flex: 1.2, color: '#838383' }}
+                label={`${commaFormatter(
+                  parseFloat(product.presentValue).toFixed(4),
+                )}`}
               />
-              <View
-                style={{
-                  flexDirection: 'column',
-                  flex: 1,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    marginBottom: 3,
-                  }}>
-                  <H3Text
-                    label={'EL'}
-                    style={{
-                      flex: 1,
-                      alignSelf: 'center',
-                      fontSize: 15,
-                      justifyContent: 'flex-end',
-                    }}
-                  />
-                  <View
-                    style={{
-                      flex: 2,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <P1Text
-                      label={` ${commaFormatter(
-                        elProduct?.presentValue
-                          ? elProduct?.presentValue
-                          : props.product.presentValue,
-                      )}`}
-                    />
-                    <P1Text
-                      label={` / ${commaFormatter(
-                        elProduct?.totalValue
-                          ? elProduct?.totalValue
-                          : props.product.totalValue,
-                      )}`}
-                      style={{ color: '#838383' }}
-                    />
-                  </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                  }}>
-                  <H3Text
-                    label={'ETH'}
-                    style={{
-                      flex: 1,
-                      alignSelf: 'center',
-                      fontSize: 15,
-                      justifyContent: 'flex-end',
-                    }}
-                  />
-                  <View
-                    style={{
-                      flex: 2,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <P1Text
-                      label={` ${commaFormatter(
-                        ethProduct?.presentValue
-                          ? ethProduct?.presentValue
-                          : props.product.presentValue,
-                      )}`}
-                    />
-                    <P1Text
-                      label={` / ${commaFormatter(
-                        ethProduct?.totalValue
-                          ? ethProduct?.totalValue
-                          : props.product.totalValue,
-                      )}`}
-                      style={{ color: '#838383' }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
               <P1Text
-                label={t('product_label.available_token')}
-                style={{ flex: 1.2, color: '#838383' }}
+                label={` / ${commaFormatter(product.totalValue)}`}
+                style={{ color: '#838383' }}
               />
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}>
-                <P1Text
-                  label={`${commaFormatter(
-                    parseFloat(product.presentValue).toFixed(4),
-                  )}`}
-                />
-                <P1Text
-                  label={` / ${commaFormatter(product.totalValue)}`}
-                  style={{ color: '#838383' }}
-                />
-              </View>
             </View>
-          )}
+          </View>
           <View
             style={{
               marginVertical: 2,
@@ -336,7 +237,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 }}>
                 <P1Text
                   label={` ${commaFormatter(
-                    (product.usdPricePerToken / props.elPrice).toFixed(2),
+                    (product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2),
                   )}`}
                 />
                 <P1Text
@@ -349,54 +250,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               </View>
             </View>
           </View>
-          {hasChildProduct && (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
-              <View style={{ flex: 1.2 }} />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}>
-                <H3Text
-                  label={'ETH'}
-                  style={{
-                    flex: 1,
-                    alignSelf: 'center',
-                    fontSize: 15,
-                    justifyContent: 'flex-end',
-                  }}
-                />
-                <View
-                  style={{
-                    flex: 2,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                  }}>
-                  <P1Text
-                    label={`${commaFormatter(
-                      (product.usdPricePerToken / props.ethPrice).toFixed(6),
-                    )}`}
-                  />
-                  <P1Text
-                    label={` (${currencyFormatter(
-                      5,
-                      0,
-                    )})`}
-                    style={{ color: '#838383' }}
-                  />
-                </View>
-              </View>
-            </View>
-          )}
         </View>
       </View>
     </View>

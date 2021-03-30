@@ -251,8 +251,6 @@ const ProductBuying: FunctionComponent = () => {
           {state.product && (
             <BasicInfo
               product={state.product}
-              elPrice={elPrice}
-              ethPrice={ethPrice}
             />
           )}
           {state.product && state.product?.status !== ProductStatus.TERMINATED && (
