@@ -14,7 +14,7 @@ import assetTokenNamePrettier from '../utiles/assetTokenNamePrettier';
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
   const { wallet, isUnlocked } = useContext(WalletContext);
-  const { elPrice, ethPrice, priceLoaded } = useContext(PriceContext);
+  const { elPrice, ethPrice, bnbPrice, priceLoaded } = useContext(PriceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -43,22 +43,31 @@ const AssetProvider: React.FC = (props) => {
         })
 
       const elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0
+      const bnbBalance = data.tokens.find((token) => token.symbol === CryptoType.BNB)?.balance || 0
 
-      assets.push({
-        title: 'Elysia',
-        currencyValue: elBalance * elPrice,
-        unitValue: elBalance,
-        type: CryptoType.EL,
-        unit: CryptoType.EL,
-      });
-
-      assets.push({
-        title: 'ETH',
-        currencyValue: data.ethBalance * ethPrice,
-        unitValue: data.ethBalance,
-        type: CryptoType.ETH,
-        unit: CryptoType.ETH,
-      })
+      assets.push(
+        {
+          title: 'Elysia',
+          currencyValue: elBalance * elPrice,
+          unitValue: elBalance,
+          type: CryptoType.EL,
+          unit: CryptoType.EL,
+        },
+        {
+          title: 'ETH',
+          currencyValue: data.ethBalance * ethPrice,
+          unitValue: data.ethBalance,
+          type: CryptoType.ETH,
+          unit: CryptoType.ETH,
+        },
+        {
+          title: 'BNB (BSC)',
+          currencyValue: bnbBalance * bnbPrice,
+          unitValue: bnbBalance,
+          type: CryptoType.BNB,
+          unit: CryptoType.BNB,
+        }
+      );
 
       setState({
         assetLoaded: true,
@@ -105,21 +114,22 @@ const AssetProvider: React.FC = (props) => {
       ethBalance = data.ethBalance || 0;
 
     } finally {
-      assets.push({
-        title: 'Elysia',
-        currencyValue: elBalance * elPrice,
-        unitValue: elBalance,
-        type: CryptoType.EL,
-        unit: CryptoType.EL
-      })
-
-      assets.push({
-        title: 'ETH',
-        currencyValue: ethBalance * ethPrice,
-        unitValue: ethBalance,
-        type: CryptoType.ETH,
-        unit: CryptoType.ETH
-      })
+      assets.push(
+        {
+          title: 'Elysia',
+          currencyValue: elBalance * elPrice,
+          unitValue: elBalance,
+          type: CryptoType.EL,
+          unit: CryptoType.EL
+        },
+        {
+          title: 'ETH',
+          currencyValue: ethBalance * ethPrice,
+          unitValue: ethBalance,
+          type: CryptoType.ETH,
+          unit: CryptoType.ETH
+        }
+      )
 
       setState({
         assetLoaded: true,

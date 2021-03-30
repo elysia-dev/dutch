@@ -33,6 +33,24 @@ export default class EspressoV2 {
     })
   }
 
+  // FIXME BNB chain TX
+  static getBnbTransaction = async (address: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
+    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      }
+    })
+  }
+
+  static getBscErc20Transaction = async (address: string, tokenAddress: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
+    return axios.get(
+      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}`, {
+      headers: {
+        'Cache-Control': 'no-cache',
+      }
+    })
+  }
+
   static subscribe = async (address: string, token?: string): Promise<AxiosResponse<void>> => {
     return axios.post(
       `${baseURL}/v2/wallet/${address}/token`,

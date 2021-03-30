@@ -87,14 +87,16 @@ const Detail: FunctionComponent = () => {
 
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
-    const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    let txRes;
     const productData = await EspressoV2.getProduct(asset.address || '');
     let reward: number;
 
     if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
       reward = parseFloat(utils.formatEther(await assetTokenBnbContract?.getReward(userAddress)));
+      txRes = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
     } else {
       reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+      txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
     }
 
     setState({
@@ -112,15 +114,19 @@ const Detail: FunctionComponent = () => {
   }
 
   const loadV2More = async () => {
-    const address = wallet?.getFirstNode()?.address || '';
+    const userAddress = wallet?.getFirstNode()?.address || '';
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
-      res = await EspressoV2.getErc20Transaction(address, asset.address || '', state.page);
+      if (state.paymentMethod === CryptoType.BNB) {
+        res = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
+      } else {
+        res = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+      }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, address)
+        return txResponseToTx(tx, userAddress)
       })
     } catch {
       if (state.page !== 1) {

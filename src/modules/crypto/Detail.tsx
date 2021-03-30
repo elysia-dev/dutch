@@ -50,6 +50,8 @@ const Detail: React.FC = () => {
     try {
       if (asset.type === CryptoType.ETH) {
         res = await EspressoV2.getEthTransaction(address, state.page);
+      } else if (asset.type === CryptoType.BNB) {
+        res = await EspressoV2.getBnbTransaction(address, state.page);
       } else {
         res = await EspressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
       }
