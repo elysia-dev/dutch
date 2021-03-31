@@ -11,10 +11,11 @@ import {
 } from '../../../shared/components/Texts';
 import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
-import getEnvironment from '../../../utiles/getEnvironment';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
+import getTokenLink from '../../../utiles/getTokenLink';
+import NetworkType from '../../../enums/NetworkType';
 
 interface Props {
   product: Product;
@@ -70,9 +71,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               <TouchableOpacity
                 onPress={() => {
                   Linking.openURL(
-                    getEnvironment().envName === 'PRODUCTION'
-                      ? `https://etherscan.io/token/${product.contractAddress}`
-                      : `https://kovan.etherscan.io/token/${product.contractAddress}`,
+                    getTokenLink(product.contractAddress, product.paymentMethod.toUpperCase() === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
                   );
                 }}
                 style={{

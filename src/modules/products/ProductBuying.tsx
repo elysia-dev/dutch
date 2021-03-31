@@ -141,7 +141,6 @@ const ProductBuying: FunctionComponent = () => {
         ...state,
         product: {
           ...product.data,
-          paymentMethod: CryptoType.BNB
         },
         loaded: true,
       });
