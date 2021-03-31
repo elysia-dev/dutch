@@ -15,6 +15,7 @@ import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
+import { useWatingTx } from '../../hooks/useWatingTx';
 
 type ParamList = {
   Refund: {
@@ -44,9 +45,10 @@ const Refund: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxHashCreated } = useTxHandler();
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
+  const txResult = useWatingTx(state.txHash, from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -86,13 +88,26 @@ const Refund: FunctionComponent = () => {
         to: populatedTransaction.to,
         data: populatedTransaction.data,
       })
+
+      if (from.type === CryptoType.BNB) {
+        setState({
+          ...state,
+          txHash: txRes?.hash || '',
+        })
+      }
     } catch (e) {
       afterTxFailed(e);
-    } finally {
-      if (txRes) {
-        afterTxHashCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
-      }
       navigation.goBack();
+    } finally {
+      if (from.type !== CryptoType.BNB && txRes) {
+        afterTxHashCreated(
+          wallet?.getFirstAddress() || '',
+          contractAddress,
+          txRes.hash || '',
+          NetworkType.ETH,
+        )
+        navigation.goBack();
+      }
     }
   }
 
@@ -100,6 +115,13 @@ const Refund: FunctionComponent = () => {
     switch (state.step) {
       case TxStep.Creating:
         createTx();
+        break;
+      case TxStep.Created:
+        afterTxCreated(
+          state.txHash,
+          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
+        )
+        navigation.goBack();
         break;
       default:
     }
