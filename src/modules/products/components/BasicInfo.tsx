@@ -39,366 +39,117 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const ethProduct = product.childProducts.find(
     (prod, _index) => prod.paymentMethod === 'eth',
   );
-
+  console.log(product)
   return (
     <View
       style={{
         backgroundColor: '#fff',
-        padding: 20,
+        paddingTop: 20,
         paddingLeft: '5%',
         paddingRight: '5%',
         width: '100%',
         borderBottomColor: '#F6F6F8',
         borderBottomWidth: 5,
       }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <View>
-          <P2Text style={{ color: '#626368' }} label={product.title} />
-          <View style={{ flexDirection: 'row' }}>
-            <H2Text
-              style={{
-                marginTop: 7,
-                marginBottom: 6,
-                zIndex: 3,
-              }}
-              label={currencyFormatter(
-                parseFloat(product.totalValue) * product.usdPricePerToken,
-                0,
-              )}
-            />
-          </View>
-        </View>
-        {product.status === ProductStatus.SALE &&
-          product.contractAddress.length > 0 && (
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(
-                  getEnvironment().envName === 'PRODUCTION'
-                    ? `https://etherscan.io/token/${product.contractAddress}`
-                    : `https://kovan.etherscan.io/token/${product.contractAddress}`,
-                );
-              }}
-              style={{
-                backgroundColor: '#fff',
-                width: 120,
-                height: 30,
-                borderRadius: 15,
-                shadowOffset: { width: 1, height: 1 },
-                shadowColor: '#00000029',
-                shadowOpacity: 0.8,
-                shadowRadius: 4,
-                elevation: 4,
-                justifyContent: 'center',
-                alignContent: 'center',
-              }}>
-              <P1Text
-                label={t('dashboard_label.token_contract')}
-                style={{ textAlign: 'center', fontSize: 13 }}
-              />
-            </TouchableOpacity>
-          )}
-      </View>
       <View
         style={{
-          marginTop: 25,
-          width: '100%',
-          backgroundColor: '#F6F6F8',
-          borderRadius: 10,
-          borderWidth: 1,
-          borderColor: '#F1F1F1',
-          flexDirection: 'column',
-          padding: 10,
-          marginBottom: 10,
+          marginBottom: 13
         }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            paddingBottom: 20,
-            borderBottomWidth: 1.5,
-            borderColor: '#F1F1F1',
-          }}>
-          <H3Text
+        <H3Text style={{ 
+          color: '#3679B5', 
+          display: product.status === ProductStatus.SALE ? "flex" : "none" 
+            }} 
+          label={"FUNDING"} />
+        <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+          <H2Text
             style={{
-              marginTop: 4,
-              paddingRight: 10,
-              fontSize: language === LocaleType.EN ? 15 : 18,
-              borderRightWidth: 1,
-              borderColor: '#CCCCCC',
+              marginTop: 7,
+              marginBottom: 6,
+              zIndex: 3,
             }}
-            label={`${t('product_label.expected_annual_return', {
-              return: product.expectedAnnualReturn,
-            })}`}
+            label={currencyFormatter(
+              parseFloat(product.totalValue) * product.usdPricePerToken,
+              0,
+            )}
           />
-          <H3Text
-            style={{
-              paddingLeft: 10,
-              marginTop: 4,
-              marginLeft: 'auto',
-              fontSize: language === LocaleType.EN ? 15 : 18,
+        {product.status === ProductStatus.SALE &&
+          product.contractAddress.length > 0 && (
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL(
+                getEnvironment().envName === 'PRODUCTION'
+                  ? `https://etherscan.io/token/${product.contractAddress}`
+                  : `https://kovan.etherscan.io/token/${product.contractAddress}`,
+              );
             }}
-            label={productDescription.propertyType}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            alignContent: 'space-between',
-            paddingTop: 10,
-          }}>
-          {product.financeType === 'loan' && (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
-              <P1Text
-                label={t('product_highlight.type')}
-                style={{ color: '#838383' }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}>
-                <P1Text label={t('product_label.loan')} />
-              </View>
-            </View>
-          )}
-          {hasChildProduct ? (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
-              <P1Text
-                label={t('product_label.available_token')}
-                style={{ flex: 1.2, color: '#838383' }}
-              />
-              <View
-                style={{
-                  flexDirection: 'column',
-                  flex: 1,
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                    marginBottom: 3,
-                  }}>
-                  <H3Text
-                    label={'EL'}
-                    style={{
-                      flex: 1,
-                      alignSelf: 'center',
-                      fontSize: 15,
-                      justifyContent: 'flex-end',
-                    }}
-                  />
-                  <View
-                    style={{
-                      flex: 2,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <P1Text
-                      label={` ${commaFormatter(
-                        elProduct?.presentValue
-                          ? elProduct?.presentValue
-                          : props.product.presentValue,
-                      )}`}
-                    />
-                    <P1Text
-                      label={` / ${commaFormatter(
-                        elProduct?.totalValue
-                          ? elProduct?.totalValue
-                          : props.product.totalValue,
-                      )}`}
-                      style={{ color: '#838383' }}
-                    />
-                  </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    flex: 1,
-                    justifyContent: 'space-between',
-                  }}>
-                  <H3Text
-                    label={'ETH'}
-                    style={{
-                      flex: 1,
-                      alignSelf: 'center',
-                      fontSize: 15,
-                      justifyContent: 'flex-end',
-                    }}
-                  />
-                  <View
-                    style={{
-                      flex: 2,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                    }}>
-                    <P1Text
-                      label={` ${commaFormatter(
-                        ethProduct?.presentValue
-                          ? ethProduct?.presentValue
-                          : props.product.presentValue,
-                      )}`}
-                    />
-                    <P1Text
-                      label={` / ${commaFormatter(
-                        ethProduct?.totalValue
-                          ? ethProduct?.totalValue
-                          : props.product.totalValue,
-                      )}`}
-                      style={{ color: '#838383' }}
-                    />
-                  </View>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
-              <P1Text
-                label={t('product_label.available_token')}
-                style={{ flex: 1.2, color: '#838383' }}
-              />
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}>
-                <P1Text
-                  label={`${commaFormatter(
-                    parseFloat(product.presentValue).toFixed(4),
-                  )}`}
-                />
-                <P1Text
-                  label={` / ${commaFormatter(product.totalValue)}`}
-                  style={{ color: '#838383' }}
-                />
-              </View>
-            </View>
-          )}
-          <View
             style={{
-              marginVertical: 2,
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 10,
-              alignItems: 'center',
+              backgroundColor: '#fff',
+              width: 120,
+              height: 31,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: "#3679B5",
+              justifyContent: 'center',
+              alignContent: 'center',
             }}>
             <P1Text
-              label={t('product_label.price_per_token')}
-              style={{ color: '#838383', flex: 1.2 }}
+              label={t('dashboard_label.token_contract')}
+              style={{ color: "#3679B5", textAlign: 'center', fontSize: 13 }}
             />
-            <View
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                justifyContent: 'space-between',
-              }}>
-              <H3Text
-                label={'EL'}
-                style={{
-                  flex: 1,
-                  alignSelf: 'center',
-                  fontSize: 15,
-                  justifyContent: 'flex-end',
-                }}
-              />
-              <View
-                style={{
-                  flex: 2,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}>
-                <P1Text
-                  label={` ${commaFormatter(
-                    (product.usdPricePerToken / props.elPrice).toFixed(2),
-                  )}`}
-                />
-                <P1Text
-                  label={` (${currencyFormatter(
-                    5,
-                    0,
-                  )})`}
-                  style={{ color: '#838383' }}
-                />
-              </View>
-            </View>
-          </View>
-          {hasChildProduct && (
-            <View
-              style={{
-                marginVertical: 2,
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                paddingHorizontal: 10,
-                alignItems: 'center',
-              }}>
-              <View style={{ flex: 1.2 }} />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  justifyContent: 'space-between',
-                }}>
-                <H3Text
-                  label={'ETH'}
-                  style={{
-                    flex: 1,
-                    alignSelf: 'center',
-                    fontSize: 15,
-                    justifyContent: 'flex-end',
-                  }}
-                />
-                <View
-                  style={{
-                    flex: 2,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                  }}>
-                  <P1Text
-                    label={`${commaFormatter(
-                      (product.usdPricePerToken / props.ethPrice).toFixed(6),
-                    )}`}
-                  />
-                  <P1Text
-                    label={` (${currencyFormatter(
-                      5,
-                      0,
-                    )})`}
-                    style={{ color: '#838383' }}
-                  />
-                </View>
-              </View>
-            </View>
+          </TouchableOpacity>
           )}
         </View>
       </View>
+      {
+        [
+          [t('more_label.product_name'), product.title],
+          [t('dashboard_label.product_info'), t('product_label.loan')],
+          [t('product_label.expected_return'), "+ " + product.expectedAnnualReturn + "%"],
+          [t('product_label.available_token'), 
+            commaFormatter(
+              elProduct?.presentValue
+                ? elProduct?.presentValue
+                : props.product.presentValue,
+            ) + " / " + 
+            commaFormatter(
+              ethProduct?.totalValue
+                ? ethProduct?.totalValue
+                : props.product.totalValue,)],
+          [t('product_label.price_per_token'), 
+            "EL " +
+            commaFormatter((product.usdPricePerToken / props.elPrice).toFixed(2)) + ` (${currencyFormatter(5,0)})`],
+        ].map(([leftContent, rightContent], index) => {
+          return (
+            <View
+              style={{
+                borderColor: "#f1f1f1",
+                borderTopWidth: 1,
+                paddingVertical: 20,
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "space-between"
+              }}>
+              <View style={{ flex: 1 }} >
+                <P2Text 
+                  style={{
+                    fontSize: 14
+                  }}
+                  label={leftContent} 
+                />
+              </View>
+              <View style={{ flex: 1 }} >
+                <H3Text 
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'right'
+                  }}
+                  label={rightContent} 
+                />
+              </View>
+            </View>
+          );
+        })
+      }
     </View>
   );
 };
