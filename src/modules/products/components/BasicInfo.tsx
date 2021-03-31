@@ -3,7 +3,6 @@ import { View, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
 import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
-import LocaleType from '../../../enums/LocaleType';
 import {
   P1Text,
   P2Text,
@@ -22,17 +21,11 @@ interface Props {
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
-  const { language, currencyFormatter } = useContext(PreferenceContext);
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
   const product = props.product;
-  // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[language || LocaleType.EN];
-  // TODO : Add null guard languages & descrptions
-  const hasChildProduct =
-    product?.childProducts && product?.childProducts.length > 0;
-
   const elProduct = product.childProducts.find(
     (prod, _index) => prod.paymentMethod === 'el',
   );
@@ -55,10 +48,10 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         style={{
           marginBottom: 13
         }}>
-        <H3Text style={{ 
-          color: '#3679B5', 
-          display: product.status === ProductStatus.SALE ? "flex" : "none" 
-            }} 
+        <H3Text style={{
+          color: '#3679B5',
+          display: product.status === ProductStatus.SALE ? "flex" : "none"
+        }}
           label={"FUNDING"} />
         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center", width: "100%" }}>
           <H2Text
@@ -72,32 +65,32 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               0,
             )}
           />
-        {product.status === ProductStatus.SALE &&
-          product.contractAddress.length > 0 && (
-          <TouchableOpacity
-            onPress={() => {
-              Linking.openURL(
-                getEnvironment().envName === 'PRODUCTION'
-                  ? `https://etherscan.io/token/${product.contractAddress}`
-                  : `https://kovan.etherscan.io/token/${product.contractAddress}`,
-              );
-            }}
-            style={{
-              backgroundColor: '#fff',
-              width: 120,
-              height: 31,
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "#3679B5",
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
-            <P1Text
-              label={t('dashboard_label.token_contract')}
-              style={{ color: "#3679B5", textAlign: 'center', fontSize: 13 }}
-            />
-          </TouchableOpacity>
-          )}
+          {product.status === ProductStatus.SALE &&
+            product.contractAddress.length > 0 && (
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    getEnvironment().envName === 'PRODUCTION'
+                      ? `https://etherscan.io/token/${product.contractAddress}`
+                      : `https://kovan.etherscan.io/token/${product.contractAddress}`,
+                  );
+                }}
+                style={{
+                  backgroundColor: '#fff',
+                  width: 120,
+                  height: 31,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: "#3679B5",
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                }}>
+                <P1Text
+                  label={t('dashboard_label.token_contract')}
+                  style={{ color: "#3679B5", textAlign: 'center', fontSize: 13 }}
+                />
+              </TouchableOpacity>
+            )}
         </View>
       </View>
       {
@@ -105,19 +98,18 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           [t('more_label.product_name'), product.title],
           [t('dashboard_label.product_info'), t('product_label.loan')],
           [t('product_label.expected_return'), "+ " + product.expectedAnnualReturn + "%"],
-          [t('product_label.available_token'), 
-            commaFormatter(
-              elProduct?.presentValue
-                ? elProduct?.presentValue
-                : props.product.presentValue,
-            ) + " / " + 
-            commaFormatter(
-              ethProduct?.totalValue
-                ? ethProduct?.totalValue
-                : props.product.totalValue,)],
-          [t('product_label.price_per_token'), 
-            product.paymentMethod.toUpperCase() +
-            commaFormatter((product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2)) + ` (${currencyFormatter(5,0)})`],
+          [t('product_label.available_token'),
+          commaFormatter(
+            elProduct?.presentValue
+              ? elProduct?.presentValue
+              : props.product.presentValue,
+          ) + " / " +
+          commaFormatter(
+            ethProduct?.totalValue
+              ? ethProduct?.totalValue
+              : props.product.totalValue)],
+          [t('product_label.price_per_token'),
+          commaFormatter((product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2)) + product.paymentMethod.toUpperCase() + ` (${currencyFormatter(5, 0)})`],
         ].map(([leftContent, rightContent], index) => {
           return (
             <View
@@ -130,20 +122,20 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 justifyContent: "space-between"
               }}>
               <View style={{ flex: 1 }} >
-                <P2Text 
+                <P2Text
                   style={{
                     fontSize: 14
                   }}
-                  label={leftContent} 
+                  label={leftContent}
                 />
               </View>
               <View style={{ flex: 1 }} >
-                <H3Text 
+                <H3Text
                   style={{
                     fontSize: 14,
                     textAlign: 'right'
                   }}
-                  label={rightContent} 
+                  label={rightContent}
                 />
               </View>
             </View>
