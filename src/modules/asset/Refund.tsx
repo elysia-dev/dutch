@@ -54,7 +54,7 @@ const Refund: FunctionComponent = () => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.refund(utils.parseEther(values.to), {
+      estimateGas = await contract?.estimateGas.refund(utils.parseEther('0.01'), {
         from: wallet?.getFirstAddress(),
       })
     } catch {
@@ -72,7 +72,7 @@ const Refund: FunctionComponent = () => {
     if (isWalletUser) {
       estimateGas();
     }
-  }, [values.to])
+  }, [])
 
   const createTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
