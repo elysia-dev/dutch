@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { BigNumber, ethers, utils } from 'ethers';
@@ -15,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
+import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 
 type ParamList = {
   Refund: {
@@ -41,27 +41,20 @@ const Refund: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
   const { from, to, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAddress);
-  const assetTokenBnbContract = useAssetTokenBnb(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxCreated } = useTxHandler();
+  const { afterTxFailed, afterTxHashCreated } = useTxHandler();
   const { t } = useTranslation();
+  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      if (to.type === CryptoType.BNB) {
-        estimateGas = await assetTokenBnbContract?.estimateGas.refund(utils.parseEther(values.to), {
-          from: wallet?.getFirstAddress(),
-        })
-      } else {
-        estimateGas = await assetTokenContract?.estimateGas.refund(utils.parseEther(values.to), {
-          from: wallet?.getFirstAddress(),
-        })
-      }
+      estimateGas = await contract?.estimateGas.refund(utils.parseEther(values.to), {
+        from: wallet?.getFirstAddress(),
+      })
     } catch {
     } finally {
       if (estimateGas) {
@@ -83,34 +76,21 @@ const Refund: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
-      if (to.type === CryptoType.BNB) {
-        const populatedTransaction = await assetTokenBnbContract?.populateTransaction.refund(
-          utils.parseEther(values.from)
-        )
+      const populatedTransaction = await contract?.populateTransaction.refund(
+        utils.parseEther(values.from)
+      )
 
-        if (!populatedTransaction) return;
+      if (!populatedTransaction) return;
 
-        txRes = await wallet?.getFirstSigner(NetworkType.BSC).sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        })
-      } else {
-        const populatedTransaction = await assetTokenContract?.populateTransaction.refund(
-          utils.parseEther(values.from)
-        )
-
-        if (!populatedTransaction) return;
-
-        txRes = await wallet?.getFirstSigner().sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        })
-      }
+      txRes = await wallet?.getFirstSigner(to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH).sendTransaction({
+        to: populatedTransaction.to,
+        data: populatedTransaction.data,
+      })
     } catch (e) {
       afterTxFailed(e);
     } finally {
       if (txRes) {
-        afterTxCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
+        afterTxHashCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
       }
       navigation.goBack();
     }

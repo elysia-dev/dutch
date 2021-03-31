@@ -6,14 +6,29 @@ import NetworkType from '../enums/NetworkType';
 import getTxScanLink from '../utiles/getTxScanLink';
 
 type TxHandlers = {
-  afterTxCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
+  afterTxCreated: (txHash: string, networkType?: NetworkType) => void;
+  afterTxHashCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
   afterTxFailed: (description?: string) => void;
 };
 
 const useTxHandler = (): TxHandlers => {
   const { t } = useTranslation();
 
-  const afterTxCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
+  const afterTxCreated = (txHash: string, networkType?: NetworkType) => {
+    showMessage({
+      message: t('transaction.created'),
+      description: txHash,
+      type: 'success',
+      onPress: () => {
+        Linking.openURL(
+          getTxScanLink(txHash, networkType)
+        )
+      },
+      duration: 3000
+    });
+  }
+
+  const afterTxHashCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
     EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
       JSON.stringify(res)
     ))
@@ -42,6 +57,7 @@ const useTxHandler = (): TxHandlers => {
 
   return {
     afterTxCreated,
+    afterTxHashCreated,
     afterTxFailed,
   };
 }

@@ -364,7 +364,8 @@
     },
     "transaction": {
       "pending": "대기중인 트랜잭션이 있습니다.",
-      "fail": "트랜잭션이 실패했습니다."
+      "fail": "트랜잭션이 실패했습니다.",
+      "created": "트랜잭션 완료"
     },
     "main": {
       "total_assets": "총 자산",

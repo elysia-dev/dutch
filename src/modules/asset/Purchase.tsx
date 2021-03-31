@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken, useAssetTokenEth, useElysiaToken, useAssetTokenBnb } from '../../hooks/useContract';
 import { BigNumber } from '@ethersproject/bignumber';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
@@ -18,6 +17,7 @@ import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
+import { getAssetTokenFromCryptoType, getElysiaContract } from '../../utiles/getContract';
 
 type ParamList = {
   Purchase: {
@@ -29,10 +29,6 @@ type ParamList = {
   };
 };
 
-// TODO
-// 1. Check Maximu value gasFee & Price...
-// 2. toPrice는 5달러 고정이 아닐 수 도 있다.
-// 4. Tx 생성 에러 더 상세하게 적기
 const Purchase: FunctionComponent = () => {
   const [values, setValues] = useState({
     from: '',
@@ -49,36 +45,27 @@ const Purchase: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
   const { from, to, toMax, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAddress);
-  const assetTokenEthContract = useAssetTokenEth(contractAddress);
-  const assetTokenBnbContract = useAssetTokenBnb(contractAddress);
-  const elContract = useElysiaToken();
   const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const txResult = useWatingTx(state.txHash);
+  const txResult = useWatingTx(state.txHash, from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxCreated } = useTxHandler();
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
+  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
 
     try {
       switch (from.type) {
-        case CryptoType.ETH:
-          estimateGas = await assetTokenEthContract?.estimateGas.purchase({
-            from: wallet?.getFirstAddress(),
-            value: utils.parseEther('0.5').toHexString()
-          })
-          break;
-        case CryptoType.BNB:
-          estimateGas = await assetTokenBnbContract?.estimateGas.purchase({
+        case CryptoType.ETH, CryptoType.BNB:
+          estimateGas = await contract?.estimateGas.purchase({
             from: wallet?.getFirstAddress(),
             value: utils.parseEther('0.5').toHexString()
           })
           break;
         default:
-          estimateGas = await assetTokenContract?.estimateGas.purchase(utils.parseEther('100'), {
+          estimateGas = await contract?.estimateGas.purchase(utils.parseEther('100'), {
             from: wallet?.getFirstNode()?.address
           })
       }
@@ -93,6 +80,8 @@ const Purchase: FunctionComponent = () => {
   }
 
   useEffect(() => {
+    // load from balcne!
+    // or load to Max
     if (isWalletUser) {
       estimateGas();
     }
@@ -105,7 +94,7 @@ const Purchase: FunctionComponent = () => {
     try {
       switch (from.type) {
         case CryptoType.ETH:
-          populatedTransaction = await assetTokenEthContract?.populateTransaction.purchase();
+          populatedTransaction = await contract?.populateTransaction.purchase();
 
           if (!populatedTransaction) break;
 
@@ -116,7 +105,7 @@ const Purchase: FunctionComponent = () => {
           })
           break;
         case CryptoType.BNB:
-          populatedTransaction = await assetTokenBnbContract?.populateTransaction.purchase();
+          populatedTransaction = await contract?.populateTransaction.purchase();
 
           if (!populatedTransaction) break;
 
@@ -126,9 +115,14 @@ const Purchase: FunctionComponent = () => {
             value: utils.parseEther(values.from).toHexString(),
           })
 
+          setState({
+            ...state,
+            txHash: txRes?.hash || '',
+          })
+
           break;
         default:
-          populatedTransaction = await assetTokenContract?.populateTransaction.purchase(
+          populatedTransaction = await contract?.populateTransaction.purchase(
             utils.parseEther(values.from)
           )
 
@@ -142,15 +136,19 @@ const Purchase: FunctionComponent = () => {
           break;
       }
 
-      afterTxCreated(
-        wallet?.getFirstAddress() || '',
-        contractAddress, txRes?.hash || '',
-        from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
-      )
     } catch (e) {
       afterTxFailed(e.message);
-    } finally {
       navigation.goBack();
+    } finally {
+      if (from.type !== CryptoType.BNB && txRes) {
+        afterTxHashCreated(
+          wallet?.getFirstAddress() || '',
+          contractAddress,
+          txRes.hash || '',
+          NetworkType.ETH,
+        )
+        navigation.goBack();
+      }
     }
   }
 
@@ -162,7 +160,7 @@ const Purchase: FunctionComponent = () => {
           return
         }
 
-        elContract?.allowance(
+        getElysiaContract()?.allowance(
           wallet?.getFirstNode()?.address, contractAddress
         ).then((res: BigNumber) => {
           if (res.isZero()) {
@@ -177,7 +175,7 @@ const Purchase: FunctionComponent = () => {
         break;
 
       case TxStep.Approving:
-        elContract?.populateTransaction
+        getElysiaContract()?.populateTransaction
           .approve(contractAddress, '1' + '0'.repeat(30))
           .then(populatedTransaction => {
             wallet?.getFirstSigner().sendTransaction({
@@ -191,9 +189,16 @@ const Purchase: FunctionComponent = () => {
             })
           })
         break;
-
       case TxStep.Creating:
         createTx();
+        break;
+      case TxStep.Created:
+        afterTxCreated(
+          state.txHash,
+          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
+        )
+        navigation.goBack();
+        break;
       default:
     }
   }, [state.step])
@@ -211,6 +216,14 @@ const Purchase: FunctionComponent = () => {
               : TxStep.Failed,
         });
         break;
+      case TxStep.Creating:
+        setState({
+          ...state,
+          step:
+            txResult.status === TxStatus.Success
+              ? TxStep.Created
+              : TxStep.Failed,
+        })
     }
   }, [txResult.status]);
 

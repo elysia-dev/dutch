@@ -367,7 +367,8 @@
     },
     "transaction": {
       "pending": "Transaction now in progress.",
-      "fail": "Transaction failed"
+      "fail": "Transaction failed",
+      "created": "Completed transaction"
     },
     "main": {
       "total_assets": "Total assets",

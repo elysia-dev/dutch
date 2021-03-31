@@ -24,12 +24,12 @@ import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
-import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
+import { getAssetTokenContract, getBscAssetTokenContract } from '../../utiles/getContract';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -83,20 +83,19 @@ const Detail: FunctionComponent = () => {
   })
   const [filter, setFilter] = useState<number>(0);
   const { getCryptoPrice } = useContext(PriceContext);
-  const assetTokenContract = useAssetToken(asset.address || '');
-  const assetTokenBnbContract = useAssetTokenBnb(asset.address || '');
 
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
     let txRes;
     const productData = await EspressoV2.getProduct(asset.address || '');
-    let reward: number;
+    const contract = productData.data.paymentMethod.toUpperCase() === CryptoType.BNB ?
+      getAssetTokenContract(asset.address || '') :
+      getBscAssetTokenContract(asset.address || '')
+    const reward = parseFloat(utils.formatEther(await contract?.getReward(userAddress)));
 
     if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
-      reward = parseFloat(utils.formatEther(await assetTokenBnbContract?.getReward(userAddress)));
       txRes = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
     } else {
-      reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
       txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
     }
 

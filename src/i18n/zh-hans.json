@@ -360,7 +360,8 @@
     },
     "transaction": {
       "pending": "交易正在进行中。",
-      "fail": "交易失败。"
+      "fail": "交易失败。",
+      "created": "交易成功"
     },
     "main": {
       "total_assets": "总资产",

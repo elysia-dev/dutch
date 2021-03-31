@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
+import NetworkType from '../enums/NetworkType';
 import TxStatus from '../enums/TxStatus';
-import { provider } from '../utiles/getContract';
+import { provider, bscProvider } from '../utiles/getContract';
 
 type TxResult = {
   status: TxStatus,
   error: string,
 }
 
-export function useWatingTx(txHash: string): TxResult {
+export function useWatingTx(txHash: string, network?: NetworkType): TxResult {
   const [state, setState] = useState<{ status: TxStatus, error: string, counter: number }>(
     { status: TxStatus.None, error: "", counter: 0 }
   );
@@ -27,8 +28,10 @@ export function useWatingTx(txHash: string): TxResult {
       return;
     }
 
+    const usedProvider = network && network === NetworkType.BSC ? bscProvider : provider;
+
     let timer = setTimeout(() => {
-      provider.getTransactionReceipt(txHash).then((res: any) => {
+      usedProvider.getTransactionReceipt(txHash).then((res: any) => {
         if (res && res.status === 1) {
           setState({
             ...state,

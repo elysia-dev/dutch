@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useAssetToken, useAssetTokenBnb } from '../../hooks/useContract';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import useTxHandler from '../../hooks/useTxHandler';
@@ -23,6 +22,7 @@ import { P3Text } from '../../shared/components/Texts';
 import NetworkType from '../../enums/NetworkType';
 import AssetContext from '../../contexts/AssetContext';
 import AppColors from '../../enums/AppColors';
+import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 
 type ParamList = {
   Reward: {
@@ -39,8 +39,6 @@ const Reward: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Reward'>>()
   const { toCrypto, toTitle, contractAddress } = route.params;
   const navigation = useNavigation();
-  const assetTokenContract = useAssetToken(contractAddress);
-  const assetTokenBnbContract = useAssetTokenBnb(contractAddress);
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { isWalletUser, user, Server } = useContext(UserContext);
@@ -52,23 +50,18 @@ const Reward: FunctionComponent = () => {
     estimateGas: '',
   });
   const { t } = useTranslation()
-  const { afterTxFailed, afterTxCreated } = useTxHandler();
+  const { afterTxFailed, afterTxHashCreated } = useTxHandler();
   const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
+  const contract = getAssetTokenFromCryptoType(toCrypto, contractAddress);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      if (toCrypto === CryptoType.BNB) {
-        estimateGas = await assetTokenBnbContract?.estimateGas.claimReward({
-          from: wallet?.getFirstNode()?.address
-        })
-      } else {
-        estimateGas = await assetTokenContract?.estimateGas.claimReward({
-          from: wallet?.getFirstNode()?.address
-        })
-      }
+      estimateGas = await contract?.estimateGas.claimReward({
+        from: wallet?.getFirstNode()?.address
+      })
     } catch {
     } finally {
       if (estimateGas) {
@@ -89,45 +82,28 @@ const Reward: FunctionComponent = () => {
   useEffect(() => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0]
 
-    if (toCrypto === CryptoType.BNB) {
-      assetTokenBnbContract?.getReward(address).then((res: BigNumber) => {
-        setInterest(parseFloat(utils.formatEther(res)));
-      });
-    } else {
-      assetTokenContract?.getReward(address).then((res: BigNumber) => {
-        setInterest(parseFloat(utils.formatEther(res)));
-      });
-    }
+    contract?.getReward(address).then((res: BigNumber) => {
+      setInterest(parseFloat(utils.formatEther(res)));
+    });
   }, [])
 
   const createTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
-      if (toCrypto === CryptoType.BNB) {
-        const populatedTransaction = await assetTokenBnbContract?.populateTransaction.claimReward()
+      const populatedTransaction = await contract?.populateTransaction.claimReward()
 
-        if (!populatedTransaction) return;
+      if (!populatedTransaction) return;
 
-        txRes = await wallet?.getFirstSigner(NetworkType.BSC).sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        })
-      } else {
-        const populatedTransaction = await assetTokenContract?.populateTransaction.claimReward()
-
-        if (!populatedTransaction) return;
-
-        txRes = await wallet?.getFirstSigner().sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        })
-      }
+      txRes = await wallet?.getFirstSigner(toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH).sendTransaction({
+        to: populatedTransaction.to,
+        data: populatedTransaction.data,
+      })
     } catch (e) {
       afterTxFailed(e.message);
     } finally {
       if (txRes) {
-        afterTxCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
+        afterTxHashCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
       }
       navigation.goBack();
     }
