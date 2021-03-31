@@ -9,6 +9,7 @@ type NotificationData = {
   tokenAmount: string;
   txHash: string;
   paymentMethod: string;
+  network: string;
 };
 
 export default NotificationData;

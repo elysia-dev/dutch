@@ -5,6 +5,9 @@ export type CoinPriceResponse = {
   ethereum: {
     usd: number;
   };
+  binancecoin: {
+    usd: number;
+  };
 };
 
 export type ELPriceResponse = {

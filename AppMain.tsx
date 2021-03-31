@@ -9,15 +9,15 @@ import UserProvider from './src/providers/UserProvider';
 const AppMain = () => {
   return (
     <PriceProvider>
-      <UserProvider>
-        <PreferenceProvider>
+      <PreferenceProvider>
+        <UserProvider>
           <WalletProvider>
             <AssetProvider>
               <AppNavigator />
             </AssetProvider>
           </WalletProvider>
-        </PreferenceProvider>
-      </UserProvider>
+        </UserProvider>
+      </PreferenceProvider>
     </PriceProvider>
   );
 };

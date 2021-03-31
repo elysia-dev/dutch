@@ -6,16 +6,19 @@ import { P1Text, P3Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import { useTranslation } from 'react-i18next';
-import getEnvironment from '../../../utiles/getEnvironment';
+import NetworkType from '../../../enums/NetworkType';
+import getTxScanLink from '../../../utiles/getTxScanLink';
 
 interface ITransactionItem {
   transaction: CryptoTransaction,
   unit: string,
+  networkType: NetworkType,
 }
 
 const TransactionItem: React.FC<ITransactionItem> = ({
   transaction,
-  unit
+  unit,
+  networkType
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
@@ -52,9 +55,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           transaction.txHash && <TouchableOpacity
             onPress={() => {
               Linking.openURL(
-                getEnvironment().envName === 'PRODUCTION'
-                  ? `https://etherscan.io/tx/${transaction.txHash}`
-                  : `https://kovan.etherscan.io/tx/${transaction.txHash}`,
+                getTxScanLink(transaction.txHash, networkType)
               );
             }}
           >

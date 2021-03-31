@@ -1,36 +1,58 @@
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import EspressoV2 from '../api/EspressoV2';
-import getEnvironment from '../utiles/getEnvironment';
+import NetworkType from '../enums/NetworkType';
+import { MainPage } from '../enums/pageEnum';
+import getTxScanLink from '../utiles/getTxScanLink';
 
 type TxHandlers = {
-  afterTxCreated: (address: string, contractAddress: string, txHash: string) => void;
-  afterTxFailed: () => void;
+  afterTxCreated: (txHash: string, networkType?: NetworkType) => void;
+  afterTxHashCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
+  afterTxFailed: (description?: string) => void;
 };
 
-function useTxHandler(): TxHandlers {
-  const afterTxCreated = (address: string, contractAddress: string, txHash: string) => {
+const useTxHandler = (): TxHandlers => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+
+  const afterTxCreated = (txHash: string) => {
+    showMessage({
+      message: t('transaction.created'),
+      description: txHash,
+      type: 'info',
+      onPress: () => {
+        navigation.navigate(MainPage.DashboardMain, {
+          refresh: true,
+        })
+      },
+      duration: 3000
+    });
+  }
+
+  const afterTxHashCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
     EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
       JSON.stringify(res)
     ))
+
     showMessage({
-      message: `트랜잭션 생성 요청을 완료했습니다.`,
+      message: t('transaction.pending'),
       description: txHash,
       type: 'info',
       onPress: () => {
         Linking.openURL(
-          getEnvironment().ethNetwork === 'main'
-            ? `https://etherscan.io/tx/${txHash}`
-            : `https://kovan.etherscan.io/tx/${txHash}`,
+          getTxScanLink(txHash, networkType)
         )
       },
       duration: 3000
     });
   }
 
-  const afterTxFailed = () => {
+  const afterTxFailed = (description?: string) => {
     showMessage({
-      message: `트랜잭션 생성에 실패했습니다.`,
+      message: t('transaction.fail'),
+      description,
       type: 'danger',
       duration: 3000
     });
@@ -38,6 +60,7 @@ function useTxHandler(): TxHandlers {
 
   return {
     afterTxCreated,
+    afterTxHashCreated,
     afterTxFailed,
   };
 }

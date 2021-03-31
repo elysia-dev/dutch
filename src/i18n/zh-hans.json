@@ -1,8 +1,5 @@
 {
   "translation": {
-    "welcome": "欢迎使用爱立厦（ELYSIA)",
-    "greeting": "您好, {{firstName}} {{lastName}}",
-    "greeting_new": "您好， {{email}}",
     "account": {
       "insert_account_email": "请输入您的邮箱地址。",
       "check_email": "请检查您的邮箱地址。",
@@ -90,29 +87,19 @@
     },
     "product": {
       "transaction_error": "该代币不能交易。",
-      "transaction_ready": "已经准备好投资",
       "select_metamask": "选择您要使用的Metamask环境。",
       "link_will_be_sent": "已通过邮件发送交易链接。",
       "send_purchase_link": "已通过邮件发送交易链接。\n 请在设置好Metamask的浏览器里打开这个链接。",
       "email_restriction": "30秒内只能申请一次邮件发送。\n  请在30秒后再次尝试。",
       "non_purchasable": "本代币不能交易。\n 请确定是否进行了认证和输入了正确的以太坊钱包地址。",
       "restricted_country": "所在国家不能交易。",
-      "subscribed": "预约成功。将会给您发送商品最新信息。",
-      "subscribed_already": "已经预约成功。",
-      "subscribe_fail": "现在不能预约。",
-      "for_subscription": "以上数据仅用来预测商品收益率，与实际会有偏差。请在交换房地产代币时再次确定具体信息。",
       "metamask_mobile": "Metamask钱包手机App",
       "metamask_pc": "Metamask钱包网站（PC）",
-      "from": "从",
-      "to": "转到",
-      "value": "价值",
-      "you": "您的账户",
-      "elysia": "爱立厦",
-      "el": "EL代币",
       "imtoken_mobile": "imToken钱包手机App",
       "select_payment": "请选择钱包。",
       "connect_wallet": "需要绑定钱包地址。",
-      "connect_wallet_confirm": "需要绑定钱包地址。\n现在绑定吗？"
+      "connect_wallet_confirm": "需要绑定钱包地址。\n现在绑定吗？",
+      "required_eth_wallet": "你用皮夹子买不到。"
     },
     "product_financial": {
       "expected_annual_return": "预期年收益",
@@ -163,27 +150,14 @@
       "property_highlightes": "房地产核心信息",
       "product_info": "产品信息",
       "abstract": "概要",
-      "purchase": "交换",
-      "refund": "减少投资",
       "legacy_refund": "请求卖出持有股份",
-      "purchase_now": "马上投资",
-      "refund_token_count": "房地产代币数",
-      "token_count": "房地产代币数",
-      "expected_el_price": "EL代币数量",
-      "expected_eth_price": "ETH代币数量",
-      "eth_price": "以太币数量",
-      "property_type": "房地产类型",
-      "recovery": "金额",
       "non_purchasable": "您需要进行认证和绑定钱包",
       "view_details": "产品详细信息",
       "available_token": "可投资的房地产代币数量",
-      "minimum_el": "最少投资额度",
-      "reserve": "预约且接受通知",
-      "reserved": "预约成功。",
       "loan": "去中心化贷款债券型商品",
       "restricted_country": "所在国家/地区不能交易。",
-      "payment_method": "交换方式",
-      "need_wallet": "需要绑定钱包地址"
+      "need_wallet": "需要绑定钱包地址",
+      "required_eth_wallet": "必备的ETH钱包"
     },
     "more_label": {
       "more": "更多",
@@ -195,7 +169,6 @@
       "my_account": "我的账户",
       "service_center": "顾客服务中心",
       "notice": "公告栏",
-      "faq": "常见问题解答",
       "service_terms": "服务条款",
       "privacy_policy": "隐私政策",
       "contact": "在线咨询",
@@ -208,32 +181,11 @@
       "product_name": "项目名称",
       "entire_profit": "全部收益",
       "expectd_sale_profit": "预期销售利润率",
-      "all": "全部",
-      "deposit": "充值",
-      "withdraw": "体现",
-      "_day": "直接输入",
-      "30_day": "1个月",
-      "90_day": "3个月",
-      "term": "期间",
       "language": "语言",
       "el_exchange": "EL币交易所",
       "search": "搜索",
       "contact_contents": "具体咨询事项",
-      "retrieve": "查询",
-      "period": "查询期间",
-      "types": "交易类型",
-      "product": "交易产品",
-      "type_": "全部",
-      "type_ownership": "获得所有权",
-      "type_refund": "出售所有权",
-      "type_close": "所有权到期",
-      "type_expectedProfit": "累计收益",
-      "type_profit": "提现收益",
-      "latest": "最新信息",
       "push_notice": "弹窗提醒",
-      "notification_setting": "提醒设置",
-      "connect": "绑定Metamask钱包",
-      "copy": "复制钱包下载链接",
       "copied": "复制成功 ({{url}})",
       "app_info": "App信息",
       "version": "版本",
@@ -247,9 +199,6 @@
       "account_withdrawl": "删除账号",
       "agree_withdrawl": "同意并删除",
       "get_latest_version": "更新最新({{version}})版本",
-      "update_alert": "最新版本通知提醒",
-      "update_text": "最新版本已推出，请更新后体验最新功能。",
-      "update": "更新",
       "disconnect_address": "解除钱包地址绑定",
       "delete_address": "删除钱包",
       "return_initial": "回到之前界面",
@@ -259,14 +208,10 @@
       "backupseed": "种子词组"
     },
     "more": {
-      "no_transaction": "该期间内没有交易。",
       "contact_text": "请填写咨询事项并提交。",
       "question_submitted": "您的问题已成功提交。，我们会尽快通过邮件与您联系。",
-      "invalid_date": "无效期间，请再次确认",
       "invalid_password": "请输入现在的密码。",
       "contact_restriction": "1分钟内只能提交1次咨询。\n 请在1分钟后再试一次",
-      "check": "请注意",
-      "check_text": "请阅读下列注意事项后，绑定钱包地址。",
       "check_1": "绑定钱包地址后不能变更。",
       "check_2": "每个用户只能绑定一个钱包地址。",
       "check_3": "请选择以下选项中的一个。",
@@ -383,15 +328,6 @@
       "participate_event": "来参与预约活动吧!",
       "connect_address": "请绑定钱包地址。"
     },
-    "day": {
-      "0": "周日",
-      "1": "周一",
-      "2": "周二",
-      "3": "周三",
-      "4": "周四",
-      "5": "周五",
-      "6": "周六"
-    },
     "notification": {
       "closeOwnership": "{{name}} 项目的所有权已到期  ",
       "successKyc": "KYC认证成功。",
@@ -422,21 +358,10 @@
       "failTransaction": "交易失败",
       "onboardingConnectWallet": "爱立厦(ELYSIA)自主发行"
     },
-    "FAQ": {
-      "question": [
-        "我可以用这个应用程序（App)做什么？",
-        "储蓄积分是什么? 如何获得储蓄积分呢？",
-        "房地产代币和EL代币如何交换呢？",
-        "什么是以太坊钱包地址？该如何获得呢？",
-        "为什么要绑定以太坊钱包地址？"
-      ],
-      "answer": [
-        "您可以注册或交换基于现货的以太币。在完成身份验证后，您可以根据持有的代币获得储蓄积分。",
-        "这是一个额外的奖励代币，与持有代币的数量和时间成正比。从您持有代币的那一刻起计算累计，根据代币持有量的不同奖励规则会有所不同，具体信息请查看合同。",
-        "您可以在主页面确定持有的代币种类，还可以选择并输入要交换的代币。单击页面上的“取消交换”按钮，可以交换任意数量的代币。",
-        "是可以交换以太币或ERC代币的钱包地址。可以在各种钱包中创建它，例如Metamask（https://metamask.io/）或MyEtherWallet（https://www.myetherwallet.com/）。如何创建请参考每个钱包的介绍。",
-        "此应用程序（App)提供每个产品的信息，并且提供交易服务，实际的交换是在提供去中心化服务的私人钱包中进行。因此，在使用此应用程序时，您需要在私人钱包中进行实际的交换。"
-      ]
+    "transaction": {
+      "pending": "交易正在进行中。",
+      "fail": "交易失败。",
+      "created": "交易成功"
     },
     "main": {
       "total_assets": "总资产",
@@ -508,7 +433,7 @@
       "yield_reward": "利息分配",
       "cancel": "取消",
       "transaction_fee": "手续费",
-      "insufficient_eth": "你的体液平衡不够。"
+      "insufficient_eth": "{{crypto}} 余额不足。"
     },
     "legacy": {
       "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"

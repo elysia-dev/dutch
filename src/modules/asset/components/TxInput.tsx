@@ -11,12 +11,11 @@ import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
-import PriceContext from '../../../contexts/PriceContext';
 import Asset from '../../../types/Asset';
 import AssetContext from '../../../contexts/AssetContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
-import { parse } from 'expo-linking';
+import PriceContext from '../../../contexts/PriceContext';
 
 interface ITxInput {
   title: string
@@ -57,15 +56,16 @@ const TxInput: React.FC<ITxInput> = ({
 }) => {
   const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
-  const { ethPrice } = useContext(PriceContext)
   const { getBalance } = useContext(AssetContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const fromToRatio = fromPrice / toPrice;
   const { t } = useTranslation();
   const isFromInvalid = parseFloat(values.from) > (from.unitValue ? from.unitValue : getBalance(from.unit));
   const isToInvalid = toMax ? (parseFloat(values.to) > toMax) : false;
-  const insufficientEth = from.type === CryptoType.ETH ?
-    getBalance(CryptoType.ETH) < parseFloat(estimateGas) + parseFloat(values.from)
-    : getBalance(CryptoType.ETH) < parseFloat(estimateGas);
+  const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
+  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
+    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from)
+    : getBalance(gasCrypto) < parseFloat(estimateGas);
 
   return (
     <>
@@ -123,12 +123,14 @@ const TxInput: React.FC<ITxInput> = ({
         {
           !!estimateGas && <>
             <P3Text
-              label={`${t('assets.transaction_fee')}: ${estimateGas} ETH (${currencyFormatter(parseFloat(estimateGas) * ethPrice)})`}
-              style={{ textAlign: 'center', marginBottom: insufficientEth ? 5 : 10 }}
+              label={`${t('assets.transaction_fee')}: ${estimateGas} ${gasCrypto} (${currencyFormatter(parseFloat(estimateGas) * getCryptoPrice(gasCrypto))})`}
+              style={{ textAlign: 'center', marginBottom: insufficientGas ? 5 : 10 }}
             />
             <View>
-              {insufficientEth && (
-                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}> {t('assets.insufficient_eth')} </Text>
+              {insufficientGas && (
+                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
+                  {t('assets.insufficient_eth', { crypto: gasCrypto })}
+                </Text>
               )}
             </View>
           </>
@@ -174,7 +176,7 @@ const TxInput: React.FC<ITxInput> = ({
           }}
         />
         <NextButton
-          disabled={isToInvalid || isFromInvalid || disabled || insufficientEth}
+          disabled={isToInvalid || isFromInvalid || disabled || insufficientGas}
           title={title}
           handler={() => {
             createTx()

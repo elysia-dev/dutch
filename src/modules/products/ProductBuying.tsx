@@ -9,7 +9,6 @@ import {
   View,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -31,11 +30,9 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
-import PriceContext from '../../contexts/PriceContext';
 
-const ProductInfoWrapper = styled.SafeAreaView`
+const ProductInfoWrapper = styled.View`
   background-color: #fff;
-  padding-top: 25px;
   height: 100%;
   width: 100%;
 `;
@@ -66,12 +63,12 @@ const ProductBuying: FunctionComponent = () => {
   const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
-  const { elPrice, ethPrice } = useContext(PriceContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
     : '';
   const purchasability = isWalletUser || user.ethAddresses?.length > 0;
+  const isBnbProductAndCannotPurchase = !isWalletUser && state.product?.paymentMethod.toUpperCase() === CryptoType.BNB
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
@@ -80,6 +77,8 @@ const ProductBuying: FunctionComponent = () => {
       return t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return t('product_label.non_purchasable');
+    } else if (isBnbProductAndCannotPurchase) {
+      return t('product_label.required_eth_wallet');
     } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
@@ -110,6 +109,8 @@ const ProductBuying: FunctionComponent = () => {
         ],
         { cancelable: false },
       );
+    } else if (isBnbProductAndCannotPurchase) {
+      return alert(t('product.required_eth_wallet'));
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
         return alert(t('product.restricted_country'));
@@ -118,8 +119,8 @@ const ProductBuying: FunctionComponent = () => {
     } else {
       navigation.navigate(ProductPage.Purchase, {
         from: {
-          type: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
-          unit: state.product?.paymentMethod === 'eth' ? CryptoType.ETH : CryptoType.EL,
+          type: state.product?.paymentMethod.toUpperCase() as CryptoType,
+          unit: state.product?.paymentMethod.toUpperCase() as CryptoType,
           title: state.product?.paymentMethod.toUpperCase(),
         },
         to: {
@@ -133,28 +134,18 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
-  const loadProductAndPrice = async () => {
+  const loadProduct = async () => {
     try {
       const product = await Server.productInfo(productId);
       setState({
         ...state,
-        product: product.data,
+        product: {
+          ...product.data,
+        },
         loaded: true,
       });
     } catch (e) {
-      if (e.response.status === 500) {
-        alert(t('account_errors.server'));
-      } else if (e.response.status) {
-        if (e.response.status === 404) {
-          const product = await Server.productInfo(productId);
-          setState({
-            ...state,
-            product: product.data,
-            subscribed: false,
-            loaded: true,
-          });
-        }
-      }
+      alert(t('account_errors.server'));
     }
   };
 
@@ -197,7 +188,7 @@ const ProductBuying: FunctionComponent = () => {
     });
 
   useEffect(() => {
-    loadProductAndPrice();
+    loadProduct();
   }, [language, productId]);
 
   return (
@@ -256,8 +247,6 @@ const ProductBuying: FunctionComponent = () => {
           {state.product && (
             <BasicInfo
               product={state.product}
-              elPrice={elPrice}
-              ethPrice={ethPrice}
             />
           )}
           {state.product && state.product?.status !== ProductStatus.TERMINATED && (
@@ -266,7 +255,7 @@ const ProductBuying: FunctionComponent = () => {
                 padding: 20,
                 borderBottomColor: '#F6F6F8',
                 borderBottomWidth: 5,
-                height: 136,
+                height: 244,
               }}>
               <ExpectedReturn product={state.product} />
             </View>
@@ -299,20 +288,6 @@ const ProductBuying: FunctionComponent = () => {
           handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
-
-        {!elPrice && (
-          <View
-            style={{
-              backgroundColor: '#fff',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
-            <ActivityIndicator size="large" color="#3679B5" />
-          </View>
-        )}
       </ProductInfoWrapper>
     </>
   );

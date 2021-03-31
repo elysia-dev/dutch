@@ -24,11 +24,13 @@ import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
-import { useAssetToken } from '../../hooks/useContract';
 import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
 import ProductStatus from '../../enums/ProductStatus';
+import NetworkType from '../../enums/NetworkType';
+import { getAssetTokenContract, getBscAssetTokenContract } from '../../utiles/getContract';
+import OverlayLoading from '../../shared/components/OverlayLoading';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -58,6 +60,7 @@ type State = {
   image: string,
   productId: number,
   productStatus: ProductStatus,
+  loaded: boolean,
 }
 
 const Detail: FunctionComponent = () => {
@@ -78,42 +81,62 @@ const Detail: FunctionComponent = () => {
     paymentMethod: CryptoType.EL,
     image: '',
     productId: 0, //for v1 user
-    productStatus: ProductStatus.SALE
+    productStatus: ProductStatus.SALE,
+    loaded: false
   })
   const [filter, setFilter] = useState<number>(0);
-  const { elPrice, ethPrice } = useContext(PriceContext);
-  const assetTokenContract = useAssetToken(asset.address || '');
+  const { getCryptoPrice } = useContext(PriceContext);
 
   const loadV2Detail = async () => {
-    const userAddress = wallet?.getFirstNode()?.address || '';
-    const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
-    const productData = await EspressoV2.getProduct(asset.address || '');
-    const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+    try {
+      const userAddress = wallet?.getFirstNode()?.address || '';
+      let txRes;
+      const productData = await EspressoV2.getProduct(asset.address || '');
+      const contract = productData.data.paymentMethod.toUpperCase() === CryptoType.BNB ?
+        getBscAssetTokenContract(asset.address || '') :
+        getAssetTokenContract(asset.address || '')
 
-    setState({
-      ...state,
-      page: 2,
-      reward,
-      contractAddress: asset.address || '',
-      transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
-      image: productData.data.data.images[0] || '',
-      totalSupply: parseFloat(productData.data.totalValue),
-      presentSupply: parseFloat(productData.data.presentValue),
-      paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType,
-      productStatus: productData.data.status as ProductStatus,
-    });
+      const reward = parseFloat(utils.formatEther(await contract?.getReward(userAddress)));
+
+      if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
+        txRes = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
+      } else {
+        txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+      }
+
+      setState({
+        ...state,
+        page: 2,
+        reward,
+        contractAddress: asset.address || '',
+        transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
+        image: productData.data.data.images[0] || '',
+        totalSupply: parseFloat(productData.data.totalValue),
+        presentSupply: parseFloat(productData.data.presentValue),
+        paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType,
+        productStatus: productData.data.status as ProductStatus,
+        loaded: true,
+      });
+    } catch (e) {
+      alert(t('account_errors.server'));
+      navigation.goBack()
+    }
   }
 
   const loadV2More = async () => {
-    const address = wallet?.getFirstNode()?.address || '';
+    const userAddress = wallet?.getFirstNode()?.address || '';
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
-      res = await EspressoV2.getErc20Transaction(address, asset.address || '', state.page);
+      if (state.paymentMethod === CryptoType.BNB) {
+        res = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
+      } else {
+        res = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+      }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, address)
+        return txResponseToTx(tx, userAddress)
       })
     } catch {
       if (state.page !== 1) {
@@ -135,22 +158,28 @@ const Detail: FunctionComponent = () => {
   const laodV1OwnershipDetail = async () => {
     if (!asset.ownershipId) return;
 
-    const res = await Server.ownershipDetail(asset.ownershipId)
-    const txRes = await Server.getTransaction(asset.ownershipId, state.page)
+    try {
+      const res = await Server.ownershipDetail(asset.ownershipId)
+      const txRes = await Server.getTransaction(asset.ownershipId, state.page)
 
-    setState({
-      page: 1,
-      totalSupply: parseFloat(res.data.product.totalValue),
-      presentSupply: parseFloat(res.data.product.presentValue),
-      reward: parseFloat(res.data.expectProfit),
-      transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
-      contractAddress: res.data.product.contractAddress,
-      paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
-      legacyRefundStatus: res.data.legacyRefundStatus,
-      image: res.data.product.data?.images[0],
-      productId: res.data.product.id,
-      productStatus: res.data.product.status as ProductStatus,
-    })
+      setState({
+        page: 1,
+        totalSupply: parseFloat(res.data.product.totalValue),
+        presentSupply: parseFloat(res.data.product.presentValue),
+        reward: parseFloat(res.data.expectProfit),
+        transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
+        contractAddress: res.data.product.contractAddress,
+        paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
+        legacyRefundStatus: res.data.legacyRefundStatus,
+        image: res.data.product.data?.images[0],
+        productId: res.data.product.id,
+        productStatus: res.data.product.status as ProductStatus,
+        loaded: true
+      })
+    } catch {
+      alert(t('account_errors.server'));
+      navigation.goBack()
+    }
   }
 
   const loadV1TxsMore = async () => {
@@ -283,7 +312,7 @@ const Detail: FunctionComponent = () => {
               {
                 state.paymentMethod !== 'none' && <H4Text
                   style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                  label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                  label={`${((state.reward / getCryptoPrice(state.paymentMethod)).toFixed(2))} ${state.paymentMethod.toUpperCase()}`}
                 />
               }
             </View>
@@ -368,6 +397,7 @@ const Detail: FunctionComponent = () => {
               )
             }
             unit={route.params.asset.unit}
+            networkType={state.paymentMethod === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
           />
           <TouchableOpacity
             style={{
@@ -400,6 +430,7 @@ const Detail: FunctionComponent = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <OverlayLoading visible={!state.loaded} />
     </>
   );
 };

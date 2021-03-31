@@ -14,11 +14,12 @@ import images from '../Images';
 import Notification from '../../../types/Notification';
 import { DashboardPage, MorePage, Page } from '../../../enums/pageEnum';
 import { P3Text, P1Text, P4Text } from '../../../shared/components/Texts';
-import getEnvironment from '../../../utiles/getEnvironment';
 import NotificationStatus from '../../../enums/NotificationStatus';
 import UserContext from '../../../contexts/UserContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import AppFonts from '../../../enums/AppFonts';
+import getTxScanLink from '../../../utiles/getTxScanLink';
+import NetworkType from '../../../enums/NetworkType';
 
 interface Props {
   notification: Notification;
@@ -222,9 +223,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   <TouchableOpacity
                     onPress={() => {
                       Linking.openURL(
-                        getEnvironment().envName === 'PRODUCTION'
-                          ? `https://etherscan.io/tx/${data.txHash}`
-                          : `https://kovan.etherscan.io/tx/${data.txHash}`,
+                        getTxScanLink(data.txHash, data.network as NetworkType)
                       );
                     }}
                     style={{
