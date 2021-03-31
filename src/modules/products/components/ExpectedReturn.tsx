@@ -29,8 +29,7 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         width: '100%',
         borderRadius: 5,
       }}>
-      <H3Text style={{ paddingBottom: 10 }} label={t('dashboard_label.expected_profit')} />
-      <P1Text style={{ paddingBottom: 20 }} label={"약 24개월 동안 매일 월세(수익금)가 지급될 예정입니다."} />
+      <H3Text style={{ paddingBottom: 20 }} label={t('dashboard_label.expected_profit')} />
       <View style={{ paddingTop: 10 }}>
         <Slider
           minimumValue={0}
