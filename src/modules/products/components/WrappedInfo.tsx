@@ -40,8 +40,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
       <View
         style={{
           padding: 20,
-          borderBottomColor: '#F6F6F8',
-          borderBottomWidth: 5,
+          marginBottom: 20
         }}>
         <H3Text
           label={t('product_label.property_info')}
@@ -357,52 +356,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           )}
         </View>
       </View>
-      <View
-        style={{
-          padding: 20,
-          borderBottomColor: '#F6F6F8',
-          borderBottomWidth: 5,
-          marginBottom: 20,
-        }}>
-        <H3Text
-          label={t('product_label.product_info')}
-          style={{ marginBottom: 15 }}
-        />
-        <View>
-          <TouchableOpacity
-            onPress={() => setState({ ...state, abstract: !state.abstract })}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <P1Text
-                label={t('product_label.abstract')}
-                style={{ marginVertical: 10 }}
-              />
-              <Image
-                source={require('../images/downbutton.png')}
-                style={[
-                  {
-                    marginTop: 14,
-                  },
-                  {
-                    transform: [{ rotate: state.abstract ? '180deg' : '0deg' }],
-                  },
-                ]}
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
-        {state.abstract && (
-          <View style={{ paddingTop: 10 }}>
-            <P3Text
-              label={productDescription.summary}
-              style={{ color: '#1c1c1c', lineHeight: 25 }}
-            />
-          </View>
-        )}
-      </View>
+      
     </View>
   );
 };
