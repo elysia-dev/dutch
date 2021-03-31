@@ -48,9 +48,10 @@ const Reward: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
+    txHash: '',
   });
   const { t } = useTranslation()
-  const { afterTxFailed, afterTxHashCreated } = useTxHandler();
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
   const contract = getAssetTokenFromCryptoType(toCrypto, contractAddress);
@@ -99,13 +100,26 @@ const Reward: FunctionComponent = () => {
         to: populatedTransaction.to,
         data: populatedTransaction.data,
       })
+
+      if (toCrypto === CryptoType.BNB) {
+        setState({
+          ...state,
+          txHash: txRes?.hash || '',
+        })
+      }
     } catch (e) {
       afterTxFailed(e.message);
-    } finally {
-      if (txRes) {
-        afterTxHashCreated(wallet?.getFirstAddress() || '', contractAddress, txRes.hash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
-      }
       navigation.goBack();
+    } finally {
+      if (toCrypto !== CryptoType.BNB && txRes) {
+        afterTxHashCreated(
+          wallet?.getFirstAddress() || '',
+          contractAddress,
+          txRes.hash || '',
+          NetworkType.ETH,
+        )
+        navigation.goBack();
+      }
     }
   }
 
@@ -113,6 +127,13 @@ const Reward: FunctionComponent = () => {
     switch (step) {
       case TxStep.Creating:
         createTx()
+        break;
+      case TxStep.Created:
+        afterTxCreated(
+          state.txHash,
+          toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
+        )
+        navigation.goBack();
         break;
       default:
     }

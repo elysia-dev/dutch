@@ -9,7 +9,6 @@ import {
   View,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -31,11 +30,9 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
-import PriceContext from '../../contexts/PriceContext';
 
-const ProductInfoWrapper = styled.SafeAreaView`
+const ProductInfoWrapper = styled.View`
   background-color: #fff;
-  padding-top: 25px;
   height: 100%;
   width: 100%;
 `;
@@ -66,7 +63,6 @@ const ProductBuying: FunctionComponent = () => {
   const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
-  const { elPrice, ethPrice } = useContext(PriceContext);
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
@@ -145,6 +141,7 @@ const ProductBuying: FunctionComponent = () => {
         ...state,
         product: {
           ...product.data,
+          paymentMethod: CryptoType.BNB
         },
         loaded: true,
       });
@@ -292,20 +289,6 @@ const ProductBuying: FunctionComponent = () => {
           handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
-
-        {!elPrice && (
-          <View
-            style={{
-              backgroundColor: '#fff',
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignContent: 'center',
-            }}>
-            <ActivityIndicator size="large" color="#3679B5" />
-          </View>
-        )}
       </ProductInfoWrapper>
     </>
   );

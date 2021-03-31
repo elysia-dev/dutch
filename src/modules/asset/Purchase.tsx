@@ -80,8 +80,6 @@ const Purchase: FunctionComponent = () => {
   }
 
   useEffect(() => {
-    // load from balcne!
-    // or load to Max
     if (isWalletUser) {
       estimateGas();
     }
@@ -93,31 +91,15 @@ const Purchase: FunctionComponent = () => {
 
     try {
       switch (from.type) {
-        case CryptoType.ETH:
+        case CryptoType.ETH, CryptoType.BNB:
           populatedTransaction = await contract?.populateTransaction.purchase();
 
           if (!populatedTransaction) break;
 
-          txRes = await wallet?.getFirstSigner().sendTransaction({
+          txRes = await wallet?.getFirstSigner(from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
             value: utils.parseEther(values.from).toHexString(),
-          })
-          break;
-        case CryptoType.BNB:
-          populatedTransaction = await contract?.populateTransaction.purchase();
-
-          if (!populatedTransaction) break;
-
-          txRes = await wallet?.getFirstSigner(NetworkType.BSC).sendTransaction({
-            to: populatedTransaction.to,
-            data: populatedTransaction.data,
-            value: utils.parseEther(values.from).toHexString(),
-          })
-
-          setState({
-            ...state,
-            txHash: txRes?.hash || '',
           })
 
           break;
@@ -134,6 +116,13 @@ const Purchase: FunctionComponent = () => {
           })
 
           break;
+      }
+
+      if (from.type === CryptoType.BNB) {
+        setState({
+          ...state,
+          txHash: txRes?.hash || '',
+        })
       }
 
     } catch (e) {
