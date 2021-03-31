@@ -259,7 +259,7 @@ const ProductBuying: FunctionComponent = () => {
                 padding: 20,
                 borderBottomColor: '#F6F6F8',
                 borderBottomWidth: 5,
-                height: 136,
+                height: 244,
               }}>
               <ExpectedReturn product={state.product} />
             </View>
