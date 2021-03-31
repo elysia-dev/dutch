@@ -186,7 +186,7 @@ const Reward: FunctionComponent = () => {
           />
           {!!state.estimateGas && <>
             <P3Text
-              label={`Transaction Fee: ${state.estimateGas} ETH (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
+              label={`Transaction Fee: ${state.estimateGas} ${toCrypto} (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
               style={{ textAlign: 'center', marginTop: 10 }}
             />
             <View>
