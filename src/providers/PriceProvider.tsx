@@ -3,44 +3,50 @@ import React, { useEffect } from 'react';
 import { useState } from "react";
 import CoingeckoClient from '../api/CoingeckoClient';
 import { PRICE_DATA } from '../constants/storage';
-import PriceContext, { IPriceContext, initialPriceContext } from '../contexts/PriceContext';
-import { provider } from '../utiles/getContract';
-
-interface PriceData {
-  ethPrice: number
-  elPrice: number
-  gasPrice: string
-}
-
-const defaultPrices = {
-  ethPrice: 1679251,
-  elPrice: 0.009799,
-  gasPrice: '6800000000',
-}
+import PriceContext, { PriceState, initialPriceState } from '../contexts/PriceContext';
+import CryptoType from '../enums/CryptoType';
+import { provider, bscProvider } from '../utiles/getContract';
 
 const PriceProvider: React.FC = (props) => {
-  const [state, setState] = useState<IPriceContext>(initialPriceContext)
+  const [state, setState] = useState<PriceState>(initialPriceState)
 
   const loadPrices = async () => {
-    let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(defaultPrices)) as PriceData;
-    let ethPrice = priceData.ethPrice;
-    let elPrice = priceData.elPrice;
-    let gasPrice = priceData.gasPrice;
+    let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(initialPriceState)) as PriceState;
 
     try {
-      const priceData = await CoingeckoClient.getElAndEthPrice();
-      ethPrice = priceData.data.ethereum.usd;
-      elPrice = priceData.data.elysia.usd;
-      gasPrice = (await provider.getGasPrice()).toString();
+      const priceRes = await CoingeckoClient.getElAndEthPrice();
+
+      priceData = {
+        ethPrice: priceRes.data.ethereum.usd,
+        elPrice: priceRes.data.elysia.usd,
+        bnbPrice: priceRes.data.binancecoin.usd,
+        gasPrice: (await provider.getGasPrice()).toString(),
+        bscGasPrice: (await bscProvider.getGasPrice()).toString(),
+        priceLoaded: true,
+      }
     } finally {
-      await AsyncStorage.setItem(PRICE_DATA, JSON.stringify({ ethPrice, elPrice, gasPrice }))
+      await AsyncStorage.setItem(PRICE_DATA, JSON.stringify(priceData))
 
       setState({
-        ethPrice,
-        elPrice,
-        gasPrice,
+        ...priceData,
         priceLoaded: true,
       })
+    }
+  }
+
+  const getCryptoPrice = (cryptoType: CryptoType): number => {
+    switch (cryptoType) {
+      case CryptoType.BNB:
+        return state.bnbPrice
+      case CryptoType.EL:
+        return state.elPrice
+      case CryptoType.ETH:
+        return state.ethPrice
+      case CryptoType.ELA:
+        // Fix ELA $5
+        return 5
+      default:
+        return 0
     }
   }
 
@@ -51,7 +57,8 @@ const PriceProvider: React.FC = (props) => {
   return (
     <PriceContext.Provider
       value={{
-        ...state
+        ...state,
+        getCryptoPrice
       }}
     >
       {props.children}

@@ -24,11 +24,12 @@ import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
-import { useAssetToken } from '../../hooks/useContract';
 import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
 import ProductStatus from '../../enums/ProductStatus';
+import NetworkType from '../../enums/NetworkType';
+import { getAssetTokenContract, getBscAssetTokenContract } from '../../utiles/getContract';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -81,14 +82,22 @@ const Detail: FunctionComponent = () => {
     productStatus: ProductStatus.SALE
   })
   const [filter, setFilter] = useState<number>(0);
-  const { elPrice, ethPrice } = useContext(PriceContext);
-  const assetTokenContract = useAssetToken(asset.address || '');
+  const { getCryptoPrice } = useContext(PriceContext);
 
   const loadV2Detail = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
-    const txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    let txRes;
     const productData = await EspressoV2.getProduct(asset.address || '');
-    const reward = parseFloat(utils.formatEther(await assetTokenContract?.getReward(userAddress)));
+    const contract = productData.data.paymentMethod.toUpperCase() === CryptoType.BNB ?
+      getAssetTokenContract(asset.address || '') :
+      getBscAssetTokenContract(asset.address || '')
+    const reward = parseFloat(utils.formatEther(await contract?.getReward(userAddress)));
+
+    if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
+      txRes = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
+    } else {
+      txRes = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+    }
 
     setState({
       ...state,
@@ -105,15 +114,19 @@ const Detail: FunctionComponent = () => {
   }
 
   const loadV2More = async () => {
-    const address = wallet?.getFirstNode()?.address || '';
+    const userAddress = wallet?.getFirstNode()?.address || '';
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
-      res = await EspressoV2.getErc20Transaction(address, asset.address || '', state.page);
+      if (state.paymentMethod === CryptoType.BNB) {
+        res = await EspressoV2.getBscErc20Transaction(userAddress, asset.address || '', 1);
+      } else {
+        res = await EspressoV2.getErc20Transaction(userAddress, asset.address || '', 1);
+      }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, address)
+        return txResponseToTx(tx, userAddress)
       })
     } catch {
       if (state.page !== 1) {
@@ -283,7 +296,7 @@ const Detail: FunctionComponent = () => {
               {
                 state.paymentMethod !== 'none' && <H4Text
                   style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                  label={`${(state.reward / (state.paymentMethod === CryptoType.EL ? elPrice : ethPrice)).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                  label={`${((state.reward / getCryptoPrice(state.paymentMethod)).toFixed(2))} ${state.paymentMethod.toUpperCase()}`}
                 />
               }
             </View>
@@ -368,6 +381,7 @@ const Detail: FunctionComponent = () => {
               )
             }
             unit={route.params.asset.unit}
+            networkType={state.paymentMethod === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
           />
           <TouchableOpacity
             style={{

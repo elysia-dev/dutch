@@ -14,15 +14,16 @@ import ProductStatus from '../../../enums/ProductStatus';
 import commaFormatter from '../../../utiles/commaFormatter';
 import getEnvironment from '../../../utiles/getEnvironment';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
+import CryptoType from '../../../enums/CryptoType';
 
 interface Props {
   product: Product;
-  elPrice: number;
-  ethPrice: number;
 }
 
 const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const { language, currencyFormatter } = useContext(PreferenceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
   const product = props.product;
@@ -115,8 +116,8 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 ? ethProduct?.totalValue
                 : props.product.totalValue,)],
           [t('product_label.price_per_token'), 
-            "EL " +
-            commaFormatter((product.usdPricePerToken / props.elPrice).toFixed(2)) + ` (${currencyFormatter(5,0)})`],
+            product.paymentMethod.toUpperCase() +
+            commaFormatter((product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2)) + ` (${currencyFormatter(5,0)})`],
         ].map(([leftContent, rightContent], index) => {
           return (
             <View

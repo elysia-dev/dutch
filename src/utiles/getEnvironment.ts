@@ -7,6 +7,7 @@ type Environment = {
   dappUrl: string;
   version: string;
   infuraProjectId: string;
+  bscRPCEndpoint: string;
   elAddress: string;
   ethNetwork: string;
 };
@@ -22,6 +23,7 @@ function getEnvironment(): Environment {
       dappUrl: 'dapp.elysia.land',
       version: '1.4.2',
       infuraProjectId: 'dd59c338cf774f818bbbe221d7fc872a',
+      bscRPCEndpoint: 'https://bsc-dataseed.binance.org/',
       ethNetwork: 'mainnet',
       elAddress: '0x2781246fe707bb15cee3e5ea354e2154a2877b16',
     };
@@ -35,6 +37,7 @@ function getEnvironment(): Environment {
       dappUrl: 'staging-dapp.elysia.land',
       version: '1.4.2',
       infuraProjectId: '4f4e9528f1fb446abeb64e05ff08fdbe',
+      bscRPCEndpoint: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       ethNetwork: 'kovan',
       elAddress: '0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be',
     };
@@ -51,6 +54,7 @@ function getEnvironment(): Environment {
     dappUrl: 'staging-dapp.elysia.land',
     version: '1.4.2',
     infuraProjectId: '4f4e9528f1fb446abeb64e05ff08fdbe',
+    bscRPCEndpoint: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
     ethNetwork: 'kovan',
     elAddress: '0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be',
   };

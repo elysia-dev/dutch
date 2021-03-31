@@ -9,6 +9,7 @@ type TokenBalance = {
 
 type WalletBalanceResponse = {
   ethBalance: number,
+  bnbBalance: number,
   tokens: TokenBalance[]
 }
 
