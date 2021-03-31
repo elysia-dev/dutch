@@ -93,8 +93,9 @@ const Detail: FunctionComponent = () => {
       let txRes;
       const productData = await EspressoV2.getProduct(asset.address || '');
       const contract = productData.data.paymentMethod.toUpperCase() === CryptoType.BNB ?
-        getAssetTokenContract(asset.address || '') :
-        getBscAssetTokenContract(asset.address || '')
+        getBscAssetTokenContract(asset.address || '') :
+        getAssetTokenContract(asset.address || '')
+
       const reward = parseFloat(utils.formatEther(await contract?.getReward(userAddress)));
 
       if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
@@ -116,7 +117,7 @@ const Detail: FunctionComponent = () => {
         productStatus: productData.data.status as ProductStatus,
         loaded: true,
       });
-    } catch {
+    } catch (e) {
       alert(t('account_errors.server'));
       navigation.goBack()
     }
