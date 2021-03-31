@@ -52,8 +52,8 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           marginTop: 20,
           marginBottom: 5,
         }}>
-        <H3Text label={t('product_label.investment')} />
-        <H3Text
+        <P1Text label={t('product_label.investment')} />
+        <P1Text
           label={currencyFormatter(
             state.tokenCount * 5,
             2,
@@ -67,12 +67,13 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           marginTop: 5,
           marginBottom: 20,
         }}>
-        <H3Text 
+        <P1Text 
           style={{
             color: "#3679b5"
+            
           }}
           label={t('product_label.expected_return')} />
-        <H3Text
+        <P1Text
           label={currencyFormatter(
             0.01 *
             parseFloat(props.product.expectedAnnualReturn) *
