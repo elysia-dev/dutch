@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   ScrollView, View, Image, TouchableOpacity, RefreshControl
 } from 'react-native';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute, useScrollToTop, useIsFocused } from '@react-navigation/native';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
@@ -19,15 +19,23 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 
+type ParamList = {
+  Main: {
+    refresh: boolean,
+  };
+};
+
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
   const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
+  const route = useRoute<RouteProp<ParamList, 'Main'>>()
   const { elPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
   const { currencyFormatter } = useContext(PreferenceContext)
   const { t } = useTranslation();
+  const isFocused = useIsFocused();
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -47,6 +55,15 @@ export const Main: React.FC = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      if (route.params?.refresh) {
+        navigation.setParams({ refresh: false })
+        onRefresh();
+      }
+    }
+  }, [isFocused])
 
   return (
     <>
