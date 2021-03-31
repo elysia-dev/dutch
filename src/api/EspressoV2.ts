@@ -43,7 +43,7 @@ export default class EspressoV2 {
 
   static getBscErc20Transaction = async (address: string, tokenAddress: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
     return axios.get(
-      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}?network=bsc`, {
+      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}&network=bsc`, {
       headers: {
         'Cache-Control': 'no-cache',
       }
