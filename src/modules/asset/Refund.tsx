@@ -16,6 +16,7 @@ import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
+import TxStatus from '../../enums/TxStatus';
 
 type ParamList = {
   Refund: {
@@ -47,8 +48,8 @@ const Refund: FunctionComponent = () => {
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  const txResult = useWatingTx(state.txHash, from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const contract = getAssetTokenFromCryptoType(to.type, contractAddress);
+  const txResult = useWatingTx(state.txHash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -62,7 +63,7 @@ const Refund: FunctionComponent = () => {
       if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(estimateGas.mul(from.type === CryptoType.ETH ? gasPrice : bscGasPrice)),
+          estimateGas: utils.formatEther(estimateGas.mul(to.type === CryptoType.ETH ? gasPrice : bscGasPrice)),
         })
       }
     }
@@ -89,7 +90,7 @@ const Refund: FunctionComponent = () => {
         data: populatedTransaction.data,
       })
 
-      if (from.type === CryptoType.BNB) {
+      if (to.type === CryptoType.BNB) {
         setState({
           ...state,
           txHash: txRes?.hash || '',
@@ -99,7 +100,7 @@ const Refund: FunctionComponent = () => {
       afterTxFailed(e);
       navigation.goBack();
     } finally {
-      if (from.type !== CryptoType.BNB && txRes) {
+      if (to.type !== CryptoType.BNB && txRes) {
         afterTxHashCreated(
           wallet?.getFirstAddress() || '',
           contractAddress,
@@ -119,7 +120,7 @@ const Refund: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
+          to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
         )
         navigation.goBack();
         break;
@@ -127,6 +128,22 @@ const Refund: FunctionComponent = () => {
     }
   }, [state.step])
 
+  useEffect(() => {
+    if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
+
+    switch (state.step) {
+      case TxStep.Creating:
+        setState({
+          ...state,
+          step:
+            txResult.status === TxStatus.Success
+              ? TxStep.Created
+              : TxStep.Failed,
+        })
+        break;
+      default:
+    }
+  }, [txResult.status]);
 
   if (state.stage === 0) {
     return (

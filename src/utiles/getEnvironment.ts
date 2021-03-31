@@ -45,8 +45,8 @@ function getEnvironment(): Environment {
 
   return {
     envName: 'DEVELOPMENT',
-    // apiUrl: 'https://api.elysia.land',
-    apiUrl: 'https://staging-api.elysia.land',
+    apiUrl: 'https://api.elysia.land',
+    //apiUrl: 'https://staging-api.elysia.land',
     //apiUrl: `http://${(manifest.debuggerHost || 'localhost')
     //.split(':')
     //.shift()}:3000`,
@@ -54,8 +54,9 @@ function getEnvironment(): Environment {
     dappUrl: 'staging-dapp.elysia.land',
     version: '1.4.3',
     infuraProjectId: '4f4e9528f1fb446abeb64e05ff08fdbe',
-    bscRPCEndpoint: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-    ethNetwork: 'kovan',
+    //bscRPCEndpoint: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+    bscRPCEndpoint: 'https://bsc-dataseed.binance.org/',
+    ethNetwork: 'mainnet',
     elAddress: '0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be',
   };
 }

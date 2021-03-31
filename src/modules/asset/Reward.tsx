@@ -23,6 +23,8 @@ import NetworkType from '../../enums/NetworkType';
 import AssetContext from '../../contexts/AssetContext';
 import AppColors from '../../enums/AppColors';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
+import TxStatus from '../../enums/TxStatus';
+import { useWatingTx } from '../../hooks/useWatingTx';
 
 type ParamList = {
   Reward: {
@@ -34,7 +36,6 @@ type ParamList = {
 };
 
 const Reward: FunctionComponent = () => {
-  const [step, setStep] = useState(TxStep.None);
   const [interest, setInterest] = useState(0);
   const route = useRoute<RouteProp<ParamList, 'Reward'>>()
   const { toCrypto, toTitle, contractAddress } = route.params;
@@ -49,12 +50,14 @@ const Reward: FunctionComponent = () => {
     stage: 0,
     estimateGas: '',
     txHash: '',
+    step: TxStep.None
   });
   const { t } = useTranslation()
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
   const contract = getAssetTokenFromCryptoType(toCrypto, contractAddress);
+  const txResult = useWatingTx(state.txHash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -124,7 +127,7 @@ const Reward: FunctionComponent = () => {
   }
 
   useEffect(() => {
-    switch (step) {
+    switch (state.step) {
       case TxStep.Creating:
         createTx()
         break;
@@ -137,7 +140,25 @@ const Reward: FunctionComponent = () => {
         break;
       default:
     }
-  }, [step])
+  }, [state.step])
+
+  useEffect(() => {
+    if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
+
+    switch (state.step) {
+      case TxStep.Creating:
+        setState({
+          ...state,
+          step:
+            txResult.status === TxStatus.Success
+              ? TxStep.Created
+              : TxStep.Failed,
+        })
+        break;
+      default:
+    }
+  }, [txResult.status]);
+
 
   if (state.stage === 0) {
     return (
@@ -183,7 +204,10 @@ const Reward: FunctionComponent = () => {
               title={t('assets.yield_reward')}
               handler={() => {
                 if (isWalletUser) {
-                  setStep(TxStep.Creating)
+                  setState({
+                    ...state,
+                    step: TxStep.Creating
+                  })
                 } else {
                   Server.requestTransaction(8, 1, 'interest')
                     .then((res) => {
@@ -204,7 +228,7 @@ const Reward: FunctionComponent = () => {
               }}
             />
           </View>
-          <OverlayLoading visible={step === TxStep.Creating} />
+          <OverlayLoading visible={state.step === TxStep.Creating} />
         </View>
       </View>
     );
