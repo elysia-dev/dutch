@@ -39,7 +39,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const ethProduct = product.childProducts.find(
     (prod, _index) => prod.paymentMethod === 'eth',
   );
-  console.log(product)
   return (
     <View
       style={{
