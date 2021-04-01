@@ -3,12 +3,10 @@ import { Text, View } from 'react-native';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
 import CryptoInput from '..//components/CryptoInput';
-import { H4Text, H3Text, P3Text } from '../../../shared/components/Texts';
+import { P3Text } from '../../../shared/components/Texts';
 import AppColors from '../../../enums/AppColors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
-import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import Asset from '../../../types/Asset';
@@ -16,6 +14,7 @@ import AssetContext from '../../../contexts/AssetContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
 import PriceContext from '../../../contexts/PriceContext';
+import SheetHeader from '../../../shared/components/SheetHeader';
 
 interface ITxInput {
   title: string
@@ -54,7 +53,6 @@ const TxInput: React.FC<ITxInput> = ({
   setValues,
   createTx,
 }) => {
-  const navigation = useNavigation();
   const { currencyFormatter } = useContext(PreferenceContext)
   const { getBalance } = useContext(AssetContext);
   const { getCryptoPrice } = useContext(PriceContext);
@@ -69,20 +67,7 @@ const TxInput: React.FC<ITxInput> = ({
 
   return (
     <>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          backgroundColor: AppColors.BACKGROUND_GREY,
-          padding: 20,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <H4Text label={t('assets.cancel')} style={{ color: AppColors.MAIN }} />
-        </TouchableOpacity>
-        <H3Text label={title} style={{}} />
-        <View style={{ width: 20 }} />
-      </View>
+      <SheetHeader title={title} />
       <View
         style={{
           paddingLeft: 20,

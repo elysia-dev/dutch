@@ -27,13 +27,9 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   const { t } = useTranslation();
 
   const product = props.product;
-  const elProduct = product.childProducts.find(
-    (prod, _index) => prod.paymentMethod === 'el',
-  );
+  const priceLabel = product.paymentMethod === 'none' ? currencyFormatter(5, 0) :
+    `${commaFormatter((product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2))} ${product.paymentMethod.toUpperCase()} (${currencyFormatter(5, 0)})`;
 
-  const ethProduct = product.childProducts.find(
-    (prod, _index) => prod.paymentMethod === 'eth',
-  );
   return (
     <View
       style={{
@@ -94,24 +90,30 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       </View>
       {
         [
-          [t('more_label.product_name'), product.title],
-          [t('dashboard_label.product_info'), t('product_label.loan')],
-          [t('product_label.expected_return'), "+ " + product.expectedAnnualReturn + "%"],
-          [t('product_label.available_token'),
-          commaFormatter(
-            elProduct?.presentValue
-              ? elProduct?.presentValue
-              : props.product.presentValue,
-          ) + " / " +
-          commaFormatter(
-            ethProduct?.totalValue
-              ? ethProduct?.totalValue
-              : props.product.totalValue)],
-          [t('product_label.price_per_token'),
-          commaFormatter((product.usdPricePerToken / getCryptoPrice(product.paymentMethod.toUpperCase() as CryptoType)).toFixed(2)) + product.paymentMethod.toUpperCase() + ` (${currencyFormatter(5, 0)})`],
+          [
+            t('more_label.product_name'),
+            product.title
+          ],
+          [
+            t('dashboard_label.product_info'),
+            t('product_label.loan')
+          ],
+          [
+            t('product_label.expected_return'),
+            `+ ${product.expectedAnnualReturn}%`
+          ],
+          [
+            t('product_label.available_token'),
+            `${commaFormatter(props.product.presentValue)} / ${commaFormatter(props.product.totalValue)}`
+          ],
+          [
+            t('product_label.price_per_token'),
+            priceLabel
+          ],
         ].map(([leftContent, rightContent], index) => {
           return (
             <View
+              key={index}
               style={{
                 borderColor: "#f1f1f1",
                 borderTopWidth: 1,
