@@ -145,7 +145,7 @@ const Contact: FunctionComponent = () => {
                 ? '#D0D8DF'
                 : '#3679B5',
           }}
-          title={t('button.submit')}
+          title={t('more_label.contact')}
           handler={() => callApi()}
         />
       }
