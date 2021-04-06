@@ -124,21 +124,26 @@ const TxInput: React.FC<ITxInput> = ({
         <NumberPad
           addValue={(text) => {
             const before = current === 'from' ? values.from : values.to
-            if (text === '.' && before.includes('.') || before.length > 18) {
+            if (
+              text === '.' && before.includes('.')
+              || before.length > 18
+              || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
+            ) {
               return
             }
 
-            const next = before + text
+            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text
+            const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
             if (current === 'from') {
               setValues({
-                from: parseFloat(next).toString(),
-                to: (parseFloat(next || '0') * fromToRatio).toFixed(2),
+                from: next,
+                to: (parseFloat(removedDotNext) * fromToRatio).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(next || '0') / fromToRatio).toFixed(2),
-                to: parseFloat(next).toString(),
+                from: (parseFloat(removedDotNext) / fromToRatio).toFixed(2),
+                to: next,
               })
             }
           }}

@@ -37,7 +37,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
         })
       }
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: 60, alignItems: 'center' }}>
-        <DialButton key={'.'} value={' '} pressHandler={() => { }} />
+        <DialButton key={'.'} value={'.'} pressHandler={() => addValue('.')} />
         <DialButton key={'0'} value={'0'} pressHandler={() => addValue('0')} />
         <DialButton key={'remove'} value={'←'} pressHandler={() => removeValue()} />
       </View>
