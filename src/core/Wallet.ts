@@ -3,7 +3,7 @@ import { HDNode, entropyToMnemonic, mnemonicToSeed, defaultPath } from "ethers/l
 import { bscProvider, provider } from '../utiles/getContract';
 import * as Random from 'expo-random';
 import * as ethers from 'ethers';
-import NetworkType from "../enums/NetworkType";
+import CryptoType from "../enums/CryptoType";
 
 interface SerializedWallet {
   seed: string;
@@ -50,8 +50,8 @@ class Wallet {
     return this.nodes[0]?.address || ''
   }
 
-  getFirstSigner(networkType?: NetworkType): Signer {
-    return new ethers.Wallet(this.nodes[0].privateKey, networkType === NetworkType.BSC ? bscProvider : provider)
+  getFirstSigner(cryptoType?: CryptoType): Signer {
+    return new ethers.Wallet(this.nodes[0].privateKey, cryptoType === CryptoType.BNB ? bscProvider : provider)
   }
 
   static deserialize(data: SerializedWallet): Wallet {

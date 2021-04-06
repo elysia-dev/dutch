@@ -96,7 +96,7 @@ const Purchase: FunctionComponent = () => {
 
           if (!populatedTransaction) break;
 
-          txRes = await wallet?.getFirstSigner(from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH).sendTransaction({
+          txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
             value: utils.parseEther(values.from).toHexString(),

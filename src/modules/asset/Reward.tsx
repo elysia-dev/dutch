@@ -99,7 +99,7 @@ const Reward: FunctionComponent = () => {
 
       if (!populatedTransaction) return;
 
-      txRes = await wallet?.getFirstSigner(toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH).sendTransaction({
+      txRes = await wallet?.getFirstSigner(toCrypto).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
       })
