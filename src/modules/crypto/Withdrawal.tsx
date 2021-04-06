@@ -2,7 +2,7 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { View, TouchableOpacity, TextInput, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, TouchableOpacity, TextInput, Text, Keyboard, TouchableWithoutFeedback, StyleSheet, Image } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import { useTranslation } from 'react-i18next';
 import NextButton from '../../shared/components/NextButton';
@@ -21,6 +21,7 @@ import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import { isAddress } from '@ethersproject/address';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 
 type ParamList = {
   Withdrawal: {
@@ -34,7 +35,7 @@ const Withdrawal: React.FC = () => {
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
-  const [to, setTo] = useState('');
+  const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [estimatedGas, setEstimatedGas] = useState('');
@@ -53,7 +54,7 @@ const Withdrawal: React.FC = () => {
         const elContract = getElysiaContract();
 
         estimatedGas = await elContract?.estimateGas.transfer(
-          to,
+          state.address,
           utils.parseEther(value || '0.1'),
           {
             from: wallet?.getFirstAddress(),
@@ -62,7 +63,7 @@ const Withdrawal: React.FC = () => {
       }
       else {
         estimatedGas = await wallet?.getFirstSigner(asset.type)?.estimateGas({
-          to,
+          to: state.address,
           value: utils.parseEther(value || '0').toHexString(),
         })
       }
@@ -83,7 +84,7 @@ const Withdrawal: React.FC = () => {
     try {
       if (asset.type === CryptoType.EL) {
         const elContract = getElysiaContract();
-        const populatedTransaction = await elContract?.populateTransaction.transfer(to, utils.parseEther(value));
+        const populatedTransaction = await elContract?.populateTransaction.transfer(state.address, utils.parseEther(value));
 
         if (!populatedTransaction) return
 
@@ -93,7 +94,7 @@ const Withdrawal: React.FC = () => {
         })
       } else {
         txRes = await wallet?.getFirstSigner(asset.type).sendTransaction({
-          to,
+          to: state.address,
           value: utils.parseEther(value).toHexString(),
         })
       }
@@ -108,13 +109,34 @@ const Withdrawal: React.FC = () => {
     }
   }
 
+  const openBarcodeScanner = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+
+    if (status === 'granted') {
+      setState({
+        ...state,
+        scanned: false,
+      })
+    } else {
+      // TODO
+      alert('Camera 권한이 없습니다.')
+    }
+  }
+
+  const handleBarCodeScanned = (barcodeScannerResult: BarCodeScannerResult) => {
+    setState({
+      scanned: true,
+      address: barcodeScannerResult.data.replace('ethereum:', '')
+    })
+  };
+
   useEffect(() => {
     const handler = setTimeout(() => {
       estimateGas();
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [value, to]);
+  }, [value, state.address]);
 
   return (
     <>
@@ -129,23 +151,38 @@ const Withdrawal: React.FC = () => {
           }}
         >
           <P2Text label={t('wallet.withdrawal_address')} style={{ color: AppColors.BLACK, marginTop: 30 }} />
-          <TextInput
-            style={{
-              height: 40,
-              borderWidth: 1,
-              borderRadius: 5,
-              borderColor: to && !isAddress(to) ? AppColors.RED : AppColors.SUB_GREY,
-              padding: 10,
-              marginTop: 5,
-              fontSize: 10,
-            }}
-            value={to}
-            onChangeText={setTo}
-            placeholder={t('wallet.withdrawal_content')}
-          />
+          <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+            <TextInput
+              style={{
+                height: 40,
+                borderWidth: 1,
+                borderRadius: 5,
+                borderColor: state.address && !isAddress(state.address) ? AppColors.RED : AppColors.SUB_GREY,
+                padding: 10,
+                fontSize: 10,
+                flex: 1,
+              }}
+              value={state.address}
+              onChangeText={(text) => { setState({ ...state, address: text }) }}
+              placeholder={t('wallet.withdrawal_content')}
+            />
+            <TouchableOpacity
+              style={{
+                width: 45,
+                marginLeft: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                openBarcodeScanner()
+              }}
+            >
+              <Image source={require('./images/qr.png')} style={{ width: 40, height: 40 }} />
+            </TouchableOpacity>
+          </View>
           <View style={{ height: 20 }}>
-            {!!to && !isAddress(to) && (
-              <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
+            {!!state.address && !isAddress(state.address) && (
+              <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'left', marginBottom: 5 }}>
                 {t('wallet.invalid_address', { crypto: gasCrypto })}
               </Text>
             )}
@@ -220,7 +257,7 @@ const Withdrawal: React.FC = () => {
             }}
           />
           <NextButton
-            disabled={!to || !value || insufficientGas || !isAddress(to)}
+            disabled={!state.address || !value || insufficientGas || !isAddress(state.address)}
             title={t('wallet.withdrawal')}
             style={{
               width: '100%',
@@ -232,6 +269,15 @@ const Withdrawal: React.FC = () => {
           />
         </View>
       </TouchableWithoutFeedback>
+      {
+        !state.scanned &&
+        <BarCodeScanner
+          onBarCodeScanned={handleBarCodeScanned}
+          style={
+            StyleSheet.absoluteFillObject
+          }
+        />
+      }
       <OverlayLoading visible={loading} />
     </>
   );
