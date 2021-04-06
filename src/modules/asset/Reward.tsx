@@ -25,6 +25,7 @@ import AppColors from '../../enums/AppColors';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
+import GasPrice from '../../shared/components/GasPrice';
 
 type ParamList = {
   Reward: {
@@ -184,20 +185,12 @@ const Reward: FunctionComponent = () => {
             active={true}
             onPress={() => { }}
           />
-          {!!state.estimateGas && <>
-            <P3Text
-              label={`Transaction Fee: ${state.estimateGas} ${toCrypto} (${currencyFormatter(parseFloat(state.estimateGas) * getCryptoPrice(toCrypto))})`}
-              style={{ textAlign: 'center', marginTop: 10 }}
-            />
-            <View>
-              {insufficientGas && (
-                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
-                  {t('assets.insufficient_eth', { crypto: gasCrypto })}
-                </Text>
-              )}
-            </View>
-          </>
-          }
+          <View style={{ height: 10 }} />
+          <GasPrice
+            estimatedGas={state.estimateGas}
+            gasCrypto={gasCrypto}
+            insufficientGas={insufficientGas}
+          />
           <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
             <NextButton
               disabled={!(interest > 0) || insufficientGas}

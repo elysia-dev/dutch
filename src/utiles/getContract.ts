@@ -15,7 +15,7 @@ import AssetTokenEthAbi from '../abi/AssetTokenEthAbi.json';
 import AssetTokenAbi from '../abi/AssetTokenAbi.json';
 import CryptoType from "../enums/CryptoType";
 
-function isAddress(value: any): string | false {
+export function isAddress(value: any): string | false {
   try {
     return getAddress(value);
   } catch {

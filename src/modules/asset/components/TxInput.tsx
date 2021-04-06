@@ -15,6 +15,7 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
 import PriceContext from '../../../contexts/PriceContext';
 import SheetHeader from '../../../shared/components/SheetHeader';
+import GasPrice from '../../../shared/components/GasPrice';
 
 interface ITxInput {
   title: string
@@ -105,21 +106,11 @@ const TxInput: React.FC<ITxInput> = ({
           active={current === 'to'}
           onPress={() => setCurrent('to')}
         />
-        {
-          !!estimateGas && <>
-            <P3Text
-              label={`${t('assets.transaction_fee')}: ${estimateGas} ${gasCrypto} (${currencyFormatter(parseFloat(estimateGas) * getCryptoPrice(gasCrypto))})`}
-              style={{ textAlign: 'center', marginBottom: insufficientGas ? 5 : 10 }}
-            />
-            <View>
-              {insufficientGas && (
-                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
-                  {t('assets.insufficient_eth', { crypto: gasCrypto })}
-                </Text>
-              )}
-            </View>
-          </>
-        }
+        <GasPrice
+          estimatedGas={estimateGas}
+          gasCrypto={gasCrypto}
+          insufficientGas={insufficientGas}
+        />
         <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />
         <NumberPad
           addValue={(text) => {

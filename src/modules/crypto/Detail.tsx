@@ -159,14 +159,26 @@ const Detail: React.FC = () => {
         >
           <NextButton
             style={{
-              // width: isWalletUser ? 160 : ,
-              width: Dimensions.get('window').width * 0.9
+              width: Dimensions.get('window').width * (isWalletUser ? 0.42 : 0.9)
             }}
             title={t('wallet.deposit')}
             handler={() => {
               navigation.navigate(CryptoPage.Deposit)
             }}
           />
+          {
+            isWalletUser && <NextButton
+              style={{
+                width: Dimensions.get('window').width * 0.42
+              }}
+              title={t('wallet.withdrawal')}
+              handler={() => {
+                navigation.navigate(CryptoPage.Withdrawal, {
+                  asset,
+                })
+              }}
+            />
+          }
         </View>
       }
     </>

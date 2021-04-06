@@ -421,7 +421,8 @@
       "crypto_value": "보유수량",
       "month": "1개월",
       "year": "1년",
-      "all": "최대"
+      "all": "최대",
+      "invalid_address": "올바르지 않은 주소 형식입니다."
     },
     "assets": {
       "null_transaction": "거래내역이 없습니다.",
