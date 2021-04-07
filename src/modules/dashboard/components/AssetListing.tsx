@@ -6,6 +6,7 @@ import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
 import { useTranslation } from 'react-i18next'
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
 
 interface IAssetListing {
   title: string
@@ -19,6 +20,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
   itemPressHandler,
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext)
+  const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
   return (
@@ -35,7 +37,7 @@ export const AssetListing: React.FC<IAssetListing> = ({
         <H3Text label={title} />
         <H3Text
           label={currencyFormatter(
-            assets.reduce((res, cur) => cur.currencyValue + res, 0),
+            assets.reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0),
             2
           )}
         />

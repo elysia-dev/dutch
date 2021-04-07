@@ -29,7 +29,7 @@ export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
   const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'Main'>>()
-  const { elPrice } = useContext(PriceContext);
+  const { elPrice, getCryptoPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -95,7 +95,7 @@ export const Main: React.FC = () => {
             {
               (isWalletUser || user.ethAddresses[0]) ? <TitleText
                 label={currencyFormatter(
-                  assets.reduce((res, cur) => res + cur.currencyValue, 0),
+                  assets.reduce((res, cur) => res + cur.value * getCryptoPrice(cur.type), 0),
                   2
                 )}
               /> :
@@ -149,7 +149,7 @@ export const Main: React.FC = () => {
             title={t('main.my_assets')}
             assets={
               assets.filter((item) => {
-                return item.type === CryptoType.ELA && item.unitValue > 0
+                return item.type === CryptoType.ELA && item.value > 0
               })
             }
             itemPressHandler={(asset) => {

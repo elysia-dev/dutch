@@ -47,6 +47,11 @@ const Detail: React.FC = () => {
     loading: true,
   })
 
+  // Load Balance & Txs
+  const init = async () => {
+
+  }
+
   const loadTxs = async () => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address || '' : user.ethAddresses[0];
 

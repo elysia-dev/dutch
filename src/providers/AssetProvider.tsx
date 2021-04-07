@@ -1,3 +1,4 @@
+import { BigNumber, utils } from 'ethers';
 import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import EspressoV2 from '../api/EspressoV2';
@@ -10,6 +11,7 @@ import ProviderType from '../enums/ProviderType';
 import SignInStatus from '../enums/SignInStatus';
 import Asset from '../types/Asset';
 import assetTokenNamePrettier from '../utiles/assetTokenNamePrettier';
+import { bscProvider, getElysiaContract, provider } from '../utiles/getContract';
 
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
@@ -38,8 +40,7 @@ const AssetProvider: React.FC = (props) => {
         .map((token) => {
           return {
             title: assetTokenNamePrettier(token.name),
-            currencyValue: token.balance * 5,
-            unitValue: token.balance,
+            value: token.balance,
             type: CryptoType.ELA,
             unit: token.symbol,
             address: token.address,
@@ -51,22 +52,19 @@ const AssetProvider: React.FC = (props) => {
       assets.push(
         {
           title: 'Elysia',
-          currencyValue: elBalance * elPrice,
-          unitValue: elBalance,
+          value: elBalance,
           type: CryptoType.EL,
           unit: CryptoType.EL,
         },
         {
           title: 'ETH',
-          currencyValue: data.ethBalance * ethPrice,
-          unitValue: data.ethBalance,
+          value: data.ethBalance,
           type: CryptoType.ETH,
           unit: CryptoType.ETH,
         },
         {
           title: 'BNB (BSC)',
-          currencyValue: data.bnbBalance * bnbPrice,
-          unitValue: data.bnbBalance,
+          value: data.bnbBalance,
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
         }
@@ -98,8 +96,7 @@ const AssetProvider: React.FC = (props) => {
     const assets = ownerships.map((ownership) => {
       return {
         title: ownership.title,
-        currencyValue: ownership.tokenValue * 5, // * asset token is 5usd
-        unitValue: ownership.tokenValue,
+        value: ownership.tokenValue,
         type: CryptoType.ELA,
         unit: CryptoType.ELA,
         ownershipId: ownership.id,
@@ -120,15 +117,13 @@ const AssetProvider: React.FC = (props) => {
       assets.push(
         {
           title: 'Elysia',
-          currencyValue: elBalance * elPrice,
-          unitValue: elBalance,
+          value: elBalance,
           type: CryptoType.EL,
           unit: CryptoType.EL
         },
         {
           title: 'ETH',
-          currencyValue: ethBalance * ethPrice,
-          unitValue: ethBalance,
+          value: ethBalance,
           type: CryptoType.ETH,
           unit: CryptoType.ETH
         }
@@ -156,7 +151,38 @@ const AssetProvider: React.FC = (props) => {
   }, [signedIn, isWalletUser, isUnlocked, priceLoaded])
 
   const getBalance = (unit: string): number => {
-    return state.assets.find((asset) => asset.unit === unit)?.unitValue || 0
+    return state.assets.find((asset) => asset.unit === unit)?.value || 0
+  }
+
+  const refreshBalance = async (cryptoType: CryptoType): Promise<void> => {
+    let balance: BigNumber
+
+    switch (cryptoType) {
+      case CryptoType.BNB:
+        balance = await bscProvider.getBalance(wallet?.getFirstAddress() || '');
+        break;
+      case CryptoType.ETH:
+        balance = await provider.getBalance(wallet?.getFirstAddress() || '')
+        break;
+      case CryptoType.EL:
+        balance = await getElysiaContract()?.balanceOf(wallet?.getFirstAddress || '');
+      default:
+        balance = BigNumber.from('0');
+    }
+
+    setState({
+      ...state,
+      assets: state.assets.map((asset) => {
+        if (asset.type === cryptoType) {
+          return {
+            ...asset,
+            value: parseFloat(utils.formatEther(balance)),
+          }
+        } else {
+          return asset
+        }
+      })
+    })
   }
 
   return (
@@ -166,6 +192,7 @@ const AssetProvider: React.FC = (props) => {
         loadV1UserBalances,
         loadV2UserBalances,
         getBalance,
+        refreshBalance,
       }}
     >
       {props.children}
