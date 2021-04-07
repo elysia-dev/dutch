@@ -419,12 +419,13 @@
       "withdrawal_content": "Enter the wallet address to withdraw.",
       "send_value": "Quantity to send",
       "insert_value": "Enter quantity",
-      "full": "Maximum",
+      "full": "Max",
       "remaining_value": "Available",
       "crypto_value": "Holding quantity",
       "month": "1 month",
       "year": "1 year",
-      "all": "All"
+      "all": "All",
+      "invalid_address": "Incorrect address format"
     },
     "assets": {
       "null_transaction": "There is no transaction history.",

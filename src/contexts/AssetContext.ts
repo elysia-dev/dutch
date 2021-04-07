@@ -11,12 +11,13 @@ export interface IAssetContext extends AssetStateType {
   loadV2UserBalances: (cacheControl?: boolean) => Promise<void>
   loadV1UserBalances: (cacheControl?: boolean) => Promise<void>
   getBalance: (unit: string) => number
+  refreshBalance: (cryptoType: CryptoType) => Promise<void>
 }
 
 export const initialAssetState = {
   assets: [
-    { title: 'EL', currencyValue: 0, unitValue: 0, type: CryptoType.EL, unit: 'EL' },
-    { title: 'ETH', currencyValue: 0, unitValue: 0, type: CryptoType.ETH, unit: 'ETH' },
+    { title: 'EL', value: 0, type: CryptoType.EL, unit: 'EL' },
+    { title: 'ETH', value: 0, type: CryptoType.ETH, unit: 'ETH' },
   ],
   assetLoaded: false
 }
@@ -26,6 +27,7 @@ export const initialAssetContext = {
   loadV2UserBalances: async () => { },
   loadV1UserBalances: async () => { },
   getBalance: () => { return 0 },
+  refreshBalance: async (_cryptoType: CryptoType) => { },
 }
 
 const AssetContext = createContext<IAssetContext>(initialAssetContext);

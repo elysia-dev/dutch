@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import BasicLayout from '../../shared/components/BasicLayout';
-import Asset from '../../types/Asset';
+import Asset, { defaultAsset } from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -21,6 +21,10 @@ import { P1Text } from '../../shared/components/Texts';
 import getEnvironment from '../../utiles/getEnvironment';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
+import TransactionContext from '../../contexts/TransactionContext';
+import TxStatus from '../../enums/TxStatus';
+import OverlayLoading from '../../shared/components/OverlayLoading';
+import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
   CryptoDetail: {
@@ -29,17 +33,20 @@ type ParamList = {
 };
 
 const Detail: React.FC = () => {
+  const { assets } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'CryptoDetail'>>();
-  const asset = route.params.asset
+  const asset = assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
   const [filter, setFilter] = useState<number>(0);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
+  const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
-  const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, }>({
+  const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, loading: boolean }>({
     page: 1,
     transactions: [],
     lastPage: true,
+    loading: true,
   })
 
   const loadTxs = async () => {
@@ -66,16 +73,33 @@ const Detail: React.FC = () => {
       }
     } finally {
       if (newTxs.length !== 0) {
-        setState({
-          ...state,
-          page: state.page + 1,
-          lastPage: false,
-          transactions: [...state.transactions, ...newTxs],
-        })
+        if (state.page === 1) {
+          const pendingTxs = transactions.filter((tx) => tx.cryptoType === asset.type && tx.status === TxStatus.Pending)
+
+          setState({
+            ...state,
+            page: 2,
+            lastPage: false,
+            transactions: pendingTxs.concat(newTxs.filter((tx) => tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash))),
+            loading: false,
+          })
+        } else {
+          setState({
+            ...state,
+            page: state.page + 1,
+            lastPage: false,
+            transactions: [
+              ...state.transactions,
+              ...newTxs
+            ],
+            loading: false,
+          })
+        }
       } else {
         setState({
           ...state,
           lastPage: true,
+          loading: false
         })
       }
     }
@@ -85,16 +109,27 @@ const Detail: React.FC = () => {
     loadTxs();
   }, [])
 
+  useEffect(() => {
+    const assetTxs = transactions.filter((tx) => tx.cryptoType === asset.type)
+
+    if (assetTxs) {
+      setState({
+        ...state,
+        transactions: assetTxs.concat(state.transactions.filter((tx) => tx.txHash && !assetTxs.find((t) => t.txHash === tx.txHash))),
+      })
+    }
+  }, [counter])
+
   return (
     <>
       <WrapperLayout
-        title={route.params.asset.title + " " + t('wallet.crypto_value')}
+        title={asset.title + " " + t('wallet.crypto_value')}
         isScrolling={true}
         backButtonHandler={() => navigation.goBack()}
         body={
           <BasicLayout>
             <AssetItem
-              asset={route.params.asset}
+              asset={asset}
               touchable={false}
             />
             <View style={{ height: 30 }} />
@@ -104,12 +139,14 @@ const Detail: React.FC = () => {
               select={(filter) => setFilter(filter)}
             />
             <TransactionList
+              loading={state.loading}
               data={
-                filter === 0 ? state.transactions : state.transactions.filter((tx) =>
-                  (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
-                )
+                state.loading ? [] :
+                  filter === 0 ? state.transactions : state.transactions.filter((tx) =>
+                    (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
+                  )
               }
-              unit={route.params.asset.unit}
+              unit={asset.unit}
               networkType={asset.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
             />
             <View style={{ height: 50 }} />
@@ -159,16 +196,29 @@ const Detail: React.FC = () => {
         >
           <NextButton
             style={{
-              // width: isWalletUser ? 160 : ,
-              width: Dimensions.get('window').width * 0.9
+              width: Dimensions.get('window').width * (isWalletUser ? 0.42 : 0.9)
             }}
             title={t('wallet.deposit')}
             handler={() => {
               navigation.navigate(CryptoPage.Deposit)
             }}
           />
+          {
+            isWalletUser && <NextButton
+              style={{
+                width: Dimensions.get('window').width * 0.42
+              }}
+              title={t('wallet.withdrawal')}
+              handler={() => {
+                navigation.navigate(CryptoPage.Withdrawal, {
+                  asset,
+                })
+              }}
+            />
+          }
         </View>
       }
+      <OverlayLoading visible={state.loading} />
     </>
   );
 };

@@ -252,7 +252,7 @@ const Detail: FunctionComponent = () => {
           <TitleText
             style={{ marginTop: 10, color: AppColors.BLACK }}
             label={currencyFormatter(
-              asset.currencyValue,
+              asset.value * getCryptoPrice(asset.type),
               2,
             )}
           />
@@ -260,8 +260,8 @@ const Detail: FunctionComponent = () => {
           {
             [
               { left: t('main.assets_name'), right: asset.title },
-              { left: t('main.assets_value'), right: `${asset.unitValue.toFixed(2)} ${asset.unit}` },
-              { left: t('main.assets_stake'), right: `${(asset.unitValue / state.totalSupply * 100).toFixed(2)}%` },
+              { left: t('main.assets_value'), right: `${asset.value.toFixed(2)} ${asset.unit}` },
+              { left: t('main.assets_stake'), right: `${(asset.value / state.totalSupply * 100).toFixed(2)}%` },
             ].map((data, index) => {
               return (
                 <View

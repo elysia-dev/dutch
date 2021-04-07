@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Image, Linking, TouchableOpacity } from 'react-native';
+import { View, Image, Linking, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import moment from 'moment';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
@@ -8,6 +8,7 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 import { useTranslation } from 'react-i18next';
 import NetworkType from '../../../enums/NetworkType';
 import getTxScanLink from '../../../utiles/getTxScanLink';
+import TxStatus from '../../../enums/TxStatus';
 
 interface ITransactionItem {
   transaction: CryptoTransaction,
@@ -34,15 +35,18 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         alignItems: 'center',
       }}
     >
-      <Image
-        style={{
-          marginLeft: 10,
-          width: 20,
-          height: 20,
-          transform: transaction.type === 'out' ? [] : [{ rotate: '180deg' }]
-        }}
-        source={require('../images/blackCircleArrow.png')}
-      />
+      {
+        transaction.status === TxStatus.Pending ? <ActivityIndicator size="small" color="#1c1c1c" style={{ marginLeft: 10 }} /> :
+          <Image
+            style={{
+              marginLeft: 10,
+              width: 20,
+              height: 20,
+              transform: transaction.type === 'out' ? [] : [{ rotate: '180deg' }]
+            }}
+            source={require('../images/blackCircleArrow.png')}
+          />
+      }
       <View style={{ marginLeft: 10 }}>
         {
           transaction.legacyType && <P1Text

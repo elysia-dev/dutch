@@ -30,6 +30,7 @@
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
+        "NSCameraUsageDescription": "Elysia needs camera permisions to allow you to read qr code.",
         "NSPhotoLibraryUsageDescription": "Give permission to select photos.",
         "NSPhotoLibraryAddUsageDescription": "Give permission to save photos.",
         "NSAppTransportSecurity": {
@@ -46,6 +47,7 @@
         }
       },
       "permissions": [
+        "CAMERA",
         "USE_FINGERPRINT",
         "USE_BIOMETRIC",
         "WRITE_SETTINGS",

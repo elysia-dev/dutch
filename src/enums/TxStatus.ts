@@ -1,8 +1,8 @@
 enum TxStatus {
-  None,
-  Pending,
-  Success,
-  Fail
+  None = 'None',
+  Pending = 'Pending',
+  Success = 'Success',
+  Fail = 'Fail'
 }
 
 export default TxStatus

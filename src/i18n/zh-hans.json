@@ -417,7 +417,8 @@
       "crypto_value": "持有数量",
       "month": "1个月",
       "year": "1年",
-      "all": "所有"
+      "all": "所有",
+      "invalid_address": "地址格式不正确。"
     },
     "assets": {
       "null_transaction": "没有交易记录。",

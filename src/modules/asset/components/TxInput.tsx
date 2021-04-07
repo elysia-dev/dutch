@@ -15,6 +15,7 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
 import PriceContext from '../../../contexts/PriceContext';
 import SheetHeader from '../../../shared/components/SheetHeader';
+import GasPrice from '../../../shared/components/GasPrice';
 
 interface ITxInput {
   title: string
@@ -55,10 +56,9 @@ const TxInput: React.FC<ITxInput> = ({
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext)
   const { getBalance } = useContext(AssetContext);
-  const { getCryptoPrice } = useContext(PriceContext);
   const fromToRatio = fromPrice / toPrice;
   const { t } = useTranslation();
-  const isFromInvalid = parseFloat(values.from) > (from.unitValue ? from.unitValue : getBalance(from.unit));
+  const isFromInvalid = parseFloat(values.from) > (from.value ? from.value : getBalance(from.unit));
   const isToInvalid = toMax ? (parseFloat(values.to) > toMax) : false;
   const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
@@ -79,7 +79,7 @@ const TxInput: React.FC<ITxInput> = ({
           title={fromInputTitle}
           cryptoTitle={from.title}
           cryptoType={from.type}
-          balanceTitle={`${t('more_label.balance')}: ${commaFormatter(from.unitValue ? from.unitValue.toFixed(2) : getBalance(from.type).toFixed(2))} ${from.type}`}
+          balanceTitle={`${t('more_label.balance')}: ${commaFormatter(from.value ? from.value.toFixed(2) : getBalance(from.type).toFixed(2))} ${from.type}`}
           invalid={isFromInvalid}
           style={{ marginTop: 20 }}
           value={values.from || '0'}
@@ -105,40 +105,35 @@ const TxInput: React.FC<ITxInput> = ({
           active={current === 'to'}
           onPress={() => setCurrent('to')}
         />
-        {
-          !!estimateGas && <>
-            <P3Text
-              label={`${t('assets.transaction_fee')}: ${estimateGas} ${gasCrypto} (${currencyFormatter(parseFloat(estimateGas) * getCryptoPrice(gasCrypto))})`}
-              style={{ textAlign: 'center', marginBottom: insufficientGas ? 5 : 10 }}
-            />
-            <View>
-              {insufficientGas && (
-                <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
-                  {t('assets.insufficient_eth', { crypto: gasCrypto })}
-                </Text>
-              )}
-            </View>
-          </>
-        }
+        <GasPrice
+          estimatedGas={estimateGas}
+          gasCrypto={gasCrypto}
+          insufficientGas={insufficientGas}
+        />
         <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />
         <NumberPad
           addValue={(text) => {
             const before = current === 'from' ? values.from : values.to
-            if (text === '.' && before.includes('.') || before.length > 18) {
+            if (
+              text === '.' && before.includes('.')
+              || before.length > 18
+              || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
+            ) {
               return
             }
 
-            const next = before + text
+            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text
+            const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
             if (current === 'from') {
               setValues({
-                from: parseFloat(next).toString(),
-                to: (parseFloat(next || '0') * fromToRatio).toFixed(2),
+                from: next,
+                to: (parseFloat(removedDotNext) * fromToRatio).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(next || '0') / fromToRatio).toFixed(2),
-                to: parseFloat(next).toString(),
+                from: (parseFloat(removedDotNext) / fromToRatio).toFixed(2),
+                to: next,
               })
             }
           }}

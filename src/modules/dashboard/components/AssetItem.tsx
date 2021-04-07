@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import PriceContext from '../../../contexts/PriceContext';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
@@ -18,6 +19,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
   touchable = true,
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext)
+  const { getCryptoPrice } = useContext(PriceContext)
 
   return (
     <TouchableOpacity
@@ -28,12 +30,12 @@ export const AssetItem: React.FC<IAssetItem> = ({
       <CryptoImage type={asset.type} />
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
-        <P2Text label={`${commaFormatter(asset.unitValue.toFixed(2))} ${asset.unit}`} />
+        <P2Text label={`${commaFormatter(asset.value.toFixed(2))} ${asset.unit}`} />
       </View>
       <P1Text
         style={{ marginLeft: 'auto' }}
         label={currencyFormatter(
-          asset.currencyValue,
+          asset.value * getCryptoPrice(asset.type),
           2
         )}
       />
