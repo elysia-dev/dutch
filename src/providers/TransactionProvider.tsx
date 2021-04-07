@@ -61,7 +61,9 @@ const TransactionProvider: React.FC = (props) => {
 
         if (txRes) {
           if (txRes.status === 1) {
-            tx.cryptoType && refreshBalance(tx.cryptoType);
+            // timeout이 필요한 이유? : 트랜잭션 요청후, 바로 요청할 경우 balance가 아직 이전 값으로 조회되는 문제가 있음
+            // 경우따라 timeout을 더 늘려야할 수도 있음!
+            setTimeout(() => { tx.cryptoType && refreshBalance(tx.cryptoType) }, 500)
 
             showMessage({
               message: t('transaction.created'),
