@@ -70,10 +70,27 @@ const TransactionProvider: React.FC = (props) => {
               },
               duration: 3000
             });
-          }
-          return {
-            ...tx,
-            status: txRes.status === 1 ? TxStatus.Success : TxStatus.Fail
+            return {
+              ...tx,
+              status: TxStatus.Success
+            }
+          } else {
+            showMessage({
+              message: t('transaction.fail'),
+              description: tx.txHash,
+              type: 'danger',
+              onPress: () => {
+                Linking.openURL(
+                  getTxScanLink(tx.txHash, tx.cryptoType === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
+                )
+              },
+              duration: 3000
+            });
+
+            return {
+              ...tx,
+              status: TxStatus.Fail
+            }
           }
         } else {
           return tx
