@@ -16,7 +16,7 @@ import { bscProvider, getElysiaContract, provider } from '../utiles/getContract'
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
   const { wallet, isUnlocked } = useContext(WalletContext);
-  const { elPrice, ethPrice, bnbPrice, priceLoaded } = useContext(PriceContext);
+  const { priceLoaded } = useContext(PriceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -147,7 +147,9 @@ const AssetProvider: React.FC = (props) => {
       return;
     }
 
-    loadV1UserBalances()
+    if (!isWalletUser) {
+      loadV1UserBalances()
+    }
   }, [signedIn, isWalletUser, isUnlocked, priceLoaded])
 
   const getBalance = (unit: string): number => {
