@@ -168,8 +168,10 @@ const AssetProvider: React.FC = (props) => {
         break;
       case CryptoType.EL:
         balance = await getElysiaContract()?.balanceOf(wallet?.getFirstAddress() || '');
+        break;
       default:
         balance = BigNumber.from('0');
+        break;
     }
 
     setState({
