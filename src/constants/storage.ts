@@ -9,3 +9,4 @@ export const CURRENCY = `${prefix}_CURRENCY`;
 export const NOTIFICATION = `${prefix}_NOTIFICATION`;
 
 export const PRICE_DATA = `${prefix}_PRICE_DATA`
+export const PENDING_TRANSACTIONS = `${prefix}_PENDING_TRANSACTIONS`

@@ -22,6 +22,8 @@ import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import { isAddress } from '@ethersproject/address';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
+import TransactionContext from '../../contexts/TransactionContext';
+import moment from 'moment';
 
 type ParamList = {
   Withdrawal: {
@@ -35,6 +37,7 @@ const Withdrawal: React.FC = () => {
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { addPendingTransaction } = useContext(TransactionContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -102,7 +105,14 @@ const Withdrawal: React.FC = () => {
       alert(e)
     } finally {
       if (txRes) {
-        // Add pending TX
+        await addPendingTransaction({
+          txHash: txRes.hash,
+          cryptoType: asset.type,
+          value: value,
+          createdAt: moment().toString(),
+          type: 'out',
+        })
+
         navigation.goBack()
       }
       setLoading(false)

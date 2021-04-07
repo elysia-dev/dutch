@@ -5,6 +5,7 @@ import PreferenceProvider from './src/providers/PreferenceProvider';
 import PriceProvider from './src/providers/PriceProvider';
 import AssetProvider from './src/providers/AssetProvider';
 import UserProvider from './src/providers/UserProvider';
+import TransactionProvider from './src/providers/TransactionProvider';
 
 const AppMain = () => {
   return (
@@ -13,7 +14,9 @@ const AppMain = () => {
         <UserProvider>
           <WalletProvider>
             <AssetProvider>
-              <AppNavigator />
+              <TransactionProvider>
+                <AppNavigator />
+              </TransactionProvider>
             </AssetProvider>
           </WalletProvider>
         </UserProvider>

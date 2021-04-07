@@ -21,6 +21,8 @@ import { P1Text } from '../../shared/components/Texts';
 import getEnvironment from '../../utiles/getEnvironment';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
+import TransactionContext from '../../contexts/TransactionContext';
+import TxStatus from '../../enums/TxStatus';
 
 type ParamList = {
   CryptoDetail: {
@@ -35,6 +37,7 @@ const Detail: React.FC = () => {
   const [filter, setFilter] = useState<number>(0);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
+  const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
   const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, }>({
     page: 1,
@@ -66,12 +69,28 @@ const Detail: React.FC = () => {
       }
     } finally {
       if (newTxs.length !== 0) {
-        setState({
-          ...state,
-          page: state.page + 1,
-          lastPage: false,
-          transactions: [...state.transactions, ...newTxs],
-        })
+        if (state.page === 1) {
+          setState({
+            ...state,
+            page: state.page + 1,
+            lastPage: false,
+            transactions: [
+              ...transactions.filter((tx) => tx.cryptoType === asset.type && tx.status === TxStatus.Pending),
+              ...state.transactions,
+              ...newTxs
+            ],
+          })
+        } else {
+          setState({
+            ...state,
+            page: state.page + 1,
+            lastPage: false,
+            transactions: [
+              ...state.transactions,
+              ...newTxs
+            ],
+          })
+        }
       } else {
         setState({
           ...state,
@@ -84,6 +103,17 @@ const Detail: React.FC = () => {
   useEffect(() => {
     loadTxs();
   }, [])
+
+  useEffect(() => {
+    const assetTxs = transactions.filter((tx) => tx.cryptoType === asset.type)
+
+    if (assetTxs) {
+      setState({
+        ...state,
+        transactions: assetTxs.concat(state.transactions.filter((tx) => tx.txHash && !assetTxs.find((t) => t.txHash === tx.txHash))),
+      })
+    }
+  }, [counter])
 
   return (
     <>
