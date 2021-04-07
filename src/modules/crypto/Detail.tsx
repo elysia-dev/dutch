@@ -23,6 +23,7 @@ import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
+import OverlayLoading from '../../shared/components/OverlayLoading';
 
 type ParamList = {
   CryptoDetail: {
@@ -39,10 +40,11 @@ const Detail: React.FC = () => {
   const { wallet } = useContext(WalletContext);
   const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
-  const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, }>({
+  const [state, setState] = useState<{ page: number, transactions: CryptoTransaction[], lastPage: boolean, loading: boolean }>({
     page: 1,
     transactions: [],
     lastPage: true,
+    loading: true,
   })
 
   const loadTxs = async () => {
@@ -76,7 +78,8 @@ const Detail: React.FC = () => {
             ...state,
             page: 2,
             lastPage: false,
-            transactions: pendingTxs.concat(newTxs.filter((tx) => tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash)))
+            transactions: pendingTxs.concat(newTxs.filter((tx) => tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash))),
+            loading: false,
           })
         } else {
           setState({
@@ -87,12 +90,14 @@ const Detail: React.FC = () => {
               ...state.transactions,
               ...newTxs
             ],
+            loading: false,
           })
         }
       } else {
         setState({
           ...state,
           lastPage: true,
+          loading: false
         })
       }
     }
@@ -209,6 +214,7 @@ const Detail: React.FC = () => {
           }
         </View>
       }
+      <OverlayLoading visible={state.loading} />
     </>
   );
 };
