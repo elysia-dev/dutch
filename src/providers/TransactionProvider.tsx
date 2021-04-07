@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import { PENDING_TRANSACTIONS } from '../constants/storage';
 import TransactionContext, { TransactionType, initialTransactions } from '../contexts/TransactionContext';
@@ -12,8 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
+import AssetContext from '../contexts/AssetContext';
 
 const TransactionProvider: React.FC = (props) => {
+  const { refreshBalance } = useContext(AssetContext)
   const [state, setState] = useState<TransactionType>(initialTransactions)
   const { t } = useTranslation()
 
@@ -59,6 +61,8 @@ const TransactionProvider: React.FC = (props) => {
 
         if (txRes) {
           if (txRes.status === 1) {
+            tx.cryptoType && refreshBalance(tx.cryptoType);
+
             showMessage({
               message: t('transaction.created'),
               description: tx.txHash,

@@ -10,12 +10,14 @@ interface ITransactionList {
   data: CryptoTransaction[],
   unit: string,
   networkType: NetworkType,
+  loading?: boolean,
 }
 
 const TransactionList: React.FC<ITransactionList> = ({
   data,
   unit,
-  networkType
+  networkType,
+  loading
 }) => {
   const { t } = useTranslation();
 
@@ -33,7 +35,7 @@ const TransactionList: React.FC<ITransactionList> = ({
             alignItems: 'center'
           }}
         >
-          <P2Text label={t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />
+          {!loading && <P2Text label={t('assets.null_transaction')} style={{ textAlign: 'center', width: '100%' }} />}
         </View>
       }
       { data.map((tx, index) => {

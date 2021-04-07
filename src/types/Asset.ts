@@ -11,4 +11,11 @@ type Asset = {
   address?: string;
 }
 
+export const defaultAsset: Asset = {
+  type: CryptoType.ETH,
+  title: "ETH",
+  value: 0,
+  unit: 'ETH',
+}
+
 export default Asset

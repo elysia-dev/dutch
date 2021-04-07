@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import BasicLayout from '../../shared/components/BasicLayout';
-import Asset from '../../types/Asset';
+import Asset, { defaultAsset } from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
@@ -24,6 +24,7 @@ import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
 import OverlayLoading from '../../shared/components/OverlayLoading';
+import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
   CryptoDetail: {
@@ -32,8 +33,9 @@ type ParamList = {
 };
 
 const Detail: React.FC = () => {
+  const { assets } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'CryptoDetail'>>();
-  const asset = route.params.asset
+  const asset = assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
   const [filter, setFilter] = useState<number>(0);
   const { isWalletUser, user } = useContext(UserContext);
@@ -46,11 +48,6 @@ const Detail: React.FC = () => {
     lastPage: true,
     loading: true,
   })
-
-  // Load Balance & Txs
-  const init = async () => {
-
-  }
 
   const loadTxs = async () => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address || '' : user.ethAddresses[0];
@@ -126,13 +123,13 @@ const Detail: React.FC = () => {
   return (
     <>
       <WrapperLayout
-        title={route.params.asset.title + " " + t('wallet.crypto_value')}
+        title={asset.title + " " + t('wallet.crypto_value')}
         isScrolling={true}
         backButtonHandler={() => navigation.goBack()}
         body={
           <BasicLayout>
             <AssetItem
-              asset={route.params.asset}
+              asset={asset}
               touchable={false}
             />
             <View style={{ height: 30 }} />
@@ -142,12 +139,14 @@ const Detail: React.FC = () => {
               select={(filter) => setFilter(filter)}
             />
             <TransactionList
+              loading={state.loading}
               data={
-                filter === 0 ? state.transactions : state.transactions.filter((tx) =>
-                  (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
-                )
+                state.loading ? [] :
+                  filter === 0 ? state.transactions : state.transactions.filter((tx) =>
+                    (filter === 1 && tx.type === 'out') || (filter === 2 && tx.type === 'in')
+                  )
               }
-              unit={route.params.asset.unit}
+              unit={asset.unit}
               networkType={asset.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH}
             />
             <View style={{ height: 50 }} />
