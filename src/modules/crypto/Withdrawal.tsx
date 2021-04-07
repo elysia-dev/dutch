@@ -266,7 +266,7 @@ const Withdrawal: React.FC = () => {
             }}
           />
           <NextButton
-            disabled={!state.address || !value || insufficientGas || !isAddress(state.address)}
+            disabled={!state.address || !value || insufficientGas || !isAddress(state.address) || !estimatedGas}
             title={t('wallet.withdrawal')}
             style={{
               width: '100%',
