@@ -18,6 +18,10 @@ const AssetProvider: React.FC = (props) => {
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
   const loadV2UserBalances = async (noCache?: boolean) => {
+    const address = wallet?.getFirstNode()?.address;
+
+    if (!address) return
+
     if (user.provider === ProviderType.GUEST && !isWalletUser) {
       setState({
         ...state,
@@ -28,7 +32,7 @@ const AssetProvider: React.FC = (props) => {
     };
 
     try {
-      const { data } = await EspressoV2.getBalances(wallet?.getFirstNode()?.address || '', noCache);
+      const { data } = await EspressoV2.getBalances(address, noCache);
 
       const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL, CryptoType.BNB].includes(token.symbol as CryptoType))
         .map((token) => {
