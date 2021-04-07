@@ -70,15 +70,13 @@ const Detail: React.FC = () => {
     } finally {
       if (newTxs.length !== 0) {
         if (state.page === 1) {
+          const pendingTxs = transactions.filter((tx) => tx.cryptoType === asset.type && tx.status === TxStatus.Pending)
+
           setState({
             ...state,
-            page: state.page + 1,
+            page: 2,
             lastPage: false,
-            transactions: [
-              ...transactions.filter((tx) => tx.cryptoType === asset.type && tx.status === TxStatus.Pending),
-              ...state.transactions,
-              ...newTxs
-            ],
+            transactions: pendingTxs.concat(newTxs.filter((tx) => tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash)))
           })
         } else {
           setState({

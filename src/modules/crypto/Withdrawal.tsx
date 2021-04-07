@@ -128,8 +128,7 @@ const Withdrawal: React.FC = () => {
         scanned: false,
       })
     } else {
-      // TODO
-      alert('Camera 권한이 없습니다.')
+      alert('Permission of camera is not grated')
     }
   }
 
