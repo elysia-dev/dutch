@@ -423,73 +423,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
               </View>
             </>
           ) : (
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-              }}>
-              <View
-                style={{
-                  width: Dimensions.get('window').width * 0.9,
-                  height: 140,
-                  flexDirection: 'column',
-                  padding: 20,
-                  backgroundColor: '#fff',
-                  elevation: 6,
-                  shadowColor: '#1C1C1C4D',
-                  shadowOffset: { width: 0, height: 0 },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 4,
-                  borderRadius: 10,
-                  marginTop: 20,
-                  top: 0,
-                  position: 'relative',
-                  marginBottom: 25,
-                }}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <P3Text
-                    label={'*  '}
-                    style={{
-                      color: '#CC3743',
-                    }}
-                  />
-                  <P3Text
-                    label={t('more.check_1')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                  <P3Text
-                    label={t('more.check_2')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <P3Text label={'*  '} style={{ color: '#CC3743' }} />
-                  <P3Text
-                    label={t('more.check_3')}
-                    style={{ color: '#1C1C1C' }}
-                  />
-                </View>
-              </View>
-            </View>
+            <View />
           )
         }
         button={
