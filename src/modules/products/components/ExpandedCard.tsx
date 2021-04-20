@@ -18,7 +18,7 @@ import {
   ImageStyle,
 } from 'react-native';
 import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
 import { useTranslation } from 'react-i18next'
@@ -124,6 +124,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
   const { t } = useTranslation();
   const { height: windowHeight } = Dimensions.get('window');
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
   const renderNode = (
     node: HTMLViewNode,
@@ -316,7 +317,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
         !state.closed && state.scrollY > 50 && (
           <SubmitButton
-            style={{ position: 'absolute', bottom: 0, marginBottom: 15 }}
+            style={{ position: 'absolute', bottom: insets.bottom || 10, }}
             title={t('product_label.more_info')}
             handler={() => {
               StatusBar.setHidden(false);

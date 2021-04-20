@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import BasicLayout from '../../shared/components/BasicLayout';
 import Asset, { defaultAsset } from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
@@ -48,6 +49,7 @@ const Detail: React.FC = () => {
     lastPage: true,
     loading: true,
   })
+  const insets = useSafeAreaInsets();
 
   const loadTxs = async () => {
     const address = isWalletUser ? wallet?.getFirstNode()?.address || '' : user.ethAddresses[0];
@@ -189,8 +191,7 @@ const Detail: React.FC = () => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             position: 'absolute',
-            bottom: 10,
-            backgroundColor: 'white',
+            bottom: insets.bottom || 10,
             width: '90%',
           }}
         >
