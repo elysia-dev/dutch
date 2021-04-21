@@ -133,7 +133,7 @@ const Withdrawal: React.FC = () => {
         scanned: false,
       })
     } else {
-      alert('Permission of camera is not grated')
+      alert('Permission of camera is not granted')
     }
   }
 
