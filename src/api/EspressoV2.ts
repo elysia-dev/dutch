@@ -9,45 +9,25 @@ const baseURL = `${getEnvironment().apiUrl}`;
 
 export default class EspressoV2 {
   static getBalances = async (address: string, noCache?: boolean): Promise<AxiosResponse<WalletBalanceResponse>> => {
-    return axios.get(`${baseURL}/v2/wallet/${address}/balance`, {
-      headers: {
-        'Cache-Control': noCache ? 'no-cache' : null
-      }
-    });
+    return axios.get(`${baseURL}/v2/wallet/${address}/balance?cache=${noCache ? 'no-cache' : 'null'}`);
   }
 
   static getEthTransaction = async (address: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
-    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-      }
-    })
+    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}&cache=no-cache`)
   }
 
   static getErc20Transaction = async (address: string, tokenAddress: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
     return axios.get(
-      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-      }
-    })
+      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}&cache=no-cache`)
   }
 
   static getBnbTransaction = async (address: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
-    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}&network=bsc`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-      }
-    })
+    return axios.get(`${baseURL}/v2/wallet/${address}/tx?page=${page}&network=bsc&cache=no-cache`)
   }
 
   static getBscErc20Transaction = async (address: string, tokenAddress: string, page: number): Promise<AxiosResponse<CryptoTxsResponse>> => {
     return axios.get(
-      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}&network=bsc`, {
-      headers: {
-        'Cache-Control': 'no-cache',
-      }
-    })
+      `${baseURL}/v2/wallet/${address}/${tokenAddress}/tx?page=${page}&network=bsc`)
   }
 
   static subscribe = async (address: string, token?: string): Promise<AxiosResponse<void>> => {

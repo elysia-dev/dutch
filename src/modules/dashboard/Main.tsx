@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  ScrollView, View, Image, TouchableOpacity, RefreshControl
+  ScrollView, View, Image, TouchableOpacity, RefreshControl, ActivityIndicator
 } from 'react-native';
 import { RouteProp, useNavigation, useRoute, useScrollToTop, useIsFocused } from '@react-navigation/native';
 import { H3Text, TitleText } from '../../shared/components/Texts';
@@ -38,23 +38,37 @@ export const Main: React.FC = () => {
   const isFocused = useIsFocused();
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [btnRefreshing, setBtnRefreshing] = React.useState(false);
 
-  const onRefresh = () => {
+  const loadBalances = async () => {
+    if (isWalletUser) {
+      await loadV2UserBalances(true)
+    } else {
+      await refreshUser()
+      await loadV1UserBalances(true)
+    }
+  }
+
+  const onRefresh = async () => {
     if (user.provider === ProviderType.GUEST && !isWalletUser) return;
 
     setRefreshing(true);
-    if (isWalletUser) {
-      loadV2UserBalances(true).then(() => {
-        setRefreshing(false)
-      });
-    } else {
-      refreshUser().then(async () => {
-        await loadV1UserBalances(true)
-      }).finally(() => {
-        setRefreshing(false)
-      });
+    try {
+      await loadBalances();
+    } finally {
+      setRefreshing(false)
     }
   };
+
+  const onBtnRefresh = async () => {
+    setBtnRefreshing(true);
+
+    try {
+      await loadBalances();
+    } finally {
+      setBtnRefreshing(false)
+    }
+  }
 
   useEffect(() => {
     if (isFocused) {
@@ -93,12 +107,35 @@ export const Main: React.FC = () => {
             marginBottom: 40,
           }}>
             {
-              (isWalletUser || user.ethAddresses[0]) ? <TitleText
-                label={currencyFormatter(
-                  assets.reduce((res, cur) => res + cur.value * getCryptoPrice(cur.type), 0),
-                  2
-                )}
-              /> :
+              (isWalletUser || user.ethAddresses[0]) ? <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center'
+                }}
+              >
+                <TitleText
+                  label={currencyFormatter(
+                    assets.reduce((res, cur) => res + cur.value * getCryptoPrice(cur.type), 0),
+                    2
+                  )}
+                />
+                <TouchableOpacity
+                  style={{ marginLeft: 'auto' }}
+                  disabled={btnRefreshing}
+                  onPress={() => {
+                    onBtnRefresh()
+                  }}
+                >
+                  {
+                    btnRefreshing ?
+                      <ActivityIndicator size="small" color="#1c1c1c" /> :
+                      <Image
+                        style={{ width: 20, height: 20 }}
+                        source={require('./images/reload.png')}
+                      />
+                  }
+                </TouchableOpacity>
+              </View> :
                 <TouchableOpacity
                   style={{
                     flex: 1,
