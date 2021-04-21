@@ -382,7 +382,8 @@
       "return": "Return",
       "transaction_list": "Transaction record",
       "my_address": "My deposit address",
-      "success_copy": "Copy sucess"
+      "success_copy": "Copy success",
+      "copy_address": "Copy address"
     },
     "recovery_key": {
       "keep": "Save your recovery key",

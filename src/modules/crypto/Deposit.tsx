@@ -2,14 +2,16 @@
 import React, {
   FunctionComponent, useContext,
 } from 'react';
-import { View, Image, TouchableOpacity, Share } from 'react-native';
+import { View, Share } from 'react-native';
 import { P2Text } from '../../shared/components/Texts';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import AppColors from '../../enums/AppColors';
 import WalletContext from '../../contexts/WalletContext';
 import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import SheetHeader from '../../shared/components/SheetHeader';
+import NextButton from '../../shared/components/NextButton';
 
 interface Props {
   modalHandler: () => void;
@@ -20,6 +22,7 @@ const Deposit: FunctionComponent<Props> = props => {
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser ? wallet?.getNodes()[0].address || '' : user.ethAddresses[0];
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -40,37 +43,28 @@ const Deposit: FunctionComponent<Props> = props => {
             size={136}
             value={address}
           />
-          <TouchableOpacity
-            style={{
-              marginTop: 25,
-              backgroundColor: AppColors.MAIN,
-              height: 70,
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderRadius: 5,
-              paddingLeft: 20,
-              paddingRight: 20,
-            }}
-            onPress={() => {
-              if (address) {
-                Share.share({
-                  message: address,
-                });
-              }
-            }}
-          >
-            <P2Text label={address} style={{ color: 'white', flex: 1 }} />
-            <View style={{ marginLeft: 10, width: 1, height: 40, backgroundColor: 'white' }} />
-            <Image
-              style={{
-                marginLeft: 10,
-                width: 20,
-                height: 20,
-              }}
-              source={require('./images/copyduplicate.png')}
-            />
-          </TouchableOpacity>
+          <P2Text label={address} style={{ color: AppColors.BLACK, marginTop: 20, }} />
         </View>
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          bottom: insets.bottom || 10,
+          paddingLeft: '5%',
+          paddingRight: '5%'
+        }}
+      >
+        <NextButton
+          title={t('main.copy_address')}
+          handler={() => {
+            if (address) {
+              Share.share({
+                message: address,
+              });
+            }
+          }}
+        />
       </View>
     </>
   );

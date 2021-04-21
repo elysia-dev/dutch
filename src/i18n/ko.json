@@ -379,7 +379,8 @@
       "return": "이자",
       "transaction_list": "거래기록",
       "my_address": "내 입금주소",
-      "success_copy": "복사가 성공했습니다."
+      "success_copy": "복사가 성공했습니다.",
+      "copy_address": "입금 주소 복사"
     },
     "recovery_key": {
       "keep": "복구키 보관",

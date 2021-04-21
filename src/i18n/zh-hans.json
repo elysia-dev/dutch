@@ -375,7 +375,8 @@
       "return": "提取",
       "transaction_list": "交易记录",
       "my_address": "我的钱包地址",
-      "success_copy": "复制成功。"
+      "success_copy": "复制成功。",
+      "copy_address": "复制收款地址"
     },
     "recovery_key": {
       "keep": "存档密匙词组",
