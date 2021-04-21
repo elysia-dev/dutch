@@ -13,6 +13,7 @@ import WhatsNew from './WhatsNew';
 import MembershipWithdrawl from './MembershipWithdrawl';
 import Asset2Ownership from './Asset2Ownership';
 import CheckMnemonic from './CheckMnemonic';
+import MyPage from './MyPage';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,10 @@ export const More = () => {
       <Stack.Screen
         name={MorePage.MembershipWithdrawl}
         component={MembershipWithdrawl}
+      />
+      <Stack.Screen
+        name={MorePage.MyPage}
+        component={MyPage}
       />
       <Stack.Screen name={MorePage.CheckMnemonic} component={CheckMnemonic} />
     </Stack.Navigator>
