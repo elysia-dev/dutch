@@ -212,9 +212,6 @@
       "question_submitted": "您的问题已成功提交。，我们会尽快通过邮件与您联系。",
       "invalid_password": "请输入现在的密码。",
       "contact_restriction": "1分钟内只能提交1次咨询。\n 请在1分钟后再试一次",
-      "check_1": "绑定钱包地址后不能变更。",
-      "check_2": "每个用户只能绑定一个钱包地址。",
-      "check_3": "请选择以下选项中的一个。",
       "connected": "钱包地址绑定成功。",
       "find_more": "可以在“更多”中我的账户里查看详细信息。",
       "confirm_logout": "您要退出吗？",
@@ -378,7 +375,8 @@
       "return": "提取",
       "transaction_list": "交易记录",
       "my_address": "我的钱包地址",
-      "success_copy": "复制成功。"
+      "success_copy": "复制成功。",
+      "copy_address": "复制收款地址"
     },
     "recovery_key": {
       "keep": "存档密匙词组",

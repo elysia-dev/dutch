@@ -51,7 +51,7 @@ const AssetProvider: React.FC = (props) => {
 
       assets.push(
         {
-          title: 'Elysia',
+          title: 'ELYSIA',
           value: elBalance,
           type: CryptoType.EL,
           unit: CryptoType.EL,
@@ -116,7 +116,7 @@ const AssetProvider: React.FC = (props) => {
     } finally {
       assets.push(
         {
-          title: 'Elysia',
+          title: 'ELYSIA',
           value: elBalance,
           type: CryptoType.EL,
           unit: CryptoType.EL
