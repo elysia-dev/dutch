@@ -3,10 +3,11 @@ import React, {
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import useTxHandler from '../../hooks/useTxHandler';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import { BigNumber } from '@ethersproject/bignumber';
@@ -18,10 +19,8 @@ import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
-import { P3Text } from '../../shared/components/Texts';
 import NetworkType from '../../enums/NetworkType';
 import AssetContext from '../../contexts/AssetContext';
-import AppColors from '../../enums/AppColors';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
@@ -59,6 +58,7 @@ const Reward: FunctionComponent = () => {
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
   const contract = getAssetTokenFromCryptoType(toCrypto, contractAddress);
   const txResult = useWatingTx(state.txHash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const insets = useSafeAreaInsets();
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -163,7 +163,7 @@ const Reward: FunctionComponent = () => {
 
   if (state.stage === 0) {
     return (
-      <View style={{}}>
+      <View style={{ height: '100%' }}>
         <SheetHeader title={t('assets.yield_reward')} />
         <View
           style={{
@@ -191,37 +191,45 @@ const Reward: FunctionComponent = () => {
             gasCrypto={gasCrypto}
             insufficientGas={insufficientGas}
           />
-          <View style={{ position: 'absolute', width: '100%', bottom: 150, marginLeft: '6%' }}>
-            <NextButton
-              disabled={!(interest > 0) || insufficientGas}
-              title={t('assets.yield_reward')}
-              handler={() => {
-                if (isWalletUser) {
-                  setState({
-                    ...state,
-                    step: TxStep.Creating
-                  })
-                } else {
-                  Server.requestTransaction(8, 1, 'interest')
-                    .then((res) => {
-                      setState({
-                        ...state,
-                        stage: 1,
-                        espressoTxId: res.data.id,
-                      })
-                    })
-                    .catch((e) => {
-                      if (e.response.status === 400) {
-                        alert(t('product.transaction_error'));
-                      } else if (e.response.status === 500) {
-                        alert(t('account_errors.server'));
-                      }
-                    });
-                }
-              }}
-            />
-          </View>
           <OverlayLoading visible={state.step === TxStep.Creating} />
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            width: '100%',
+            bottom: insets.bottom || 10,
+            paddingLeft: '5%',
+            paddingRight: '5%'
+          }}
+        >
+          <NextButton
+            disabled={!(interest > 0) || insufficientGas}
+            title={t('assets.yield_reward')}
+            handler={() => {
+              if (isWalletUser) {
+                setState({
+                  ...state,
+                  step: TxStep.Creating
+                })
+              } else {
+                Server.requestTransaction(8, 1, 'interest')
+                  .then((res) => {
+                    setState({
+                      ...state,
+                      stage: 1,
+                      espressoTxId: res.data.id,
+                    })
+                  })
+                  .catch((e) => {
+                    if (e.response.status === 400) {
+                      alert(t('product.transaction_error'));
+                    } else if (e.response.status === 500) {
+                      alert(t('account_errors.server'));
+                    }
+                  });
+              }
+            }}
+          />
         </View>
       </View>
     );

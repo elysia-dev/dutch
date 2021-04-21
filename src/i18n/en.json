@@ -215,9 +215,6 @@
       "question_submitted": "Your inquiry has been successfully submitted. We will reply via email as soon as possible.",
       "invalid_password": "Please enter your current password.",
       "contact_restriction": "Sending inquiries is limited to one per minute. Please try again soon.",
-      "check_1": "You will not be able to change the wallet address once it is registered.",
-      "check_2": "Only one wallet address can be registered per account.",
-      "check_3": "Please choose your wallet.",
       "connected": "Wallet is connected",
       "find_more": "Find out more by going to your account and clicking 'more'",
       "confirm_logout": "Would you like to sign out?",
@@ -385,7 +382,8 @@
       "return": "Return",
       "transaction_list": "Transaction record",
       "my_address": "My deposit address",
-      "success_copy": "Copy sucess"
+      "success_copy": "Copy success",
+      "copy_address": "Copy address"
     },
     "recovery_key": {
       "keep": "Save your recovery key",

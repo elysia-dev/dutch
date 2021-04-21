@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import { BackButton } from '../../shared/components/BackButton';
@@ -63,6 +64,7 @@ const ProductBuying: FunctionComponent = () => {
   const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
+  const insets = useSafeAreaInsets();
 
   const shortNationality = user.nationality
     ? user.nationality.split(', ')[1]
@@ -82,7 +84,7 @@ const ProductBuying: FunctionComponent = () => {
     } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
-      return t('product_label.invest');
+      return t('assets.invest');
     }
     return '';
   };
@@ -274,8 +276,7 @@ const ProductBuying: FunctionComponent = () => {
         <SubmitButton
           style={{
             position: 'absolute',
-            bottom: 0,
-            marginBottom: 15,
+            bottom: insets.bottom || 10,
             backgroundColor:
               // eslint-disable-next-line no-nested-ternary
               state.product?.status === ProductStatus.TERMINATED

@@ -2,7 +2,8 @@
 import React, {
   useContext, useEffect, useState,
 } from 'react';
-import { View, TouchableOpacity, TextInput, Text, Keyboard, TouchableWithoutFeedback, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, TextInput, Text, Keyboard, TouchableWithoutFeedback, StyleSheet, Image, Dimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppColors from '../../enums/AppColors';
 import { useTranslation } from 'react-i18next';
 import NextButton from '../../shared/components/NextButton';
@@ -31,6 +32,9 @@ type ParamList = {
   };
 };
 
+// * Info
+// Tricky Height Calculations!
+// TxInput component 참고
 const Withdrawal: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Withdrawal'>>();
   const { asset } = route.params;
@@ -48,6 +52,7 @@ const Withdrawal: React.FC = () => {
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   const estimateGas = async () => {
     let estimatedGas: BigNumber | undefined;
@@ -148,15 +153,14 @@ const Withdrawal: React.FC = () => {
   }, [value, state.address]);
 
   return (
-    <>
+    <View style={{ height: '100%', backgroundColor: '#fff' }}>
       <SheetHeader title={t('wallet.withdrawal')} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{
             paddingLeft: 20,
             paddingRight: 20,
-            height: '100%',
-            backgroundColor: '#fff',
+            height: Dimensions.get('window').height - 200,
           }}
         >
           <P2Text label={t('wallet.withdrawal_address')} style={{ color: AppColors.BLACK, marginTop: 30 }} />
@@ -264,20 +268,31 @@ const Withdrawal: React.FC = () => {
             removeValue={() => {
               setValue(value.slice(0, -1))
             }}
-          />
-          <NextButton
-            disabled={!state.address || !value || insufficientGas || !isAddress(state.address) || !estimatedGas}
-            title={t('wallet.withdrawal')}
-            style={{
-              width: '100%',
-              marginTop: 20,
-            }}
-            handler={() => {
-              sendTx()
-            }}
+            height={Dimensions.get('window').height - 440}
           />
         </View>
       </TouchableWithoutFeedback>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          bottom: insets.bottom || 10,
+          paddingLeft: '5%',
+          paddingRight: '5%'
+        }}
+      >
+        <NextButton
+          disabled={!state.address || !value || insufficientGas || !isAddress(state.address) || !estimatedGas}
+          title={t('wallet.withdrawal')}
+          style={{
+            width: '100%',
+            marginTop: 20,
+          }}
+          handler={() => {
+            sendTx()
+          }}
+        />
+      </View>
       {
         !state.scanned &&
         <BarCodeScanner
@@ -288,7 +303,7 @@ const Withdrawal: React.FC = () => {
         />
       }
       <OverlayLoading visible={loading} />
-    </>
+    </View>
   );
 };
 
