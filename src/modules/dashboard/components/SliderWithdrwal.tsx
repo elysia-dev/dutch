@@ -3,6 +3,7 @@ import React, { useState, FunctionComponent, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UserContext from '../../../contexts/UserContext';
 import LegacyRefundStatus from '../../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
@@ -34,6 +35,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   });
   const [focusing, setFocusing] = useState(false);
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const refundLegacyWallet = () => {
     Server.setRefundLegacyWallet(state.inputWallet, state.inputEmail)
@@ -189,7 +191,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
             style={{
               position: 'absolute',
               bottom: 0,
-              marginBottom: 10,
+              marginBottom: insets.bottom || 10,
               width: '100%',
               marginLeft: 'auto',
               marginRight: 'auto',

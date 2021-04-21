@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
 import { TitleText } from '../../shared/components/Texts';
 import Layout from './components/Layout';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NextButton from '../../shared/components/NextButton';
 import RecoverMnemonicView from './components/RecoverMnemonicView';
 import { isValidMnemonic } from '@ethersproject/hdnode';
@@ -17,6 +18,7 @@ type State = {
 const RecoverSeedPharase: FunctionComponent = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [state, setState] = useState<State>({
     currentIndex: 0,
     mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
@@ -39,7 +41,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
           setState({ ...state, mnemonic })
         }}
       />
-      <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
+      <View style={{ position: 'absolute', bottom: insets.bottom || 10, width: '100%' }}>
         <NextButton
           title={t('recovery_key.insert_seed_btn')}
           disabled={!isValidMnemonic(state.mnemonic.join(' '))}

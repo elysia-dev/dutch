@@ -399,7 +399,7 @@
       "check_seed_notice": "This is the step to check the seed phrases you have stored. Please enter it correctly.",
       "seed_check_btn": "Confirmed",
       "insert_seed": "Please enter the seed phrase.",
-      "insert_seed_btn": "Input complete",
+      "insert_seed_btn": "Recover",
       "wallet_select": "Do you have any existing wallets?",
       "wallet_select_content": "You can create a new wallet or use an existing wallet.",
       "existing_wallet": "Using existing wallet",
