@@ -1,4 +1,8 @@
 {
+  "config": {
+    "mversion": "v1.4.0",
+    "version": "v1.4.5"
+  },
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
@@ -6,12 +10,12 @@
     "web": "expo start --web",
     "test": "jest",
     "lint": "eslint . --ext .tsx --fix",
-    "publish:stag": "expo publish --config stagingApp.json --release-channel staging-v1.4.0",
-    "build:stag:ios": "expo build:ios --config stagingApp.json --release-channel staging-v1.4.0",
-    "build:stag:android": "expo build:android --config stagingApp.json --release-channel staging-v1.4.0",
-    "publish:prod": "expo publish --config app.json --release-channel prod-v1.4.0",
-    "build:prod:ios": "expo build:ios --release-channel prod-v1.4.0",
-    "build:prod:android": "expo build:android --release-channel prod-v1.4.0"
+    "publish:stag": "expo publish --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
+    "build:stag:ios": "expo build:ios --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
+    "build:stag:android": "expo build:android --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
+    "publish:prod": "expo publish --release-channel prod-$npm_package_config_mversion",
+    "build:prod:ios": "expo build:ios --release-channel prod-$npm_package_config_mversion",
+    "build:prod:android": "expo build:android --release-channel prod-$npm_package_config_mversion"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
