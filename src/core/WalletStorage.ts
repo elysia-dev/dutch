@@ -1,5 +1,5 @@
 import { BACKUP_COMPLETE, ENCRYPTED_WALLET, IS_WALLET_USER } from "../constants/storage";
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import CryptoES from 'crypto-es';
 import Wallet from "./Wallet";
 
