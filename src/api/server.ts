@@ -8,11 +8,9 @@ import { PostResponse } from '../types/PostResponse';
 import { DocsResponse } from '../types/Docs';
 import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
-import { SummaryReportResponse } from '../types/SummaryReport';
-import { CoinPriceResponse } from '../types/CoinPrice';
+import Constants from 'expo-constants';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
-import getEnvironment from '../utiles/getEnvironment';
 import { SignOut } from '../enums/SignInStatus';
 import LocaleType from '../enums/LocaleType';
 import { removeToken } from '../asyncStorages/token';
@@ -263,7 +261,7 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${getEnvironment().elAddress
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${Constants.manifest?.extra?.elAddress
       }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };

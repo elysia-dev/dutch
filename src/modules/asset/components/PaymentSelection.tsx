@@ -12,17 +12,15 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import * as Linking from 'expo-linking';
+import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
-import { H3Text, H4Text } from '../../../shared/components/Texts';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
-import getEnvironment from '../../../utiles/getEnvironment';
 import useAppState from '../../../hooks/useAppState';
 import WalletType from '../../../enums/WalletType';
 import storeDeeplink from '../../../utiles/storeDeeplink';
 import ProviderType from '../../../enums/ProviderType';
 import { TextField } from '../../../shared/components/TextField';
 import UserContext from '../../../contexts/UserContext';
-import AppColors from '../../../enums/AppColors';
 import SheetHeader from '../../../shared/components/SheetHeader';
 
 type ButtonProps = {
@@ -114,7 +112,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
+          `imtokenv2://navigate?screen=DappView&url=https://${Constants.manifest?.extra?.dappUrl
           }/requests/${espressTxId}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
@@ -123,7 +121,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
+          `https://metamask.app.link/dapp/${Constants.manifest?.extra?.dappUrl
           }/requests/${espressTxId}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');

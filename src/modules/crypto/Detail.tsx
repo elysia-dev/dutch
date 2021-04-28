@@ -3,6 +3,7 @@ import BasicLayout from '../../shared/components/BasicLayout';
 import Asset, { defaultAsset } from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
@@ -19,7 +20,6 @@ import CryptoTransaction from '../../types/CryptoTransaction';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
-import getEnvironment from '../../utiles/getEnvironment';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';
@@ -63,7 +63,7 @@ const Detail: React.FC = () => {
       } else if (asset.type === CryptoType.BNB) {
         res = await EspressoV2.getBnbTransaction(address, state.page);
       } else {
-        res = await EspressoV2.getErc20Transaction(address, getEnvironment().elAddress, state.page);
+        res = await EspressoV2.getErc20Transaction(address, Constants.manifest?.extra?.elAddress || '', state.page);
       }
 
       newTxs = res.data.tx.map((tx) => {

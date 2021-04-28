@@ -3,9 +3,9 @@ import CryptoTxsResponse from '../types/CryptoTxsResponse';
 import Notification from '../types/Notification';
 import Product from '../types/Product';
 import WalletBalanceResponse from '../types/WalletBalanceResponse';
-import getEnvironment from '../utiles/getEnvironment';
+import Constants from 'expo-constants';
 
-const baseURL = `${getEnvironment().apiUrl}`;
+const baseURL = Constants.manifest?.extra?.apiUrl;
 
 export default class EspressoV2 {
   static getBalances = async (address: string, noCache?: boolean): Promise<AxiosResponse<WalletBalanceResponse>> => {

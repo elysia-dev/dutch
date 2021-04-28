@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import { CurrencyResponse } from '../types/CurrencyResponse';
-import getEnvironment from '../utiles/getEnvironment';
+import Constants from 'expo-constants';
 
-const baseURL = `${getEnvironment().apiUrl}`;
+const baseURL = Constants.manifest?.extra?.apiUrl;
 
 export default class EspressoV1 {
   static getAllCurrency = async (): Promise<AxiosResponse<CurrencyResponse[]>> => {

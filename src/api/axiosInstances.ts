@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { SignInStatus, SignOut } from '../enums/SignInStatus';
-import getEnvironment from '../utiles/getEnvironment';
+import Constants from 'expo-constants';
 
-const baseURL = getEnvironment().apiUrl;
+const baseURL = Constants.manifest?.extra?.apiUrl;
 
 export const authenticatedEspressoClient = (
   autoSignOutHandler: (signInStatus: SignOut) => void,

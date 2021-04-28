@@ -4,18 +4,10 @@
     "version": "v1.4.5"
   },
   "scripts": {
-    "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "start": "expo start",
     "web": "expo start --web",
     "test": "jest",
-    "lint": "eslint . --ext .tsx --fix",
-    "publish:stag": "expo publish --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
-    "build:stag:ios": "expo build:ios --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
-    "build:stag:android": "expo build:android --config stagingApp.json --release-channel staging-$npm_package_config_mversion",
-    "publish:prod": "expo publish --release-channel prod-$npm_package_config_mversion",
-    "build:prod:ios": "expo build:ios --release-channel prod-$npm_package_config_mversion",
-    "build:prod:android": "expo build:android --release-channel prod-$npm_package_config_mversion"
+    "lint": "eslint . --ext .tsx --fix"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
