@@ -34,7 +34,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { BackButton } from '../../shared/components/BackButton';
 import { Modal } from '../../shared/components/Modal';
-import getEnvironment from '../../utiles/getEnvironment';
+import Constants from 'expo-constants';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
@@ -168,14 +168,14 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const openExternalWallet = (type: string, requestId: string) => {
     if (type === 'metamask') {
       Linking.openURL(
-        `https://metamask.app.link/dapp/${getEnvironment().dappUrl
+        `https://metamask.app.link/dapp/${Constants.manifest?.extra?.dappUrl
         }/ethAddress/${requestId}`,
       ).catch((_e) => {
         storeDeeplink('metamask/id1438144202', 'io.metamask');
       });
     } else if (type === 'imtoken') {
       Linking.openURL(
-        `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
+        `imtokenv2://navigate?screen=DappView&url=https://${Constants.manifest?.extra?.dappUrl
         }/ethAddress/${requestId}`,
       ).catch((_e) => {
         storeDeeplink(
@@ -189,7 +189,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const copyLink = () => {
     Server.requestEthAddressRegister()
       .then((res) => {
-        const url = `https://${getEnvironment().dappUrl}/ethAddress/${res.data.id
+        const url = `https://${Constants.manifest?.extra?.dappUrl}/ethAddress/${res.data.id
           }`;
         Clipboard.setString(url);
         alert(t('more_label.copied', { url }));
@@ -332,7 +332,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   </TouchableOpacity>
                   <H3Text
                     label={
-                      getEnvironment().envName === 'PRODUCTION' ? 'EL' : 'ELRS '
+                      Constants.manifest?.extra?.ethNetwork === 'mainnet' ? 'EL' : "KEL"
                     }
                     style={{
                       flex: 3,

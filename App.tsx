@@ -9,13 +9,15 @@ import { useFonts } from 'expo-font';
 
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
+import Constants from 'expo-constants';
 
-Sentry.init({
-  dsn:
-    'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
-  enableInExpoDevelopment: true,
-  debug: true,
-});
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    enableInExpoDevelopment: true,
+    debug: true,
+  });
+}
 
 const App = () => {
   /* eslint-disable @typescript-eslint/camelcase */

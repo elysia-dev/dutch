@@ -1,8 +1,0 @@
-{
-    "react-native": {
-        "packager": {
-            "port": 19001 //packagerPort from packager-info.json
-        }
-    },
-    "files.eol": "\n"
-}
