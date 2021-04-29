@@ -3,9 +3,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
-import Product, { ProductId, Story } from '../types/product';
-import { PostResponse } from '../types/PostResponse';
-import { DocsResponse } from '../types/Docs';
+import Product, { Story } from '../types/product';
 import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
 import Constants from 'expo-constants';
@@ -13,7 +11,6 @@ import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { SignOut } from '../enums/SignInStatus';
 import LocaleType from '../enums/LocaleType';
-import { removeToken } from '../asyncStorages/token';
 
 export default class Server {
   token: string;
@@ -37,18 +34,6 @@ export default class Server {
     password: string,
   ): Promise<AxiosResponse<AccountResponse>> => {
     return espressoClient.post('/auth', { email, password });
-  };
-
-  signup = async (
-    verificationId: string,
-    password: string,
-    language: string,
-  ): Promise<AxiosResponse<AccountResponse>> => {
-    return espressoClient.post(`/users`, {
-      verificationId,
-      password,
-      language,
-    });
   };
 
   certifyEmail = async (
@@ -115,15 +100,6 @@ export default class Server {
     });
   };
 
-  logout = async () => {
-    try {
-      await removeToken();
-      return true;
-    } catch (exception) {
-      return false;
-    }
-  };
-
   notification = async (): Promise<AxiosResponse<Notification[]>> => {
     return this.authenticatedEspressoClient.get(`/notifications`);
   };
@@ -160,24 +136,6 @@ export default class Server {
     return this.authenticatedEspressoClient.get(`/products`);
   };
 
-  productPost = async (id: number): Promise<AxiosResponse<PostResponse[]>> => {
-    return this.authenticatedEspressoClient.get(`/posts/products?id=${id}`);
-  };
-
-  elysiaPost = async (): Promise<AxiosResponse<PostResponse[]>> => {
-    return this.authenticatedEspressoClient.get('/posts/elysia');
-  };
-
-  productDocs = async (id: number): Promise<AxiosResponse<DocsResponse>> => {
-    return this.authenticatedEspressoClient.get(
-      `/products/docs?productId=${id}`,
-    );
-  };
-
-  getAllProductIds = async (): Promise<AxiosResponse<ProductId[]>> => {
-    return this.authenticatedEspressoClient.get('/products/ids');
-  };
-
   sendQuestion = async (content: string): Promise<AxiosResponse> => {
     return this.authenticatedEspressoClient.post('/questions', {
       content,
@@ -201,19 +159,6 @@ export default class Server {
   ): Promise<AxiosResponse<Transaction[]>> => {
     return this.authenticatedEspressoClient.get(
       `/transactions?ownershipId=${id}&page=${page}`,
-    );
-  };
-
-  getTransactionHistory = async (
-    page: number,
-    start: string,
-    end: string,
-    type: string,
-    period: string,
-    productId: number,
-  ): Promise<AxiosResponse<Transaction[]>> => {
-    return this.authenticatedEspressoClient.get(
-      `/transactions/history?productId=${productId}&start=${start}&end=${end}&period=${period}&type=${type}&page=${page}`,
     );
   };
 
@@ -243,20 +188,10 @@ export default class Server {
     );
   };
 
-  registerAddress = async (ethAddress: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put('/users/ethAddresses', {
-      ethAddress,
-    });
-  };
-
   requestEthAddressRegister = async (): Promise<
     AxiosResponse<TransactionRequestResponse>
   > => {
     return this.authenticatedEspressoClient.post('/ethAddress');
-  };
-
-  setEthAddressRegister = async (id: string): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.put(`/ethAddress/${id}`);
   };
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
@@ -290,12 +225,6 @@ export default class Server {
 
   checkLatestVersion = (platform: string): Promise<AxiosResponse> => {
     return espressoClient.get(`/q/${platform}`);
-  };
-
-  addGuestUser = (
-    language: string,
-  ): Promise<AxiosResponse<AccountResponse>> => {
-    return espressoClient.post('/users/guest', { language });
   };
 
   checkEthAddressRegisteration = (
