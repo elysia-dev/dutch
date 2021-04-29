@@ -14,6 +14,7 @@ import {
 import * as Linking from 'expo-linking';
 import { useTranslation } from 'react-i18next';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import getEnvironment from '../../../utiles/getEnvironment';
 import useAppState from '../../../hooks/useAppState';
@@ -100,6 +101,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
   const { t } = useTranslation();
 
   const appState = useAppState();
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (appState === 'active' && espressTxId) {
@@ -186,6 +188,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     <View
       style={{
         backgroundColor: '#fff',
+        height: "100%"
       }}>
       <SheetHeader title={t('product.select_payment')} />
       <View
@@ -193,7 +196,6 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
           paddingLeft: 20,
           paddingRight: 20,
           backgroundColor: '#fff',
-          height: '100%',
         }}>
         <View style={{ marginTop: 40 }}>
           <MetaMaskButton
@@ -235,12 +237,20 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
             }
           />
         </View>
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          bottom: insets.bottom || 10,
+          paddingLeft: '5%',
+          paddingRight: '5%'
+        }}
+      >
         <SubmitButton
           title={t('account_label.continue')}
           // eslint-disable-next-line no-nested-ternary
           style={{
-            position: 'absolute',
-            bottom: 150,
             alignSelf: 'center',
             width: '100%',
             backgroundColor:
