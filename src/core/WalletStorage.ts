@@ -1,17 +1,31 @@
-import { BACKUP_COMPLETE, ENCRYPTED_WALLET, IS_WALLET_USER } from "../constants/storage";
+import { BACKUP_COMPLETE, ENCRYPTED_WALLET, IS_MIGRATED_TO_SECURE, IS_WALLET_USER } from "../constants/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 import CryptoES from 'crypto-es';
 import Wallet from "./Wallet";
+import { SECURE_ENCRYPTED_WALLET } from "../constants/securestorage";
 
 class WalletStorage {
   static async save(wallet: Wallet, password: string): Promise<void> {
     const encrypted = await CryptoES.AES.encrypt(JSON.stringify(wallet.serialize()), password);
-    await AsyncStorage.setItem(ENCRYPTED_WALLET, encrypted.toString());
+    await SecureStore.setItemAsync(SECURE_ENCRYPTED_WALLET, encrypted.toString());
+    await AsyncStorage.setItem(IS_MIGRATED_TO_SECURE, 'true');
     await AsyncStorage.setItem(IS_WALLET_USER, 'true');
   }
 
   static async load(password: string): Promise<Wallet> {
-    const encrypted = await AsyncStorage.getItem(ENCRYPTED_WALLET);
+    const migrated = await AsyncStorage.getItem(IS_MIGRATED_TO_SECURE);
+    let encrypted = await AsyncStorage.getItem(ENCRYPTED_WALLET);
+
+    if (migrated === 'true') {
+      encrypted = await SecureStore.getItemAsync(SECURE_ENCRYPTED_WALLET);
+    } else {
+      if (encrypted) {
+        await SecureStore.setItemAsync(SECURE_ENCRYPTED_WALLET, encrypted);
+        await AsyncStorage.removeItem(ENCRYPTED_WALLET);
+        await AsyncStorage.setItem(IS_MIGRATED_TO_SECURE, 'true');
+      }
+    }
 
     if (!encrypted) {
       throw new Error('No previous wallet.')
@@ -29,6 +43,7 @@ class WalletStorage {
 
   static async clear(): Promise<void> {
     await AsyncStorage.removeItem(ENCRYPTED_WALLET);
+    await SecureStore.deleteItemAsync(SECURE_ENCRYPTED_WALLET);
     await AsyncStorage.removeItem(BACKUP_COMPLETE);
     await AsyncStorage.removeItem(IS_WALLET_USER);
   }
