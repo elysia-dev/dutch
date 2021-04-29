@@ -41,6 +41,9 @@
           "BSC_RPC_ENDPOINT": "https://bsc-dataseed.binance.org/",
           "ETH_NETWORK": "mainnet",
           "EL_ADDRESS": "0x2781246fe707bb15cee3e5ea354e2154a2877b16"
+        },
+        "cache": {
+          "disabled": true
         }
       },
       "team": {
@@ -53,6 +56,9 @@
           "BSC_RPC_ENDPOINT": "https://data-seed-prebsc-1-s1.binance.org:8545/",
           "ETH_NETWORK": "kovan",
           "EL_ADDRESS": "0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be"
+        },
+        "cache": {
+          "disabled": true
         }
       },
       "test": {
