@@ -9,13 +9,17 @@ import { useFonts } from 'expo-font';
 
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
+import {
+  SENTRY_DSN
+} from 'react-native-dotenv';
 
-Sentry.init({
-  dsn:
-    'https://e4dba4697fc743758bd94045d483872b@o449330.ingest.sentry.io/5478998',
-  enableInExpoDevelopment: true,
-  debug: true,
-});
+if (SENTRY_DSN) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    enableInExpoDevelopment: true,
+    debug: true,
+  });
+}
 
 const App = () => {
   /* eslint-disable @typescript-eslint/camelcase */

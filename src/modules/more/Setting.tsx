@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import LocaleType from '../../enums/LocaleType';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
-import getEnvironment from '../../utiles/getEnvironment';
+import { config } from '../../../package.json';
 import IosPickerModal from '../../shared/components/IosPickerModal';
 import { MorePage } from '../../enums/pageEnum';
 import CurrencyType from '../../enums/CurrencyType';
@@ -44,7 +44,7 @@ const Setting: FunctionComponent = () => {
     showCurrencyModal: false,
     selectedLanguage: language || LocaleType.EN,
     selctedCurrency: currency,
-    latestVersion: getEnvironment().version,
+    latestVersion: config.version,
   });
   const { t } = useTranslation();
 
@@ -333,13 +333,13 @@ const Setting: FunctionComponent = () => {
               <H3Text
                 label={
                   t('more_label.version') +
-                  ` ${getEnvironment().version}`
+                  ` ${config.version}`
                 }
                 style={{ fontSize: 15 }}
               />
             </TouchableOpacity>
             {checkLatestVersion(
-              getEnvironment().version,
+              config.version,
               state.latestVersion,
             ) && (
                 <TouchableOpacity

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { SignInStatus, SignOut } from '../enums/SignInStatus';
-import getEnvironment from '../utiles/getEnvironment';
+import {
+  API_URL
+} from 'react-native-dotenv';
 
-const baseURL = getEnvironment().apiUrl;
+const baseURL = API_URL;
 
 export const authenticatedEspressoClient = (
   autoSignOutHandler: (signInStatus: SignOut) => void,

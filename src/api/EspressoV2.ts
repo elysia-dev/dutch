@@ -3,9 +3,11 @@ import CryptoTxsResponse from '../types/CryptoTxsResponse';
 import Notification from '../types/Notification';
 import Product from '../types/Product';
 import WalletBalanceResponse from '../types/WalletBalanceResponse';
-import getEnvironment from '../utiles/getEnvironment';
+import {
+  API_URL
+} from 'react-native-dotenv';
 
-const baseURL = `${getEnvironment().apiUrl}`;
+const baseURL = API_URL;
 
 export default class EspressoV2 {
   static getBalances = async (address: string, noCache?: boolean): Promise<AxiosResponse<WalletBalanceResponse>> => {

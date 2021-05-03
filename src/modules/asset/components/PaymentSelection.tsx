@@ -12,6 +12,9 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import * as Linking from 'expo-linking';
+import {
+  DAPP_URL
+} from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
@@ -115,7 +118,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${getEnvironment().dappUrl
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL
           }/requests/${espressTxId}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
@@ -124,7 +127,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${getEnvironment().dappUrl
+          `https://metamask.app.link/dapp/${DAPP_URL
           }/requests/${espressTxId}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');

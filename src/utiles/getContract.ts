@@ -8,7 +8,12 @@ import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
 import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
-import getEnvironment from './getEnvironment';
+import {
+  ETH_NETWORK,
+  INFURA_PROJECT_ID,
+  BSC_RPC_ENDPOINT,
+  EL_ADDRESS
+} from 'react-native-dotenv';
 import AssetTokenBnbAbi from '../abi/AssetTokenBnb.json';
 import ERC20Abi from '../abi/ERC20Abi.json';
 import AssetTokenEthAbi from '../abi/AssetTokenEthAbi.json';
@@ -24,12 +29,12 @@ export function isAddress(value: any): string | false {
 }
 
 export const provider = new InfuraProvider(
-  getEnvironment().ethNetwork,
-  getEnvironment().infuraProjectId,
+  ETH_NETWORK,
+  INFURA_PROJECT_ID
 );
 
 export const bscProvider = new JsonRpcProvider(
-  getEnvironment().bscRPCEndpoint
+  BSC_RPC_ENDPOINT
 )
 
 
@@ -52,7 +57,7 @@ function getContract(address: string, ABI: any): Contract {
 
 export function getElysiaContract(): Contract | null {
   return getContract(
-    getEnvironment().elAddress,
+    EL_ADDRESS,
     ERC20Abi,
   )
 }

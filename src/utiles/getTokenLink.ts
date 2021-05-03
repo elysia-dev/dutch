@@ -1,10 +1,12 @@
 import NetworkType from '../enums/NetworkType';
-import getEnvironment from './getEnvironment';
+import {
+  ETH_NETWORK
+} from 'react-native-dotenv';
 
 const getTokenLink = (address?: string, networkType?: NetworkType): string => {
   return networkType && networkType === NetworkType.BSC ?
-    `https://${getEnvironment().ethNetwork === 'mainnet' ? '' : 'testnet.'}bscscan.com/token/${address}`
-    : `https://${getEnvironment().ethNetwork === 'mainnet' ? '' : 'kovan.'}etherscan.io/token/${address}`
+    `https://${ETH_NETWORK === 'mainnet' ? '' : 'testnet.'}bscscan.com/token/${address}`
+    : `https://${ETH_NETWORK === 'mainnet' ? '' : 'kovan.'}etherscan.io/token/${address}`
 }
 
 export default getTokenLink
