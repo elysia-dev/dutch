@@ -26,7 +26,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "land.elysia.staging",
       "config": {
-        "googleMapsApiKey": "AIzaSyDfF8z9jPr8JIYnP4fG7L_a0NiQ0he0HOY",
+        "googleMapsApiKey": "AIzaSyC2-hKZLpKgSj2B-TiMg7tFLX2WCGaIOKI",
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
@@ -40,7 +40,7 @@
       "package": "land.elysia.staging",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCQhD0kqPwCwbylYI5t8ovgCd-7kQuo2DI"
+          "apiKey": "AIzaSyA152WVXuByczEznggeStNBoatM2h_Az4U"
         }
       },
       "permissions": [
