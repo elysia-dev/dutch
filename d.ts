@@ -19,4 +19,6 @@ declare module 'react-native-dotenv' {
     export const EL_ADDRESS: string;
     export const INFURA_PROJECT_ID: string;
     export const SENTRY_DSN: string;
+    export const GOOGLE_MAP_API_ANDROID: string;
+    export const GOOGLE_MAP_API_IOS: string;
 }

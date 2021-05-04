@@ -4,15 +4,15 @@
     "version": "v1.5.0"
   },
   "scripts": {
-    "start": "react-native start",
+    "start": "APP_ENV=development expo start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "test": "jest",
     "lint": "eslint . --ext .tsx --fix",
-    "publish:stag": "APP_ENV=staging expo publish --config stagingApp.json --release-channel staging-$npm_package_config_cversion",
-    "build:stag:ios": "APP_ENV=staging expo build:ios --config stagingApp.json --release-channel staging-$npm_package_config_cversion",
-    "build:stag:android": "APP_ENV=staging expo build:android --config stagingApp.json --release-channel staging-$npm_package_config_cversion",
+    "publish:stag": "APP_ENV=staging expo publish --release-channel staging-$npm_package_config_cversion",
+    "build:stag:ios": "APP_ENV=staging expo build:ios --release-channel staging-$npm_package_config_cversion",
+    "build:stag:android": "APP_ENV=staging expo build:android --release-channel staging-$npm_package_config_cversion",
     "publish:prod": "APP_ENV=production expo publish --release-channel prod-$npm_package_config_cversion",
     "build:prod:ios": "APP_ENV=production expo build:ios --release-channel prod-$npm_package_config_cversion",
     "build:prod:android": "APP_ENV=production expo build:android --release-channel prod-$npm_package_config_cversion"
