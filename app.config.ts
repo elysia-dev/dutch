@@ -1,17 +1,15 @@
-import {
-  GOOGLE_MAP_API_IOS,
-  GOOGLE_MAP_API_ANDROID,
-} from 'react-native-dotenv';
 import { ExpoConfig, ConfigContext } from '@expo/config';
 
 let name = 'ElysiaStaging';
 let slug = 'ElysiaAppStaging';
 let packageName = 'land.elysia.staging';
+let googleServicesFile = './google-services.stag.json';
 
 if (process.env.APP_ENV === 'production') {
   name = 'Elysia';
   slug = 'ElysiaApp';
   packageName = 'land.elysia';
+  googleServicesFile = './google-services.json';
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -41,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: false,
     bundleIdentifier: packageName,
     config: {
-      googleMapsApiKey: GOOGLE_MAP_API_IOS,
+      googleMapsApiKey: process.env.GOOGLE_MAP_API_IOS,
       usesNonExemptEncryption: false,
     },
     infoPlist: {
@@ -59,7 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: packageName,
     config: {
       googleMaps: {
-        apiKey: GOOGLE_MAP_API_ANDROID,
+        apiKey: process.env.GOOGLE_MAP_API_ANDROID,
       },
     },
     permissions: [
@@ -83,7 +81,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     versionCode: 13,
     useNextNotificationsApi: true,
-    googleServicesFile: './google-services.json',
+    googleServicesFile,
   },
   entryPoint: 'node_modules/expo/AppEntry.js',
   scheme: 'elysia-app',
