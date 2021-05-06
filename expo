@@ -1,3 +1,0 @@
-yarn run v1.22.10
-$ export $(egrep -v '^#' .env.staging | xargs) config
-Done in 0.07s.
