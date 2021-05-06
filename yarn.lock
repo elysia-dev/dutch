@@ -5312,6 +5312,11 @@ expo-notifications@~0.7.2:
     expo-constants "9.2.0"
     uuid "^3.4.0"
 
+expo-optimize@^0.1.86:
+  version "0.1.86"
+  resolved "https://registry.yarnpkg.com/expo-optimize/-/expo-optimize-0.1.86.tgz#44a4445f40332119684163429e90b2a05597fb2d"
+  integrity sha512-6n4D+7KYeAwA6EaUJWtnQsu3hhWQ6SubxSkROizsSE6zJdNY4bG4RVE6yUNgbZLsMYsCXVaxznEuQEkfo2ppHw==
+
 expo-permissions@~9.3.0:
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-9.3.0.tgz#b90c7e9e411d306c1c7ba2bae18d5c53c201affd"
