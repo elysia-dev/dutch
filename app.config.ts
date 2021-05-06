@@ -39,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: false,
     bundleIdentifier: packageName,
     config: {
-      googleMapsApiKey: process.env.GOOGLE_MAP_API_IOS,
+      googleMapsApiKey: process.env.APP_GOOGLE_MAP_API_IOS,
       usesNonExemptEncryption: false,
     },
     infoPlist: {
@@ -57,7 +57,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: packageName,
     config: {
       googleMaps: {
-        apiKey: process.env.GOOGLE_MAP_API_ANDROID,
+        apiKey: process.env.APP_GOOGLE_MAP_API_ANDROID,
       },
     },
     permissions: [
