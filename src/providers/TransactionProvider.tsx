@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
 import { PENDING_TRANSACTIONS } from '../constants/storage';

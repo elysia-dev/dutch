@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import Server from '../api/server';
 import { getToken, removeToken } from '../asyncStorages/token';
