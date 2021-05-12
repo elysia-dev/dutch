@@ -10,6 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
+  Image
 } from 'react-native';
 import {
   RouteProp,
@@ -133,15 +134,32 @@ const MainList: FunctionComponent = () => {
                 shadowOffset: { width: 1, height: 1 },
                 shadowColor: '#00000033',
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-between"
               }}>
               <H1Text
                 style={{
-                  width: '100%',
                   textAlign: 'left',
                   marginBottom: 30,
                 }}
                 label={t('product_label.product')}
               />
+              <View 
+                style={{
+                  alignSelf: "center",
+                  marginBottom: 30,
+                  alignContent: "flex-end"
+                }}
+              >
+                <Image 
+                  source={require("./images/infomation.png")}
+                  style={{
+                    width: 20,
+                    height: 20
+                  }}
+                />
+              </View>
             </View>
             {state.stories.map((story, index) => (
               <Item
