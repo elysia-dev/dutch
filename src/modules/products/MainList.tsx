@@ -10,7 +10,8 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import {
   RouteProp,
@@ -29,6 +30,7 @@ import { H1Text } from '../../shared/components/Texts';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
+import { Page, ProductPage } from '../../enums/pageEnum';
 
 interface State {
   stories: Story[];
@@ -145,11 +147,16 @@ const MainList: FunctionComponent = () => {
                 }}
                 label={t('product_label.product')}
               />
-              <View 
+              <TouchableOpacity 
                 style={{
                   alignSelf: "center",
                   marginBottom: 30,
                   alignContent: "flex-end"
+                }}
+                onPress={() => {
+                  navigation.navigate(Page.Product, {
+                    screen: ProductPage.PropertyInfomation,
+                  })
                 }}
               >
                 <Image 
@@ -159,7 +166,7 @@ const MainList: FunctionComponent = () => {
                     height: 20
                   }}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
             {state.stories.map((story, index) => (
               <Item

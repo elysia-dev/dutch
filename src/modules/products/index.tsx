@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { ProductPage } from '../../enums/pageEnum';
 import ProductBuying from './ProductBuying';
 import Purchase from '../asset/Purchase';
+import PropertyInfomation from './PropertyInfomation';
 
 const RootStack = createNativeStackNavigator();
 
@@ -23,6 +24,10 @@ const Main: React.FC = () => {
       <RootStack.Screen
         name={ProductPage.Purchase}
         component={Purchase}
+      />
+      <RootStack.Screen 
+        name={ProductPage.PropertyInfomation}
+        component={PropertyInfomation}
       />
     </RootStack.Navigator>
   );
