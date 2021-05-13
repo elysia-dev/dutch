@@ -10,6 +10,7 @@ import { Story } from '../../../types/product';
 import EL from '../../../../src/shared/assets/images/el.png';
 import ETH from '../../../../src/shared/assets/images/eth.png';
 import BNB from '../../../../src/shared/assets/images/bnb.png';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   story: Story;
@@ -19,7 +20,7 @@ interface Props {
 
 export const Item: FunctionComponent<Props> = (props: Props) => {
   const ref = createRef<Image>();
-
+  const { t } = useTranslation();
   const setImage = (method: PaymentCryptoType) => {
     switch(method) {
       case PaymentCryptoType.EL :
@@ -80,12 +81,12 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             borderBottomWidth: 1,
             alignItems: "center"
           }}>
-            <P1Text label={"투자방식"} style={{ fontSize: 15 }} />
+            <P1Text label={t("product_label.investment_method")} style={{ fontSize: 15 }} />
             <H2Text label={
               props.story.investmentMethod === AssetType.Unit ?
-              "갯수 기준"
+              t("product_label.unit_method")
               :
-              "원화 기준"
+              t("product_label.usd_method")
             } style={{ fontSize: 15 }} />
           </View>
           <View style={{
@@ -96,7 +97,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             borderBottomWidth: 1,
             alignItems: "center"
           }}>
-            <P1Text label={"투자가능수단"} style={{ fontSize: 15 }} />
+            <P1Text label={t("product_label.payment_method")} style={{ fontSize: 15 }} />
             <View style={{
               flexDirection: "row",
               alignItems: "center"
