@@ -32,10 +32,6 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
         break;
     }
   }
-  useEffect(() => {
-    console.log(props.story)
-    console.log(props.story.paymentMethod)
-  }, [])
 
   return (
     <TouchableWithoutFeedback
