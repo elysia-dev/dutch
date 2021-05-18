@@ -22,7 +22,6 @@ import CryptoTransaction from '../../types/CryptoTransaction';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
-import getEnvironment from '../../utiles/getEnvironment';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';

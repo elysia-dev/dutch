@@ -11,7 +11,6 @@ import {
 } from 'react-native-dotenv';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
-import getEnvironment from '../utiles/getEnvironment';
 import { SignOut } from '../enums/SignInStatus';
 import LocaleType from '../enums/LocaleType';
 

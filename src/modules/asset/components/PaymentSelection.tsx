@@ -18,7 +18,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
-import getEnvironment from '../../../utiles/getEnvironment';
 import useAppState from '../../../hooks/useAppState';
 import WalletType from '../../../enums/WalletType';
 import storeDeeplink from '../../../utiles/storeDeeplink';
