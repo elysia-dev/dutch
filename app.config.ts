@@ -19,7 +19,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug,
   version: '1.4.1',
   orientation: 'portrait',
-  icon: './assets/icon.png',
   updates: {
     fallbackToCacheTimeout: 0,
     enabled: true,
@@ -36,6 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     androidCollapsedTitle: '#{unread_notifications} new interactions',
   },
   ios: {
+    icon: './assets/icon.png',
     supportsTablet: false,
     bundleIdentifier: packageName,
     config: {
@@ -54,6 +54,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     buildNumber: '1.4.1',
   },
   android: {
+    adaptiveIcon: {
+      foregroundImage: './assets/android-icon.png',
+    },
     package: packageName,
     config: {
       googleMaps: {
