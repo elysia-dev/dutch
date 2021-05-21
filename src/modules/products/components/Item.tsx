@@ -21,18 +21,6 @@ interface Props {
 export const Item: FunctionComponent<Props> = (props: Props) => {
   const ref = createRef<Image>();
   const { t } = useTranslation();
-  const setImage = (method: PaymentCryptoType) => {
-    switch(method) {
-      case PaymentCryptoType.EL :
-        return (<Image style={{ width: 17, height: 17, marginRight: 5 }} source={EL} />)
-      case PaymentCryptoType.ETH :
-        return (<Image style={{ width: 17, height: 17, marginRight: 5 }} source={ETH} />)
-      case PaymentCryptoType.BNB :
-        return (<Image style={{ width: 17, height: 17, marginRight: 5 }} source={BNB} />)
-      default:
-        break;
-    }
-  }
 
   return (
     <TouchableWithoutFeedback
@@ -102,7 +90,17 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
               flexDirection: "row",
               alignItems: "center"
             }}>
-              {setImage(props.story.paymentMethod)}
+              <Image 
+                style={{ width: 17, height: 17, marginRight: 5 }} 
+                source={props.story.paymentMethod === PaymentCryptoType.EL ?
+                  EL
+                  :
+                    props.story.paymentMethod === PaymentCryptoType.ETH ? 
+                    ETH 
+                    : 
+                    BNB
+                } 
+              />
               <H2Text label={props.story.paymentMethod.toUpperCase()} style={{ fontSize: 15 }} />
             </View>
           </View>
