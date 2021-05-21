@@ -11,7 +11,7 @@ type Asset = {
   isLegacyOwnership?: boolean;
   address?: string;
   image?: string;
-  paymentMethod?: PaymentCryptoType;
+  paymentMethod?: CryptoType | PaymentCryptoType | string;
 }
 
 export const defaultAsset: Asset = {
