@@ -21,6 +21,8 @@ const CryptoImage: React.FC<{ type: CryptoType | PaymentCryptoType | string, sty
       case CryptoType.ELA:
         return require('../assets/images/asset.png')
         break;
+      case "none":
+        return
       default:
         return {uri: type}
         break;
