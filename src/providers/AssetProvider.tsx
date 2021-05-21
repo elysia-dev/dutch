@@ -1,6 +1,7 @@
 import { BigNumber, utils } from 'ethers';
 import React, { useContext, useEffect } from 'react';
 import { useState } from "react";
+import EspressoV1 from '../api/EspressoV1';
 import EspressoV2 from '../api/EspressoV2';
 import AssetContext, { initialAssetState, AssetStateType } from '../contexts/AssetContext';
 import PriceContext from '../contexts/PriceContext';
@@ -10,13 +11,18 @@ import CryptoType from '../enums/CryptoType';
 import ProviderType from '../enums/ProviderType';
 import SignInStatus from '../enums/SignInStatus';
 import Asset from '../types/Asset';
-import assetTokenNamePrettier from '../utiles/assetTokenNamePrettier';
-import { bscProvider, getElysiaContract, provider } from '../utiles/getContract';
+import { bscProvider, getElysiaContract, provider, getAssetTokenContract, getBscAssetTokenContract, getAssetTokenEthContract } from '../utiles/getContract';
+import PreferenceContext from '../contexts/PreferenceContext';
+import LocaleType from '../enums/LocaleType';
+import PaymentCryptoType from '../enums/PaymentCryptoType';
+
+import { ethers } from "ethers";
 
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
   const { wallet, isUnlocked } = useContext(WalletContext);
   const { priceLoaded } = useContext(PriceContext);
+  const { language } = useContext(PreferenceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState)
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -34,37 +40,40 @@ const AssetProvider: React.FC = (props) => {
     };
 
     try {
-      const { data } = await EspressoV2.getBalances(address, noCache);
-
-      const assets = data.tokens.filter((token) => ![CryptoType.ETH, CryptoType.EL, CryptoType.BNB].includes(token.symbol as CryptoType))
-        .map((token) => {
+      const res = await EspressoV1.getAllProduct();
+      const assets = await Promise.all(res.data.filter((product) => product.contractAddress)
+        .map(async (product) => {
+          const assetToken = product.paymentMethod === PaymentCryptoType.BNB ? 
+          getBscAssetTokenContract(product?.contractAddress || '')
+          : getAssetTokenContract(product?.contractAddress || '');
+          const balance: BigNumber = await assetToken?.balanceOf(wallet?.getFirstAddress() || '');
           return {
-            title: assetTokenNamePrettier(token.name),
-            value: token.balance,
+            title: product.data.descriptions[language || LocaleType.EN]?.title,
+            value: parseFloat(utils.formatEther(balance)),
             type: CryptoType.ELA,
-            unit: token.symbol,
-            address: token.address,
+            unit: product.tokenName,
+            address: product.contractAddress,
+            image: product.data.images[0],
+            paymentMethod: product.paymentMethod
           } as Asset
         })
-
-      const elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0
-
+      )
       assets.push(
         {
           title: 'ELYSIA',
-          value: elBalance,
+          value: parseFloat(utils.formatEther(await getElysiaContract()?.balanceOf(wallet?.getFirstAddress() || ''))),
           type: CryptoType.EL,
           unit: CryptoType.EL,
         },
         {
           title: 'ETH',
-          value: data.ethBalance,
+          value: parseFloat(utils.formatEther(await provider.getBalance(wallet?.getFirstAddress() || ''))),
           type: CryptoType.ETH,
           unit: CryptoType.ETH,
         },
         {
           title: 'BNB (BSC)',
-          value: data.bnbBalance,
+          value: parseFloat(utils.formatEther(await bscProvider.getBalance(wallet?.getFirstAddress() || ''))),
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
         }
@@ -74,7 +83,7 @@ const AssetProvider: React.FC = (props) => {
         assetLoaded: true,
         assets: assets,
       })
-    } catch {
+    } catch (e) {
       alert('Server Error');
       setState({
         ...state,
@@ -84,6 +93,8 @@ const AssetProvider: React.FC = (props) => {
   }
 
   const loadV1UserBalances = async (noCache?: boolean) => {
+    const address = user.ethAddresses[0];
+
     if (user.provider === ProviderType.GUEST && !isWalletUser) {
       setState({
         ...state,
@@ -92,38 +103,40 @@ const AssetProvider: React.FC = (props) => {
 
       return
     };
-
     const assets = ownerships.map((ownership) => {
       return {
-        title: ownership.title,
+        title: ownership.product.data.descriptions[language || LocaleType.EN]?.title,
         value: ownership.tokenValue,
         type: CryptoType.ELA,
         unit: CryptoType.ELA,
         ownershipId: ownership.id,
-        isLegacyOwnership: ownership.isLegacy
+        isLegacyOwnership: ownership.isLegacy,
+        image: ownership.product.data.images[0],
+        paymentMethod: ownership.product.paymentMethod
       } as Asset
     })
 
-    let elBalance = 0;
-    let ethBalance = 0;
-
     try {
-      const { data } = await EspressoV2.getBalances(user.ethAddresses[0] || '', noCache);
-
-      elBalance = data.tokens.find((token) => token.symbol === CryptoType.EL)?.balance || 0;
-      ethBalance = data.ethBalance || 0;
-
-    } finally {
+      if (address === undefined) {
+        setState({
+          ...state,
+          assetLoaded: true,
+        })
+        
+        return;
+      }
+    }
+    finally {
       assets.push(
         {
           title: 'ELYSIA',
-          value: elBalance,
+          value: parseFloat(utils.formatEther(await getElysiaContract()?.balanceOf(address || ''))),
           type: CryptoType.EL,
           unit: CryptoType.EL
         },
         {
           title: 'ETH',
-          value: ethBalance,
+          value: parseFloat(utils.formatEther(await provider.getBalance(address || ''))),
           type: CryptoType.ETH,
           unit: CryptoType.ETH
         }
@@ -150,7 +163,7 @@ const AssetProvider: React.FC = (props) => {
     if (!isWalletUser) {
       loadV1UserBalances()
     }
-  }, [signedIn, isWalletUser, isUnlocked, priceLoaded])
+  }, [signedIn, isWalletUser, isUnlocked, priceLoaded, language])
 
   const getBalance = (unit: string): number => {
     return state.assets.find((asset) => asset.unit === unit)?.value || 0

@@ -1,4 +1,5 @@
 import CryptoType from "../enums/CryptoType"
+import PaymentCryptoType from "../enums/PaymentCryptoType"
 
 type Asset = {
   type: CryptoType;
@@ -9,6 +10,8 @@ type Asset = {
   productId?: number;
   isLegacyOwnership?: boolean;
   address?: string;
+  image?: string;
+  paymentMethod?: PaymentCryptoType;
 }
 
 export const defaultAsset: Asset = {
