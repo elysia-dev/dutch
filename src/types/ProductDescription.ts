@@ -1,4 +1,5 @@
 type ProductDescription = {
+  title: string;
   currencyUnit: string;
   monthlyRentIncomeDistributionCycle: string;
   address: string;
@@ -18,6 +19,7 @@ type ProductDescription = {
 };
 
 export const defaultProductDescription = {
+  title: '',
   currencyUnit: '',
   monthlyRentIncomeDistributionCycle: '',
   address: '',

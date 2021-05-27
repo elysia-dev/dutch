@@ -41,6 +41,7 @@ const MnemonicView: React.FC<INemonicView> = ({
                   height: 40,
                   padding: 10,
                 }}
+                autoCapitalize={'none'}
                 value={word}
                 onChangeText={(text) => setMnemonic(text, index)}
               />

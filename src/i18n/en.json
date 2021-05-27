@@ -160,7 +160,35 @@
       "loan": "Decentralized loans",
       "restricted_country": "Swap is unavailable in the country",
       "need_wallet": "Wallet connection required",
-      "required_eth_wallet": "Ethereum Wallet Only"
+      "required_eth_wallet": "Ethereum Wallet Only",
+      "investment_method": "Investment Methods",
+      "payment_method": "Investable means",
+      "unit_method": "by Count",
+      "usd_method": "by Dollar",
+      "property_infomation_title": "Investment Methods",
+      "unit": [
+        "What is [by Count]?",
+        "1. product information by Count",
+        "There are products with an annual interest rate of 10% and the current EL price (1EL = $1).",
+        "2. Product investment",
+        "Invest 1,000 EL (= $1,000) in the product.",
+        "3. After one year, repayment",
+        "Principal 1,000EL",
+        "Interest 100EL",
+        "Repayment 1,100EL"
+      ],
+      "usd": [
+        "What is [by Dollar]?",
+        "1. product information by Dollar",
+        "There are products with an annual interest rate of 10% and the current EL price (1EL = $1).",
+        "2. Product investment",
+        "Invest $1,000 (=1,000EL) in the product.",
+        "After one year, repayment in case of EL market price (1EL = 2USD)",
+        "After one year, repayment in case of EL market price (1EL = 0.5USD)",
+        "Principal $1,000",
+        "Interest $100",
+        "Repayment $1,100"
+      ]
     },
     "more_label": {
       "more": "More",

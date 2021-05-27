@@ -12,6 +12,7 @@ export enum ProductPage {
   ProductBuying = 'ProductBuying',
   Purchase = 'Purchase',
   PaymentSelection = 'PaymentSelection',
+  PropertyInfomation = 'PropertyInfomation'
 }
 
 export enum AccountPage {

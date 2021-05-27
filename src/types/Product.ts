@@ -2,6 +2,8 @@ import ProductDescription, {
   defaultProductDescription,
 } from './ProductDescription';
 import LocaleType from '../enums/LocaleType';
+import AssetType from '../enums/AssetType';
+import PaymentCryptoType from '../enums/PaymentCryptoType';
 
 export type Story = {
   productId: number;
@@ -9,6 +11,8 @@ export type Story = {
   subTitle: string;
   body: string;
   image: string;
+  investmentMethod: AssetType;
+  paymentMethod: PaymentCryptoType;
 };
 
 type Product = {
