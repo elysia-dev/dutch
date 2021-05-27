@@ -41,6 +41,7 @@ export enum MorePage {
   TermsOfUse = 'TermsOfUse',
   PrivacyPolicy = 'PrivacyPolicy',
   WhatsNew = 'WhatsNew',
+  HelpDesk = 'HelpDesk',
   MembershipWithdrawl = 'MembershipWithdrawl',
   Asset2Ownership = 'Asset2Ownership',
   CheckMnemonic = 'CheckMnemonic',

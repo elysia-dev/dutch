@@ -344,6 +344,29 @@ const MainInfo: FunctionComponent = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('More', {
+                    screen: MorePage.HelpDesk,
+                  })
+                }>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <H3Text
+                    label={t('more_label.help_desk')}
+                    style={{ lineHeight: 50, fontSize: 15 }}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                height: 50,
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('More', {
                     screen: MorePage.TermsOfUse,
                   })
                 }>
@@ -396,55 +419,55 @@ const MainInfo: FunctionComponent = () => {
                 color: AppColors.BLACK2
               }}
             />
-              <ScrollView
-                horizontal={true}
+            <ScrollView
+              horizontal={true}
+              style={{
+                flexDirection: 'row',
+                marginBottom: 20
+              }}>
+              <TouchableOpacity
                 style={{
-                  flexDirection: 'row',
-                  marginBottom: 20
-                }}>
-                <TouchableOpacity
-                  style={{ 
-                    width: 100,
-                    marginHorizontal: 5
-                   }}
-                  onPress={() => Linking.openURL('https://www.bithumb.com')}>
-                  <ExchangeImg source={Exchange00} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ 
-                    width: 100,
-                    marginHorizontal: 5
-                   }}
-                  onPress={() =>
-                    Linking.openURL('https://www.bithumb.pro/en-us')
-                  }>
-                  <ExchangeImg source={Exchange01} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    width: 100,
-                    marginHorizontal: 5
-                  }}
-                  onPress={() => Linking.openURL('https://www.boboo.com')}>
-                  <ExchangeImg source={Exchange02} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    width: 100,
-                    marginHorizontal: 5
-                  }}
-                  onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
-                  <ExchangeImg source={Exchange03} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    width: 100,
-                    marginHorizontal: 5
-                  }}
-                  onPress={() => Linking.openURL('https://www.xt.com')}>
-                  <ExchangeImg source={Exchange04} />
-                </TouchableOpacity>
-                
+                  width: 100,
+                  marginHorizontal: 5
+                }}
+                onPress={() => Linking.openURL('https://www.bithumb.com')}>
+                <ExchangeImg source={Exchange00} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  marginHorizontal: 5
+                }}
+                onPress={() =>
+                  Linking.openURL('https://www.bithumb.pro/en-us')
+                }>
+                <ExchangeImg source={Exchange01} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  marginHorizontal: 5
+                }}
+                onPress={() => Linking.openURL('https://www.boboo.com')}>
+                <ExchangeImg source={Exchange02} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  marginHorizontal: 5
+                }}
+                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
+                <ExchangeImg source={Exchange03} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  marginHorizontal: 5
+                }}
+                onPress={() => Linking.openURL('https://www.xt.com')}>
+                <ExchangeImg source={Exchange04} />
+              </TouchableOpacity>
+
             </ScrollView>
 
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />

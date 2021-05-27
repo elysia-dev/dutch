@@ -14,6 +14,7 @@ import MembershipWithdrawl from './MembershipWithdrawl';
 import Asset2Ownership from './Asset2Ownership';
 import CheckMnemonic from './CheckMnemonic';
 import MyPage from './MyPage';
+import HelpDesk from './HelpDesk';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,10 @@ export const More = () => {
       <Stack.Screen
         name={MorePage.WhatsNew}
         component={WhatsNew}
+      />
+      <Stack.Screen
+        name={MorePage.HelpDesk}
+        component={HelpDesk}
       />
       <Stack.Screen
         name={MorePage.MembershipWithdrawl}
