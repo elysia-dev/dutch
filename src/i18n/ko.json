@@ -160,7 +160,7 @@
       "required_eth_wallet": "Ethereum Wallet만 구매 가능",
       "investment_method": "투자방식",
       "payment_method": "투자가능수단",
-      "unit_method": "갯수 기준",
+      "unit_method": "개수 기준",
       "usd_method": "달러 기준",
       "property_infomation_title": "투자 방식",
       "unit": [
