@@ -3,6 +3,7 @@ import Notification from './Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
 import ProviderType from '../enums/ProviderType';
+import Product from './Product';
 
 export type AccountResponse = {
   verificationId?: string;
@@ -19,6 +20,7 @@ export type OwnershipResponse = {
   value: number;
   profit: number;
   tokenValue: number;
+  product: Product;
 };
 
 export type UserResponse = {
