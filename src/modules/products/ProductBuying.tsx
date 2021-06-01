@@ -9,11 +9,9 @@ import {
   View,
   ScrollView,
   StatusBar,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import ViewPager from '@react-native-community/viewpager';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
@@ -25,12 +23,12 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { Map } from './components/Map';
 import { ExpectedReturn } from './components/ExpectedReturn';
 import ProductStatus from '../../enums/ProductStatus';
-import CachedImage from '../../shared/components/CachedImage';
 import { MorePage, ProductPage } from '../../enums/pageEnum';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
+import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
 
 const ProductInfoWrapper = styled.View`
   background-color: #fff;
@@ -48,19 +46,16 @@ interface State {
   subscribed: boolean;
   product?: Product;
   loaded: boolean;
-  selectedImage: number;
 }
 
 const ProductBuying: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     subscribed: false,
     loaded: false,
-    selectedImage: 0,
   });
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProductBuying'>>();
   const { productId } = route.params;
-  const viewPager = useRef<ViewPager>(null);
   const { user, isWalletUser, Server } = useContext(UserContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
@@ -151,44 +146,6 @@ const ProductBuying: FunctionComponent = () => {
     }
   };
 
-  const imageList = state.product?.data.images.map((image, index) => {
-    return (
-      <CachedImage
-        key={index}
-        source={{ uri: image }}
-        cacheKey={image.replace(/\//g, '_')}
-        style={{
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
-          resizeMode: 'cover',
-        }}
-      />
-    );
-  });
-
-  const buttonList = Array(imageList?.length)
-    .fill(0)
-    .map((_x, index) => {
-      return (
-        <TouchableOpacity
-          key={index}
-          onPress={() => {
-            viewPager.current?.setPage(index);
-          }}>
-          <View
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: 5,
-              margin: 10,
-              backgroundColor:
-                state.selectedImage === index ? '#3679B5' : '#BDD3E6',
-            }}
-          />
-        </TouchableOpacity>
-      );
-    });
-
   useEffect(() => {
     loadProduct();
   }, [language, productId]);
@@ -212,31 +169,7 @@ const ProductBuying: FunctionComponent = () => {
               borderBottomRightRadius: 10,
               paddingBottom: 35,
             }}>
-            <ViewPager
-              style={{
-                position: 'absolute',
-                top: 0,
-                width: '100%',
-                height: 293,
-              }}
-              initialPage={0}
-              ref={viewPager}
-              onPageSelected={(e) => {
-                setState({ ...state, selectedImage: e.nativeEvent.position });
-              }}>
-              {imageList}
-            </ViewPager>
-            <View
-              style={{
-                position: 'relative',
-                top: 250,
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row',
-                bottom: '20%',
-              }}>
-              {buttonList}
-            </View>
+            <ProductImageCarousel images={state.product?.data.images || []} />
             <View style={{ position: 'absolute', padding: 20 }}>
               <BackButton
                 handler={() => {

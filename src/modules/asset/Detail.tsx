@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, Dimensions } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import { H2Text, H4Text, P1Text, TitleText } from '../../shared/components/Texts';
@@ -31,6 +31,9 @@ import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenContract, getBscAssetTokenContract } from '../../utiles/getContract';
 import OverlayLoading from '../../shared/components/OverlayLoading';
+import Carousel from 'react-native-snap-carousel';
+import CachedImage from '../../shared/components/CachedImage';
+import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
 
 const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
   return {
@@ -57,7 +60,7 @@ type State = {
   contractAddress: string,
   paymentMethod: CryptoType | 'none',
   legacyRefundStatus?: string,
-  image: string,
+  images: string[],
   productId: number,
   productStatus: ProductStatus,
   loaded: boolean,
@@ -79,7 +82,7 @@ const Detail: FunctionComponent = () => {
     transactions: [],
     contractAddress: '',
     paymentMethod: CryptoType.EL,
-    image: '',
+    images: [],
     productId: 0, //for v1 user
     productStatus: ProductStatus.SALE,
     loaded: false
@@ -110,7 +113,7 @@ const Detail: FunctionComponent = () => {
         reward,
         contractAddress: asset.address || '',
         transactions: txRes.data.tx.map((tx) => txResponseToTx(tx, userAddress)),
-        image: productData.data.data.images[0] || '',
+        images: productData.data.data.images || [],
         totalSupply: parseFloat(productData.data.totalValue),
         presentSupply: parseFloat(productData.data.presentValue),
         paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType,
@@ -171,7 +174,7 @@ const Detail: FunctionComponent = () => {
         contractAddress: res.data.product.contractAddress,
         paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
         legacyRefundStatus: res.data.legacyRefundStatus,
-        image: res.data.product.data?.images[0],
+        images: res.data.product.data?.images || [],
         productId: res.data.product.id,
         productStatus: res.data.product.status as ProductStatus,
         loaded: true
@@ -226,20 +229,7 @@ const Detail: FunctionComponent = () => {
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
           }}>
-          {
-            !!state.image && <Image
-              source={{ uri: state.image }}
-              style={{
-                borderBottomLeftRadius: 10,
-                borderBottomRightRadius: 10,
-                position: 'absolute',
-                top: 0,
-                width: '100%',
-                height: 293,
-                resizeMode: 'cover',
-              }}
-            />
-          }
+          <ProductImageCarousel images={state.images} />
           <View style={{ position: 'absolute', padding: 20 }}>
             <BackButton handler={() => navigation.goBack()} />
           </View>
