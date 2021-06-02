@@ -22,18 +22,8 @@ export const AssetItem: React.FC<IAssetItem> = ({
 
   const { currencyFormatter } = useContext(PreferenceContext)
   const { getCryptoPrice } = useContext(PriceContext)
-  const ResultCryptoImage = (type: CryptoType) => {
-    if(type === CryptoType.ELA) {
-      return (<>
-      <CryptoImage type={asset.image!} style={{ borderColor: "#F1F1F1", borderWidth: 1 }} />
-      <CryptoImage type={asset.paymentMethod!} style={{ 
-        width: 25, height: 25, position: "absolute", bottom: 5, left: 20 
-        }}/>
-      </>)
-    } else {
-      return <CryptoImage type={asset.type} /> 
-    }
-  }
+
+
 
   return (
     <TouchableOpacity
@@ -41,7 +31,21 @@ export const AssetItem: React.FC<IAssetItem> = ({
       disabled={!touchable}
       style={{ display: 'flex', flexDirection: 'row', height: 60, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
     >
-      {ResultCryptoImage(asset.type)}
+      {asset.type === CryptoType.ELA 
+      ?
+        <>
+          <CryptoImage 
+            type={asset.image!}
+            style={{ borderColor: "#F1F1F1", borderWidth: 1 }} 
+          />
+          <CryptoImage 
+            type={asset.paymentMethod!} 
+            style={{ width: 25, height: 25, position: "absolute", bottom: 5, left: 20 }}
+          />
+        </> 
+      :
+        <CryptoImage type={asset.type} />
+      }
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
         <P2Text label={`${commaFormatter(asset.value.toFixed(2))} ${asset.unit}`} />
