@@ -115,19 +115,16 @@ const AssetProvider: React.FC = (props) => {
         paymentMethod: ownership.product.paymentMethod
       } as Asset
     })
-
-    try {
-      if (address === undefined) {
-        setState({
-          ...state,
-          assetLoaded: true,
-          assets: assets
-        })
-        
-        return;
-      }
+    if (address === undefined) {
+      setState({
+        ...state,
+        assetLoaded: true,
+        assets: assets
+      })
+      
+      return;
     }
-    finally {
+    try {
       assets.push(
         {
           title: 'ELYSIA',
@@ -142,7 +139,8 @@ const AssetProvider: React.FC = (props) => {
           unit: CryptoType.ETH
         }
       )
-
+    }
+    finally {
       setState({
         assetLoaded: true,
         assets: assets,
