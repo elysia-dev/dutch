@@ -58,7 +58,7 @@ type State = {
   reward: number,
   transactions: CryptoTransaction[],
   contractAddress: string,
-  paymentMethod: CryptoType | 'none',
+  paymentMethod: CryptoType | 'NONE',
   legacyRefundStatus?: string,
   images: string[],
   productId: number,
@@ -300,7 +300,7 @@ const Detail: FunctionComponent = () => {
                 )}
               />
               {
-                state.paymentMethod !== 'none' && <H4Text
+                state.paymentMethod !== 'NONE' && <H4Text
                   style={{ color: AppColors.BLACK2, textAlign: 'right' }}
                   label={`${((state.reward / getCryptoPrice(state.paymentMethod)).toFixed(2))} ${state.paymentMethod.toUpperCase()}`}
                 />
