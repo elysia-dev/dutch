@@ -121,6 +121,7 @@ const AssetProvider: React.FC = (props) => {
         setState({
           ...state,
           assetLoaded: true,
+          assets: assets
         })
         
         return;
