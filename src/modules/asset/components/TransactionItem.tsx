@@ -76,7 +76,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       <View style={{ marginLeft: 'auto' }}>
         <P1Text
           label={
-            ['profit', 'expectedProfit'].includes(transaction.legacyType || '') ?
+            ['profit', 'expectedProfit'].includes(transaction.legacyType || '') || transaction.legacyType ?
               currencyFormatter(parseFloat(transaction.value)) :
               `${transaction.type === 'out' ? '-' : '+'} ${parseFloat(transaction.value).toFixed(2)} ${unit}`
           }
