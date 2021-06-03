@@ -111,6 +111,12 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
             priceLabel
           ],
         ].map(([leftContent, rightContent], index) => {
+          // Finance Type 이 loan인 경우만 "product_label.loan"을 보여주어야 함
+          // Finance Type 이 fund인 경우는 아무것도 보여주지 않음
+          if (product.financeType !== 'loan' && index === 1) {
+            return <></>
+          }
+
           return (
             <View
               key={index}
