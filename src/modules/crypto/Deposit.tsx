@@ -1,8 +1,7 @@
 /* eslint-disable radix */
-import React, {
-  FunctionComponent, useContext,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View, Share } from 'react-native';
+import { ethers } from 'ethers';
 import { P2Text } from '../../shared/components/Texts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
@@ -17,10 +16,12 @@ interface Props {
   modalHandler: () => void;
 }
 
-const Deposit: FunctionComponent<Props> = props => {
+const Deposit: FunctionComponent<Props> = (props) => {
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const address = isWalletUser ? wallet?.getNodes()[0].address || '' : user.ethAddresses[0];
+  const address = isWalletUser
+    ? wallet?.getNodes()[0].address || ''
+    : user.ethAddresses[0];
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
@@ -34,16 +35,17 @@ const Deposit: FunctionComponent<Props> = props => {
           height: '100%',
           backgroundColor: '#fff',
         }}>
-        <View style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30
-        }}>
-          <QRCode
-            size={136}
-            value={address}
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 30,
+          }}>
+          <QRCode size={136} value={address} />
+          <P2Text
+            label={address}
+            style={{ color: AppColors.BLACK, marginTop: 20 }}
           />
-          <P2Text label={address} style={{ color: AppColors.BLACK, marginTop: 20, }} />
         </View>
       </View>
       <View
@@ -52,9 +54,8 @@ const Deposit: FunctionComponent<Props> = props => {
           width: '100%',
           bottom: insets.bottom || 10,
           paddingLeft: '5%',
-          paddingRight: '5%'
-        }}
-      >
+          paddingRight: '5%',
+        }}>
         <NextButton
           title={t('main.copy_address')}
           handler={() => {
