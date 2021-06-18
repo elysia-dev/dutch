@@ -69,12 +69,12 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             borderBottomWidth: 1,
             alignItems: "center"
           }}>
-            <P1Text label={t("product_label.investment_method")} style={{ fontSize: 15 }} />
+            <P1Text label={t("product_label.investment_type")} style={{ fontSize: 15 }} />
             <H2Text label={
               props.story.investmentMethod === AssetType.Unit ?
-              t("product_label.unit_method")
-              :
-              t("product_label.usd_method")
+                t("product_label.unit_method")
+                :
+                t("product_label.usd_method")
             } style={{ fontSize: 15 }} />
           </View>
           <View style={{
@@ -90,16 +90,16 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
               flexDirection: "row",
               alignItems: "center"
             }}>
-              <Image 
-                style={{ width: 17, height: 17, marginRight: 5 }} 
+              <Image
+                style={{ width: 17, height: 17, marginRight: 5 }}
                 source={props.story.paymentMethod === PaymentCryptoType.EL ?
                   EL
                   :
-                    props.story.paymentMethod === PaymentCryptoType.ETH ? 
-                    ETH 
-                    : 
+                  props.story.paymentMethod === PaymentCryptoType.ETH ?
+                    ETH
+                    :
                     BNB
-                } 
+                }
               />
               <H2Text label={props.story.paymentMethod.toUpperCase()} style={{ fontSize: 15 }} />
             </View>

@@ -161,11 +161,11 @@
       "restricted_country": "Swap is unavailable in the country",
       "need_wallet": "Wallet connection required",
       "required_eth_wallet": "Ethereum Wallet Only",
-      "investment_method": "Investment Methods",
-      "payment_method": "Investable means",
+      "investment_type": "Investment Type",
+      "payment_method": "Investment Method",
       "unit_method": "by Count",
-      "usd_method": "by Dollar",
-      "property_infomation_title": "Investment Methods",
+      "usd_method": "US Dollar basis",
+      "property_infomation_title": "Investment Type",
       "unit": [
         "What is [by Count]?",
         "1. product information by Count",
@@ -178,8 +178,8 @@
         "Repayment 1,100EL"
       ],
       "usd": [
-        "What is [by Dollar]?",
-        "1. product information by Dollar",
+        "What is [US Dollar basis]?",
+        "1. product information US Dollar basis",
         "There are products with an annual interest rate of 10% and the current EL price (1EL = $1).",
         "2. Product investment",
         "Invest $1,000 (=1,000EL) in the product.",
