@@ -448,14 +448,6 @@ const MainInfo: FunctionComponent = () => {
                   width: 100,
                   marginHorizontal: 5
                 }}
-                onPress={() => Linking.openURL('https://www.boboo.com')}>
-                <ExchangeImg source={Exchange02} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5
-                }}
                 onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
                 <ExchangeImg source={Exchange03} />
               </TouchableOpacity>
