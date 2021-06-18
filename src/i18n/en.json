@@ -168,7 +168,7 @@
       "property_infomation_title": "Investment Type",
       "unit": [
         "What is [by Count]?",
-        "1. product information by Count",
+        "1. Product information",
         "There are products with an annual interest rate of 10% and the current EL price (1EL = $1).",
         "2. Product investment",
         "Invest 1,000 EL (= $1,000) in the product.",
@@ -179,7 +179,7 @@
       ],
       "usd": [
         "What is [US Dollar basis]?",
-        "1. product information US Dollar basis",
+        "1. Product information",
         "There are products with an annual interest rate of 10% and the current EL price (1EL = $1).",
         "2. Product investment",
         "Invest $1,000 (=1,000EL) in the product.",
