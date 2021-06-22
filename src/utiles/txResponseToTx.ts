@@ -4,6 +4,7 @@ import Bignumberjs from 'bignumber.js';
 import CryptoTransaction from '../types/CryptoTransaction';
 import moment from 'moment';
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { block } from 'react-native-reanimated';
 
 const txResponseToTx = (
   tx: Transaction,
@@ -19,6 +20,7 @@ const txResponseToTx = (
     value: value.length > 12 ? new Bignumberjs(value).toFixed(2) : value,
     txHash: tx.hash,
     createdAt: moment.unix(parseInt(tx.timeStamp)).toString(),
+    blockNumber: Number(tx.blockNumber) - 1,
   };
 };
 

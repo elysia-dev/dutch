@@ -1,5 +1,5 @@
 export type Transaction = {
-  blocknumber: string;
+  blockNumber: string;
   timeStamp: string;
   hash: string;
   from: string;

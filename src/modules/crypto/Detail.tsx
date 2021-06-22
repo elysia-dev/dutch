@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ethers, providers } from 'ethers';
-import BasicLayout from '../../shared/components/BasicLayout';
-import Asset, { defaultAsset } from '../../types/Asset';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { EL_ADDRESS } from 'react-native-dotenv';
+import { ChartDataPoint } from 'react-native-responsive-linechart';
+import Asset, { defaultAsset } from '../../types/Asset';
+import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
@@ -16,7 +15,6 @@ import UserContext from '../../contexts/UserContext';
 import { CryptoPage } from '../../enums/pageEnum';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
-import EspressoV2 from '../../api/EspressoV2';
 import CryptoTransaction from '../../types/CryptoTransaction';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
@@ -28,7 +26,9 @@ import TxStatus from '../../enums/TxStatus';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
-import TransactionsAPIs from '../../utiles/getTansections';
+import EthersacnClient from '../../api/EtherscanClient';
+import AssetGraph from './components/AssetGraph';
+import { chartColor, isFilterGraph } from '../../utiles/getTransactionChart';
 
 type ParamList = {
   CryptoDetail: {
@@ -43,10 +43,12 @@ const Detail: React.FC = () => {
     assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
   const [filter, setFilter] = useState<number>(0);
+  const [filterGraph, setFilterGraph] = useState<number>(0);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
+  const [graphData, setGraphData] = useState<ChartDataPoint[] | undefined>([]);
   const [state, setState] = useState<{
     page: number;
     transactions: CryptoTransaction[];
@@ -58,43 +60,44 @@ const Detail: React.FC = () => {
     lastPage: true,
     loading: true,
   });
-  const insets = useSafeAreaInsets();
-  const provider = new ethers.providers.EtherscanProvider(
-    'kovan',
-    'ASRYBDYSYS98VSJ2VMN65MXU2YWW982ABW',
+  const [prevAssetValue, setPrevAssetValue] = useState<number>(
+    parseFloat(asset.value.toFixed(2)),
   );
+  const [appColor, setAppColor] = useState<AppColors>(AppColors.BLACK);
+  const [chartLoading, setChartLoading] = useState<boolean>(false);
+  const [lastBlock, setLastBlock] = useState<number>(999999999);
+  const insets = useSafeAreaInsets();
+
+  const address = isWalletUser
+    ? wallet?.getFirstNode()?.address || ''
+    : user.ethAddresses[0];
 
   const loadTxs = async () => {
-    const address = isWalletUser
-      ? wallet?.getFirstNode()?.address || ''
-      : user.ethAddresses[0];
-
     let newTxs: CryptoTransaction[] = [];
     let res;
-    let tran;
 
     try {
+      /**
+       * 첫 블록넘버(endBlock)는 999999999 입력
+       * 그 이후로는 처음 10개의 데이터를 가져왔을 때 마지막 블록넘버에서 1을 뺀 값이 들어갑니다.
+       * blocknumber 0 ~ 마지막 블록넘버에서 1을 뺀 값 사이에서 블록을 10개 가져옵니다.
+       */
       if (asset.type === CryptoType.ETH) {
-        // res = await EspressoV2.getEthTransaction(address, state.page);
-        res = await TransactionsAPIs.getEthTransaction(address, state.page);
+        res = await EthersacnClient.getEthTransaction(address, lastBlock);
       } else if (asset.type === CryptoType.BNB) {
-        // res = await EspressoV2.getBnbTransaction(address, state.page);
-        res = await TransactionsAPIs.getBnbTransaction(address, state.page);
+        res = await EthersacnClient.getBnbTransaction(address, lastBlock);
       } else {
-        res = await TransactionsAPIs.getErc20Transaction(
-          address,
-          EL_ADDRESS,
-          state.page,
-        );
-        // res = await EspressoV2.getErc20Transaction(
-        //   address,
-        //   EL_ADDRESS,
-        //   state.page,
-        // );
+        res = await EthersacnClient.getErc20Transaction(address, lastBlock);
       }
+
       newTxs = res.data.result.map((tx: Transaction) =>
         txResponseToTx(tx, address),
       );
+
+      /**
+       * 데이터를 가져와 마지막 블록넘버를 상태저장
+       */
+      setLastBlock(newTxs[newTxs.length - 1].blockNumber);
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'));
@@ -143,6 +146,29 @@ const Detail: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    getChart();
+  }, [filterGraph]);
+
+  /**
+   * chart를 띄워주는 함수
+   * chartLoading - 차트를 띄워줄 데이터를 가져오기전까지 로딩바 표시 (boolean)
+   * AppColor - 차트색을 assetType에 따라 상태변경
+   * graphData - 데이터를 가져와 상태값을 저장하여 chart - data props에 전달
+   */
+  const getChart = async () => {
+    try {
+      setChartLoading(true);
+      setAppColor(chartColor(asset.type));
+      setGraphData(
+        await isFilterGraph(filterGraph, address, prevAssetValue, asset.type),
+      );
+      setChartLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     const assetTxs = transactions.filter((tx) => tx.cryptoType === asset.type);
 
     if (assetTxs) {
@@ -166,6 +192,19 @@ const Detail: React.FC = () => {
         body={
           <BasicLayout>
             <AssetItem asset={asset} touchable={false} />
+
+            <SelectBox
+              options={['7 days', '14 days', '30 days']}
+              selected={filterGraph}
+              select={(filterGraph) => {
+                setFilterGraph(filterGraph);
+              }}
+            />
+            <AssetGraph
+              data={graphData}
+              lineColor={appColor}
+              chartLoading={chartLoading}
+            />
             <View style={{ height: 30 }} />
             <SelectBox
               options={['ALL', 'OUT', 'IN']}
