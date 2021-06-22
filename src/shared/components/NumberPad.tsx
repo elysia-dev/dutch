@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableHighlight, View } from 'react-native';
 import { H2Text } from '../../shared/components/Texts';
 
 const DialButton: FunctionComponent<{ pressHandler: () => void, value: string }> = ({
@@ -7,12 +7,20 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value: string }>
   value,
 }) => {
   return (
-    <TouchableOpacity
-      style={{ width: 60, height: 50 }}
+    <TouchableHighlight
+      style={{
+        flex: 1,
+        height: 50,
+        borderRadius: 8,
+        justifyContent: 'center',
+        marginHorizontal: 4,
+      }}
       onPress={() => pressHandler()}
+      underlayColor='#F0F0F0'
+      activeOpacity={0.5}
     >
       <H2Text label={value} style={{ textAlign: 'center' }} />
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 
