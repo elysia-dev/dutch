@@ -43,11 +43,11 @@ const PropertyInfomation: FunctionComponent<{}> = () => {
                   paddingBottom: 20
                 }}>
                   <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                    <Image source={require('./images/el-main.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/el-main.png')} style={{ flex: 1, resizeMode: "contain", width: 80, height: 80, marginVertical: 10 }} />
                     <H3Text label={"+"} style={{ position: 'absolute', left: "34%" }}/>
-                    <Image source={require('./images/el-bonus.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/el-bonus.png')} style={{ flex: 1, resizeMode: "contain", width: 60, height: 60 }} />
                     <H3Text label={"="} style={{ position: 'absolute', right: "34%" }}/>
-                    <Image source={require('./images/el-total.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/el-total.png')} style={{ flex: 1, resizeMode: "contain", width: 70, height: 70 }} />
                   </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
                     <View style={{
@@ -100,11 +100,11 @@ const PropertyInfomation: FunctionComponent<{}> = () => {
                   marginBottom: 20
                 }}>
                   <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                    <Image source={require('./images/usd-main.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-main.png')} style={{ flex: 1, resizeMode: "contain", width: 80, height: 80, marginVertical: 10 }} />
                     <H3Text label={"+"} style={{ position: 'absolute', left: "34%" }}/>
-                    <Image source={require('./images/usd-bonus.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-bonus.png')} style={{ flex: 1, resizeMode: "contain", width: 60, height: 60 }} />
                     <H3Text label={"="} style={{ position: 'absolute', right: "34%" }}/>
-                    <Image source={require('./images/usd-total.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-total.png')} style={{ flex: 1, resizeMode: "contain", width: 70, height: 70 }} />
                   </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
                     <View style={{
@@ -143,11 +143,11 @@ const PropertyInfomation: FunctionComponent<{}> = () => {
                   paddingBottom: 20
                 }}>
                   <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                    <Image source={require('./images/usd-main.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-main.png')} style={{ flex: 1, resizeMode: "contain", width: 80, height: 80, marginVertical: 10 }} />
                     <H3Text label={"+"} style={{ position: 'absolute', left: "34%" }}/>
-                    <Image source={require('./images/usd-bonus.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-bonus.png')} style={{ flex: 1, resizeMode: "contain", width: 60, height: 60 }} />
                     <H3Text label={"="} style={{ position: 'absolute', right: "34%" }}/>
-                    <Image source={require('./images/usd-total.png')} style={{ flex: 1, resizeMode: "contain" }} />
+                    <Image source={require('./images/usd-total.png')} style={{ flex: 1, resizeMode: "contain", width: 70, height: 70 }} />
                   </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
                     <View style={{

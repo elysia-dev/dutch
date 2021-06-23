@@ -171,6 +171,16 @@ const ProductBuying: FunctionComponent = () => {
             }}>
             <ProductImageCarousel images={state.product?.data.images || []} />
             <View style={{ position: 'absolute', padding: 20 }}>
+              <View
+                style={{
+                  position: 'absolute',
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  marginLeft: 12,
+                  marginTop: 32,
+                }} />
               <BackButton
                 handler={() => {
                   StatusBar.setHidden(true);
