@@ -24,6 +24,10 @@ In `./.env.development`, below environment variables shoud be declared.
 | INFURA_PROJECT_ID          | Infura project id                      | \*\*\*                                          |
 | APP_GOOGLE_MAP_API_IOS     | Google map API key for ios             | \*\*\*                                          |
 | APP_GOOGLE_MAP_API_ANDROID | Google map API key for android         | \*\*\*                                          |
+| ETHERSCAN_API              | Etherscan API key                      | \*\*\*                                          |
+| BSCSCAN_API                | Bscscan API key                        | \*\*\*                                          |
+| ETHERSCAN_API_URL          | Etherscan testnet api url              | https://api-kovan.etherscan.io/api              |
+| BSCSCAN_API_URL            | Bscscan testnet api url                | https://api-testnet.bscscan.com/api             |
 
 Example
 
@@ -36,6 +40,10 @@ EL_ADDRESS=0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be
 INFURA_PROJECT_ID=***
 APP_GOOGLE_MAP_API_IOS=***
 APP_GOOGLE_MAP_API_ANDROID=***
+ETHERSCAN_API=***
+BSCSCAN_API=***
+ETHERSCAN_API_URL=https://api-kovan.etherscan.io/api
+BSCSCAN_API_URL=https://api-testnet.bscscan.com/api
 ```
 
 ## Getting started

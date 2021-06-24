@@ -1,11 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  Dimensions,
-  Text,
-} from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import {
@@ -15,7 +9,6 @@ import {
   ChartDataPoint,
 } from 'react-native-responsive-linechart';
 
-import CustomChartTooltip from './CustomChartTooltip';
 import AppColors from '../../../enums/AppColors';
 import { P2Text } from '../../../shared/components/Texts';
 import ChartDataContext from '../../../contexts/ChartDataContext';
