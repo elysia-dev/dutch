@@ -27,6 +27,7 @@ import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 import { Page, ProductPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
+import useSafeAsync from '../../../utiles/useSafeAsync';
 
 interface Props {
   story: Story;
@@ -69,25 +70,27 @@ const AutoSizedImage: FunctionComponent<{
   source: { uri: string };
 }> = (props: { style?: ImageStyle; source: { uri: string } }) => {
   const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
+  const finalSize = {
+    width: 0,
+    height: 0,
+  };
   const windowWidth = Dimensions.get('window').width;
+  const safeAsync = useSafeAsync();
 
   useEffect(() => {
     if (props.style?.width || props.style?.height) {
       return;
     }
-    Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
-      const finalSize = {
-        width: originalWidth,
-        height: originalWidth,
-      };
+    safeAsync(Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
+      finalSize.width = originalWidth;
+      finalSize.height = originalHeight;
       if (originalWidth > windowWidth) {
         finalSize.width = windowWidth;
         const ratio = finalSize.width / originalWidth;
         finalSize.height = originalHeight * ratio;
       }
-      setState({
-        finalSize,
-      });
+    })).then(() => {
+      setState({ finalSize });
     });
   }, []);
 
