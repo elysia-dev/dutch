@@ -13,4 +13,8 @@ type CryptoTxsResponse = {
   tx: Transaction[];
 };
 
+export type CryptoTxsResultResponse = {
+  result: Transaction[];
+};
+
 export default CryptoTxsResponse;

@@ -7,7 +7,7 @@ import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, Text } from 'react-native';
 import TransactionList from '../asset/components/TransactionList';
 import NextButton from '../../shared/components/NextButton';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,8 @@ import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
-import { chartColor, isFilterGraph } from '../../utiles/getTransactionChart';
+import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
+import ChartDataContext from '../../contexts/ChartDataContext';
 
 type ParamList = {
   CryptoDetail: {
@@ -42,10 +43,11 @@ const Detail: React.FC = () => {
   const asset =
     assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
-  const [filter, setFilter] = useState<number>(0);
-  const [filterGraph, setFilterGraph] = useState<number>(0);
+  const [filter, setFilter] = useState<number>(1);
+  const [filterDay, setFilterDay] = useState<number>(1);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
+  const { setIsChartLine } = useContext(ChartDataContext);
   const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
   const [graphData, setGraphData] = useState<ChartDataPoint[] | undefined>([]);
@@ -63,7 +65,6 @@ const Detail: React.FC = () => {
   const [prevAssetValue, setPrevAssetValue] = useState<number>(
     parseFloat(asset.value.toFixed(2)),
   );
-  const [appColor, setAppColor] = useState<AppColors>(AppColors.BLACK);
   const [chartLoading, setChartLoading] = useState<boolean>(false);
   const [lastBlock, setLastBlock] = useState<number>(999999999);
   const insets = useSafeAreaInsets();
@@ -72,6 +73,11 @@ const Detail: React.FC = () => {
     ? wallet?.getFirstNode()?.address || ''
     : user.ethAddresses[0];
 
+  const chartTransactions = new ChartTransactions(
+    address,
+    prevAssetValue,
+    asset.type,
+  );
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
@@ -146,22 +152,20 @@ const Detail: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    setIsChartLine(false);
     getChart();
-  }, [filterGraph]);
+  }, [filterDay]);
 
   /**
    * chart를 띄워주는 함수
    * chartLoading - 차트를 띄워줄 데이터를 가져오기전까지 로딩바 표시 (boolean)
-   * AppColor - 차트색을 assetType에 따라 상태변경
-   * graphData - 데이터를 가져와 상태값을 저장하여 chart - data props에 전달
+   * chartTransactions class의 getTransactionChart에서 차트에 들어갈 데이터를 가져옵니다.
+   * filterChart는 차트 상단에 보면 7일 14일 30일을 탭 할 때 기간에 맞는 데이터가 들어갑니다.
    */
   const getChart = async () => {
     try {
       setChartLoading(true);
-      setAppColor(chartColor(asset.type));
-      setGraphData(
-        await isFilterGraph(filterGraph, address, prevAssetValue, asset.type),
-      );
+      setGraphData(await chartTransactions.getTransactionChart(filterDay));
       setChartLoading(false);
     } catch (error) {
       console.log(error);
@@ -195,14 +199,15 @@ const Detail: React.FC = () => {
 
             <SelectBox
               options={['7 days', '14 days', '30 days']}
-              selected={filterGraph}
-              select={(filterGraph) => {
-                setFilterGraph(filterGraph);
+              selected={filterDay}
+              select={(filterDay) => {
+                setFilterDay(filterDay);
               }}
             />
+            <View style={{ height: 50 }} />
             <AssetGraph
               data={graphData}
-              lineColor={appColor}
+              lineColor={toAppColor.toString(asset.type)}
               chartLoading={chartLoading}
             />
             <View style={{ height: 30 }} />
@@ -216,12 +221,12 @@ const Detail: React.FC = () => {
               data={
                 state.loading
                   ? []
-                  : filter === 0
+                  : filter === 1
                   ? state.transactions
                   : state.transactions.filter(
                       (tx) =>
-                        (filter === 1 && tx.type === 'out') ||
-                        (filter === 2 && tx.type === 'in'),
+                        (filter === 2 && tx.type === 'out') ||
+                        (filter === 4 && tx.type === 'in'),
                     )
               }
               unit={asset.unit}

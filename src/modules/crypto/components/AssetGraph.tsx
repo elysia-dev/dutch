@@ -1,6 +1,13 @@
-import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+  Text,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import {
   Chart,
   Line,
@@ -11,6 +18,8 @@ import {
 import CustomChartTooltip from './CustomChartTooltip';
 import AppColors from '../../../enums/AppColors';
 import { P2Text } from '../../../shared/components/Texts';
+import ChartDataContext from '../../../contexts/ChartDataContext';
+import ClickChartLine from './ClickChartLine';
 
 interface IAssetGraph {
   data: ChartDataPoint[] | undefined;
@@ -34,13 +43,17 @@ const AssetGraph: React.FC<IAssetGraph> = ({
   lineColor,
   chartLoading = true,
 }) => {
+  const { isChartLine, setChartDate, setChartToken, setIsChartLine } =
+    useContext(ChartDataContext);
   const maxY = data.reduce((res, cur) => (cur.y >= res ? cur.y : res), 0);
+  const [chartLoc, setChartLoc] = useState<number>(0);
   const { t } = useTranslation();
+  const chartWidth = Dimensions.get('window').width * 0.9;
   return (
     <View
       style={{
         position: 'relative',
-        minHeight: 200,
+        minHeight: 250,
         paddingBottom: 20,
       }}>
       {chartLoading ? (
@@ -53,7 +66,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             <View
               style={{
                 flexDirection: 'row',
-                height: 200,
+                height: 250,
                 alignItems: 'center',
               }}>
               <P2Text
@@ -66,7 +79,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             <View
               style={{
                 flexDirection: 'row',
-                height: 200,
+                height: 250,
                 alignItems: 'center',
               }}>
               <P2Text
@@ -79,7 +92,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             <Chart
               style={{ height: 250, width: '100%' }}
               data={data}
-              padding={{ bottom: 2, top: 70 }}
+              padding={{ bottom: 0, top: 40 }}
               xDomain={{ min: data[0].x, max: data[data.length - 1].x }}
               yDomain={{ min: -1, max: maxY + 1 }}>
               <HorizontalAxis
@@ -104,19 +117,22 @@ const AssetGraph: React.FC<IAssetGraph> = ({
                 }}
               />
               <Line
-                tooltipComponent={<CustomChartTooltip value={data[0]} />}
                 theme={{
                   stroke: { color: lineColor, width: 4 },
-                  scatter: {
-                    selected: {
-                      width: 1,
-                      height: 230,
-                      dy: -100,
-                      color: AppColors.SUB_BLACK,
-                    },
-                  },
+                }}
+                onTooltipSelect={(value) => {
+                  setChartLoc(((value.x - 1) * chartWidth) / (data.length - 1));
+                  setChartDate(
+                    moment.unix(value?.dateTime).format('YYYY.MM.DD'),
+                  );
+                  setChartToken(value?.y.toString() || 0);
+                  setIsChartLine(true);
                 }}
               />
+              {/* 차트 클릭시 클릭한 부분 토큰과 날짜를 표시해주는 컴포넌트*/}
+              {isChartLine && (
+                <ClickChartLine chartLoc={chartLoc} chartWidth={chartWidth} />
+              )}
             </Chart>
           )}
         </>

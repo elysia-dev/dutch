@@ -20,6 +20,14 @@ export const SelectBox: React.FC<ISelectBox> = ({
         flexDirection: 'row',
       }}>
       {options.map((option, index) => {
+        let currentNum;
+        if (index === 0) {
+          currentNum = 1;
+        } else if (index === 1) {
+          currentNum = 2;
+        } else {
+          currentNum = 4;
+        }
         return (
           <TouchableOpacity
             key={index}
@@ -28,10 +36,10 @@ export const SelectBox: React.FC<ISelectBox> = ({
               height: 40,
               borderBottomWidth: 2,
               borderBottomColor:
-                index === selected ? AppColors.BLACK : AppColors.GREY,
+                currentNum === selected ? AppColors.BLACK : AppColors.GREY,
             }}
             onPress={() => {
-              select(index);
+              index === 0 ? select(1) : index === 1 ? select(2) : select(4);
             }}>
             <H4Text label={option} style={{ textAlign: 'center' }} />
           </TouchableOpacity>

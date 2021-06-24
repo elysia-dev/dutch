@@ -7,6 +7,7 @@ import {
   ETHERSCAN_API_URL,
   BSCSCAN_API_URL,
 } from 'react-native-dotenv';
+import { CryptoTxsResultResponse } from '../types/CryptoTxsResponse';
 
 export default class EthersacnClient {
   /**
@@ -15,7 +16,7 @@ export default class EthersacnClient {
   static getEthTransaction = async (
     address: string,
     lastBlock: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return await axios.get(
         `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
@@ -32,7 +33,7 @@ export default class EthersacnClient {
   static getErc20Transaction = async (
     address: string,
     lastBlock: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return await axios.get(
         `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
@@ -49,7 +50,7 @@ export default class EthersacnClient {
   static getBnbTransaction = async (
     address: string,
     lastBlock: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return await axios.get(
         `${BSCSCAN_API_URL}? module=account&action=txlist&address=${address}&startblock=1&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${BSCSCAN_API}`,
@@ -67,7 +68,7 @@ export default class EthersacnClient {
     address: string,
     startBlockNumber: number,
     endBlockNumber: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return axios.get(
         `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=${startBlockNumber}&endblock=${endBlockNumber}&sort=desc&apikey=${ETHERSCAN_API}`,
@@ -85,7 +86,7 @@ export default class EthersacnClient {
     address: string,
     startBlockNumber: number,
     endBlockNumber: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return axios.get(
         `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=${startBlockNumber}&endblock=${endBlockNumber}&sort=desc&apikey=${ETHERSCAN_API}`,
@@ -103,7 +104,7 @@ export default class EthersacnClient {
     address: string,
     startBlockNumber: number,
     endBlockNumber: number,
-  ): Promise<AxiosResponse> => {
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     if (APP_ENV !== 'development') {
       return axios.get(
         `${BSCSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=${startBlockNumber}&endblock=${endBlockNumber}&sort=desc&apikey=${BSCSCAN_API}`,

@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Dimensions, View } from 'react-native';
 import moment from 'moment';
 import { ChartDataPoint, XYValue } from 'react-native-responsive-linechart';
 import { Text } from 'react-native-svg';
+import ChartDataContext from '../../../contexts/ChartDataContext';
 
 type Props = {
   value: ChartDataPoint;
@@ -22,26 +23,44 @@ const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
   //x position is problems...
   //Why?
 
+  function dayPositionX(): number {
+    return positionX <= maxDayPositionX * 0.1
+      ? value?.y.toString().length >= 7
+        ? 40
+        : 28
+      : positionX >= maxDayPositionX * 0.92
+      ? value?.y.toString().length >= 7
+        ? maxDayPositionX - 35
+        : maxDayPositionX - 18
+      : positionX >= maxDayPositionX
+      ? maxDayPositionX
+      : positionX >= minDayPositionX
+      ? positionX
+      : minDayPositionX;
+  }
+
+  function valuePositionX(): number {
+    return positionX <= maxDayPositionX * 0.1
+      ? value?.y.toString().length >= 7
+        ? 40
+        : 28
+      : positionX >= maxDayPositionX * 0.92
+      ? value?.y.toString().length >= 7
+        ? maxDayPositionX - 35
+        : maxDayPositionX - 18
+      : positionX >= maxPositionX
+      ? maxPositionX
+      : positionX >= minPositionX
+      ? positionX
+      : minPositionX;
+  }
+
   return (
     <React.Fragment>
       <Text
         // 시작점과 끝지점의 텍스트가 잘려서 잘리지 않도록 설정한 값
-        x={
-          positionX <= maxDayPositionX * 0.1
-            ? value?.y.toString().length >= 7
-              ? 40
-              : 28
-            : positionX >= maxDayPositionX * 0.92
-            ? value?.y.toString().length >= 7
-              ? maxDayPositionX - 35
-              : maxDayPositionX - 18
-            : positionX >= maxDayPositionX
-            ? maxDayPositionX
-            : positionX >= minDayPositionX
-            ? positionX
-            : minDayPositionX
-        }
-        y={positionY - 45}
+        x={dayPositionX()}
+        y={positionY - 100}
         fontSize={10}
         textAnchor={'middle'}
         opacity={1}
@@ -50,21 +69,7 @@ const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
       </Text>
       <Text
         // 시작점과 끝지점의 텍스트가 잘려서 잘리지 않도록 설정한 값
-        x={
-          positionX <= maxDayPositionX * 0.1
-            ? value?.y.toString().length >= 7
-              ? 40
-              : 28
-            : positionX >= maxDayPositionX * 0.92
-            ? value?.y.toString().length >= 7
-              ? maxDayPositionX - 35
-              : maxDayPositionX - 18
-            : positionX >= maxPositionX
-            ? maxPositionX
-            : positionX >= minPositionX
-            ? positionX
-            : minPositionX
-        }
+        x={valuePositionX()}
         y={positionY - 30}
         fontSize={14}
         textAnchor={'middle'}
