@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import { H4Text } from '../../../shared/components/Texts';
@@ -7,27 +8,47 @@ interface ISelectBox {
   options: string[];
   selected: number;
   select: (id: number) => void;
+  selectType: string;
 }
 
 export const SelectBox: React.FC<ISelectBox> = ({
   options,
   selected,
   select,
+  selectType,
 }) => {
+  const onPress = (index: number): void => {
+    if (selectType === 'day') {
+      if (index === 0) {
+        select(1);
+      } else if (index === 1) {
+        select(2);
+      } else {
+        select(4);
+      }
+    } else {
+      select(index);
+    }
+  };
+
+  const borderBottomColor = (index: number): number => {
+    if (selectType === 'day') {
+      if (index === 0) {
+        return 1;
+      } else if (index === 1) {
+        return 2;
+      } else {
+        return 4;
+      }
+    }
+    return index;
+  };
   return (
     <View
       style={{
         flexDirection: 'row',
       }}>
       {options.map((option, index) => {
-        let currentNum;
-        if (index === 0) {
-          currentNum = 1;
-        } else if (index === 1) {
-          currentNum = 2;
-        } else {
-          currentNum = 4;
-        }
         return (
           <TouchableOpacity
             key={index}
@@ -36,11 +57,11 @@ export const SelectBox: React.FC<ISelectBox> = ({
               height: 40,
               borderBottomWidth: 2,
               borderBottomColor:
-                currentNum === selected ? AppColors.BLACK : AppColors.GREY,
+                borderBottomColor(index) === selected
+                  ? AppColors.BLACK
+                  : AppColors.GREY,
             }}
-            onPress={() => {
-              index === 0 ? select(1) : index === 1 ? select(2) : select(4);
-            }}>
+            onPress={() => onPress(index)}>
             <H4Text label={option} style={{ textAlign: 'center' }} />
           </TouchableOpacity>
         );

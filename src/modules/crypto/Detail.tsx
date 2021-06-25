@@ -43,7 +43,7 @@ const Detail: React.FC = () => {
   const asset =
     assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
-  const [filter, setFilter] = useState<number>(1);
+  const [filter, setFilter] = useState<number>(0);
   const [filterDay, setFilterDay] = useState<number>(1);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
@@ -203,6 +203,7 @@ const Detail: React.FC = () => {
               select={(filterDay) => {
                 setFilterDay(filterDay);
               }}
+              selectType={'day'}
             />
             <View style={{ height: 50 }} />
             <AssetGraph
@@ -215,18 +216,19 @@ const Detail: React.FC = () => {
               options={['ALL', 'OUT', 'IN']}
               selected={filter}
               select={(filter) => setFilter(filter)}
+              selectType={'list'}
             />
             <TransactionList
               loading={state.loading}
               data={
                 state.loading
                   ? []
-                  : filter === 1
+                  : filter === 0
                   ? state.transactions
                   : state.transactions.filter(
                       (tx) =>
-                        (filter === 2 && tx.type === 'out') ||
-                        (filter === 4 && tx.type === 'in'),
+                        (filter === 1 && tx.type === 'out') ||
+                        (filter === 2 && tx.type === 'in'),
                     )
               }
               unit={asset.unit}

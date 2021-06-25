@@ -10,6 +10,8 @@ interface IChartLine {
 
 const ClickChartLine: React.FC<IChartLine> = ({ chartLoc, chartWidth }) => {
   const { chartDate, chartToken } = useContext(ChartDataContext);
+  const frontChartWidth = chartWidth * 0.1;
+  const backChartWidth = chartWidth * 0.9;
 
   return (
     <View
@@ -30,17 +32,17 @@ const ClickChartLine: React.FC<IChartLine> = ({ chartLoc, chartWidth }) => {
           transform: [
             {
               translateX:
-                chartWidth * 0.1 >= chartLoc
+                frontChartWidth >= chartLoc
                   ? 70
-                  : chartWidth * 0.9 <= chartLoc
+                  : backChartWidth <= chartLoc
                   ? -70
                   : 0,
             },
           ],
           alignItems:
-            chartWidth * 0.1 >= chartLoc
+            frontChartWidth >= chartLoc
               ? 'flex-start'
-              : chartWidth * 0.9 <= chartLoc
+              : backChartWidth <= chartLoc
               ? 'flex-end'
               : 'center',
           justifyContent: 'center',
