@@ -1,15 +1,20 @@
 import React from 'react';
-import { useContext } from 'react';
 import { View, Text } from 'react-native';
-import ChartDataContext from '../../../contexts/ChartDataContext';
 
 interface IChartLine {
   chartLoc: number;
   chartWidth: number;
+  chartDate: string;
+  chartToken: string;
 }
 
-const ClickChartLine: React.FC<IChartLine> = ({ chartLoc, chartWidth }) => {
-  const { chartDate, chartToken } = useContext(ChartDataContext);
+const ClickChartLine: React.FC<IChartLine> = ({
+  chartLoc,
+  chartWidth,
+  chartDate,
+  chartToken,
+}) => {
+  // const { chartDate, chartToken } = useContext(ChartDataContext);
   const frontChartWidth = chartWidth * 0.1;
   const backChartWidth = chartWidth * 0.9;
 

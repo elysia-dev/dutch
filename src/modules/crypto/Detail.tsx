@@ -29,7 +29,7 @@ import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
-import ChartDataContext from '../../contexts/ChartDataContext';
+import SelectType from '../../enums/SelectType';
 
 type ParamList = {
   CryptoDetail: {
@@ -47,7 +47,6 @@ const Detail: React.FC = () => {
   const [filterDay, setFilterDay] = useState<number>(1);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const { setIsChartLine } = useContext(ChartDataContext);
   const { transactions, counter } = useContext(TransactionContext);
   const { t } = useTranslation();
   const [graphData, setGraphData] = useState<ChartDataPoint[] | undefined>([]);
@@ -66,6 +65,7 @@ const Detail: React.FC = () => {
     parseFloat(asset.value.toFixed(2)),
   );
   const [chartLoading, setChartLoading] = useState<boolean>(false);
+  const [isChartLine, setIsChartLine] = useState<boolean>(false);
   const [lastBlock, setLastBlock] = useState<number>(999999999);
   const insets = useSafeAreaInsets();
 
@@ -203,20 +203,22 @@ const Detail: React.FC = () => {
               select={(filterDay) => {
                 setFilterDay(filterDay);
               }}
-              selectType={'day'}
+              selectType={SelectType.Day}
             />
             <View style={{ height: 50 }} />
             <AssetGraph
               data={graphData}
               lineColor={toAppColor.toString(asset.type)}
               chartLoading={chartLoading}
+              setIsChartLine={setIsChartLine}
+              isChartLine={isChartLine}
             />
             <View style={{ height: 30 }} />
             <SelectBox
               options={['ALL', 'OUT', 'IN']}
               selected={filter}
               select={(filter) => setFilter(filter)}
-              selectType={'list'}
+              selectType={SelectType.List}
             />
             <TransactionList
               loading={state.loading}

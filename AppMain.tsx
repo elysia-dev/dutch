@@ -6,7 +6,6 @@ import PriceProvider from './src/providers/PriceProvider';
 import AssetProvider from './src/providers/AssetProvider';
 import UserProvider from './src/providers/UserProvider';
 import TransactionProvider from './src/providers/TransactionProvider';
-import ChartDataProvider from './src/providers/ChartDataProvider';
 
 const AppMain = () => {
   return (
@@ -16,9 +15,7 @@ const AppMain = () => {
           <WalletProvider>
             <AssetProvider>
               <TransactionProvider>
-                <ChartDataProvider>
-                  <AppNavigator />
-                </ChartDataProvider>
+                <AppNavigator />
               </TransactionProvider>
             </AssetProvider>
           </WalletProvider>

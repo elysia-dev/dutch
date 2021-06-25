@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -11,13 +11,14 @@ import {
 
 import AppColors from '../../../enums/AppColors';
 import { P2Text } from '../../../shared/components/Texts';
-import ChartDataContext from '../../../contexts/ChartDataContext';
 import ClickChartLine from './ClickChartLine';
 
 interface IAssetGraph {
   data: ChartDataPoint[] | undefined;
   lineColor: AppColors;
   chartLoading: boolean;
+  isChartLine: boolean;
+  setIsChartLine: Function;
 }
 const styles = StyleSheet.create({
   container: {
@@ -35,9 +36,12 @@ const AssetGraph: React.FC<IAssetGraph> = ({
   data = [],
   lineColor,
   chartLoading = true,
+  isChartLine,
+  setIsChartLine,
 }) => {
-  const { isChartLine, setChartDate, setChartToken, setIsChartLine } =
-    useContext(ChartDataContext);
+  // const { setChartDate, setChartToken } = useContext(ChartDataContext);
+  const [chartDate, setChartDate] = useState<string>('');
+  const [chartToken, setChartToken] = useState<string>('');
   const maxY = data.reduce((res, cur) => (cur.y >= res ? cur.y : res), 0);
   const [chartLoc, setChartLoc] = useState<number>(0);
   const { t } = useTranslation();
@@ -118,13 +122,18 @@ const AssetGraph: React.FC<IAssetGraph> = ({
                   setChartDate(
                     moment.unix(value?.dateTime).format('YYYY.MM.DD'),
                   );
-                  setChartToken(value?.y.toString() || 0);
+                  setChartToken(value?.y.toString() || '0');
                   setIsChartLine(true);
                 }}
               />
               {/* 차트 클릭시 클릭한 부분 토큰과 날짜를 표시해주는 컴포넌트*/}
               {isChartLine && (
-                <ClickChartLine chartLoc={chartLoc} chartWidth={chartWidth} />
+                <ClickChartLine
+                  chartLoc={chartLoc}
+                  chartWidth={chartWidth}
+                  chartDate={chartDate}
+                  chartToken={chartToken}
+                />
               )}
             </Chart>
           )}

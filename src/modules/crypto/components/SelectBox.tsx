@@ -2,6 +2,8 @@ import React from 'react';
 import { useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
+import ChartTabDays from '../../../enums/ChartTabDays';
+import SelectType from '../../../enums/SelectType';
 import { H4Text } from '../../../shared/components/Texts';
 
 interface ISelectBox {
@@ -18,13 +20,13 @@ export const SelectBox: React.FC<ISelectBox> = ({
   selectType,
 }) => {
   const onPress = (index: number): void => {
-    if (selectType === 'day') {
+    if (selectType === SelectType.Day) {
       if (index === 0) {
-        select(1);
+        select(ChartTabDays.OneWeek);
       } else if (index === 1) {
-        select(2);
+        select(ChartTabDays.TwoWeeks);
       } else {
-        select(4);
+        select(ChartTabDays.OneMonth);
       }
     } else {
       select(index);
@@ -34,11 +36,11 @@ export const SelectBox: React.FC<ISelectBox> = ({
   const borderBottomColor = (index: number): number => {
     if (selectType === 'day') {
       if (index === 0) {
-        return 1;
+        return ChartTabDays.OneWeek;
       } else if (index === 1) {
-        return 2;
+        return ChartTabDays.TwoWeeks;
       } else {
-        return 4;
+        return ChartTabDays.OneMonth;
       }
     }
     return index;

@@ -76,7 +76,11 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           </TouchableOpacity>
         )}
         <P3Text
-          label={moment(transaction.createdAt).format('YYYY-MM-DD | HH:mm:ss')}
+          label={
+            moment(transaction.createdAt).format('YYYY-MM-DD') +
+            ' | ' +
+            moment(transaction.createdAt).format('HH:mm:ss')
+          }
         />
       </View>
       <View style={{ marginLeft: 'auto' }}>
