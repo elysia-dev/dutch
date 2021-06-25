@@ -101,8 +101,8 @@ export class ChartTransactions {
       let prevValue: number = this.currentAssetValue;
       await (
         await this.getTransactionData(day)
-      ).data.result
-        .map((tx: Transaction) => {
+      ).data?.result
+        ?.map((tx: Transaction) => {
           return txResponseToTx(tx, this.address);
         })
         .forEach((tx, idx, crypTotxs) => {

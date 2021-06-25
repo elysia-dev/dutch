@@ -1,8 +1,16 @@
 /* eslint-disable radix */
-import React, {
-  useContext, useEffect, useState,
-} from 'react';
-import { View, TouchableOpacity, TextInput, Text, Keyboard, TouchableWithoutFeedback, StyleSheet, Image, Dimensions } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  Text,
+  Keyboard,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppColors from '../../enums/AppColors';
 import { useTranslation } from 'react-i18next';
@@ -46,9 +54,10 @@ const Withdrawal: React.FC = () => {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [estimatedGas, setEstimatedGas] = useState('');
-  const gasCrypto = asset.type === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
-  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(asset.type) ?
-    getBalance(gasCrypto) < parseFloat(estimatedGas) + parseFloat(value)
+  const gasCrypto =
+    asset.type === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
+  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(asset.type)
+    ? getBalance(gasCrypto) < parseFloat(estimatedGas) + parseFloat(value)
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -66,24 +75,27 @@ const Withdrawal: React.FC = () => {
           utils.parseEther(value || '0.1'),
           {
             from: wallet?.getFirstAddress(),
-          }
-        )
-      }
-      else {
+          },
+        );
+      } else {
         estimatedGas = await wallet?.getFirstSigner(asset.type)?.estimateGas({
           to: state.address,
           value: utils.parseEther(value || '0').toHexString(),
-        })
+        });
       }
     } catch (e) {
     } finally {
       if (estimatedGas) {
         setEstimatedGas(
-          utils.formatEther(estimatedGas.mul(asset.type === CryptoType.ETH ? gasPrice : bscGasPrice))
-        )
+          utils.formatEther(
+            estimatedGas.mul(
+              asset.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
+          ),
+        );
       }
     }
-  }
+  };
 
   const sendTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
@@ -92,22 +104,26 @@ const Withdrawal: React.FC = () => {
     try {
       if (asset.type === CryptoType.EL) {
         const elContract = getElysiaContract();
-        const populatedTransaction = await elContract?.populateTransaction.transfer(state.address, utils.parseEther(value));
+        const populatedTransaction =
+          await elContract?.populateTransaction.transfer(
+            state.address,
+            utils.parseEther(value),
+          );
 
-        if (!populatedTransaction) return
+        if (!populatedTransaction) return;
 
         txRes = await wallet?.getFirstSigner().sendTransaction({
           to: populatedTransaction.to,
           data: populatedTransaction.data,
-        })
+        });
       } else {
         txRes = await wallet?.getFirstSigner(asset.type).sendTransaction({
           to: state.address,
           value: utils.parseEther(value).toHexString(),
-        })
+        });
       }
     } catch (e) {
-      alert(e)
+      alert(e);
     } finally {
       if (txRes) {
         await addPendingTransaction({
@@ -116,13 +132,13 @@ const Withdrawal: React.FC = () => {
           value: value,
           createdAt: moment().toString(),
           type: 'out',
-        })
-
-        navigation.goBack()
+          blockNumber: Number(txRes.blockNumber),
+        });
       }
-      setLoading(false)
+      setLoading(false);
+      navigation.goBack();
     }
-  }
+  };
 
   const openBarcodeScanner = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -131,17 +147,17 @@ const Withdrawal: React.FC = () => {
       setState({
         ...state,
         scanned: false,
-      })
+      });
     } else {
-      alert('Permission of camera is not granted')
+      alert('Permission of camera is not granted');
     }
-  }
+  };
 
   const handleBarCodeScanned = (barcodeScannerResult: BarCodeScannerResult) => {
     setState({
       scanned: true,
-      address: barcodeScannerResult.data.replace('ethereum:', '')
-    })
+      address: barcodeScannerResult.data.replace('ethereum:', ''),
+    });
   };
 
   useEffect(() => {
@@ -161,22 +177,34 @@ const Withdrawal: React.FC = () => {
             paddingLeft: 20,
             paddingRight: 20,
             height: Dimensions.get('window').height - 200,
-          }}
-        >
-          <P2Text label={t('wallet.withdrawal_address')} style={{ color: AppColors.BLACK, marginTop: 30 }} />
-          <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+          }}>
+          <P2Text
+            label={t('wallet.withdrawal_address')}
+            style={{ color: AppColors.BLACK, marginTop: 30 }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              justifyContent: 'space-between',
+            }}>
             <TextInput
               style={{
                 height: 40,
                 borderWidth: 1,
                 borderRadius: 5,
-                borderColor: state.address && !isAddress(state.address) ? AppColors.RED : AppColors.SUB_GREY,
+                borderColor:
+                  state.address && !isAddress(state.address)
+                    ? AppColors.RED
+                    : AppColors.SUB_GREY,
                 padding: 10,
                 fontSize: 10,
                 flex: 1,
               }}
               value={state.address}
-              onChangeText={(text) => { setState({ ...state, address: text }) }}
+              onChangeText={(text) => {
+                setState({ ...state, address: text });
+              }}
               placeholder={t('wallet.withdrawal_content')}
             />
             <TouchableOpacity
@@ -187,21 +215,38 @@ const Withdrawal: React.FC = () => {
                 alignItems: 'center',
               }}
               onPress={() => {
-                openBarcodeScanner()
-              }}
-            >
-              <Image source={require('./images/qr.png')} style={{ width: 40, height: 40 }} />
+                openBarcodeScanner();
+              }}>
+              <Image
+                source={require('./images/qr.png')}
+                style={{ width: 40, height: 40 }}
+              />
             </TouchableOpacity>
           </View>
           <View style={{ height: 20 }}>
             {!!state.address && !isAddress(state.address) && (
-              <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'left', marginBottom: 5 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  right: 0,
+                  color: AppColors.RED,
+                  textAlign: 'left',
+                  marginBottom: 5,
+                }}>
                 {t('wallet.invalid_address', { crypto: gasCrypto })}
               </Text>
             )}
           </View>
-          <P2Text label={t('wallet.send_value')} style={{ color: AppColors.BLACK }} />
-          <View style={{ flexDirection: 'row', marginTop: 5, justifyContent: 'space-between' }}>
+          <P2Text
+            label={t('wallet.send_value')}
+            style={{ color: AppColors.BLACK }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 5,
+              justifyContent: 'space-between',
+            }}>
             <View
               style={{
                 height: 40,
@@ -210,9 +255,11 @@ const Withdrawal: React.FC = () => {
                 borderColor: AppColors.SUB_GREY,
                 padding: 10,
                 flex: 1,
-              }}
-            >
-              <P1Text label={`${commaFormatter(value) || '0'} ${asset.unit}`} style={{ textAlign: 'right' }} />
+              }}>
+              <P1Text
+                label={`${commaFormatter(value) || '0'} ${asset.unit}`}
+                style={{ textAlign: 'right' }}
+              />
             </View>
             <TouchableOpacity
               style={{
@@ -226,18 +273,28 @@ const Withdrawal: React.FC = () => {
               }}
               onPress={() => {
                 if (asset.type === CryptoType.EL) {
-                  setValue(getBalance(asset.type).toString())
+                  setValue(getBalance(asset.type).toString());
                 } else {
                   setValue(
-                    (getBalance(asset.type) - parseFloat(estimatedGas) * 1.01).toString()
-                  )
+                    (
+                      getBalance(asset.type) -
+                      parseFloat(estimatedGas) * 1.01
+                    ).toString(),
+                  );
                 }
-              }}
-            >
-              <P3Text label={t('wallet.full')} style={{ color: AppColors.MAIN, textAlign: 'center' }} />
+              }}>
+              <P3Text
+                label={t('wallet.full')}
+                style={{ color: AppColors.MAIN, textAlign: 'center' }}
+              />
             </TouchableOpacity>
           </View>
-          <P4Text label={`${t('wallet.remaining_value')} : ${commaFormatter(getBalance(asset.type))}`} style={{ marginTop: 5 }} />
+          <P4Text
+            label={`${t('wallet.remaining_value')} : ${commaFormatter(
+              getBalance(asset.type),
+            )}`}
+            style={{ marginTop: 5 }}
+          />
           <View style={{ height: 30, marginTop: 10 }}>
             <GasPrice
               estimatedGas={estimatedGas}
@@ -248,25 +305,32 @@ const Withdrawal: React.FC = () => {
           <NumberPad
             addValue={(text) => {
               if (
-                text === '.' && value.includes('.')
-                || value.length > 18
-                || value.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
+                (text === '.' && value.includes('.')) ||
+                value.length > 18 ||
+                (value
+                  .split('')
+                  .reduce((res, cur) => res && cur === '0', true) &&
+                  text === '0')
               ) {
-                return
+                return;
               }
 
-              const next = text === '.' && !value ? '0.' : text !== '0' && value === '0' ? text : value + text
+              const next =
+                text === '.' && !value
+                  ? '0.'
+                  : text !== '0' && value === '0'
+                  ? text
+                  : value + text;
 
               if (parseFloat(next) >= getBalance(asset.type)) {
                 // Maximum!
                 return;
               } else {
-                setValue(next)
+                setValue(next);
               }
-
             }}
             removeValue={() => {
-              setValue(value.slice(0, -1))
+              setValue(value.slice(0, -1));
             }}
             height={Dimensions.get('window').height - 440}
           />
@@ -278,30 +342,32 @@ const Withdrawal: React.FC = () => {
           width: '100%',
           bottom: insets.bottom || 10,
           paddingLeft: '5%',
-          paddingRight: '5%'
-        }}
-      >
+          paddingRight: '5%',
+        }}>
         <NextButton
-          disabled={!state.address || !value || insufficientGas || !isAddress(state.address) || !estimatedGas}
+          disabled={
+            !state.address ||
+            !value ||
+            insufficientGas ||
+            !isAddress(state.address) ||
+            !estimatedGas
+          }
           title={t('wallet.withdrawal')}
           style={{
             width: '100%',
             marginTop: 20,
           }}
           handler={() => {
-            sendTx()
+            sendTx();
           }}
         />
       </View>
-      {
-        !state.scanned &&
+      {!state.scanned && (
         <BarCodeScanner
           onBarCodeScanned={handleBarCodeScanned}
-          style={
-            StyleSheet.absoluteFillObject
-          }
+          style={StyleSheet.absoluteFillObject}
         />
-      }
+      )}
       <OverlayLoading visible={loading} />
     </View>
   );

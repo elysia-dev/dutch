@@ -152,8 +152,10 @@ const Detail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setIsChartLine(false);
-    getChart();
+    if (address) {
+      setIsChartLine(false);
+      getChart();
+    }
   }, [filterDay]);
 
   /**

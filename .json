@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "818566987297",
+    "firebase_url": "https://elysia-bbf93.firebaseio.com",
+    "project_id": "elysia-bbf93",
+    "storage_bucket": "elysia-bbf93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818566987297:android:e9f65d446972bfc3edad60",
+        "android_client_info": {
+          "package_name": "land.elysia.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818566987297-qdojmg9u0ndbfcf3npoutov1uc72av4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFSzh0Xp5it8Aa6417keYvpl4PKS1aV24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818566987297-qdojmg9u0ndbfcf3npoutov1uc72av4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
