@@ -28,6 +28,7 @@ In `./.env.development`, below environment variables shoud be declared.
 | BSCSCAN_API                | Bscscan API key                        | \*\*\*                                          |
 | ETHERSCAN_API_URL          | Etherscan testnet api url              | https://api-kovan.etherscan.io/api              |
 | BSCSCAN_API_URL            | Bscscan testnet api url                | https://api-testnet.bscscan.com/api             |
+| APP_ENV                    | APP Env                                | development                                     |
 
 Example
 
@@ -44,6 +45,7 @@ ETHERSCAN_API=***
 BSCSCAN_API=***
 ETHERSCAN_API_URL=https://api-kovan.etherscan.io/api
 BSCSCAN_API_URL=https://api-testnet.bscscan.com/api
+APP_ENV=development
 ```
 
 ## Getting started
