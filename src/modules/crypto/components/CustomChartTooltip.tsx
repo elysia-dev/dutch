@@ -1,13 +1,14 @@
-import * as React from 'react'
-import { Dimensions } from 'react-native';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { Dimensions, View } from 'react-native';
 import moment from 'moment';
 import { ChartDataPoint, XYValue } from 'react-native-responsive-linechart';
 import { Text } from 'react-native-svg';
+import ChartDataContext from '../../../contexts/ChartDataContext';
 
 type Props = {
-  value?: ChartDataPoint
-  position?: XYValue
-}
+  value: ChartDataPoint;
+  position?: XYValue;
+};
 
 const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
   const valueY = value?.y || 0;
@@ -17,42 +18,68 @@ const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
   const positionY = position?.y || 0;
   const positionX = position?.x || 0;
   const maxPositionX = Dimensions.get('window').width * 0.9 - minPositionX;
-  const maxDayPositionX = Dimensions.get('window').width * 0.9 - minDayPositionX;
-
+  const maxDayPositionX =
+    Dimensions.get('window').width * 0.9 - minDayPositionX;
   //x position is problems...
   //Why?
+
+  function dayPositionX(): number {
+    return positionX <= maxDayPositionX * 0.1
+      ? value?.y.toString().length >= 7
+        ? 40
+        : 28
+      : positionX >= maxDayPositionX * 0.92
+      ? value?.y.toString().length >= 7
+        ? maxDayPositionX - 35
+        : maxDayPositionX - 18
+      : positionX >= maxDayPositionX
+      ? maxDayPositionX
+      : positionX >= minDayPositionX
+      ? positionX
+      : minDayPositionX;
+  }
+
+  function valuePositionX(): number {
+    return positionX <= maxDayPositionX * 0.1
+      ? value?.y.toString().length >= 7
+        ? 40
+        : 28
+      : positionX >= maxDayPositionX * 0.92
+      ? value?.y.toString().length >= 7
+        ? maxDayPositionX - 35
+        : maxDayPositionX - 18
+      : positionX >= maxPositionX
+      ? maxPositionX
+      : positionX >= minPositionX
+      ? positionX
+      : minPositionX;
+  }
 
   return (
     <React.Fragment>
       <Text
-        x={
-          positionX >= maxDayPositionX ? maxDayPositionX :
-            positionX >= minDayPositionX ? positionX : minDayPositionX
-        }
-        y={positionY - 45}
+        // 시작점과 끝지점의 텍스트가 잘려서 잘리지 않도록 설정한 값
+        x={dayPositionX()}
+        y={positionY - 100}
         fontSize={10}
         textAnchor={'middle'}
         opacity={1}
-        fill={'#C3C3C3'}
-      >
-        {moment(value?.x).format('MM.DD')}
+        fill={'#C3C3C3'}>
+        {moment.unix(value?.dateTime).format('YYYY.MM.DD')}
       </Text>
       <Text
-        x={
-          positionX >= maxPositionX ? maxPositionX :
-            positionX >= minPositionX ? positionX : minPositionX
-        }
+        // 시작점과 끝지점의 텍스트가 잘려서 잘리지 않도록 설정한 값
+        x={valuePositionX()}
         y={positionY - 30}
         fontSize={14}
         textAnchor={'middle'}
         opacity={1}
         fill={'#848484'}
-        fontWeight={700}
-      >
+        fontWeight={700}>
         {value?.y.toString() || 0}
       </Text>
     </React.Fragment>
-  )
+  );
 };
 
-export default CustomChartTooltip
+export default CustomChartTooltip;

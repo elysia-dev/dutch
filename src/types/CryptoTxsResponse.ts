@@ -1,16 +1,20 @@
 export type Transaction = {
-  blocknumber: string,
-  timeStamp: string,
-  hash: string,
-  from: string,
-  to: string,
-  value: string,
-  gasUsed: string,
-  gasPrice: string,
-}
+  blockNumber: string;
+  timeStamp: string;
+  hash: string;
+  from: string;
+  to: string;
+  value: string;
+  gasUsed: string;
+  gasPrice: string;
+};
 
 type CryptoTxsResponse = {
-  tx: Transaction[]
-}
+  tx: Transaction[];
+};
 
-export default CryptoTxsResponse
+export type CryptoTxsResultResponse = {
+  result: Transaction[];
+};
+
+export default CryptoTxsResponse;

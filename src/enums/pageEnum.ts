@@ -12,7 +12,7 @@ export enum ProductPage {
   ProductBuying = 'ProductBuying',
   Purchase = 'Purchase',
   PaymentSelection = 'PaymentSelection',
-  PropertyInfomation = 'PropertyInfomation'
+  PropertyInfomation = 'PropertyInfomation',
 }
 
 export enum AccountPage {
@@ -89,11 +89,11 @@ export enum AssetPage {
   Purchase = 'Purchase',
   Refund = 'Refund',
   Reward = 'Reward',
-  LegacyOwnershipRefund = 'LegacyOwnershipRefund'
+  LegacyOwnershipRefund = 'LegacyOwnershipRefund',
 }
 
 export enum CryptoPage {
   Detail = 'Detail',
   Deposit = 'Deposit',
-  Withdrawal = 'Withdrawal'
+  Withdrawal = 'Withdrawal',
 }

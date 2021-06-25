@@ -25,19 +25,18 @@ const NextButton: FunctionComponent<INextButton> = ({
       disabled={disabled}
       style={{
         backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
-        ...style as {},
+        ...(style as {}),
         borderRadius: 5,
         justifyContent: 'center',
         alignContent: 'center',
         height: 50,
-      }}
-    >
+      }}>
       <Text
         style={{
           fontSize: 16,
           textAlign: 'center',
           fontFamily: AppFonts.Bold,
-          color: 'white'
+          color: 'white',
         }}
         allowFontScaling={false}>
         {title}
@@ -46,4 +45,4 @@ const NextButton: FunctionComponent<INextButton> = ({
   );
 };
 
-export default NextButton
+export default NextButton;
