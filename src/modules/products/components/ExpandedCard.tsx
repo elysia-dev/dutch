@@ -5,11 +5,11 @@ import React, {
   useRef,
 } from 'react';
 import {
-  Animated as iOSAnimated,
+  Animated,
   Image,
   View,
   Dimensions,
-  Easing as iOSEasing,
+  Easing,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
@@ -17,15 +17,6 @@ import {
   Platform,
   ImageStyle,
 } from 'react-native';
-import AndroidAnimated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing as AndroidEasing,
-  interpolate,
-  interpolateColor,
-  runOnJS,
-} from 'react-native-reanimated';
 import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
@@ -73,16 +64,6 @@ const defaultTextProps = {
 };
 
 const ELEMENT_HEIGHT = 416;
-
-let Animated: any;
-let Easing: any;
-if (Platform.OS === 'ios') {
-  Animated = iOSAnimated;
-  Easing = iOSEasing;
-} else if (Platform.OS === 'android') {
-  Animated = AndroidAnimated;
-  Easing = AndroidEasing;
-}
 
 const AutoSizedImage: FunctionComponent<{
   style?: ImageStyle;
@@ -135,7 +116,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
   on,
   image,
 }) => {
-  const [animatedValue] = Platform.OS === 'ios' ? useState(new Animated.Value(0)) : useState(useSharedValue(0));
+  const [animatedValue] = useState(new Animated.Value(0));
   const [state, setState] = useState({
     scrollY: 0,
     closed: false,
@@ -163,39 +144,24 @@ const ExpandedItem: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (on) {
-      if (Platform.OS === 'ios') {
-        Animated.timing(animatedValue, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: false,
-          easing: Easing.elastic(1),
-        }).start();
-        setState({
-          ...state,
-          scrollY: 0,
-          closed: false,
-          scrollEnabled: true,
-        });
-      } else {
-        animatedValue.value = withTiming(1, {
-          duration: 500,
-          easing: Easing.elastic(1),
-        }, () => {
-          'worklet';
-          runOnJS(setState)({
-            ...state,
-            scrollY: 0,
-            closed: false,
-            scrollEnabled: true,
-          });
-        });
-      }
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: false,
+        easing: Easing.elastic(1),
+      }).start();
+      setState({
+        ...state,
+        scrollY: 0,
+        closed: false,
+        scrollEnabled: true,
+      });
     }
   }, [on]);
 
   return (
     <Animated.View
-      style={ Platform.OS === 'ios' ? {
+      style={{
         position: 'absolute',
         borderRadius: animatedValue.interpolate({
           inputRange: [0, 1],
@@ -221,68 +187,18 @@ const ExpandedItem: FunctionComponent<Props> = ({
           outputRange: [0.6, 0],
         }),
         shadowRadius: 5,
-        top: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [yOffset, 0],
-        }),
-        left: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [xOffset, 0],
-        }),
-        right: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [xOffset, 0],
-        }),
-        bottom: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [windowHeight - yOffset - ELEMENT_HEIGHT, 0],
-        }),
-      } : [{
-        position: 'absolute',
-        height: on ? '100%' : 0,
-        shadowOffset: { width: 2, height: 2 },
-        shadowColor: '#00000033',
-        shadowRadius: 5,
-      }, useAnimatedStyle(() => {
-        return {
-          borderRadius: interpolate(animatedValue.value,
-            [0, 1],
-            [10, 0],
-          ),
-          backgroundColor: interpolateColor(animatedValue.value,
-            [0, 0.9, 1],
-            [
-              'rgba(255, 255, 255, 0)',
-              'rgba(255, 255, 255, 0)',
-              'rgba(255, 255, 255, 1)',
-            ],
-          ),
-          elevation: interpolate(animatedValue.value,
-            [0, 1],
-            [0, 6],
-          ),
-          shadowOpacity: interpolate(animatedValue.value,
-            [0, 1],
-            [0.6, 0],
-          ),
-          top: interpolate(animatedValue.value,
-            [0, 1],
-            [yOffset, 0],
-          ),
-          left: interpolate(animatedValue.value,
-            [0, 1],
-            [xOffset, 0],
-          ),
-          right: interpolate(animatedValue.value,
-            [0, 1],
-            [xOffset, 0],
-          ),
-          bottom: interpolate(animatedValue.value,
-            [0, 1],
-            [windowHeight - yOffset - ELEMENT_HEIGHT, 0],
-          ),
-        };
-      })]}>
+        transform: [{
+          translateX: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [xOffset, 0],
+          })
+        }, {
+          translateY: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [yOffset, 0],
+          })
+        }],
+      }}>
       <ScrollView
         ref={scrollRef}
         contentInset={{ bottom: Platform.OS === 'ios' ? -500 : 0 }}
@@ -299,7 +215,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         }}>
         <Animated.Image
           source={{ uri: base64.decode(image) }}
-          style={ Platform.OS === 'ios' ? {
+          style={{
             borderRadius: animatedValue.interpolate({
               inputRange: [0, 1],
               outputRange: [10, 0],
@@ -308,48 +224,30 @@ const ExpandedItem: FunctionComponent<Props> = ({
               inputRange: [0, 1],
               outputRange: [416, 500],
             }),
+            width: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [364, 412],
+            }),
             resizeMode: 'cover',
-          } : [{
-            resizeMode: 'cover',
-          }, useAnimatedStyle(() => {
-            return {
-              borderRadius: interpolate(animatedValue.value,
-                [0, 1],
-                [10, 0],
-              ),
-              height: interpolate(animatedValue.value,
-                [0, 1],
-                [416, 500],
-              ),
-            };
-          })]}
+          }}
         />
         <Animated.View
-          style={Platform.OS === 'ios' ? {
+          style={{
             position: 'absolute',
             flexDirection: 'column',
-            top: animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [20, 40],
-            }),
+            transform: [{
+              translateY: animatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [20, 40],
+              })
+            }],
             left: 20,
-          } : [{
-            position: 'absolute',
-            flexDirection: 'column',
-            left: 20,
-          }, useAnimatedStyle(() => {
-            return {
-              top: interpolate(animatedValue.value,
-                [0, 1],
-                [20, 40],
-              ),
-            };
-          })]}>
+          }}>
           <P1Text label={story.subTitle} />
           <H2Text label={story.title} style={{ marginTop: 10 }} />
         </Animated.View>
         <Animated.View
-          style={ Platform.OS === 'ios' ? {
+          style={{
             backgroundColor: '#fff',
             paddingTop: 30,
             paddingBottom: 60,
@@ -357,18 +255,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
               inputRange: [0, 1],
               outputRange: [0, 1],
             }),
-          } : [{
-            backgroundColor: '#fff',
-            paddingTop: 30,
-            paddingBottom: 60,
-          }, useAnimatedStyle(() => {
-            return {
-              opacity: interpolate(animatedValue.value,
-                [0, 1],
-                [0, 1],
-              ),
-            };
-          })]}>
+          }}>
           <HTMLView
             renderNode={renderNode}
             value={story.body}
@@ -380,7 +267,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         </Animated.View>
       </ScrollView>
       <Animated.View
-        style={ Platform.OS === 'ios' ? {
+        style={{
           position: 'absolute',
           top: 30,
           right: 20,
@@ -388,18 +275,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             inputRange: [0, 0.8, 1],
             outputRange: [0, 1, 1],
           }),
-        } : [{
-          position: 'absolute',
-          top: 30,
-          right: 20,
-        }, useAnimatedStyle(() => {
-          return {
-            opacity: interpolate(animatedValue.value,
-              [0, 0.8, 1],
-              [0, 1, 1],
-            ),
-          };
-        })]}>
+        }}>
         <TouchableOpacity
           onPress={() => {
             scrollRef.current?.scrollTo({ y: 0, animated: false });
@@ -409,24 +285,14 @@ const ExpandedItem: FunctionComponent<Props> = ({
               scrollEnabled: false,
               backgroundColor: false,
             });
-            if (Platform.OS === 'ios') {
-              Animated.timing(animatedValue, {
-                toValue: 0,
-                duration: 500,
-                useNativeDriver: false,
-                easing: Easing.elastic(1),
-              }).start(() => {
-                deactivateStory();
-              });
-            } else {
-              animatedValue.value = withTiming(0, {
-                duration: 500,
-                easing: Easing.elastic(1),
-              }, () => {
-                'worklet';
-                runOnJS(deactivateStory)();
-              });
-            }
+            Animated.timing(animatedValue, {
+              toValue: 0,
+              duration: 500,
+              useNativeDriver: false,
+              easing: Easing.elastic(1),
+            }).start(() => {
+              deactivateStory();
+            });
           }}>
           <View
             style={{
