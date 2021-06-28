@@ -226,7 +226,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             }),
             width: animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [364, 412],
+              outputRange: ['88.5%', '100%'],
             }),
             resizeMode: 'cover',
           }}
