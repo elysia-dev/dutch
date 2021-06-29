@@ -64,13 +64,13 @@ const defaultTextProps = {
 };
 
 const ELEMENT_HEIGHT = 416;
+const windowWidth = Dimensions.get('window').width;
 
 const AutoSizedImage: FunctionComponent<{
   style?: ImageStyle;
   source: { uri: string };
 }> = (props: { style?: ImageStyle; source: { uri: string } }) => {
   const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
-  const windowWidth = Dimensions.get('window').width;
   const safeAsync = useSafeAsync();
 
   useEffect(() => {
@@ -227,7 +227,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             }),
             width: animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: ['88.5%', '100%'],
+              outputRange: [windowWidth-xOffset*2, windowWidth],
             }),
             resizeMode: 'cover',
           }}
