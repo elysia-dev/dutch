@@ -27,6 +27,7 @@ import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 import { Page, ProductPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
+import useSafeAsync from '../../../utiles/useSafeAsync';
 
 interface Props {
   story: Story;
@@ -63,31 +64,34 @@ const defaultTextProps = {
 };
 
 const ELEMENT_HEIGHT = 416;
+const windowWidth = Dimensions.get('window').width;
 
 const AutoSizedImage: FunctionComponent<{
   style?: ImageStyle;
   source: { uri: string };
 }> = (props: { style?: ImageStyle; source: { uri: string } }) => {
   const [state, setState] = useState({ finalSize: { width: 0, height: 0 } });
-  const windowWidth = Dimensions.get('window').width;
+  const safeAsync = useSafeAsync();
 
   useEffect(() => {
+    const finalSize = {
+      width: 0,
+      height: 0,
+    };
+
     if (props.style?.width || props.style?.height) {
       return;
     }
-    Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
-      const finalSize = {
-        width: originalWidth,
-        height: originalWidth,
-      };
+    safeAsync(Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
+      finalSize.width = originalWidth;
+      finalSize.height = originalHeight;
       if (originalWidth > windowWidth) {
         finalSize.width = windowWidth;
         const ratio = finalSize.width / originalWidth;
         finalSize.height = originalHeight * ratio;
       }
-      setState({
-        finalSize,
-      });
+    })).then(() => {
+      setState({ finalSize });
     });
   }, []);
 
@@ -184,22 +188,17 @@ const ExpandedItem: FunctionComponent<Props> = ({
           outputRange: [0.6, 0],
         }),
         shadowRadius: 5,
-        top: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [yOffset, 0],
-        }),
-        left: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [xOffset, 0],
-        }),
-        right: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [xOffset, 0],
-        }),
-        bottom: animatedValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [windowHeight - yOffset - ELEMENT_HEIGHT, 0],
-        }),
+        transform: [{
+          translateX: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [xOffset, 0],
+          })
+        }, {
+          translateY: animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [yOffset, 0],
+          })
+        }],
       }}>
       <ScrollView
         ref={scrollRef}
@@ -226,6 +225,10 @@ const ExpandedItem: FunctionComponent<Props> = ({
               inputRange: [0, 1],
               outputRange: [416, 500],
             }),
+            width: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [windowWidth-xOffset*2, windowWidth],
+            }),
             resizeMode: 'cover',
           }}
         />
@@ -233,10 +236,12 @@ const ExpandedItem: FunctionComponent<Props> = ({
           style={{
             position: 'absolute',
             flexDirection: 'column',
-            top: animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [20, 40],
-            }),
+            transform: [{
+              translateY: animatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [20, 40],
+              })
+            }],
             left: 20,
           }}>
           <P1Text label={story.subTitle} />

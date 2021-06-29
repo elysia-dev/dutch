@@ -31,6 +31,7 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import { Page, ProductPage } from '../../enums/pageEnum';
+import useSafeAsync from '../../utiles/useSafeAsync';
 
 interface State {
   stories: Story[];
@@ -53,6 +54,7 @@ const MainList: FunctionComponent = () => {
     xOffset: 0,
     yOffset: 0,
   });
+  const safeAsync = useSafeAsync();
 
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'MainList'>>();
@@ -65,16 +67,16 @@ const MainList: FunctionComponent = () => {
   useScrollToTop(ref);
 
   useEffect(() => {
-    Server.storyList(language || LocaleType.EN)
-      .then((res) => {
+    safeAsync(Server.storyList(language || LocaleType.EN))
+      .then((res: any) => {
         setState({ ...state, stories: res.data });
 
-        Server.products().then((res) => {
+        safeAsync(Server.products()).then((res: any) => {
           setState((state) => {
             return {
               ...state,
               products: res.data.filter(
-                (product) => product.status === 'terminated',
+                (product: { status: string; }) => product.status === 'terminated',
               ),
             };
           });
@@ -85,7 +87,7 @@ const MainList: FunctionComponent = () => {
           alert(t('account_errors.server'));
         }
       });
-  }, [language]);
+  }, [language, safeAsync]);
 
   // useFocusEffect(
   //   React.useCallback(() => {
