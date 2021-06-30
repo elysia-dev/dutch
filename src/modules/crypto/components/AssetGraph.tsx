@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -39,13 +39,13 @@ const AssetGraph: React.FC<IAssetGraph> = ({
   isChartLine,
   setIsChartLine,
 }) => {
-  // const { setChartDate, setChartToken } = useContext(ChartDataContext);
   const [chartDate, setChartDate] = useState<string>('');
   const [chartToken, setChartToken] = useState<string>('');
   const maxY = data.reduce((res, cur) => (cur.y >= res ? cur.y : res), 0);
   const [chartLoc, setChartLoc] = useState<number>(0);
   const { t } = useTranslation();
   const chartWidth = Dimensions.get('window').width * 0.9;
+
   return (
     <View
       style={{

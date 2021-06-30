@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { setupCache } from 'axios-cache-adapter';
 import {
   EL_ADDRESS,
   ETHERSCAN_API,
@@ -9,21 +10,23 @@ import {
 } from 'react-native-dotenv';
 import { CryptoTxsResultResponse } from '../types/CryptoTxsResponse';
 
+const cache = setupCache({
+  maxAge: 15 * 60 * 1000,
+});
+
+const api = axios.create({
+  adapter: cache.adapter,
+});
 export default class EthersacnClient {
   /**
    * 10개씩 ETH 트랜잭션 조회
    */
   static getEthTransaction = async (
     address: string,
-    lastBlock: number,
+    page: number,
   ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
-    if (APP_ENV !== 'development') {
-      return await axios.get(
-        `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
-      );
-    }
-    return await axios.get(
-      `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
+    return await api.get(
+      `${ETHERSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${ETHERSCAN_API}`,
     );
   };
 
@@ -32,15 +35,10 @@ export default class EthersacnClient {
    */
   static getErc20Transaction = async (
     address: string,
-    lastBlock: number,
+    page: number,
   ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
-    if (APP_ENV !== 'development') {
-      return await axios.get(
-        `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
-      );
-    }
-    return await axios.get(
-      `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=0&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
+    return await api.get(
+      `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${ETHERSCAN_API}`,
     );
   };
 
@@ -49,15 +47,10 @@ export default class EthersacnClient {
    */
   static getBnbTransaction = async (
     address: string,
-    lastBlock: number,
+    page: number,
   ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
-    if (APP_ENV !== 'development') {
-      return await axios.get(
-        `${BSCSCAN_API_URL}? module=account&action=txlist&address=${address}&startblock=1&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${BSCSCAN_API}`,
-      );
-    }
-    return await axios.get(
-      `${BSCSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=1&endblock=${lastBlock}&page=1&offset=10&sort=desc&apikey=${BSCSCAN_API}`,
+    return await api.get(
+      `${BSCSCAN_API_URL}?module=account&action=txlist&address=${address}&startblock=1&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${BSCSCAN_API}`,
     );
   };
 

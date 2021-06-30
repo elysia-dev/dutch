@@ -30,6 +30,7 @@
     "@react-navigation/stack": "^5.9.0",
     "@types/react-native-dotenv": "^0.2.0",
     "axios": ">=0.21.1",
+    "axios-cache-adapter": "^2.7.3",
     "base-64": "^1.0.0",
     "bignumber.js": "^9.0.1",
     "bsc-scan": "^1.1.0",

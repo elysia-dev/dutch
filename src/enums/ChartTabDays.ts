@@ -1,7 +1,7 @@
 enum ChartTabDays {
-  OneWeek = 1,
-  TwoWeeks = 2,
-  OneMonth = 4,
+  OneWeek = 7,
+  TwoWeeks = 14,
+  OneMonth = 30,
 }
 
 export default ChartTabDays;

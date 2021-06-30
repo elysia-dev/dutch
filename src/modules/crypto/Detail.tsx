@@ -7,7 +7,7 @@ import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
-import { View, Dimensions, Text } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import TransactionList from '../asset/components/TransactionList';
 import NextButton from '../../shared/components/NextButton';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +44,7 @@ const Detail: React.FC = () => {
     assets.find((a) => a.type === route.params.asset.type) || defaultAsset;
   const navigation = useNavigation();
   const [filter, setFilter] = useState<number>(0);
-  const [filterDay, setFilterDay] = useState<number>(1);
+  const [filterDay, setFilterDay] = useState<number>(7);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { transactions, counter } = useContext(TransactionContext);
@@ -64,46 +64,36 @@ const Detail: React.FC = () => {
   const [prevAssetValue, setPrevAssetValue] = useState<number>(
     parseFloat(asset.value.toFixed(2)),
   );
-  const [chartLoading, setChartLoading] = useState<boolean>(false);
+  const [chartLoading, setChartLoading] = useState<boolean>(true);
   const [isChartLine, setIsChartLine] = useState<boolean>(false);
-  const [lastBlock, setLastBlock] = useState<number>(999999999);
   const insets = useSafeAreaInsets();
 
   const address = isWalletUser
     ? wallet?.getFirstNode()?.address || ''
     : user.ethAddresses[0];
 
-  const chartTransactions = new ChartTransactions(
-    address,
-    prevAssetValue,
-    asset.type,
-  );
+  const chartTransactions = new ChartTransactions(prevAssetValue);
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
-      /**
-       * 첫 블록넘버(endBlock)는 999999999 입력
-       * 그 이후로는 처음 10개의 데이터를 가져왔을 때 마지막 블록넘버에서 1을 뺀 값이 들어갑니다.
-       * blocknumber 0 ~ 마지막 블록넘버에서 1을 뺀 값 사이에서 블록을 10개 가져옵니다.
-       */
       if (asset.type === CryptoType.ETH) {
-        res = await EthersacnClient.getEthTransaction(address, lastBlock);
+        res = await EthersacnClient.getEthTransaction(address, state.page);
       } else if (asset.type === CryptoType.BNB) {
-        res = await EthersacnClient.getBnbTransaction(address, lastBlock);
+        res = await EthersacnClient.getBnbTransaction(address, state.page);
       } else {
-        res = await EthersacnClient.getErc20Transaction(address, lastBlock);
+        res = await EthersacnClient.getErc20Transaction(address, state.page);
+      }
+
+      if (res.data.result.length === 0) {
+        alert(t('dashboard.last_transaction'));
+        return;
       }
 
       newTxs = res.data.result.map((tx: Transaction) =>
         txResponseToTx(tx, address),
       );
-
-      /**
-       * 데이터를 가져와 마지막 블록넘버를 상태저장
-       */
-      setLastBlock(newTxs[newTxs.length - 1].blockNumber);
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'));
@@ -153,10 +143,14 @@ const Detail: React.FC = () => {
 
   useEffect(() => {
     if (address) {
+      setGraphData([]);
       setIsChartLine(false);
-      getChart();
+      if (state.transactions.length) {
+        setChartLoading(true);
+        getChart();
+      }
     }
-  }, [filterDay]);
+  }, [filterDay, state.transactions.length, setChartLoading]);
 
   /**
    * chart를 띄워주는 함수
@@ -166,8 +160,12 @@ const Detail: React.FC = () => {
    */
   const getChart = async () => {
     try {
-      setChartLoading(true);
-      setGraphData(await chartTransactions.getTransactionChart(filterDay));
+      setGraphData(
+        await chartTransactions.getTransactionChart(
+          filterDay,
+          state.transactions,
+        ),
+      );
       setChartLoading(false);
     } catch (error) {
       console.log(error);
