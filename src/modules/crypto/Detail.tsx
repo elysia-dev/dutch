@@ -86,11 +86,10 @@ const Detail: React.FC = () => {
         res = await EthersacnClient.getErc20Transaction(address, state.page);
       }
 
-      if (res.data.result.length === 0) {
+      if (res.data.result.length === 0 && state.page >= 2) {
         alert(t('dashboard.last_transaction'));
         return;
       }
-
       newTxs = res.data.result.map((tx: Transaction) =>
         txResponseToTx(tx, address),
       );
@@ -145,12 +144,14 @@ const Detail: React.FC = () => {
     if (address) {
       setGraphData([]);
       setIsChartLine(false);
-      if (state.transactions.length) {
+      if (state.transactions.length && state.page >= 2) {
         setChartLoading(true);
         getChart();
+      } else if (state.loading === false) {
+        setChartLoading(false);
       }
     }
-  }, [filterDay, state.transactions.length, setChartLoading]);
+  }, [filterDay, state.transactions.length, state.loading, setChartLoading]);
 
   /**
    * chart를 띄워주는 함수

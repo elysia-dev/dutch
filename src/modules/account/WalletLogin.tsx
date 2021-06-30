@@ -21,9 +21,11 @@ const WalletLogin: React.FC = () => {
   if (stage === 0) {
     return (
       <ExpiredAccount
-        nextHandler={() => { setStage(1) }}
+        nextHandler={() => {
+          setStage(1);
+        }}
       />
-    )
+    );
   }
 
   return (
@@ -39,12 +41,12 @@ const WalletLogin: React.FC = () => {
           <TextField
             style={{ marginTop: 20 }}
             label={t('account_label.account_password')}
-            eventHandler={(input: string) =>
-              setPassword(input)
-            }
+            eventHandler={(input: string) => setPassword(input)}
             value={password}
             secure={true}
-            helperText={error ? t('account_errors.password_do_not_match') : undefined}
+            helperText={
+              error ? t('account_errors.password_do_not_match') : undefined
+            }
             helperIcon={error ? 'Error' : undefined}
           />
         </>
@@ -56,9 +58,9 @@ const WalletLogin: React.FC = () => {
             title={t('account_label.login')}
             handler={async () => {
               try {
-                await unlock(password)
+                await unlock(password);
               } catch (e) {
-                setError(1)
+                setError(1);
               }
             }}
           />
@@ -66,7 +68,7 @@ const WalletLogin: React.FC = () => {
             style={{ marginTop: 10, marginLeft: '5%', marginRight: '5%' }}
             title={t('wallet.lost_password')}
             handler={() => {
-              navigation.navigate(AccountPage.WalletRecover)
+              navigation.navigate(AccountPage.WalletRecover);
             }}
           />
         </>

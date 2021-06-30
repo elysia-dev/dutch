@@ -92,7 +92,6 @@ export class ChartTransactions {
             },
           ];
         });
-
       return xyDayValue.reverse();
     } catch (error) {
       console.error(error);
