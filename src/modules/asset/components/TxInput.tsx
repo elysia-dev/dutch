@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext } from 'react';
-import { Text, View, Dimensions } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -15,6 +15,8 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
 import GasPrice from '../../../shared/components/GasPrice';
+import NumberPadShortcut from './NumberPadShortcut';
+import TxInputViewer from './TxInputViewer';
 
 interface ITxInput {
   title: string
@@ -74,51 +76,103 @@ const TxInput: React.FC<ITxInput> = ({
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
 
+  let input;
+  let shortcut;
+  if (current === 'to') {
+    input = (
+      <TxInputViewer
+        current={current}
+        value={values.to}
+        type={to.type}
+        maxAmount={toMax}
+        balance={to.value}
+      />
+    );
+    shortcut = (
+      <NumberPadShortcut
+        current={current}
+        values={[0.01, 1, 10, 100, 1000]}
+        inputValue={values.to}
+        setValues={setValues}
+        fromToRatio={fromToRatio}
+      />
+    );
+  } else {
+    input = (
+      <TxInputViewer
+        current={current}
+        value={values.from}
+        type={from.type}
+        maxAmount={0} // 이거 임시값임!! 나중에 계산해서 넣어야 함
+        balance={from.value || getBalance(from.type)}
+      />
+    );
+    shortcut = (
+      <NumberPadShortcut
+        current={current}
+        values={[10, 50, 100, 500, 1000]}
+        inputValue={values.from}
+        setValues={setValues}
+        fromToRatio={fromToRatio}
+      />
+    );
+  }
+
   return (
     <View style={{ backgroundColor: '#fff', height: '100%' }}>
       <SheetHeader title={title} />
+      <View style={{
+        display: 'flex',
+        flexDirection:'row',
+        justifyContent: 'center',
+      }}>
+        <TouchableOpacity
+          onPress={() => setCurrent('to')}
+          style={{
+            backgroundColor: current === 'to' ? '#3679B5' : 'white',
+            borderColor: current === 'to' ? '#3679B5' : '#E6ECF2',
+            borderWidth: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderTopLeftRadius: 5,
+            borderBottomLeftRadius: 5,
+            width: '45%',
+            height: 37,
+          }}
+        >
+          <Text style={{ color: current === 'to' ? 'white' : '#CCCCCC' }}>받는 지분</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setCurrent('from')}
+          style={{
+            backgroundColor: current === 'from' ? '#3679B5' : 'white',
+            borderColor: current === 'from' ? '#3679B5' : '#E6ECF2',
+            borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderTopRightRadius: 5,
+            borderBottomRightRadius: 5,
+            width: '45%',
+            height: 37,
+          }}
+        >
+          <Text style={{ color: current === 'from' ? 'white' : '#CCCCCC' }}>금액 입력</Text>
+        </TouchableOpacity>
+      </View>
       <View
         style={{
           paddingLeft: 20,
           paddingRight: 20,
           height: Dimensions.get('window').height - 200,
         }}>
-        <CryptoInput
-          title={fromInputTitle}
-          cryptoTitle={from.title}
-          cryptoType={from.type}
-          balanceTitle={`${t('more_label.balance')}: ${commaFormatter(from.value ? from.value.toFixed(2) : getBalance(from.type).toFixed(2))} ${from.type}`}
-          invalid={isFromInvalid}
-          style={{ marginTop: 20 }}
-          value={values.from || '0'}
-          subValue={
-            currencyFormatter(
-              parseFloat(values.from || '0') * fromPrice,
-              2,
-            )}
-          active={current === 'from'}
-          onPress={() => setCurrent('from')}
-        />
-        <View>
-          <Text style={{ textAlign: 'center', fontSize: 20, color: AppColors.MAIN, marginTop: 5, marginBottom: 5 }}>↓</Text>
-        </View>
-        <CryptoInput
-          title={toInputTitle}
-          cryptoTitle={to.title}
-          cryptoType={to.type}
-          balanceTitle={toMax ? `${t('product_label.available_token')}: ${toMax} ${to.type}` : ''}
-          invalid={isToInvalid}
-          style={{ marginBottom: estimateGas ? 10 : 30 }}
-          value={values.to || '0'}
-          active={current === 'to'}
-          onPress={() => setCurrent('to')}
-        />
+        {input}
         <GasPrice
           estimatedGas={estimateGas}
           gasCrypto={gasCrypto}
           insufficientGas={insufficientGas}
         />
-        <View style={{ width: '100%', height: 1, marginTop: 0, marginBottom: 20, backgroundColor: AppColors.GREY }} />
+        {shortcut}
         <NumberPad
           addValue={(text) => {
             const before = current === 'from' ? values.from : values.to
