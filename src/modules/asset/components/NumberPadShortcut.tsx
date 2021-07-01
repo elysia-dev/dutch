@@ -36,11 +36,8 @@ const NumberPadShortcut: React.FC<Props> = ({
     )
   }
 
-  // 아 헐 지분/금액을 왔다갔다하더라도 변환만 하고 값은 유지되어야 하는구나!!!!!!!! 이걸 안 하고 있었던 듯.....
-  // 그니까 새로 만든 Input이랑 NumberPad가 제대로 연결이 됐는지 모르겠다...
-  // 지금은 금액을 입력해도 지분이 바뀌지 않음 ㅠㅠ
-  function addValue(value: number) {
-    const newInputValue = parseFloat(inputValue) + value // Number() 하면서 소수점이 엄청 생기지는 않나 검사해야 함..!!!!
+  function addValue(value: number) { console.log(inputValue)
+    const newInputValue = parseFloat(inputValue || '0') + value // Number() 하면서 소수점이 엄청 생기지는 않나 검사해야 함..!!!!
 
     if (current === 'from') {
       setValues({
