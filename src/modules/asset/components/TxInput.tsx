@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction, useContext } from 'react';
-import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -17,6 +17,7 @@ import SheetHeader from '../../../shared/components/SheetHeader';
 import GasPrice from '../../../shared/components/GasPrice';
 import NumberPadShortcut from './NumberPadShortcut';
 import TxInputViewer from './TxInputViewer';
+import UserContext from '../../../contexts/UserContext';
 
 interface ITxInput {
   title: string
@@ -66,6 +67,7 @@ const TxInput: React.FC<ITxInput> = ({
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext)
   const { getBalance } = useContext(AssetContext);
+  const { isWalletUser } = useContext(UserContext);
   const fromToRatio = fromPrice / toPrice;
   const { t } = useTranslation();
   const isFromInvalid = parseFloat(values.from) > (from.value ? from.value : getBalance(from.unit));
@@ -75,6 +77,7 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
+  const [modalVisible, setModalVisible] = useState(false);
 
   let input;
   let shortcut;
@@ -232,10 +235,50 @@ const TxInput: React.FC<ITxInput> = ({
           disabled={isToInvalid || isFromInvalid || disabled || insufficientGas}
           title={title}
           handler={() => {
-            createTx()
+            if (isWalletUser) {
+              setModalVisible(true)
+            } else {
+              createTx()
+            }
           }}
         />
       </View>
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+      >
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: 'lawngreen',
+              width: '50%',
+              height: '50%',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+            >
+              <Text>x (QuitIcon 쓸 것)</Text>
+            </TouchableOpacity>
+            <Text>{`투자 상품: ${to.title} (${to.type})`}</Text>
+            <Text>{`투자 금액: ${values.from} ${from.type}`}</Text>
+            <Text>{`매수량: ${values.to} ${to.type}`}</Text>
+            <TouchableOpacity
+              onPress={createTx}
+            >
+              <Text>정말구매할것입니다</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
   )
