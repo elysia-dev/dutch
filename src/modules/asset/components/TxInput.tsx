@@ -81,7 +81,7 @@ const TxInput: React.FC<ITxInput> = ({
 
   let input;
   let shortcut;
-  if (current === 'to') {
+  if (current === 'to') { console.log(11, to)
     input = (
       <TxInputViewer
         current={current}
@@ -170,11 +170,6 @@ const TxInput: React.FC<ITxInput> = ({
           height: Dimensions.get('window').height - 200,
         }}>
         {input}
-        <GasPrice
-          estimatedGas={estimateGas}
-          gasCrypto={gasCrypto}
-          insufficientGas={insufficientGas}
-        />
         {shortcut}
         <NumberPad
           addValue={(text) => {
@@ -271,6 +266,7 @@ const TxInput: React.FC<ITxInput> = ({
             <Text>{`투자 상품: ${to.title} (${to.type})`}</Text>
             <Text>{`투자 금액: ${values.from} ${from.type}`}</Text>
             <Text>{`매수량: ${values.to} ${to.type}`}</Text>
+            <Text>{`가스비: ${estimateGas} ${gasCrypto}`}</Text>
             <TouchableOpacity
               onPress={createTx}
             >
