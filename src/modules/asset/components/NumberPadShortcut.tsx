@@ -26,12 +26,21 @@ const NumberPadShortcut: React.FC<Props> = ({
           borderWidth: 1,
           width: 56,
           height: 27,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
         onPress={() => addValue(values[i])}
       >
-        <Text style={{ textAlign: 'center' }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 12,
+            marginBottom: 2
+          }}
+        >
           {`${current === 'to' ? '+' : '$'}${values[i]}`}
-          </Text>
+        </Text>
       </TouchableOpacity>
     )
   }
