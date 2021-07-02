@@ -18,6 +18,7 @@ import GasPrice from '../../../shared/components/GasPrice';
 import NumberPadShortcut from './NumberPadShortcut';
 import TxInputViewer from './TxInputViewer';
 import UserContext from '../../../contexts/UserContext';
+import { H3Text, H4Text } from '../../../shared/components/Texts';
 
 interface ITxInput {
   title: string
@@ -228,7 +229,7 @@ const TxInput: React.FC<ITxInput> = ({
       >
         <NextButton
           disabled={isToInvalid || isFromInvalid || disabled || insufficientGas}
-          title={title}
+          title='입력완료'
           handler={() => {
             if (isWalletUser) {
               setModalVisible(true)
@@ -241,39 +242,225 @@ const TxInput: React.FC<ITxInput> = ({
       <Modal
         transparent={true}
         visible={modalVisible}
+        animationType={'slide'}
       >
-        <View
+        <TouchableOpacity
+          onPress={() => setModalVisible(false)}
+          activeOpacity={1}
           style={{
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: 'flex-end',
             width: '100%',
             height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.44)',
           }}
         >
           <View
             style={{
-              backgroundColor: 'lawngreen',
-              width: '50%',
-              height: '50%',
+              backgroundColor: 'white',
+              width: '100%',
+              height: 572,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              display: 'flex',
             }}
           >
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: AppColors.BACKGROUND_GREY,
+                padding: 20,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+              }}
             >
-              <Text>x (QuitIcon 쓸 것)</Text>
-            </TouchableOpacity>
-            <Text>{`투자 상품: ${to.title}`}</Text>
-            <Text>{`투자 금액: ${values.from} ${from.type}`}</Text>
-            <Text>{`매수량: ${values.to} ${to.unit}`}</Text>
-            <Text>{`가스비: ${estimateGas} ${gasCrypto}`}</Text>
-            <TouchableOpacity
-              onPress={createTx}
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <H4Text label={t('assets.cancel')} style={{ color: AppColors.MAIN }} />
+              </TouchableOpacity>
+              <H3Text label={title} style={{}} />
+              <View style={{ width: 20 }} />
+            </View>
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: 18,
+                flex: 1,
+              }}
             >
-              <Text>정말구매할것입니다</Text>
-            </TouchableOpacity>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: 'rgba(28, 28, 28, 1)',
+                    textAlign: 'center',
+                    lineHeight: 32,
+                    fontWeight: 'bold',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'rgba(241, 241, 241, 1)',
+                    alignItems: 'center',
+                    marginTop: 20,
+                    height: 50,
+                  }}
+                >
+                  구매 전 최종 금액을 확인해 주세요!
+                </Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'rgba(241, 241, 241, 1)',
+                    alignItems: 'center',
+                    height: 50,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'rgba(102, 102, 102, 1)',
+                      marginLeft: 5,
+                    }}
+                  >
+                    투자 상품
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      color: '#1C1C1C',
+                      marginRight: 5,
+                    }}
+                  >
+                    {to.title}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'rgba(241, 241, 241, 1)',
+                    alignItems: 'center',
+                    height: 64,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'rgba(102, 102, 102, 1)',
+                      marginLeft: 5,
+                    }}
+                  >
+                    투자 금액
+                  </Text>
+                  <View style={{ marginRight: 5 }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        color: '#1C1C1C',
+                      }}
+                    >
+                      (달러환산금액)
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#848484',
+                        textAlign: 'right',
+                      }}
+                    >
+                      {`${values.from} ${from.type}`}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'rgba(241, 241, 241, 1)',
+                    alignItems: 'center',
+                    height: 50,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'rgba(102, 102, 102, 1)',
+                      marginLeft: 5,
+                    }}
+                  >
+                    구매자 분량
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      color: '#1C1C1C',
+                      marginRight: 5,
+                    }}
+                  >
+                    {`${values.to} ${to.unit}`}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'rgba(241, 241, 241, 1)',
+                    alignItems: 'center',
+                    height: 50,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'rgba(102, 102, 102, 1)',
+                      marginLeft: 5,
+                    }}
+                  >
+                    가스비
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      color: '#1C1C1C',
+                      marginRight: 5,
+                    }}
+                  >
+                    {`${estimateGas} ${gasCrypto}`}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: '#1C1C1C',
+                    marginHorizontal: 5,
+                    marginTop: 12,
+                    lineHeight: 20,
+                  }}
+                >
+                  * 이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.
+                </Text>
+              </View>
+              <NextButton
+                title='구매하기'
+                handler={createTx}
+              />
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
       <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
