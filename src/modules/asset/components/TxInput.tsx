@@ -19,6 +19,7 @@ import NumberPadShortcut from './NumberPadShortcut';
 import TxInputViewer from './TxInputViewer';
 import UserContext from '../../../contexts/UserContext';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
+import PriceContext from '../../../contexts/PriceContext';
 
 interface ITxInput {
   title: string
@@ -69,58 +70,54 @@ const TxInput: React.FC<ITxInput> = ({
   const { currencyFormatter } = useContext(PreferenceContext)
   const { getBalance } = useContext(AssetContext);
   const { isWalletUser } = useContext(UserContext);
-  const fromToRatio = fromPrice / toPrice;
+  const [modalVisible, setModalVisible] = useState(false);
+  const { getCryptoPrice } = useContext(PriceContext);
+  const ELAPrice = 5;
   const { t } = useTranslation();
-  const isFromInvalid = parseFloat(values.from) > (from.value ? from.value : getBalance(from.unit));
-  const isToInvalid = toMax ? (parseFloat(values.to) > toMax) : false;
   const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from)
+    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(CryptoType.BNB)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
-  const [modalVisible, setModalVisible] = useState(false);
 
-  let input;
-  let shortcut;
-  if (current === 'to') {
-    input = (
-      <TxInputViewer
-        current={current}
-        value={values.to}
-        type={to.unit}
-        maxAmount={toMax}
-        balance={to.value}
-      />
-    );
-    shortcut = (
-      <NumberPadShortcut
-        current={current}
-        values={[0.01, 1, 10, 100, 1000]}
-        inputValue={values.to}
-        setValues={setValues}
-        fromToRatio={fromToRatio}
-      />
-    );
-  } else {
-    input = (
-      <TxInputViewer
-        current={current}
-        value={values.from}
-        type={from.type}
-        maxAmount={0} // 이거 임시값임!! 나중에 계산해서 넣어야 함
-        balance={from.value || getBalance(from.type)}
-      />
-    );
-    shortcut = (
-      <NumberPadShortcut
-        current={current}
-        values={[10, 50, 100, 500, 1000]}
-        inputValue={values.from}
-        setValues={setValues}
-        fromToRatio={fromToRatio}
-      />
-    );
-  }
+  const isToBalanceSufficient = parseFloat(values.to || '0') < to.value;
+  const isFromBalanceSufficient = parseFloat(values.from || '0') < ((from.value ? from.value : getBalance(from.unit)) * getCryptoPrice(CryptoType.BNB));
+  const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
+  const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
+  const isToInvalid = !isToBalanceSufficient || !isUnderToMax;
+  const isFromInvalid = !isFromBalanceSufficient || !isUnderFromMax;
+  console.log(isToBalanceSufficient)
+  const input = (
+    <TxInputViewer
+      current={current}
+      to={{
+        value: values.to,
+        type: to.unit,
+        maxAmount: toMax,
+        balance: to.value,
+        price: toPrice,
+      }}
+      from={{
+        value: values.from,
+        type: from.type,
+        maxAmount: (toMax || 0) * 5 / getCryptoPrice(from.type),
+        balance: from.value || getBalance(from.type),
+        price: fromPrice,
+      }}
+      isBalanceSufficient={current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient}
+      isUnderMax={current === 'to' ? isUnderToMax : isUnderFromMax}
+    />
+  );
+
+  const shortcut = (
+    <NumberPadShortcut
+      current={current}
+      values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
+      inputValue={current === 'to' ? values.to : values.from}
+      setValues={setValues}
+      ELAPrice={ELAPrice}
+    />
+  );
 
   return (
     <View style={{ backgroundColor: '#fff', height: '100%' }}>
@@ -189,11 +186,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(removedDotNext) * fromToRatio).toFixed(2),
+                to: (parseFloat(removedDotNext) / ELAPrice).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(removedDotNext) / fromToRatio).toFixed(2),
+                from: (parseFloat(removedDotNext) * ELAPrice).toFixed(2),
                 to: next,
               })
             }
@@ -206,11 +203,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(next || '0') * fromToRatio).toFixed(2),
+                to: (parseFloat(next || '0') / ELAPrice).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(next || '0') / fromToRatio).toFixed(2),
+                from: (parseFloat(next || '0') * ELAPrice).toFixed(2),
                 to: next,
               })
             }
@@ -244,25 +241,27 @@ const TxInput: React.FC<ITxInput> = ({
         visible={modalVisible}
         animationType={'slide'}
       >
-        <TouchableOpacity
-          onPress={() => setModalVisible(false)}
-          activeOpacity={1}
+        <View
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.44)',
           }}
         >
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            activeOpacity={1}
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0, 0, 0, 0.44)',
+            }}
+          />
           <View
             style={{
-              backgroundColor: 'white',
               width: '100%',
               height: 572,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
               display: 'flex',
+              backgroundColor: 'rgba(0, 0, 0, 0.44)',
             }}
           >
             <View
@@ -289,6 +288,7 @@ const TxInput: React.FC<ITxInput> = ({
                 justifyContent: 'space-between',
                 padding: 18,
                 flex: 1,
+                backgroundColor: 'white',
               }}
             >
               <View>
@@ -365,9 +365,10 @@ const TxInput: React.FC<ITxInput> = ({
                         fontSize: 14,
                         fontWeight: 'bold',
                         color: '#1C1C1C',
+                        textAlign: 'right',
                       }}
                     >
-                      (달러환산금액)
+                      {`$ ${values.from}`}
                     </Text>
                     <Text
                       style={{
@@ -376,7 +377,7 @@ const TxInput: React.FC<ITxInput> = ({
                         textAlign: 'right',
                       }}
                     >
-                      {`${values.from} ${from.type}`}
+                      {`${(Number(values.from) / fromPrice).toFixed(2)} ${from.type}`}
                     </Text>
                   </View>
                 </View>
@@ -454,13 +455,35 @@ const TxInput: React.FC<ITxInput> = ({
                   * 이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.
                 </Text>
               </View>
-              <NextButton
+              {/* <NextButton
                 title='구매하기'
                 handler={createTx}
-              />
+              /> */}
+              <TouchableOpacity
+                onPress={createTx}
+                // disabled={disabled}
+                style={{
+                  backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
+                  // ...(style as {}),
+                  borderRadius: 5,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  height: 50,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    textAlign: 'center',
+                    // fontFamily: AppFonts.Bold,
+                    color: 'white',
+                  }}
+                  allowFontScaling={false}>
+                  구매하기~~~~
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
       <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>

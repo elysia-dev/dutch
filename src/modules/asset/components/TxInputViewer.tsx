@@ -1,35 +1,69 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
+import { max } from 'react-native-reanimated';
+import PriceContext from '../../../contexts/PriceContext';
+import CryptoType from '../../../enums/CryptoType';
 
 interface Props {
   current: string
-  value: string
-  type: string
-  maxAmount: number | undefined // 투자가능금액
-  balance: number // 잔고
+  to: {
+    value: string, // 입력한 값
+    type: string, // 화폐 단위
+    maxAmount: number | undefined, // 최대 투자 가능 금액
+    balance: number, // 잔고
+    price: number, // 토큰당 현재 가격..?
+  }
+  from: {
+    value: string, // 입력한 값
+    type: string, // 화폐 단위
+    maxAmount: number | undefined, // 최대 투자 가능 금액
+    balance: number, // 잔고
+    price: number, // 토큰당 현재 가격..?
+  }
+  isBalanceSufficient: boolean,
+  isUnderMax: boolean,
 }
 
 const TxInputViewer: React.FC<Props> = ({
   current,
-  value,
-  type,
-  maxAmount,
-  balance,
+  to,
+  from,
+  isBalanceSufficient,
+  isUnderMax,
 }) => {
-  let valueText;
-  let guideText;
+  const { getCryptoPrice } = useContext(PriceContext);
 
-  if (value) {
+  let currentTab;
+  let otherTab;
+  if (current === 'to') {
+    currentTab = to;
+    otherTab = from;
+  } else {
+    currentTab = from;
+    otherTab = to;
+  }
+
+  let valueText;
+  if (currentTab.value) {
     valueText = (
       <View
         style={{
           width: '100%',
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'flex-end',
+          justifyContent: current === 'to' ? 'flex-end' : 'space-between',
           alignItems: 'flex-end',
         }}
       >
+        {current === 'from' && <Text
+          style={{
+            fontSize: 25,
+            color: '#666666',
+            fontWeight: 'bold',
+          }}
+        >
+          $
+        </Text>}
         <Text
           style={{
             fontSize: 30,
@@ -37,17 +71,17 @@ const TxInputViewer: React.FC<Props> = ({
             fontWeight: 'bold',
             }}
           >
-            {value}
+            {currentTab.value}
           </Text>
-        <Text
+        {current === 'to' && <Text
           style={{
             fontSize: 25,
             color: '#666666',
             fontWeight: 'bold',
           }}
         >
-          {' ' + type}
-        </Text>
+          {' ' + currentTab.type}
+        </Text>}
       </View>
     );
   } else {
@@ -56,7 +90,7 @@ const TxInputViewer: React.FC<Props> = ({
         style={{
           fontSize: 30,
           textAlign: 'center',
-          color: value ? '#1C1C1C' : '#CCCCCC',
+          color: currentTab.value ? '#1C1C1C' : '#CCCCCC',
         }}
       >
         {current === 'to' ? '몇 개를 구매할까요?' : '얼마를 구매할까요?'}
@@ -64,7 +98,25 @@ const TxInputViewer: React.FC<Props> = ({
     );
   }
 
-  guideText = (
+  let balanceText;
+  if (isBalanceSufficient) {
+    if (current === 'to') {
+      balanceText = `투자 금액: $ ${(Number(currentTab.value)) * 5} (= ${(Number(from.value) * getCryptoPrice(CryptoType.EL)).toFixed(2)} EL)`;
+    } else {
+      balanceText = `구매량: ${(Number(currentTab.value) / currentTab.price).toFixed(2)} ${currentTab.type} (= ${(Number(from.value) * getCryptoPrice(CryptoType.EL)).toFixed(2)} EL)`;
+    }
+  } else {
+    balanceText = '보유하신 EL 잔액이 부족합니다.';
+  }
+
+  let maxText;
+  if (isUnderMax) {
+    maxText = `${current === 'to' ? '투자 가능 토큰 수량' : '투자 가능 금액'}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`;
+  } else {
+    `${current === 'to' ? '구매 가능한 토큰 수량을 초과했습니다.' : '구매 가능 금액을 초과했습니다.'}`
+  }
+
+  const guideText = (
     <View
       style={{
         marginTop: 10,
@@ -79,7 +131,7 @@ const TxInputViewer: React.FC<Props> = ({
           fontSize: 12,
         }}
       >
-        {`${current === 'to' ? '투자 가능 토큰 수량' : '투자 가능 금액'}: ${maxAmount} ${type}`}
+        {balanceText}
       </Text>
       <Text
         style={{
@@ -88,8 +140,9 @@ const TxInputViewer: React.FC<Props> = ({
           fontSize: 12,
         }}
       >
-        {`지갑 잔액: ${balance.toFixed(2)} ${type}`}
+        {maxText}
       </Text>
+      <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text>
     </View>
   );
 

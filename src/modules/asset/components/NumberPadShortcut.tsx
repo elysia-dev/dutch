@@ -6,7 +6,7 @@ interface Props {
   values: number[]
   inputValue: string
   setValues: any // 이름에 value가 너무 많이 들어가서 좀 헷갈리긴 한다... 그리고 타입도 좀 엄밀하게
-  fromToRatio: number
+  ELAPrice: number
 }
 
 const NumberPadShortcut: React.FC<Props> = ({
@@ -14,7 +14,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   values,
   inputValue,
   setValues,
-  fromToRatio,
+  ELAPrice,
 }) => {
   const buttons = [];
   for (let i=0; i<values.length; i++) {
@@ -51,11 +51,11 @@ const NumberPadShortcut: React.FC<Props> = ({
     if (current === 'from') {
       setValues({
         from: String(newInputValue),
-        to: (newInputValue * fromToRatio).toFixed(2),
+        to: (newInputValue / ELAPrice).toFixed(2),
       })
     } else {
       setValues({
-        from: (newInputValue / fromToRatio).toFixed(2),
+        from: (newInputValue * ELAPrice).toFixed(2),
         to: String(newInputValue),
       })
     }
