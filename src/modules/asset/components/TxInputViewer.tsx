@@ -170,7 +170,7 @@ const TxInputViewer: React.FC<Props> = ({
           textAlign: 'right',
           color: '#BABABA',
           fontSize: 12,
-          marginTop: 4,
+          marginTop: 6,
           fontFamily: AppFonts.Regular,
         }}
       >
@@ -240,7 +240,7 @@ const TxInputViewer: React.FC<Props> = ({
           borderBottomWidth: 1,
           borderColor: '#3679B5',
           width: '100%',
-          marginTop: 14,
+          marginTop: 12,
         }}
       />
       {guideText}
