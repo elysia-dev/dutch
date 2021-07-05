@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
+import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
   current: string
@@ -36,7 +37,8 @@ const NumberPadShortcut: React.FC<Props> = ({
           style={{
             textAlign: 'center',
             fontSize: 12,
-            marginBottom: 2
+            marginBottom: 2,
+            fontFamily: AppFonts.Medium,
           }}
         >
           {`${current === 'to' ? '+' : '$'}${values[i]}`}

@@ -20,6 +20,7 @@ import TxInputViewer from './TxInputViewer';
 import UserContext from '../../../contexts/UserContext';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
 import PriceContext from '../../../contexts/PriceContext';
+import AppFonts from '../../../enums/AppFonts';
 
 interface ITxInput {
   title: string
@@ -86,7 +87,7 @@ const TxInput: React.FC<ITxInput> = ({
   const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
   const isToInvalid = !isToBalanceSufficient || !isUnderToMax;
   const isFromInvalid = !isFromBalanceSufficient || !isUnderFromMax;
-  console.log(isToBalanceSufficient)
+
   const input = (
     <TxInputViewer
       current={current}
@@ -142,7 +143,14 @@ const TxInput: React.FC<ITxInput> = ({
             height: 37,
           }}
         >
-          <Text style={{ color: current === 'to' ? 'white' : '#CCCCCC' }}>받는 지분</Text>
+          <Text
+            style={{
+              color: current === 'to' ? 'white' : '#CCCCCC',
+              fontFamily: AppFonts.Regular,
+            }}
+          >
+            받는 지분
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setCurrent('from')}
@@ -158,7 +166,14 @@ const TxInput: React.FC<ITxInput> = ({
             height: 37,
           }}
         >
-          <Text style={{ color: current === 'from' ? 'white' : '#CCCCCC' }}>금액 입력</Text>
+          <Text
+            style={{
+              color: current === 'from' ? 'white' : '#CCCCCC',
+              fontFamily: AppFonts.Regular,
+            }}
+          >
+            금액 입력
+          </Text>
         </TouchableOpacity>
       </View>
       <View
@@ -304,6 +319,7 @@ const TxInput: React.FC<ITxInput> = ({
                     alignItems: 'center',
                     marginTop: 20,
                     height: 50,
+                    fontFamily: AppFonts.Bold,
                   }}
                 >
                   구매 전 최종 금액을 확인해 주세요!
@@ -324,6 +340,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontSize: 14,
                       color: 'rgba(102, 102, 102, 1)',
                       marginLeft: 5,
+                      fontFamily: AppFonts.Regular,
                     }}
                   >
                     투자 상품
@@ -334,6 +351,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontWeight: 'bold',
                       color: '#1C1C1C',
                       marginRight: 5,
+                      fontFamily: AppFonts.Bold,
                     }}
                   >
                     {to.title}
@@ -355,6 +373,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontSize: 14,
                       color: 'rgba(102, 102, 102, 1)',
                       marginLeft: 5,
+                      fontFamily: AppFonts.Regular,
                     }}
                   >
                     투자 금액
@@ -366,6 +385,7 @@ const TxInput: React.FC<ITxInput> = ({
                         fontWeight: 'bold',
                         color: '#1C1C1C',
                         textAlign: 'right',
+                        fontFamily: AppFonts.Bold,
                       }}
                     >
                       {`$ ${values.from}`}
@@ -375,6 +395,7 @@ const TxInput: React.FC<ITxInput> = ({
                         fontSize: 12,
                         color: '#848484',
                         textAlign: 'right',
+                        fontFamily: AppFonts.Regular,
                       }}
                     >
                       {`${(Number(values.from) / fromPrice).toFixed(2)} ${from.type}`}
@@ -397,9 +418,10 @@ const TxInput: React.FC<ITxInput> = ({
                       fontSize: 14,
                       color: 'rgba(102, 102, 102, 1)',
                       marginLeft: 5,
+                      fontFamily: AppFonts.Regular,
                     }}
                   >
-                    구매자 분량
+                    구매 지분량
                   </Text>
                   <Text
                     style={{
@@ -407,6 +429,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontWeight: 'bold',
                       color: '#1C1C1C',
                       marginRight: 5,
+                      fontFamily: AppFonts.Bold,
                     }}
                   >
                     {`${values.to} ${to.unit}`}
@@ -428,6 +451,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontSize: 14,
                       color: 'rgba(102, 102, 102, 1)',
                       marginLeft: 5,
+                      fontFamily: AppFonts.Regular,
                     }}
                   >
                     가스비
@@ -438,6 +462,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontWeight: 'bold',
                       color: '#1C1C1C',
                       marginRight: 5,
+                      fontFamily: AppFonts.Bold,
                     }}
                   >
                     {`${estimateGas} ${gasCrypto}`}
@@ -450,21 +475,16 @@ const TxInput: React.FC<ITxInput> = ({
                     marginHorizontal: 5,
                     marginTop: 12,
                     lineHeight: 20,
+                    fontFamily: AppFonts.Regular,
                   }}
                 >
                   * 이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.
                 </Text>
               </View>
-              {/* <NextButton
-                title='구매하기'
-                handler={createTx}
-              /> */}
               <TouchableOpacity
                 onPress={createTx}
-                // disabled={disabled}
                 style={{
                   backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
-                  // ...(style as {}),
                   borderRadius: 5,
                   justifyContent: 'center',
                   alignContent: 'center',
@@ -474,11 +494,11 @@ const TxInput: React.FC<ITxInput> = ({
                   style={{
                     fontSize: 16,
                     textAlign: 'center',
-                    // fontFamily: AppFonts.Bold,
+                    fontFamily: AppFonts.Bold,
                     color: 'white',
                   }}
                   allowFontScaling={false}>
-                  구매하기~~~~
+                  구매하기
                 </Text>
               </TouchableOpacity>
             </View>
