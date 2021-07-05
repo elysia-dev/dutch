@@ -37,7 +37,6 @@ const NumberPadShortcut: React.FC<Props> = ({
           style={{
             textAlign: 'center',
             fontSize: 12,
-            marginBottom: 2,
             fontFamily: AppFonts.Medium,
           }}
         >

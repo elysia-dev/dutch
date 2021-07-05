@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { TouchableHighlight, View, Image } from 'react-native';
 import { H2Text } from '../../shared/components/Texts';
+import AppFonts from '../../enums/AppFonts';
 
 const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, img?: any }> = ({
   pressHandler,
@@ -9,7 +10,7 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, 
 }) => {
   let child;
   if (value) {
-    child = <H2Text label={value} style={{ textAlign: 'center' }} />;
+    child = <H2Text label={value} style={{ textAlign: 'center', fontFamily: AppFonts.Medium }} />;
   } else if (img) {
     child = (
       <View
@@ -48,7 +49,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
   height = 240,
 }) => {
   return (
-    <View style={{ paddingLeft: '5%', paddingRight: '5%' }}>
+    <View>
       {
         [0, 1, 2].map((index) => {
           return (
