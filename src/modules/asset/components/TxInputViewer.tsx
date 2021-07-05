@@ -231,7 +231,7 @@ const TxInputViewer: React.FC<Props> = ({
       <View
         style={{
           borderBottomWidth: 1,
-          borderColor: '#F1F1F1',
+          borderColor: '#3679B5',
           width: '100%',
           marginTop: 14,
         }}
