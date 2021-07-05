@@ -1,11 +1,29 @@
 import React, { FunctionComponent } from 'react';
-import { TouchableHighlight, View } from 'react-native';
+import { TouchableHighlight, View, Image } from 'react-native';
 import { H2Text } from '../../shared/components/Texts';
 
-const DialButton: FunctionComponent<{ pressHandler: () => void, value: string }> = ({
+const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, img?: any }> = ({
   pressHandler,
   value,
+  img,
 }) => {
+  let child;
+  if (value) {
+    child = <H2Text label={value} style={{ textAlign: 'center' }} />;
+  } else if (img) {
+    child = (
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Image source={img} resizeMethod='scale' />
+      </View>
+    );
+  }
+
   return (
     <TouchableHighlight
       style={{
@@ -19,7 +37,7 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value: string }>
       underlayColor='#F0F0F0'
       activeOpacity={0.5}
     >
-      <H2Text label={value} style={{ textAlign: 'center' }} />
+      {child}
     </TouchableHighlight>
   );
 };
@@ -48,7 +66,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: height / 4, alignItems: 'center' }}>
         <DialButton key={'.'} value={'.'} pressHandler={() => addValue('.')} />
         <DialButton key={'0'} value={'0'} pressHandler={() => addValue('0')} />
-        <DialButton key={'remove'} value={'←'} pressHandler={() => removeValue()} />
+        <DialButton key={'remove'} img={require('../assets/images/delete_icon.png')} pressHandler={() => removeValue()} />
       </View>
     </View>
   );
