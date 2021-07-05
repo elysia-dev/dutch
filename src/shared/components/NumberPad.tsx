@@ -20,7 +20,11 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, 
           alignItems: 'center',
         }}
       >
-        <Image source={img} resizeMethod='scale' />
+        <Image
+          source={img}
+          resizeMethod='scale'
+          style={{ width: 42, height: 42 }}
+        />
       </View>
     );
   }
@@ -67,7 +71,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: height / 4, alignItems: 'center' }}>
         <DialButton key={'.'} value={'.'} pressHandler={() => addValue('.')} />
         <DialButton key={'0'} value={'0'} pressHandler={() => addValue('0')} />
-        <DialButton key={'remove'} img={require('../assets/images/delete_icon.png')} pressHandler={() => removeValue()} />
+        <DialButton key={'remove'} img={require('../assets/images/delete_icon_xxhdpi.png')} pressHandler={() => removeValue()} />
       </View>
     </View>
   );
