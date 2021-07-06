@@ -212,7 +212,7 @@ const Reward: FunctionComponent = () => {
                   step: TxStep.Creating
                 })
               } else {
-                Server.requestTransaction(8, 1, 'interest')
+                Server.requestTransaction(route.params.productId, 1, 'interest')
                   .then((res) => {
                     setState({
                       ...state,
