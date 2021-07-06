@@ -23,6 +23,9 @@ interface Props {
   }
   isBalanceSufficient: boolean,
   isUnderMax: boolean,
+  estimatedGas: string,
+  gasCrypto: CryptoType,
+  insufficientGas: boolean,
 }
 
 const TxInputViewer: React.FC<Props> = ({
@@ -31,6 +34,9 @@ const TxInputViewer: React.FC<Props> = ({
   from,
   isBalanceSufficient,
   isUnderMax,
+  estimatedGas,
+  gasCrypto,
+  insufficientGas,
 }) => {
   const { getCryptoPrice } = useContext(PriceContext);
 
@@ -211,6 +217,55 @@ const TxInputViewer: React.FC<Props> = ({
     );
   }
 
+  let gasText;
+  if (!insufficientGas) {
+    gasText = (
+      <Text
+      style={{
+        textAlign: 'right',
+        color: '#BABABA',
+        fontSize: 12,
+        marginTop: 6,
+        fontFamily: AppFonts.Regular,
+      }}
+      >
+        {`가스비: ${estimatedGas} ${gasCrypto}`}
+      </Text>
+    );
+  } else {
+    gasText = (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          width: '100%',
+          marginTop: 4,
+        }}
+      >
+        <Image
+          source={require('../images/alert_icon_xxhdpi.png')}
+          style={{
+            width: 15,
+            height: 15,
+            marginRight: 3,
+          }}
+        />
+        <Text
+          style={{
+            textAlign: 'right',
+            color: '#E53935',
+            fontSize: 12,
+            fontFamily: AppFonts.Medium,
+          }}
+        >
+          가스비가 부족합니다.
+        </Text>
+      </View>
+    );
+  }
+
   const guideText = (
     <View
       style={{
@@ -221,6 +276,7 @@ const TxInputViewer: React.FC<Props> = ({
     >
       {balanceText}
       {maxText}
+      {gasText}
       {/* <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text> */}
     </View>
   );

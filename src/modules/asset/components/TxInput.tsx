@@ -3,7 +3,6 @@ import { Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
-import CryptoInput from '..//components/CryptoInput';
 import AppColors from '../../../enums/AppColors';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
@@ -14,7 +13,6 @@ import AssetContext from '../../../contexts/AssetContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
-import GasPrice from '../../../shared/components/GasPrice';
 import NumberPadShortcut from './NumberPadShortcut';
 import TxInputViewer from './TxInputViewer';
 import UserContext from '../../../contexts/UserContext';
@@ -111,6 +109,9 @@ const TxInput: React.FC<ITxInput> = ({
       }}
       isBalanceSufficient={current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient}
       isUnderMax={current === 'to' ? isUnderToMax : isUnderFromMax}
+      estimatedGas={estimateGas}
+      gasCrypto={gasCrypto}
+      insufficientGas={insufficientGas}
     />
   );
 
