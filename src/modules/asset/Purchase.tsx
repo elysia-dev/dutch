@@ -36,7 +36,7 @@ const Purchase: FunctionComponent = () => {
   })
   const [state, setState] = useState({
     txHash: '',
-    step: TxStep.None,
+    step: TxStep.CheckAllowance,
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
@@ -52,6 +52,9 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
+  // 자식 요소인 모달의 버튼 문구를 바꾸려면 state로 바꿔야 할 수도....
+  const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
+  const [isApproving, setIsApproving] = useState(false);
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -145,18 +148,20 @@ const Purchase: FunctionComponent = () => {
     switch (state.step) {
       case TxStep.CheckAllowance:
         if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
-          setState({ ...state, step: TxStep.Creating })
+          // setState({ ...state, step: TxStep.Creating })
           return
         }
 
         getElysiaContract()?.allowance(
           wallet?.getFirstNode()?.address, contractAddress
         ).then((res: BigNumber) => {
-          if (res.isZero()) {
-            setState({ ...state, step: TxStep.Approving })
-          } else {
-            setState({ ...state, step: TxStep.Creating })
+          if (res.isZero()) { // res가 쓰려는 돈보다 적어야 함 (res.lte())
+            // setState({ ...state, step: TxStep.Approving })
+          } else { console.log(isApproved, 888888888888)
+            setIsApproved(true);
+            // setState({ ...state, step: TxStep.Creating })
           }
+          setState({ ...state, step: TxStep.None })
         }).catch((e: any) => {
           afterTxFailed(e.message);
           navigation.goBack();
@@ -164,14 +169,17 @@ const Purchase: FunctionComponent = () => {
         break;
 
       case TxStep.Approving:
+        setIsApproving(true);
         getElysiaContract()?.populateTransaction
           .approve(contractAddress, '1' + '0'.repeat(30))
           .then(populatedTransaction => {
+            setIsApproving(false);
             wallet?.getFirstSigner().sendTransaction({
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx: any) => {
-              setState({ ...state, txHash: tx, step: TxStep.Creating })
+            setIsApproved(true);
+              setState({ ...state, txHash: tx, step: TxStep.None })
             }).catch((e) => {
               afterTxFailed(e.message);
               navigation.goBack();
@@ -234,9 +242,15 @@ const Purchase: FunctionComponent = () => {
         setValues={setValues}
         disabled={parseInt(values.to || '0') < 1}
         estimateGas={state.estimateGas}
+        isApproved={isApproved}
+        isApproving={isApproving}
         createTx={() => {
           if (isWalletUser) {
-            setState({ ...state, step: TxStep.CheckAllowance })
+            if (isApproved) {
+              setState({ ...state, step: TxStep.Creating })
+            } else {
+              setState({ ...state, step: TxStep.Approving })
+            }
           } else {
             Server.requestTransaction(route.params.productId, parseInt(values.to), 'buying')
               .then((res) => {

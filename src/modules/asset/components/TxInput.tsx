@@ -36,6 +36,8 @@ interface ITxInput {
   step: TxStep
   estimateGas?: string
   disabled: boolean
+  isApproved: boolean
+  isApproving: boolean
   setCurrent: Dispatch<SetStateAction<"from" | "to">>
   setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
   createTx: () => void
@@ -64,6 +66,8 @@ const TxInput: React.FC<ITxInput> = ({
   step,
   estimateGas = '0',
   disabled,
+  isApproved,
+  isApproving,
   setCurrent,
   setValues,
   createTx,
@@ -497,15 +501,16 @@ const TxInput: React.FC<ITxInput> = ({
                     fontFamily: AppFonts.Bold,
                     color: 'white',
                   }}
-                  allowFontScaling={false}>
-                  구매하기
+                  allowFontScaling={false}
+                >
+                  {isApproved ? '구매하기' : '한도 올리기..?'}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-      <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
+      <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step) || isApproving} />
     </View>
   )
 }
