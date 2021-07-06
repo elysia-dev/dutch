@@ -21,6 +21,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   for (let i=0; i<values.length; i++) {
     buttons.push(
       <TouchableOpacity
+        key={values[i]}
         style={{
           borderRadius: 5,
           borderColor: '#C8C8C8',
