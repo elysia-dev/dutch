@@ -6,6 +6,7 @@ import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
+  purpose: string
   current: string
   to: {
     value: string, // 입력한 값
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const TxInputViewer: React.FC<Props> = ({
+  purpose,
   current,
   to,
   from,
@@ -103,7 +105,7 @@ const TxInputViewer: React.FC<Props> = ({
           marginTop: currentTab.value ? 0 : 12,
         }}
       >
-        {current === 'to' ? t('assets.invest_stake_placeholder') : t('assets.invest_value_placeholder')}
+        {current === 'to' ? t(`assets.${purpose}_stake_placeholder`) : t(`assets.${purpose}_value_placeholder`)}
       </Text>
     );
   }
@@ -197,7 +199,7 @@ const TxInputViewer: React.FC<Props> = ({
           fontFamily: AppFonts.Regular,
         }}
       >
-        {`${current === 'to' ? t('assets.invest_stake_available') : t('assets.invest_value_available')}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`}
+        {`${current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`)}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`}
       </Text>
     );
   } else {
@@ -227,7 +229,7 @@ const TxInputViewer: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? t('assets.invest_stake_excess') : t('assets.invest_value_excess')}`}
+          {`${current === 'to' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`}
         </Text>
       </View>
     );

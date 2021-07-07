@@ -220,6 +220,7 @@ const Purchase: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
+        purpose="purchase"
         title={t('assets.invest')}
         fromInputTitle={t('assets.invest_value')}
         toInputTitle={t('assets.invest_stake')}

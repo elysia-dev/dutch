@@ -21,6 +21,7 @@ import PriceContext from '../../../contexts/PriceContext';
 import AppFonts from '../../../enums/AppFonts';
 
 interface ITxInput {
+  purpose: string
   title: string
   fromInputTitle: string
   toInputTitle: string
@@ -50,6 +51,7 @@ interface ITxInput {
 // TxInput Height ~= 200
 // -> NumberPad Height = Window.height - 440
 const TxInput: React.FC<ITxInput> = ({
+  purpose,
   title,
   fromInputTitle,
   toInputTitle,
@@ -88,9 +90,11 @@ const TxInput: React.FC<ITxInput> = ({
   const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
   const isToInvalid = !isToBalanceSufficient || !isUnderToMax;
   const isFromInvalid = !isFromBalanceSufficient || !isUnderFromMax;
+  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
 
   const input = (
     <TxInputViewer
+      purpose={purposeType}
       current={current}
       to={{
         value: values.to,
@@ -326,7 +330,7 @@ const TxInput: React.FC<ITxInput> = ({
                     fontFamily: AppFonts.Bold,
                   }}
                 >
-                  {t('assets.invest_confirm')}
+                  {t(`assets.${purposeType}_confirm`)}
                 </Text>
                 <View
                   style={{
@@ -347,7 +351,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    {t('assets.invest_confirm_product')}
+                    {t(`assets.${purposeType}_confirm_product`)}
                   </Text>
                   <Text
                     style={{
@@ -380,7 +384,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    {t('assets.invest_confirm_value')}
+                    {t(`assets.${purposeType}_confirm_value`)}
                   </Text>
                   <View style={{ marginRight: 5 }}>
                     <Text
@@ -425,7 +429,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    {t('assets.invest_confirm_stake')}
+                    {t(`assets.${purposeType}_confirm_stake`)}
                   </Text>
                   <Text
                     style={{
@@ -503,7 +507,7 @@ const TxInput: React.FC<ITxInput> = ({
                   }}
                   allowFontScaling={false}
                 >
-                  {isApproved ? t('assets.invest') : t('assets.check_allowance')}
+                  {isApproved ? t(`assets.${purposeType}`) : t('assets.check_allowance')}
                 </Text>
               </TouchableOpacity>
             </View>

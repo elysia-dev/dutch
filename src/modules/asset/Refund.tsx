@@ -148,9 +148,10 @@ const Refund: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
+        purpose="refund"
         title={t('assets.refund')}
-        fromInputTitle={t('assets.refund_stake')}
-        toInputTitle={t('assets.refund_value')}
+        fromInputTitle={t('assets.refund_value')}
+        toInputTitle={t('assets.refund_stake')}
         from={from}
         to={to}
         values={values}
