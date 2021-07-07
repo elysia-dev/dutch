@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { View, Text, Image } from 'react-native';
-import { max } from 'react-native-reanimated';
 import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
@@ -76,10 +75,10 @@ const TxInputViewer: React.FC<Props> = ({
             fontSize: 30,
             color: '#1C1C1C',
             fontFamily: AppFonts.Bold,
-            }}
-          >
-            {currentTab.value}
-          </Text>
+          }}
+        >
+          {currentTab.value}
+        </Text>
         {current === 'to' && <Text
           style={{
             fontSize: 25,
@@ -99,6 +98,7 @@ const TxInputViewer: React.FC<Props> = ({
           textAlign: 'center',
           color: '#CCCCCC',
           fontFamily: AppFonts.Medium,
+          marginTop: currentTab.value ? 0 : 12,
         }}
       >
         {current === 'to' ? '몇 개를 구매할까요?' : '얼마를 구매할까요?'}
@@ -107,64 +107,80 @@ const TxInputViewer: React.FC<Props> = ({
   }
 
   let balanceText;
-  if (isBalanceSufficient) {
-    if (current === 'to') {
-      balanceText = (
-        <Text
-          style={{
-            textAlign: 'right',
-            color: '#BABABA',
-            fontSize: 12,
-            fontFamily: AppFonts.Regular,
-          }}
-        >
-          {`투자 금액: $ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${(Number(from.value) * getCryptoPrice(CryptoType.EL)).toFixed(2)} EL)`}
-        </Text>
-      );
+  if (currentTab.value) {
+    if (isBalanceSufficient) {
+      if (current === 'to') {
+        balanceText = (
+          <Text
+            style={{
+              textAlign: 'right',
+              color: '#BABABA',
+              fontSize: 12,
+              fontFamily: AppFonts.Regular,
+              width: '100%',
+              marginTop: 4,
+            }}
+          >
+            {`투자 금액: $ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${from.value} ${from.type})`}
+          </Text>
+        );
+      } else {
+        balanceText = (
+          <Text
+            style={{
+              textAlign: 'right',
+              color: '#BABABA',
+              fontSize: 12,
+              fontFamily: AppFonts.Regular,
+              width: '100%',
+              marginTop: 4,
+            }}
+          >
+            {`구매량: ${(Number(currentTab.value) / currentTab.price).toFixed(2)} ${currentTab.type} (= ${from.value} ${from.type})`}
+          </Text>
+        );
+      }
     } else {
       balanceText = (
-        <Text
+        <View
           style={{
-            textAlign: 'right',
-            color: '#BABABA',
-            fontSize: 12,
-            fontFamily: AppFonts.Regular,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            width: '100%',
+            marginTop: 4,
           }}
         >
-          {`구매량: ${(Number(currentTab.value) / currentTab.price).toFixed(2)} ${currentTab.type} (= ${(Number(from.value) * getCryptoPrice(CryptoType.EL)).toFixed(2)} EL)`}
-        </Text>
+          <Image
+            source={require('../images/alert_icon_xxhdpi.png')}
+            style={{
+              width: 15,
+              height: 15,
+              marginRight: 3,
+            }}
+          />
+          <Text
+            style={{
+              textAlign: 'right',
+              color: '#E53935',
+              fontSize: 12,
+              fontFamily: AppFonts.Medium,
+            }}
+          >
+            보유하신 EL 잔액이 부족합니다.
+          </Text>
+        </View>
       );
     }
   } else {
     balanceText = (
       <View
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
           width: '100%',
+          height: 9,
         }}
-      >
-        <Image
-          source={require('../images/alert_icon_xxhdpi.png')}
-          style={{
-            width: 15,
-            height: 15,
-            marginRight: 3,
-          }}
-        />
-        <Text
-          style={{
-            textAlign: 'right',
-            color: '#E53935',
-            fontSize: 12,
-            fontFamily: AppFonts.Medium,
-          }}
-        >
-          보유하신 EL 잔액이 부족합니다.
-        </Text>
-      </View>
+      />
     );
   }
 
@@ -176,7 +192,6 @@ const TxInputViewer: React.FC<Props> = ({
           textAlign: 'right',
           color: '#BABABA',
           fontSize: 12,
-          marginTop: 6,
           fontFamily: AppFonts.Regular,
         }}
       >
@@ -192,7 +207,6 @@ const TxInputViewer: React.FC<Props> = ({
           justifyContent: 'flex-end',
           alignItems: 'center',
           width: '100%',
-          marginTop: 4,
         }}
       >
         <Image
@@ -241,7 +255,7 @@ const TxInputViewer: React.FC<Props> = ({
           justifyContent: 'flex-end',
           alignItems: 'center',
           width: '100%',
-          marginTop: 4,
+          marginTop: 6,
         }}
       >
         <Image
@@ -272,9 +286,13 @@ const TxInputViewer: React.FC<Props> = ({
         marginTop: 10,
         marginRight: 10,
         width: '100%',
+        borderColor: '#E6E6E6',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
       }}
     >
-      {balanceText}
       {maxText}
       {gasText}
       {/* <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text> */}
@@ -291,6 +309,7 @@ const TxInputViewer: React.FC<Props> = ({
       }}
     >
       {valueText}
+      {balanceText}
       <View
         style={{
           borderBottomWidth: 1,
