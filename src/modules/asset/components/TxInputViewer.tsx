@@ -121,7 +121,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`투자 금액: $ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${from.value} ${from.type})`}
+            {`투자 금액: $ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
           </Text>
         );
       } else {
@@ -136,7 +136,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`구매량: ${(Number(currentTab.value) / currentTab.price).toFixed(2)} ${currentTab.type} (= ${from.value} ${from.type})`}
+            {`구매량: ${(Number(currentTab.value) / 5).toFixed(2)} ${to.type} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
           </Text>
         );
       }

@@ -80,9 +80,10 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(CryptoType.BNB)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
-
-  const isToBalanceSufficient = parseFloat(values.to || '0') < to.value;
-  const isFromBalanceSufficient = parseFloat(values.from || '0') < ((from.value ? from.value : getBalance(from.unit)) * getCryptoPrice(CryptoType.BNB));
+  const fromBalance = getBalance(from.type);
+  const toBalance = fromBalance * fromPrice / 5;
+  const isToBalanceSufficient = parseFloat(values.to || '0') < toBalance;
+  const isFromBalanceSufficient = parseFloat(values.from || '0') < ((fromBalance) * fromPrice);
   const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
   const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
   const isToInvalid = !isToBalanceSufficient || !isUnderToMax;
@@ -95,14 +96,14 @@ const TxInput: React.FC<ITxInput> = ({
         value: values.to,
         type: to.unit,
         maxAmount: toMax,
-        balance: to.value,
+        balance: toBalance,
         price: toPrice,
       }}
       from={{
         value: values.from,
         type: from.type,
         maxAmount: (toMax || 0) * 5 / getCryptoPrice(from.type),
-        balance: from.value || getBalance(from.type),
+        balance: fromBalance,
         price: fromPrice,
       }}
       isBalanceSufficient={current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient}
