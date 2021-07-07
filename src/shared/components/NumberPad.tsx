@@ -32,7 +32,7 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, 
   return (
     <TouchableHighlight
       style={{
-        flex: 1,
+        width: 100,
         height: 50,
         borderRadius: 8,
         justifyContent: 'center',
@@ -50,14 +50,19 @@ const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, 
 const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeValue: () => void, height?: number }> = ({
   addValue,
   removeValue,
-  height = 240,
 }) => {
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'space-around',
+        paddingVertical: 12,
+      }}
+    >
       {
         [0, 1, 2].map((index) => {
           return (
-            <View key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: height / 4 }}>
+            <View key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               {
                 [0, 1, 2].map((index2) => {
                   const number = (index * 3 + index2 + 1).toString();
@@ -68,7 +73,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
           )
         })
       }
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: height / 4, alignItems: 'center' }}>
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <DialButton key={'.'} value={'.'} pressHandler={() => addValue('.')} />
         <DialButton key={'0'} value={'0'} pressHandler={() => addValue('0')} />
         <DialButton key={'remove'} img={require('../assets/images/delete_icon_xxhdpi.png')} pressHandler={() => removeValue()} />
