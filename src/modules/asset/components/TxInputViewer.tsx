@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Text, Image } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
@@ -38,6 +39,7 @@ const TxInputViewer: React.FC<Props> = ({
   insufficientGas,
 }) => {
   const { getCryptoPrice } = useContext(PriceContext);
+  const { t } = useTranslation();
 
   let currentTab;
   let otherTab;
@@ -101,7 +103,7 @@ const TxInputViewer: React.FC<Props> = ({
           marginTop: currentTab.value ? 0 : 12,
         }}
       >
-        {current === 'to' ? '몇 개를 구매할까요?' : '얼마를 구매할까요?'}
+        {current === 'to' ? t('assets.invest_stake_placeholder') : t('assets.invest_value_placeholder')}
       </Text>
     );
   }
@@ -121,7 +123,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`투자 금액: $ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
+            {`$ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
           </Text>
         );
       } else {
@@ -136,7 +138,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`구매량: ${(Number(currentTab.value) / 5).toFixed(2)} ${to.type} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
+            {`${(Number(currentTab.value) / 5).toFixed(2)} ${to.type} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
           </Text>
         );
       }
@@ -168,7 +170,7 @@ const TxInputViewer: React.FC<Props> = ({
               fontFamily: AppFonts.Medium,
             }}
           >
-            보유하신 EL 잔액이 부족합니다.
+            {t('assets.insufficient_balance', { type: from.type })}
           </Text>
         </View>
       );
@@ -195,7 +197,7 @@ const TxInputViewer: React.FC<Props> = ({
           fontFamily: AppFonts.Regular,
         }}
       >
-        {`${current === 'to' ? '투자 가능 토큰 수량' : '투자 가능 금액'}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`}
+        {`${current === 'to' ? t('assets.invest_stake_available') : t('assets.invest_value_available')}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`}
       </Text>
     );
   } else {
@@ -225,7 +227,7 @@ const TxInputViewer: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? '구매 가능한 토큰 수량을 초과했습니다.' : '구매 가능 금액을 초과했습니다.'}`}
+          {`${current === 'to' ? t('assets.invest_stake_excess') : t('assets.invest_value_excess')}`}
         </Text>
       </View>
     );
@@ -243,7 +245,7 @@ const TxInputViewer: React.FC<Props> = ({
         fontFamily: AppFonts.Regular,
       }}
       >
-        {`가스비: ${estimatedGas} ${gasCrypto}`}
+        {`${t('assets.gas_price')}: ${estimatedGas} ${gasCrypto}`}
       </Text>
     );
   } else {
@@ -274,7 +276,7 @@ const TxInputViewer: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          가스비가 부족합니다.
+          {t('assets.insufficient_gas')}
         </Text>
       </View>
     );

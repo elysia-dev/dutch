@@ -153,7 +153,7 @@ const TxInput: React.FC<ITxInput> = ({
               fontFamily: AppFonts.Regular,
             }}
           >
-            받는 지분
+            {toInputTitle}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -176,7 +176,7 @@ const TxInput: React.FC<ITxInput> = ({
               fontFamily: AppFonts.Regular,
             }}
           >
-            금액 입력
+            {fromInputTitle}
           </Text>
         </TouchableOpacity>
       </View>
@@ -245,7 +245,7 @@ const TxInput: React.FC<ITxInput> = ({
       >
         <NextButton
           disabled={isToInvalid || isFromInvalid || disabled || insufficientGas}
-          title='입력완료'
+          title={t('assets.done')}
           handler={() => {
             if (isWalletUser) {
               setModalVisible(true)
@@ -326,7 +326,7 @@ const TxInput: React.FC<ITxInput> = ({
                     fontFamily: AppFonts.Bold,
                   }}
                 >
-                  구매 전 최종 금액을 확인해 주세요!
+                  {t('assets.invest_confirm')}
                 </Text>
                 <View
                   style={{
@@ -347,7 +347,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    투자 상품
+                    {t('assets.invest_confirm_product')}
                   </Text>
                   <Text
                     style={{
@@ -380,7 +380,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    투자 금액
+                    {t('assets.invest_confirm_value')}
                   </Text>
                   <View style={{ marginRight: 5 }}>
                     <Text
@@ -425,7 +425,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    구매 지분량
+                    {t('assets.invest_confirm_stake')}
                   </Text>
                   <Text
                     style={{
@@ -458,7 +458,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    가스비
+                    {t('assets.gas_price')}
                   </Text>
                   <Text
                     style={{
@@ -482,7 +482,7 @@ const TxInput: React.FC<ITxInput> = ({
                     fontFamily: AppFonts.Regular,
                   }}
                 >
-                  * 이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.
+                  {`* ${t('assets.confirm_gas')}`}
                 </Text>
               </View>
               <TouchableOpacity
@@ -503,7 +503,7 @@ const TxInput: React.FC<ITxInput> = ({
                   }}
                   allowFontScaling={false}
                 >
-                  {isApproved ? '구매하기' : '인출 한도 올리기'}
+                  {isApproved ? t('assets.invest') : t('assets.check_allowance')}
                 </Text>
               </TouchableOpacity>
             </View>
