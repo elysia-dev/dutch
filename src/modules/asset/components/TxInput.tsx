@@ -75,7 +75,6 @@ const TxInput: React.FC<ITxInput> = ({
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const { getCryptoPrice } = useContext(PriceContext);
-  const ELAPrice = 5;
   const { t } = useTranslation();
   const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
@@ -96,7 +95,7 @@ const TxInput: React.FC<ITxInput> = ({
   const isToBalanceSufficient = parseFloat(values.to || '0') < toBalance;
   const isFromBalanceSufficient = parseFloat(values.from || '0') < ((fromBalance) * fromPrice);
   const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
-  const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
+  const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * toPrice) : false;
 
   // 구매를 할 때는 구매 가능한 최대 금액 != 잔고(내 지갑)임.
   // 하지만 환불을 할 때는 환불 가능한 최대 금액 = 잔고(내 투자금)임!!!!
@@ -141,7 +140,7 @@ const TxInput: React.FC<ITxInput> = ({
       values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
       inputValue={current === 'to' ? values.to : values.from}
       setValues={setValues}
-      ELAPrice={ELAPrice}
+      ELAPrice={toPrice}
     />
   );
 
@@ -226,11 +225,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(removedDotNext) / ELAPrice).toFixed(2),
+                to: (parseFloat(removedDotNext) / toPrice).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(removedDotNext) * ELAPrice).toFixed(2),
+                from: (parseFloat(removedDotNext) * toPrice).toFixed(2),
                 to: next,
               })
             }
@@ -243,11 +242,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(next || '0') / ELAPrice).toFixed(2),
+                to: (parseFloat(next || '0') / toPrice).toFixed(2),
               })
             } else {
               setValues({
-                from: (parseFloat(next || '0') * ELAPrice).toFixed(2),
+                from: (parseFloat(next || '0') * toPrice).toFixed(2),
                 to: next,
               })
             }
