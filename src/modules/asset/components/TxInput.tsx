@@ -79,7 +79,7 @@ const TxInput: React.FC<ITxInput> = ({
   const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(CryptoType.BNB)
+    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
   const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
 
