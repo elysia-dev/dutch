@@ -120,7 +120,7 @@ const TxInputViewer: React.FC<Props> = ({
           <Text
             style={{
               textAlign: 'right',
-              color: '#BABABA',
+              color: '#848484',
               fontSize: 12,
               fontFamily: AppFonts.Regular,
               width: '100%',
@@ -135,7 +135,7 @@ const TxInputViewer: React.FC<Props> = ({
           <Text
             style={{
               textAlign: 'right',
-              color: '#BABABA',
+              color: '#848484',
               fontSize: 12,
               fontFamily: AppFonts.Regular,
               width: '100%',
@@ -200,7 +200,7 @@ const TxInputViewer: React.FC<Props> = ({
       <Text
         style={{
           textAlign: 'right',
-          color: '#BABABA',
+          color: '#848484',
           fontSize: 12,
           fontFamily: AppFonts.Regular,
         }}
@@ -247,7 +247,7 @@ const TxInputViewer: React.FC<Props> = ({
       <Text
       style={{
         textAlign: 'right',
-        color: '#BABABA',
+        color: '#848484',
         fontSize: 12,
         marginTop: 6,
         fontFamily: AppFonts.Regular,
@@ -294,7 +294,6 @@ const TxInputViewer: React.FC<Props> = ({
     <View
       style={{
         marginTop: 10,
-        marginRight: 10,
         width: '100%',
         borderColor: '#E6E6E6',
         borderWidth: 1,
