@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
+import commaFormatter from '../../../utiles/commaFormatter';
 
 interface Props {
   purpose: string // invest / refund
@@ -82,7 +83,7 @@ const TxInputViewer: React.FC<Props> = ({
             fontFamily: AppFonts.Bold,
           }}
         >
-          {currentTab.value}
+          {commaFormatter(currentTab.value)}
         </Text>
         {current === 'to' && <Text
           style={{
@@ -126,7 +127,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`$ ${((Number(currentTab.value)) * 5).toFixed(2)} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
+            {`$ ${commaFormatter(((Number(currentTab.value)) * 5).toFixed(2))} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
           </Text>
         );
       } else {
@@ -141,7 +142,7 @@ const TxInputViewer: React.FC<Props> = ({
               marginTop: 4,
             }}
           >
-            {`${(Number(currentTab.value) / 5).toFixed(2)} ${to.type} (= ${(Number(from.value) / from.price).toFixed(2)} ${from.type})`}
+            {`${commaFormatter((Number(currentTab.value) / 5).toFixed(2))} ${to.type} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
           </Text>
         );
       }
@@ -204,7 +205,7 @@ const TxInputViewer: React.FC<Props> = ({
           fontFamily: AppFonts.Regular,
         }}
       >
-        {`${maxTextLabel}: ${maxTextValue} ${currentTab.type}`}
+        {`${maxTextLabel}: ${commaFormatter(maxTextValue)} ${currentTab.type}`}
       </Text>
     );
   } else {
@@ -252,7 +253,7 @@ const TxInputViewer: React.FC<Props> = ({
         fontFamily: AppFonts.Regular,
       }}
       >
-        {`${t('assets.gas_price')}: ${estimatedGas} ${gasCrypto}`}
+        {`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
       </Text>
     );
   } else {

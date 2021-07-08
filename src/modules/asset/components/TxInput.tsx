@@ -413,7 +413,7 @@ const TxInput: React.FC<ITxInput> = ({
                         fontFamily: AppFonts.Bold,
                       }}
                     >
-                      {`$ ${values.from}`}
+                      {`$ ${commaFormatter(values.from)}`}
                     </Text>
                     <Text
                       style={{
@@ -423,7 +423,7 @@ const TxInput: React.FC<ITxInput> = ({
                         fontFamily: AppFonts.Regular,
                       }}
                     >
-                      {`${(Number(values.from) / fromPrice).toFixed(2)} ${from.type}`}
+                      {`${commaFormatter((Number(values.from) / fromPrice).toFixed(2))} ${from.type}`}
                     </Text>
                   </View>
                 </View>
@@ -457,7 +457,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Bold,
                     }}
                   >
-                    {`${values.to} ${to.unit}`}
+                    {`${commaFormatter(values.to)} ${to.unit}`}
                   </Text>
                 </View>
                 <View
@@ -490,7 +490,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Bold,
                     }}
                   >
-                    {`${estimateGas} ${gasCrypto}`}
+                    {`${commaFormatter(estimateGas)} ${gasCrypto}`}
                   </Text>
                 </View>
                 <Text

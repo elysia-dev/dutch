@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
+import commaFormatter from '../../../utiles/commaFormatter';
 
 interface Props {
   current: string
@@ -41,7 +42,7 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? '+' : '$'}${values[i]}`}
+          {`${current === 'to' ? '+' : '$'}${commaFormatter(values[i])}`}
         </Text>
       </TouchableOpacity>
     )
