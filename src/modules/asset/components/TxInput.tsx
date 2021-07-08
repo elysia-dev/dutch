@@ -97,10 +97,11 @@ const TxInput: React.FC<ITxInput> = ({
   const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
   const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * toPrice) : false;
 
-  // 구매를 할 때는 구매 가능한 최대 금액 != 잔고(내 지갑)임.
-  // 하지만 환불을 할 때는 환불 가능한 최대 금액 = 잔고(내 투자금)임!!!!
   let isBalanceSufficient = current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient
   let isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
+
+  // 구매를 할 때는 구매 가능한 최대 금액 != 잔고(내 지갑)임.
+  // 하지만 환불을 할 때는 환불 가능한 최대 금액 = 잔고(내 투자금)임!!!!
   if (purpose === 'refund') {
     isUnderMax = isBalanceSufficient;
     isBalanceSufficient = true;

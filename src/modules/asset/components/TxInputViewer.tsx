@@ -190,7 +190,7 @@ const TxInputViewer: React.FC<Props> = ({
 
   let maxText;
   const maxTextLabel = current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
-  const maxTextValue = currentTab.balance.toFixed(2);
+  const maxTextValue = (currentTab.maxAmount || 0).toFixed(2);
   if (isUnderMax) {
     maxText = (
       <Text
@@ -301,7 +301,7 @@ const TxInputViewer: React.FC<Props> = ({
     >
       {maxText}
       {gasText}
-      {/* <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text> */}
+      <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text>
     </View>
   );
 
