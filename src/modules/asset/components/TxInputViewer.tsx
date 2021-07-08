@@ -206,8 +206,8 @@ const TxInputViewer: React.FC<Props> = ({
   let maxText;
   const maxTextLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
   const maxTextValue = purpose === 'purchase' ?
-    (currentTab.maxAmount || 0).toFixed(2)
-    : currentTab.balance.toFixed(2); // refund
+    (currentTab.maxAmount || 0).toFixed(current === 'to' ? 4 : 2)
+    : currentTab.balance.toFixed(current === 'to' ? 4 : 2); // refund
   if (isUnderMax) {
     maxText = (
       <Text
