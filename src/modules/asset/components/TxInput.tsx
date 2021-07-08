@@ -227,7 +227,7 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 2),
+                to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
               })
             } else {
               setValues({
@@ -244,7 +244,7 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: decimalFormatter(parseFloat(next || '0') / toPrice, 2),
+                to: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
               })
             } else {
               setValues({
