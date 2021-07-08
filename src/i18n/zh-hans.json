@@ -487,8 +487,8 @@
       "done": "输入完成",
       "gas_price": "gas费用",
       "confirm_gas": "因为使用以太坊网络，所以会产生gas费用（类似于手续费）。",
-      "check_allowance_guide": "해당 컨트랙트에게 사용자의 자산 활용 권한을 허용해야 합니다.",
-      "check_allowance": "허용합니다"
+      "check_allowance_guide": "分红指南",
+      "check_allowance": "分红"
     },
     "legacy": {
       "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"
