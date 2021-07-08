@@ -53,7 +53,6 @@ const Purchase: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
-  console.log(65656565, values)
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;

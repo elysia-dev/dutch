@@ -19,6 +19,7 @@ import UserContext from '../../../contexts/UserContext';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
 import PriceContext from '../../../contexts/PriceContext';
 import AppFonts from '../../../enums/AppFonts';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface ITxInput {
   purpose: string
@@ -226,11 +227,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(removedDotNext) / toPrice).toFixed(2),
+                to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 2),
               })
             } else {
               setValues({
-                from: (parseFloat(removedDotNext) * toPrice).toFixed(2),
+                from: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
                 to: next,
               })
             }
@@ -243,11 +244,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'from') {
               setValues({
                 from: next,
-                to: (parseFloat(next || '0') / toPrice).toFixed(2),
+                to: decimalFormatter(parseFloat(next || '0') / toPrice, 2),
               })
             } else {
               setValues({
-                from: (parseFloat(next || '0') * toPrice).toFixed(2),
+                from: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
                 to: next,
               })
             }
