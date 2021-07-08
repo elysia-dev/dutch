@@ -155,14 +155,15 @@ const Refund: FunctionComponent = () => {
         from={from}
         to={to}
         values={values}
-        fromPrice={getCryptoPrice(CryptoType.ELA)}
-        toPrice={getCryptoPrice(to.type)}
+        fromPrice={getCryptoPrice(from.type)}
+        toPrice={getCryptoPrice(CryptoType.ELA)}
         current={current}
         step={state.step}
         disabled={parseInt(values.from || '0') < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
         estimateGas={state.estimateGas}
+        isApproved={true}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })

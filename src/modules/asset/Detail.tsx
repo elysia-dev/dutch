@@ -339,8 +339,8 @@ const Detail: FunctionComponent = () => {
                   icon={'-'}
                   handler={() => {
                     navigation.navigate(AssetPage.Refund, {
-                      from: asset,
-                      to: { type: state.paymentMethod, title: state.paymentMethod.toUpperCase(), unit: state.paymentMethod.toUpperCase() },
+                      from: { type: state.paymentMethod, title: state.paymentMethod.toUpperCase(), unit: state.paymentMethod.toUpperCase() },
+                      to: asset,
                       contractAddress: state.contractAddress,
                       productId: state.productId,
                     })

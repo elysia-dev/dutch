@@ -189,6 +189,8 @@ const TxInputViewer: React.FC<Props> = ({
   }
 
   let maxText;
+  const maxTextLabel = current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
+  const maxTextValue = currentTab.balance.toFixed(2);
   if (isUnderMax) {
     maxText = (
       <Text
@@ -199,7 +201,7 @@ const TxInputViewer: React.FC<Props> = ({
           fontFamily: AppFonts.Regular,
         }}
       >
-        {`${current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`)}: ${currentTab.maxAmount?.toFixed(2)} ${currentTab.type}`}
+        {`${maxTextLabel}: ${maxTextValue} ${currentTab.type}`}
       </Text>
     );
   } else {

@@ -82,15 +82,32 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(CryptoType.BNB)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
-  const fromBalance = getBalance(from.type);
-  const toBalance = fromBalance * fromPrice / 5;
+  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
+
+  let fromBalance = 0;
+  let toBalance = 0;
+  if (purpose === 'purchase') {
+    fromBalance = getBalance(from.type);
+    toBalance = fromBalance * fromPrice / toPrice;
+  } else if (purpose === 'refund') {
+    toBalance = to.value;
+    fromBalance = toBalance * toPrice / fromPrice;
+  }
   const isToBalanceSufficient = parseFloat(values.to || '0') < toBalance;
   const isFromBalanceSufficient = parseFloat(values.from || '0') < ((fromBalance) * fromPrice);
   const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
   const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * ELAPrice) : false;
-  const isToInvalid = !isToBalanceSufficient || !isUnderToMax;
-  const isFromInvalid = !isFromBalanceSufficient || !isUnderFromMax;
-  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
+
+  // 구매를 할 때는 구매 가능한 최대 금액 != 잔고(내 지갑)임.
+  // 하지만 환불을 할 때는 환불 가능한 최대 금액 = 잔고(내 투자금)임!!!!
+  let isBalanceSufficient = current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient
+  let isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
+  if (purpose === 'refund') {
+    isUnderMax = isBalanceSufficient;
+    isBalanceSufficient = true;
+  }
+
+  const isInvalid = !isBalanceSufficient || !isUnderMax;
 
   const input = (
     <TxInputViewer
@@ -110,8 +127,8 @@ const TxInput: React.FC<ITxInput> = ({
         balance: fromBalance,
         price: fromPrice,
       }}
-      isBalanceSufficient={current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient}
-      isUnderMax={current === 'to' ? isUnderToMax : isUnderFromMax}
+      isBalanceSufficient={isBalanceSufficient}
+      isUnderMax={isUnderMax}
       estimatedGas={estimateGas}
       gasCrypto={gasCrypto}
       insufficientGas={insufficientGas}
@@ -248,7 +265,7 @@ const TxInput: React.FC<ITxInput> = ({
         }}
       >
         <NextButton
-          disabled={isToInvalid || isFromInvalid || disabled || insufficientGas}
+          disabled={isInvalid || disabled || insufficientGas}
           title={t('assets.done')}
           handler={() => {
             if (isWalletUser) {
