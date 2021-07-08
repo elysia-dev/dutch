@@ -506,27 +506,41 @@ const TxInput: React.FC<ITxInput> = ({
                   {`* ${t('assets.confirm_gas')}`}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={createTx}
-                style={{
-                  backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
-                  borderRadius: 5,
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  height: 50,
-                }}>
-                <Text
+              <View>
+                {!isApproved && <Text
                   style={{
-                    fontSize: 16,
-                    textAlign: 'center',
+                    fontSize: 12,
+                    color: '#1C1C1C',
+                    marginHorizontal: 5,
+                    marginBottom: 12,
+                    lineHeight: 20,
                     fontFamily: AppFonts.Bold,
-                    color: 'white',
                   }}
-                  allowFontScaling={false}
                 >
-                  {isApproved ? t(`assets.${purposeType}`) : t('assets.check_allowance')}
-                </Text>
-              </TouchableOpacity>
+                  {`* ${t('assets.check_allowance_guide')}`}
+                </Text>}
+                <TouchableOpacity
+                  onPress={createTx}
+                  style={{
+                    backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    height: 50,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textAlign: 'center',
+                      fontFamily: AppFonts.Bold,
+                      color: 'white',
+                    }}
+                    allowFontScaling={false}
+                  >
+                    {isApproved ? t(`assets.${purposeType}`) : t('assets.check_allowance')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
