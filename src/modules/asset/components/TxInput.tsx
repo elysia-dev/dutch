@@ -380,7 +380,7 @@ const TxInput: React.FC<ITxInput> = ({
                       fontFamily: AppFonts.Bold,
                     }}
                   >
-                    {to.title}
+                    {`${to.title} (${to.unit})`}
                   </Text>
                 </View>
                 <View
