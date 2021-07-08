@@ -53,6 +53,7 @@ const Purchase: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
+  console.log(65656565, values)
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -91,6 +92,7 @@ const Purchase: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
+      const ether = String(parseFloat(values.from) / getCryptoPrice(from.type)) // dollar to crypto
       switch (from.type) {
         case CryptoType.ETH, CryptoType.BNB:
           populatedTransaction = await contract?.populateTransaction.purchase();
@@ -100,13 +102,13 @@ const Purchase: FunctionComponent = () => {
           txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
-            value: utils.parseEther(values.from).toHexString(),
+            value: utils.parseEther(ether).toHexString(),
           })
 
           break;
         default:
           populatedTransaction = await contract?.populateTransaction.purchase(
-            utils.parseEther(values.from)
+            utils.parseEther(ether)
           )
 
           if (!populatedTransaction) break;

@@ -50,6 +50,7 @@ const Refund: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(to.type, contractAddress);
   const txResult = useWatingTx(state.txHash, to.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const ether = String(parseFloat(values.from) / getCryptoPrice(from.type))
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -80,7 +81,7 @@ const Refund: FunctionComponent = () => {
 
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(values.from)
+        utils.parseEther(ether)
       )
 
       if (!populatedTransaction) return;
@@ -168,7 +169,7 @@ const Refund: FunctionComponent = () => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })
           } else {
-            Server.requestTransaction(route.params.productId, parseInt(values.from), 'refund')
+            Server.requestTransaction(route.params.productId, parseInt(ether), 'refund')
               .then((res) => {
                 setState({
                   ...state,
