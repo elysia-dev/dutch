@@ -111,7 +111,7 @@ const TxInput: React.FC<ITxInput> = ({
 
   const input = (
     <TxInputViewer
-      purpose={purposeType}
+      purpose={purpose}
       current={current}
       to={{
         value: values.to,

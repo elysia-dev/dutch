@@ -6,7 +6,7 @@ import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
-  purpose: string
+  purpose: string // invest / refund
   current: string
   to: {
     value: string, // 입력한 값
@@ -42,6 +42,7 @@ const TxInputViewer: React.FC<Props> = ({
 }) => {
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
+  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
 
   let currentTab;
   let otherTab;
@@ -105,7 +106,7 @@ const TxInputViewer: React.FC<Props> = ({
           marginTop: currentTab.value ? 0 : 12,
         }}
       >
-        {current === 'to' ? t(`assets.${purpose}_stake_placeholder`) : t(`assets.${purpose}_value_placeholder`)}
+        {current === 'to' ? t(`assets.${purposeType}_stake_placeholder`) : t(`assets.${purposeType}_value_placeholder`)}
       </Text>
     );
   }
@@ -189,8 +190,10 @@ const TxInputViewer: React.FC<Props> = ({
   }
 
   let maxText;
-  const maxTextLabel = current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
-  const maxTextValue = (currentTab.maxAmount || 0).toFixed(2);
+  const maxTextLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
+  const maxTextValue = purpose === 'purchase' ?
+    (currentTab.maxAmount || 0).toFixed(2)
+    : currentTab.balance.toFixed(2); // refund
   if (isUnderMax) {
     maxText = (
       <Text
@@ -231,7 +234,7 @@ const TxInputViewer: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`}
+          {`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`}
         </Text>
       </View>
     );
@@ -301,7 +304,7 @@ const TxInputViewer: React.FC<Props> = ({
     >
       {maxText}
       {gasText}
-      <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text>
+      {/* <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text> */}
     </View>
   );
 
