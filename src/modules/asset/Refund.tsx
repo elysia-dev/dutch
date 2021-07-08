@@ -39,7 +39,7 @@ const Refund: FunctionComponent = () => {
     stage: 0,
     estimateGas: '',
   });
-  const [current, setCurrent] = useState<'from' | 'to'>('from');
+  const [current, setCurrent] = useState<'from' | 'to'>('to');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
   const { from, to, contractAddress } = route.params;
   const navigation = useNavigation();

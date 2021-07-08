@@ -41,7 +41,7 @@ const Purchase: FunctionComponent = () => {
     stage: 0,
     estimateGas: '',
   });
-  const [current, setCurrent] = useState<'from' | 'to'>('from');
+  const [current, setCurrent] = useState<'from' | 'to'>('to');
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
   const { from, to, toMax, contractAddress } = route.params;
   const navigation = useNavigation();
