@@ -92,10 +92,10 @@ const TxInput: React.FC<ITxInput> = ({
     toBalance = to.value;
     fromBalance = toBalance * toPrice / fromPrice;
   }
-  const isToBalanceSufficient = parseFloat(values.to || '0') < toBalance;
-  const isFromBalanceSufficient = parseFloat(values.from || '0') < ((fromBalance) * fromPrice);
-  const isUnderToMax = toMax ? (parseFloat(values.to || '0') < (toMax || 0)) : false;
-  const isUnderFromMax = toMax ? parseFloat(values.from || '0') < ((toMax || 0) * toPrice) : false;
+  const isToBalanceSufficient = parseFloat(values.to || '0') <= toBalance;
+  const isFromBalanceSufficient = parseFloat(values.from || '0') <= ((fromBalance) * fromPrice);
+  const isUnderToMax = toMax ? (parseFloat(values.to || '0') <= (toMax || 0)) : false;
+  const isUnderFromMax = toMax ? parseFloat(values.from || '0') <= ((toMax || 0) * toPrice) : false;
 
   let isBalanceSufficient = current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient
   let isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
