@@ -215,7 +215,7 @@ const TxInput: React.FC<ITxInput> = ({
             const before = current === 'from' ? values.from : values.to
             if (
               text === '.' && before.includes('.')
-              || before.length > 18
+              || before.length >= (current === 'from' ? 14 : 18)
               || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
             ) {
               return

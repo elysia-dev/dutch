@@ -56,7 +56,12 @@ const TxInputViewer: React.FC<Props> = ({
   }
 
   let valueText;
+  let valueFontSize = 30;
   if (currentTab.value) {
+    if (currentTab.value.length > 10) {
+      valueFontSize = valueFontSize - (currentTab.value.length-10);
+    }
+
     valueText = (
       <View
         style={{
@@ -76,15 +81,23 @@ const TxInputViewer: React.FC<Props> = ({
         >
           $
         </Text>}
-        <Text
+        <View
           style={{
-            fontSize: 30,
-            color: '#1C1C1C',
-            fontFamily: AppFonts.Bold,
+            height: 41.8,
+            display: 'flex',
+            justifyContent: 'flex-end',
           }}
         >
-          {commaFormatter(currentTab.value)}
-        </Text>
+          <Text
+            style={{
+              fontSize: valueFontSize,
+              color: '#1C1C1C',
+              fontFamily: AppFonts.Bold,
+            }}
+          >
+            {commaFormatter(currentTab.value)}
+          </Text>
+        </View>
         {current === 'to' && <Text
           style={{
             fontSize: 25,
