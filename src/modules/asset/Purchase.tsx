@@ -59,7 +59,8 @@ const Purchase: FunctionComponent = () => {
 
     try {
       switch (from.type) {
-        case CryptoType.ETH, CryptoType.BNB:
+        case CryptoType.ETH:
+        case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
             from: wallet?.getFirstAddress(),
             value: utils.parseEther('0.5').toHexString()
