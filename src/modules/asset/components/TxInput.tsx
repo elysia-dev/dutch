@@ -200,9 +200,11 @@ const TxInput: React.FC<ITxInput> = ({
         <NumberPad
           addValue={(text) => {
             const before = current === 'from' ? values.from : values.to
+            const includesComma = before.includes('.')
             if (
-              text === '.' && before.includes('.')
-              || before.length >= (current === 'from' ? 14 : 18)
+              text === '.' && includesComma
+              || text !== '.' && !includesComma && before.length >= 12
+              || includesComma && before.split('.')[1].length >= (current === 'from' ? 2 : 6)
               || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
             ) {
               return
