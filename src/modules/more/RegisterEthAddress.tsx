@@ -167,7 +167,6 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
 
   const openExternalWallet = (type: string, requestId: string) => {
     if (type === 'metamask') {
-      console.log(requestId);
       Linking.openURL(
         `https://metamask.app.link/dapp/${DAPP_URL}/ethAddress/${requestId}`,
       ).catch((_e) => {

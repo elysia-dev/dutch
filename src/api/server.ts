@@ -6,9 +6,7 @@ import { OwnershipResponse } from '../types/Ownership';
 import Product, { Story } from '../types/product';
 import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
-import {
-  EL_ADDRESS
-} from 'react-native-dotenv';
+import { EL_ADDRESS } from 'react-native-dotenv';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { SignOut } from '../enums/SignInStatus';
@@ -127,7 +125,9 @@ export default class Server {
   };
 
   storyList = (language: LocaleType): Promise<AxiosResponse<Story[]>> => {
-    return this.authenticatedEspressoClient.get(`/products/stories?language=${language}`);
+    return this.authenticatedEspressoClient.get(
+      `/products/stories?language=${language}`,
+    );
   };
 
   productInfo = async (id: number): Promise<AxiosResponse<Product>> => {
@@ -198,8 +198,7 @@ export default class Server {
 
   getBalance = (address: string): Promise<AxiosResponse<BalanceResponse>> => {
     return axios.get(
-      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${EL_ADDRESS
-      }&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
+      `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=${EL_ADDRESS}&address=${address}&tag=latest&apikey=AD6WVV4IKCM7R4764UTDWVA52V7ARDYIP7`,
     );
   };
 

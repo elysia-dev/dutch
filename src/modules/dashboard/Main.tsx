@@ -1,15 +1,32 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  ScrollView, View, Image, TouchableOpacity, RefreshControl, ActivityIndicator
+  ScrollView,
+  View,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
-import { RouteProp, useNavigation, useRoute, useScrollToTop, useIsFocused } from '@react-navigation/native';
+import {
+  RouteProp,
+  useNavigation,
+  useRoute,
+  useScrollToTop,
+  useIsFocused,
+} from '@react-navigation/native';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
 import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import UserContext from '../../contexts/UserContext';
-import { AssetPage, CryptoPage, DashboardPage, MorePage, Page } from '../../enums/pageEnum';
+import {
+  AssetPage,
+  CryptoPage,
+  DashboardPage,
+  MorePage,
+  Page,
+} from '../../enums/pageEnum';
 import { useTranslation } from 'react-i18next';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
@@ -21,19 +38,20 @@ import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
   Main: {
-    refresh: boolean,
+    refresh: boolean;
   };
 };
 
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
-  const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } = useContext(AssetContext);
-  const route = useRoute<RouteProp<ParamList, 'Main'>>()
+  const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } =
+    useContext(AssetContext);
+  const route = useRoute<RouteProp<ParamList, 'Main'>>();
   const { elPrice, getCryptoPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
-  const { currencyFormatter } = useContext(PreferenceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
@@ -41,14 +59,9 @@ export const Main: React.FC = () => {
   const [btnRefreshing, setBtnRefreshing] = React.useState(false);
 
   const loadBalances = async () => {
-    if (isWalletUser) {
-      await loadV2UserBalances(true)
-    } else {
-      await refreshUser()
-      await loadV1UserBalances(true)
-    }
-  }
-
+    await refreshUser();
+    await loadV2UserBalances(true);
+  };
   const onRefresh = async () => {
     if (user.provider === ProviderType.GUEST && !isWalletUser) return;
 
@@ -56,28 +69,27 @@ export const Main: React.FC = () => {
     try {
       await loadBalances();
     } finally {
-      setRefreshing(false)
+      setRefreshing(false);
     }
   };
 
   const onBtnRefresh = async () => {
     setBtnRefreshing(true);
-
     try {
       await loadBalances();
     } finally {
-      setBtnRefreshing(false)
+      setBtnRefreshing(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (isFocused) {
       if (route.params?.refresh) {
-        navigation.setParams({ refresh: false })
+        navigation.setParams({ refresh: false });
         onRefresh();
       }
     }
-  }, [isFocused])
+  }, [isFocused]);
 
   return (
     <>
@@ -92,125 +104,125 @@ export const Main: React.FC = () => {
           user.provider !== ProviderType.GUEST || isWalletUser ? (
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           ) : undefined
-        }
-      >
-        <BasicLayout >
-          <H3Text
-            style={{ marginTop: 70 }}
-            label={t('main.total_assets')}
-          />
-          <View style={{
-            paddingBottom: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: AppColors.GREY,
-            marginTop: 15,
-            marginBottom: 40,
-          }}>
-            {
-              (isWalletUser || user.ethAddresses[0]) ? <View
+        }>
+        <BasicLayout>
+          <H3Text style={{ marginTop: 70 }} label={t('main.total_assets')} />
+          <View
+            style={{
+              paddingBottom: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: AppColors.GREY,
+              marginTop: 15,
+              marginBottom: 40,
+            }}>
+            {isWalletUser || user.ethAddresses[0] ? (
+              <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'center'
-                }}
-              >
+                  justifyContent: 'center',
+                }}>
                 <TitleText
                   label={currencyFormatter(
-                    assets.reduce((res, cur) => res + cur.value * getCryptoPrice(cur.type), 0),
-                    2
+                    assets.reduce(
+                      (res, cur) => res + cur.value * getCryptoPrice(cur.type),
+                      0,
+                    ),
+                    2,
                   )}
                 />
                 <TouchableOpacity
                   style={{ marginLeft: 'auto' }}
                   disabled={btnRefreshing}
                   onPress={() => {
-                    onBtnRefresh()
-                  }}
-                >
-                  {
-                    btnRefreshing ?
-                      <ActivityIndicator size="small" color="#1c1c1c" /> :
-                      <Image
-                        style={{ width: 20, height: 20 }}
-                        source={require('./images/reload.png')}
-                      />
-                  }
-                </TouchableOpacity>
-              </View> :
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                  onPress={() => {
-                    navigation.navigate(Page.More, { screen: MorePage.RegisterEthAddress })
-                  }}
-                >
-                  <View
-                    style={{
-                      shadowRadius: 3,
-                      shadowColor: '#6F6F6F',
-                      shadowOffset: { width: 0, height: 0 },
-                      shadowOpacity: 0.4,
-                    }}
-                  >
+                    onBtnRefresh();
+                  }}>
+                  {btnRefreshing ? (
+                    <ActivityIndicator size="small" color="#1c1c1c" />
+                  ) : (
                     <Image
-                      style={{
-                        height: 50,
-                        width: 50,
-                      }}
-                      source={require('./images/newWallet.png')}
+                      style={{ width: 20, height: 20 }}
+                      source={require('./images/reload.png')}
                     />
-                  </View>
-                  <TitleText
-                    label={t('main.connect_wallet')}
-                    style={{ height: 30, marginLeft: 15 }}
+                  )}
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  navigation.navigate(Page.More, {
+                    screen: MorePage.RegisterEthAddress,
+                  });
+                }}>
+                <View
+                  style={{
+                    shadowRadius: 3,
+                    shadowColor: '#6F6F6F',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.4,
+                  }}>
+                  <Image
+                    style={{
+                      height: 50,
+                      width: 50,
+                    }}
+                    source={require('./images/newWallet.png')}
                   />
-                  <View style={{
+                </View>
+                <TitleText
+                  label={t('main.connect_wallet')}
+                  style={{ height: 30, marginLeft: 15 }}
+                />
+                <View
+                  style={{
                     marginLeft: 'auto',
                     marginBottom: 5,
                   }}>
-                    <Image
-                      source={require('./images/bluedownarrow.png')}
-                      style={{
-                        width: 30,
-                        height: 30,
-                        transform: [{ rotate: '270deg' }],
-                      }}
-                    />
-                  </View>
-                </TouchableOpacity>
-            }
+                  <Image
+                    source={require('./images/bluedownarrow.png')}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      transform: [{ rotate: '270deg' }],
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
           <AssetListing
             title={t('main.my_assets')}
-            assets={
-              assets.filter((item) => {
-                return item.type === CryptoType.ELA && item.value > 0
-              })
-            }
+            assets={assets.filter((item) => {
+              return item.type === CryptoType.ELA && item.value > 0;
+            })}
             itemPressHandler={(asset) => {
               navigation.navigate(Page.Asset, {
                 screen: AssetPage.Detail,
                 params: {
                   asset,
-                }
-              })
+                },
+              });
             }}
           />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
-            assets={assets.filter((item) => [CryptoType.EL, CryptoType.ETH, CryptoType.BNB].includes(item.type))}
+            assets={assets.filter((item) =>
+              [CryptoType.EL, CryptoType.ETH, CryptoType.BNB].includes(
+                item.type,
+              ),
+            )}
             itemPressHandler={(asset) => {
-              navigation.navigate(
-                Page.Crypto, {
+              navigation.navigate(Page.Crypto, {
                 screen: CryptoPage.Detail,
                 params: {
                   asset,
-                }
-              }
-              );
+                },
+              });
             }}
           />
           {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
@@ -218,9 +230,11 @@ export const Main: React.FC = () => {
               user.legacyWalletRefundStatus,
             ) && (
               <LegacyWallet
-                balance={(user.legacyEl * elPrice + user.legacyUsd)}
+                balance={user.legacyEl * elPrice + user.legacyUsd}
                 handler={() =>
-                  navigation.navigate(Page.Dashboard, { screen: DashboardPage.RemainingBalance })
+                  navigation.navigate(Page.Dashboard, {
+                    screen: DashboardPage.RemainingBalance,
+                  })
                 }
               />
             )}

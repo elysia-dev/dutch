@@ -23,7 +23,6 @@ import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
 import CryptoTransaction from '../../types/CryptoTransaction';
-import { Transaction } from '../../types/Transaction';
 import SelectBox from './components/SelectBox';
 import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
@@ -42,8 +41,13 @@ import OverlayLoading from '../../shared/components/OverlayLoading';
 import Carousel from 'react-native-snap-carousel';
 import CachedImage from '../../shared/components/CachedImage';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
+import EthersacnClient from '../../api/EtherscanClient';
+import { Transaction } from '../../types/CryptoTxsResponse';
+import { Transaction as TransactionType } from '../../types/Transaction';
+import LoadDetail from '../../utiles/LoadLagacyDetail';
+import LoadAssetDetail from '../../types/LoadAssetDetail';
 
-const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
+const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
     type: ['ownership', 'expectedProfit'].includes(tx.transactionType)
       ? 'in'
@@ -52,6 +56,7 @@ const legacyTxToCryptoTx = (tx: Transaction): CryptoTransaction => {
     value: tx.value,
     txHash: tx.hash,
     createdAt: tx.createdAt,
+    blockNumber: undefined,
   };
 };
 
@@ -61,30 +66,16 @@ type ParamList = {
   };
 };
 
-type State = {
-  page: number;
-  totalSupply: number;
-  presentSupply: number;
-  reward: number;
-  transactions: CryptoTransaction[];
-  contractAddress: string;
-  paymentMethod: CryptoType | 'NONE';
-  legacyRefundStatus?: string;
-  images: string[];
-  productId: number;
-  productStatus: ProductStatus;
-  loaded: boolean;
-};
-
 const Detail: FunctionComponent = () => {
+  const loadDetail = new LoadDetail();
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
   const { currencyFormatter } = useContext(PreferenceContext);
-  const { isWalletUser, Server } = useContext(UserContext);
+  const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
-  const [state, setState] = useState<State>({
+  const [state, setState] = useState<LoadAssetDetail>({
     page: 1,
     totalSupply: 0,
     presentSupply: 0,
@@ -102,49 +93,29 @@ const Detail: FunctionComponent = () => {
 
   const loadV2Detail = async () => {
     try {
-      const userAddress = wallet?.getFirstNode()?.address || '';
-      let txRes;
-      const productData = await EspressoV2.getProduct(asset.address || '');
-      const contract =
-        productData.data.paymentMethod.toUpperCase() === CryptoType.BNB
-          ? getBscAssetTokenContract(asset.address || '')
-          : getAssetTokenContract(asset.address || '');
-
-      const reward = parseFloat(
-        utils.formatEther(await contract?.getReward(userAddress)),
-      );
-
-      if (productData.data.paymentMethod.toUpperCase() === CryptoType.BNB) {
-        txRes = await EspressoV2.getBscErc20Transaction(
-          userAddress,
-          asset.address || '',
-          1,
+      if (asset.ownershipId) {
+        setState(
+          await loadDetail.ownershipDetailAndGetTx(
+            Server,
+            asset.ownershipId,
+            state.page,
+          ),
         );
       } else {
-        txRes = await EspressoV2.getErc20Transaction(
-          userAddress,
-          asset.address || '',
-          1,
+        const userAddress =
+          wallet?.getFirstNode()?.address || user.ethAddresses[0];
+        const productData = await EspressoV2.getProduct(asset.address || '');
+        setState(
+          await loadDetail.loadV2Detail(
+            productData,
+            userAddress,
+            asset.address,
+            state.page,
+          ),
         );
       }
-
-      setState({
-        ...state,
-        page: 2,
-        reward,
-        contractAddress: asset.address || '',
-        transactions: txRes.data.tx.map((tx) =>
-          txResponseToTx(tx, userAddress),
-        ),
-        images: productData.data.data.images || [],
-        totalSupply: parseFloat(productData.data.totalValue),
-        presentSupply: parseFloat(productData.data.presentValue),
-        paymentMethod:
-          productData.data.paymentMethod.toUpperCase() as CryptoType,
-        productStatus: productData.data.status as ProductStatus,
-        loaded: true,
-      });
     } catch (e) {
+      console.error(e);
       alert(t('account_errors.server'));
       navigation.goBack();
     }
@@ -152,26 +123,27 @@ const Detail: FunctionComponent = () => {
 
   const loadV2More = async () => {
     const userAddress = wallet?.getFirstNode()?.address || '';
+    const ethAddress = user.ethAddresses[0];
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
       if (state.paymentMethod === CryptoType.BNB) {
         res = await EspressoV2.getBscErc20Transaction(
-          userAddress,
+          userAddress || ethAddress,
           asset.address || '',
-          1,
+          state.page,
         );
       } else {
         res = await EspressoV2.getErc20Transaction(
-          userAddress,
+          userAddress || ethAddress,
           asset.address || '',
-          1,
+          state.page,
         );
       }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, userAddress);
+        return txResponseToTx(tx, userAddress || ethAddress);
       });
     } catch {
       if (state.page !== 1) {
@@ -189,47 +161,16 @@ const Detail: FunctionComponent = () => {
       }
     }
   };
-
-  const laodV1OwnershipDetail = async () => {
-    if (!asset.ownershipId) return;
-
-    try {
-      const res = await Server.ownershipDetail(asset.ownershipId);
-      const txRes = await Server.getTransaction(asset.ownershipId, state.page);
-
-      setState({
-        page: 1,
-        totalSupply: parseFloat(res.data.product.totalValue),
-        presentSupply: parseFloat(res.data.product.presentValue),
-        reward: parseFloat(res.data.expectProfit),
-        transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
-        contractAddress: res.data.product.contractAddress,
-        paymentMethod:
-          res.data.product.paymentMethod.toUpperCase() as CryptoType,
-        legacyRefundStatus: res.data.legacyRefundStatus,
-        images: res.data.product.data?.images || [],
-        productId: res.data.product.id,
-        productStatus: res.data.product.status as ProductStatus,
-        loaded: true,
-      });
-    } catch {
-      alert(t('account_errors.server'));
-      navigation.goBack();
-    }
-  };
-
   const loadV1TxsMore = async () => {
     if (!asset.ownershipId) return;
 
     try {
       const txRes = await Server.getTransaction(asset.ownershipId, state.page);
       const nextTxs = txRes.data.map((tx) => legacyTxToCryptoTx(tx));
-
       if (nextTxs.length === 0) {
         alert(t('dashboard.last_transaction'));
         return;
       }
-
       setState({
         ...state,
         page: state.page + 1,
@@ -241,11 +182,7 @@ const Detail: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (isWalletUser) {
-      loadV2Detail();
-    } else {
-      laodV1OwnershipDetail();
-    }
+    loadV2Detail();
   }, []);
 
   return (
@@ -472,10 +409,10 @@ const Detail: FunctionComponent = () => {
               marginBottom: 15,
             }}
             onPress={() => {
-              if (isWalletUser) {
-                loadV2More();
-              } else {
+              if (asset.ownershipId) {
                 loadV1TxsMore();
+              } else {
+                loadV2More();
               }
             }}>
             <P1Text

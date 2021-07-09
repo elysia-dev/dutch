@@ -1,6 +1,4 @@
-import {
-  useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, {
   FunctionComponent,
   useContext,
@@ -8,13 +6,9 @@ import React, {
   useState,
 } from 'react';
 import { View, Image, Text } from 'react-native';
-import {
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Linking from 'expo-linking';
-import {
-  DAPP_URL
-} from 'react-native-dotenv';
+import { DAPP_URL } from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
@@ -89,8 +83,14 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
   );
 };
 
-const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) => {
-  useEffect(() => { }, []);
+const PaymentSelection: React.FC<{
+  espressTxId: string;
+  valueTo: number;
+  productId: number;
+  type: string;
+  contractAddress: string;
+}> = ({ espressTxId, valueTo, productId, type, contractAddress }) => {
+  useEffect(() => {}, []);
   const navigation = useNavigation();
   const [state, setState] = useState({
     wallet: '',
@@ -117,8 +117,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL
-          }/requests/${espressTxId}`,
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
@@ -126,8 +125,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${DAPP_URL
-          }/requests/${espressTxId}`,
+          `https://metamask.app.link/dapp/${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });
@@ -150,7 +148,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
                     ...state,
                     emailRestriction: false,
                   });
-                  navigation.goBack()
+                  navigation.goBack();
                 }, 30000);
               })
               .catch((e) => {
@@ -170,7 +168,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
                   emailRestriction: false,
                 });
 
-                navigation.goBack()
+                navigation.goBack();
               }, 30000);
             })
             .catch((e) => {
@@ -189,7 +187,7 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
     <View
       style={{
         backgroundColor: '#fff',
-        height: "100%"
+        height: '100%',
       }}>
       <SheetHeader title={t('product.select_payment')} />
       <View
@@ -245,9 +243,8 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
           width: '100%',
           bottom: insets.bottom || 10,
           paddingLeft: '5%',
-          paddingRight: '5%'
-        }}
-      >
+          paddingRight: '5%',
+        }}>
         <SubmitButton
           title={t('account_label.continue')}
           // eslint-disable-next-line no-nested-ternary
@@ -259,8 +256,8 @@ const PaymentSelection: React.FC<{ espressTxId: string }> = ({ espressTxId }) =>
               wallet === WalletType.METAMASK_MOBILE
                 ? '#3679B5'
                 : emailRestriction
-                  ? '#D0D8DF'
-                  : '#3679B5',
+                ? '#D0D8DF'
+                : '#3679B5',
           }}
           handler={linkDapp}></SubmitButton>
       </View>

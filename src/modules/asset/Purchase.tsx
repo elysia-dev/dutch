@@ -1,5 +1,8 @@
 import React, {
-  FunctionComponent, useContext, useEffect, useState,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -17,23 +20,26 @@ import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
-import { getAssetTokenFromCryptoType, getElysiaContract } from '../../utiles/getContract';
+import {
+  getAssetTokenFromCryptoType,
+  getElysiaContract,
+} from '../../utiles/getContract';
 
 type ParamList = {
   Purchase: {
-    from: Asset,
-    to: Asset,
-    toMax: number,
-    contractAddress: string,
-    productId: number, // legacy
+    from: Asset;
+    to: Asset;
+    toMax: number;
+    contractAddress: string;
+    productId: number; // legacy
   };
 };
 
 const Purchase: FunctionComponent = () => {
   const [values, setValues] = useState({
     from: '',
-    to: ''
-  })
+    to: '',
+  });
   const [state, setState] = useState({
     txHash: '',
     step: TxStep.None,
@@ -42,12 +48,15 @@ const Purchase: FunctionComponent = () => {
     estimateGas: '',
   });
   const [current, setCurrent] = useState<'from' | 'to'>('from');
-  const route = useRoute<RouteProp<ParamList, 'Purchase'>>()
-  const { from, to, toMax, contractAddress } = route.params;
+  const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
+  const { from, to, toMax, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const txResult = useWatingTx(state.txHash, from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const txResult = useWatingTx(
+    state.txHash,
+    from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+  );
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
@@ -58,32 +67,39 @@ const Purchase: FunctionComponent = () => {
 
     try {
       switch (from.type) {
-        case CryptoType.ETH, CryptoType.BNB:
+        case (CryptoType.ETH, CryptoType.BNB):
           estimateGas = await contract?.estimateGas.purchase({
             from: wallet?.getFirstAddress(),
-            value: utils.parseEther('0.5').toHexString()
-          })
+            value: utils.parseEther('0.5').toHexString(),
+          });
           break;
         default:
-          estimateGas = await contract?.estimateGas.purchase(utils.parseEther('100'), {
-            from: wallet?.getFirstNode()?.address
-          })
+          estimateGas = await contract?.estimateGas.purchase(
+            utils.parseEther('100'),
+            {
+              from: wallet?.getFirstNode()?.address,
+            },
+          );
       }
     } finally {
       if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(estimateGas.mul(from.type === CryptoType.ETH ? gasPrice : bscGasPrice)),
-        })
+          estimateGas: utils.formatEther(
+            estimateGas.mul(
+              from.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
+          ),
+        });
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (isWalletUser) {
       estimateGas();
     }
-  }, [])
+  }, []);
 
   const createTx = async () => {
     let populatedTransaction: ethers.PopulatedTransaction | undefined;
@@ -91,7 +107,7 @@ const Purchase: FunctionComponent = () => {
 
     try {
       switch (from.type) {
-        case CryptoType.ETH, CryptoType.BNB:
+        case (CryptoType.ETH, CryptoType.BNB):
           populatedTransaction = await contract?.populateTransaction.purchase();
 
           if (!populatedTransaction) break;
@@ -100,20 +116,20 @@ const Purchase: FunctionComponent = () => {
             to: populatedTransaction.to,
             data: populatedTransaction.data,
             value: utils.parseEther(values.from).toHexString(),
-          })
+          });
 
           break;
         default:
           populatedTransaction = await contract?.populateTransaction.purchase(
-            utils.parseEther(values.from)
-          )
+            utils.parseEther(values.from),
+          );
 
           if (!populatedTransaction) break;
 
           txRes = await wallet?.getFirstSigner().sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
-          })
+          });
 
           break;
       }
@@ -122,9 +138,8 @@ const Purchase: FunctionComponent = () => {
         setState({
           ...state,
           txHash: txRes?.hash || '',
-        })
+        });
       }
-
     } catch (e) {
       afterTxFailed(e.message);
       navigation.goBack();
@@ -135,48 +150,53 @@ const Purchase: FunctionComponent = () => {
           contractAddress,
           txRes.hash || '',
           NetworkType.ETH,
-        )
+        );
         navigation.goBack();
       }
     }
-  }
+  };
 
   useEffect(() => {
     switch (state.step) {
       case TxStep.CheckAllowance:
         if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
-          setState({ ...state, step: TxStep.Creating })
-          return
+          setState({ ...state, step: TxStep.Creating });
+          return;
         }
 
-        getElysiaContract()?.allowance(
-          wallet?.getFirstNode()?.address, contractAddress
-        ).then((res: BigNumber) => {
-          if (res.isZero()) {
-            setState({ ...state, step: TxStep.Approving })
-          } else {
-            setState({ ...state, step: TxStep.Creating })
-          }
-        }).catch((e: any) => {
-          afterTxFailed(e.message);
-          navigation.goBack();
-        })
+        getElysiaContract()
+          ?.allowance(wallet?.getFirstNode()?.address, contractAddress)
+          .then((res: BigNumber) => {
+            if (res.isZero()) {
+              setState({ ...state, step: TxStep.Approving });
+            } else {
+              setState({ ...state, step: TxStep.Creating });
+            }
+          })
+          .catch((e: any) => {
+            afterTxFailed(e.message);
+            navigation.goBack();
+          });
         break;
 
       case TxStep.Approving:
-        getElysiaContract()?.populateTransaction
-          .approve(contractAddress, '1' + '0'.repeat(30))
-          .then(populatedTransaction => {
-            wallet?.getFirstSigner().sendTransaction({
-              to: populatedTransaction.to,
-              data: populatedTransaction.data,
-            }).then((tx: any) => {
-              setState({ ...state, txHash: tx, step: TxStep.Creating })
-            }).catch((e) => {
-              afterTxFailed(e.message);
-              navigation.goBack();
-            })
-          })
+        getElysiaContract()
+          ?.populateTransaction.approve(contractAddress, '1' + '0'.repeat(30))
+          .then((populatedTransaction) => {
+            wallet
+              ?.getFirstSigner()
+              .sendTransaction({
+                to: populatedTransaction.to,
+                data: populatedTransaction.data,
+              })
+              .then((tx: any) => {
+                setState({ ...state, txHash: tx, step: TxStep.Creating });
+              })
+              .catch((e) => {
+                afterTxFailed(e.message);
+                navigation.goBack();
+              });
+          });
         break;
       case TxStep.Creating:
         createTx();
@@ -184,13 +204,13 @@ const Purchase: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
-        )
+          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+        );
         navigation.goBack();
         break;
       default:
     }
-  }, [state.step])
+  }, [state.step]);
 
   useEffect(() => {
     if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
@@ -212,7 +232,7 @@ const Purchase: FunctionComponent = () => {
             txResult.status === TxStatus.Success
               ? TxStep.Created
               : TxStep.Failed,
-        })
+        });
     }
   }, [txResult.status]);
 
@@ -236,15 +256,19 @@ const Purchase: FunctionComponent = () => {
         estimateGas={state.estimateGas}
         createTx={() => {
           if (isWalletUser) {
-            setState({ ...state, step: TxStep.CheckAllowance })
+            setState({ ...state, step: TxStep.CheckAllowance });
           } else {
-            Server.requestTransaction(route.params.productId, parseInt(values.to), 'buying')
+            Server.requestTransaction(
+              route.params.productId,
+              parseFloat(values.to),
+              'buying',
+            )
               .then((res) => {
                 setState({
                   ...state,
                   stage: 1,
                   espressoTxId: res.data.id,
-                })
+                });
               })
               .catch((e) => {
                 if (e.response.status === 400) {
@@ -259,9 +283,16 @@ const Purchase: FunctionComponent = () => {
     );
   }
 
+  // return <PaymentSelection espressTxId={state.espressoTxId} />;
   return (
-    <PaymentSelection espressTxId={state.espressoTxId} />
-  )
+    <PaymentSelection
+      valueTo={parseFloat(values.to)}
+      productId={productId}
+      type={'buying'}
+      contractAddress={contractAddress}
+      espressTxId={state.espressoTxId}
+    />
+  );
 };
 
 export default Purchase;

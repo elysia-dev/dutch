@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useState, useContext, useEffect } from 'react';
+import React, {
+  FunctionComponent,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -159,10 +164,10 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
               outputRange: [
                 550,
                 Dimensions.get('window').width * 0.05 +
-                // eslint-disable-next-line no-nested-ternary
-                (language === LocaleType.KO
-                  ? 220
-                  : language === LocaleType.CH
+                  // eslint-disable-next-line no-nested-ternary
+                  (language === LocaleType.KO
+                    ? 220
+                    : language === LocaleType.CH
                     ? 180
                     : 240),
                 Platform.OS === 'ios'
@@ -182,41 +187,15 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
             }),
             width: scrollX.interpolate({
               inputRange: [
-                -1,
-                0,
-                1,
-                2,
-                2.3,
-                2.301,
-                2.499,
-                2.5,
-                3,
-                3.3,
-                3.301,
-                3.599,
-                3.6,
-                4,
-                5,
+                -1, 0, 1, 2, 2.3, 2.301, 2.499, 2.5, 3, 3.3, 3.301, 3.599, 3.6,
+                4, 5,
               ],
               outputRange: [8, 8, 45, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
             }),
             height: scrollX.interpolate({
               inputRange: [
-                -1,
-                0,
-                1,
-                2,
-                2.3,
-                2.301,
-                2.499,
-                2.5,
-                3,
-                3.3,
-                3.301,
-                3.599,
-                3.6,
-                4,
-                5,
+                -1, 0, 1, 2, 2.3, 2.301, 2.499, 2.5, 3, 3.3, 3.301, 3.599, 3.6,
+                4, 5,
               ],
               outputRange: [8, 8, 45, 30, 8, 0, 0, 8, 30, 8, 0, 0, 8, 30, 30],
             }),

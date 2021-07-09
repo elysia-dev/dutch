@@ -30,6 +30,7 @@ import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
+import { add } from 'react-native-reanimated';
 
 type ParamList = {
   CryptoDetail: {
@@ -76,7 +77,6 @@ const Detail: React.FC = () => {
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
-
     try {
       if (asset.type === CryptoType.ETH) {
         res = await EthersacnClient.getEthTransaction(address, state.page);
@@ -169,7 +169,7 @@ const Detail: React.FC = () => {
       );
       setChartLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
