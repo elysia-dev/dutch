@@ -83,6 +83,7 @@ const TxInput: React.FC<ITxInput> = ({
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
   const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
+  const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
 
   let fromBalance = 0;
   let toBalance = 0;
@@ -93,22 +94,11 @@ const TxInput: React.FC<ITxInput> = ({
     toBalance = to.value;
     fromBalance = toBalance * toPrice / fromPrice;
   }
-  const isToBalanceSufficient = parseFloat(values.to || '0') <= toBalance;
-  const isFromBalanceSufficient = parseFloat(values.from || '0') <= ((fromBalance) * fromPrice);
-  const isUnderToMax = toMax ? (parseFloat(values.to || '0') <= (toMax || 0)) : false;
-  const isUnderFromMax = toMax ? parseFloat(values.from || '0') <= ((toMax || 0) * toPrice) : false;
 
-  let isBalanceSufficient = current === 'to' ? isToBalanceSufficient : isFromBalanceSufficient
-  let isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
-
-  // 구매를 할 때는 구매 가능한 최대 금액 != 잔고(내 지갑)임.
-  // 하지만 환불을 할 때는 환불 가능한 최대 금액 = 잔고(내 투자금)임!!!!
-  if (purpose === 'refund') {
-    isUnderMax = isBalanceSufficient;
-    isBalanceSufficient = true;
-  }
-
-  const isInvalid = !isBalanceSufficient || !isUnderMax;
+  // 잔고도 충분하고 구매 가능한 토큰/금액도 충분한지? 둘 중에 더 작은 것과 비교함
+  const isUnderToMax = parseFloat(values.to || '0') <= Math.min((toMax||0), toBalance); // 이건 근데 이름이 헷갈릴 수 있겠다...
+  const isUnderFromMax = (parseFloat(values.from || '0') / getCryptoPrice(from.type)) <= Math.min(fromMax, fromBalance);
+  const isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
 
   const input = (
     <TxInputViewer
@@ -117,18 +107,15 @@ const TxInput: React.FC<ITxInput> = ({
       to={{
         value: values.to,
         type: to.unit,
-        maxAmount: toMax,
-        balance: toBalance,
         price: toPrice,
+        max: Math.min((toMax||0), toBalance),
       }}
       from={{
         value: values.from,
         type: from.type,
-        maxAmount: (toMax || 0) * 5 / getCryptoPrice(from.type),
-        balance: fromBalance,
         price: fromPrice,
+        max: Math.min(fromMax, fromBalance)
       }}
-      isBalanceSufficient={isBalanceSufficient}
       isUnderMax={isUnderMax}
       estimatedGas={estimateGas}
       gasCrypto={gasCrypto}
@@ -266,7 +253,7 @@ const TxInput: React.FC<ITxInput> = ({
         }}
       >
         <NextButton
-          disabled={isInvalid || disabled || insufficientGas}
+          disabled={!isUnderMax || disabled || insufficientGas}
           title={t('assets.done')}
           handler={() => {
             if (isWalletUser) {

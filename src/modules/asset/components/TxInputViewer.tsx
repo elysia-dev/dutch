@@ -12,18 +12,15 @@ interface Props {
   to: {
     value: string, // 입력한 값
     type: string, // 화폐 단위
-    maxAmount: number | undefined, // 최대 투자 가능 금액
-    balance: number, // 잔고
-    price: number, // 토큰당 현재 가격..?
+    price: number, // 토큰 가격
+    max: number, // 사용자가 구매/환불 가능한 최대 토큰 개수
   }
   from: {
     value: string, // 입력한 값
     type: string, // 화폐 단위
-    maxAmount: number | undefined, // 최대 투자 가능 금액
-    balance: number, // 잔고
-    price: number, // 토큰당 현재 가격..?
+    price: number, // 화폐 가격
+    max: number, // 사용자가 구매/환불 가능한 최대 금액
   }
-  isBalanceSufficient: boolean,
   isUnderMax: boolean,
   estimatedGas: string,
   gasCrypto: CryptoType,
@@ -35,7 +32,6 @@ const TxInputViewer: React.FC<Props> = ({
   current,
   to,
   from,
-  isBalanceSufficient,
   isUnderMax,
   estimatedGas,
   gasCrypto,
@@ -127,69 +123,35 @@ const TxInputViewer: React.FC<Props> = ({
 
   let balanceText;
   if (currentTab.value) {
-    if (isBalanceSufficient) {
-      if (current === 'to') {
-        balanceText = (
-          <Text
-            style={{
-              textAlign: 'right',
-              color: '#848484',
-              fontSize: 12,
-              fontFamily: AppFonts.Regular,
-              width: '100%',
-              marginTop: 4,
-            }}
-          >
-            {`$ ${commaFormatter(((Number(currentTab.value)) * 5).toFixed(2))} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
-          </Text>
-        );
-      } else {
-        balanceText = (
-          <Text
-            style={{
-              textAlign: 'right',
-              color: '#848484',
-              fontSize: 12,
-              fontFamily: AppFonts.Regular,
-              width: '100%',
-              marginTop: 4,
-            }}
-          >
-            {`${commaFormatter((Number(currentTab.value) / 5).toFixed(2))} ${to.type} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
-          </Text>
-        );
-      }
-    } else {
+    if (current === 'to') {
       balanceText = (
-        <View
+        <Text
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
+            textAlign: 'right',
+            color: '#848484',
+            fontSize: 12,
+            fontFamily: AppFonts.Regular,
             width: '100%',
             marginTop: 4,
           }}
         >
-          <Image
-            source={require('../images/alert_icon_xxhdpi.png')}
-            style={{
-              width: 15,
-              height: 15,
-              marginRight: 3,
-            }}
-          />
-          <Text
-            style={{
-              textAlign: 'right',
-              color: '#E53935',
-              fontSize: 12,
-              fontFamily: AppFonts.Medium,
-            }}
-          >
-            {t('assets.insufficient_balance', { type: from.type })}
-          </Text>
-        </View>
+          {`$ ${commaFormatter(((Number(currentTab.value)) * 5).toFixed(4))} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
+        </Text>
+      );
+    } else {
+      balanceText = (
+        <Text
+          style={{
+            textAlign: 'right',
+            color: '#848484',
+            fontSize: 12,
+            fontFamily: AppFonts.Regular,
+            width: '100%',
+            marginTop: 4,
+          }}
+        >
+          {`${commaFormatter((Number(currentTab.value) / 5).toFixed(2))} ${to.type} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
+        </Text>
       );
     }
   } else {
@@ -205,9 +167,7 @@ const TxInputViewer: React.FC<Props> = ({
 
   let maxText;
   const maxTextLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
-  const maxTextValue = purpose === 'purchase' ?
-    (currentTab.maxAmount || 0).toFixed(current === 'to' ? 4 : 2)
-    : currentTab.balance.toFixed(current === 'to' ? 4 : 2); // refund
+  const maxTextValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
   if (isUnderMax) {
     maxText = (
       <Text
@@ -317,7 +277,6 @@ const TxInputViewer: React.FC<Props> = ({
     >
       {maxText}
       {gasText}
-      {/* <Text>{`잔고: ${currentTab.balance} ${currentTab.type}`}</Text> */}
     </View>
   );
 
