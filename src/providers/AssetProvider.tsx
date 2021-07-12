@@ -2,7 +2,6 @@ import { BigNumber, utils } from 'ethers';
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import EspressoV1 from '../api/EspressoV1';
-import EspressoV2 from '../api/EspressoV2';
 import AssetContext, {
   initialAssetState,
   AssetStateType,
@@ -20,7 +19,6 @@ import {
   provider,
   getAssetTokenContract,
   getBscAssetTokenContract,
-  getAssetTokenEthContract,
 } from '../utiles/getContract';
 import PreferenceContext from '../contexts/PreferenceContext';
 import LocaleType from '../enums/LocaleType';
@@ -33,9 +31,9 @@ const AssetProvider: React.FC = (props) => {
   const { language } = useContext(PreferenceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState);
 
-  const loadV2UserBalances = async (noCache?: boolean) => {
-    const address = wallet?.getFirstNode()?.address || user.ethAddresses[0];
+  const address = wallet?.getFirstNode()?.address || user.ethAddresses[0];
 
+  const loadV2UserBalances = async (noCache?: boolean) => {
     if (!address) return;
 
     if (user.provider === ProviderType.GUEST && !isWalletUser) {

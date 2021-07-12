@@ -18,7 +18,6 @@ import storeDeeplink from '../../../utiles/storeDeeplink';
 import ProviderType from '../../../enums/ProviderType';
 import { TextField } from '../../../shared/components/TextField';
 import UserContext from '../../../contexts/UserContext';
-import AppColors from '../../../enums/AppColors';
 import SheetHeader from '../../../shared/components/SheetHeader';
 
 type ButtonProps = {
@@ -117,7 +116,7 @@ const PaymentSelection: React.FC<{
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests?productId=${productId}&value=${valueTo}&type=${type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
@@ -125,7 +124,7 @@ const PaymentSelection: React.FC<{
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
+          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${productId}&value=${valueTo}&type=${type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });

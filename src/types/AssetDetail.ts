@@ -2,7 +2,7 @@ import CryptoType from '../enums/CryptoType';
 import ProductStatus from '../enums/ProductStatus';
 import CryptoTransaction from './CryptoTransaction';
 
-type LoadAssetDetail = {
+type AssetDetail = {
   page: number;
   totalSupply: number;
   presentSupply: number;
@@ -17,4 +17,4 @@ type LoadAssetDetail = {
   loaded: boolean;
 };
 
-export default LoadAssetDetail;
+export default AssetDetail;

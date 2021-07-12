@@ -3,34 +3,20 @@ import CryptoTransaction from '../types/CryptoTransaction';
 import Server from '../api/server';
 import ProductStatus from '../enums/ProductStatus';
 import { Transaction } from '../types/Transaction';
-import LoadAssetDetail from '../types/LoadAssetDetail';
+import AssetDetail from '../types/AssetDetail';
 import EthersacnClient from '../api/EtherscanClient';
-import { CryptoTxsResultResponse } from '../types/CryptoTxsResponse';
 import txResponseToTx from './txResponseToTx';
 import Product from '../types/Product';
-import { AxiosResponse } from 'axios';
 import { getAssetTokenContract, getBscAssetTokenContract } from './getContract';
 import { utils } from 'ethers';
 
 class LoadDetail {
-  legacyTxToCryptoTx(tx: Transaction): CryptoTransaction {
-    return {
-      type: ['ownership', 'expectedProfit'].includes(tx.transactionType)
-        ? 'in'
-        : 'out',
-      legacyType: tx.transactionType,
-      value: tx.value,
-      txHash: tx.hash,
-      createdAt: tx.createdAt,
-      blockNumber: undefined,
-    };
-  }
-
-  async ownershipDetailAndGetTx(
+  async ownershipDetail(
     server: Server,
     ownershipId: number,
     page: number,
-  ): Promise<LoadAssetDetail> {
+    legacyTxToCryptoTx: (tx: Transaction) => CryptoTransaction,
+  ): Promise<AssetDetail> {
     const res = await server.ownershipDetail(ownershipId);
     const txRes = await server.getTransaction(ownershipId, page);
 
@@ -39,7 +25,7 @@ class LoadDetail {
       totalSupply: parseFloat(res.data.product.totalValue),
       presentSupply: parseFloat(res.data.product.presentValue),
       reward: parseFloat(res.data.expectProfit),
-      transactions: txRes.data.map((tx) => this.legacyTxToCryptoTx(tx)),
+      transactions: txRes.data.map((tx) => legacyTxToCryptoTx(tx)),
       contractAddress: res.data.product.contractAddress,
       paymentMethod: res.data.product.paymentMethod.toUpperCase() as CryptoType,
       legacyRefundStatus: res.data.legacyRefundStatus,
@@ -56,30 +42,29 @@ class LoadDetail {
     assetAddress: string | undefined,
     page: number,
   ) {
-    let txRes;
     if (paymentMethod.toUpperCase() === CryptoType.BNB) {
-      return (txRes = await EthersacnClient.getBscErc20Transaction(
+      return await EthersacnClient.getBscErc20Transaction(
         userAddress,
         assetAddress || '',
         page,
-      ));
+      );
     } else {
-      return (txRes = await EthersacnClient.getAssetErc20Transaction(
+      return await EthersacnClient.getAssetErc20Transaction(
         userAddress,
         assetAddress || '',
         page,
-      ));
+      );
     }
   }
 
   async loadV2Detail(
-    productData: AxiosResponse<Product>,
+    productData: Product,
     userAddress: string,
     assetAddress: string | undefined,
     page: number,
   ) {
     const contract =
-      productData.data.paymentMethod.toUpperCase() === CryptoType.BNB
+      productData.paymentMethod.toUpperCase() === CryptoType.BNB
         ? getBscAssetTokenContract(assetAddress || '')
         : getAssetTokenContract(assetAddress || '');
     const reward = parseFloat(
@@ -91,17 +76,17 @@ class LoadDetail {
       contractAddress: assetAddress || '',
       transactions: (
         await this.getTxResponse(
-          productData.data.paymentMethod,
+          productData.paymentMethod,
           userAddress,
           assetAddress,
           page,
         )
       ).data.result.map((tx) => txResponseToTx(tx, userAddress)),
-      images: productData.data.data.images || [],
-      totalSupply: parseFloat(productData.data.totalValue),
-      presentSupply: parseFloat(productData.data.presentValue),
-      paymentMethod: productData.data.paymentMethod.toUpperCase() as CryptoType,
-      productStatus: productData.data.status as ProductStatus,
+      images: productData.data.images || [],
+      totalSupply: parseFloat(productData.totalValue),
+      presentSupply: parseFloat(productData.presentValue),
+      paymentMethod: productData.paymentMethod.toUpperCase() as CryptoType,
+      productStatus: productData.status as ProductStatus,
       productId: 0,
       loaded: true,
     };

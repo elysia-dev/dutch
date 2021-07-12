@@ -28,24 +28,15 @@ import NextButton from '../../shared/components/NextButton';
 import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
-import { utils } from 'ethers';
 import txResponseToTx from '../../utiles/txResponseToTx';
 import CircleButton from './components/CircleButton';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
-import {
-  getAssetTokenContract,
-  getBscAssetTokenContract,
-} from '../../utiles/getContract';
 import OverlayLoading from '../../shared/components/OverlayLoading';
-import Carousel from 'react-native-snap-carousel';
-import CachedImage from '../../shared/components/CachedImage';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
-import EthersacnClient from '../../api/EtherscanClient';
-import { Transaction } from '../../types/CryptoTxsResponse';
 import { Transaction as TransactionType } from '../../types/Transaction';
 import LoadDetail from '../../utiles/LoadLagacyDetail';
-import LoadAssetDetail from '../../types/LoadAssetDetail';
+import AssetDetail from '../../types/AssetDetail';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -72,10 +63,10 @@ const Detail: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
   const { currencyFormatter } = useContext(PreferenceContext);
-  const { isWalletUser, Server, user } = useContext(UserContext);
+  const { Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
-  const [state, setState] = useState<LoadAssetDetail>({
+  const [state, setState] = useState<AssetDetail>({
     page: 1,
     totalSupply: 0,
     presentSupply: 0,
@@ -91,23 +82,23 @@ const Detail: FunctionComponent = () => {
   const [filter, setFilter] = useState<number>(0);
   const { getCryptoPrice } = useContext(PriceContext);
 
-  const loadV2Detail = async () => {
+  const userAddress = wallet?.getFirstNode()?.address || user.ethAddresses[0];
+  const loadDetailTx = async () => {
     try {
       if (asset.ownershipId) {
         setState(
-          await loadDetail.ownershipDetailAndGetTx(
+          await loadDetail.ownershipDetail(
             Server,
             asset.ownershipId,
             state.page,
+            legacyTxToCryptoTx,
           ),
         );
       } else {
-        const userAddress =
-          wallet?.getFirstNode()?.address || user.ethAddresses[0];
         const productData = await EspressoV2.getProduct(asset.address || '');
         setState(
           await loadDetail.loadV2Detail(
-            productData,
+            productData.data,
             userAddress,
             asset.address,
             state.page,
@@ -122,28 +113,26 @@ const Detail: FunctionComponent = () => {
   };
 
   const loadV2More = async () => {
-    const userAddress = wallet?.getFirstNode()?.address || '';
-    const ethAddress = user.ethAddresses[0];
     let newTxs: CryptoTransaction[] = [];
     let res;
 
     try {
       if (state.paymentMethod === CryptoType.BNB) {
         res = await EspressoV2.getBscErc20Transaction(
-          userAddress || ethAddress,
+          userAddress || '',
           asset.address || '',
           state.page,
         );
       } else {
         res = await EspressoV2.getErc20Transaction(
-          userAddress || ethAddress,
+          userAddress || '',
           asset.address || '',
           state.page,
         );
       }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, userAddress || ethAddress);
+        return txResponseToTx(tx, userAddress || '');
       });
     } catch {
       if (state.page !== 1) {
@@ -182,7 +171,7 @@ const Detail: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    loadV2Detail();
+    loadDetailTx();
   }, []);
 
   return (

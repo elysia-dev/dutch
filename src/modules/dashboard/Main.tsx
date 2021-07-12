@@ -44,8 +44,7 @@ type ParamList = {
 
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
-  const { assets, assetLoaded, loadV2UserBalances, loadV1UserBalances } =
-    useContext(AssetContext);
+  const { assets, assetLoaded, loadV2UserBalances } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'Main'>>();
   const { elPrice, getCryptoPrice } = useContext(PriceContext);
   const navigation = useNavigation();
@@ -59,12 +58,13 @@ export const Main: React.FC = () => {
   const [btnRefreshing, setBtnRefreshing] = React.useState(false);
 
   const loadBalances = async () => {
-    await refreshUser();
+    if (!isWalletUser) {
+      await refreshUser();
+    }
     await loadV2UserBalances(true);
   };
   const onRefresh = async () => {
     if (user.provider === ProviderType.GUEST && !isWalletUser) return;
-
     setRefreshing(true);
     try {
       await loadBalances();
