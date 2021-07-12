@@ -1,74 +1,12 @@
 import React, { useContext } from 'react';
-import { View, Text, Image, StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
-
-interface LabelProps {
-  text: string
-  style?: StyleProp<ViewStyle> | StyleProp<TextStyle>
-}
-
-const Label: React.FC<LabelProps> = ({
-  text,
-  style,
-}) => {
-  return (
-    <Text
-      style={{
-        ...(style as {}),
-        textAlign: 'right',
-        color: '#848484',
-        fontSize: 12,
-        fontFamily: AppFonts.Regular,
-        // width: '100%',
-        // marginTop: 4,
-      }}
-    >
-      {text}
-    </Text>
-  );
-}
-
-const LabelInvalid: React.FC<LabelProps> = ({
-  text,
-  style,
-}) => {
-  return (
-    <View
-      style={{
-        ...(style as {}),
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        width: '100%',
-        // marginTop: 4,
-      }}
-    >
-      <Image
-        source={require('../images/alert_icon_xxhdpi.png')}
-        style={{
-          width: 15,
-          height: 15,
-          marginRight: 3,
-        }}
-      />
-      <Text
-        style={{
-          textAlign: 'right',
-          color: '#E53935',
-          fontSize: 12,
-          fontFamily: AppFonts.Medium,
-        }}
-      >
-        {text}
-      </Text>
-    </View>
-  );
-}
+import GuideText from './GuideText';
+import GuideTextInvalid from './GuideTextInvalid';
 
 interface Props {
   purpose: string // invest / refund
@@ -101,7 +39,6 @@ const TxInputViewer: React.FC<Props> = ({
   gasCrypto,
   insufficientGas,
 }) => {
-  const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
   const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
   const currentTab = current === 'to' ? to : from;
@@ -180,7 +117,7 @@ const TxInputViewer: React.FC<Props> = ({
   if (currentTab.value) {
     if (current === 'to') {
       balanceText = (
-        <Label
+        <GuideText
           text={`$ ${commaFormatter(((Number(currentTab.value)) * 5).toFixed(4))} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
           style={{
             width: '100%',
@@ -190,7 +127,7 @@ const TxInputViewer: React.FC<Props> = ({
       );
     } else {
       balanceText = (
-        <Label
+        <GuideText
           text={`${commaFormatter((Number(currentTab.value) / 5).toFixed(2))} ${to.type} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
           style={{
             width: '100%',
@@ -215,25 +152,25 @@ const TxInputViewer: React.FC<Props> = ({
   const maxTextValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
   if (isUnderMax) {
     maxText = (
-      <Label text={`${maxTextLabel}: ${commaFormatter(maxTextValue)} ${currentTab.type}`} />
+      <GuideText text={`${maxTextLabel}: ${commaFormatter(maxTextValue)} ${currentTab.type}`} />
     );
   } else {
     maxText = (
-      <LabelInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
+      <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
     );
   }
 
   let gasText;
   if (!insufficientGas) {
     gasText = (
-      <Label
+      <GuideText
         text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
         style={{ marginTop: 6 }}
       />
     );
   } else {
     gasText = (
-      <LabelInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
+      <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
     );
   }
 
