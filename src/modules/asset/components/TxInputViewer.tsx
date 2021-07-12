@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
-import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import GuideText from './GuideText';
 import GuideTextInvalid from './GuideTextInvalid';
+import LargeTextInput from './LargeTextInput';
 
 interface Props {
   purpose: string // invest / refund
@@ -42,76 +41,6 @@ const TxInputViewer: React.FC<Props> = ({
   const { t } = useTranslation();
   const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
   const currentTab = current === 'to' ? to : from;
-
-  let valueText;
-  let valueFontSize = 30;
-  if (currentTab.value) {
-    if (currentTab.value.length > 10) {
-      valueFontSize = valueFontSize - (currentTab.value.length-10);
-    }
-
-    valueText = (
-      <View
-        style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: current === 'to' ? 'flex-end' : 'space-between',
-          alignItems: 'flex-end',
-        }}
-      >
-        {current === 'from' && <Text
-          style={{
-            fontSize: 25,
-            color: '#666666',
-            fontFamily: AppFonts.Bold,
-          }}
-        >
-          $
-        </Text>}
-        <View
-          style={{
-            height: 41.8,
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Text
-            style={{
-              fontSize: valueFontSize,
-              color: '#1C1C1C',
-              fontFamily: AppFonts.Bold,
-            }}
-          >
-            {commaFormatter(currentTab.value)}
-          </Text>
-        </View>
-        {current === 'to' && <Text
-          style={{
-            fontSize: 25,
-            color: '#666666',
-            fontFamily: AppFonts.Bold,
-          }}
-        >
-          {' ' + currentTab.type}
-        </Text>}
-      </View>
-    );
-  } else {
-    valueText = (
-      <Text
-        style={{
-          fontSize: 30,
-          textAlign: 'center',
-          color: '#CCCCCC',
-          fontFamily: AppFonts.Medium,
-          marginTop: currentTab.value ? 0 : 12,
-        }}
-      >
-        {current === 'to' ? t(`assets.${purposeType}_stake_placeholder`) : t(`assets.${purposeType}_value_placeholder`)}
-      </Text>
-    );
-  }
 
   let balanceText;
   if (currentTab.value) {
@@ -183,15 +112,14 @@ const TxInputViewer: React.FC<Props> = ({
         alignItems: 'center'
       }}
     >
-      {valueText}
-      {balanceText}
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderColor: '#3679B5',
-          width: '100%',
-          marginTop: 12,
-        }}
+      <LargeTextInput
+        current={current}
+        value={currentTab.value}
+        type={currentTab.type}
+        purposeType={purposeType}
+        tokenType={to.type}
+        priceInCryptocurrency={commaFormatter((Number(from.value) / from.price).toFixed(2))}
+        cryptocurrencyType={from.type}
       />
       <View
         style={{
