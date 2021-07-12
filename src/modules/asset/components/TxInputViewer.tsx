@@ -41,67 +41,8 @@ const TxInputViewer: React.FC<Props> = ({
   const { t } = useTranslation();
   const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
   const currentTab = current === 'to' ? to : from;
-
-  let balanceText;
-  if (currentTab.value) {
-    if (current === 'to') {
-      balanceText = (
-        <GuideText
-          text={`$ ${commaFormatter(((Number(currentTab.value)) * 5).toFixed(4))} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
-          style={{
-            width: '100%',
-            marginTop: 4,
-          }}
-        />
-      );
-    } else {
-      balanceText = (
-        <GuideText
-          text={`${commaFormatter((Number(currentTab.value) / 5).toFixed(2))} ${to.type} (= ${commaFormatter((Number(from.value) / from.price).toFixed(2))} ${from.type})`}
-          style={{
-            width: '100%',
-            marginTop: 4,
-          }}
-        />
-      );
-    }
-  } else {
-    balanceText = (
-      <View
-        style={{
-          width: '100%',
-          height: 9,
-        }}
-      />
-    );
-  }
-
-  let maxText;
-  const maxTextLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
-  const maxTextValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
-  if (isUnderMax) {
-    maxText = (
-      <GuideText text={`${maxTextLabel}: ${commaFormatter(maxTextValue)} ${currentTab.type}`} />
-    );
-  } else {
-    maxText = (
-      <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
-    );
-  }
-
-  let gasText;
-  if (!insufficientGas) {
-    gasText = (
-      <GuideText
-        text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
-        style={{ marginTop: 6 }}
-      />
-    );
-  } else {
-    gasText = (
-      <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
-    );
-  }
+  const maxLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
+  const maxValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
 
   return (
     <View
@@ -132,8 +73,19 @@ const TxInputViewer: React.FC<Props> = ({
           paddingHorizontal: 10,
         }}
       >
-        {maxText}
-        {gasText}
+        {isUnderMax ? (
+          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
+        ) : (
+          <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
+        )}
+        {insufficientGas ? (
+          <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
+        ) : (
+          <GuideText
+            text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
+            style={{ marginTop: 6 }}
+          />
+        )}
       </View>
     </View>
   );
