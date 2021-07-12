@@ -17,6 +17,7 @@ import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
+import PurposeType from '../../enums/PurposeType';
 
 type ParamList = {
   Refund: {
@@ -148,7 +149,7 @@ const Refund: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
-        purpose="refund"
+        purpose={PurposeType.Refund}
         title={t('assets.refund')}
         fromInputTitle={t('assets.refund_value')}
         toInputTitle={t('assets.refund_stake')}

@@ -18,6 +18,7 @@ import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenFromCryptoType, getElysiaContract } from '../../utiles/getContract';
+import PurposeType from '../../enums/PurposeType';
 
 type ParamList = {
   Purchase: {
@@ -222,7 +223,7 @@ const Purchase: FunctionComponent = () => {
   if (state.stage === 0) {
     return (
       <TxInput
-        purpose="purchase"
+        purpose={PurposeType.Purchase}
         title={t('assets.invest')}
         fromInputTitle={t('assets.invest_value')}
         toInputTitle={t('assets.invest_stake')}
