@@ -100,39 +100,6 @@ const TxInput: React.FC<ITxInput> = ({
   const isUnderFromMax = (parseFloat(values.from || '0') / getCryptoPrice(from.type)) <= Math.min(fromMax, fromBalance);
   const isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
 
-  const input = (
-    <TxInputViewer
-      purpose={purpose}
-      current={current}
-      to={{
-        value: values.to,
-        type: to.unit,
-        price: toPrice,
-        max: Math.min((toMax||0), toBalance),
-      }}
-      from={{
-        value: values.from,
-        type: from.type,
-        price: fromPrice,
-        max: Math.min(fromMax, fromBalance)
-      }}
-      isUnderMax={isUnderMax}
-      estimatedGas={estimateGas}
-      gasCrypto={gasCrypto}
-      insufficientGas={insufficientGas}
-    />
-  );
-
-  const shortcut = (
-    <NumberPadShortcut
-      current={current}
-      values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
-      inputValue={current === 'to' ? values.to : values.from}
-      setValues={setValues}
-      ELAPrice={toPrice}
-    />
-  );
-
   return (
     <View style={{ backgroundColor: '#fff', height: '100%' }}>
       <SheetHeader title={title} />
@@ -195,8 +162,33 @@ const TxInput: React.FC<ITxInput> = ({
           paddingRight: 20,
           height: Dimensions.get('window').height - 200,
         }}>
-        {input}
-        {shortcut}
+        <TxInputViewer
+          purpose={purpose}
+          current={current}
+          to={{
+            value: values.to,
+            type: to.unit,
+            price: toPrice,
+            max: Math.min((toMax||0), toBalance),
+          }}
+          from={{
+            value: values.from,
+            type: from.type,
+            price: fromPrice,
+            max: Math.min(fromMax, fromBalance)
+          }}
+          isUnderMax={isUnderMax}
+          estimatedGas={estimateGas}
+          gasCrypto={gasCrypto}
+          insufficientGas={insufficientGas}
+        />
+        <NumberPadShortcut
+          current={current}
+          values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
+          inputValue={current === 'to' ? values.to : values.from}
+          setValues={setValues}
+          ELAPrice={toPrice}
+        />
         <NumberPad
           addValue={(text) => {
             const before = current === 'from' ? values.from : values.to
