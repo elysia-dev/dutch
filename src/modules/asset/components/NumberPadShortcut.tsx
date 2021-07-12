@@ -47,7 +47,7 @@ const NumberPadShortcut: React.FC<Props> = ({
     );
   });
 
-  function addValue(value: number) { console.log(inputValue)
+  function addValue(value: number) {
     const newInputValue = parseFloat(inputValue || '0') + value // Number() 하면서 소수점이 엄청 생기지는 않나 검사해야 함..!!!!
 
     if (current === 'from') {
