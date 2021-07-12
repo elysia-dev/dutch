@@ -18,11 +18,10 @@ const NumberPadShortcut: React.FC<Props> = ({
   setValues,
   ELAPrice,
 }) => {
-  const buttons = [];
-  for (let i=0; i<values.length; i++) {
-    buttons.push(
+  const buttons = values.map((value) => {
+    return (
       <TouchableOpacity
-        key={values[i]}
+        key={value}
         style={{
           borderRadius: 5,
           borderColor: '#C8C8C8',
@@ -33,7 +32,7 @@ const NumberPadShortcut: React.FC<Props> = ({
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={() => addValue(values[i])}
+        onPress={() => addValue(value)}
       >
         <Text
           style={{
@@ -42,11 +41,11 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? '+' : '$'}${commaFormatter(values[i])}`}
+          {`${current === 'to' ? '+' : '$'}${commaFormatter(value)}`}
         </Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  });
 
   function addValue(value: number) { console.log(inputValue)
     const newInputValue = parseFloat(inputValue || '0') + value // Number() 하면서 소수점이 엄청 생기지는 않나 검사해야 함..!!!!
