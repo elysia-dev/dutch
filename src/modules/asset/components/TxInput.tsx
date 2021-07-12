@@ -94,8 +94,8 @@ const TxInput: React.FC<ITxInput> = ({
   }
 
   // 잔고도 충분하고 구매 가능한 토큰/금액도 충분한지? 둘 중에 더 작은 것과 비교함
-  const isUnderToMax = parseFloat(values.to || '0') <= Math.min((toMax||0), toBalance); // 이건 근데 이름이 헷갈릴 수 있겠다...
-  const isUnderFromMax = (parseFloat(values.from || '0') / getCryptoPrice(from.type)) <= Math.min(fromMax, fromBalance);
+  const isUnderToMax = parseFloat(values.to || '0') <= (toMax ? Math.min(toMax, toBalance) : toBalance);
+  const isUnderFromMax = (parseFloat(values.from || '0') / getCryptoPrice(from.type)) <= (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
   const isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
 
   return (
@@ -167,13 +167,13 @@ const TxInput: React.FC<ITxInput> = ({
             value: values.to,
             type: to.unit,
             price: toPrice,
-            max: Math.min((toMax||0), toBalance),
+            max: toMax ? Math.min(toMax, toBalance) : toBalance,
           }}
           from={{
             value: values.from,
             type: from.type,
             price: fromPrice,
-            max: Math.min(fromMax, fromBalance)
+            max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance
           }}
           isUnderMax={isUnderMax}
           estimatedGas={estimateGas}
