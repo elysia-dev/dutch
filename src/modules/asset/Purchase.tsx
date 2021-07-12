@@ -63,7 +63,7 @@ const Purchase: FunctionComponent = () => {
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
             from: wallet?.getFirstAddress(),
-            value: utils.parseEther('0.5').toHexString()
+            value: utils.parseEther('0.5')
           })
           break;
         default:
@@ -102,7 +102,7 @@ const Purchase: FunctionComponent = () => {
           txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
-            value: utils.parseEther(ether).toHexString(),
+            value: utils.parseEther(ether),
           })
 
           break;
