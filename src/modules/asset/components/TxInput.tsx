@@ -18,6 +18,7 @@ import PriceContext from '../../../contexts/PriceContext';
 import AppFonts from '../../../enums/AppFonts';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 import ConfirmationModal from './ConfirmationModal';
+import AppColors from '../../../enums/AppColors';
 
 interface ITxInput {
   purpose: string
@@ -99,7 +100,7 @@ const TxInput: React.FC<ITxInput> = ({
   const isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
 
   return (
-    <View style={{ backgroundColor: '#fff', height: '100%' }}>
+    <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader title={title} />
       <View style={{
         display: 'flex',
@@ -109,8 +110,8 @@ const TxInput: React.FC<ITxInput> = ({
         <TouchableOpacity
           onPress={() => setCurrent('to')}
           style={{
-            backgroundColor: current === 'to' ? '#3679B5' : 'white',
-            borderColor: current === 'to' ? '#3679B5' : '#E6ECF2',
+            backgroundColor: current === 'to' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor: current === 'to' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             display: 'flex',
             justifyContent: 'center',
@@ -123,7 +124,7 @@ const TxInput: React.FC<ITxInput> = ({
         >
           <Text
             style={{
-              color: current === 'to' ? 'white' : '#CCCCCC',
+              color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED, //
               fontFamily: AppFonts.Regular,
             }}
           >
@@ -133,8 +134,8 @@ const TxInput: React.FC<ITxInput> = ({
         <TouchableOpacity
           onPress={() => setCurrent('from')}
           style={{
-            backgroundColor: current === 'from' ? '#3679B5' : 'white',
-            borderColor: current === 'from' ? '#3679B5' : '#E6ECF2',
+            backgroundColor: current === 'from' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor: current === 'from' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -146,7 +147,7 @@ const TxInput: React.FC<ITxInput> = ({
         >
           <Text
             style={{
-              color: current === 'from' ? 'white' : '#CCCCCC',
+              color: current === 'from' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
             }}
           >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, Text, StyleProp, ViewStyle } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   text: string
@@ -33,7 +34,7 @@ const GuideTextInvalid: React.FC<Props> = ({
       <Text
         style={{
           textAlign: 'right',
-          color: '#E53935',
+          color: AppColors.ERROR_RED,
           fontSize: 12,
           fontFamily: AppFonts.Medium,
         }}

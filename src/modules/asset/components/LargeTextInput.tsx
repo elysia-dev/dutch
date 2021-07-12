@@ -4,6 +4,7 @@ import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import { useTranslation } from 'react-i18next';
 import GuideText from './GuideText';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   current: string,
@@ -46,7 +47,7 @@ const LargeTextInput: React.FC<Props> = ({
           {current === 'from' && <Text
             style={{
               fontSize: 25,
-              color: '#666666',
+              color: AppColors.BLACK2,
               fontFamily: AppFonts.Bold,
             }}
           >
@@ -62,7 +63,7 @@ const LargeTextInput: React.FC<Props> = ({
             <Text
               style={{
                 fontSize: valueFontSize,
-                color: '#1C1C1C',
+                color: AppColors.BLACK,
                 fontFamily: AppFonts.Bold,
               }}
             >
@@ -72,7 +73,7 @@ const LargeTextInput: React.FC<Props> = ({
           {current === 'to' && <Text
             style={{
               fontSize: 25,
-              color: '#666666',
+              color: AppColors.BLACK2,
               fontFamily: AppFonts.Bold,
             }}
           >
@@ -96,7 +97,7 @@ const LargeTextInput: React.FC<Props> = ({
         <View
           style={{
             borderBottomWidth: 1,
-            borderColor: '#3679B5',
+            borderColor: AppColors.MAIN,
             width: '100%',
             marginTop: 12,
           }}
@@ -110,7 +111,7 @@ const LargeTextInput: React.FC<Props> = ({
           style={{
             fontSize: 30,
             textAlign: 'center',
-            color: '#CCCCCC',
+            color: AppColors.DEACTIVATED,
             fontFamily: AppFonts.Medium,
             marginTop: 12,
             marginBottom: 9,
@@ -121,7 +122,7 @@ const LargeTextInput: React.FC<Props> = ({
         <View
           style={{
             borderBottomWidth: 1,
-            borderColor: '#3679B5',
+            borderColor: AppColors.MAIN,
             width: '100%',
             marginTop: 12,
           }}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleProp, TextStyle } from 'react-native';
+import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
@@ -16,7 +17,7 @@ const GuideText: React.FC<Props> = ({
       style={{
         ...(style as {}),
         textAlign: 'right',
-        color: '#848484',
+        color: AppColors.SUB_BLACK,
         fontSize: 12,
         fontFamily: AppFonts.Regular,
       }}

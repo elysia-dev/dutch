@@ -6,6 +6,7 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import GuideText from './GuideText';
 import GuideTextInvalid from './GuideTextInvalid';
 import LargeTextInput from './LargeTextInput';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   purpose: string // invest / refund
@@ -66,7 +67,7 @@ const TxInputViewer: React.FC<Props> = ({
         style={{
           marginTop: 10,
           width: '100%',
-          borderColor: '#E6E6E6',
+          borderColor: AppColors.SUB_GREY,
           borderWidth: 1,
           borderRadius: 5,
           paddingVertical: 12,

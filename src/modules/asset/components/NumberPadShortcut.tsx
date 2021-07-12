@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   current: string
@@ -24,7 +25,7 @@ const NumberPadShortcut: React.FC<Props> = ({
         key={value}
         style={{
           borderRadius: 5,
-          borderColor: '#C8C8C8',
+          borderColor: '#C8C8C8', //
           borderWidth: 1,
           width: 56,
           height: 27,

@@ -59,7 +59,7 @@ const ConfirmationModal: React.FC<Props> = ({
           activeOpacity={1}
           style={{
             flex: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.44)',
+            backgroundColor: AppColors.MODAL_BACKGROUND,
           }}
         />
         <View
@@ -67,7 +67,7 @@ const ConfirmationModal: React.FC<Props> = ({
             width: '100%',
             height: 572,
             display: 'flex',
-            backgroundColor: 'rgba(0, 0, 0, 0.44)',
+            backgroundColor: AppColors.MODAL_BACKGROUND,
           }}
         >
           <View
@@ -94,19 +94,19 @@ const ConfirmationModal: React.FC<Props> = ({
               justifyContent: 'space-between',
               padding: 18,
               flex: 1,
-              backgroundColor: 'white',
+              backgroundColor: AppColors.WHITE,
             }}
           >
             <View>
               <Text
                 style={{
                   fontSize: 18,
-                  color: 'rgba(28, 28, 28, 1)',
+                  color: AppColors.BLACK,
                   textAlign: 'center',
                   lineHeight: 32,
                   fontWeight: 'bold',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'rgba(241, 241, 241, 1)',
+                  borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   marginTop: 20,
                   height: 50,
@@ -121,7 +121,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'rgba(241, 241, 241, 1)',
+                  borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
                 }}
@@ -129,7 +129,7 @@ const ConfirmationModal: React.FC<Props> = ({
                 <Text
                   style={{
                     fontSize: 14,
-                    color: 'rgba(102, 102, 102, 1)',
+                    color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
                   }}
@@ -140,7 +140,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   style={{
                     fontSize: 14,
                     fontWeight: 'bold',
-                    color: '#1C1C1C',
+                    color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
                   }}
@@ -154,7 +154,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'rgba(241, 241, 241, 1)',
+                  borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 64,
                 }}
@@ -162,7 +162,7 @@ const ConfirmationModal: React.FC<Props> = ({
                 <Text
                   style={{
                     fontSize: 14,
-                    color: 'rgba(102, 102, 102, 1)',
+                    color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
                   }}
@@ -174,7 +174,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     style={{
                       fontSize: 14,
                       fontWeight: 'bold',
-                      color: '#1C1C1C',
+                      color: AppColors.BLACK,
                       textAlign: 'right',
                       fontFamily: AppFonts.Bold,
                     }}
@@ -184,7 +184,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   <Text
                     style={{
                       fontSize: 12,
-                      color: '#848484',
+                      color: AppColors.SUB_BLACK,
                       textAlign: 'right',
                       fontFamily: AppFonts.Regular,
                     }}
@@ -199,7 +199,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'rgba(241, 241, 241, 1)',
+                  borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
                 }}
@@ -207,7 +207,7 @@ const ConfirmationModal: React.FC<Props> = ({
                 <Text
                   style={{
                     fontSize: 14,
-                    color: 'rgba(102, 102, 102, 1)',
+                    color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
                   }}
@@ -218,7 +218,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   style={{
                     fontSize: 14,
                     fontWeight: 'bold',
-                    color: '#1C1C1C',
+                    color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
                   }}
@@ -232,7 +232,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   borderBottomWidth: 1,
-                  borderBottomColor: 'rgba(241, 241, 241, 1)',
+                  borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
                 }}
@@ -240,7 +240,7 @@ const ConfirmationModal: React.FC<Props> = ({
                 <Text
                   style={{
                     fontSize: 14,
-                    color: 'rgba(102, 102, 102, 1)',
+                    color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
                   }}
@@ -251,7 +251,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   style={{
                     fontSize: 14,
                     fontWeight: 'bold',
-                    color: '#1C1C1C',
+                    color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
                   }}
@@ -262,7 +262,7 @@ const ConfirmationModal: React.FC<Props> = ({
               <Text
                 style={{
                   fontSize: 12,
-                  color: '#1C1C1C',
+                  color: AppColors.BLACK,
                   marginHorizontal: 5,
                   marginTop: 12,
                   lineHeight: 20,
@@ -276,7 +276,7 @@ const ConfirmationModal: React.FC<Props> = ({
               {!isApproved && <Text
                 style={{
                   fontSize: 12,
-                  color: '#1C1C1C',
+                  color: AppColors.BLACK,
                   marginHorizontal: 5,
                   marginBottom: 12,
                   lineHeight: 20,
@@ -299,7 +299,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontSize: 16,
                     textAlign: 'center',
                     fontFamily: AppFonts.Bold,
-                    color: 'white',
+                    color: AppColors.WHITE,
                   }}
                   allowFontScaling={false}
                 >
