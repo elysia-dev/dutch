@@ -1,51 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { TouchableHighlight, View, Image } from 'react-native';
-import { H2Text } from '../../shared/components/Texts';
-import AppFonts from '../../enums/AppFonts';
-
-const DialButton: FunctionComponent<{ pressHandler: () => void, value?: string, img?: any }> = ({
-  pressHandler,
-  value,
-  img,
-}) => {
-  let child;
-  if (value) {
-    child = <H2Text label={value} style={{ textAlign: 'center', fontFamily: AppFonts.Medium }} />;
-  } else if (img) {
-    child = (
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Image
-          source={img}
-          resizeMethod='scale'
-          style={{ width: 42, height: 42 }}
-        />
-      </View>
-    );
-  }
-
-  return (
-    <TouchableHighlight
-      style={{
-        width: 100,
-        height: 50,
-        borderRadius: 8,
-        justifyContent: 'center',
-        marginHorizontal: 4,
-      }}
-      onPress={() => pressHandler()}
-      underlayColor='#F0F0F0'
-      activeOpacity={0.5}
-    >
-      {child}
-    </TouchableHighlight>
-  );
-};
+import { View } from 'react-native';
+import DialButton from './DialButton';
+import RemoveButton from './RemoveButton';
 
 const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeValue: () => void, height?: number }> = ({
   addValue,
@@ -76,7 +32,7 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <DialButton key={'.'} value={'.'} pressHandler={() => addValue('.')} />
         <DialButton key={'0'} value={'0'} pressHandler={() => addValue('0')} />
-        <DialButton key={'remove'} img={require('../assets/images/delete_icon_xxhdpi.png')} pressHandler={() => removeValue()} />
+        <RemoveButton key={'remove'} pressHandler={() => removeValue()} />
       </View>
     </View>
   );
