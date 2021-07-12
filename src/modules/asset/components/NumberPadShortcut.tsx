@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
@@ -7,7 +7,7 @@ interface Props {
   current: string
   values: number[]
   inputValue: string
-  setValues: any // 이름에 value가 너무 많이 들어가서 좀 헷갈리긴 한다... 그리고 타입도 좀 엄밀하게
+  setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
   ELAPrice: number
 }
 
