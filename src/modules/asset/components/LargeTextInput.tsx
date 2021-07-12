@@ -113,6 +113,7 @@ const LargeTextInput: React.FC<Props> = ({
             color: '#CCCCCC',
             fontFamily: AppFonts.Medium,
             marginTop: 12,
+            marginBottom: 9,
           }}
         >
           {current === 'to' ? t(`assets.${purposeType}_stake_placeholder`) : t(`assets.${purposeType}_value_placeholder`)}
