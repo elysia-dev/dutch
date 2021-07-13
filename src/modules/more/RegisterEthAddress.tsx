@@ -19,7 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics';
 import Clipboard from 'expo-clipboard';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 
 import {
   P1Text,
@@ -33,10 +33,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { BackButton } from '../../shared/components/BackButton';
 import { Modal } from '../../shared/components/Modal';
-import {
-  DAPP_URL,
-  ETH_NETWORK
-} from 'react-native-dotenv';
+import { DAPP_URL, ETH_NETWORK } from 'react-native-dotenv';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
@@ -79,7 +76,7 @@ const buttonImage = (type: string) => {
     case WalletType.IMTOKEN_MOBILE:
       return require('./images/imToken_logo.png');
     case WalletType.ELYSIA:
-      return require('./images/eth.png')
+      return require('./images/eth.png');
     default:
   }
 };
@@ -121,11 +118,10 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
-  const { user, Server, setEthAddress, signOut, signIn } = useContext(
-    UserContext,
-  );
+  const { user, Server, setEthAddress, signOut, signIn } =
+    useContext(UserContext);
   const { elPrice } = useContext(PriceContext);
-  const { currencyFormatter } = useContext(PreferenceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
   const { language } = useContext(PreferenceContext);
 
@@ -156,7 +152,9 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
     const token = await getToken();
 
     if (!token) {
-      const res = await createGuestAndRegisterAddress(language || LocaleType.EN);
+      const res = await createGuestAndRegisterAddress(
+        language || LocaleType.EN,
+      );
       setRequestId(res.requestId);
       openExternalWallet(type, res.requestId);
       signIn();
@@ -170,29 +168,23 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
   const openExternalWallet = (type: string, requestId: string) => {
     if (type === 'metamask') {
       Linking.openURL(
-        `https://metamask.app.link/dapp/${DAPP_URL
-        }/ethAddress/${requestId}`,
+        `https://metamask.app.link/dapp/${DAPP_URL}/ethAddress/${requestId}`,
       ).catch((_e) => {
         storeDeeplink('metamask/id1438144202', 'io.metamask');
       });
     } else if (type === 'imtoken') {
       Linking.openURL(
-        `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL
-        }/ethAddress/${requestId}`,
+        `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/ethAddress/${requestId}`,
       ).catch((_e) => {
-        storeDeeplink(
-          'imtoken-btc-eth-wallet/id1384798940',
-          'im.token.app',
-        );
+        storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
       });
     }
-  }
+  };
 
   const copyLink = () => {
     Server.requestEthAddressRegister()
       .then((res) => {
-        const url = `https://${DAPP_URL}/ethAddress/${res.data.id
-          }`;
+        const url = `https://${DAPP_URL}/ethAddress/${res.data.id}`;
         Clipboard.setString(url);
         alert(t('more_label.copied', { url }));
       })
@@ -333,9 +325,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     />
                   </TouchableOpacity>
                   <H3Text
-                    label={
-                      ETH_NETWORK === 'mainnet' ? 'EL' : "KEL"
-                    }
+                    label={ETH_NETWORK === 'mainnet' ? 'EL' : 'KEL'}
                     style={{
                       flex: 3,
                       marginTop: 9,
@@ -344,12 +334,13 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   <View style={{ flexDirection: 'column', flex: 4 }}>
                     <H3Text
                       style={{ marginTop: 9, textAlign: 'right' }}
-                      label={`${state.balance
-                        ? commaFormatter(
-                          (parseFloat(state.balance) / 10 ** 18).toFixed(3),
-                        )
-                        : '-.--'
-                        }`}
+                      label={`${
+                        state.balance
+                          ? commaFormatter(
+                              (parseFloat(state.balance) / 10 ** 18).toFixed(3),
+                            )
+                          : '-.--'
+                      }`}
                     />
                     <P3Text
                       style={{
@@ -357,13 +348,14 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                         marginTop: 8,
                         textAlign: 'right',
                       }}
-                      label={`= ${state.balance
-                        ? currencyFormatter(
-                          (elPrice * parseFloat(state.balance)) / 10 ** 18,
-                          2,
-                        )
-                        : '$ -.--'
-                        }`}
+                      label={`= ${
+                        state.balance
+                          ? currencyFormatter(
+                              (elPrice * parseFloat(state.balance)) / 10 ** 18,
+                              2,
+                            )
+                          : '$ -.--'
+                      }`}
                     />
                   </View>
                 </View>
@@ -441,7 +433,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     [
                       {
                         text: 'Cancel',
-                        onPress: () => { },
+                        onPress: () => {},
                         style: 'cancel',
                       },
                       {
@@ -461,8 +453,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             )
           ) : (
             <>
-              {
-                user.provider === ProviderType.GUEST &&
+              {user.provider === ProviderType.GUEST && (
                 <WalletButton
                   title={'Ethereum Wallet'}
                   selected={state.wallet === WalletType.ELYSIA}
@@ -472,7 +463,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   }}
                   type={WalletType.ELYSIA}
                 />
-              }
+              )}
               <WalletButton
                 title={'MetaMask'}
                 selected={state.wallet === WalletType.METAMASK_MOBILE}
@@ -527,10 +518,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                 marginLeft: 'auto',
                 marginRight: 'auto',
               }}></Image>
-            <H2Text
-              label={t('more.connected')}
-              style={{ marginTop: 10 }}
-            />
+            <H2Text label={t('more.connected')} style={{ marginTop: 10 }} />
             <P2Text
               label={t('more.find_more')}
               style={{

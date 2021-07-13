@@ -20,18 +20,23 @@ const WalletRecover: FunctionComponent = () => {
       title={<></>}
       body={
         <>
-          <P1Text
-            label={t('wallet.recover_infomation')}
-          />
+          <P1Text label={t('wallet.recover_infomation')} />
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => {
-              setConfirm(!confirmed)
-            }}
-          >
-            <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
+              setConfirm(!confirmed);
+            }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                marginRight: '5%',
+              }}>
               <CheckIcon checked={confirmed} />
-              <P1Text style={{ marginLeft: 10 }} label={t('wallet.recover_check')} />
+              <P1Text
+                style={{ marginLeft: 10 }}
+                label={t('wallet.recover_check')}
+              />
             </View>
           </TouchableOpacity>
         </>
@@ -39,11 +44,16 @@ const WalletRecover: FunctionComponent = () => {
       button={
         <>
           <NextButton
-            style={{ marginTop: 'auto', marginLeft: '5%', marginRight: '5%', backgroundColor: '#c4302b' }}
+            style={{
+              marginTop: 'auto',
+              marginLeft: '5%',
+              marginRight: '5%',
+              backgroundColor: '#c4302b',
+            }}
             title={t('wallet.recover_button')}
             disabled={!confirmed}
             handler={async () => {
-              if (Platform.OS !== "android") {
+              if (Platform.OS !== 'android') {
                 Alert.prompt(
                   t('more_label.delete_address'),
                   t('more.confirm_delete'),
@@ -62,7 +72,7 @@ const WalletRecover: FunctionComponent = () => {
                   [
                     {
                       text: 'Cancel',
-                      onPress: () => { },
+                      onPress: () => {},
                       style: 'cancel',
                     },
                     {

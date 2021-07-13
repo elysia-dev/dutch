@@ -1,15 +1,11 @@
 import { ethers } from 'ethers';
 import { ETHERSCAN_API, ETH_NETWORK } from 'react-native-dotenv';
-import EthersacnClient from '../api/EtherscanClient';
-import txResponseToTx from './txResponseToTx';
-import {
-  CryptoTxsResultResponse,
-  Transaction,
-} from '../types/CryptoTxsResponse';
 import CryptoType from '../enums/CryptoType';
 import AppColors from '../enums/AppColors';
 import { ChartDataPoint } from 'react-native-responsive-linechart';
-import { AxiosResponse } from 'axios';
+import CryptoTransaction from '../types/CryptoTransaction';
+import moment from 'moment';
+import ChartTabDays from '../enums/ChartTabDays';
 
 const provider = new ethers.providers.EtherscanProvider(
   ETH_NETWORK,
@@ -29,53 +25,11 @@ export namespace toAppColor {
     return AppColors.EL_BLUE;
   }
 }
-
 export class ChartTransactions {
-  private address: string;
   private currentAssetValue: number;
-  private assetType: string;
 
-  constructor(address: string, currentAssetValue: number, assetType: string) {
-    this.address = address;
+  constructor(currentAssetValue: number) {
     this.currentAssetValue = currentAssetValue;
-    this.assetType = assetType;
-  }
-
-  /**
-   * 트랜잭션의 데이터를 가져오는 메서드
-   */
-  async getTransactionData(
-    day: number,
-  ): Promise<AxiosResponse<CryptoTxsResultResponse>> {
-    let endBlockNumber: number = await provider.getBlockNumber();
-    let startBlockNumber: number = endBlockNumber - 46100 * day;
-    try {
-      const asset_type = this.assetType;
-      if (asset_type === CryptoType.ETH) {
-        return await EthersacnClient.getEthTransactionLatest(
-          this.address,
-          startBlockNumber,
-          endBlockNumber,
-        );
-      } else if (asset_type === CryptoType.BNB) {
-        const bnbRes = await EthersacnClient.getBnbLatestBlock();
-        endBlockNumber = bnbRes.data.result;
-        startBlockNumber = endBlockNumber - 200000 * day;
-        return await EthersacnClient.getBnbTransactionLatest(
-          this.address,
-          startBlockNumber,
-          endBlockNumber,
-        );
-      } else {
-        return await EthersacnClient.getErc20TransactionLatest(
-          this.address,
-          startBlockNumber,
-          endBlockNumber,
-        );
-      }
-    } catch (error) {
-      throw error;
-    }
   }
 
   /**
@@ -93,17 +47,34 @@ export class ChartTransactions {
   }
 
   /**
-   * getTransactionChar 호출 시 chart에 들어갈 데이터를 만들어서 리턴
+   * chart에 들어갈 데이터를 날짜 별로 분리하여 리턴
    */
-  async getTransactionChart(day: number) {
+  async getTransactionChart(
+    day: number,
+    txs: CryptoTransaction[],
+  ): Promise<ChartDataPoint[] | undefined> {
     try {
       let xyDayValue: ChartDataPoint[] = [];
       let prevValue: number = this.currentAssetValue;
-      await (
-        await this.getTransactionData(day)
-      ).data?.result
-        ?.map((tx: Transaction) => {
-          return txResponseToTx(tx, this.address);
+      const currentTime = new Date();
+      const fotmatCurTime = moment(currentTime).format('YYYY-MM-DD');
+      let weeks: string;
+      let month: string;
+      if (day === ChartTabDays.OneMonth) {
+        month = moment(currentTime).subtract(1, 'M').format('YYYY-MM-DD');
+      } else {
+        weeks = moment(currentTime).subtract(day, 'days').format('YYYY-MM-DD');
+      }
+      txs
+        .filter((tx, idx) => {
+          const txTime = moment(tx.createdAt).format('YYYY-MM-DD');
+          if (day === ChartTabDays.OneWeek) {
+            return weeks <= txTime && fotmatCurTime >= txTime;
+          } else if (day === ChartTabDays.TwoWeeks) {
+            return weeks <= txTime && fotmatCurTime >= txTime;
+          } else if (day === ChartTabDays.OneMonth) {
+            return month <= txTime && fotmatCurTime >= txTime;
+          }
         })
         .forEach((tx, idx, crypTotxs) => {
           const value: string = crypTotxs[idx - 1]?.value;
