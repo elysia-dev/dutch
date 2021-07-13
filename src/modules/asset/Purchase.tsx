@@ -8,7 +8,7 @@ import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
-import { ethers, utils } from 'ethers';
+import { ethers, utils, constants } from 'ethers';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
@@ -91,9 +91,9 @@ const Purchase: FunctionComponent = () => {
   const createTx = async () => {
     let populatedTransaction: ethers.PopulatedTransaction | undefined;
     let txRes: ethers.providers.TransactionResponse | undefined;
+    const valueInDollar = String(getCryptoPrice(from.type));
 
     try {
-      const ether = String(parseFloat(values.from) / getCryptoPrice(from.type)) // dollar to crypto
       switch (from.type) {
         case CryptoType.ETH, CryptoType.BNB:
           populatedTransaction = await contract?.populateTransaction.purchase();
@@ -103,13 +103,17 @@ const Purchase: FunctionComponent = () => {
           txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
-            value: utils.parseEther(ether),
+            value: utils.parseEther(values.from)
+              .mul(constants.WeiPerEther)
+              .div(utils.parseEther(valueInDollar)), // dollar to crypto
           })
 
           break;
         default:
           populatedTransaction = await contract?.populateTransaction.purchase(
-            utils.parseEther(ether)
+            utils.parseEther(values.from)
+              .mul(constants.WeiPerEther)
+              .div(utils.parseEther(valueInDollar))
           )
 
           if (!populatedTransaction) break;
