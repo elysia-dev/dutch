@@ -19,9 +19,10 @@ import AppFonts from '../../../enums/AppFonts';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 import ConfirmationModal from './ConfirmationModal';
 import AppColors from '../../../enums/AppColors';
+import PurposeType from '../../../enums/PurposeType';
 
 interface ITxInput {
-  purpose: string
+  purpose: PurposeType
   title: string
   fromInputTitle: string
   toInputTitle: string
@@ -81,15 +82,15 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
-  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
+  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
   const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
 
   let fromBalance = 0;
   let toBalance = 0;
-  if (purpose === 'purchase') {
+  if (purpose === PurposeType.Purchase) {
     fromBalance = getBalance(from.type);
     toBalance = fromBalance * fromPrice / toPrice;
-  } else if (purpose === 'refund') {
+  } else if (purpose === PurposeType.Refund) {
     toBalance = to.value;
     fromBalance = toBalance * toPrice / fromPrice;
   }

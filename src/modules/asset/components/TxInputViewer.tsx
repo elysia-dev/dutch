@@ -7,9 +7,10 @@ import GuideText from './GuideText';
 import GuideTextInvalid from './GuideTextInvalid';
 import LargeTextInput from './LargeTextInput';
 import AppColors from '../../../enums/AppColors';
+import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
-  purpose: string // invest / refund
+  purpose: PurposeType
   current: string
   to: {
     value: string, // 입력한 값
@@ -40,7 +41,7 @@ const TxInputViewer: React.FC<Props> = ({
   insufficientGas,
 }) => {
   const { t } = useTranslation();
-  const purposeType = purpose === 'purchase' ? 'invest' : 'refund';
+  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
   const currentTab = current === 'to' ? to : from;
   const maxLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
   const maxValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
