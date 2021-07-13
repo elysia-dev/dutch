@@ -6,7 +6,6 @@ import NextButton from '../../../shared/components/NextButton';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useTranslation } from 'react-i18next';
-import PreferenceContext from '../../../contexts/PreferenceContext';
 import Asset from '../../../types/Asset';
 import AssetContext from '../../../contexts/AssetContext';
 import CryptoType from '../../../enums/CryptoType';
@@ -29,8 +28,11 @@ interface ITxInput {
   from: Asset
   to: Asset
   toMax?: number
+  fromMax?: number
   fromPrice: number
   toPrice: number
+  fromBalance: number
+  toBalance: number
   values: { from: string, to: string }
   current: string
   step: TxStep
@@ -58,9 +60,12 @@ const TxInput: React.FC<ITxInput> = ({
   toInputTitle,
   from,
   to,
+  fromMax,
   toMax,
   fromPrice,
   toPrice,
+  fromBalance,
+  toBalance,
   values,
   current,
   step,
@@ -71,7 +76,6 @@ const TxInput: React.FC<ITxInput> = ({
   setValues,
   createTx,
 }) => {
-  const { currencyFormatter } = useContext(PreferenceContext)
   const { getBalance } = useContext(AssetContext);
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -83,17 +87,6 @@ const TxInput: React.FC<ITxInput> = ({
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
   const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
-  const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
-
-  let fromBalance = 0;
-  let toBalance = 0;
-  if (purpose === PurposeType.Purchase) {
-    fromBalance = getBalance(from.type);
-    toBalance = fromBalance * fromPrice / toPrice;
-  } else if (purpose === PurposeType.Refund) {
-    toBalance = to.value;
-    fromBalance = toBalance * toPrice / fromPrice;
-  }
 
   // 잔고도 충분하고 구매 가능한 토큰/금액도 충분한지? 둘 중에 더 작은 것과 비교함
   const isUnderToMax = parseFloat(values.to || '0') <= (toMax ? Math.min(toMax, toBalance) : toBalance);
@@ -175,7 +168,7 @@ const TxInput: React.FC<ITxInput> = ({
             value: values.from,
             type: from.type,
             price: fromPrice,
-            max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance
+            max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
           }}
           isUnderMax={isUnderMax}
           estimatedGas={estimateGas}

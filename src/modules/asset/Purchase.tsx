@@ -19,6 +19,7 @@ import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
 import { getAssetTokenFromCryptoType, getElysiaContract } from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
+import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
   Purchase: {
@@ -54,6 +55,13 @@ const Purchase: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
+  const { getBalance } = useContext(AssetContext);
+
+  const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
+  const fromPrice = getCryptoPrice(from.type);
+  const toPrice = getCryptoPrice(CryptoType.ELA);
+  const fromBalance = getBalance(from.type);
+  const toBalance = fromBalance * fromPrice / toPrice;
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -234,9 +242,12 @@ const Purchase: FunctionComponent = () => {
         from={from}
         to={to}
         toMax={toMax}
+        fromMax={fromMax}
+        toBalance={toBalance}
+        fromBalance={fromBalance}
         values={values}
-        fromPrice={getCryptoPrice(from.type)}
-        toPrice={getCryptoPrice(CryptoType.ELA)}
+        fromPrice={fromPrice}
+        toPrice={toPrice}
         current={current}
         step={state.step}
         setCurrent={setCurrent}
