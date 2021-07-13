@@ -19,9 +19,9 @@ type Product = {
   id: number;
   title: string;
   contractAddress: string;
-  totalValue: string;
+  totalValue: string; // 전체 토큰 수
   expectedAnnualReturn: string;
-  presentValue: string;
+  presentValue: string; // 이미 팔린 토큰을 제외하고 남은 토큰 수
   tokenName: string;
   usdPricePerToken: number;
   status: string;

@@ -253,7 +253,7 @@ const Detail: FunctionComponent = () => {
       <ScrollView
         scrollEnabled={true}
         scrollToOverflowEnabled={true}
-        style={{ height: '100%', backgroundColor: '#fff' }}>
+        style={{ height: '100%', backgroundColor: AppColors.WHITE }}>
         <View
           style={{
             top: 0,
@@ -270,7 +270,7 @@ const Detail: FunctionComponent = () => {
                 width: 32,
                 height: 32,
                 borderRadius: 16,
-                backgroundColor: 'rgba(255,255,255,0.5)',
+                backgroundColor: AppColors.BACKGROUND_WHITE,
                 marginLeft: 12,
                 marginTop: 32,
               }}
@@ -384,12 +384,12 @@ const Detail: FunctionComponent = () => {
                   icon={'-'}
                   handler={() => {
                     navigation.navigate(AssetPage.Refund, {
-                      from: asset,
-                      to: {
+                      from: {
                         type: state.paymentMethod,
                         title: state.paymentMethod.toUpperCase(),
                         unit: state.paymentMethod.toUpperCase(),
                       },
+                      to: asset,
                       contractAddress: state.contractAddress,
                       productId: state.productId,
                     });
