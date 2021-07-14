@@ -180,17 +180,21 @@ const Purchase: FunctionComponent = () => {
           return
         }
 
-        getElysiaContract()?.allowance(
-          wallet?.getFirstNode()?.address, contractAddress
-        ).then((res: BigNumber) => {
-          if (!res.isZero()) {
-            setIsApproved(true);
-          }
-          setState({ ...state, step: TxStep.None })
-        }).catch((e: any) => {
-          afterTxFailed(e.message);
-          navigation.goBack();
-        })
+        if (isWalletUser) {
+          getElysiaContract()?.allowance(
+            wallet?.getFirstNode()?.address, contractAddress
+          ).then((res: BigNumber) => {
+            if (!res.isZero()) {
+              setIsApproved(true);
+            }
+            setState({ ...state, step: TxStep.None })
+          }).catch((e: any) => {
+            afterTxFailed(e.message);
+            navigation.goBack();
+          })
+        } else {
+          return
+        }
         break;
 
       case TxStep.Approving:
