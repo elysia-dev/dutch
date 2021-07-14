@@ -42,7 +42,7 @@ const Refund: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { from, to, contractAddress } = route.params;
+  const { from, to, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server } = useContext(UserContext);
@@ -176,7 +176,7 @@ const Refund: FunctionComponent = () => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })
           } else {
-            Server.requestTransaction(route.params.productId, parseInt(values.to), 'refund')
+            Server.requestTransaction(productId, parseInt(values.to), 'refund')
               .then((res) => {
                 setState({
                   ...state,
@@ -198,7 +198,12 @@ const Refund: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection espressTxId={state.espressoTxId} />
+    <PaymentSelection 
+    valueTo={parseFloat(values.to)}
+    productId={productId}
+    type={'refund'}
+    contractAddress={contractAddress}
+    espressTxId={state.espressoTxId} />
   )
 };
 
