@@ -150,6 +150,8 @@ const Detail: React.FC = () => {
       } else if (state.loading === false) {
         setChartLoading(false);
       }
+    } else {
+      setChartLoading(false);
     }
   }, [filterDay, state.transactions.length, state.loading, setChartLoading]);
 
