@@ -51,7 +51,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         NSAllowsArbitraryLoads: true,
       },
     },
-    buildNumber: '1.5.1',
+    buildNumber: '1.5.2',
   },
   android: {
     adaptiveIcon: {
