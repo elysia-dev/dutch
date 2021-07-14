@@ -87,7 +87,7 @@ class LoadDetail {
       presentSupply: parseFloat(productData.presentValue),
       paymentMethod: productData.paymentMethod.toUpperCase() as CryptoType,
       productStatus: productData.status as ProductStatus,
-      productId: 0,
+      productId: productData.id,
       loaded: true,
     };
   }

@@ -38,7 +38,7 @@ type ParamList = {
 const Reward: FunctionComponent = () => {
   const [interest, setInterest] = useState(0);
   const route = useRoute<RouteProp<ParamList, 'Reward'>>()
-  const { toCrypto, toTitle, contractAddress } = route.params;
+  const { toCrypto, toTitle, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
@@ -212,7 +212,7 @@ const Reward: FunctionComponent = () => {
                   step: TxStep.Creating
                 })
               } else {
-                Server.requestTransaction(route.params.productId, 1, 'interest')
+                Server.requestTransaction(productId, 1, 'interest')
                   .then((res) => {
                     setState({
                       ...state,
@@ -236,7 +236,12 @@ const Reward: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection espressTxId={state.espressoTxId} />
+    <PaymentSelection   
+    valueTo={parseFloat((interest / (getCryptoPrice(toCrypto))).toFixed(4))}
+    productId={productId}
+    type={'interest'}
+    contractAddress={contractAddress} 
+    espressTxId={state.espressoTxId} />
   )
 };
 
