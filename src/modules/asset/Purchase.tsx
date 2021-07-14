@@ -283,16 +283,15 @@ const Purchase: FunctionComponent = () => {
             }
           } else {
             Server.requestTransaction(
-              route.params.productId,
+              productId,
               parseFloat(values.to),
               'buying',
-            )
-              .then((res) => {
-                setState({
-                  ...state,
-                  stage: 1,
-                  espressoTxId: res.data.id,
-                });
+            ).then((res) => {
+              setState({
+                ...state,
+                stage: 1,
+                espressoTxId: res.data.id,
+              });
               })
               .catch((e) => {
                 if (e.response.status === 400) {
@@ -307,7 +306,6 @@ const Purchase: FunctionComponent = () => {
     );
   }
 
-  // return <PaymentSelection espressTxId={state.espressoTxId} />;
   return (
     <PaymentSelection
       valueTo={parseFloat(values.to)}
