@@ -21,6 +21,7 @@ export type UserContextState = {
     legacyUsd: number;
     legacyWalletRefundStatus: LegacyRefundStatus;
     legacyAsset2Value: number;
+    language: string;
     provider: ProviderType;
   };
   ownerships: OwnershipResponse[];
@@ -58,6 +59,7 @@ export const initialUserState: UserContextState = {
     legacyUsd: 0,
     legacyWalletRefundStatus: LegacyRefundStatus.NONE,
     legacyAsset2Value: 0,
+    language: 'ko',
     provider: ProviderType.GUEST,
   },
   ownerships: [],
@@ -65,20 +67,20 @@ export const initialUserState: UserContextState = {
   notifications: [] as Notification[],
   expoPushToken: '',
   isWalletUser: false,
-  Server: new Server(() => { }, '')
-}
+  Server: new Server(() => {}, ''),
+};
 
 const UserContext = createContext<IUserContext>({
   ...initialUserState,
-  signIn: async () => { },
-  guestSignIn: async () => { },
-  signOut: async (_signInStatus: SignOut) => { },
-  refreshUser: async () => { },
-  setNotifications: (_notifications: Notification[]) => { },
-  setEthAddress: (_address: string) => { },
-  setUserExpoPushToken: (_expoPushToken: string) => { },
-  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => { },
-  newWalletUser: () => { },
+  signIn: async () => {},
+  guestSignIn: async () => {},
+  signOut: async (_signInStatus: SignOut) => {},
+  refreshUser: async () => {},
+  setNotifications: (_notifications: Notification[]) => {},
+  setEthAddress: (_address: string) => {},
+  setUserExpoPushToken: (_expoPushToken: string) => {},
+  setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => {},
+  newWalletUser: () => {},
 });
 
 export default UserContext;

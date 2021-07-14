@@ -5,16 +5,11 @@ import React, {
   useContext,
   useRef,
 } from 'react';
-import {
-  View,
-  ScrollView,
-  StatusBar,
-  Alert,
-} from 'react-native';
+import { View, ScrollView, StatusBar, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
 import Product from '../../types/Product';
@@ -65,7 +60,9 @@ const ProductBuying: FunctionComponent = () => {
     ? user.nationality.split(', ')[1]
     : '';
   const purchasability = isWalletUser || user.ethAddresses?.length > 0;
-  const isBnbProductAndCannotPurchase = !isWalletUser && state.product?.paymentMethod.toUpperCase() === CryptoType.BNB
+  const isBnbProductAndCannotPurchase =
+    !isWalletUser &&
+    state.product?.paymentMethod.toUpperCase() === CryptoType.BNB;
 
   const submitButtonTitle = () => {
     if (state.product?.status === ProductStatus.TERMINATED) {
@@ -74,9 +71,11 @@ const ProductBuying: FunctionComponent = () => {
       return t('product_label.need_wallet');
     } else if (user.provider === ProviderType.EMAIL && !purchasability) {
       return t('product_label.non_purchasable');
-    } else if (isBnbProductAndCannotPurchase) {
-      return t('product_label.required_eth_wallet');
-    } else if (state.product?.restrictedCountries?.includes(shortNationality)) {
+    }
+    // else if (isBnbProductAndCannotPurchase) {
+    //   return t('product_label.required_eth_wallet');
+    // }
+    else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
       return t('assets.invest');
@@ -92,7 +91,7 @@ const ProductBuying: FunctionComponent = () => {
         [
           {
             text: 'Cancel',
-            onPress: () => { },
+            onPress: () => {},
             style: 'cancel',
           },
           {
@@ -106,9 +105,11 @@ const ProductBuying: FunctionComponent = () => {
         ],
         { cancelable: false },
       );
-    } else if (isBnbProductAndCannotPurchase) {
-      return alert(t('product.required_eth_wallet'));
-    } else if (user.provider === ProviderType.EMAIL && !purchasability) {
+    }
+    // else if (isBnbProductAndCannotPurchase) {
+    //   return alert(t('product.required_eth_wallet'));
+    // }
+    else if (user.provider === ProviderType.EMAIL && !purchasability) {
       if (state.product?.restrictedCountries.includes(shortNationality)) {
         return alert(t('product.restricted_country'));
       }
@@ -130,7 +131,7 @@ const ProductBuying: FunctionComponent = () => {
         toMax: parseFloat(state.product?.presentValue || '0'),
         contractAddress: state.product?.contractAddress,
         productId: state.product?.id,
-      })
+      });
     }
   };
 
@@ -183,7 +184,8 @@ const ProductBuying: FunctionComponent = () => {
                   backgroundColor: 'rgba(255,255,255,0.5)',
                   marginLeft: 12,
                   marginTop: 32,
-                }} />
+                }}
+              />
               <BackButton
                 handler={() => {
                   StatusBar.setHidden(true);
@@ -192,11 +194,7 @@ const ProductBuying: FunctionComponent = () => {
               />
             </View>
           </View>
-          {state.product && (
-            <BasicInfo
-              product={state.product}
-            />
-          )}
+          {state.product && <BasicInfo product={state.product} />}
           {state.product && state.product?.status !== ProductStatus.TERMINATED && (
             <View
               style={{
@@ -228,8 +226,8 @@ const ProductBuying: FunctionComponent = () => {
               state.product?.status === ProductStatus.TERMINATED
                 ? '#1c1c1c'
                 : user.provider === ProviderType.ETH || purchasability
-                  ? '#3679B5'
-                  : '#D0D8DF',
+                ? '#3679B5'
+                : '#D0D8DF',
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={submitButtonHandler}

@@ -8,7 +8,9 @@ import {
   ETHERSCAN_API_URL,
   BSCSCAN_API_URL,
 } from 'react-native-dotenv';
-import { CryptoTxsResultResponse } from '../types/CryptoTxsResponse';
+import CryptoTxsResponse, {
+  CryptoTxsResultResponse,
+} from '../types/CryptoTxsResponse';
 
 const cache = setupCache({
   maxAge: 15 * 60 * 1000,
@@ -109,17 +111,25 @@ export default class EthersacnClient {
   };
 
   /**
-   * BNB 가장 최근에 생성된 블록넘버 조회
+   * BNB로 구매한 상품 트랜잭션 리스트 조회
    */
-  static getBnbLatestBlock = async (): Promise<AxiosResponse> => {
-    const date = (new Date().getTime() / 1000).toFixed(0);
-    if (APP_ENV !== 'development') {
-      return axios.get(
-        `${BSCSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${date}&closest=before&apikey=${BSCSCAN_API}`,
-      );
-    }
+  static getBscErc20Transaction = async (
+    address: string,
+    tokenAddress: string,
+    page: number,
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     return axios.get(
-      `${BSCSCAN_API_URL}?module=block&action=getblocknobytime&timestamp=${date}&closest=before&apikey=${BSCSCAN_API}`,
+      `${BSCSCAN_API_URL}?module=account&action=tokentx&contractaddress=${tokenAddress}&address=${address}&page=${page}&offset=10&sort=desc&apikey=${BSCSCAN_API}`,
+    );
+  };
+
+  static getAssetErc20Transaction = async (
+    address: string,
+    tokenAddress: string,
+    page: number,
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
+    return axios.get(
+      `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${tokenAddress}&address=${address}&page=${page}&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
     );
   };
 }

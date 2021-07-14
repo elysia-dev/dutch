@@ -13,7 +13,7 @@ type CryptoTransaction = {
   value: string;
   txHash?: string;
   createdAt: string;
-  blockNumber: number;
+  blockNumber: number | undefined;
   status?: TxStatus;
   cryptoType?: CryptoType;
 };

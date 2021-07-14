@@ -4,7 +4,10 @@ import * as Notifications from 'expo-notifications';
 import Server from '../api/server';
 import { getToken, removeToken } from '../asyncStorages/token';
 import { IS_WALLET_USER } from '../constants/storage';
-import UserContext, { UserContextState, initialUserState } from '../contexts/UserContext';
+import UserContext, {
+  UserContextState,
+  initialUserState,
+} from '../contexts/UserContext';
 import NotificationStatus from '../enums/NotificationStatus';
 import NotificationType from '../enums/NotificationType';
 import ProviderType from '../enums/ProviderType';
@@ -14,6 +17,7 @@ import registerForPushNotificationsAsync from '../utiles/registerForPushNotifica
 import Notification, { isNotification } from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import moment from 'moment';
+import { composeInitialProps } from 'react-i18next';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -24,7 +28,7 @@ Notifications.setNotificationHandler({
 });
 
 const UserProvider: React.FC = (props) => {
-  const [state, setState] = useState<UserContextState>(initialUserState)
+  const [state, setState] = useState<UserContextState>(initialUserState);
 
   const signOut = async (signInStatus: SignOut) => {
     await removeToken();
@@ -40,7 +44,7 @@ const UserProvider: React.FC = (props) => {
       Server: authServer,
       isWalletUser: isWalletUser === 'true',
     });
-  }
+  };
 
   const signIn = async () => {
     const isWalletUser = await AsyncStorage.getItem(IS_WALLET_USER);
@@ -97,9 +101,8 @@ const UserProvider: React.FC = (props) => {
 
   const refreshUser = async () => {
     if (state.user.provider === ProviderType.GUEST) {
-      return
+      return;
     }
-
     state.Server.me()
       .then(async (res) => {
         setState({
@@ -163,8 +166,8 @@ const UserProvider: React.FC = (props) => {
       ].includes(type);
     };
 
-    const addNotificationReceivedListener = Notifications.addNotificationReceivedListener(
-      (response) => {
+    const addNotificationReceivedListener =
+      Notifications.addNotificationReceivedListener((response) => {
         if (isNotification(response.request.content.data as Notification)) {
           if (
             isTransactionEnd(
@@ -187,12 +190,11 @@ const UserProvider: React.FC = (props) => {
             });
           }
         }
-      },
-    );
+      });
 
     // eslint-disable-next-line max-len
-    const addNotificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
+    const addNotificationResponseReceivedListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
         if (
           isNotification(
             response.notification.request.content.data as Notification,
@@ -219,8 +221,7 @@ const UserProvider: React.FC = (props) => {
             });
           }
         }
-      },
-    );
+      });
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -230,35 +231,35 @@ const UserProvider: React.FC = (props) => {
         addNotificationResponseReceivedListener,
       );
     };
-  }, [state.isWalletUser, state.signedIn])
+  }, [state.isWalletUser, state.signedIn]);
 
   const newWalletUser = () => {
     setState((state) => {
       return {
         ...state,
         isWalletUser: true,
-        notifications: []
-      }
-    })
-  }
+        notifications: [],
+      };
+    });
+  };
 
   const setNotifications = (notifications: Notification[]) => {
     setState((state) => {
       return {
         ...state,
         notifications,
-      }
+      };
     });
-  }
+  };
 
   const setEthAddress = (address: string) => {
     setState((state) => {
       return {
         ...state,
         user: { ...state.user, ethAddresses: [address] },
-      }
+      };
     });
-  }
+  };
 
   const setUserExpoPushToken = (expoPushToken: string) => {
     setState((state) => {
@@ -268,9 +269,9 @@ const UserProvider: React.FC = (props) => {
           ...state.user,
           expoPushTokens: expoPushToken ? [expoPushToken] : [],
         },
-      }
+      };
     });
-  }
+  };
 
   const setRefundStatus = (legacyRefundStatus: LegacyRefundStatus) => {
     setState((state) => {
@@ -280,9 +281,9 @@ const UserProvider: React.FC = (props) => {
           ...state.user,
           legacyWalletRefundStatus: legacyRefundStatus,
         },
-      }
+      };
     });
-  }
+  };
 
   return (
     <UserContext.Provider
@@ -297,11 +298,10 @@ const UserProvider: React.FC = (props) => {
         setUserExpoPushToken,
         setRefundStatus,
         newWalletUser,
-      }}
-    >
+      }}>
       {props.children}
     </UserContext.Provider>
   );
-}
+};
 
 export default UserProvider;

@@ -2,7 +2,6 @@ import { BigNumber, utils } from 'ethers';
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import EspressoV1 from '../api/EspressoV1';
-import EspressoV2 from '../api/EspressoV2';
 import AssetContext, {
   initialAssetState,
   AssetStateType,
@@ -20,7 +19,6 @@ import {
   provider,
   getAssetTokenContract,
   getBscAssetTokenContract,
-  getAssetTokenEthContract,
 } from '../utiles/getContract';
 import PreferenceContext from '../contexts/PreferenceContext';
 import LocaleType from '../enums/LocaleType';
@@ -33,9 +31,9 @@ const AssetProvider: React.FC = (props) => {
   const { language } = useContext(PreferenceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState);
 
-  const loadV2UserBalances = async (noCache?: boolean) => {
-    const address = wallet?.getFirstNode()?.address;
+  const address = wallet?.getFirstNode()?.address || user.ethAddresses[0];
 
+  const loadV2UserBalances = async (noCache?: boolean) => {
     if (!address) return;
 
     if (user.provider === ProviderType.GUEST && !isWalletUser) {
@@ -48,17 +46,34 @@ const AssetProvider: React.FC = (props) => {
     }
 
     try {
+      const assets = ownerships
+        .filter((ownership) => ownership.isLegacy)
+        .map((ownership) => {
+          return {
+            title:
+              ownership.product.data.descriptions[language || LocaleType.EN]
+                ?.title,
+            value: ownership.tokenValue,
+            type: CryptoType.ELA,
+            unit: CryptoType.ELA,
+            ownershipId: ownership.id,
+            isLegacyOwnership: ownership.isLegacy,
+            image: ownership.product.data.images[0],
+            paymentMethod: ownership.product.paymentMethod,
+          } as Asset;
+        });
+
       const res = await EspressoV1.getAllProduct();
-      const assets = await Promise.all(
+      const result = await Promise.all(
         res.data
           .filter((product) => product.contractAddress)
-          .map(async (product) => {
+          .map(async (product, idx, arr) => {
             const assetToken =
               product.paymentMethod === PaymentCryptoType.BNB
                 ? getBscAssetTokenContract(product?.contractAddress || '')
                 : getAssetTokenContract(product?.contractAddress || '');
             const balance: BigNumber = await assetToken?.balanceOf(
-              wallet?.getFirstAddress() || '',
+              wallet?.getFirstAddress() || address,
             );
             return {
               title:
@@ -72,13 +87,14 @@ const AssetProvider: React.FC = (props) => {
             } as Asset;
           }),
       );
+      result.forEach((v) => assets.push(v));
       assets.push(
         {
           title: 'ELYSIA',
           value: parseFloat(
             utils.formatEther(
               await getElysiaContract()?.balanceOf(
-                wallet?.getFirstAddress() || '',
+                wallet?.getFirstAddress() || address,
               ),
             ),
           ),
@@ -89,7 +105,7 @@ const AssetProvider: React.FC = (props) => {
           title: 'ETH',
           value: parseFloat(
             utils.formatEther(
-              await provider.getBalance(wallet?.getFirstAddress() || ''),
+              await provider.getBalance(wallet?.getFirstAddress() || address),
             ),
           ),
           type: CryptoType.ETH,
@@ -99,14 +115,15 @@ const AssetProvider: React.FC = (props) => {
           title: 'BNB (BSC)',
           value: parseFloat(
             utils.formatEther(
-              await bscProvider.getBalance(wallet?.getFirstAddress() || ''),
+              await bscProvider.getBalance(
+                wallet?.getFirstAddress() || address,
+              ),
             ),
           ),
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
         },
       );
-
       setState({
         assetLoaded: true,
         assets: assets,
@@ -131,24 +148,49 @@ const AssetProvider: React.FC = (props) => {
 
       return;
     }
-    const assets = ownerships.map((ownership) => {
-      return {
-        title:
-          ownership.product.data.descriptions[language || LocaleType.EN]?.title,
-        value: ownership.tokenValue,
-        type: CryptoType.ELA,
-        unit: CryptoType.ELA,
-        ownershipId: ownership.id,
-        isLegacyOwnership: ownership.isLegacy,
-        image: ownership.product.data.images[0],
-        paymentMethod: ownership.product.paymentMethod,
-      } as Asset;
-    });
+    const assets = ownerships
+      .filter((ownership) => ownership.isLegacy)
+      .map((ownership) => {
+        return {
+          title:
+            ownership.product.data.descriptions[language || LocaleType.EN]
+              ?.title,
+          value: ownership.tokenValue,
+          type: CryptoType.ELA,
+          unit: CryptoType.ELA,
+          ownershipId: ownership.id,
+          isLegacyOwnership: ownership.isLegacy,
+          image: ownership.product.data.images[0],
+          paymentMethod: ownership.product.paymentMethod,
+        } as Asset;
+      });
+    const res = await EspressoV1.getAllProduct();
+    const result = await Promise.all(
+      res.data
+        .filter((product) => product.contractAddress)
+        .map(async (product, idx, arr) => {
+          const assetToken =
+            product.paymentMethod === PaymentCryptoType.BNB
+              ? getBscAssetTokenContract(product?.contractAddress || '')
+              : getAssetTokenContract(product?.contractAddress || '');
+          const balance: BigNumber = await assetToken?.balanceOf(address);
+          return {
+            title: product.data.descriptions[language || LocaleType.EN]?.title,
+            value: parseFloat(utils.formatEther(balance)),
+            type: CryptoType.ELA,
+            unit: CryptoType.ELA,
+            address: product.contractAddress,
+            image: product.data.images[0],
+            paymentMethod: product.paymentMethod,
+          } as Asset;
+        }),
+    );
+    result.forEach((v) => assets.push(v));
     if (address === undefined) {
       setState({
         ...state,
         assetLoaded: true,
-        assets: assets,
+        assets: assets || undefined,
       });
 
       return;
@@ -172,6 +214,14 @@ const AssetProvider: React.FC = (props) => {
           ),
           type: CryptoType.ETH,
           unit: CryptoType.ETH,
+        },
+        {
+          title: 'BNB (BSC)',
+          value: parseFloat(
+            utils.formatEther(await bscProvider.getBalance(address || '')),
+          ),
+          type: CryptoType.BNB,
+          unit: CryptoType.BNB,
         },
       );
     } finally {
