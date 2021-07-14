@@ -175,6 +175,9 @@ const Purchase: FunctionComponent = () => {
         if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
           setState({ ...state, step: TxStep.None })
           return
+        } else if (!isWalletUser) {
+          setState({ ...state, step: TxStep.None })
+          return
         }
 
         getElysiaContract()?.allowance(
