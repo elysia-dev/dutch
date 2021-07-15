@@ -83,10 +83,17 @@ const TxInputViewer: React.FC<Props> = ({
         {insufficientGas ? (
           <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
         ) : (
-          <GuideText
-            text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
-            style={{ marginTop: 6 }}
-          />
+          estimatedGas ? (
+            <GuideText
+              text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
+              style={{ marginTop: 6 }}
+            />
+          ) : ( // 빈 문자열이면
+            <GuideText
+              text="가스비를 추정할 수 없습니다."
+              style={{ marginTop: 6 }}
+            />
+          )
         )}
       </View>
     </View>
