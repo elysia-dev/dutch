@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, View } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import AppColors from '../../../enums/AppColors';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
   current: string
@@ -48,18 +49,30 @@ const NumberPadShortcut: React.FC<Props> = ({
     );
   });
 
+  function sliceZero(value: string) {
+    let newValue = value;
+    for (let i=value.length-1; i>0; i--) {
+      if (value[i] === '0') {
+        newValue = newValue.slice(0, -1);
+      } else {
+        break;
+      }
+    }
+    return newValue;
+  }
+
   function addValue(value: number) {
-    const newInputValue = parseFloat(inputValue || '0') + value // Number() 하면서 소수점이 엄청 생기지는 않나 검사해야 함..!!!!
+    const newInputValue = parseFloat(inputValue || '0') + value
 
     if (current === 'from') {
       setValues({
-        from: String(newInputValue),
-        to: (newInputValue / ELAPrice).toFixed(2),
+        from: decimalFormatter(newInputValue, 2),
+        to: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),
       })
     } else {
       setValues({
-        from: (newInputValue * ELAPrice).toFixed(2),
-        to: String(newInputValue),
+        from: decimalFormatter(newInputValue * ELAPrice, 2),
+        to: sliceZero(decimalFormatter(newInputValue, 6)),
       })
     }
   }

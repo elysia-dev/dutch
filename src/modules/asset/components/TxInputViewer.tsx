@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../../enums/CryptoType';
 import commaFormatter from '../../../utiles/commaFormatter';
@@ -49,8 +49,8 @@ const TxInputViewer: React.FC<Props> = ({
   return (
     <View
       style={{
-        marginTop: 40,
-        marginBottom: 60,
+        marginTop: Platform.OS === 'android' ? 40 : 20,
+        marginBottom: Platform.OS === 'android' ? 60 : 30,
         display: 'flex',
         alignItems: 'center'
       }}
@@ -83,10 +83,17 @@ const TxInputViewer: React.FC<Props> = ({
         {insufficientGas ? (
           <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
         ) : (
-          <GuideText
-            text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
-            style={{ marginTop: 6 }}
-          />
+          estimatedGas ? (
+            <GuideText
+              text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
+              style={{ marginTop: 6 }}
+            />
+          ) : ( // 빈 문자열이면
+            <GuideText
+              text="가스비를 추정할 수 없습니다."
+              style={{ marginTop: 6 }}
+            />
+          )
         )}
       </View>
     </View>
