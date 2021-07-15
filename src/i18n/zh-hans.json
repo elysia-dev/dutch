@@ -150,16 +150,16 @@
       "property_highlightes": "房地产核心信息",
       "product_info": "产品信息",
       "abstract": "概要",
-      "legacy_refund": "请求卖出持有股份",
+      "legacy_refund": "请求提现",
       "non_purchasable": "您需要进行认证和绑定钱包",
       "view_details": "产品详细信息",
-      "available_token": "可投资的房地产代币数量",
+      "available_token": "剩余房地产代币数量",
       "loan": "去中心化贷款债券型商品",
       "restricted_country": "所在国家/地区不能交易。",
       "need_wallet": "需要绑定钱包地址",
       "required_eth_wallet": "必备的ETH钱包",
       "investment_type": "投资方式",
-      "payment_method": "可投资的手段",
+      "payment_method": "投资购买方式",
       "unit_method": "根据数量",
       "usd_method": "以美元计",
       "property_infomation_title": "投资方式",
@@ -167,8 +167,8 @@
         "什么是[根据数量]？",
         "1.基于件数的产品信息",
         "有些产品的年利率为10％，当前的EL价格为（1EL = 1美元）。",
-        "2.产品投资",
-        "在产品中投资1,000 EL（= $ 1,000）。",
+        "2.投资产品",
+        "在产品中投资1,000 EL（= $ 1,000）等值的房地产代币。",
         "3.一年后还款",
         "本金 1,000EL",
         "利息 100EL",
@@ -178,8 +178,8 @@
         "什么是[以美元计]？",
         "1.基于美元的产品信息",
         "有些产品的年利率为10％，当前的EL价格为（1EL = 1美元）。",
-        "2.产品投资",
-        "在产品中投资$ 1,000（= 1,000EL）。",
+        "2.投资产品",
+        "在产品中投资$ 1,000（= 1,000 EL）等值的房地产代币。",
         "一年后，按EL市场价格（1EL = 2美元）还款",
         "一年后，按EL市场价格（1EL = 0.5美元）还款",
         "本金 $1,000",
@@ -190,7 +190,7 @@
     "more_label": {
       "more": "更多",
       "confirm": "确认",
-      "investment_history": "投资明细",
+      "investment_history": "投资历史",
       "transaction_history": "交易明细",
       "reset_password": "变更密码",
       "wallet_connect": "绑定钱包",
@@ -229,7 +229,7 @@
       "agree_withdrawl": "同意并删除",
       "get_latest_version": "更新最新({{version}})版本",
       "disconnect_address": "解除钱包地址绑定",
-      "delete_address": "删除钱包",
+      "delete_address": "解绑钱包",
       "return_initial": "回到之前界面",
       "disconnect": "解除绑定",
       "reply_email": "请输入邮箱地址。",
@@ -250,7 +250,7 @@
       "withdrawl_check_2": "在删除账号后，您将不能从爱立厦Elysia的内部钱包中提款。\n请操作提款后，再删除账号。(EL {{legacyEl}}, USD {{legacyUsd}})",
       "withdrawl_check_3": "您的个人信息（包括邮箱地址和验证记录）将会被全部删除。",
       "withdrawl_check_4": "在删除账号后，您将承担房地产所有权相关的所有潜在经济损失。",
-      "confirm_disconnect": "您确定要解绑钱包吗？\n\n-钱包地址将保持不变。\n-钱包里的资产将被保留。\n-您可以随时使用密匙词组重新连接钱包。\n（请单独保存密匙词组。）",
+      "confirm_disconnect": "本App内的该钱包全部信息将会被删除。\n\n- 钱包地址将保持不变。\n- 钱包里的资产将被保留。\n- 您可以随时使用密匙词组重新连接钱包。\n（请单独保存密匙词组。）",
       "confirm_disconnect_and_new": "在绑定新的钱包地址前，您需要解除已绑定的钱包地址。\n解除绑定后，将保留现有钱包地址的资产所有权。\n 请问要解除已绑定的钱包地址吗？",
       "confirm_delete": "您确定想要从该应用程序中永久删除钱包吗？ 这个钱包只能用恢复键来恢复。 埃莉西亚没有你的修复键。 输入 'delete' 永久删除当前钱包 。",
       "confirm_delete_android": "您确定想要从该应用程序中永久删除钱包吗？ 这个钱包只能用恢复键来恢复。 埃莉西亚没有你的修复键。"
@@ -265,11 +265,11 @@
       "total_interest": "已获得收益",
       "withdrawn_interest": "已获得收益",
       "available_interest": "将获得收益",
-      "stake": "持有房产所有权百分比",
+      "stake": "投资份额百分比",
       "purchase": "增加投资",
       "withdraw_stake": "减少投资",
-      "withdraw_stake_legacy": "卖掉持有股份",
-      "withdraw_stake_pending": "正在卖掉股份",
+      "withdraw_stake_legacy": "提现",
+      "withdraw_stake_pending": "正在提现",
       "withdraw_profit": "提现收益",
       "property_abstract": "资产概览",
       "document": "文件",
@@ -322,11 +322,11 @@
         "存放EL代币或以太币(ETH)",
         "选择产品和数量",
         "使用经过验证的钱包创建交易",
-        "股权所有权已完成！"
+        "恭喜您购得房地产代币！"
       ],
       "investment_guide_text": [
         "从上市交易所购买EL后，\n请将EL代币或以太币(ETH)存入您的钱包！",
-        "选择完所需的产品后，\n请选择要投资的房地产代币数量！",
+        "选择完心仪的房地产后，\n请选择要投资的房地产代币数量！",
         "请使用Metamask进行交易！",
         "利润是根据拥有的房地产令牌产生的。"
       ],
@@ -392,12 +392,12 @@
     "main": {
       "total_assets": "总资产",
       "connect_wallet": "请连接你的钱包",
-      "my_assets": "我的投资",
+      "my_assets": "我的房地产代币",
       "my_wallet": "我的钱包",
       "assets": "投资",
       "assets_name": "产品名称",
       "assets_value": "持有资产",
-      "assets_stake": "资产比率",
+      "assets_stake": "投资份额百分比",
       "total_assets_yield": "累计收入",
       "ownership": "购买",
       "refund": "退款",
@@ -450,7 +450,7 @@
     "assets": {
       "null_transaction": "没有交易记录。",
       "null_data": "没有相关数据。",
-      "null_investment": "没有投资历史。",
+      "null_investment": "没有投资购买历史。",
       "invest": "购买",
       "invest_value": "输入金额",
       "invest_stake": "收到的代币",
@@ -491,7 +491,7 @@
       "check_allowance": "分红"
     },
     "legacy": {
-      "refund_notice": "持有股份卖出将在3个工作日内处理完成，我们的团队将通过邮件与您取得联系。（注意：此规则仅针对之前上线产品。）"
+      "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
     }
   }
 }
