@@ -205,7 +205,7 @@ const Purchase: FunctionComponent = () => {
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx: any) => {
-            setIsApproved(true);
+              setIsApproved(true);
               setState({ ...state, txHash: tx, step: TxStep.None })
             }).catch((e) => {
               afterTxFailed(e.message);

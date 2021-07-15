@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -267,7 +267,7 @@ const TxInput: React.FC<ITxInput> = ({
         createTx={createTx}
         disabled={disabled}
       />
-      <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
+      <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
   )
 }
