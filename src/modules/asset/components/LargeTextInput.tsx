@@ -42,6 +42,7 @@ const LargeTextInput: React.FC<Props> = ({
             flexDirection: 'row',
             justifyContent: current === 'to' ? 'flex-end' : 'space-between',
             alignItems: 'flex-end',
+            marginBottom: -2.5, // 아이폰일 때만 적용된다..?!
           }}
         >
           {current === 'from' && <Text

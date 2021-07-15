@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../../enums/CryptoType';
 import commaFormatter from '../../../utiles/commaFormatter';
@@ -49,8 +49,8 @@ const TxInputViewer: React.FC<Props> = ({
   return (
     <View
       style={{
-        marginTop: 40,
-        marginBottom: 60,
+        marginTop: Platform.OS === 'android' ? 40 : 20,
+        marginBottom: Platform.OS === 'android' ? 60 : 30,
         display: 'flex',
         alignItems: 'center'
       }}

@@ -153,7 +153,7 @@ const TxInput: React.FC<ITxInput> = ({
         style={{
           paddingLeft: 20,
           paddingRight: 20,
-          height: Dimensions.get('window').height - 200,
+          flex: 1,
         }}>
         <TxInputViewer
           purpose={purpose}
@@ -232,9 +232,7 @@ const TxInput: React.FC<ITxInput> = ({
       </View>
       <View
         style={{
-          position: 'absolute',
-          width: '100%',
-          bottom: insets.bottom || 10,
+          marginBottom: insets.bottom || 10,
           paddingLeft: '5%',
           paddingRight: '5%'
         }}
