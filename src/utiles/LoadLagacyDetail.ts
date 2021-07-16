@@ -42,18 +42,22 @@ class LoadDetail {
     assetAddress: string | undefined,
     page: number,
   ) {
-    if (paymentMethod.toUpperCase() === CryptoType.BNB) {
-      return await EthersacnClient.getBscErc20Transaction(
-        userAddress,
-        assetAddress || '',
-        page,
-      );
-    } else {
-      return await EthersacnClient.getAssetErc20Transaction(
-        userAddress,
-        assetAddress || '',
-        page,
-      );
+    try {
+      if (paymentMethod.toUpperCase() === CryptoType.BNB) {
+        return await EthersacnClient.getBscErc20Transaction(
+          userAddress,
+          assetAddress || '',
+          page,
+        );
+      } else {
+        return await EthersacnClient.getAssetErc20Transaction(
+          userAddress,
+          assetAddress || '',
+          page,
+        );
+      }
+    } catch (e) {
+      return { data: { result: [] } };
     }
   }
 
