@@ -40,7 +40,7 @@ const RecoverPassword: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(t('recover_error'));
+          alert(t('account.recover_error'));
         } else if (e.reponse.status === 404) {
           alert(t('account.recover_verification_error'));
           navigation.navigate(AccountPage.InitializeEmail);
