@@ -116,7 +116,7 @@ const PaymentSelection: React.FC<{
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests?productId=${productId}&value=${valueTo}&type=${type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${espressTxId}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });

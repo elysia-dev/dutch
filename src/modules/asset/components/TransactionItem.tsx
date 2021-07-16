@@ -90,9 +90,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
               transaction.legacyType || '',
             ) || transaction.legacyType
               ? currencyFormatter(parseFloat(transaction.value))
-              : `${transaction.type === 'out' ? '-' : '+'} ${parseFloat(
-                  transaction.value,
-                ).toFixed(2)} ${unit}`
+              : `${transaction.type === 'out' ? '-' : '+'} ${0.01 < parseFloat(transaction.value) ? (Math.floor(parseFloat(transaction.value) * 100) / 100).toString() : '0.00...' } ${unit}`
           }
         />
       </View>
