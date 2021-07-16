@@ -41,9 +41,8 @@ const TxInputViewer: React.FC<Props> = ({
   insufficientGas,
 }) => {
   const { t } = useTranslation();
-  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
   const currentTab = current === 'to' ? to : from;
-  const maxLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
+  const maxLabel = current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
   const maxValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
 
   return (
@@ -59,7 +58,7 @@ const TxInputViewer: React.FC<Props> = ({
         current={current}
         value={currentTab.value}
         type={currentTab.type}
-        purposeType={purposeType}
+        purpose={purpose}
         tokenType={to.type}
         priceInCryptocurrency={commaFormatter((Number(from.value) / from.price).toFixed(2))}
         cryptocurrencyType={from.type}
@@ -78,7 +77,7 @@ const TxInputViewer: React.FC<Props> = ({
         {isUnderMax ? (
           <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
         ) : (
-          <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
+          <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`} />
         )}
         {insufficientGas ? (
           <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />

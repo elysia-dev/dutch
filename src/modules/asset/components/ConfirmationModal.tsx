@@ -5,12 +5,13 @@ import AppFonts from '../../../enums/AppFonts';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
+import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
   modalVisible: boolean
   setModalVisible: Dispatch<SetStateAction<boolean>>
   title: string
-  purposeType: string
+  purpose: PurposeType
   assetTitle: string
   assetUnit: string
   values: { from: string, to: string }
@@ -27,7 +28,7 @@ const ConfirmationModal: React.FC<Props> = ({
   modalVisible,
   setModalVisible,
   title,
-  purposeType,
+  purpose,
   assetTitle,
   assetUnit,
   values,
@@ -113,7 +114,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   fontFamily: AppFonts.Bold,
                 }}
               >
-                {t(`assets.${purposeType}_confirm`)}
+                {t(`assets.${purpose}_confirm`)}
               </Text>
               <View
                 style={{
@@ -134,7 +135,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontFamily: AppFonts.Regular,
                   }}
                 >
-                  {t(`assets.${purposeType}_confirm_product`)}
+                  {t(`assets.${purpose}_confirm_product`)}
                 </Text>
                 <Text
                   style={{
@@ -167,7 +168,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontFamily: AppFonts.Regular,
                   }}
                 >
-                  {t(`assets.${purposeType}_confirm_value`)}
+                  {t(`assets.${purpose}_confirm_value`)}
                 </Text>
                 <View style={{ marginRight: 5 }}>
                   <Text
@@ -212,7 +213,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontFamily: AppFonts.Regular,
                   }}
                 >
-                  {t(`assets.${purposeType}_confirm_stake`)}
+                  {t(`assets.${purpose}_confirm_stake`)}
                 </Text>
                 <Text
                   style={{
@@ -303,7 +304,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   }}
                   allowFontScaling={false}
                 >
-                  {isApproved ? t(`assets.${purposeType}`) : t('assets.check_allowance')}
+                  {isApproved ? t(`assets.${purpose}`) : t('assets.check_allowance')}
                 </Text>
               </TouchableOpacity>
             </View>

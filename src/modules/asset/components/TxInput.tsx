@@ -86,7 +86,6 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
     : getBalance(gasCrypto) < parseFloat(estimateGas);
-  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
 
   // 잔고도 충분하고 구매 가능한 토큰/금액도 충분한지? 둘 중에 더 작은 것과 비교함
   const isUnderToMax = parseFloat(values.to || '0') <= (toMax ? Math.min(toMax, toBalance) : toBalance);
@@ -255,7 +254,7 @@ const TxInput: React.FC<ITxInput> = ({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={title}
-        purposeType={purposeType}
+        purpose={purpose}
         assetTitle={to.title}
         assetUnit={to.unit}
         values={values}

@@ -5,12 +5,13 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import { useTranslation } from 'react-i18next';
 import GuideText from './GuideText';
 import AppColors from '../../../enums/AppColors';
+import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
   current: string,
   value: string,
   type: string,
-  purposeType: string,
+  purpose: PurposeType,
   tokenType: string,
   priceInCryptocurrency: string,
   cryptocurrencyType: string,
@@ -20,7 +21,7 @@ const LargeTextInput: React.FC<Props> = ({
   current,
   value,
   type,
-  purposeType,
+  purpose,
   tokenType,
   priceInCryptocurrency,
   cryptocurrencyType,
@@ -117,7 +118,7 @@ const LargeTextInput: React.FC<Props> = ({
             marginBottom: 9,
           }}
         >
-          {current === 'to' ? t(`assets.${purposeType}_stake_placeholder`) : t(`assets.${purposeType}_value_placeholder`)}
+          {current === 'to' ? t(`assets.${purpose}_stake_placeholder`) : t(`assets.${purpose}_value_placeholder`)}
         </Text>
         <View
           style={{

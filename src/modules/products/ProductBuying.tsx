@@ -78,7 +78,7 @@ const ProductBuying: FunctionComponent = () => {
     else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
-      return t('assets.invest');
+      return t('assets.purchase');
     }
     return '';
   };

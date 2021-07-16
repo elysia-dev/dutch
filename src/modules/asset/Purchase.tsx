@@ -252,9 +252,9 @@ const Purchase: FunctionComponent = () => {
     return (
       <TxInput
         purpose={PurposeType.Purchase}
-        title={t('assets.invest')}
-        fromInputTitle={t('assets.invest_value')}
-        toInputTitle={t('assets.invest_stake')}
+        title={t('assets.purchase')}
+        fromInputTitle={t('assets.purchase_value')}
+        toInputTitle={t('assets.purchase_stake')}
         from={from}
         to={to}
         toMax={toMax}
