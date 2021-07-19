@@ -60,27 +60,34 @@ const Reward: FunctionComponent = () => {
   const txResult = useWatingTx(state.txHash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
   const insets = useSafeAreaInsets();
 
-  const estimateGas = async () => {
+  const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
       estimateGas = await contract?.estimateGas.claimReward({
-        from: wallet?.getFirstNode()?.address
+        from: address,
       })
-    } catch {
-    } finally {
       if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)),
-        })
+          estimateGas: utils.formatEther(
+            estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)
+          ),
+        });
       }
+    } catch {
+      setState({
+        ...state,
+        estimateGas: '',
+      });
     }
   }
 
   useEffect(() => {
-    if (isWalletUser) {
-      estimateGas();
+    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
     }
   }, [])
 
@@ -236,12 +243,12 @@ const Reward: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection   
-    valueTo={parseFloat((interest / (getCryptoPrice(toCrypto))).toFixed(4))}
-    productId={productId}
-    type={'interest'}
-    contractAddress={contractAddress} 
-    espressTxId={state.espressoTxId} />
+    <PaymentSelection
+      valueTo={parseFloat((interest / (getCryptoPrice(toCrypto))).toFixed(4))}
+      productId={productId}
+      type={'interest'}
+      contractAddress={contractAddress}
+      espressTxId={state.espressoTxId} />
   )
 };
 

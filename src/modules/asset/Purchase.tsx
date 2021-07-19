@@ -51,7 +51,7 @@ const Purchase: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const navigation = useNavigation();
-  const { isWalletUser, Server } = useContext(UserContext);
+  const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(
     state.txHash,
@@ -69,7 +69,7 @@ const Purchase: FunctionComponent = () => {
   const fromBalance = getBalance(from.type);
   const toBalance = fromBalance * fromPrice / toPrice;
 
-  const estimateGas = async () => {
+  const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
@@ -77,7 +77,7 @@ const Purchase: FunctionComponent = () => {
         case CryptoType.ETH:
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
-            from: wallet?.getFirstAddress(),
+            from: address,
             value: utils.parseEther('0.5')
           })
           break;
@@ -85,11 +85,11 @@ const Purchase: FunctionComponent = () => {
           estimateGas = await contract?.estimateGas.purchase(
             utils.parseEther('100'),
             {
-              from: wallet?.getFirstNode()?.address,
+              from: address,
             },
           );
       }
-    } finally {
+
       if (estimateGas) {
         setState({
           ...state,
@@ -100,12 +100,19 @@ const Purchase: FunctionComponent = () => {
           ),
         });
       }
+    } catch (e) {
+      setState({
+        ...state,
+        estimateGas: '',
+      });
     }
   };
 
   useEffect(() => {
-    if (isWalletUser) {
-      estimateGas();
+    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
     }
   }, []);
 
@@ -305,7 +312,7 @@ const Purchase: FunctionComponent = () => {
                 stage: 1,
                 espressoTxId: res.data.id,
               });
-              })
+            })
               .catch((e) => {
                 if (e.response.status === 400) {
                   alert(t('product.transaction_error'));
