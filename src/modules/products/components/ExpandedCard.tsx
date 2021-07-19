@@ -82,7 +82,7 @@ const AutoSizedImage: FunctionComponent<{
     if (props.style?.width || props.style?.height) {
       return;
     }
-    safeAsync(Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
+    Image.getSize(props.source.uri, (originalWidth, originalHeight) => {
       finalSize.width = originalWidth;
       finalSize.height = originalHeight;
       if (originalWidth > windowWidth) {
@@ -90,7 +90,6 @@ const AutoSizedImage: FunctionComponent<{
         const ratio = finalSize.width / originalWidth;
         finalSize.height = originalHeight * ratio;
       }
-    })).then(() => {
       setState({ finalSize });
     });
   }, []);
