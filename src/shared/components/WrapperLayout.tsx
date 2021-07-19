@@ -8,18 +8,11 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
-import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
-
-const Wrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  height: 100%;
-  background-color: #fff;
-  overflow: hidden;
-`;
+import FullScreenWrapper from './FullScreenWrapper';
 
 interface Props {
   title: string;
@@ -75,7 +68,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
   const languageType = user.language;
 
   return (
-    <Wrapper style={props.style}>
+    <FullScreenWrapper style={props.style}>
       <Animated.View
         style={{
           marginLeft: '5%',
@@ -255,7 +248,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
           )}
         </ConditionalKeyboardAvoidingView>
       </ScrollingView>
-    </Wrapper>
+    </FullScreenWrapper>
   );
 };
 

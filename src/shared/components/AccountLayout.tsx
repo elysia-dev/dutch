@@ -1,13 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Platform, KeyboardAvoidingView, View } from 'react-native';
-import styled from 'styled-components/native';
-
-const Wrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  height: 100%;
-  background-color: #fff;
-  overflow: hidden;
-`;
+import FullScreenWrapper from './FullScreenWrapper';
 
 interface Props {
   title: React.ReactNode;
@@ -28,7 +21,7 @@ const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
 
 const AccountLayout: FunctionComponent<Props> = props => {
   return (
-    <Wrapper>
+    <FullScreenWrapper>
       <ConditionalKeyboardAvoidingView>
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
           {props.title}
@@ -40,7 +33,7 @@ const AccountLayout: FunctionComponent<Props> = props => {
           {props.button}
         </View>
       </ConditionalKeyboardAvoidingView>
-    </Wrapper>
+    </FullScreenWrapper>
   );
 };
 
