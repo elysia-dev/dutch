@@ -50,8 +50,6 @@ const Purchase: FunctionComponent = () => {
     isApproved: [CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
-  // const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  // const { from, to, toMax, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
@@ -63,7 +61,6 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  // const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
   const { getBalance } = useContext(AssetContext);
 
   const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
@@ -188,7 +185,6 @@ const Purchase: FunctionComponent = () => {
             wallet?.getFirstNode()?.address, contractAddress
           ).then((res: BigNumber) => {
             if (!res.isZero()) {
-              // setIsApproved(true);
               setState({
                 ...state,
                 isApproved: true,
@@ -201,7 +197,6 @@ const Purchase: FunctionComponent = () => {
                 step: TxStep.None,
               })
             }
-            // setState({ ...state, step: TxStep.None })
           }).catch((e: any) => {
             afterTxFailed(e.message);
             navigation.goBack();
@@ -219,8 +214,6 @@ const Purchase: FunctionComponent = () => {
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx: any) => {
-              // setIsApproved(true);
-              // setState({ ...state, txHash: tx, step: TxStep.None })
               setState({
                 ...state,
                 isApproved: true,

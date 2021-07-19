@@ -20,7 +20,6 @@ interface Props {
   gasCrypto: string
   isApproved: boolean
   createTx: () => void
-  // disabled: boolean
 }
 
 const ConfirmationModal: React.FC<Props> = ({
@@ -37,7 +36,6 @@ const ConfirmationModal: React.FC<Props> = ({
   gasCrypto,
   isApproved,
   createTx,
-  // disabled,
 }) => {
   const { t } = useTranslation();
   const [disabled, setDisabled] = useState(false);
