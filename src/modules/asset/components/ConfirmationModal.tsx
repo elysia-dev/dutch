@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Modal, View, TouchableOpacity, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
@@ -20,7 +20,7 @@ interface Props {
   gasCrypto: string
   isApproved: boolean
   createTx: () => void
-  disabled: boolean
+  // disabled: boolean
 }
 
 const ConfirmationModal: React.FC<Props> = ({
@@ -37,9 +37,10 @@ const ConfirmationModal: React.FC<Props> = ({
   gasCrypto,
   isApproved,
   createTx,
-  disabled,
+  // disabled,
 }) => {
   const { t } = useTranslation();
+  const [disabled, setDisabled] = useState(false);
 
   return (
     <Modal
@@ -286,7 +287,11 @@ const ConfirmationModal: React.FC<Props> = ({
                 {`* ${t('assets.check_allowance_guide')}`}
               </Text>}
               <TouchableOpacity
-                onPress={createTx}
+                onPress={() => {
+                  setDisabled(true);
+                  createTx();
+                }}
+                disabled={disabled}
                 style={{
                   backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
                   borderRadius: 5,

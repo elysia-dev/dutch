@@ -263,7 +263,7 @@ const TxInput: React.FC<ITxInput> = ({
         gasCrypto={gasCrypto}
         isApproved={isApproved}
         createTx={createTx}
-        disabled={disabled}
+        // disabled={disabled}
       />
       <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
