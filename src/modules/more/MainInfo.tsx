@@ -7,14 +7,11 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import * as Linking from 'expo-linking';
 import { useTranslation } from 'react-i18next'
 import { MorePage } from '../../enums/pageEnum';
 import Exchange00 from './images/bithumb_logo.png';
 import Exchange01 from './images/bithumb_global_logo.png';
-import Exchange02 from './images/boboo_logo.png';
 import Exchange03 from './images/gopax.png';
 import Exchange04 from './images/xt_logo.png';
 import { H3Text } from '../../shared/components/Texts';
@@ -27,12 +24,7 @@ import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import { ScrollView } from 'react-native-gesture-handler';
-
-const ExchangeImg = styled.Image`
-  width: 95px;
-  height: 95px;
-  resize-mode: contain;
-`;
+import ExchangeButton from './components/ExchangeButton';
 
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -424,42 +416,24 @@ const MainInfo: FunctionComponent = () => {
               style={{
                 flexDirection: 'row',
                 marginBottom: 20
-              }}>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5
-                }}
-                onPress={() => Linking.openURL('https://www.bithumb.com')}>
-                <ExchangeImg source={Exchange00} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5
-                }}
-                onPress={() =>
-                  Linking.openURL('https://www.bithumb.pro/en-us')
-                }>
-                <ExchangeImg source={Exchange01} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5
-                }}
-                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
-                <ExchangeImg source={Exchange03} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5
-                }}
-                onPress={() => Linking.openURL('https://www.xt.com')}>
-                <ExchangeImg source={Exchange04} />
-              </TouchableOpacity>
-
+              }}
+            >
+              <ExchangeButton
+                url="https://www.bithumb.com"
+                img={Exchange00}
+              />
+              <ExchangeButton
+                url="https://www.bithumb.pro/en-us"
+                img={Exchange01}
+              />
+              <ExchangeButton
+                url="https://www.gopax.co.kr"
+                img={Exchange03}
+              />
+              <ExchangeButton
+                url="https://www.xt.com"
+                img={Exchange04}
+              />
             </ScrollView>
 
             <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
