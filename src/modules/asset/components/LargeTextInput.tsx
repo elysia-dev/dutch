@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +43,7 @@ const LargeTextInput: React.FC<Props> = ({
             flexDirection: 'row',
             justifyContent: current === 'to' ? 'flex-end' : 'space-between',
             alignItems: 'flex-end',
+            marginBottom: Platform.OS === 'ios' ? -2.5 : 0,
           }}
         >
           {current === 'from' && <Text

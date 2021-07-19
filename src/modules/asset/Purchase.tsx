@@ -35,6 +35,8 @@ type ParamList = {
 };
 
 const Purchase: FunctionComponent = () => {
+  const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
+  const { from, to, toMax, contractAddress, productId } = route.params;
   const [values, setValues] = useState({
     from: '',
     to: '',
@@ -45,12 +47,11 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
+    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
-  const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  const { from, to, toMax, contractAddress, productId } = route.params;
   const navigation = useNavigation();
-  const { isWalletUser, Server } = useContext(UserContext);
+  const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(
     state.txHash,
@@ -60,7 +61,6 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
   const { getBalance } = useContext(AssetContext);
 
   const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
@@ -69,7 +69,7 @@ const Purchase: FunctionComponent = () => {
   const fromBalance = getBalance(from.type);
   const toBalance = fromBalance * fromPrice / toPrice;
 
-  const estimateGas = async () => {
+  const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
@@ -77,7 +77,7 @@ const Purchase: FunctionComponent = () => {
         case CryptoType.ETH:
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
-            from: wallet?.getFirstAddress(),
+            from: address,
             value: utils.parseEther('0.5')
           })
           break;
@@ -85,11 +85,11 @@ const Purchase: FunctionComponent = () => {
           estimateGas = await contract?.estimateGas.purchase(
             utils.parseEther('100'),
             {
-              from: wallet?.getFirstNode()?.address,
+              from: address,
             },
           );
       }
-    } finally {
+
       if (estimateGas) {
         setState({
           ...state,
@@ -100,12 +100,19 @@ const Purchase: FunctionComponent = () => {
           ),
         });
       }
+    } catch (e) {
+      setState({
+        ...state,
+        estimateGas: '',
+      });
     }
   };
 
   useEffect(() => {
-    if (isWalletUser) {
-      estimateGas();
+    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
     }
   }, []);
 
@@ -180,17 +187,30 @@ const Purchase: FunctionComponent = () => {
           return
         }
 
-        getElysiaContract()?.allowance(
-          wallet?.getFirstNode()?.address, contractAddress
-        ).then((res: BigNumber) => {
-          if (!res.isZero()) {
-            setIsApproved(true);
-          }
-          setState({ ...state, step: TxStep.None })
-        }).catch((e: any) => {
-          afterTxFailed(e.message);
-          navigation.goBack();
-        })
+        if (isWalletUser) {
+          getElysiaContract()?.allowance(
+            wallet?.getFirstNode()?.address, contractAddress
+          ).then((res: BigNumber) => {
+            if (!res.isZero()) {
+              setState({
+                ...state,
+                isApproved: true,
+                step: TxStep.None,
+              })
+            } else {
+              setState({
+                ...state,
+                isApproved: false,
+                step: TxStep.None,
+              })
+            }
+          }).catch((e: any) => {
+            afterTxFailed(e.message);
+            navigation.goBack();
+          })
+        } else {
+          return
+        }
         break;
 
       case TxStep.Approving:
@@ -201,8 +221,12 @@ const Purchase: FunctionComponent = () => {
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx: any) => {
-            setIsApproved(true);
-              setState({ ...state, txHash: tx, step: TxStep.None })
+              setState({
+                ...state,
+                isApproved: true,
+                txHash: tx,
+                step: TxStep.None,
+              })
             }).catch((e) => {
               afterTxFailed(e.message);
               navigation.goBack();
@@ -270,27 +294,26 @@ const Purchase: FunctionComponent = () => {
         setValues={setValues}
         disabled={parseInt(values.to || '0') < 1}
         estimateGas={state.estimateGas}
-        isApproved={isApproved}
+        isApproved={state.isApproved}
         createTx={() => {
           if (isWalletUser) {
-            if (isApproved) {
+            if (state.isApproved) {
               setState({ ...state, step: TxStep.Creating })
             } else {
               setState({ ...state, step: TxStep.Approving })
             }
           } else {
             Server.requestTransaction(
-              route.params.productId,
+              productId,
               parseFloat(values.to),
               'buying',
-            )
-              .then((res) => {
-                setState({
-                  ...state,
-                  stage: 1,
-                  espressoTxId: res.data.id,
-                });
-              })
+            ).then((res) => {
+              setState({
+                ...state,
+                stage: 1,
+                espressoTxId: res.data.id,
+              });
+            })
               .catch((e) => {
                 if (e.response.status === 400) {
                   alert(t('product.transaction_error'));
@@ -304,7 +327,6 @@ const Purchase: FunctionComponent = () => {
     );
   }
 
-  // return <PaymentSelection espressTxId={state.espressoTxId} />;
   return (
     <PaymentSelection
       valueTo={parseFloat(values.to)}

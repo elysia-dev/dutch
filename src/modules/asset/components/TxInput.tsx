@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
@@ -7,7 +7,6 @@ import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
 import { useTranslation } from 'react-i18next';
 import Asset from '../../../types/Asset';
-import AssetContext from '../../../contexts/AssetContext';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
 import NumberPadShortcut from './NumberPadShortcut';
@@ -76,21 +75,20 @@ const TxInput: React.FC<ITxInput> = ({
   setValues,
   createTx,
 }) => {
-  const { getBalance } = useContext(AssetContext);
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
   const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
+  const valueInCrypto = parseFloat(values.from) / getCryptoPrice(from.type);
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    getBalance(gasCrypto) < parseFloat(estimateGas) + parseFloat(values.from) / getCryptoPrice(gasCrypto)
-    : getBalance(gasCrypto) < parseFloat(estimateGas);
+    fromBalance < parseFloat(estimateGas) + valueInCrypto
+    : fromBalance < parseFloat(estimateGas);
 
-  // 잔고도 충분하고 구매 가능한 토큰/금액도 충분한지? 둘 중에 더 작은 것과 비교함
-  const isUnderToMax = parseFloat(values.to || '0') <= (toMax ? Math.min(toMax, toBalance) : toBalance);
-  const isUnderFromMax = (parseFloat(values.from || '0') / getCryptoPrice(from.type)) <= (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
-  const isUnderMax = current === 'to' ? isUnderToMax : isUnderFromMax;
+  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
+    valueInCrypto + parseFloat(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
+    : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -117,7 +115,7 @@ const TxInput: React.FC<ITxInput> = ({
         >
           <Text
             style={{
-              color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED, //
+              color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
             }}
           >
@@ -152,7 +150,7 @@ const TxInput: React.FC<ITxInput> = ({
         style={{
           paddingLeft: 20,
           paddingRight: 20,
-          height: Dimensions.get('window').height - 200,
+          flex: 1,
         }}>
         <TxInputViewer
           purpose={purpose}
@@ -169,7 +167,7 @@ const TxInput: React.FC<ITxInput> = ({
             price: fromPrice,
             max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
           }}
-          isUnderMax={isUnderMax}
+          isOverMax={isOverMax}
           estimatedGas={estimateGas}
           gasCrypto={gasCrypto}
           insufficientGas={insufficientGas}
@@ -231,15 +229,13 @@ const TxInput: React.FC<ITxInput> = ({
       </View>
       <View
         style={{
-          position: 'absolute',
-          width: '100%',
-          bottom: insets.bottom || 10,
+          marginBottom: insets.bottom || 10,
           paddingLeft: '5%',
           paddingRight: '5%'
         }}
       >
         <NextButton
-          disabled={!isUnderMax || disabled || insufficientGas}
+          disabled={isOverMax || disabled || insufficientGas}
           title={t('assets.done')}
           handler={() => {
             if (isWalletUser) {
@@ -264,9 +260,8 @@ const TxInput: React.FC<ITxInput> = ({
         gasCrypto={gasCrypto}
         isApproved={isApproved}
         createTx={createTx}
-        disabled={disabled}
       />
-      <OverlayLoading visible={[TxStep.Approving, TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
+      <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
   )
 }

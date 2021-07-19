@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../../enums/CryptoType';
 import commaFormatter from '../../../utiles/commaFormatter';
@@ -24,7 +24,7 @@ interface Props {
     price: number, // 화폐 가격
     max: number, // 사용자가 구매/환불 가능한 최대 금액
   }
-  isUnderMax: boolean,
+  isOverMax: boolean,
   estimatedGas: string,
   gasCrypto: CryptoType,
   insufficientGas: boolean,
@@ -35,7 +35,7 @@ const TxInputViewer: React.FC<Props> = ({
   current,
   to,
   from,
-  isUnderMax,
+  isOverMax,
   estimatedGas,
   gasCrypto,
   insufficientGas,
@@ -48,8 +48,8 @@ const TxInputViewer: React.FC<Props> = ({
   return (
     <View
       style={{
-        marginTop: 40,
-        marginBottom: 60,
+        marginTop: Platform.OS === 'android' ? 40 : 20,
+        marginBottom: Platform.OS === 'android' ? 60 : 30,
         display: 'flex',
         alignItems: 'center'
       }}
@@ -74,18 +74,25 @@ const TxInputViewer: React.FC<Props> = ({
           paddingHorizontal: 10,
         }}
       >
-        {isUnderMax ? (
-          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
-        ) : (
+        {isOverMax ? (
           <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`} />
+        ) : (
+          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
         )}
         {insufficientGas ? (
           <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
         ) : (
-          <GuideText
-            text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
-            style={{ marginTop: 6 }}
-          />
+          estimatedGas ? (
+            <GuideText
+              text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
+              style={{ marginTop: 6 }}
+            />
+          ) : ( // 빈 문자열이면
+            <GuideText
+              text="가스비를 추정할 수 없습니다."
+              style={{ marginTop: 6 }}
+            />
+          )
         )}
       </View>
     </View>

@@ -42,10 +42,10 @@ const Refund: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { from, to, contractAddress } = route.params;
+  const { from, to, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
-  const { isWalletUser, Server } = useContext(UserContext);
+  const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
@@ -57,27 +57,35 @@ const Refund: FunctionComponent = () => {
   const toBalance = to.value;
   const fromBalance = toBalance * toPrice / fromPrice;
 
-  const estimateGas = async () => {
+  const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
       estimateGas = await contract?.estimateGas.refund(utils.parseEther('0.01'), {
-        from: wallet?.getFirstAddress(),
-      })
-    } catch {
-    } finally {
+        from: address,
+      });
+
       if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(estimateGas.mul(from.type === CryptoType.ETH ? gasPrice : bscGasPrice)),
-        })
+          estimateGas: utils.formatEther(
+            estimateGas.mul(from.type === CryptoType.ETH ? gasPrice : bscGasPrice)
+          ),
+        });
       }
+    } catch {
+      setState({
+        ...state,
+        estimateGas: '',
+      });
     }
   }
 
   useEffect(() => {
-    if (isWalletUser) {
-      estimateGas();
+    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
     }
   }, [])
 
@@ -176,7 +184,7 @@ const Refund: FunctionComponent = () => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })
           } else {
-            Server.requestTransaction(route.params.productId, parseInt(values.to), 'refund')
+            Server.requestTransaction(productId, parseInt(values.to), 'refund')
               .then((res) => {
                 setState({
                   ...state,
@@ -198,7 +206,13 @@ const Refund: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection espressTxId={state.espressoTxId} />
+    <PaymentSelection
+      valueTo={parseFloat(values.to)}
+      productId={productId}
+      type={'refund'}
+      contractAddress={contractAddress}
+      espressTxId={state.espressoTxId}
+    />
   )
 };
 

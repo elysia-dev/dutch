@@ -38,7 +38,7 @@ type ParamList = {
 const Reward: FunctionComponent = () => {
   const [interest, setInterest] = useState(0);
   const route = useRoute<RouteProp<ParamList, 'Reward'>>()
-  const { toCrypto, toTitle, contractAddress } = route.params;
+  const { toCrypto, toTitle, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext)
@@ -60,27 +60,34 @@ const Reward: FunctionComponent = () => {
   const txResult = useWatingTx(state.txHash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
   const insets = useSafeAreaInsets();
 
-  const estimateGas = async () => {
+  const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
       estimateGas = await contract?.estimateGas.claimReward({
-        from: wallet?.getFirstNode()?.address
+        from: address,
       })
-    } catch {
-    } finally {
       if (estimateGas) {
         setState({
           ...state,
-          estimateGas: utils.formatEther(estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)),
-        })
+          estimateGas: utils.formatEther(
+            estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)
+          ),
+        });
       }
+    } catch {
+      setState({
+        ...state,
+        estimateGas: '',
+      });
     }
   }
 
   useEffect(() => {
-    if (isWalletUser) {
-      estimateGas();
+    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
     }
   }, [])
 
@@ -212,7 +219,7 @@ const Reward: FunctionComponent = () => {
                   step: TxStep.Creating
                 })
               } else {
-                Server.requestTransaction(route.params.productId, 1, 'interest')
+                Server.requestTransaction(productId, 1, 'interest')
                   .then((res) => {
                     setState({
                       ...state,
@@ -236,7 +243,12 @@ const Reward: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection espressTxId={state.espressoTxId} />
+    <PaymentSelection
+      valueTo={parseFloat((interest / (getCryptoPrice(toCrypto))).toFixed(4))}
+      productId={productId}
+      type={'interest'}
+      contractAddress={contractAddress}
+      espressTxId={state.espressoTxId} />
   )
 };
 
