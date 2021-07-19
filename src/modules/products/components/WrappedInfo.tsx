@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
@@ -8,13 +7,7 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
 import moment from 'moment';
-
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
+import DesView from './DesView';
 
 interface Props {
   product: Product;
@@ -356,7 +349,6 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           )}
         </View>
       </View>
-      
     </View>
   );
 };
