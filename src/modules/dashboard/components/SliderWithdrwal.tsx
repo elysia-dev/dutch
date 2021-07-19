@@ -2,13 +2,13 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UserContext from '../../../contexts/UserContext';
 import LegacyRefundStatus from '../../../enums/LegacyRefundStatus';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { TextField } from '../../../shared/components/TextField';
 import { P1Text } from '../../../shared/components/Texts';
+import Circle from '../../../shared/components/Circle';
 
 interface Props {
   modalHandler: () => void;
@@ -16,15 +16,6 @@ interface Props {
   el: number;
   usd: number;
 }
-
-const InformationCircle = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: #3679b5;
-  border-radius: 10px;
-  margin-right: 10px;
-  top: 6px;
-`;
 
 const SliderWithdrawal: FunctionComponent<Props> = (props) => {
   const { Server, setRefundStatus } = useContext(UserContext);
@@ -171,14 +162,26 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
               marginBottom: 10,
               marginRight: '5%',
             }}>
-            <InformationCircle />
+            <Circle
+              style={{
+                backgroundColor: '#3679b5',
+                marginRight: 10,
+                top: 6,
+              }}
+            />
             <P1Text
               label={t('dashboard.remaining_text.0')}
               style={{ fontSize: 13, lineHeight: 17 }}
             />
           </View>
           <View style={{ flexDirection: 'row', marginRight: '5%' }}>
-            <InformationCircle />
+            <Circle
+              style={{
+                backgroundColor: '#3679b5',
+                marginRight: 10,
+                top: 6,
+              }}
+            />
             <P1Text
               label={t('dashboard.remaining_text.1')}
               style={{ fontSize: 13, lineHeight: 17 }}

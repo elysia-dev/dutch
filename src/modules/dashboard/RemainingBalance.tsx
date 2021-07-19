@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useState, useContext } from 'react';
-import { View, Modal } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Modal, Image } from 'react-native';
+// import styled from 'styled-components/native';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text, H2Text } from '../../shared/components/Texts';
 import { Modal as Modals } from '../../shared/components/Modal';
@@ -14,20 +14,13 @@ import AcceptedImg from '../account/images/accepted.png';
 import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
 import { useTranslation } from 'react-i18next';
+import Circle from '../../shared/components/Circle';
 
-const Accepted = styled.Image`
-  width: 140px;
-  height: 140px;
-  margin: 10px auto;
-`;
-const InformationCircle = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: #3679b5;
-  border-radius: 10px;
-  margin-right: 10px;
-  top: 6px;
-`;
+// const Accepted = styled.Image`
+//   width: 140px;
+//   height: 140px;
+//   margin: 10px auto;
+// `;
 
 const RemainingBalance: FunctionComponent<{}> = () => {
   const defaultUser = {
@@ -71,14 +64,26 @@ const RemainingBalance: FunctionComponent<{}> = () => {
                   marginBottom: 10,
                   marginRight: '5%',
                 }}>
-                <InformationCircle />
+                <Circle
+                  style={{
+                    backgroundColor: '#3679b5',
+                    marginRight: 10,
+                    top: 6,
+                  }}
+                />
                 <P1Text
                   label={t('dashboard.remaining_text.0')}
                   style={{ fontSize: 14, lineHeight: 22 }}
                 />
               </View>
               <View style={{ flexDirection: 'row', marginRight: '5%' }}>
-                <InformationCircle />
+                <Circle
+                  style={{
+                    backgroundColor: '#3679b5',
+                    marginRight: 10,
+                    top: 6,
+                  }}
+                />
                 <P1Text
                   label={t('dashboard.remaining_text.1')}
                   style={{ fontSize: 14, lineHeight: 22 }}
@@ -108,7 +113,15 @@ const RemainingBalance: FunctionComponent<{}> = () => {
             <Modals
               child={
                 <View>
-                  <Accepted source={AcceptedImg} />
+                  <Image
+                    source={AcceptedImg}
+                    style={{
+                      width: 140,
+                      height: 140,
+                      marginVertical: 10,
+                      marginHorizontal: 'auto',
+                    }}
+                  />
                   <H2Text
                     style={{
                       textAlign: 'center',
