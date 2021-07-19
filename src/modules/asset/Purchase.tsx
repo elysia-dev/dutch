@@ -35,6 +35,8 @@ type ParamList = {
 };
 
 const Purchase: FunctionComponent = () => {
+  const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
+  const { from, to, toMax, contractAddress, productId } = route.params;
   const [values, setValues] = useState({
     from: '',
     to: '',
@@ -45,10 +47,11 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
+    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
-  const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  const { from, to, toMax, contractAddress, productId } = route.params;
+  // const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
+  // const { from, to, toMax, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { isWalletUser, Server } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
@@ -60,7 +63,7 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
+  // const [isApproved, setIsApproved] = useState([CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false);
   const { getBalance } = useContext(AssetContext);
 
   const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
@@ -185,9 +188,20 @@ const Purchase: FunctionComponent = () => {
             wallet?.getFirstNode()?.address, contractAddress
           ).then((res: BigNumber) => {
             if (!res.isZero()) {
-              setIsApproved(true);
+              // setIsApproved(true);
+              setState({
+                ...state,
+                isApproved: true,
+                step: TxStep.None,
+              })
+            } else {
+              setState({
+                ...state,
+                isApproved: false,
+                step: TxStep.None,
+              })
             }
-            setState({ ...state, step: TxStep.None })
+            // setState({ ...state, step: TxStep.None })
           }).catch((e: any) => {
             afterTxFailed(e.message);
             navigation.goBack();
@@ -205,8 +219,14 @@ const Purchase: FunctionComponent = () => {
               to: populatedTransaction.to,
               data: populatedTransaction.data,
             }).then((tx: any) => {
-              setIsApproved(true);
-              setState({ ...state, txHash: tx, step: TxStep.None })
+              // setIsApproved(true);
+              // setState({ ...state, txHash: tx, step: TxStep.None })
+              setState({
+                ...state,
+                isApproved: true,
+                txHash: tx,
+                step: TxStep.None,
+              })
             }).catch((e) => {
               afterTxFailed(e.message);
               navigation.goBack();
@@ -273,10 +293,10 @@ const Purchase: FunctionComponent = () => {
         setValues={setValues}
         disabled={parseInt(values.to || '0') < 1}
         estimateGas={state.estimateGas}
-        isApproved={isApproved}
+        isApproved={state.isApproved}
         createTx={() => {
           if (isWalletUser) {
-            if (isApproved) {
+            if (state.isApproved) {
               setState({ ...state, step: TxStep.Creating })
             } else {
               setState({ ...state, step: TxStep.Approving })

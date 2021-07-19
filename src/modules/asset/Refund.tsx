@@ -198,7 +198,7 @@ const Refund: FunctionComponent = () => {
   }
 
   return (
-    <PaymentSelection 
+    <PaymentSelection
     valueTo={parseFloat(values.to)}
     productId={productId}
     type={'refund'}
