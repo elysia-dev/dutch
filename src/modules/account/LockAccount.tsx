@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import styled from 'styled-components/native';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
@@ -14,12 +13,6 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
-
-const LockAccountImg = styled.Image`
-  width: 100%;
-  resize-mode: center;
-  margin-top: 53px;
-`;
 
 type ParamList = {
   LockAccount: {
@@ -93,7 +86,14 @@ const LockAccount: FunctionComponent = () => {
     <AccountLayout
       title={
         <View>
-          {!state.focusing && <LockAccountImg source={LockAccountPng} />}
+          {!state.focusing && <Image
+            source={LockAccountPng}
+            style={{
+              width: '100%',
+              resizeMode: 'center',
+              marginTop: 53,
+            }}
+          />}
         </View>
       }
       body={

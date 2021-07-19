@@ -3,12 +3,10 @@ import React, {
   useState,
   useEffect,
   useContext,
-  useRef,
 } from 'react';
 import { View, ScrollView, StatusBar, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
@@ -24,12 +22,6 @@ import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
-
-const ProductInfoWrapper = styled.View`
-  background-color: #fff;
-  height: 100%;
-  width: 100%;
-`;
 
 type ParamList = {
   ProductBuying: {
@@ -156,7 +148,13 @@ const ProductBuying: FunctionComponent = () => {
 
   return (
     <>
-      <ProductInfoWrapper>
+      <View
+        style={{
+          backgroundColor: '#fff',
+          height: '100%',
+          width: '100%',
+        }}
+      >
         <ScrollView
           scrollEnabled={true}
           scrollToOverflowEnabled={true}
@@ -233,7 +231,7 @@ const ProductBuying: FunctionComponent = () => {
           handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
-      </ProductInfoWrapper>
+      </View>
     </>
   );
 };

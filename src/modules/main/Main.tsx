@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import styled from 'styled-components/native';
 
 import DashboardBlackPng from '../../shared/assets/images/dashboard_black.png';
 import DashboardPng from '../../shared/assets/images/dashboard.png';
@@ -18,13 +17,6 @@ import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import UserContext from '../../contexts/UserContext';
 import { MainPage } from '../../enums/pageEnum';
-
-const Icon = styled.Image`
-  position: absolute;
-  top: 8px;
-  width: 26px;
-  height: 26px;
-`;
 
 const Tab = createBottomTabNavigator();
 
@@ -50,11 +42,13 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon
+              <Image
                 source={focused ? DashboardBlackPng : DashboardPng}
                 style={{
                   width: 30,
                   height: 30,
+                  position: 'absolute',
+                  top: 8,
                 }}
               />
             ),
@@ -67,11 +61,13 @@ const Main: FunctionComponent = () => {
             unmountOnBlur: true,
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon
+              <Image
                 source={focused ? ProductBlackPng : ProductPng}
                 style={{
                   width: 30,
                   height: 30,
+                  position: 'absolute',
+                  top: 8,
                 }}
               />
             ),
@@ -84,11 +80,13 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
+                <Image
                   source={focused ? NotificationBlackPng : NotificationPng}
                   style={{
                     height: 30,
                     width: 25,
+                    position: 'absolute',
+                    top: 8,
                   }}
                 />
                 {notifications.filter(
@@ -117,11 +115,12 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
+                <Image
                   style={{
                     top: 20,
                     height: 5,
                     width: 25,
+                    position: 'absolute',
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />

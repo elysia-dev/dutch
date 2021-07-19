@@ -1,18 +1,11 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import UserContext from '../../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
-
-const InfoArrowImg = styled.Image`
-  width: 5px;
-  height: 8px;
-  margin: 20px 20px;
-`;
 
 const MyPage: FunctionComponent = () => {
   const { user } = useContext(UserContext);
@@ -59,7 +52,14 @@ const MyPage: FunctionComponent = () => {
                     label={t('more_label.reset_password')}
                     style={{ lineHeight: 50, fontSize: 15 }}
                   />
-                  <InfoArrowImg source={require('./images/next_gray.png')} />
+                  <Image
+                    source={require('./images/next_gray.png')}
+                    style={{
+                      width: 5,
+                      height: 8,
+                      margin: 20,
+                    }}
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -95,9 +95,14 @@ const MyPage: FunctionComponent = () => {
                     style={{ color: '#a7a7a7' }}
                   />
                 </View>
-                <InfoArrowImg
+                <Image
                   source={require('./images/next_gray.png')}
-                  style={{ alignSelf: 'center' }}
+                  style={{
+                    alignSelf: 'center',
+                    width: 5,
+                    height: 8,
+                    margin: 20,
+                  }}
                 />
               </View>
             </TouchableOpacity>

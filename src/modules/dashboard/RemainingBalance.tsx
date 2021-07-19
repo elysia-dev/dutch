@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { View, Modal, Image } from 'react-native';
-// import styled from 'styled-components/native';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text, H2Text } from '../../shared/components/Texts';
 import { Modal as Modals } from '../../shared/components/Modal';
@@ -15,12 +14,6 @@ import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
 import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
-
-// const Accepted = styled.Image`
-//   width: 140px;
-//   height: 140px;
-//   margin: 10px auto;
-// `;
 
 const RemainingBalance: FunctionComponent<{}> = () => {
   const defaultUser = {

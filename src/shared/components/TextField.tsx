@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, StyleProp, ViewStyle, Keyboard } from 'react-native';
-import styled from 'styled-components/native';
+import { StyleSheet, View, StyleProp, ViewStyle, Keyboard, TextInput, Image } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
@@ -21,22 +20,6 @@ interface Props {
   focusHandler?: (value: boolean) => void;
 }
 
-const TextInput = styled.TextInput`
-  width: 100%;
-  height: 30px;
-  border-bottom-width: 1px;
-`;
-const HelperWrapper = styled.View`
-  flex-direction: row-reverse;
-  padding-top: 5px;
-  height: 30px;
-`;
-const HelperIcon = styled.Image`
-  margin-top: 1px;
-  width: 12px;
-  height: 12px;
-  margin-right: 2px;
-`;
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
   autocapitalize = 'none',
@@ -88,6 +71,9 @@ export const TextField: FunctionComponent<Props> = ({
           marginBottom: props.helperText !== undefined ? 0 : 20,
           color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
           fontFamily: AppFonts.Regular,
+          width: '100%',
+          height: 30,
+          borderBottomWidth: 1,
         }}
         allowFontScaling={false}
         defaultValue={props.value}
@@ -112,7 +98,13 @@ export const TextField: FunctionComponent<Props> = ({
         }}
       />
       {props.helperText !== undefined && (
-        <HelperWrapper>
+        <View
+          style={{
+            flexDirection: 'row-reverse',
+            paddingTop: 5,
+            height: 30,
+          }}
+        >
           <P3Text
             label={props.helperText}
             style={{
@@ -124,15 +116,23 @@ export const TextField: FunctionComponent<Props> = ({
           {(() => {
             switch (props.helperIcon) {
               case 'Error':
-                return <HelperIcon source={WarningImg} />;
-                break;
+                return (
+                  <Image
+                    source={WarningImg}
+                    style={{
+                      marginTop: 1,
+                      width: 12,
+                      height: 12,
+                      marginRight: 2,
+                    }}
+                  />
+                );
               case 'Info':
-                // <HelperIcon source={InfoImg} />
-                break;
               default:
+                break;
             }
           })()}
-        </HelperWrapper>
+        </View>
       )}
     </View>
   );

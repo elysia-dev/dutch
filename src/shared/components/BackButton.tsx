@@ -4,21 +4,12 @@ import {
   GestureResponderEvent,
   StyleProp,
   ViewStyle,
+  Image,
+  TouchableOpacity
 } from "react-native";
-import styled from "styled-components/native";
 import BackButtonImg from "../assets/images/backbutton.png";
 import BackButtonWhiteImg from "../assets/images/backbutton_white.png";
 
-const ArrowImg = styled.Image`
-  width: 30px;
-  height: 30px;
-  left: -8px;
-`;
-const WhiteBtn = styled.TouchableOpacity`
-  background-color: transparent;
-  margin-bottom: 25px;
-  margin-top: 13px;
-`;
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;
   isWhite?: boolean;
@@ -26,11 +17,23 @@ export const BackButton: FunctionComponent<{
 }> = ({ handler, isWhite = false, style = {} }) => {
   return (
     <View style={style}>
-      <WhiteBtn onPress={handler}>
-        <ArrowImg
+      <TouchableOpacity
+        onPress={handler}
+        style={{
+          backgroundColor: 'transparent',
+          marginBottom: 25,
+          marginTop: 13,
+        }}
+      >
+        <Image
           source={isWhite === true ? BackButtonWhiteImg : BackButtonImg}
+          style={{
+            width: 30,
+            height: 30,
+            left: -8,
+          }}
         />
-      </WhiteBtn>
+      </TouchableOpacity>
     </View>
   );
 };

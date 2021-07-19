@@ -1,71 +1,34 @@
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components/native';
-import { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle, TouchableOpacity, Text } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 
-type ButtonProps = {
-  theme: string;
-};
-
-const handleThemeType = (variant: string) => {
+const handleThemeType = (variant: string | undefined) => {
   switch (variant) {
     case 'WhiteTheme':
-      return 'border: 1px solid #3679B5; background-color: #FFFFFF; height: 50px;';
+      return {
+        borderWidth: 1,
+        borderColor: '#3679B5',
+        backgroundColor: '#FFFFFF',
+      };
     case 'GrayTheme':
-      return 'border: 0px solid #FFFFFF; background-color: #AAAAAA; height: 50px;';
+      return {
+        borderWidth: 0,
+        borderColor: '#FFFFFF',
+        backgroundColor: '#AAAAAA',
+      };
+    case '':
+    case undefined:
     default:
-      return 'border: 0px solid #FFFFFF; background-color:#3679B5; height: 50px;';
-  }
-};
-const handleThemeWrapperType = (variant: string) => {
-  switch (variant) {
-    case 'WithFlat':
-      return 'margin-bottom: 5px;';
-    case 'WhiteTheme':
-      return 'margin-bottom: 25px;';
-    default:
-      return 'margin-bottom: 36px;';
+      return {
+        borderWidth: 0,
+        borderColor: '#FFFFFF',
+        backgroundColor: '#3679B5',
+      };
   }
 };
 
-const Button = styled.TouchableOpacity`
-  width: 90%;
-  margin-left: 5%;
-  margin-right: 5%;
-  border-radius: 5px;
-  justify-content: center;
-  align-content: center;
-
-  ${(props: ButtonProps) => handleThemeType(props.theme)};
-`;
-const ButtonLabel = styled.Text`
-  font-size: ${(props: ButtonProps) =>
-    props.theme === 'WhiteTheme' ? '14px' : '16px'};
-  text-align: center;
-  line-height: 40px;
-  font-family: ${(props: ButtonProps) =>
-    props.theme === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold};
-  color: ${(props: ButtonProps) =>
-    props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-`;
-const DuplicateUpperLabel = styled.Text`
-  font-size: 14px;
-  text-align: left;
-  margin-left: 6%;
-  color: ${(props: ButtonProps) =>
-    props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-family: '${AppFonts.Regular}';
-`;
-const DuplicateLabel = styled.Text`
-  font-size: 16px;
-  text-align: left;
-  color: ${(props: ButtonProps) =>
-    props.theme === 'WhiteTheme' ? '#000000' : '#FFFFFF'};
-  font-family: '${AppFonts.Bold}';
-`;
 interface SubmitButtonProps {
   title: string;
-  // handler: (event: GestureResponderEvent) => void;
   handler: any;
   variant?: 'WhiteTheme' | 'GrayTheme' | ''; // WhiteTheme를 받으면 하얀색 버튼으로 변경됩니다
   disabled?: boolean;
@@ -84,20 +47,60 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   duplicateTitle,
 }) => {
   return (
-    <Button onPress={handler} theme={variant} disabled={disabled} style={style}>
+    <TouchableOpacity
+      onPress={handler}
+      disabled={disabled}
+      style={{
+        width: '90%',
+        height: 50,
+        marginHorizontal: '5%',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignContent: 'center',
+        ...handleThemeType(variant),
+        ...(style as {}),
+      }}
+    >
       {duplicateTitle === undefined ? (
-        <ButtonLabel theme={variant} style={textStyle} allowFontScaling={false}>
+        <Text
+          style={{
+            fontSize: variant === 'WhiteTheme' ? 14 : 16,
+            textAlign: 'center',
+            lineHeight: 40,
+            fontFamily: variant === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold,
+            color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+            ...(textStyle as {}),
+          }}
+          allowFontScaling={false}
+        >
           {title}
-        </ButtonLabel>
+        </Text>
       ) : (
-        <DuplicateUpperLabel theme={variant} allowFontScaling={false}>
+        <Text
+          allowFontScaling={false}
+          style={{
+            fontSize: 14,
+            textAlign: 'left',
+            marginLeft: '6%',
+            color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+            fontFamily: AppFonts.Regular,
+          }}
+        >
           {duplicateTitle}
-          <DuplicateLabel theme={variant} allowFontScaling={false}>
+          <Text
+            allowFontScaling={false}
+            style={{
+              fontSize: 16,
+              textAlign: 'left',
+              color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+              fontFamily: AppFonts.Bold,
+            }}
+          >
             {'\n'}
             {title}
-          </DuplicateLabel>
-        </DuplicateUpperLabel>
+          </Text>
+        </Text>
       )}
-    </Button>
+    </TouchableOpacity>
   );
 };

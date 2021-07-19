@@ -1,13 +1,11 @@
 import React, { FunctionComponent, useState } from 'react';
 import {
-  // StyleSheet,
   View,
   Image,
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
-// import styled from 'styled-components/native';
 import investmentGuide1 from './images/investmentGuide1.png';
 import investmentGuide2 from './images/investmentGuide2.png';
 import investmentGuide3 from './images/investmentGuide3.png';
@@ -16,12 +14,6 @@ import { H2Text, P1Text } from '../../shared/components/Texts';
 import QuitIcon from '../products/images/quitbutton.png';
 import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
-
-// const GuideImage = styled.Image`
-//   width: 90%;
-//   margin: 10% 5% 30px 5%;
-//   position: absolute;
-// `;
 
 const InvestmentGuide: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
