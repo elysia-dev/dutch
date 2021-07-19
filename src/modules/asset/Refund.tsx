@@ -45,7 +45,7 @@ const Refund: FunctionComponent = () => {
   const { from, to, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
-  const { isWalletUser, Server } = useContext(UserContext);
+  const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
