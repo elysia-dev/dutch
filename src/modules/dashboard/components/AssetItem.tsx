@@ -48,7 +48,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
       }
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
-        <P2Text label={`${ 0.01 < asset.value ? commaFormatter(Math.floor(asset.value * 100) / 100) : '0.00...' } ${asset.unit}`} />
+        <P2Text label={`${ 0.01 <= asset.value ? commaFormatter(Math.floor(asset.value * 100) / 100) : '0.00...' } ${asset.unit}`} />
       </View>
       <P1Text
         style={{ marginLeft: 'auto' }}
