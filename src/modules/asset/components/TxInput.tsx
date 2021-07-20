@@ -88,7 +88,7 @@ const TxInput: React.FC<ITxInput> = ({
   const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
 
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    valueInCrypto + parseFloat(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
+    valueInCrypto + Number(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
     : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
 
   return (
