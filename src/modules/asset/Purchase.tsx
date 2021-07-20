@@ -95,7 +95,7 @@ const Purchase: FunctionComponent = () => {
           ...state,
           estimateGas: utils.formatEther(
             estimateGas.mul(
-              from.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+              from.type !== CryptoType.BNB ? gasPrice : bscGasPrice,
             ),
           ),
         });
