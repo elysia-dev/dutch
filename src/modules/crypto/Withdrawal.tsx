@@ -89,7 +89,7 @@ const Withdrawal: React.FC = () => {
         setEstimatedGas(
           utils.formatEther(
             estimatedGas.mul(
-              asset.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+              asset.type !== CryptoType.BNB ? gasPrice : bscGasPrice,
             ),
           ),
         );
