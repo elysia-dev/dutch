@@ -24,7 +24,7 @@ interface Props {
     price: number, // 화폐 가격
     max: number, // 사용자가 구매/환불 가능한 최대 금액
   }
-  isUnderMax: boolean,
+  isOverMax: boolean,
   estimatedGas: string,
   gasCrypto: CryptoType,
   insufficientGas: boolean,
@@ -35,7 +35,7 @@ const TxInputViewer: React.FC<Props> = ({
   current,
   to,
   from,
-  isUnderMax,
+  isOverMax,
   estimatedGas,
   gasCrypto,
   insufficientGas,
@@ -75,10 +75,10 @@ const TxInputViewer: React.FC<Props> = ({
           paddingHorizontal: 10,
         }}
       >
-        {isUnderMax ? (
-          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
-        ) : (
+        {isOverMax ? (
           <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
+        ) : (
+          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
         )}
         {insufficientGas ? (
           <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
