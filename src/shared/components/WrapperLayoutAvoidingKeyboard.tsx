@@ -12,7 +12,6 @@ import {
 import AppFonts from '../../enums/AppFonts';
 import { BackButton } from './BackButton';
 import AppColors from '../../enums/AppColors';
-import App from '../../../App';
 
 interface Props {
   title: string;
