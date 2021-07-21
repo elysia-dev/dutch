@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, View, Animated } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
 
 const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> = ({
   title,
@@ -44,7 +45,7 @@ const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> =
           <Animated.Text
             allowFontScaling={false}
             style={{
-              color: '#1c1c1c',
+              color: AppColors.BLACK,
               fontSize: 28,
               left: 0,
               paddingLeft: 0,

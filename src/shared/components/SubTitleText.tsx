@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, TextStyle, Text } from 'react-native';
+import AppColors from '../../enums/AppColors';
 
 export const SubTitleText: FunctionComponent<{
   label: string;
@@ -8,7 +9,7 @@ export const SubTitleText: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 15,
         textAlign: 'left',
         lineHeight: 20,

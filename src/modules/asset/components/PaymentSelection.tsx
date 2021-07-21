@@ -69,7 +69,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
           fontSize: 14,
           paddingLeft: 10,
           fontWeight: props.selected ? 'bold' : 'normal',
-          color: '#1C1C1C',
+          color: AppColors.BLACK,
           alignSelf: 'center',
         }}>
         {props.title}

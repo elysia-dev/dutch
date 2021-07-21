@@ -108,7 +108,7 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
           paddingLeft: 10,
           paddingRight: 30,
           fontWeight: props.selected ? 'bold' : 'normal',
-          color: '#1C1C1C',
+          color: AppColors.BLACK,
           textAlign: 'center',
           alignSelf: 'center',
         }}

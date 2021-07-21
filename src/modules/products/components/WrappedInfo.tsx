@@ -8,6 +8,7 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
 import moment from 'moment';
 import DesView from './DesView';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;
@@ -75,7 +76,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={`${props.product.expectedAnnualReturn}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -89,7 +90,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={`${props.product.data.returnOnRent}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -99,7 +100,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={`${props.product.data.returnOnSale}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -113,7 +114,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.monthlyRentIncomeDistributionCycle}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -123,7 +124,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.lockupPeriod}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -137,7 +138,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.expectedSaleDate}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -156,7 +157,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                         0,
                       )
                   }
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               {!isLoan && (
@@ -170,7 +171,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       parseFloat(product.data.netDeposit),
                       0,
                     )}
-                    style={{ color: '#1c1c1c' }}
+                    style={{ color: AppColors.BLACK }}
                   />
                 </DesView>
               )}
@@ -188,7 +189,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                     parseFloat(product.data.netRentPerYear),
                     0,
                   )}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
 
@@ -206,7 +207,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                         0,
                       )
                   }
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
             </View>
@@ -248,7 +249,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.propertyType}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -258,7 +259,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.ground}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -268,7 +269,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.underground}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               {productDescription.unit && (
@@ -279,7 +280,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   />
                   <P3Text
                     label={productDescription.unit}
-                    style={{ color: '#1c1c1c' }}
+                    style={{ color: AppColors.BLACK }}
                   />
                 </DesView>
               )}
@@ -290,7 +291,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.bedroom}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -302,7 +303,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   label={
                     moment(product.data.buildingCompletionDate).format('YYYY-MM-DD')
                   }
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -312,7 +313,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.totalParkingAvailable}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -322,7 +323,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.airConditioning}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -332,7 +333,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.heating}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -342,7 +343,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.securityFacilities}
-                  style={{ color: '#1c1c1c', flex: 4, textAlign: 'right' }}
+                  style={{ color: AppColors.BLACK, flex: 4, textAlign: 'right' }}
                 />
               </DesView>
             </View>

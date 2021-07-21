@@ -3,6 +3,7 @@ import { View, StyleProp, ViewStyle, Keyboard, TextInput, Image } from 'react-na
 import AppFonts from '../../enums/AppFonts';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   label: string;
@@ -109,7 +110,7 @@ export const TextField: FunctionComponent<Props> = ({
             label={props.helperText}
             style={{
               fontSize: 12,
-              color: '#1c1c1c',
+              color: AppColors.BLACK,
               lineHeight: 15,
             }}
           />

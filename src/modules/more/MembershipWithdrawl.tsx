@@ -115,7 +115,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 />
                 <P3Text
                   label={t('more.withdrawl_check_1', { legacyOwnerships })}
-                  style={{ color: '#1C1C1C', lineHeight: 18 }}
+                  style={{ color: AppColors.BLACK, lineHeight: 18 }}
                 />
               </View>
             )}
@@ -137,7 +137,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                     legacyEl: user.legacyUsd,
                     legacyUsd: user.legacyUsd,
                   })}
-                  style={{ color: '#1C1C1C', lineHeight: 18 }}
+                  style={{ color: AppColors.BLACK, lineHeight: 18 }}
                 />
               </View>
             )}
@@ -155,7 +155,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               />
               <P3Text
                 label={t('more.withdrawl_check_3')}
-                style={{ color: '#1C1C1C', lineHeight: 18 }}
+                style={{ color: AppColors.BLACK, lineHeight: 18 }}
               />
             </View>
             <View
@@ -172,7 +172,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               />
               <P3Text
                 label={t('more.withdrawl_check_4')}
-                style={{ color: '#1C1C1C', lineHeight: 18 }}
+                style={{ color: AppColors.BLACK, lineHeight: 18 }}
               />
             </View>
           </View>

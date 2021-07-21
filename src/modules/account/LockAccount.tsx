@@ -13,6 +13,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   LockAccount: {
@@ -123,7 +124,7 @@ const LockAccount: FunctionComponent = () => {
               <P3Text
                 style={{
                   marginLeft: 'auto',
-                  color: '#1c1c1c',
+                  color: AppColors.BLACK,
                   fontSize: 13,
                   marginRight: '2%',
                   lineHeight: 21,

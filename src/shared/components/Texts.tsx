@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, TextStyle, Text } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
 
 export const H1Text: FunctionComponent<{
   label: string;
@@ -9,7 +10,7 @@ export const H1Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 28,
         textAlign: 'left',
         fontFamily: AppFonts.Bold,
@@ -29,7 +30,7 @@ export const H2Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 25,
         textAlign: 'left',
         fontFamily: AppFonts.Bold,
@@ -49,7 +50,7 @@ export const P1Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 15,
         textAlign: 'left',
         fontFamily: AppFonts.Regular,
@@ -70,7 +71,7 @@ export const H3Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 17,
         textAlign: 'left',
         fontFamily: AppFonts.Bold,
@@ -90,7 +91,7 @@ export const H4Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 14,
         textAlign: 'left',
         fontFamily: AppFonts.Bold,
@@ -170,7 +171,7 @@ export const TitleText: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#1c1c1c',
+        color: AppColors.BLACK,
         fontSize: 25,
         textAlign: 'left',
         fontFamily: AppFonts.Bold,

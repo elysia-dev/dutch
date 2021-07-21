@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { View, Image, Text } from "react-native";
 import WarningImg from "../assets/images/warning.png";
+import AppColors from '../../enums/AppColors';
 
 interface Iprops {
   message: string;
@@ -20,7 +21,7 @@ const ValidationMessage: FunctionComponent<Iprops> = ({ message }) => {
       <Text
         style={{
           fontSize: 12,
-          color: '#1c1c1c',
+          color: AppColors.BLACK,
         }}
       >
         {message}
