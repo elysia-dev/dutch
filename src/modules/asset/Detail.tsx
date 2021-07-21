@@ -341,12 +341,12 @@ const Detail: FunctionComponent = () => {
                           disabled={state.productStatus !== ProductStatus.SALE}
                           handler={() => {
                             navigation.navigate(AssetPage.Purchase, {
-                              from: {
+                              assetInCrypto: {
                                 type: state.paymentMethod,
                                 title: state.paymentMethod.toUpperCase(),
                                 unit: state.paymentMethod.toUpperCase(),
                               },
-                              to: asset,
+                              assetInToken: asset,
                               contractAddress: state.contractAddress,
                               productId: state.productId,
                               toMax: state.presentSupply,
@@ -358,12 +358,12 @@ const Detail: FunctionComponent = () => {
                           icon={'-'}
                           handler={() => {
                             navigation.navigate(AssetPage.Refund, {
-                              from: {
+                              assetInCrypto: {
                                 type: state.paymentMethod,
                                 title: state.paymentMethod.toUpperCase(),
                                 unit: state.paymentMethod.toUpperCase(),
                               },
-                              to: asset,
+                              assetInToken: asset,
                               contractAddress: state.contractAddress,
                               productId: state.productId,
                             });

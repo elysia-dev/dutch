@@ -26,8 +26,8 @@ import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
   Purchase: {
-    from: Asset;
-    to: Asset;
+    assetInCrypto: Asset;
+    assetInToken: Asset;
     toMax: number;
     contractAddress: string;
     productId: number; // legacy
@@ -36,7 +36,7 @@ type ParamList = {
 
 const Purchase: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  const { from, to, toMax, contractAddress, productId } = route.params;
+  const { assetInCrypto, assetInToken, toMax, contractAddress, productId } = route.params;
   const [values, setValues] = useState({
     from: '',
     to: '',
@@ -47,7 +47,7 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
-    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false,
+    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type) ? true : false,
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const navigation = useNavigation();
@@ -55,25 +55,25 @@ const Purchase: FunctionComponent = () => {
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(
     state.txHash,
-    from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+    assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
+  const contract = getAssetTokenFromCryptoType(assetInCrypto.type, contractAddress);
   const { getBalance } = useContext(AssetContext);
 
-  const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
-  const fromPrice = getCryptoPrice(from.type);
+  const fromMax = (toMax || 0) * 5 / getCryptoPrice(assetInCrypto.type);
+  const fromPrice = getCryptoPrice(assetInCrypto.type);
   const toPrice = getCryptoPrice(CryptoType.ELA);
-  const fromBalance = getBalance(from.type);
+  const fromBalance = getBalance(assetInCrypto.type);
   const toBalance = fromBalance * fromPrice / toPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      switch (from.type) {
+      switch (assetInCrypto.type) {
         case CryptoType.ETH:
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
@@ -95,7 +95,7 @@ const Purchase: FunctionComponent = () => {
           ...state,
           estimateGas: utils.formatEther(
             estimateGas.mul(
-              from.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
             ),
           ),
         });
@@ -119,16 +119,16 @@ const Purchase: FunctionComponent = () => {
   const createTx = async () => {
     let populatedTransaction: ethers.PopulatedTransaction | undefined;
     let txRes: ethers.providers.TransactionResponse | undefined;
-    const valueInDollar = String(getCryptoPrice(from.type));
+    const valueInDollar = String(getCryptoPrice(assetInCrypto.type));
 
     try {
-      switch (from.type) {
+      switch (assetInCrypto.type) {
         case (CryptoType.ETH, CryptoType.BNB):
           populatedTransaction = await contract?.populateTransaction.purchase();
 
           if (!populatedTransaction) break;
 
-          txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
+          txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
             value: utils.parseEther(values.from)
@@ -154,7 +154,7 @@ const Purchase: FunctionComponent = () => {
           break;
       }
 
-      if (from.type === CryptoType.BNB) {
+      if (assetInCrypto.type === CryptoType.BNB) {
         setState({
           ...state,
           txHash: txRes?.hash || '',
@@ -164,7 +164,7 @@ const Purchase: FunctionComponent = () => {
       afterTxFailed(e.message);
       navigation.goBack();
     } finally {
-      if (from.type !== CryptoType.BNB && txRes) {
+      if (assetInCrypto.type !== CryptoType.BNB && txRes) {
         afterTxHashCreated(
           wallet?.getFirstAddress() || '',
           contractAddress,
@@ -179,7 +179,7 @@ const Purchase: FunctionComponent = () => {
   useEffect(() => {
     switch (state.step) {
       case TxStep.CheckAllowance:
-        if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
+        if ([CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type)) {
           setState({ ...state, step: TxStep.None })
           return
         } else if (!isWalletUser) {
@@ -239,7 +239,7 @@ const Purchase: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+          assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
         );
         navigation.goBack();
         break;
@@ -279,8 +279,8 @@ const Purchase: FunctionComponent = () => {
         title={t('assets.purchase')}
         fromInputTitle={t('assets.purchase_value')}
         toInputTitle={t('assets.purchase_stake')}
-        from={from}
-        to={to}
+        from={assetInCrypto}
+        to={assetInToken}
         toMax={toMax}
         fromMax={fromMax}
         toBalance={toBalance}

@@ -21,8 +21,8 @@ import PurposeType from '../../enums/PurposeType';
 
 type ParamList = {
   Refund: {
-    from: Asset,
-    to: Asset,
+    assetInCrypto: Asset,
+    assetInToken: Asset,
     productId: number,
     contractAddress: string,
   };
@@ -42,19 +42,19 @@ const Refund: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { from, to, contractAddress, productId } = route.params;
+  const { assetInCrypto, assetInToken, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  const txResult = useWatingTx(state.txHash, from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const contract = getAssetTokenFromCryptoType(assetInCrypto.type, contractAddress);
+  const txResult = useWatingTx(state.txHash, assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
 
-  const fromPrice = getCryptoPrice(from.type);
+  const fromPrice = getCryptoPrice(assetInCrypto.type);
   const toPrice = getCryptoPrice(CryptoType.ELA);
-  const toBalance = to.value;
+  const toBalance = assetInToken.value;
   const fromBalance = toBalance * toPrice / fromPrice;
 
   const estimateGas = async (address: string) => {
@@ -69,7 +69,7 @@ const Refund: FunctionComponent = () => {
         setState({
           ...state,
           estimateGas: utils.formatEther(
-            estimateGas.mul(from.type === CryptoType.ETH ? gasPrice : bscGasPrice)
+            estimateGas.mul(assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice)
           ),
         });
       }
@@ -99,12 +99,12 @@ const Refund: FunctionComponent = () => {
 
       if (!populatedTransaction) return;
 
-      txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
+      txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
       })
 
-      if (from.type === CryptoType.BNB) {
+      if (assetInCrypto.type === CryptoType.BNB) {
         setState({
           ...state,
           txHash: txRes?.hash || '',
@@ -114,7 +114,7 @@ const Refund: FunctionComponent = () => {
       afterTxFailed(e);
       navigation.goBack();
     } finally {
-      if (from.type !== CryptoType.BNB && txRes) {
+      if (assetInCrypto.type !== CryptoType.BNB && txRes) {
         afterTxHashCreated(
           wallet?.getFirstAddress() || '',
           contractAddress,
@@ -134,7 +134,7 @@ const Refund: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
+          assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
         )
         navigation.goBack();
         break;
@@ -166,8 +166,8 @@ const Refund: FunctionComponent = () => {
         title={t('assets.refund')}
         fromInputTitle={t('assets.refund_value')}
         toInputTitle={t('assets.refund_stake')}
-        from={from}
-        to={to}
+        from={assetInCrypto}
+        to={assetInToken}
         values={values}
         fromPrice={fromPrice}
         toPrice={toPrice}

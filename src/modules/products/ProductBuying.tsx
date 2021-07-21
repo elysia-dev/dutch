@@ -108,13 +108,13 @@ const ProductBuying: FunctionComponent = () => {
       return alert(t('product.non_purchasable'));
     } else {
       navigation.navigate(ProductPage.Purchase, {
-        from: { // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
+        assetInCrypto: { // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
           type: state.product?.paymentMethod.toUpperCase() as CryptoType,
           unit: state.product?.paymentMethod.toUpperCase() as CryptoType,
           title: state.product?.paymentMethod.toUpperCase(),
           value: state.product?.totalValue, // 이것도 필요하던가... 아니 근데 이걸 나중에 잔고로 쓰기도 함....?ㅠㅠ
         },
-        to: {
+        assetInToken: {
           type: CryptoType.ELA,
           unit: state.product?.tokenName,
           title: state.product?.tokenName,
