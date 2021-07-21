@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, StyleProp, ViewStyle, Keyboard, TextInput, Image } from 'react-native';
+import { View, StyleProp, ViewStyle, Keyboard, TextInput, Image } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
@@ -137,5 +137,3 @@ export const TextField: FunctionComponent<Props> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({});

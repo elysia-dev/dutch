@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
+import { View, ActivityIndicator, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import {
@@ -20,17 +20,6 @@ interface IAssetGraph {
   isChartLine: boolean;
   setIsChartLine: Function;
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-  },
-});
 
 const AssetGraph: React.FC<IAssetGraph> = ({
   data = [],
@@ -54,7 +43,15 @@ const AssetGraph: React.FC<IAssetGraph> = ({
         paddingBottom: 20,
       }}>
       {chartLoading ? (
-        <View style={[styles.container, styles.horizontal]}>
+        <View
+          style={{
+            flex: 1,
+            // justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            padding: 10,
+          }}
+        >
           <ActivityIndicator size="large" color={lineColor} />
         </View>
       ) : (

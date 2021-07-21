@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next'
 import Product from '../../../types/product';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
@@ -35,7 +35,13 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
           borderRadius: 5,
         }}>
         <MapView
-          style={styles.mapStyle}
+          style={{
+            marginTop: 20,
+            marginBottom: 20,
+            height: 180,
+            width: '100%',
+            borderRadius: 5,
+          }}
           initialRegion={{
             latitude: parseFloat(props.product.data.latitude),
             longitude: parseFloat(props.product.data.longitude),
@@ -63,21 +69,3 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mapStyle: {
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height,
-    marginTop: 20,
-    marginBottom: 20,
-    height: 180,
-    width: '100%',
-    borderRadius: 5,
-  },
-});

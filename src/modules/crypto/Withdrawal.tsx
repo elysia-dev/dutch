@@ -7,7 +7,6 @@ import {
   Text,
   Keyboard,
   TouchableWithoutFeedback,
-  StyleSheet,
   Image,
   Dimensions,
 } from 'react-native';
@@ -365,7 +364,13 @@ const Withdrawal: React.FC = () => {
       {!state.scanned && (
         <BarCodeScanner
           onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+          }}
         />
       )}
       <OverlayLoading visible={loading} />
