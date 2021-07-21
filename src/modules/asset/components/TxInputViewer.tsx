@@ -12,13 +12,13 @@ import PurposeType from '../../../enums/PurposeType';
 interface Props {
   purpose: PurposeType
   current: string
-  to: {
+  dataInToken: {
     value: string, // 입력한 값
     type: string, // 화폐 단위
     price: number, // 토큰 가격
     max: number, // 사용자가 구매/환불 가능한 최대 토큰 개수
   }
-  from: {
+  dataInFiat: {
     value: string, // 입력한 값
     type: string, // 화폐 단위
     price: number, // 화폐 가격
@@ -33,15 +33,15 @@ interface Props {
 const TxInputViewer: React.FC<Props> = ({
   purpose,
   current,
-  to,
-  from,
+  dataInToken,
+  dataInFiat,
   isOverMax,
   estimatedGas,
   gasCrypto,
   insufficientGas,
 }) => {
   const { t } = useTranslation();
-  const currentTab = current === 'token' ? to : from;
+  const currentTab = current === 'token' ? dataInToken : dataInFiat;
   const maxLabel = current === 'token' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
   const maxValue = currentTab.max.toFixed(current === 'token' ? 4 : 2);
 
@@ -59,9 +59,9 @@ const TxInputViewer: React.FC<Props> = ({
         value={currentTab.value}
         type={currentTab.type}
         purpose={purpose}
-        tokenType={to.type}
-        priceInCryptocurrency={commaFormatter((Number(from.value) / from.price).toFixed(2))}
-        cryptocurrencyType={from.type}
+        tokenType={dataInToken.type}
+        priceInCryptocurrency={commaFormatter((Number(dataInFiat.value) / dataInFiat.price).toFixed(2))}
+        cryptocurrencyType={dataInFiat.type}
       />
       <View
         style={{

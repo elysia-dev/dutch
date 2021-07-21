@@ -155,13 +155,13 @@ const TxInput: React.FC<ITxInput> = ({
         <TxInputViewer
           purpose={purpose}
           current={current}
-          to={{
+          dataInToken={{
             value: values.inToken,
             type: assetInToken.unit,
             price: tokenPrice,
             max: remainingSupplyInToken ? Math.min(remainingSupplyInToken, balanceInToken) : balanceInToken,
           }}
-          from={{
+          dataInFiat={{
             value: values.inFiat,
             type: assetInCrypto.type,
             price: cryptoPrice,
