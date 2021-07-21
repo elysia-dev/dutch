@@ -40,7 +40,7 @@ const Refund: FunctionComponent = () => {
     stage: 0,
     estimateGas: '',
   });
-  const [current, setCurrent] = useState<'from' | 'to'>('to');
+  const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
   const { assetInCrypto, assetInToken, contractAddress, productId } = route.params;
   const navigation = useNavigation();

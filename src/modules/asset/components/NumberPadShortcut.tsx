@@ -43,7 +43,7 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
           }}
         >
-          {`${current === 'to' ? '+' : '$'}${commaFormatter(value)}`}
+          {`${current === 'token' ? '+' : '$'}${commaFormatter(value)}`}
         </Text>
       </TouchableOpacity>
     );
@@ -64,7 +64,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   function addValue(value: number) {
     const newInputValue = parseFloat(inputValue || '0') + value
 
-    if (current === 'from') {
+    if (current === 'fiat') {
       setValues({
         inFiat: decimalFormatter(newInputValue, 2),
         inToken: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),

@@ -41,9 +41,9 @@ const TxInputViewer: React.FC<Props> = ({
   insufficientGas,
 }) => {
   const { t } = useTranslation();
-  const currentTab = current === 'to' ? to : from;
-  const maxLabel = current === 'to' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
-  const maxValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
+  const currentTab = current === 'token' ? to : from;
+  const maxLabel = current === 'token' ? t(`assets.${purpose}_stake_available`) : t(`assets.${purpose}_value_available`);
+  const maxValue = currentTab.max.toFixed(current === 'token' ? 4 : 2);
 
   return (
     <View
@@ -75,7 +75,7 @@ const TxInputViewer: React.FC<Props> = ({
         }}
       >
         {isOverMax ? (
-          <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`} />
+          <GuideTextInvalid text={`${current === 'token' ? t(`assets.${purpose}_stake_excess`) : t(`assets.${purpose}_value_excess`)}`} />
         ) : (
           <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
         )}

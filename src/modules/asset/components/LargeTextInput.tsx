@@ -41,12 +41,12 @@ const LargeTextInput: React.FC<Props> = ({
             width: '100%',
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: current === 'to' ? 'flex-end' : 'space-between',
+            justifyContent: current === 'token' ? 'flex-end' : 'space-between',
             alignItems: 'flex-end',
             marginBottom: Platform.OS === 'ios' ? -2.5 : 0,
           }}
         >
-          {current === 'from' && <Text
+          {current === 'fiat' && <Text
             style={{
               fontSize: 25,
               color: AppColors.BLACK2,
@@ -72,7 +72,7 @@ const LargeTextInput: React.FC<Props> = ({
               {commaFormatter(value)}
             </Text>
           </View>
-          {current === 'to' && <Text
+          {current === 'token' && <Text
             style={{
               fontSize: 25,
               color: AppColors.BLACK2,
@@ -82,14 +82,14 @@ const LargeTextInput: React.FC<Props> = ({
             {' ' + type}
           </Text>}
         </View>
-        {current === 'to' && <GuideText
+        {current === 'token' && <GuideText
           text={`$ ${commaFormatter(((Number(value)) * 5).toFixed(2))} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
           style={{
             width: '100%',
             marginTop: 4,
           }}
         />}
-        {current === 'from' && <GuideText
+        {current === 'fiat' && <GuideText
           text={`${commaFormatter((Number(value) / 5).toFixed(4))} ${tokenType} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
           style={{
             width: '100%',
@@ -119,7 +119,7 @@ const LargeTextInput: React.FC<Props> = ({
             marginBottom: 9,
           }}
         >
-          {current === 'to' ? t(`assets.${purpose}_stake_placeholder`) : t(`assets.${purpose}_value_placeholder`)}
+          {current === 'token' ? t(`assets.${purpose}_stake_placeholder`) : t(`assets.${purpose}_value_placeholder`)}
         </Text>
         <View
           style={{

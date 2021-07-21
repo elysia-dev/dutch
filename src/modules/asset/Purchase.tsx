@@ -49,7 +49,7 @@ const Purchase: FunctionComponent = () => {
     estimateGas: '',
     isApproved: [CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type) ? true : false,
   });
-  const [current, setCurrent] = useState<'from' | 'to'>('to');
+  const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const navigation = useNavigation();
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);

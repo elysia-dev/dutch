@@ -38,7 +38,7 @@ interface ITxInput {
   estimateGas?: string
   disabled: boolean
   isApproved: boolean
-  setCurrent: Dispatch<SetStateAction<"from" | "to">>
+  setCurrent: Dispatch<SetStateAction<"token" | "fiat">>
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string; }>>
   createTx: () => void
 }
@@ -99,10 +99,10 @@ const TxInput: React.FC<ITxInput> = ({
         justifyContent: 'center',
       }}>
         <TouchableOpacity
-          onPress={() => setCurrent('to')}
+          onPress={() => setCurrent('token')}
           style={{
-            backgroundColor: current === 'to' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'to' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor: current === 'token' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor: current === 'token' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             display: 'flex',
             justifyContent: 'center',
@@ -115,7 +115,7 @@ const TxInput: React.FC<ITxInput> = ({
         >
           <Text
             style={{
-              color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED,
+              color: current === 'token' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
             }}
           >
@@ -123,10 +123,10 @@ const TxInput: React.FC<ITxInput> = ({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setCurrent('from')}
+          onPress={() => setCurrent('fiat')}
           style={{
-            backgroundColor: current === 'from' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'from' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor: current === 'fiat' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor: current === 'fiat' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -138,7 +138,7 @@ const TxInput: React.FC<ITxInput> = ({
         >
           <Text
             style={{
-              color: current === 'from' ? AppColors.WHITE : AppColors.DEACTIVATED,
+              color: current === 'fiat' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
             }}
           >
@@ -174,19 +174,19 @@ const TxInput: React.FC<ITxInput> = ({
         />
         <NumberPadShortcut
           current={current}
-          values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
-          inputValue={current === 'to' ? values.inToken : values.inFiat}
+          values={current === 'token' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
+          inputValue={current === 'token' ? values.inToken : values.inFiat}
           setValues={setValues}
           ELAPrice={toPrice}
         />
         <NumberPad
           addValue={(text) => {
-            const before = current === 'from' ? values.inFiat : values.inToken
+            const before = current === 'fiat' ? values.inFiat : values.inToken
             const includesComma = before.includes('.')
             if (
               text === '.' && includesComma
               || text !== '.' && !includesComma && before.length >= 12
-              || includesComma && before.split('.')[1].length >= (current === 'from' ? 2 : 6)
+              || includesComma && before.split('.')[1].length >= (current === 'fiat' ? 2 : 6)
               || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
             ) {
               return
@@ -195,7 +195,7 @@ const TxInput: React.FC<ITxInput> = ({
             const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text
             const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
-            if (current === 'from') {
+            if (current === 'fiat') {
               setValues({
                 inFiat: next,
                 inToken: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
@@ -208,11 +208,11 @@ const TxInput: React.FC<ITxInput> = ({
             }
           }}
           removeValue={() => {
-            const before = current === 'from' ? values.inFiat : values.inToken
+            const before = current === 'fiat' ? values.inFiat : values.inToken
 
             const next = before.slice(0, -1)
 
-            if (current === 'from') {
+            if (current === 'fiat') {
               setValues({
                 inFiat: next,
                 inToken: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
