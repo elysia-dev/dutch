@@ -164,8 +164,8 @@ const Refund: FunctionComponent = () => {
       <TxInput
         purpose={PurposeType.Refund}
         title={t('assets.refund')}
-        fromInputTitle={t('assets.refund_value')}
-        toInputTitle={t('assets.refund_stake')}
+        fiatInputTitle={t('assets.refund_value')}
+        tokenInputTitle={t('assets.refund_stake')}
         assetInCrypto={assetInCrypto}
         assetInToken={assetInToken}
         values={values}

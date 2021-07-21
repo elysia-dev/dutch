@@ -277,8 +277,8 @@ const Purchase: FunctionComponent = () => {
       <TxInput
         purpose={PurposeType.Purchase}
         title={t('assets.purchase')}
-        fromInputTitle={t('assets.purchase_value')}
-        toInputTitle={t('assets.purchase_stake')}
+        fiatInputTitle={t('assets.purchase_value')}
+        tokenInputTitle={t('assets.purchase_stake')}
         assetInCrypto={assetInCrypto}
         assetInToken={assetInToken}
         remainingSupplyInToken={remainingSupplyInToken}

@@ -22,8 +22,8 @@ import PurposeType from '../../../enums/PurposeType';
 interface ITxInput {
   purpose: PurposeType
   title: string
-  fromInputTitle: string
-  toInputTitle: string
+  fiatInputTitle: string
+  tokenInputTitle: string
   assetInCrypto: Asset
   assetInToken: Asset
   remainingSupplyInToken?: number
@@ -55,8 +55,8 @@ interface ITxInput {
 const TxInput: React.FC<ITxInput> = ({
   purpose,
   title,
-  fromInputTitle,
-  toInputTitle,
+  fiatInputTitle,
+  tokenInputTitle,
   assetInCrypto,
   assetInToken,
   remainingSupplyInCrypto,
@@ -119,7 +119,7 @@ const TxInput: React.FC<ITxInput> = ({
               fontFamily: AppFonts.Regular,
             }}
           >
-            {toInputTitle}
+            {tokenInputTitle}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -142,7 +142,7 @@ const TxInput: React.FC<ITxInput> = ({
               fontFamily: AppFonts.Regular,
             }}
           >
-            {fromInputTitle}
+            {fiatInputTitle}
           </Text>
         </TouchableOpacity>
       </View>
