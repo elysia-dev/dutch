@@ -32,6 +32,7 @@ import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import { Page, ProductPage } from '../../enums/pageEnum';
 import useSafeAsync from '../../utiles/useSafeAsync';
+import AppColors from '../../enums/AppColors';
 
 interface State {
   stories: Story[];

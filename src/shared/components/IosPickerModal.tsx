@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next'
 import { P1Text } from './Texts';
+import AppColors from '../../enums/AppColors';
 
 type Props = React.PropsWithChildren<{
   modalVisible: boolean;

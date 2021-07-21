@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Platform, KeyboardAvoidingView, View, SafeAreaView } from 'react-native';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   title: React.ReactNode;

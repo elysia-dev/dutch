@@ -16,6 +16,7 @@ import PriceContext from '../../../contexts/PriceContext';
 import CryptoType from '../../../enums/CryptoType';
 import getTokenLink from '../../../utiles/getTokenLink';
 import NetworkType from '../../../enums/NetworkType';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;

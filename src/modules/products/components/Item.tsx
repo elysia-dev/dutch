@@ -11,6 +11,7 @@ import EL from '../../../../src/shared/assets/images/el.png';
 import ETH from '../../../../src/shared/assets/images/eth.png';
 import BNB from '../../../../src/shared/assets/images/bnb.png';
 import { useTranslation } from 'react-i18next';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   story: Story;

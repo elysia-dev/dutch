@@ -22,6 +22,7 @@ import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   ProductBuying: {

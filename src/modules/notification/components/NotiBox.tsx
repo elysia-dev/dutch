@@ -20,6 +20,7 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 import AppFonts from '../../../enums/AppFonts';
 import getTxScanLink from '../../../utiles/getTxScanLink';
 import NetworkType from '../../../enums/NetworkType';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   notification: Notification;
