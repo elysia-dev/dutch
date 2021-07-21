@@ -349,7 +349,7 @@ const Detail: FunctionComponent = () => {
                               assetInToken: asset,
                               contractAddress: state.contractAddress,
                               productId: state.productId,
-                              toMax: state.presentSupply,
+                              remainingSupplyInToken: state.presentSupply,
                             });
                           }}
                         />

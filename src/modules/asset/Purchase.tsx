@@ -28,7 +28,7 @@ type ParamList = {
   Purchase: {
     assetInCrypto: Asset;
     assetInToken: Asset;
-    toMax: number;
+    remainingSupplyInToken: number;
     contractAddress: string;
     productId: number; // legacy
   };
@@ -36,7 +36,7 @@ type ParamList = {
 
 const Purchase: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  const { assetInCrypto, assetInToken, toMax, contractAddress, productId } = route.params;
+  const { assetInCrypto, assetInToken, remainingSupplyInToken, contractAddress, productId } = route.params;
   const [values, setValues] = useState({
     inFiat: '',
     inToken: '',
@@ -63,11 +63,11 @@ const Purchase: FunctionComponent = () => {
   const contract = getAssetTokenFromCryptoType(assetInCrypto.type, contractAddress);
   const { getBalance } = useContext(AssetContext);
 
-  const fromMax = (toMax || 0) * 5 / getCryptoPrice(assetInCrypto.type);
-  const fromPrice = getCryptoPrice(assetInCrypto.type);
-  const toPrice = getCryptoPrice(CryptoType.ELA);
-  const fromBalance = getBalance(assetInCrypto.type);
-  const toBalance = fromBalance * fromPrice / toPrice;
+  const remainingSupplyInCrypto = (remainingSupplyInToken || 0) * 5 / getCryptoPrice(assetInCrypto.type);
+  const cryptoPrice = getCryptoPrice(assetInCrypto.type);
+  const tokenPrice = getCryptoPrice(CryptoType.ELA);
+  const balanceInCrypto = getBalance(assetInCrypto.type);
+  const balanceInToken = balanceInCrypto * cryptoPrice / tokenPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -281,13 +281,13 @@ const Purchase: FunctionComponent = () => {
         toInputTitle={t('assets.purchase_stake')}
         assetInCrypto={assetInCrypto}
         assetInToken={assetInToken}
-        toMax={toMax}
-        fromMax={fromMax}
-        toBalance={toBalance}
-        fromBalance={fromBalance}
+        remainingSupplyInToken={remainingSupplyInToken}
+        remainingSupplyInCrypto={remainingSupplyInCrypto}
+        balanceInToken={balanceInToken}
+        balanceInCrypto={balanceInCrypto}
         values={values}
-        fromPrice={fromPrice}
-        toPrice={toPrice}
+        cryptoPrice={cryptoPrice}
+        tokenPrice={tokenPrice}
         current={current}
         step={state.step}
         setCurrent={setCurrent}

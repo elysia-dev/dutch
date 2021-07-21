@@ -26,12 +26,12 @@ interface ITxInput {
   toInputTitle: string
   assetInCrypto: Asset
   assetInToken: Asset
-  toMax?: number
-  fromMax?: number
-  fromPrice: number
-  toPrice: number
-  fromBalance: number
-  toBalance: number
+  remainingSupplyInToken?: number
+  remainingSupplyInCrypto?: number
+  cryptoPrice: number
+  tokenPrice: number
+  balanceInCrypto: number
+  balanceInToken: number
   values: { inFiat: string, inToken: string }
   current: string
   step: TxStep
@@ -59,12 +59,12 @@ const TxInput: React.FC<ITxInput> = ({
   toInputTitle,
   assetInCrypto,
   assetInToken,
-  fromMax,
-  toMax,
-  fromPrice,
-  toPrice,
-  fromBalance,
-  toBalance,
+  remainingSupplyInCrypto,
+  remainingSupplyInToken,
+  cryptoPrice,
+  tokenPrice,
+  balanceInCrypto,
+  balanceInToken,
   values,
   current,
   step,
@@ -83,12 +83,12 @@ const TxInput: React.FC<ITxInput> = ({
   const insets = useSafeAreaInsets();
   const valueInCrypto = parseFloat(values.inFiat) / getCryptoPrice(assetInCrypto.type);
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(assetInCrypto.type) ?
-    fromBalance < parseFloat(estimateGas) + valueInCrypto
-    : fromBalance < parseFloat(estimateGas);
+    balanceInCrypto < parseFloat(estimateGas) + valueInCrypto
+    : balanceInCrypto < parseFloat(estimateGas);
 
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(assetInCrypto.type) ?
-    valueInCrypto + parseFloat(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
-    : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
+    valueInCrypto + parseFloat(estimateGas) > (remainingSupplyInCrypto ? Math.min(remainingSupplyInCrypto, balanceInCrypto) : balanceInCrypto)
+    : valueInCrypto > (remainingSupplyInCrypto ? Math.min(remainingSupplyInCrypto, balanceInCrypto) : balanceInCrypto);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -158,14 +158,14 @@ const TxInput: React.FC<ITxInput> = ({
           to={{
             value: values.inToken,
             type: assetInToken.unit,
-            price: toPrice,
-            max: toMax ? Math.min(toMax, toBalance) : toBalance,
+            price: tokenPrice,
+            max: remainingSupplyInToken ? Math.min(remainingSupplyInToken, balanceInToken) : balanceInToken,
           }}
           from={{
             value: values.inFiat,
             type: assetInCrypto.type,
-            price: fromPrice,
-            max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
+            price: cryptoPrice,
+            max: remainingSupplyInCrypto ? Math.min(remainingSupplyInCrypto, balanceInCrypto) : balanceInCrypto,
           }}
           isOverMax={isOverMax}
           estimatedGas={estimateGas}
@@ -177,7 +177,7 @@ const TxInput: React.FC<ITxInput> = ({
           values={current === 'token' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
           inputValue={current === 'token' ? values.inToken : values.inFiat}
           setValues={setValues}
-          ELAPrice={toPrice}
+          ELAPrice={tokenPrice}
         />
         <NumberPad
           addValue={(text) => {
@@ -198,11 +198,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'fiat') {
               setValues({
                 inFiat: next,
-                inToken: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
+                inToken: decimalFormatter(parseFloat(removedDotNext) / tokenPrice, 6),
               })
             } else {
               setValues({
-                inFiat: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
+                inFiat: decimalFormatter(parseFloat(removedDotNext) * tokenPrice, 2),
                 inToken: next,
               })
             }
@@ -215,11 +215,11 @@ const TxInput: React.FC<ITxInput> = ({
             if (current === 'fiat') {
               setValues({
                 inFiat: next,
-                inToken: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
+                inToken: decimalFormatter(parseFloat(next || '0') / tokenPrice, 6),
               })
             } else {
               setValues({
-                inFiat: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
+                inFiat: decimalFormatter(parseFloat(next || '0') * tokenPrice, 2),
                 inToken: next,
               })
             }
@@ -254,7 +254,7 @@ const TxInput: React.FC<ITxInput> = ({
         assetTitle={assetInToken.title}
         assetUnit={assetInToken.unit}
         values={values}
-        priceInCryptocurrency={fromPrice}
+        priceInCryptocurrency={cryptoPrice}
         cryptocurrencyType={assetInCrypto.type}
         estimateGas={estimateGas}
         gasCrypto={gasCrypto}

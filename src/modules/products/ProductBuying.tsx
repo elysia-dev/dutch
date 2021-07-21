@@ -120,7 +120,7 @@ const ProductBuying: FunctionComponent = () => {
           title: state.product?.tokenName,
           value: state.product?.totalValue,
         },
-        toMax: parseFloat(state.product?.presentValue || '0'),
+        remainingSupplyInToken: parseFloat(state.product?.presentValue || '0'),
         contractAddress: state.product?.contractAddress,
         productId: state.product?.id,
       });

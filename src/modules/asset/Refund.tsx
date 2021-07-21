@@ -52,10 +52,10 @@ const Refund: FunctionComponent = () => {
   const contract = getAssetTokenFromCryptoType(assetInCrypto.type, contractAddress);
   const txResult = useWatingTx(state.txHash, assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
 
-  const fromPrice = getCryptoPrice(assetInCrypto.type);
-  const toPrice = getCryptoPrice(CryptoType.ELA);
-  const toBalance = assetInToken.value;
-  const fromBalance = toBalance * toPrice / fromPrice;
+  const cryptoPrice = getCryptoPrice(assetInCrypto.type);
+  const tokenPrice = getCryptoPrice(CryptoType.ELA);
+  const balanceInToken = assetInToken.value;
+  const balanceInCrypto = balanceInToken * tokenPrice / cryptoPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -169,10 +169,10 @@ const Refund: FunctionComponent = () => {
         assetInCrypto={assetInCrypto}
         assetInToken={assetInToken}
         values={values}
-        fromPrice={fromPrice}
-        toPrice={toPrice}
-        fromBalance={fromBalance}
-        toBalance={toBalance}
+        cryptoPrice={cryptoPrice}
+        tokenPrice={tokenPrice}
+        balanceInCrypto={balanceInCrypto}
+        balanceInToken={balanceInToken}
         current={current}
         step={state.step}
         disabled={parseInt(values.inToken || '0') < 0.01}
