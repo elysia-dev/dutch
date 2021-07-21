@@ -32,14 +32,14 @@ interface ITxInput {
   toPrice: number
   fromBalance: number
   toBalance: number
-  values: { from: string, to: string }
+  values: { inFiat: string, inToken: string }
   current: string
   step: TxStep
   estimateGas?: string
   disabled: boolean
   isApproved: boolean
   setCurrent: Dispatch<SetStateAction<"from" | "to">>
-  setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
+  setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string; }>>
   createTx: () => void
 }
 
@@ -81,7 +81,7 @@ const TxInput: React.FC<ITxInput> = ({
   const { t } = useTranslation();
   const gasCrypto = [assetInCrypto.type, assetInToken.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
-  const valueInCrypto = parseFloat(values.from) / getCryptoPrice(assetInCrypto.type);
+  const valueInCrypto = parseFloat(values.inFiat) / getCryptoPrice(assetInCrypto.type);
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(assetInCrypto.type) ?
     fromBalance < parseFloat(estimateGas) + valueInCrypto
     : fromBalance < parseFloat(estimateGas);
@@ -156,13 +156,13 @@ const TxInput: React.FC<ITxInput> = ({
           purpose={purpose}
           current={current}
           to={{
-            value: values.to,
+            value: values.inToken,
             type: assetInToken.unit,
             price: toPrice,
             max: toMax ? Math.min(toMax, toBalance) : toBalance,
           }}
           from={{
-            value: values.from,
+            value: values.inFiat,
             type: assetInCrypto.type,
             price: fromPrice,
             max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
@@ -175,13 +175,13 @@ const TxInput: React.FC<ITxInput> = ({
         <NumberPadShortcut
           current={current}
           values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
-          inputValue={current === 'to' ? values.to : values.from}
+          inputValue={current === 'to' ? values.inToken : values.inFiat}
           setValues={setValues}
           ELAPrice={toPrice}
         />
         <NumberPad
           addValue={(text) => {
-            const before = current === 'from' ? values.from : values.to
+            const before = current === 'from' ? values.inFiat : values.inToken
             const includesComma = before.includes('.')
             if (
               text === '.' && includesComma
@@ -197,30 +197,30 @@ const TxInput: React.FC<ITxInput> = ({
 
             if (current === 'from') {
               setValues({
-                from: next,
-                to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
+                inFiat: next,
+                inToken: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
               })
             } else {
               setValues({
-                from: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
-                to: next,
+                inFiat: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
+                inToken: next,
               })
             }
           }}
           removeValue={() => {
-            const before = current === 'from' ? values.from : values.to
+            const before = current === 'from' ? values.inFiat : values.inToken
 
             const next = before.slice(0, -1)
 
             if (current === 'from') {
               setValues({
-                from: next,
-                to: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
+                inFiat: next,
+                inToken: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
               })
             } else {
               setValues({
-                from: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
-                to: next,
+                inFiat: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
+                inToken: next,
               })
             }
           }}

@@ -9,7 +9,7 @@ interface Props {
   current: string
   values: number[]
   inputValue: string
-  setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
+  setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string; }>>
   ELAPrice: number
 }
 
@@ -26,7 +26,7 @@ const NumberPadShortcut: React.FC<Props> = ({
         key={value}
         style={{
           borderRadius: 5,
-          borderColor: '#C8C8C8', //
+          borderColor: '#C8C8C8',
           borderWidth: 1,
           width: 56,
           height: 27,
@@ -66,13 +66,13 @@ const NumberPadShortcut: React.FC<Props> = ({
 
     if (current === 'from') {
       setValues({
-        from: decimalFormatter(newInputValue, 2),
-        to: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),
+        inFiat: decimalFormatter(newInputValue, 2),
+        inToken: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),
       })
     } else {
       setValues({
-        from: decimalFormatter(newInputValue * ELAPrice, 2),
-        to: sliceZero(decimalFormatter(newInputValue, 6)),
+        inFiat: decimalFormatter(newInputValue * ELAPrice, 2),
+        inToken: sliceZero(decimalFormatter(newInputValue, 6)),
       })
     }
   }

@@ -38,8 +38,8 @@ const Purchase: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
   const { assetInCrypto, assetInToken, toMax, contractAddress, productId } = route.params;
   const [values, setValues] = useState({
-    from: '',
-    to: '',
+    inFiat: '',
+    inToken: '',
   });
   const [state, setState] = useState({
     txHash: '',
@@ -131,7 +131,7 @@ const Purchase: FunctionComponent = () => {
           txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
             to: populatedTransaction.to,
             data: populatedTransaction.data,
-            value: utils.parseEther(values.from)
+            value: utils.parseEther(values.inFiat)
               .mul(constants.WeiPerEther)
               .div(utils.parseEther(valueInDollar)), // dollar to crypto
           })
@@ -139,7 +139,7 @@ const Purchase: FunctionComponent = () => {
           break;
         default:
           populatedTransaction = await contract?.populateTransaction.purchase(
-            utils.parseEther(values.from)
+            utils.parseEther(values.inFiat)
               .mul(constants.WeiPerEther)
               .div(utils.parseEther(valueInDollar))
           )
@@ -292,7 +292,7 @@ const Purchase: FunctionComponent = () => {
         step={state.step}
         setCurrent={setCurrent}
         setValues={setValues}
-        disabled={parseInt(values.to || '0') < 1}
+        disabled={parseInt(values.inToken || '0') < 1}
         estimateGas={state.estimateGas}
         isApproved={state.isApproved}
         createTx={() => {
@@ -305,7 +305,7 @@ const Purchase: FunctionComponent = () => {
           } else {
             Server.requestTransaction(
               productId,
-              parseFloat(values.to),
+              parseFloat(values.inToken),
               'buying',
             ).then((res) => {
               setState({
@@ -329,7 +329,7 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.to)}
+      valueTo={parseFloat(values.inToken)}
       productId={productId}
       type={'buying'}
       contractAddress={contractAddress}

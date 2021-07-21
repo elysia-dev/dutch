@@ -14,7 +14,7 @@ interface Props {
   purpose: PurposeType
   assetTitle: string
   assetUnit: string
-  values: { from: string, to: string }
+  values: { inFiat: string, inToken: string }
   priceInCryptocurrency: number
   cryptocurrencyType: string
   estimateGas: string
@@ -179,7 +179,7 @@ const ConfirmationModal: React.FC<Props> = ({
                       fontFamily: AppFonts.Bold,
                     }}
                   >
-                    {`$ ${commaFormatter(values.from)}`}
+                    {`$ ${commaFormatter(values.inFiat)}`}
                   </Text>
                   <Text
                     style={{
@@ -189,7 +189,7 @@ const ConfirmationModal: React.FC<Props> = ({
                       fontFamily: AppFonts.Regular,
                     }}
                   >
-                    {`${commaFormatter((Number(values.from) / priceInCryptocurrency).toFixed(2))} ${cryptocurrencyType}`}
+                    {`${commaFormatter((Number(values.inFiat) / priceInCryptocurrency).toFixed(2))} ${cryptocurrencyType}`}
                   </Text>
                 </View>
               </View>
@@ -223,7 +223,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontFamily: AppFonts.Bold,
                   }}
                 >
-                  {`${commaFormatter(values.to)} ${assetUnit}`}
+                  {`${commaFormatter(values.inToken)} ${assetUnit}`}
                 </Text>
               </View>
               <View

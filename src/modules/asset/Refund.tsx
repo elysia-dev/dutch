@@ -30,8 +30,8 @@ type ParamList = {
 
 const Refund: FunctionComponent = () => {
   const [values, setValues] = useState({
-    from: '',
-    to: ''
+    inFiat: '',
+    inToken: ''
   })
   const [state, setState] = useState({
     txHash: '',
@@ -94,7 +94,7 @@ const Refund: FunctionComponent = () => {
 
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(values.to)
+        utils.parseEther(values.inToken)
       )
 
       if (!populatedTransaction) return;
@@ -175,7 +175,7 @@ const Refund: FunctionComponent = () => {
         toBalance={toBalance}
         current={current}
         step={state.step}
-        disabled={parseInt(values.to || '0') < 0.01}
+        disabled={parseInt(values.inToken || '0') < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
         estimateGas={state.estimateGas}
@@ -184,7 +184,7 @@ const Refund: FunctionComponent = () => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating })
           } else {
-            Server.requestTransaction(productId, parseInt(values.to), 'refund')
+            Server.requestTransaction(productId, parseInt(values.inToken), 'refund')
               .then((res) => {
                 setState({
                   ...state,
@@ -207,7 +207,7 @@ const Refund: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.to)}
+      valueTo={parseFloat(values.inToken)}
       productId={productId}
       type={'refund'}
       contractAddress={contractAddress}
