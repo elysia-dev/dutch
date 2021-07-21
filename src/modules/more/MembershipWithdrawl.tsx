@@ -9,6 +9,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
 import { SignInStatus } from '../../enums/SignInStatus';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships } = useContext(UserContext);
@@ -87,7 +88,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               height: 'auto',
               flexDirection: 'column',
               padding: 20,
-              backgroundColor: '#fff',
+              backgroundColor: AppColors.WHITE,
               elevation: 6,
               shadowColor: '#1C1C1C4D',
               shadowOffset: { width: 0, height: 0 },

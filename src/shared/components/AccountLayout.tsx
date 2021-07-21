@@ -24,7 +24,7 @@ const AccountLayout: FunctionComponent<Props> = props => {
       style={{
         paddingTop: Platform.OS === 'android' ? 25 : 0,
         height: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         overflow: 'hidden',
       }}
     >

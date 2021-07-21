@@ -10,6 +10,7 @@ import SheetHeader from '../../shared/components/SheetHeader';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   LegacyOwnershipRefund: {
@@ -48,7 +49,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
           paddingLeft: 20,
           paddingRight: 20,
           height: '100%',
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
         }}>
         <View
           style={{

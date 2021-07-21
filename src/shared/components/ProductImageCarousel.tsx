@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Dimensions, View, } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CachedImage from './CachedImage';
+import AppColors from '../../enums/AppColors';
 
 const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) => {
   const [current, setCurrent] = useState(0);
@@ -62,7 +63,7 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
             borderRadius: 5,
             marginLeft: 2,
             marginRight: 2,
-            backgroundColor: '#3679B5',
+            backgroundColor: AppColors.MAIN,
           }}
           inactiveDotStyle={{
             backgroundColor: '#BDD3E6',

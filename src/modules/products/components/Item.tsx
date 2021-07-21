@@ -33,7 +33,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
       }}>
       <Animated.View
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
           elevation: 3,
           height: 516,
           marginLeft: 3,

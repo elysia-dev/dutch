@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import { BackButton } from './BackButton';
+import AppColors from '../../enums/AppColors';
+import App from '../../../App';
 
 interface Props {
   title: string;
@@ -68,7 +70,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
         style={{
           paddingTop: Platform.OS === 'android' ? 25 : 0,
           height: '100%',
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
           overflow: 'hidden',
         }}
       >

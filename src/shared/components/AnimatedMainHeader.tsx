@@ -16,7 +16,7 @@ const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> =
       <Animated.View
         style={{
           flexDirection: 'row',
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
           elevation: scrollY.interpolate({
             inputRange: [-1000, 0, 15, 1000],
             outputRange: [0, 0, 5, 5],

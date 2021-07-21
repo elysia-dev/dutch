@@ -11,6 +11,7 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
+import AppColors from '../../enums/AppColors';
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -75,9 +76,6 @@ const Contact: FunctionComponent = () => {
   };
 
   return (
-    // <SafeAreaView
-    //   style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}
-    //   forceInset={{ bottom: 'always' }}>
     <WrapperLayout
       isScrolling={false}
       backButtonHandler={() => {
@@ -100,7 +98,7 @@ const Contact: FunctionComponent = () => {
             paddingTop: 15,
             paddingBottom: 15,
             borderRadius: 10,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             shadowOffset: { width: 0, height: 2 },
             shadowColor: '#00000029',
             shadowOpacity: 0.8,
@@ -150,7 +148,6 @@ const Contact: FunctionComponent = () => {
         />
       }
     />
-    // </SafeAreaView>
   );
 };
 

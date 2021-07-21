@@ -120,7 +120,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         width: '100%',
         flex: 1,
         marginBottom: 40,

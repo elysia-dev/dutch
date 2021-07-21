@@ -47,6 +47,7 @@ import { Page } from '../../enums/pageEnum';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 import PriceContext from '../../contexts/PriceContext';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   resetHandler: () => void;
@@ -288,7 +289,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   shadowOffset: { width: 1, height: 2 },
                   shadowOpacity: 0.7,
                   shadowRadius: 4,
-                  backgroundColor: '#fff',
+                  backgroundColor: AppColors.WHITE,
                   flexDirection: 'column',
                   padding: 20,
                 }}>
@@ -304,7 +305,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     style={{
                       width: 40,
                       height: 40,
-                      backgroundColor: '#fff',
+                      backgroundColor: AppColors.WHITE,
                       elevation: 2,
                       borderRadius: 21,
                       shadowColor: '#1C1C1C4D',

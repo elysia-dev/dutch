@@ -23,6 +23,7 @@ import { FlatButton } from '../../shared/components/FlatButton';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
 import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -132,7 +133,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           style={{
             position: 'absolute',
             zIndex: 5,
-            backgroundColor: '#3679B5',
+            backgroundColor: AppColors.MAIN,
             bottom: scrollX.interpolate({
               inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
               outputRange: [

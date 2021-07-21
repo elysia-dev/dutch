@@ -154,7 +154,7 @@ const MainInfo: FunctionComponent = () => {
         width: '100%',
         height: '100%',
         top: 0,
-        backgroundColor: '#FFF',
+        backgroundColor: AppColors.WHITE,
       }}>
       <AnimatedMainHeader title={t('more_label.more')} scrollY={scrollY} />
       <Animated.ScrollView

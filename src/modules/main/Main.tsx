@@ -17,6 +17,7 @@ import { Main as DashBoardMain } from '../dashboard/Main';
 import Notifications from '../notification/Notifications';
 import UserContext from '../../contexts/UserContext';
 import { MainPage } from '../../enums/pageEnum';
+import AppColors from '../../enums/AppColors';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +26,7 @@ const Main: FunctionComponent = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: '#FFF' }}
+      style={{ flex: 1, backgroundColor: AppColors.WHITE }}
       forceInset={{ top: 'never', bottom: 'always' }}>
       <Tab.Navigator
         initialRouteName="DashboardMain"

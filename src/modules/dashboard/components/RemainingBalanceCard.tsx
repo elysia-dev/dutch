@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { View } from 'react-native';
 import { P1Text, P2Text, H2Text } from '../../../shared/components/Texts';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   totalBalance: number;
@@ -15,7 +15,7 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         width: '99%',
         height: 205,
         borderRadius: 10,

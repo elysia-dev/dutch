@@ -98,7 +98,7 @@ export const Main: React.FC = () => {
         style={{
           width: '100%',
           height: '100%',
-          backgroundColor: 'white',
+          backgroundColor: AppColors.WHITE,
         }}
         refreshControl={
           user.provider !== ProviderType.GUEST || isWalletUser ? (

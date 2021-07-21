@@ -1,19 +1,20 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, ViewStyle, TextStyle, TouchableOpacity, Text } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
 
 const handleThemeType = (variant: string | undefined) => {
   switch (variant) {
     case 'WhiteTheme':
       return {
         borderWidth: 1,
-        borderColor: '#3679B5',
-        backgroundColor: '#FFFFFF',
+        borderColor: AppColors.MAIN,
+        backgroundColor: AppColors.WHITE,
       };
     case 'GrayTheme':
       return {
         borderWidth: 0,
-        borderColor: '#FFFFFF',
+        borderColor: AppColors.WHITE,
         backgroundColor: '#AAAAAA',
       };
     case '':
@@ -21,8 +22,8 @@ const handleThemeType = (variant: string | undefined) => {
     default:
       return {
         borderWidth: 0,
-        borderColor: '#FFFFFF',
-        backgroundColor: '#3679B5',
+        borderColor: AppColors.WHITE,
+        backgroundColor: AppColors.MAIN,
       };
   }
 };

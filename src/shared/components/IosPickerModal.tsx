@@ -29,7 +29,7 @@ const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
         <View
           style={{
             zIndex: 3,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             position: 'absolute',
             top: 0,
             width: '100%',

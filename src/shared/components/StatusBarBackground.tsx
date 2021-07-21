@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { View, Platform } from 'react-native';
+import AppColors from '../../enums/AppColors';
 
 class StatusBarBackground extends Component {
   render() {
@@ -8,7 +9,7 @@ class StatusBarBackground extends Component {
       <View
         style={{
           height: (Platform.OS === 'ios') ? 180 : 0,
-          backgroundColor: 'white',
+          backgroundColor: AppColors.WHITE,
         }}
       />
     );

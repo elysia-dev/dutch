@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, ScrollView, Image, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BackButton } from '../../shared/components/BackButton';
 import {
@@ -178,7 +178,7 @@ const Detail: FunctionComponent = () => {
   return (
     <>
       <FlatList
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: AppColors.WHITE }}
         data={
           filter === 0
             ? state.transactions

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
+import AppColors from '../../../enums/AppColors';
 
 const Layout: React.FC = (props) => {
   return (
     <View style={{
       paddingTop: Platform.OS === 'android' ? 25 : 0,
       height: '100%',
-      backgroundColor: 'white',
+      backgroundColor: AppColors.WHITE,
       overflow: 'hidden'
     }}>
       <View
@@ -14,7 +15,7 @@ const Layout: React.FC = (props) => {
           height: '100%',
           marginRight: '5%',
           marginLeft: '5%',
-          backgroundColor: 'white'
+          backgroundColor: AppColors.WHITE,
         }}>
         {props.children}
       </View>

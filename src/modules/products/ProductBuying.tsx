@@ -150,7 +150,7 @@ const ProductBuying: FunctionComponent = () => {
     <>
       <View
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
           height: '100%',
           width: '100%',
         }}
@@ -160,7 +160,7 @@ const ProductBuying: FunctionComponent = () => {
           scrollToOverflowEnabled={true}
           style={{
             height: '100%',
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
           }}>
           <View
             style={{

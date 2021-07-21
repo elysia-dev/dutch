@@ -13,6 +13,7 @@ import { BackButton } from './BackButton';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   title: string;
@@ -72,7 +73,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
       style={{
         paddingTop: Platform.OS === 'android' ? 25 : 0,
         height: '100%',
-        backgroundColor: 'blue', // '#fff',
+        backgroundColor: AppColors.WHITE,
         overflow: 'hidden',
         ...(props.style as {}),
       }}

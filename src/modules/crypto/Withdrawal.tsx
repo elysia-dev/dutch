@@ -168,7 +168,7 @@ const Withdrawal: React.FC = () => {
   }, [value, state.address]);
 
   return (
-    <View style={{ height: '100%', backgroundColor: '#fff' }}>
+    <View style={{ height: '100%', backgroundColor: AppColors.WHITE }}>
       <SheetHeader title={t('wallet.withdrawal')} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View

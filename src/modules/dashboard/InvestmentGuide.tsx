@@ -14,6 +14,7 @@ import { H2Text, P1Text } from '../../shared/components/Texts';
 import QuitIcon from '../products/images/quitbutton.png';
 import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const InvestmentGuide: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -82,7 +83,7 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
       );
     });
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF', paddingTop: 55 }}>
+    <View style={{ flex: 1, backgroundColor: AppColors.WHITE, paddingTop: 55 }}>
       <TouchableOpacity
         onPress={() => {
           navigation.goBack();

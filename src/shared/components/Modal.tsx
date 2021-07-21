@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Modal as RNModal, TouchableOpacity, View, Image } from 'react-native';
 import QuitButtonImg from '../assets/images/quitbutton.png';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   visible: boolean;
@@ -27,7 +28,7 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
         >
           <View
             style={{
-              backgroundColor: '#fff',
+              backgroundColor: AppColors.WHITE,
               borderRadius: 20,
               alignItems: 'center',
               elevation: 10,

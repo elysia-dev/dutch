@@ -14,6 +14,7 @@ import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
 import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const RemainingBalance: FunctionComponent<{}> = () => {
   const defaultUser = {
@@ -59,7 +60,7 @@ const RemainingBalance: FunctionComponent<{}> = () => {
                 }}>
                 <Circle
                   style={{
-                    backgroundColor: '#3679b5',
+                    backgroundColor: AppColors.MAIN,
                     marginRight: 10,
                     top: 6,
                   }}
@@ -72,7 +73,7 @@ const RemainingBalance: FunctionComponent<{}> = () => {
               <View style={{ flexDirection: 'row', marginRight: '5%' }}>
                 <Circle
                   style={{
-                    backgroundColor: '#3679b5',
+                    backgroundColor: AppColors.MAIN,
                     marginRight: 10,
                     top: 6,
                   }}

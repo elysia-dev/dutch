@@ -9,6 +9,7 @@ import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { TextField } from '../../../shared/components/TextField';
 import { P1Text } from '../../../shared/components/Texts';
 import Circle from '../../../shared/components/Circle';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   modalHandler: () => void;
@@ -112,7 +113,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         paddingRight: 20,
         height: '70%',
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         justifyContent: 'center',
       }}>
       <View style={{ width: '100%', height: '100%' }}>
@@ -164,7 +165,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
             }}>
             <Circle
               style={{
-                backgroundColor: '#3679b5',
+                backgroundColor: AppColors.MAIN,
                 marginRight: 10,
                 top: 6,
               }}
@@ -177,7 +178,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
           <View style={{ flexDirection: 'row', marginRight: '5%' }}>
             <Circle
               style={{
-                backgroundColor: '#3679b5',
+                backgroundColor: AppColors.MAIN,
                 marginRight: 10,
                 top: 6,
               }}
@@ -199,7 +200,7 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
               marginLeft: 'auto',
               marginRight: 'auto',
               marginTop: 10,
-              backgroundColor: '#3679B5',
+              backgroundColor: AppColors.MAIN,
             }}
             handler={() => {
               if (checkWithdrawInput()) {

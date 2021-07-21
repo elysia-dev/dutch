@@ -248,7 +248,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         </Animated.View>
         <Animated.View
           style={{
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             paddingTop: 30,
             paddingBottom: 60,
             opacity: animatedValue.interpolate({

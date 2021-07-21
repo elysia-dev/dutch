@@ -19,6 +19,7 @@ import ProviderType from '../../../enums/ProviderType';
 import { TextField } from '../../../shared/components/TextField';
 import UserContext from '../../../contexts/UserContext';
 import SheetHeader from '../../../shared/components/SheetHeader';
+import AppColors from '../../../enums/AppColors';
 
 type ButtonProps = {
   title: string;
@@ -185,7 +186,7 @@ const PaymentSelection: React.FC<{
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         height: '100%',
       }}>
       <SheetHeader title={t('product.select_payment')} />
@@ -193,7 +194,7 @@ const PaymentSelection: React.FC<{
         style={{
           paddingLeft: 20,
           paddingRight: 20,
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
         }}>
         <View style={{ marginTop: 40 }}>
           <MetaMaskButton

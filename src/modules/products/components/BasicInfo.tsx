@@ -33,7 +33,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         paddingTop: 20,
         paddingLeft: '5%',
         paddingRight: '5%',
@@ -71,7 +71,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   );
                 }}
                 style={{
-                  backgroundColor: '#fff',
+                  backgroundColor: AppColors.WHITE,
                   width: 120,
                   height: 31,
                   borderRadius: 5,

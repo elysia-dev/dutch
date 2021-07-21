@@ -116,7 +116,7 @@ const MainList: FunctionComponent = () => {
         width: '100%',
         height: '100%',
         top: 0,
-        backgroundColor: '#FFF',
+        backgroundColor: AppColors.WHITE,
       }}>
       <ScrollView
         scrollEnabled={!state.activeStory}
@@ -134,7 +134,7 @@ const MainList: FunctionComponent = () => {
             }}>
             <View
               style={{
-                backgroundColor: '#fff',
+                backgroundColor: AppColors.WHITE,
                 shadowOffset: { width: 1, height: 1 },
                 shadowColor: '#00000033',
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
@@ -149,7 +149,7 @@ const MainList: FunctionComponent = () => {
                 }}
                 label={t('product_label.product')}
               />
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={{
                   alignSelf: "center",
                   marginBottom: 30,
@@ -161,7 +161,7 @@ const MainList: FunctionComponent = () => {
                   })
                 }}
               >
-                <Image 
+                <Image
                   source={require("./images/infomation.png")}
                   style={{
                     width: 20,

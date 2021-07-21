@@ -19,6 +19,7 @@ import UserContext from '../../contexts/UserContext';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import WalletContext from '../../contexts/WalletContext';
 import EspressoV2 from '../../api/EspressoV2';
+import AppColors from '../../enums/AppColors';
 
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -155,7 +156,7 @@ const Notifications: FunctionComponent = () => {
         width: '100%',
         height: '100%',
         top: 0,
-        backgroundColor: '#FFF',
+        backgroundColor: AppColors.WHITE,
       }}>
       <AnimatedMainHeader title={t('notification_label.notification')} scrollY={scrollY} />
       <Animated.ScrollView
