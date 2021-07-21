@@ -7,10 +7,10 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
 } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import { BackButton } from './BackButton';
-import FullScreenWrapper from './FullScreenWrapper';
 
 interface Props {
   title: string;
@@ -64,7 +64,14 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <FullScreenWrapper>
+      <SafeAreaView
+        style={{
+          paddingTop: Platform.OS === 'android' ? 25 : 0,
+          height: '100%',
+          backgroundColor: '#fff',
+          overflow: 'hidden',
+        }}
+      >
         <Animated.View
           style={{
             marginLeft: '5%',
@@ -166,7 +173,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             )}
           </ConditionalKeyboardAvoidingView>
         </ScrollingView>
-      </FullScreenWrapper>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
