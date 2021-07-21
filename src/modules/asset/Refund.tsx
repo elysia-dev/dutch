@@ -166,8 +166,8 @@ const Refund: FunctionComponent = () => {
         title={t('assets.refund')}
         fromInputTitle={t('assets.refund_value')}
         toInputTitle={t('assets.refund_stake')}
-        from={assetInCrypto}
-        to={assetInToken}
+        assetInCrypto={assetInCrypto}
+        assetInToken={assetInToken}
         values={values}
         fromPrice={fromPrice}
         toPrice={toPrice}

@@ -24,8 +24,8 @@ interface ITxInput {
   title: string
   fromInputTitle: string
   toInputTitle: string
-  from: Asset
-  to: Asset
+  assetInCrypto: Asset
+  assetInToken: Asset
   toMax?: number
   fromMax?: number
   fromPrice: number
@@ -57,8 +57,8 @@ const TxInput: React.FC<ITxInput> = ({
   title,
   fromInputTitle,
   toInputTitle,
-  from,
-  to,
+  assetInCrypto,
+  assetInToken,
   fromMax,
   toMax,
   fromPrice,
@@ -79,14 +79,14 @@ const TxInput: React.FC<ITxInput> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
-  const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
+  const gasCrypto = [assetInCrypto.type, assetInToken.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
   const insets = useSafeAreaInsets();
-  const valueInCrypto = parseFloat(values.from) / getCryptoPrice(from.type);
-  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
+  const valueInCrypto = parseFloat(values.from) / getCryptoPrice(assetInCrypto.type);
+  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(assetInCrypto.type) ?
     fromBalance < parseFloat(estimateGas) + valueInCrypto
     : fromBalance < parseFloat(estimateGas);
 
-  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
+  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(assetInCrypto.type) ?
     valueInCrypto + parseFloat(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
     : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
 
@@ -157,13 +157,13 @@ const TxInput: React.FC<ITxInput> = ({
           current={current}
           to={{
             value: values.to,
-            type: to.unit,
+            type: assetInToken.unit,
             price: toPrice,
             max: toMax ? Math.min(toMax, toBalance) : toBalance,
           }}
           from={{
             value: values.from,
-            type: from.type,
+            type: assetInCrypto.type,
             price: fromPrice,
             max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
           }}
@@ -251,11 +251,11 @@ const TxInput: React.FC<ITxInput> = ({
         setModalVisible={setModalVisible}
         title={title}
         purpose={purpose}
-        assetTitle={to.title}
-        assetUnit={to.unit}
+        assetTitle={assetInToken.title}
+        assetUnit={assetInToken.unit}
         values={values}
         priceInCryptocurrency={fromPrice}
-        cryptocurrencyType={from.type}
+        cryptocurrencyType={assetInCrypto.type}
         estimateGas={estimateGas}
         gasCrypto={gasCrypto}
         isApproved={isApproved}

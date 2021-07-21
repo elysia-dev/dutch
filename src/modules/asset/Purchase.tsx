@@ -279,8 +279,8 @@ const Purchase: FunctionComponent = () => {
         title={t('assets.purchase')}
         fromInputTitle={t('assets.purchase_value')}
         toInputTitle={t('assets.purchase_stake')}
-        from={assetInCrypto}
-        to={assetInToken}
+        assetInCrypto={assetInCrypto}
+        assetInToken={assetInToken}
         toMax={toMax}
         fromMax={fromMax}
         toBalance={toBalance}
