@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
+import AppColors from '../../enums/AppColors';
 
 const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
   nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia) },
@@ -12,7 +13,7 @@ const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
   const { t } = useTranslation();
 
   return (
-    <View style={{ width: '100%', height: '100%', backgroundColor: '#3679B5' }}>
+    <View style={{ width: '100%', height: '100%', backgroundColor: AppColors.MAIN }}>
       <Image
         style={{
           width: 120,

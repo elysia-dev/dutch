@@ -52,7 +52,7 @@ const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
           <TouchableOpacity onPress={props.doneHandler}>
             <P1Text
               label={t('more_label.done')}
-              style={{ color: '#3679B5' }}
+              style={{ color: AppColors.MAIN }}
             />
           </TouchableOpacity>
         </View>

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import Product from '../../../types/Product';
 import { P2Text, H3Text, P1Text, H2Text } from '../../../shared/components/Texts';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;
@@ -66,10 +67,10 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           marginTop: 5,
           marginBottom: 20,
         }}>
-        <P1Text 
+        <P1Text
           style={{
             color: "#3679b5"
-            
+
           }}
           label={t('product_label.expected_return')} />
         <P1Text
@@ -80,10 +81,10 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
             state.tokenCount,
             2,
           )}
-          style={{ color: '#3679b5' }}
+          style={{ color: AppColors.MAIN }}
         />
       </View>
-      
+
     </View>
   );
 };

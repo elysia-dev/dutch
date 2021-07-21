@@ -47,7 +47,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           marginBottom: 13
         }}>
         <H3Text style={{
-          color: '#3679B5',
+          color: AppColors.MAIN,
           display: product.status === ProductStatus.SALE ? "flex" : "none"
         }}
           label={"FUNDING"} />
