@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useState, useContext } from 'react';
 import { View, Modal, Image } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text, H2Text } from '../../shared/components/Texts';
 import { Modal as Modals } from '../../shared/components/Modal';
@@ -12,7 +13,6 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import AcceptedImg from '../account/images/accepted.png';
 import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
-import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
 import AppColors from '../../enums/AppColors';
 

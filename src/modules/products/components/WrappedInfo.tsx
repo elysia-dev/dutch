@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
-import moment from 'moment';
 import DesView from './DesView';
 import AppColors from '../../../enums/AppColors';
 

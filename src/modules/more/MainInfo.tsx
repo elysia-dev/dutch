@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { ScrollView } from 'react-native-gesture-handler';
 import { MorePage } from '../../enums/pageEnum';
 import Exchange00 from './images/bithumb_logo.png';
 import Exchange01 from './images/bithumb_global_logo.png';
@@ -23,7 +24,6 @@ import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
-import { ScrollView } from 'react-native-gesture-handler';
 import ExchangeButton from './components/ExchangeButton';
 
 const MainInfo: FunctionComponent = () => {

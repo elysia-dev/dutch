@@ -5,7 +5,7 @@ import {
   StyleProp,
   ViewStyle,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import BackButtonImg from "../assets/images/backbutton.png";
 import BackButtonWhiteImg from "../assets/images/backbutton_white.png";

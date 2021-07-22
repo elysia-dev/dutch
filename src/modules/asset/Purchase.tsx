@@ -56,9 +56,7 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
-    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type)
-      ? true
-      : false,
+    isApproved: !![CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type),
   });
   const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const navigation = useNavigation();

@@ -2,13 +2,13 @@ import React, { FunctionComponent, useState } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
+import { useTranslation } from 'react-i18next';
 import investmentGuide1 from './images/investmentGuide1.png';
 import investmentGuide2 from './images/investmentGuide2.png';
 import investmentGuide3 from './images/investmentGuide3.png';
 import investmentGuide4 from './images/investmentGuide4.png';
 import { H2Text, P1Text } from '../../shared/components/Texts';
 import QuitIcon from '../products/images/quitbutton.png';
-import { useTranslation } from 'react-i18next';
 import Circle from '../../shared/components/Circle';
 import AppColors from '../../enums/AppColors';
 

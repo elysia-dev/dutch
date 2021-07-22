@@ -9,11 +9,11 @@ const ExchangeButton: React.FC<{
   url,
   img,
 }) => {
-  return(
+  return (
     <TouchableOpacity
       style={{
         width: 100,
-        marginHorizontal: 5
+        marginHorizontal: 5,
       }}
       onPress={() => Linking.openURL(url)}>
       <Image
