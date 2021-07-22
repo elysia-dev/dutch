@@ -110,7 +110,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           ...notification,
           status:
             notification.status === NotificationStatus.READ ||
-              notification.id === props.notification.id
+            notification.id === props.notification.id
               ? NotificationStatus.READ
               : NotificationStatus.UNREAD,
         })),
@@ -162,10 +162,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 month: data.month,
                 week: data.week,
                 device: data.message,
-                profit: currencyFormatter(
-                  parseFloat(data.message),
-                  4,
-                ),
+                profit: currencyFormatter(parseFloat(data.message), 4),
                 tokenName: data.tokenName,
                 tokenAmount: data.tokenAmount,
                 paymentMethod: data.paymentMethod?.toUpperCase(),
@@ -198,7 +195,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <P4Text
-                      style={{ color: '#fff', textAlign: 'center' }}
+                      style={{ color: AppColors.WHITE, textAlign: 'center' }}
                       label={
                         showTx
                           ? t('dashboard_label.fold')
@@ -256,11 +253,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             {(type === NotificationType.PRODUCT_NOTICE ||
               type === NotificationType.ONBOARDING_NEW_USER ||
               type === NotificationType.ONBOARDING_CONNECT_WALLET) && (
-                <Image
-                  style={{ left: 10, width: 6, height: 9 }}
-                  source={images[9][status === 'read' ? 0 : 1]}
-                />
-              )}
+              <Image
+                style={{ left: 10, width: 6, height: 9 }}
+                source={images[9][status === 'read' ? 0 : 1]}
+              />
+            )}
           </View>
           {type === NotificationType.PENDING_TRANSACTION && (
             <View

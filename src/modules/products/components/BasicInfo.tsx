@@ -46,7 +46,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         paddingLeft: '5%',
         paddingRight: '5%',
         width: '100%',
-        borderBottomColor: '#F6F6F8',
+        borderBottomColor: AppColors.BACKGROUND_GREY,
         borderBottomWidth: 5,
       }}>
       <View
@@ -97,14 +97,14 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                   height: 31,
                   borderRadius: 5,
                   borderWidth: 1,
-                  borderColor: '#3679B5',
+                  borderColor: AppColors.MAIN,
                   justifyContent: 'center',
                   alignContent: 'center',
                 }}>
                 <P1Text
                   label={t('dashboard_label.token_contract')}
                   style={{
-                    color: '#3679B5',
+                    color: AppColors.MAIN,
                     textAlign: 'center',
                     fontSize: 13,
                   }}
@@ -138,7 +138,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
           <View
             key={index}
             style={{
-              borderColor: '#f1f1f1',
+              borderColor: AppColors.GREY,
               borderTopWidth: 1,
               paddingVertical: 20,
               flexDirection: 'row',

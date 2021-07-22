@@ -77,7 +77,8 @@ const MainList: FunctionComponent = () => {
             return {
               ...state,
               products: res.data.filter(
-                (product: { status: string }) => product.status === 'terminated',
+                (product: { status: string }) =>
+                  product.status === 'terminated',
               ),
             };
           });
@@ -127,7 +128,7 @@ const MainList: FunctionComponent = () => {
           <View
             // onStartShouldSetResponder={() => true}
             style={{
-              borderBottomColor: '#F6F6F8',
+              borderBottomColor: AppColors.BACKGROUND_GREY,
               borderBottomWidth: 5,
               paddingLeft: '5%',
               paddingRight: '5%',
@@ -139,9 +140,9 @@ const MainList: FunctionComponent = () => {
                 shadowOffset: { width: 1, height: 1 },
                 shadowColor: '#00000033',
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "space-between",
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}>
               <H1Text
                 style={{
@@ -152,18 +153,17 @@ const MainList: FunctionComponent = () => {
               />
               <TouchableOpacity
                 style={{
-                  alignSelf: "center",
+                  alignSelf: 'center',
                   marginBottom: 30,
-                  alignContent: "flex-end",
+                  alignContent: 'flex-end',
                 }}
                 onPress={() => {
                   navigation.navigate(Page.Product, {
                     screen: ProductPage.PropertyInfomation,
                   });
-                }}
-              >
+                }}>
                 <Image
-                  source={require("./images/infomation.png")}
+                  source={require('./images/infomation.png')}
                   style={{
                     width: 20,
                     height: 20,

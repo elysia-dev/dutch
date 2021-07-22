@@ -26,7 +26,7 @@ const NumberPadShortcut: React.FC<Props> = ({
         key={value}
         style={{
           borderRadius: 5,
-          borderColor: '#C8C8C8',
+          borderColor: AppColors.GREY2,
           borderWidth: 1,
           width: 56,
           height: 27,

@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from "react";
-import { GestureResponderEvent, TouchableOpacity } from "react-native";
+import React, { FunctionComponent } from 'react';
+import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 import { P3Text } from './Texts';
+import AppColors from '../../enums/AppColors';
 
 const FlatBorderButton: FunctionComponent<{
   title: string;
@@ -17,13 +18,15 @@ const FlatBorderButton: FunctionComponent<{
         height: 21,
         paddingVertical: 3,
         paddingHorizontal: 21,
-      }}
-    >
-      <P3Text label={title} style={{
-        color: "#1c1c1c",
-        textAlign: "center",
-        lineHeight: 15,
-      }} />
+      }}>
+      <P3Text
+        label={title}
+        style={{
+          color: AppColors.BLACK,
+          textAlign: 'center',
+          lineHeight: 15,
+        }}
+      />
     </TouchableOpacity>
   );
 };

@@ -109,7 +109,8 @@ const ProductBuying: FunctionComponent = () => {
       return alert(t('product.non_purchasable'));
     } else {
       navigation.navigate(ProductPage.Purchase, {
-        assetInCrypto: { // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
+        assetInCrypto: {
+          // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
           type: state.product?.paymentMethod.toUpperCase() as CryptoType,
           unit: state.product?.paymentMethod.toUpperCase() as CryptoType,
           title: state.product?.paymentMethod.toUpperCase(),
@@ -154,8 +155,7 @@ const ProductBuying: FunctionComponent = () => {
           backgroundColor: AppColors.WHITE,
           height: '100%',
           width: '100%',
-        }}
-      >
+        }}>
         <ScrollView
           scrollEnabled={true}
           scrollToOverflowEnabled={true}
@@ -198,7 +198,7 @@ const ProductBuying: FunctionComponent = () => {
             <View
               style={{
                 padding: 20,
-                borderBottomColor: '#F6F6F8',
+                borderBottomColor: AppColors.BACKGROUND_GREY,
                 borderBottomWidth: 5,
                 height: 198,
               }}>
@@ -208,7 +208,7 @@ const ProductBuying: FunctionComponent = () => {
           <View
             style={{
               padding: 20,
-              borderBottomColor: '#F6F6F8',
+              borderBottomColor: AppColors.BACKGROUND_GREY,
               borderBottomWidth: 5,
               height: 320,
             }}>

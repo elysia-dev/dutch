@@ -20,4 +20,4 @@ enum AppColors {
   DEACTIVATED = '#CCCCCC',
 }
 
-export default AppColors
+export default AppColors;

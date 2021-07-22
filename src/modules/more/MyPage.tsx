@@ -6,6 +6,7 @@ import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 const MyPage: FunctionComponent = () => {
   const { user } = useContext(UserContext);
@@ -25,7 +26,7 @@ const MyPage: FunctionComponent = () => {
               paddingLeft: '5%',
               // paddingBottom: 20,
               borderBottomWidth: 5,
-              borderBottomColor: '#F6F6F8',
+              borderBottomColor: AppColors.BACKGROUND_GREY,
             }}>
             <P1Text
               label={t('account_label.account_email')}
@@ -70,7 +71,7 @@ const MyPage: FunctionComponent = () => {
               paddingLeft: '5%',
               paddingVertical: 10,
               borderBottomWidth: 5,
-              borderBottomColor: '#F6F6F8',
+              borderBottomColor: AppColors.BACKGROUND_GREY,
             }}>
             <TouchableOpacity
               onPress={() => {

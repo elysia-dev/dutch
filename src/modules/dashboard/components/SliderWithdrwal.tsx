@@ -150,10 +150,10 @@ const SliderWithdrawal: FunctionComponent<Props> = (props) => {
         />
         <View
           style={{
-            backgroundColor: '#F6F6F8',
+            backgroundColor: AppColors.BACKGROUND_GREY,
             borderRadius: 10,
             borderWidth: 1,
-            borderColor: '#F1F1F1',
+            borderColor: AppColors.GREY,
             padding: 15,
             marginTop: 15,
           }}>

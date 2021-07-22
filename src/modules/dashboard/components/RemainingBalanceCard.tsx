@@ -10,7 +10,9 @@ interface Props {
   el: number;
 }
 
-export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => {
+export const RemainingBalanceCard: FunctionComponent<Props> = (
+  props: Props,
+) => {
   const { t } = useTranslation();
   return (
     <View
@@ -35,13 +37,13 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
       />
       <H2Text
         style={{ marginBottom: 18 }}
-        label={`$ ${(props.totalBalance).toFixed(2)}`}
+        label={`$ ${props.totalBalance.toFixed(2)}`}
       />
       <View
         style={{
           borderWidth: 1,
           borderRadius: 10,
-          borderColor: '#F1F1F1',
+          borderColor: AppColors.GREY,
           width: '100%',
           height: 89,
           paddingTop: 20,
@@ -59,12 +61,10 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             alignItems: 'center',
             paddingBottom: 12,
           }}>
-          <P2Text label={t("dashboard_label.remaining_usd")} />
+          <P2Text label={t('dashboard_label.remaining_usd')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`$ ${(props.usd).toFixed(
-              2,
-            )}`}
+            label={`$ ${props.usd.toFixed(2)}`}
           />
         </View>
         <View
@@ -74,12 +74,10 @@ export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => 
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <P2Text label={t("dashboard_label.remaining_el")} />
+          <P2Text label={t('dashboard_label.remaining_el')} />
           <P1Text
             style={{ textAlign: 'right' }}
-            label={`EL ${(props.el).toFixed(
-              3,
-            )}`}
+            label={`EL ${props.el.toFixed(3)}`}
           />
         </View>
       </View>

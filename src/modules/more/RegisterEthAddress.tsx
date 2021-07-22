@@ -364,9 +364,9 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   style={{
                     width: '100%',
                     height: 110,
-                    backgroundColor: '#F6F6F8',
+                    backgroundColor: AppColors.BACKGROUND_GREY,
                     borderRadius: 10,
-                    borderColor: '#F1F1F1',
+                    borderColor: AppColors.GREY,
                     borderWidth: 2,
                     marginTop: 30,
                     padding: 15,

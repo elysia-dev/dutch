@@ -72,7 +72,7 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         }}>
         <P1Text
           style={{
-            color: '#3679b5',
+            color: AppColors.MAIN,
           }}
           label={t('product_label.expected_return')}
         />

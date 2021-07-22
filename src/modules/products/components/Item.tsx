@@ -78,7 +78,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
               height: 50,
               flexDirection: 'row',
               justifyContent: 'space-between',
-              borderBottomColor: '#F1F1F1',
+              borderBottomColor: AppColors.GREY,
               borderBottomWidth: 1,
               alignItems: 'center',
             }}>
@@ -100,7 +100,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
               height: 50,
               flexDirection: 'row',
               justifyContent: 'space-between',
-              borderBottomColor: '#F1F1F1',
+              borderBottomColor: AppColors.GREY,
               borderBottomWidth: 1,
               alignItems: 'center',
             }}>
