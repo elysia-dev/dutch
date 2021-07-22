@@ -4,23 +4,23 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { showMessage } from 'react-native-flash-message';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
 import SheetHeader from '../../shared/components/SheetHeader';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { showMessage } from 'react-native-flash-message';
 import UserContext from '../../contexts/UserContext';
 import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   LegacyOwnershipRefund: {
-    ownershipId: number,
+    ownershipId: number;
   };
 };
 
 const LegacyOwnershipRefund: FunctionComponent = () => {
   const { t } = useTranslation();
-  const route = useRoute<RouteProp<ParamList, 'LegacyOwnershipRefund'>>()
+  const route = useRoute<RouteProp<ParamList, 'LegacyOwnershipRefund'>>();
   const navigation = useNavigation();
   const { Server } = useContext(UserContext);
 
@@ -29,7 +29,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
       .then(() => {
         showMessage({
           message: t('more.question_submitted'),
-        })
+        });
         navigation.goBack();
       })
       .catch((e) => {
@@ -39,7 +39,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
           alert(t('account_errors.server'));
         }
       });
-  }
+  };
 
   return (
     <>
@@ -79,7 +79,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
             marginRight: 'auto',
             marginTop: 20,
           }}
-          handler={() => { callApi() }}
+          handler={() => { callApi(); }}
           title={t('product_label.legacy_refund')}
         />
       </View>

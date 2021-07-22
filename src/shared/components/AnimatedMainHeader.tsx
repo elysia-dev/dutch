@@ -3,7 +3,7 @@ import { Platform, View, Animated } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import AppColors from '../../enums/AppColors';
 
-const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> = ({
+const AnimatedMainHeader: React.FC<{ title: string; scrollY: Animated.Value }> = ({
   title,
   scrollY,
 }) => {

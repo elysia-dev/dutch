@@ -2,12 +2,12 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, Share } from 'react-native';
 import { ethers } from 'ethers';
-import { P2Text } from '../../shared/components/Texts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
+import { useTranslation } from 'react-i18next';
+import { P2Text } from '../../shared/components/Texts';
 import AppColors from '../../enums/AppColors';
 import WalletContext from '../../contexts/WalletContext';
-import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import NextButton from '../../shared/components/NextButton';

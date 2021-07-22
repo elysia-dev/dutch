@@ -1,16 +1,26 @@
-import React, { createRef, FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  createRef,
+  FunctionComponent,
+  useEffect,
+  useState,
+} from 'react';
 import { View, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AssetType from '../../../enums/AssetType';
 import PaymentCryptoType from '../../../enums/PaymentCryptoType';
 import CachedImage from '../../../shared/components/CachedImage';
 
-import { H1Text, H2Text, P1Text, P2Text } from '../../../shared/components/Texts';
+import {
+  H1Text,
+  H2Text,
+  P1Text,
+  P2Text,
+} from '../../../shared/components/Texts';
 import { Story } from '../../../types/product';
 
-import EL from '../../../../src/shared/assets/images/el.png';
-import ETH from '../../../../src/shared/assets/images/eth.png';
-import BNB from '../../../../src/shared/assets/images/bnb.png';
-import { useTranslation } from 'react-i18next';
+import EL from '../../../shared/assets/images/el.png';
+import ETH from '../../../shared/assets/images/eth.png';
+import BNB from '../../../shared/assets/images/bnb.png';
 import AppColors from '../../../enums/AppColors';
 
 interface Props {
@@ -59,50 +69,64 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             borderRadius: 10,
           }}
         />
-        <View style={{
-          marginHorizontal: "5%"
-        }}>
-          <View style={{
-            height: 50,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            borderBottomColor: "#F1F1F1",
-            borderBottomWidth: 1,
-            alignItems: "center"
+        <View
+          style={{
+            marginHorizontal: '5%',
           }}>
-            <P1Text label={t("product_label.investment_type")} style={{ fontSize: 15 }} />
-            <H2Text label={
-              props.story.investmentMethod === AssetType.Unit ?
-                t("product_label.unit_method")
-                :
-                t("product_label.usd_method")
-            } style={{ fontSize: 15 }} />
-          </View>
-          <View style={{
-            height: 50,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            borderBottomColor: "#F1F1F1",
-            borderBottomWidth: 1,
-            alignItems: "center"
-          }}>
-            <P1Text label={t("product_label.payment_method")} style={{ fontSize: 15 }} />
-            <View style={{
-              flexDirection: "row",
-              alignItems: "center"
+          <View
+            style={{
+              height: 50,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderBottomColor: '#F1F1F1',
+              borderBottomWidth: 1,
+              alignItems: 'center',
             }}>
+            <P1Text
+              label={t('product_label.investment_type')}
+              style={{ fontSize: 15 }}
+            />
+            <H2Text
+              label={
+                props.story.investmentMethod === AssetType.Unit
+                  ? t('product_label.unit_method')
+                  : t('product_label.usd_method')
+              }
+              style={{ fontSize: 15 }}
+            />
+          </View>
+          <View
+            style={{
+              height: 50,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              borderBottomColor: '#F1F1F1',
+              borderBottomWidth: 1,
+              alignItems: 'center',
+            }}>
+            <P1Text
+              label={t('product_label.payment_method')}
+              style={{ fontSize: 15 }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <Image
                 style={{ width: 17, height: 17, marginRight: 5 }}
-                source={props.story.paymentMethod === PaymentCryptoType.EL ?
-                  EL
-                  :
-                  props.story.paymentMethod === PaymentCryptoType.ETH ?
-                    ETH
-                    :
-                    BNB
+                source={
+                  props.story.paymentMethod === PaymentCryptoType.EL
+                    ? EL
+                    : props.story.paymentMethod === PaymentCryptoType.ETH
+                    ? ETH
+                    : BNB
                 }
               />
-              <H2Text label={props.story.paymentMethod.toUpperCase()} style={{ fontSize: 15 }} />
+              <H2Text
+                label={props.story.paymentMethod.toUpperCase()}
+                style={{ fontSize: 15 }}
+              />
             </View>
           </View>
         </View>

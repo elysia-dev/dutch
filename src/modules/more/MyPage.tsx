@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { AccountPage, MorePage } from '../../enums/pageEnum';
 import { H3Text, P1Text, P3Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import UserContext from '../../contexts/UserContext';
-import { useTranslation } from 'react-i18next';
 
 const MyPage: FunctionComponent = () => {
   const { user } = useContext(UserContext);

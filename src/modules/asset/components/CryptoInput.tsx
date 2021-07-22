@@ -8,16 +8,16 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 
 interface Props {
-  active: boolean
-  title: string
-  balanceTitle?: string
-  value: string,
-  subValue?: string
-  cryptoType: CryptoType
-  cryptoTitle: string
-  invalid?: boolean
-  style?: StyleProp<ViewStyle>
-  onPress: () => void
+  active: boolean;
+  title: string;
+  balanceTitle?: string;
+  value: string;
+  subValue?: string;
+  cryptoType: CryptoType;
+  cryptoTitle: string;
+  invalid?: boolean;
+  style?: StyleProp<ViewStyle>;
+  onPress: () => void;
 }
 
 const CryptoInput: FunctionComponent<Props> = ({
@@ -45,7 +45,7 @@ const CryptoInput: FunctionComponent<Props> = ({
           borderWidth: 1,
           padding: 10,
           height: 50,
-          flexDirection: 'row'
+          flexDirection: 'row',
         }}
         onPress={onPress}
       >

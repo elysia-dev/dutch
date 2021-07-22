@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Platform,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import {
   RouteProp,
@@ -20,7 +20,7 @@ import {
   useScrollToTop,
 } from '@react-navigation/native';
 import base64 from 'base-64';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { Item } from './components/Item';
 import { PostItem } from './components/PostItem';
 import Product, { Story } from '../../types/product';
@@ -77,7 +77,7 @@ const MainList: FunctionComponent = () => {
             return {
               ...state,
               products: res.data.filter(
-                (product: { status: string; }) => product.status === 'terminated',
+                (product: { status: string }) => product.status === 'terminated',
               ),
             };
           });
@@ -101,9 +101,9 @@ const MainList: FunctionComponent = () => {
   useEffect(() => {
     navigation.setOptions({
       tabBarVisible: !state.activeStory,
-    })
+    });
     StatusBar.setHidden(!!state.activeStory);
-  }, [state.activeStory])
+  }, [state.activeStory]);
 
   useEffect(() => {
     if (refresh) {
@@ -141,7 +141,7 @@ const MainList: FunctionComponent = () => {
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
                 width: "100%",
                 flexDirection: "row",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}>
               <H1Text
                 style={{
@@ -154,19 +154,19 @@ const MainList: FunctionComponent = () => {
                 style={{
                   alignSelf: "center",
                   marginBottom: 30,
-                  alignContent: "flex-end"
+                  alignContent: "flex-end",
                 }}
                 onPress={() => {
                   navigation.navigate(Page.Product, {
                     screen: ProductPage.PropertyInfomation,
-                  })
+                  });
                 }}
               >
                 <Image
                   source={require("./images/infomation.png")}
                   style={{
                     width: 20,
-                    height: 20
+                    height: 20,
                   }}
                 />
               </TouchableOpacity>

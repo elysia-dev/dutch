@@ -3,13 +3,13 @@ import { View, Text, TextInput } from "react-native";
 import AppColors from '../../../enums/AppColors';
 
 interface INemonicView {
-  mnemonic: string[]
-  setMnemonic: (value: string, index: number) => void
+  mnemonic: string[];
+  setMnemonic: (value: string, index: number) => void;
 }
 
 const MnemonicView: React.FC<INemonicView> = ({
   mnemonic,
-  setMnemonic
+  setMnemonic,
 }) => {
   return (
     <View
@@ -46,11 +46,11 @@ const MnemonicView: React.FC<INemonicView> = ({
                 onChangeText={(text) => setMnemonic(text, index)}
               />
             </View>
-          )
+          );
         })
       }
     </View>
-  )
-}
+  );
+};
 
-export default MnemonicView
+export default MnemonicView;

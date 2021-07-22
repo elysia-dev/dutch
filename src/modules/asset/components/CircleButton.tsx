@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../../enums/AppColors';
 import { H4Text } from '../../../shared/components/Texts';
 
-const CircleButton: React.FC<{ handler: () => void, icon: string, title: string, disabled?: boolean }> = ({
+const CircleButton: React.FC<{ handler: () => void; icon: string; title: string; disabled?: boolean }> = ({
   handler,
   icon,
   title,
@@ -15,7 +15,7 @@ const CircleButton: React.FC<{ handler: () => void, icon: string, title: string,
       style={{ flexDirection: 'column', alignItems: 'center' }}
       disabled={disabled}
       onPress={() => {
-        handler()
+        handler();
       }}
     >
       <View
@@ -24,20 +24,20 @@ const CircleButton: React.FC<{ handler: () => void, icon: string, title: string,
           height: 55,
           borderRadius: 27.5,
           backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Text
           style={{
             color: AppColors.WHITE,
             fontSize: 27,
-            textAlign: 'center'
+            textAlign: 'center',
           }}
         >{icon}</Text>
       </View>
       <H4Text label={title} style={{ marginTop: 10 }} />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 export default CircleButton;

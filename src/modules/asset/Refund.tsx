@@ -1,16 +1,19 @@
 import React, {
-  FunctionComponent, useContext, useEffect, useState,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
-import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { BigNumber, ethers, utils } from 'ethers';
+import { useTranslation } from 'react-i18next';
+import CryptoType from '../../enums/CryptoType';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
-import { BigNumber, ethers, utils } from 'ethers';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
-import { useTranslation } from 'react-i18next';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
@@ -21,18 +24,18 @@ import PurposeType from '../../enums/PurposeType';
 
 type ParamList = {
   Refund: {
-    assetInCrypto: Asset,
-    assetInToken: Asset,
-    productId: number,
-    contractAddress: string,
+    assetInCrypto: Asset;
+    assetInToken: Asset;
+    productId: number;
+    contractAddress: string;
   };
 };
 
 const Refund: FunctionComponent = () => {
   const [values, setValues] = useState({
     inFiat: '',
-    inToken: ''
-  })
+    inToken: '',
+  });
   const [state, setState] = useState({
     txHash: '',
     step: TxStep.None,
@@ -42,34 +45,46 @@ const Refund: FunctionComponent = () => {
   });
   const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const route = useRoute<RouteProp<ParamList, 'Refund'>>();
-  const { assetInCrypto, assetInToken, contractAddress, productId } = route.params;
+  const { assetInCrypto, assetInToken, contractAddress, productId } =
+    route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(assetInCrypto.type, contractAddress);
-  const txResult = useWatingTx(state.txHash, assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const contract = getAssetTokenFromCryptoType(
+    assetInCrypto.type,
+    contractAddress,
+  );
+  const txResult = useWatingTx(
+    state.txHash,
+    assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+  );
 
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
   const tokenPrice = getCryptoPrice(CryptoType.ELA);
   const balanceInToken = assetInToken.value;
-  const balanceInCrypto = balanceInToken * tokenPrice / cryptoPrice;
+  const balanceInCrypto = (balanceInToken * tokenPrice) / cryptoPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.refund(utils.parseEther('0.01'), {
-        from: address,
-      });
+      estimateGas = await contract?.estimateGas.refund(
+        utils.parseEther('0.01'),
+        {
+          from: address,
+        },
+      );
 
       if (estimateGas) {
         setState({
           ...state,
           estimateGas: utils.formatEther(
-            estimateGas.mul(assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice)
+            estimateGas.mul(
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
           ),
         });
       }
@@ -79,36 +94,38 @@ const Refund: FunctionComponent = () => {
         estimateGas: '',
       });
     }
-  }
+  };
 
   useEffect(() => {
-    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
 
     if (address) {
       estimateGas(address);
     }
-  }, [])
+  }, []);
 
   const createTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(values.inToken)
-      )
+        utils.parseEther(values.inToken),
+      );
 
       if (!populatedTransaction) return;
 
       txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
-      })
+      });
 
       if (assetInCrypto.type === CryptoType.BNB) {
         setState({
           ...state,
           txHash: txRes?.hash || '',
-        })
+        });
       }
     } catch (e) {
       afterTxFailed(e);
@@ -120,11 +137,11 @@ const Refund: FunctionComponent = () => {
           contractAddress,
           txRes.hash || '',
           NetworkType.ETH,
-        )
+        );
         navigation.goBack();
       }
     }
-  }
+  };
 
   useEffect(() => {
     switch (state.step) {
@@ -134,13 +151,15 @@ const Refund: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
-        )
+          assetInCrypto.type === CryptoType.BNB
+            ? NetworkType.BSC
+            : NetworkType.ETH,
+        );
         navigation.goBack();
         break;
       default:
     }
-  }, [state.step])
+  }, [state.step]);
 
   useEffect(() => {
     if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
@@ -153,7 +172,7 @@ const Refund: FunctionComponent = () => {
             txResult.status === TxStatus.Success
               ? TxStep.Created
               : TxStep.Failed,
-        })
+        });
         break;
       default:
     }
@@ -182,15 +201,19 @@ const Refund: FunctionComponent = () => {
         isApproved={true}
         createTx={() => {
           if (isWalletUser) {
-            setState({ ...state, step: TxStep.Creating })
+            setState({ ...state, step: TxStep.Creating });
           } else {
-            Server.requestTransaction(productId, parseInt(values.inToken), 'refund')
+            Server.requestTransaction(
+              productId,
+              parseInt(values.inToken),
+              'refund',
+            )
               .then((res) => {
                 setState({
                   ...state,
                   stage: 1,
                   espressoTxId: res.data.id,
-                })
+                });
               })
               .catch((e) => {
                 if (e.response.status === 400) {
@@ -213,7 +236,7 @@ const Refund: FunctionComponent = () => {
       contractAddress={contractAddress}
       espressTxId={state.espressoTxId}
     />
-  )
+  );
 };
 
 export default Refund;

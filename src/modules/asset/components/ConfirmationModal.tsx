@@ -8,19 +8,19 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
-  modalVisible: boolean
-  setModalVisible: Dispatch<SetStateAction<boolean>>
-  title: string
-  purpose: PurposeType
-  assetTitle: string
-  assetUnit: string
-  values: { inFiat: string, inToken: string }
-  priceInCryptocurrency: number
-  cryptocurrencyType: string
-  estimateGas: string
-  gasCrypto: string
-  isApproved: boolean
-  createTx: () => void
+  modalVisible: boolean;
+  setModalVisible: Dispatch<SetStateAction<boolean>>;
+  title: string;
+  purpose: PurposeType;
+  assetTitle: string;
+  assetUnit: string;
+  values: { inFiat: string; inToken: string };
+  priceInCryptocurrency: number;
+  cryptocurrencyType: string;
+  estimateGas: string;
+  gasCrypto: string;
+  isApproved: boolean;
+  createTx: () => void;
 }
 
 const ConfirmationModal: React.FC<Props> = ({
@@ -42,18 +42,13 @@ const ConfirmationModal: React.FC<Props> = ({
   const [disabled, setDisabled] = useState(false);
 
   return (
-    <Modal
-      transparent={true}
-      visible={modalVisible}
-      animationType={'slide'}
-    >
+    <Modal transparent={true} visible={modalVisible} animationType={'slide'}>
       <View
         style={{
           display: 'flex',
           width: '100%',
           height: '100%',
-        }}
-      >
+        }}>
         <TouchableOpacity
           onPress={() => setModalVisible(false)}
           activeOpacity={1}
@@ -68,8 +63,7 @@ const ConfirmationModal: React.FC<Props> = ({
             height: 572,
             display: 'flex',
             backgroundColor: AppColors.MODAL_BACKGROUND,
-          }}
-        >
+          }}>
           <View
             style={{
               flexDirection: 'row',
@@ -78,10 +72,12 @@ const ConfirmationModal: React.FC<Props> = ({
               padding: 20,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
-            }}
-          >
+            }}>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <H4Text label={t('assets.cancel')} style={{ color: AppColors.MAIN }} />
+              <H4Text
+                label={t('assets.cancel')}
+                style={{ color: AppColors.MAIN }}
+              />
             </TouchableOpacity>
             <H3Text label={title} style={{}} />
             <View style={{ width: 20 }} />
@@ -95,8 +91,7 @@ const ConfirmationModal: React.FC<Props> = ({
               padding: 18,
               flex: 1,
               backgroundColor: AppColors.WHITE,
-            }}
-          >
+            }}>
             <View>
               <Text
                 style={{
@@ -111,8 +106,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   marginTop: 20,
                   height: 50,
                   fontFamily: AppFonts.Bold,
-                }}
-              >
+                }}>
                 {t(`assets.${purpose}_confirm`)}
               </Text>
               <View
@@ -124,16 +118,14 @@ const ConfirmationModal: React.FC<Props> = ({
                   borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     fontSize: 14,
                     color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
-                  }}
-                >
+                  }}>
                   {t(`assets.${purpose}_confirm_product`)}
                 </Text>
                 <Text
@@ -143,8 +135,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
-                  }}
-                >
+                  }}>
                   {`${assetTitle} (${assetUnit})`}
                 </Text>
               </View>
@@ -157,16 +148,14 @@ const ConfirmationModal: React.FC<Props> = ({
                   borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 64,
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     fontSize: 14,
                     color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
-                  }}
-                >
+                  }}>
                   {t(`assets.${purpose}_confirm_value`)}
                 </Text>
                 <View style={{ marginRight: 5 }}>
@@ -177,8 +166,7 @@ const ConfirmationModal: React.FC<Props> = ({
                       color: AppColors.BLACK,
                       textAlign: 'right',
                       fontFamily: AppFonts.Bold,
-                    }}
-                  >
+                    }}>
                     {`$ ${commaFormatter(values.inFiat)}`}
                   </Text>
                   <Text
@@ -187,9 +175,12 @@ const ConfirmationModal: React.FC<Props> = ({
                       color: AppColors.SUB_BLACK,
                       textAlign: 'right',
                       fontFamily: AppFonts.Regular,
-                    }}
-                  >
-                    {`${commaFormatter((Number(values.inFiat) / priceInCryptocurrency).toFixed(2))} ${cryptocurrencyType}`}
+                    }}>
+                    {`${commaFormatter(
+                      (Number(values.inFiat) / priceInCryptocurrency).toFixed(
+                        2,
+                      ),
+                    )} ${cryptocurrencyType}`}
                   </Text>
                 </View>
               </View>
@@ -202,16 +193,14 @@ const ConfirmationModal: React.FC<Props> = ({
                   borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     fontSize: 14,
                     color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
-                  }}
-                >
+                  }}>
                   {t(`assets.${purpose}_confirm_stake`)}
                 </Text>
                 <Text
@@ -221,8 +210,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
-                  }}
-                >
+                  }}>
                   {`${commaFormatter(values.inToken)} ${assetUnit}`}
                 </Text>
               </View>
@@ -235,16 +223,14 @@ const ConfirmationModal: React.FC<Props> = ({
                   borderBottomColor: AppColors.GREY,
                   alignItems: 'center',
                   height: 50,
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     fontSize: 14,
                     color: AppColors.BLACK2,
                     marginLeft: 5,
                     fontFamily: AppFonts.Regular,
-                  }}
-                >
+                  }}>
                   {t('assets.gas_price')}
                 </Text>
                 <Text
@@ -254,8 +240,7 @@ const ConfirmationModal: React.FC<Props> = ({
                     color: AppColors.BLACK,
                     marginRight: 5,
                     fontFamily: AppFonts.Bold,
-                  }}
-                >
+                  }}>
                   {`${commaFormatter(estimateGas)} ${gasCrypto}`}
                 </Text>
               </View>
@@ -267,24 +252,24 @@ const ConfirmationModal: React.FC<Props> = ({
                   marginTop: 12,
                   lineHeight: 20,
                   fontFamily: AppFonts.Regular,
-                }}
-              >
+                }}>
                 {`* ${t('assets.confirm_gas')}`}
               </Text>
             </View>
             <View>
-              {!isApproved && <Text
-                style={{
-                  fontSize: 12,
-                  color: AppColors.BLACK,
-                  marginHorizontal: 5,
-                  marginBottom: 12,
-                  lineHeight: 20,
-                  fontFamily: AppFonts.Bold,
-                }}
-              >
-                {`* ${t('assets.check_allowance_guide')}`}
-              </Text>}
+              {!isApproved && (
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: AppColors.BLACK,
+                    marginHorizontal: 5,
+                    marginBottom: 12,
+                    lineHeight: 20,
+                    fontFamily: AppFonts.Bold,
+                  }}>
+                  {`* ${t('assets.check_allowance_guide')}`}
+                </Text>
+              )}
               <TouchableOpacity
                 onPress={() => {
                   setDisabled(true);
@@ -305,9 +290,10 @@ const ConfirmationModal: React.FC<Props> = ({
                     fontFamily: AppFonts.Bold,
                     color: AppColors.WHITE,
                   }}
-                  allowFontScaling={false}
-                >
-                  {isApproved ? t(`assets.${purpose}`) : t('assets.check_allowance')}
+                  allowFontScaling={false}>
+                  {isApproved
+                    ? t(`assets.${purpose}`)
+                    : t('assets.check_allowance')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -316,6 +302,6 @@ const ConfirmationModal: React.FC<Props> = ({
       </View>
     </Modal>
   );
-}
+};
 
 export default ConfirmationModal;

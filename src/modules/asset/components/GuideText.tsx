@@ -4,8 +4,8 @@ import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 interface Props {
-  text: string
-  style?: StyleProp<TextStyle>
+  text: string;
+  style?: StyleProp<TextStyle>;
 }
 
 const GuideText: React.FC<Props> = ({
@@ -25,6 +25,6 @@ const GuideText: React.FC<Props> = ({
       {text}
     </Text>
   );
-}
+};
 
 export default GuideText;

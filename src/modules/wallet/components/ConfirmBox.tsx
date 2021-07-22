@@ -6,11 +6,11 @@ import { H3Text, P3Text } from '../../../shared/components/Texts';
 import CheckIcon from './CheckIcon';
 
 interface IConfirmBox {
-  confirmed: boolean,
-  toggleConfirm: () => void,
-  title: string,
-  content: string,
-  style?: StyleProp<ViewStyle>,
+  confirmed: boolean;
+  toggleConfirm: () => void;
+  title: string;
+  content: string;
+  style?: StyleProp<ViewStyle>;
 }
 
 const ConfirmBox: React.FC<IConfirmBox> = (props) => {

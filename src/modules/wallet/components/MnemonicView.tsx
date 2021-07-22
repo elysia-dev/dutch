@@ -4,15 +4,15 @@ import AppColors from '../../../enums/AppColors';
 import WordBox from './WordBox';
 
 interface INemonicView {
-  mnemonic: string
+  mnemonic: string;
 }
 
 const MnemonicView: React.FC<INemonicView> = (props) => {
   const wordListing = props.mnemonic.split(' ').map((word, index) => {
     return (
       <WordBox key={index} index={index + 1} word={word} />
-    )
-  })
+    );
+  });
   return (
     <View
       style={{
@@ -28,12 +28,12 @@ const MnemonicView: React.FC<INemonicView> = (props) => {
         flexWrap: 'wrap',
       }}
     >
-      <View 
+      <View
         style={{
           alignItems: "center",
           flexDirection: "column",
           justifyContent: "space-between",
-          flex: 1
+          flex: 1,
       }}>
         {wordListing[0]}
         {wordListing[1]}
@@ -42,12 +42,12 @@ const MnemonicView: React.FC<INemonicView> = (props) => {
         {wordListing[4]}
         {wordListing[5]}
       </View>
-      <View 
+      <View
         style={{
           alignItems: "center",
           flexDirection: "column",
           justifyContent: "space-between",
-          flex: 1
+          flex: 1,
       }}>
         {wordListing[6]}
         {wordListing[7]}
@@ -57,7 +57,7 @@ const MnemonicView: React.FC<INemonicView> = (props) => {
         {wordListing[11]}
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default MnemonicView
+export default MnemonicView;

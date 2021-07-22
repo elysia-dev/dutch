@@ -6,6 +6,8 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import {
   H2Text,
@@ -15,8 +17,6 @@ import {
   TitleText,
 } from '../../shared/components/Texts';
 import Asset from '../../types/Asset';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import { AssetPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
@@ -76,7 +76,7 @@ const Detail: FunctionComponent = () => {
     contractAddress: '',
     paymentMethod: CryptoType.EL,
     images: [],
-    productId: 0, //for v1 user
+    productId: 0, // for v1 user
     productStatus: ProductStatus.SALE,
     loaded: false,
   });

@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import AppColors from '../../../enums/AppColors';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
+import AppColors from '../../../enums/AppColors';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import PreferenceContext from '../../../contexts/PreferenceContext';
-import { useTranslation } from 'react-i18next';
 import NetworkType from '../../../enums/NetworkType';
 import getTxScanLink from '../../../utiles/getTxScanLink';
 import TxStatus from '../../../enums/TxStatus';
@@ -90,7 +90,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
               transaction.legacyType || '',
             ) || transaction.legacyType
               ? currencyFormatter(parseFloat(transaction.value))
-              : `${transaction.type === 'out' ? '-' : '+'} ${0.01 < parseFloat(transaction.value) ? (Math.floor(parseFloat(transaction.value) * 100) / 100).toString() : '0.00...' } ${unit}`
+              : `${transaction.type === 'out' ? '-' : '+'} ${parseFloat(transaction.value) > 0.01 ? (Math.floor(parseFloat(transaction.value) * 100) / 100).toString() : '0.00...'} ${unit}`
           }
         />
       </View>

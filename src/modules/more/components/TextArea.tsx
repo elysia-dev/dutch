@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View, TextInput } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { P3Text } from '../../../shared/components/Texts';
-import { useTranslation } from 'react-i18next'
 import AppFonts from '../../../enums/AppFonts';
 
 interface Props {

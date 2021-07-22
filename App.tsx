@@ -7,9 +7,9 @@ import * as Updates from 'expo-updates';
 
 import { useFonts } from 'expo-font';
 
+import { SENTRY_DSN } from 'react-native-dotenv';
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
-import { SENTRY_DSN } from 'react-native-dotenv';
 
 if (SENTRY_DSN) {
   Sentry.init({

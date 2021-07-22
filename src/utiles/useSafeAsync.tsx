@@ -9,7 +9,7 @@ const useMountedState = () => {
 
     return () => {
       mountedRef.current = false;
-    }
+    };
   }, []);
 
   return isMounted;

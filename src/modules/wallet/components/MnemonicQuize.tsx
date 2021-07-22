@@ -4,10 +4,10 @@ import AppColors from '../../../enums/AppColors';
 import WordQuizeBox from './WordQuizeBox';
 
 interface INemonicView {
-  currentIndex: number
-  selectedIndices: number[]
-  selectedWords: string[]
-  clear: (number: number) => void
+  currentIndex: number;
+  selectedIndices: number[];
+  selectedWords: string[];
+  clear: (number: number) => void;
 }
 
 const MnemonicQuize: React.FC<INemonicView> = ({ currentIndex, selectedIndices, selectedWords, clear }) => {
@@ -33,11 +33,11 @@ const MnemonicQuize: React.FC<INemonicView> = ({ currentIndex, selectedIndices, 
             word={selectedWords[index]}
             active={currentIndex === index}
             onPress={() => clear(index)}
-          />
+          />;
         })
       }
     </View>
-  )
-}
+  );
+};
 
-export default MnemonicQuize
+export default MnemonicQuize;

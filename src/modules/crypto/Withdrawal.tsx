@@ -11,27 +11,27 @@ import {
   Dimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AppColors from '../../enums/AppColors';
 import { useTranslation } from 'react-i18next';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { BigNumber, ethers, utils } from 'ethers';
+import { isAddress } from '@ethersproject/address';
+import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
+import moment from 'moment';
+import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { P1Text, P2Text, P3Text, P4Text } from '../../shared/components/Texts';
 import Asset from '../../types/Asset';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import AssetContext from '../../contexts/AssetContext';
 import commaFormatter from '../../utiles/commaFormatter';
 import NumberPad from '../../shared/components/NumberPad';
 import CryptoType from '../../enums/CryptoType';
 import { getElysiaContract } from '../../utiles/getContract';
-import { BigNumber, ethers, utils } from 'ethers';
 import WalletContext from '../../contexts/WalletContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
-import { isAddress } from '@ethersproject/address';
-import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import TransactionContext from '../../contexts/TransactionContext';
-import moment from 'moment';
 
 type ParamList = {
   Withdrawal: {
@@ -88,7 +88,7 @@ const Withdrawal: React.FC = () => {
         setEstimatedGas(
           utils.formatEther(
             estimatedGas.mul(
-              asset.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+              asset.type !== CryptoType.BNB ? gasPrice : bscGasPrice,
             ),
           ),
         );
@@ -128,7 +128,7 @@ const Withdrawal: React.FC = () => {
         await addPendingTransaction({
           txHash: txRes.hash,
           cryptoType: asset.type,
-          value: value,
+          value,
           createdAt: moment().toString(),
           type: 'out',
           blockNumber: Number(txRes.blockNumber),
@@ -323,7 +323,7 @@ const Withdrawal: React.FC = () => {
 
               if (parseFloat(next) >= getBalance(asset.type)) {
                 // Maximum!
-                return;
+
               } else {
                 setValue(next);
               }

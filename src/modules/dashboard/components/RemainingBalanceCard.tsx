@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const RemainingBalanceCard: FunctionComponent<Props> = (props: Props) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <View
       style={{

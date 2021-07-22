@@ -149,13 +149,13 @@ const RemainingBalance: FunctionComponent<{}> = () => {
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
                 ? t('dashboard_label.remaining_withdraw')
                 : user.legacyWalletRefundStatus === LegacyRefundStatus.PENDING
-                  ? t('dashboard_label.remaining_withdraw_pending')
-                  : t('dashboard_label.remaining_withdraw_other')
+                ? t('dashboard_label.remaining_withdraw_pending')
+                : t('dashboard_label.remaining_withdraw_other')
             }
             handler={
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
                 ? () => setState({ ...state, modalVisible: true })
-                : () => { }
+                : () => {}
             }
             variant={
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
@@ -179,4 +179,4 @@ const RemainingBalance: FunctionComponent<{}> = () => {
   );
 };
 
-export default RemainingBalance
+export default RemainingBalance;

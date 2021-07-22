@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { TextField } from '../../shared/components/TextField';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import { TextField } from '../../shared/components/TextField';
 import { TitleText } from '../../shared/components/Texts';
 import NextButton from '../../shared/components/NextButton';
 import ExpiredAccount from './ExpiredAccount';
 import AccountLayout from '../../shared/components/AccountLayout';
 import WalletContext from '../../contexts/WalletContext';
 import BorderButton from '../../shared/components/BorderButton';
-import { useNavigation } from '@react-navigation/native';
 import { AccountPage } from '../../enums/pageEnum';
 
 const WalletLogin: React.FC = () => {

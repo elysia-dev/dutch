@@ -24,14 +24,14 @@ import AppColors from '../../enums/AppColors';
 const Notifications: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = React.useState(false);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
   const { user, notifications, isWalletUser, Server, setNotifications } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext)
-  const address = wallet?.getFirstAddress() || ''
+  const { wallet } = useContext(WalletContext);
+  const address = wallet?.getFirstAddress() || '';
 
   const loadNotifications = () => {
     Server.notification()
@@ -44,7 +44,7 @@ const Notifications: FunctionComponent = () => {
           alert(t('account_errors.server'));
         }
       });
-  }
+  };
 
   const loadV2UserNotifications = () => {
     EspressoV2.getNoficiations(address).then((res) => {
@@ -55,16 +55,16 @@ const Notifications: FunctionComponent = () => {
         alert(t('account_errors.server'));
       }
     });
-  }
+  };
 
   const onRefresh = React.useCallback(() => {
     if (isWalletUser) {
-      loadV2UserNotifications()
+      loadV2UserNotifications();
       setRefreshing(true);
-      return
+      return;
     }
 
-    if (user.provider === ProviderType.GUEST) return
+    if (user.provider === ProviderType.GUEST) return;
 
     setRefreshing(true);
     loadNotifications();
@@ -75,7 +75,7 @@ const Notifications: FunctionComponent = () => {
       EspressoV2.readAllNotifications(address)
         .then((_res) => loadV2UserNotifications())
         .catch((e) => {
-          alert(e)
+          alert(e);
           if (e.response.status === 500) {
             alert(t('account_errors.server'));
           }

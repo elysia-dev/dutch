@@ -47,4 +47,4 @@ const BorderButton: FunctionComponent<IBorderButton> = ({
   );
 };
 
-export default BorderButton
+export default BorderButton;

@@ -7,7 +7,7 @@ import { H3Text, P1Text } from '../../shared/components/Texts';
 import AppColors from '../../enums/AppColors';
 
 const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
-  nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia) },
+  nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia); },
 }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
         label={t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => { nextHandler() }}
+        onPress={() => { nextHandler(); }}
         style={{
           position: 'absolute',
           bottom: '20%',

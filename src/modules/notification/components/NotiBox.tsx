@@ -7,7 +7,7 @@ import {
   Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import NotificationType from '../../../enums/NotificationType';
 import images from '../Images';
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const NotiBox: FunctionComponent<Props> = (props: Props) => {
-  const { currencyFormatter } = useContext(PreferenceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { notifications, setNotifications } = useContext(UserContext);
   const [showTx, setShowTx] = useState(false);
   const { t } = useTranslation();
@@ -224,7 +224,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   <TouchableOpacity
                     onPress={() => {
                       Linking.openURL(
-                        getTxScanLink(data.txHash, data.network as NetworkType)
+                        getTxScanLink(data.txHash, data.network as NetworkType),
                       );
                     }}
                     style={{

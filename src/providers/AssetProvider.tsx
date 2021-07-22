@@ -1,6 +1,6 @@
 import { BigNumber, utils } from 'ethers';
-import React, { useContext, useEffect } from 'react';
-import { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
 import EspressoV1 from '../api/EspressoV1';
 import AssetContext, {
   initialAssetState,
@@ -126,7 +126,7 @@ const AssetProvider: React.FC = (props) => {
       );
       setState({
         assetLoaded: true,
-        assets: assets,
+        assets,
       });
     } catch (e) {
       alert('Server Error');
@@ -164,7 +164,7 @@ const AssetProvider: React.FC = (props) => {
           paymentMethod: ownership.product.paymentMethod,
         } as Asset;
       });
-      if(address){
+      if (address) {
         const res = await EspressoV1.getAllProduct();
         const result = await Promise.all(
           res.data
@@ -229,7 +229,7 @@ const AssetProvider: React.FC = (props) => {
     } finally {
       setState({
         assetLoaded: true,
-        assets: assets,
+        assets,
       });
     }
   };

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
@@ -25,7 +25,8 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[language || LocaleType.EN];
+  const productDescription =
+    product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
   const isLoan = product.financeType === 'loan';
 
@@ -34,7 +35,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
       <View
         style={{
           padding: 20,
-          marginBottom: 20
+          marginBottom: 20,
         }}>
         <H3Text
           label={t('product_label.property_info')}
@@ -150,12 +151,12 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   label={
                     isLoan
                       ? `₩ ${commaFormatter(
-                        parseFloat(product.data.propertyPrice),
-                      )}`
+                          parseFloat(product.data.propertyPrice),
+                        )}`
                       : currencyFormatter(
-                        parseFloat(product.data.propertyPrice),
-                        0,
-                      )
+                          parseFloat(product.data.propertyPrice),
+                          0,
+                        )
                   }
                   style={{ color: AppColors.BLACK }}
                 />
@@ -202,10 +203,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   label={
                     isLoan
                       ? `₩ ${commaFormatter(parseFloat(product.data.bankLoan))}`
-                      : currencyFormatter(
-                        parseFloat(product.data.bankLoan),
-                        0,
-                      )
+                      : currencyFormatter(parseFloat(product.data.bankLoan), 0)
                   }
                   style={{ color: AppColors.BLACK }}
                 />
@@ -300,9 +298,9 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                   style={{ color: '#626368' }}
                 />
                 <P3Text
-                  label={
-                    moment(product.data.buildingCompletionDate).format('YYYY-MM-DD')
-                  }
+                  label={moment(product.data.buildingCompletionDate).format(
+                    'YYYY-MM-DD',
+                  )}
                   style={{ color: AppColors.BLACK }}
                 />
               </DesView>
@@ -343,7 +341,11 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 />
                 <P3Text
                   label={productDescription.securityFacilities}
-                  style={{ color: AppColors.BLACK, flex: 4, textAlign: 'right' }}
+                  style={{
+                    color: AppColors.BLACK,
+                    flex: 4,
+                    textAlign: 'right',
+                  }}
                 />
               </DesView>
             </View>

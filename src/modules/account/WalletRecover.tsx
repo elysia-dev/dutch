@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
+import { Alert, TouchableOpacity, View, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import NextButton from '../../shared/components/NextButton';
 import AccountLayout from '../../shared/components/AccountLayout';
 import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
-import { Alert, TouchableOpacity, View, Platform } from 'react-native';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
-import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 
 const WalletRecover: FunctionComponent = () => {

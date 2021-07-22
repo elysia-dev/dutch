@@ -6,10 +6,10 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { P2Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import TransactionItem from './TransactionItem';
-import { useTranslation } from 'react-i18next';
 import NetworkType from '../../../enums/NetworkType';
 import { Item } from '../../products/components/Item';
 

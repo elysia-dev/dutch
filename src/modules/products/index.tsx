@@ -13,7 +13,7 @@ const Main: React.FC = () => {
       mode="modal"
       screenOptions={{
         headerShown: false,
-        stackPresentation: 'formSheet'
+        stackPresentation: 'formSheet',
       }}
     >
       <RootStack.Screen
@@ -25,7 +25,7 @@ const Main: React.FC = () => {
         name={ProductPage.Purchase}
         component={Purchase}
       />
-      <RootStack.Screen 
+      <RootStack.Screen
         name={ProductPage.PropertyInfomation}
         component={PropertyInfomation}
       />
@@ -33,4 +33,4 @@ const Main: React.FC = () => {
   );
 };
 
-export default Main
+export default Main;

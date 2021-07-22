@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { SubmitButton } from '../../shared/components/SubmitButton';
 import { useTranslation } from 'react-i18next';
+import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TextArea } from './components/TextArea';
 import { SubTitleText, P1Text } from '../../shared/components/Texts';
 import WrapperLayout from '../../shared/components/WrapperLayoutAvoidingKeyboard';

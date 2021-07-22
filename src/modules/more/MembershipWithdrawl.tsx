@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { useTranslation } from 'react-i18next'
 import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';

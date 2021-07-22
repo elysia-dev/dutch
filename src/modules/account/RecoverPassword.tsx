@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { Modal } from '../../shared/components/Modal';
 import { TitleText, P1Text } from '../../shared/components/Texts';
 import AcceptedImg from './images/accepted.png';
-import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
 import UserContext from '../../contexts/UserContext';

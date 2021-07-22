@@ -1,21 +1,21 @@
 import React, {
   FunctionComponent, useContext, useEffect, useState,
 } from 'react';
-import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils } from 'ethers';
+import { useTranslation } from 'react-i18next';
+import CryptoType from '../../enums/CryptoType';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import useTxHandler from '../../hooks/useTxHandler';
-import { View } from 'react-native';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils } from 'ethers';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PaymentSelection from './components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
-import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
@@ -29,31 +29,31 @@ import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   Reward: {
-    toCrypto: CryptoType,
-    toTitle: string,
-    productId: number,
-    contractAddress: string,
+    toCrypto: CryptoType;
+    toTitle: string;
+    productId: number;
+    contractAddress: string;
   };
 };
 
 const Reward: FunctionComponent = () => {
   const [interest, setInterest] = useState(0);
-  const route = useRoute<RouteProp<ParamList, 'Reward'>>()
+  const route = useRoute<RouteProp<ParamList, 'Reward'>>();
   const { toCrypto, toTitle, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
-  const { currencyFormatter } = useContext(PreferenceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { isWalletUser, user, Server } = useContext(UserContext);
   const { getBalance } = useContext(AssetContext);
-  const { gasPrice, bscGasPrice, getCryptoPrice, } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const [state, setState] = useState({
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
     txHash: '',
-    step: TxStep.None
+    step: TxStep.None,
   });
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
@@ -67,12 +67,12 @@ const Reward: FunctionComponent = () => {
     try {
       estimateGas = await contract?.estimateGas.claimReward({
         from: address,
-      })
+      });
       if (estimateGas) {
         setState({
           ...state,
           estimateGas: utils.formatEther(
-            estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice)
+            estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice),
           ),
         });
       }
@@ -82,7 +82,7 @@ const Reward: FunctionComponent = () => {
         estimateGas: '',
       });
     }
-  }
+  };
 
   useEffect(() => {
     const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
@@ -90,34 +90,34 @@ const Reward: FunctionComponent = () => {
     if (address) {
       estimateGas(address);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0]
+    const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0];
 
     contract?.getReward(address).then((res: BigNumber) => {
       setInterest(parseFloat(utils.formatEther(res)));
     });
-  }, [])
+  }, []);
 
   const createTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
-      const populatedTransaction = await contract?.populateTransaction.claimReward()
+      const populatedTransaction = await contract?.populateTransaction.claimReward();
 
       if (!populatedTransaction) return;
 
       txRes = await wallet?.getFirstSigner(toCrypto).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
-      })
+      });
 
       if (toCrypto === CryptoType.BNB) {
         setState({
           ...state,
           txHash: txRes?.hash || '',
-        })
+        });
       }
     } catch (e) {
       afterTxFailed(e.message);
@@ -129,27 +129,27 @@ const Reward: FunctionComponent = () => {
           contractAddress,
           txRes.hash || '',
           NetworkType.ETH,
-        )
+        );
         navigation.goBack();
       }
     }
-  }
+  };
 
   useEffect(() => {
     switch (state.step) {
       case TxStep.Creating:
-        createTx()
+        createTx();
         break;
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH
-        )
+          toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+        );
         navigation.goBack();
         break;
       default:
     }
-  }, [state.step])
+  }, [state.step]);
 
   useEffect(() => {
     if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
@@ -162,7 +162,7 @@ const Reward: FunctionComponent = () => {
             txResult.status === TxStatus.Success
               ? TxStep.Created
               : TxStep.Failed,
-        })
+        });
         break;
       default:
     }
@@ -188,7 +188,7 @@ const Reward: FunctionComponent = () => {
             value={(interest / (getCryptoPrice(toCrypto))).toFixed(4)}
             subValue={currencyFormatter(
               interest,
-              4
+              4,
             )}
             active={true}
             onPress={() => { }}
@@ -207,7 +207,7 @@ const Reward: FunctionComponent = () => {
             width: '100%',
             bottom: insets.bottom || 10,
             paddingLeft: '5%',
-            paddingRight: '5%'
+            paddingRight: '5%',
           }}
         >
           <NextButton
@@ -217,8 +217,8 @@ const Reward: FunctionComponent = () => {
               if (isWalletUser) {
                 setState({
                   ...state,
-                  step: TxStep.Creating
-                })
+                  step: TxStep.Creating,
+                });
               } else {
                 Server.requestTransaction(productId, 1, 'interest')
                   .then((res) => {
@@ -226,7 +226,7 @@ const Reward: FunctionComponent = () => {
                       ...state,
                       stage: 1,
                       espressoTxId: res.data.id,
-                    })
+                    });
                   })
                   .catch((e) => {
                     if (e.response.status === 400) {
@@ -250,7 +250,7 @@ const Reward: FunctionComponent = () => {
       type={'interest'}
       contractAddress={contractAddress}
       espressTxId={state.espressoTxId} />
-  )
+  );
 };
 
 export default Reward;

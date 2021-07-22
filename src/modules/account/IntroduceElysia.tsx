@@ -14,8 +14,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import { SafeAreaView } from 'react-navigation';
-import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import { useTranslation } from 'react-i18next';
+import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { AccountPage } from '../../enums/pageEnum';
 import LocaleType from '../../enums/LocaleType';

@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
-import WrapperLayout from '../../shared/components/WrapperLayout';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P3Text } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import NextButton from '../../shared/components/NextButton';
 import { WalletPage } from '../../enums/pageEnum';
 import BorderButton from '../../shared/components/BorderButton';
-import { useTranslation } from 'react-i18next';
 
 const SelectMethod: FunctionComponent = () => {
   const navigation = useNavigation();

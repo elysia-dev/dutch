@@ -1,9 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
 import investmentGuide1 from './images/investmentGuide1.png';
@@ -70,8 +66,7 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
           onPress={() => {
             viewPager.current?.setPage(index);
           }}
-          key={index}
-        >
+          key={index}>
           <Circle
             style={{
               backgroundColor: state === index ? '#3679B5' : '#BDD3E6',

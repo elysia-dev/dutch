@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import LockAccountPng from './images/lockaccount.png';
-import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
@@ -87,14 +87,16 @@ const LockAccount: FunctionComponent = () => {
     <AccountLayout
       title={
         <View>
-          {!state.focusing && <Image
-            source={LockAccountPng}
-            style={{
-              width: '100%',
-              resizeMode: 'center',
-              marginTop: 53,
-            }}
-          />}
+          {!state.focusing && (
+            <Image
+              source={LockAccountPng}
+              style={{
+                width: '100%',
+                resizeMode: 'center',
+                marginTop: 53,
+              }}
+            />
+          )}
         </View>
       }
       body={

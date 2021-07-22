@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Product from '../../../types/product';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import UserContext from '../../../contexts/UserContext';
@@ -22,7 +22,8 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
   const { user } = useContext(UserContext);
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[language || LocaleType.EN];
+  const productDescription =
+    product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
 
   return (

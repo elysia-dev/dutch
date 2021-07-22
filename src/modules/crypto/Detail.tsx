@@ -2,21 +2,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChartDataPoint } from 'react-native-responsive-linechart';
+import { View, Dimensions } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { add } from 'react-native-reanimated';
 import Asset, { defaultAsset } from '../../types/Asset';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import SelectBox from './components/SelectBox';
-import { View, Dimensions } from 'react-native';
 import TransactionList from '../asset/components/TransactionList';
 import NextButton from '../../shared/components/NextButton';
-import { useTranslation } from 'react-i18next';
 import UserContext from '../../contexts/UserContext';
 import { CryptoPage } from '../../enums/pageEnum';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import CryptoTransaction from '../../types/CryptoTransaction';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import { P1Text } from '../../shared/components/Texts';
 import txResponseToTx from '../../utiles/txResponseToTx';
@@ -30,7 +31,6 @@ import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
-import { add } from 'react-native-reanimated';
 
 type ParamList = {
   CryptoDetail: {

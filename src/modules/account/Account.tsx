@@ -20,13 +20,13 @@ export const Account: FunctionComponent = () => {
   const initialRouteName = () => {
     switch (signedIn) {
       case SignInStatus.DELETE:
-        return AccountPage.WithdrawnMember
+        return AccountPage.WithdrawnMember;
       case SignInStatus.EXPIRED:
-        return AccountPage.ExpiredAccount
+        return AccountPage.ExpiredAccount;
       default:
-        return AccountPage.IntroduceElysia
+        return AccountPage.IntroduceElysia;
     }
-  }
+  };
 
   return (
     <Stack.Navigator
