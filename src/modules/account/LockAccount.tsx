@@ -2,11 +2,11 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import BorderFlatButton from '../../shared/components/BorderFlatButton';
 import LockAccountPng from './images/lockaccount.png';
-import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';

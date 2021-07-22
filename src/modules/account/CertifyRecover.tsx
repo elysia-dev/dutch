@@ -28,7 +28,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
   const { Server } = useContext(UserContext);
   const route = useRoute<RouteProp<ParamList, 'CertifyRecover'>>();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const callResendApi: () => void = () => {
     Server.certifyEmail_recover(

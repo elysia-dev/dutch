@@ -1,18 +1,18 @@
 import React, { FunctionComponent, useState } from 'react';
 import { View } from 'react-native';
-import { TitleText } from '../../shared/components/Texts';
-import Layout from './components/Layout';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import NextButton from '../../shared/components/NextButton';
-import RecoverMnemonicView from './components/RecoverMnemonicView';
 import { isValidMnemonic } from '@ethersproject/hdnode';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { TitleText } from '../../shared/components/Texts';
+import Layout from './components/Layout';
+import NextButton from '../../shared/components/NextButton';
+import RecoverMnemonicView from './components/RecoverMnemonicView';
 import { WalletPage } from '../../enums/pageEnum';
-import { useTranslation } from 'react-i18next'
 
 type State = {
-  currentIndex: number,
-  mnemonic: string[],
+  currentIndex: number;
+  mnemonic: string[];
 }
 
 const RecoverSeedPharase: FunctionComponent = () => {
@@ -22,9 +22,9 @@ const RecoverSeedPharase: FunctionComponent = () => {
   const [state, setState] = useState<State>({
     currentIndex: 0,
     mnemonic: ['', '', '', '', '', '', '', '', '', '', '', ''],
-    //for test
-    //mnemonic: ['conduct', 'come', 'lobster', 'cliff', 'harsh', 'journey', 'inner', 'airport', 'awkward', 'weapon', 'sibling', 'borrow'],
-  })
+    // for test
+    // mnemonic: ['conduct', 'come', 'lobster', 'cliff', 'harsh', 'journey', 'inner', 'airport', 'awkward', 'weapon', 'sibling', 'borrow'],
+  });
 
   return (
     <Layout>
@@ -38,7 +38,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
           const mnemonic = state.mnemonic;
           mnemonic[index] = text;
 
-          setState({ ...state, mnemonic })
+          setState({ ...state, mnemonic });
         }}
       />
       <View style={{ position: 'absolute', bottom: insets.bottom || 10, width: '100%' }}>
@@ -47,7 +47,7 @@ const RecoverSeedPharase: FunctionComponent = () => {
           disabled={!isValidMnemonic(state.mnemonic.join(' '))}
           handler={async () => {
             navigation.navigate(WalletPage.RecoverWallet, {
-              menmonic: state.mnemonic.join(' ')
+              menmonic: state.mnemonic.join(' '),
             });
           }}
         />

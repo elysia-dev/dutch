@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Modal } from 'react-native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { P1Text } from './Texts';
 
 type Props = React.PropsWithChildren<{

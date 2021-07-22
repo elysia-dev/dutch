@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
-import { useTranslation } from 'react-i18next';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { MainPage, Page } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';

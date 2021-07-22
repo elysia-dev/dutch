@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Dimensions, View, } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CachedImage from './CachedImage';
 
@@ -46,7 +46,7 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
         style={{
           position: 'relative',
           top: 230,
-          width: '100%'
+          width: '100%',
         }}
       >
         <Pagination
@@ -72,7 +72,7 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
         />
       </View>
     </>
-  )
-}
+  );
+};
 
 export default ProductImageCarousel;

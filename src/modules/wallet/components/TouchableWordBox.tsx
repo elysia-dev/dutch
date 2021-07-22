@@ -3,9 +3,9 @@ import { Text, TouchableOpacity } from "react-native";
 import AppColors from '../../../enums/AppColors';
 
 interface ITouchableWordBox {
-  selected: boolean,
-  word: string,
-  onPress: () => void,
+  selected: boolean;
+  word: string;
+  onPress: () => void;
 }
 
 const TouchableWordBox: React.FC<ITouchableWordBox> = ({ selected, word, onPress }) => {
@@ -20,12 +20,12 @@ const TouchableWordBox: React.FC<ITouchableWordBox> = ({ selected, word, onPress
         padding: 8,
       }}
       onPress={() => {
-        !selected && onPress()
+        !selected && onPress();
       }}
     >
       <Text style={{ textAlign: 'center' }}>{word}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default TouchableWordBox
+export default TouchableWordBox;

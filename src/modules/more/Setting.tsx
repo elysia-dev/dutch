@@ -15,7 +15,7 @@ import {
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { P1Text, H3Text } from '../../shared/components/Texts';
 import LocaleType from '../../enums/LocaleType';
 import registerForPushNotificationsAsync from '../../utiles/registerForPushNotificationsAsync';
@@ -155,7 +155,7 @@ const Setting: FunctionComponent = () => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignContent: 'center',
-              marginTop: 20
+              marginTop: 20,
             }}>
             <H3Text
               label={t('more_label.language')}
@@ -190,7 +190,7 @@ const Setting: FunctionComponent = () => {
                       setState({
                         ...state,
                         selectedLanguage: itemValue.toString() as LocaleType,
-                      })
+                      });
                       setLanguage(itemValue.toString() as LocaleType);
                     }}>
                     <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
@@ -225,13 +225,13 @@ const Setting: FunctionComponent = () => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignContent: 'center',
-              marginTop: 20
+              marginTop: 20,
             }}>
             <H3Text
               label={t('more_label.currency')}
               style={{
                 alignSelf: 'center',
-                fontSize: 15
+                fontSize: 15,
               }}
             />
             <View
@@ -257,7 +257,7 @@ const Setting: FunctionComponent = () => {
                     itemStyle={{
                       margin: 0,
                       padding: 0,
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}
                     accessibilityLabel={'settings'}
                     selectedValue={state.selectedCurrency}
@@ -316,7 +316,7 @@ const Setting: FunctionComponent = () => {
             <H3Text
               label={t('more_label.app_info')}
               style={{
-                color: AppColors.SUB_BLACK
+                color: AppColors.SUB_BLACK,
               }}
             />
             <TouchableOpacity
@@ -374,7 +374,7 @@ const Setting: FunctionComponent = () => {
         modalVisible={state.showLanguageModal}
         doneHandler={async () => {
           setState({ ...state, showLanguageModal: false });
-          setLanguage(state.selectedLanguage)
+          setLanguage(state.selectedLanguage);
         }}
         cancelHandler={() => {
           setState({

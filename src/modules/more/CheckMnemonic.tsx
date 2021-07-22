@@ -1,5 +1,7 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
+import { TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { P1Text, TitleText } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
@@ -7,9 +9,7 @@ import WalletContext from '../../contexts/WalletContext';
 import NextButton from '../../shared/components/NextButton';
 import BasicLayout from '../../shared/components/BasicLayout';
 import MnemonicView from '../wallet/components/MnemonicView';
-import { TouchableOpacity, View } from 'react-native';
 import { BackButton } from '../../shared/components/BackButton';
-import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 
 const CheckMnemonic: FunctionComponent = () => {
@@ -57,9 +57,9 @@ const CheckMnemonic: FunctionComponent = () => {
               title={t('account_label.continue')}
               handler={() => {
                 if (validatePassword(password)) {
-                  setStage(1)
+                  setStage(1);
                 } else {
-                  setError(1)
+                  setError(1);
                 }
               }}
             />
@@ -84,13 +84,13 @@ const CheckMnemonic: FunctionComponent = () => {
             </TouchableOpacity> :
             <TouchableOpacity
               style={{ height: 300, backgroundColor: AppColors.BACKGROUND_GREY, justifyContent: 'center', borderRadius: 5 }}
-              onPress={() => { setVisible(true) }}
+              onPress={() => { setVisible(true); }}
             >
               <P1Text label={t('recovery_key.check_after_click')} style={{ textAlign: 'center' }} />
             </TouchableOpacity>
         }
       </BasicLayout>
-    )
+    );
   }
 };
 

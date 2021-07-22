@@ -7,19 +7,19 @@ import { H3Text, H4Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
 
 interface Props {
-  modalVisible: boolean
-  setModalVisible: Dispatch<SetStateAction<boolean>>
-  title: string
-  purposeType: string
-  assetTitle: string
-  assetUnit: string
-  values: { from: string, to: string }
-  priceInCryptocurrency: number
-  cryptocurrencyType: string
-  estimateGas: string
-  gasCrypto: string
-  isApproved: boolean
-  createTx: () => void
+  modalVisible: boolean;
+  setModalVisible: Dispatch<SetStateAction<boolean>>;
+  title: string;
+  purposeType: string;
+  assetTitle: string;
+  assetUnit: string;
+  values: { from: string; to: string };
+  priceInCryptocurrency: number;
+  cryptocurrencyType: string;
+  estimateGas: string;
+  gasCrypto: string;
+  isApproved: boolean;
+  createTx: () => void;
 }
 
 const ConfirmationModal: React.FC<Props> = ({
@@ -315,6 +315,6 @@ const ConfirmationModal: React.FC<Props> = ({
       </View>
     </Modal>
   );
-}
+};
 
 export default ConfirmationModal;

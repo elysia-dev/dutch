@@ -7,17 +7,17 @@ import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import { P3Text } from './Texts';
 
-const GasPrice: React.FC<{ estimatedGas: string, gasCrypto: CryptoType, insufficientGas: boolean }> = ({
+const GasPrice: React.FC<{ estimatedGas: string; gasCrypto: CryptoType; insufficientGas: boolean }> = ({
   estimatedGas,
   gasCrypto,
   insufficientGas,
 }) => {
-  const { currencyFormatter } = useContext(PreferenceContext)
-  const { getCryptoPrice } = useContext(PriceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
   if (!estimatedGas) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -34,7 +34,7 @@ const GasPrice: React.FC<{ estimatedGas: string, gasCrypto: CryptoType, insuffic
         )}
       </View>
     </>
-  )
-}
+  );
+};
 
 export default GasPrice;

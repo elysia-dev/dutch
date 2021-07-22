@@ -1,19 +1,19 @@
 import React from 'react';
 import { View, Text, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
-import { useTranslation } from 'react-i18next';
 import GuideText from './GuideText';
 import AppColors from '../../../enums/AppColors';
 
 interface Props {
-  current: string,
-  value: string,
-  type: string,
-  purposeType: string,
-  tokenType: string,
-  priceInCryptocurrency: string,
-  cryptocurrencyType: string,
+  current: string;
+  value: string;
+  type: string;
+  purposeType: string;
+  tokenType: string;
+  priceInCryptocurrency: string;
+  cryptocurrencyType: string;
 }
 
 const LargeTextInput: React.FC<Props> = ({
@@ -30,7 +30,7 @@ const LargeTextInput: React.FC<Props> = ({
   if (value) {
     let valueFontSize = 30;
     if (value.length > 10) {
-      valueFontSize = valueFontSize - (value.length-10);
+      valueFontSize -= (value.length - 10);
     }
 
     return (
@@ -131,6 +131,6 @@ const LargeTextInput: React.FC<Props> = ({
       </>
     );
   }
-}
+};
 
 export default LargeTextInput;

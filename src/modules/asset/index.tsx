@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { enableScreens } from 'react-native-screens'
+import { enableScreens } from 'react-native-screens';
 import Purchase from './Purchase';
 import Detail from './Detail';
 import { AssetPage } from '../../enums/pageEnum';
@@ -8,16 +8,16 @@ import Refund from './Refund';
 import Reward from './Reward';
 import LegacyOwnershipRefund from './LagacyOwnershipRefund';
 
-enableScreens()
+enableScreens();
 
-const RootStack = createNativeStackNavigator()
+const RootStack = createNativeStackNavigator();
 
 export const Main = () => {
   return (
     <RootStack.Navigator
       screenOptions={{
         headerShown: false,
-        stackPresentation: 'formSheet'
+        stackPresentation: 'formSheet',
       }}
     >
       <RootStack.Screen
@@ -45,4 +45,4 @@ export const Main = () => {
   );
 };
 
-export default Main
+export default Main;

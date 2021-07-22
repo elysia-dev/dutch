@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { BackButton } from '../../shared/components/BackButton';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TitleText } from '../../shared/components/Texts';
-import { useTranslation } from 'react-i18next';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkPassword from '../../utiles/checkPassword';
 

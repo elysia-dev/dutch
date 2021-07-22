@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Text, View, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
 import TxStep from '../../../enums/TxStep';
 import OverlayLoading from '../../../shared/components/OverlayLoading';
-import { useTranslation } from 'react-i18next';
 import Asset from '../../../types/Asset';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
@@ -20,27 +20,27 @@ import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
 
 interface ITxInput {
-  purpose: PurposeType
-  title: string
-  fromInputTitle: string
-  toInputTitle: string
-  from: Asset
-  to: Asset
-  toMax?: number
-  fromMax?: number
-  fromPrice: number
-  toPrice: number
-  fromBalance: number
-  toBalance: number
-  values: { from: string, to: string }
-  current: string
-  step: TxStep
-  estimateGas?: string
-  disabled: boolean
-  isApproved: boolean
-  setCurrent: Dispatch<SetStateAction<"from" | "to">>
-  setValues: Dispatch<SetStateAction<{ from: string; to: string; }>>
-  createTx: () => void
+  purpose: PurposeType;
+  title: string;
+  fromInputTitle: string;
+  toInputTitle: string;
+  from: Asset;
+  to: Asset;
+  toMax?: number;
+  fromMax?: number;
+  fromPrice: number;
+  toPrice: number;
+  fromBalance: number;
+  toBalance: number;
+  values: { from: string; to: string };
+  current: string;
+  step: TxStep;
+  estimateGas?: string;
+  disabled: boolean;
+  isApproved: boolean;
+  setCurrent: Dispatch<SetStateAction<"from" | "to">>;
+  setValues: Dispatch<SetStateAction<{ from: string; to: string }>>;
+  createTx: () => void;
 }
 
 // * Info
@@ -96,7 +96,7 @@ const TxInput: React.FC<ITxInput> = ({
       <SheetHeader title={title} />
       <View style={{
         display: 'flex',
-        flexDirection:'row',
+        flexDirection: 'row',
         justifyContent: 'center',
       }}>
         <TouchableOpacity
@@ -182,47 +182,47 @@ const TxInput: React.FC<ITxInput> = ({
         />
         <NumberPad
           addValue={(text) => {
-            const before = current === 'from' ? values.from : values.to
-            const includesComma = before.includes('.')
+            const before = current === 'from' ? values.from : values.to;
+            const includesComma = before.includes('.');
             if (
               text === '.' && includesComma
               || text !== '.' && !includesComma && before.length >= 12
               || includesComma && before.split('.')[1].length >= (current === 'from' ? 2 : 6)
               || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
             ) {
-              return
+              return;
             }
 
-            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text
+            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text;
             const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
             if (current === 'from') {
               setValues({
                 from: next,
                 to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
-              })
+              });
             } else {
               setValues({
                 from: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
                 to: next,
-              })
+              });
             }
           }}
           removeValue={() => {
-            const before = current === 'from' ? values.from : values.to
+            const before = current === 'from' ? values.from : values.to;
 
-            const next = before.slice(0, -1)
+            const next = before.slice(0, -1);
 
             if (current === 'from') {
               setValues({
                 from: next,
                 to: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
-              })
+              });
             } else {
               setValues({
                 from: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
                 to: next,
-              })
+              });
             }
           }}
           height={Dimensions.get('window').height - 440}
@@ -232,7 +232,7 @@ const TxInput: React.FC<ITxInput> = ({
         style={{
           marginBottom: insets.bottom || 10,
           paddingLeft: '5%',
-          paddingRight: '5%'
+          paddingRight: '5%',
         }}
       >
         <NextButton
@@ -240,9 +240,9 @@ const TxInput: React.FC<ITxInput> = ({
           title={t('assets.done')}
           handler={() => {
             if (isWalletUser) {
-              setModalVisible(true)
+              setModalVisible(true);
             } else {
-              createTx()
+              createTx();
             }
           }}
         />
@@ -264,7 +264,7 @@ const TxInput: React.FC<ITxInput> = ({
       />
       <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
     </View>
-  )
-}
+  );
+};
 
 export default TxInput;

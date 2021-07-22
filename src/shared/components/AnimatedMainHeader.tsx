@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, View, Animated } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 
-const AnimatedMainHeader: React.FC<{ title: string, scrollY: Animated.Value }> = ({
+const AnimatedMainHeader: React.FC<{ title: string; scrollY: Animated.Value }> = ({
   title,
   scrollY,
 }) => {

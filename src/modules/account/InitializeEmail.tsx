@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator, Modal, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { TitleText } from '../../shared/components/Texts';
 
-import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';

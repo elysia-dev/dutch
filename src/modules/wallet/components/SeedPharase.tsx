@@ -10,7 +10,7 @@ const SeedPharase: React.FC = () => {
       {stage === 0 && <BackupSeedPharase next={() => setStage(1)} />}
       {stage === 1 && <ConfirmSeedPharase />}
     </>
-  )
-}
+  );
+};
 
-export default SeedPharase
+export default SeedPharase;

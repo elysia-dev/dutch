@@ -16,7 +16,7 @@ const LegacyWallet: FunctionComponent<Props> = ({
   balance,
   handler,
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { currencyFormatter } = useContext(PreferenceContext);
 
   return (
@@ -33,7 +33,7 @@ const LegacyWallet: FunctionComponent<Props> = ({
         <H3Text label={t("dashboard_label.remaining_balance")} />
       </View>
       <TouchableOpacity
-        onPress={() => { handler() }}
+        onPress={() => { handler(); }}
         style={{ display: 'flex', flexDirection: 'row', height: 60, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
       >
         <CryptoImage type={CryptoType.EL} />
@@ -44,7 +44,7 @@ const LegacyWallet: FunctionComponent<Props> = ({
           style={{ marginLeft: 'auto' }}
           label={currencyFormatter(
             balance,
-            2
+            2,
           )}
         />
       </TouchableOpacity>
@@ -57,4 +57,4 @@ const LegacyWallet: FunctionComponent<Props> = ({
   );
 };
 
-export default LegacyWallet
+export default LegacyWallet;

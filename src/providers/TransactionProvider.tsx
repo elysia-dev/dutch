@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useContext, useEffect } from 'react';
-import { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
+import { showMessage } from 'react-native-flash-message';
+import { useTranslation } from 'react-i18next';
+import { Linking } from 'react-native';
 import { PENDING_TRANSACTIONS } from '../constants/storage';
 import TransactionContext, {
   TransactionType,
@@ -10,9 +13,6 @@ import CryptoType from '../enums/CryptoType';
 import TxStatus from '../enums/TxStatus';
 import CryptoTransaction from '../types/CryptoTransaction';
 import { bscProvider, provider } from '../utiles/getContract';
-import { showMessage } from 'react-native-flash-message';
-import { useTranslation } from 'react-i18next';
-import { Linking } from 'react-native';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
@@ -62,10 +62,9 @@ const TransactionProvider: React.FC = (props) => {
     if (
       state.transactions.filter((tx) => tx.status === TxStatus.Pending)
         .length === 0
-    )
-      return;
+    ) return;
 
-    let timer = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       const txResponses = await Promise.all(
         state.transactions
           .filter((tx) => tx.status === TxStatus.Pending)

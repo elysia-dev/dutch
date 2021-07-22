@@ -126,7 +126,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
                   setIsChartLine(true);
                 }}
               />
-              {/* 차트 클릭시 클릭한 부분 토큰과 날짜를 표시해주는 컴포넌트*/}
+              {/* 차트 클릭시 클릭한 부분 토큰과 날짜를 표시해주는 컴포넌트 */}
               {isChartLine && (
                 <ClickChartLine
                   chartLoc={chartLoc}
