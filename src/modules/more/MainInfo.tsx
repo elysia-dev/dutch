@@ -209,7 +209,7 @@ const MainInfo: FunctionComponent = () => {
                             width: 8,
                             height: 8,
                             borderRadius: 4,
-                            backgroundColor: '#FC5C4F',
+                            backgroundColor: AppColors.NOTICE_RED,
                           }}
                         />
                       )}

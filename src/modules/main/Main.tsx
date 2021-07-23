@@ -93,18 +93,18 @@ const Main: FunctionComponent = () => {
                 {notifications.filter(
                   (notification) => notification.status === 'unread',
                 ).length > 0 && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 25,
-                        width: 8,
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: '#FC5C4F',
-                      }}
-                    />
-                  )}
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 10,
+                      right: 25,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: AppColors.NOTICE_RED,
+                    }}
+                  />
+                )}
               </>
             ),
           }}
@@ -125,7 +125,7 @@ const Main: FunctionComponent = () => {
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {(!isWalletUser && !(user.ethAddresses?.length > 0)) && (
+                {!isWalletUser && !(user.ethAddresses?.length > 0) && (
                   <View
                     style={{
                       position: 'absolute',
@@ -134,7 +134,7 @@ const Main: FunctionComponent = () => {
                       width: 8,
                       height: 8,
                       borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
+                      backgroundColor: AppColors.NOTICE_RED,
                     }}
                   />
                 )}
