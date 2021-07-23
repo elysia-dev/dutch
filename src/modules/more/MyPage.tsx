@@ -89,7 +89,11 @@ const MyPage: FunctionComponent = () => {
                   }}>
                   <H3Text
                     label={t('more_label.leave_elysia')}
-                    style={{ fontSize: 15, lineHeight: 25, color: '#CC3743' }}
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 25,
+                      color: AppColors.CRITICAL_RED,
+                    }}
                   />
                   <P3Text
                     label={t('more.delete_info')}

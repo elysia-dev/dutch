@@ -401,7 +401,7 @@ const Setting: FunctionComponent = () => {
                   label={t('more_label.get_latest_version', {
                     version: state.latestVersion,
                   })}
-                  style={{ color: '#CC3743', fontSize: 15 }}
+                  style={{ color: AppColors.CRITICAL_RED, fontSize: 15 }}
                 />
                 <Image
                   source={require('./images/next_gray.png')}

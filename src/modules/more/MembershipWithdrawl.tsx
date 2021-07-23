@@ -110,7 +110,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 <P3Text
                   label={'*  '}
                   style={{
-                    color: '#CC3743',
+                    color: AppColors.CRITICAL_RED,
                   }}
                 />
                 <P3Text
@@ -129,7 +129,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 <P3Text
                   label={'*  '}
                   style={{
-                    color: '#CC3743',
+                    color: AppColors.CRITICAL_RED,
                   }}
                 />
                 <P3Text
@@ -150,7 +150,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               <P3Text
                 label={'*  '}
                 style={{
-                  color: '#CC3743',
+                  color: AppColors.CRITICAL_RED,
                 }}
               />
               <P3Text
@@ -167,7 +167,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               <P3Text
                 label={'*  '}
                 style={{
-                  color: '#CC3743',
+                  color: AppColors.CRITICAL_RED,
                 }}
               />
               <P3Text
