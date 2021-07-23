@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator, Modal } from 'react-native';
+import AppColors from '../../enums/AppColors';
 
 const OverlayLoading: React.FC<{ visible: boolean }> = ({ visible }) => {
   return (
@@ -8,8 +9,7 @@ const OverlayLoading: React.FC<{ visible: boolean }> = ({ visible }) => {
       transparent={true}
       animationType={'none'}
       style={{ zIndex: 1100 }}
-      onRequestClose={() => { }}
-    >
+      onRequestClose={() => {}}>
       <View
         style={{
           backgroundColor: 'rgba(0,0,0,0.5)',
@@ -23,7 +23,7 @@ const OverlayLoading: React.FC<{ visible: boolean }> = ({ visible }) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <ActivityIndicator size="large" color="#ffff" />
+          <ActivityIndicator size="large" color={AppColors.WHITE} />
         </View>
       </View>
     </Modal>

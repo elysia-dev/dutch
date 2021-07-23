@@ -11,7 +11,7 @@ const Loading: React.FC = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <ActivityIndicator size="large" color="#ffff" />
+        <ActivityIndicator size="large" color={AppColors.WHITE} />
       </View>
     </View>
   );

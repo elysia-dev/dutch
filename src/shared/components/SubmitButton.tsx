@@ -1,5 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { StyleProp, ViewStyle, TextStyle, TouchableOpacity, Text } from 'react-native';
+import {
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import AppColors from '../../enums/AppColors';
 
@@ -60,20 +66,19 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
         alignContent: 'center',
         ...handleThemeType(variant),
         ...(style as {}),
-      }}
-    >
+      }}>
       {duplicateTitle === undefined ? (
         <Text
           style={{
             fontSize: variant === 'WhiteTheme' ? 14 : 16,
             textAlign: 'center',
             lineHeight: 40,
-            fontFamily: variant === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold,
-            color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+            fontFamily:
+              variant === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold,
+            color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
             ...(textStyle as {}),
           }}
-          allowFontScaling={false}
-        >
+          allowFontScaling={false}>
           {title}
         </Text>
       ) : (
@@ -83,20 +88,18 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
             fontSize: 14,
             textAlign: 'left',
             marginLeft: '6%',
-            color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+            color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
             fontFamily: AppFonts.Regular,
-          }}
-        >
+          }}>
           {duplicateTitle}
           <Text
             allowFontScaling={false}
             style={{
               fontSize: 16,
               textAlign: 'left',
-              color: variant === 'WhiteTheme' ? '#000000' : '#FFFFFF',
+              color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
               fontFamily: AppFonts.Bold,
-            }}
-          >
+            }}>
             {'\n'}
             {title}
           </Text>

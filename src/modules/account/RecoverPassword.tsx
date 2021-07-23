@@ -8,6 +8,7 @@ import AcceptedImg from './images/accepted.png';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   RecoverPassword: {
@@ -52,7 +53,8 @@ const RecoverPassword: FunctionComponent = () => {
           height: '100%',
           width: '100%',
           zIndex: state.modalVisible === false ? 0 : 999,
-          backgroundColor: state.modalVisible === false ? '#FFFFFF' : '#000000',
+          backgroundColor:
+            state.modalVisible === false ? AppColors.WHITE : '#000000',
           display: state.modalVisible === false ? 'none' : 'flex',
           opacity: state.modalVisible === false ? 0 : 0.6,
         }}></View>
