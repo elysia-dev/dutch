@@ -458,7 +458,7 @@ const MainInfo: FunctionComponent = () => {
                   alignSelf: 'center',
                   backgroundColor:
                     user.provider === ProviderType.ETH || isWalletUser
-                      ? '#c4302b'
+                      ? AppColors.CRITICAL_RED
                       : '#767577',
                 }}
               />

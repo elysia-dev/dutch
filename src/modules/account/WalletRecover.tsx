@@ -8,6 +8,7 @@ import SignInStatus from '../../enums/SignInStatus';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 const WalletRecover: FunctionComponent = () => {
   const { setLock, clearWallet } = useContext(WalletContext);
@@ -48,7 +49,7 @@ const WalletRecover: FunctionComponent = () => {
               marginTop: 'auto',
               marginLeft: '5%',
               marginRight: '5%',
-              backgroundColor: '#c4302b',
+              backgroundColor: AppColors.CRITICAL_RED,
             }}
             title={t('wallet.recover_button')}
             disabled={!confirmed}
