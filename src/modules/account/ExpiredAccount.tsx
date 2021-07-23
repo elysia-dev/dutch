@@ -48,7 +48,7 @@ const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
           position: 'absolute',
           bottom: '20%',
           alignSelf: 'center',
-          backgroundColor: '#2C6190',
+          backgroundColor: AppColors.MAIN_DARKER,
           width: 200,
           height: 50,
           justifyContent: 'center',

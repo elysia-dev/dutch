@@ -18,6 +18,7 @@ enum AppColors {
   BLUE_2 = '#D0D8DF',
   MODAL_BACKGROUND = '#0000006F',
   DEACTIVATED = '#CCCCCC',
+  MAIN_DARKER = '#2C6190',
 }
 
 export default AppColors;
