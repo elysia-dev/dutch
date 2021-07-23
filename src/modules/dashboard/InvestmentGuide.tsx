@@ -69,7 +69,8 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
           key={index}>
           <Circle
             style={{
-              backgroundColor: state === index ? '#3679B5' : '#BDD3E6',
+              backgroundColor:
+                state === index ? AppColors.MAIN : AppColors.MAIN_LIGHTER,
               overflow: 'hidden',
               margin: 10,
             }}

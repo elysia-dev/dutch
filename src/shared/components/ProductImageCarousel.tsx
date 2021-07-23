@@ -4,7 +4,9 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CachedImage from './CachedImage';
 import AppColors from '../../enums/AppColors';
 
-const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) => {
+const ProductImageCarousel: React.FC<{ images: string[] }> = ({
+  images = [],
+}) => {
   const [current, setCurrent] = useState(0);
   const carouselRef = useRef(null);
 
@@ -16,8 +18,7 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
           top: 0,
           width: '100%',
           height: 293,
-        }}
-      >
+        }}>
         <Carousel
           ref={carouselRef}
           data={images}
@@ -48,15 +49,13 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
           position: 'relative',
           top: 230,
           width: '100%',
-        }}
-      >
+        }}>
         <Pagination
           carouselRef={carouselRef}
           tappableDots={true}
           dotsLength={images.length || 0}
           activeDotIndex={current}
-          containerStyle={{
-          }}
+          containerStyle={{}}
           dotStyle={{
             width: 10,
             height: 10,
@@ -66,7 +65,7 @@ const ProductImageCarousel: React.FC<{ images: string[] }> = ({ images = [] }) =
             backgroundColor: AppColors.MAIN,
           }}
           inactiveDotStyle={{
-            backgroundColor: '#BDD3E6',
+            backgroundColor: AppColors.MAIN_LIGHTER,
           }}
           inactiveDotOpacity={1}
           inactiveDotScale={1}
