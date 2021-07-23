@@ -92,7 +92,7 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         height: 50,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: props.selected ? '#3679B5' : '#D0D8DF',
+        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
         paddingVertical: 15,
         paddingHorizontal: 25,
         flexDirection: 'row',

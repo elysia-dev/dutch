@@ -183,7 +183,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
           title={t('more_label.agree_withdrawl')}
           handler={confirmWithdrawl}
           style={{
-            backgroundColor: password ? '#3679B5' : '#D0D8DF',
+            backgroundColor: password ? AppColors.MAIN : AppColors.BLUE_2,
           }}
           disabled={!password}
         />

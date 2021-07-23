@@ -144,8 +144,8 @@ const Contact: FunctionComponent = () => {
           style={{
             backgroundColor:
               !state.contents || state.contactRestriction
-                ? '#D0D8DF'
-                : '#3679B5',
+                ? AppColors.BLUE_2
+                : AppColors.MAIN,
           }}
           title={t('more_label.contact')}
           handler={() => callApi()}

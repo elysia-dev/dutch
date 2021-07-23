@@ -147,7 +147,7 @@ const Setting: FunctionComponent = () => {
                     }}
                   />
                   <Switch
-                    trackColor={{ false: '#767577', true: '#3679B5' }}
+                    trackColor={{ false: '#767577', true: AppColors.MAIN }}
                     thumbColor={
                       state.hasPermission ? AppColors.WHITE : '#f4f3f4'
                     }

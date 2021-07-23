@@ -43,9 +43,9 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         <Slider
           minimumValue={0}
           maximumValue={parseInt(props.product.presentValue, 10)}
-          minimumTrackTintColor={'#3679B5'}
+          minimumTrackTintColor={AppColors.MAIN}
           maximumTrackTintColor={'#626368'}
-          thumbTintColor={'#3679B5'}
+          thumbTintColor={AppColors.MAIN}
           value={state.tokenCount}
           step={1}
           onValueChange={(token: number) => {

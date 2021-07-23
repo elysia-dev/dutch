@@ -55,7 +55,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         height: 50,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: props.selected ? '#3679B5' : '#D0D8DF',
+        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
         padding: 15,
         flexDirection: 'row',
         marginBottom: 15,
@@ -254,10 +254,10 @@ const PaymentSelection: React.FC<{
             backgroundColor:
               // eslint-disable-next-line no-nested-ternary
               wallet === WalletType.METAMASK_MOBILE
-                ? '#3679B5'
+                ? AppColors.MAIN
                 : emailRestriction
-                ? '#D0D8DF'
-                : '#3679B5',
+                ? AppColors.BLUE_2
+                : AppColors.MAIN,
           }}
           handler={linkDapp}></SubmitButton>
       </View>

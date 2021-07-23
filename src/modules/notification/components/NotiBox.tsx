@@ -266,7 +266,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 alignContent: 'center',
                 justifyContent: 'center',
               }}>
-              <ActivityIndicator size="small" color="#3679B5" />
+              <ActivityIndicator size="small" color={AppColors.MAIN} />
             </View>
           )}
         </View>
