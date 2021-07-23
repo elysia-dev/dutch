@@ -1,5 +1,12 @@
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
-import { View, StyleProp, ViewStyle, Keyboard, TextInput, Image } from 'react-native';
+import {
+  View,
+  StyleProp,
+  ViewStyle,
+  Keyboard,
+  TextInput,
+  Image,
+} from 'react-native';
 import AppFonts from '../../enums/AppFonts';
 import WarningImg from '../assets/images/warning.png';
 import { P3Text } from './Texts';
@@ -24,7 +31,7 @@ interface Props {
 export const TextField: FunctionComponent<Props> = ({
   onFocused = false,
   autocapitalize = 'none',
-  focusHandler = () => { },
+  focusHandler = () => {},
   ...props
 }) => {
   const [focusing, setFocus] = useState(onFocused);
@@ -55,8 +62,8 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-                ? '#3679B5'
-                : '#A7A7A7',
+              ? '#3679B5'
+              : '#A7A7A7',
           fontFamily: AppFonts.Regular,
         }}
       />
@@ -67,10 +74,10 @@ export const TextField: FunctionComponent<Props> = ({
             props.helperText !== undefined
               ? '#C91725'
               : focusing === true
-                ? '#3679B5'
-                : '#D0D8DF',
+              ? '#3679B5'
+              : '#D0D8DF',
           marginBottom: props.helperText !== undefined ? 0 : 20,
-          color: props.editable === false ? '#A7A7A7' : '#1C1C1C',
+          color: props.editable === false ? '#A7A7A7' : AppColors.BLACK,
           fontFamily: AppFonts.Regular,
           width: '100%',
           height: 30,
@@ -104,8 +111,7 @@ export const TextField: FunctionComponent<Props> = ({
             flexDirection: 'row-reverse',
             paddingTop: 5,
             height: 30,
-          }}
-        >
+          }}>
           <P3Text
             label={props.helperText}
             style={{

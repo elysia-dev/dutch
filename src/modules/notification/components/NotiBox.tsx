@@ -153,7 +153,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
+                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK,
                 fontFamily:
                   status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,

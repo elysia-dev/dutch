@@ -137,7 +137,7 @@ export const Main: React.FC = () => {
                     onBtnRefresh();
                   }}>
                   {btnRefreshing ? (
-                    <ActivityIndicator size="small" color="#1c1c1c" />
+                    <ActivityIndicator size="small" color={AppColors.BLACK} />
                   ) : (
                     <Image
                       style={{ width: 20, height: 20 }}

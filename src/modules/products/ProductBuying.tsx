@@ -223,10 +223,10 @@ const ProductBuying: FunctionComponent = () => {
             backgroundColor:
               // eslint-disable-next-line no-nested-ternary
               state.product?.status === ProductStatus.TERMINATED
-                ? '#1c1c1c'
+                ? AppColors.BLACK
                 : user.provider === ProviderType.ETH || purchasability
-                ? '#3679B5'
-                : '#D0D8DF',
+                ? AppColors.MAIN
+                : AppColors.BLUE_2,
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={submitButtonHandler}
