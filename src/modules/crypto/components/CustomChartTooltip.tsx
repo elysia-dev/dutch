@@ -4,6 +4,7 @@ import moment from 'moment';
 import { ChartDataPoint, XYValue } from 'react-native-responsive-linechart';
 import { Text } from 'react-native-svg';
 import ChartDataContext from '../../../contexts/ChartDataContext';
+import AppColors from '../../../enums/AppColors';
 
 type Props = {
   value: ChartDataPoint;
@@ -74,7 +75,7 @@ const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
         fontSize={14}
         textAnchor={'middle'}
         opacity={1}
-        fill={'#848484'}
+        fill={AppColors.SUB_BLACK}
         fontWeight={700}>
         {value?.y.toString() || 0}
       </Text>
