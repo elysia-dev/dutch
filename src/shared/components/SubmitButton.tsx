@@ -75,7 +75,7 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
             lineHeight: 40,
             fontFamily:
               variant === 'GrayTheme' ? AppFonts.Regular : AppFonts.Bold,
-            color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
+            color: variant === 'WhiteTheme' ? AppColors.BLACK : AppColors.WHITE,
             ...(textStyle as {}),
           }}
           allowFontScaling={false}>
@@ -88,7 +88,7 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
             fontSize: 14,
             textAlign: 'left',
             marginLeft: '6%',
-            color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
+            color: variant === 'WhiteTheme' ? AppColors.BLACK : AppColors.WHITE,
             fontFamily: AppFonts.Regular,
           }}>
           {duplicateTitle}
@@ -97,7 +97,8 @@ export const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
             style={{
               fontSize: 16,
               textAlign: 'left',
-              color: variant === 'WhiteTheme' ? '#000000' : AppColors.WHITE,
+              color:
+                variant === 'WhiteTheme' ? AppColors.BLACK : AppColors.WHITE,
               fontFamily: AppFonts.Bold,
             }}>
             {'\n'}
