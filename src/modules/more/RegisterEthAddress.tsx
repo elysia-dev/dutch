@@ -386,7 +386,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                       marginTop: 10,
                       backgroundColor: state.pressed
                         ? 'rgba(0,0,0,0.07)'
-                        : 'rgba(0,0,0,0)',
+                        : AppColors.TRANSPARENT,
 
                       borderRadius: 10,
                     }}

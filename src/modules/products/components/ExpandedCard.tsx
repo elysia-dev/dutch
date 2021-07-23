@@ -166,8 +166,8 @@ const ExpandedItem: FunctionComponent<Props> = ({
         backgroundColor: animatedValue.interpolate({
           inputRange: [0, 0.9, 1],
           outputRange: [
-            'rgba(255,255,255,0)',
-            'rgba(255,255,255,0)',
+            AppColors.TRANSPARENT,
+            AppColors.TRANSPARENT,
             AppColors.WHITE,
           ],
         }),
