@@ -45,7 +45,7 @@ const htmlStyles = StyleSheet.create({
   p: {
     fontSize: 15,
     lineHeight: 25,
-    color: '#626368',
+    color: AppColors.BLACK2,
     textAlign: 'left',
     marginLeft: '5%',
     marginRight: '5%',

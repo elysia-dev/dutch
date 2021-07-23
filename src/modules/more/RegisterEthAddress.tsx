@@ -526,7 +526,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             <P2Text
               label={t('more.find_more')}
               style={{
-                color: '#626368',
+                color: AppColors.BLACK2,
                 textAlign: 'center',
                 top: 5,
                 marginBottom: 40,

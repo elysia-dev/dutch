@@ -44,7 +44,7 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           minimumValue={0}
           maximumValue={parseInt(props.product.presentValue, 10)}
           minimumTrackTintColor={AppColors.MAIN}
-          maximumTrackTintColor={'#626368'}
+          maximumTrackTintColor={AppColors.BLACK2}
           thumbTintColor={AppColors.MAIN}
           value={state.tokenCount}
           step={1}

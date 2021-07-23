@@ -128,7 +128,7 @@ const RemainingBalance: FunctionComponent<{}> = () => {
                     style={{
                       marginBottom: 40,
                       textAlign: 'center',
-                      color: '#626368',
+                      color: AppColors.BLACK2,
                     }}
                     label={t('dashboard.remaining_withdraw_popup.1')}
                   />

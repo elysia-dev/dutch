@@ -111,7 +111,7 @@ const LockAccount: FunctionComponent = () => {
               label={t('account.lockdown')}
             />
             <P1Text
-              style={{ marginTop: 10, color: '#626368' }}
+              style={{ marginTop: 10, color: AppColors.BLACK2 }}
               label={t('account.lockdown_text')}
             />
             <View style={{ marginTop: 20 }} />

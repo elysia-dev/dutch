@@ -7,6 +7,7 @@ import { H3Text, P1Text } from '../../../shared/components/Texts';
 import UserContext from '../../../contexts/UserContext';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;
@@ -59,7 +60,7 @@ export const Map: FunctionComponent<Props> = (props: Props) => {
           }}>
           <P1Text
             label={t('product_label.location')}
-            style={{ flex: 1, color: '#626368' }}
+            style={{ flex: 1, color: AppColors.BLACK2 }}
           />
           <P1Text
             label={productDescription.address}

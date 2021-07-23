@@ -73,7 +73,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.expected_annual_return')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.expectedAnnualReturn}%`}
@@ -87,7 +87,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.apr'
                       : 'product_financial.return_rent',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.data.returnOnRent}%`}
@@ -97,7 +97,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.return_sale')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.data.returnOnSale}%`}
@@ -111,7 +111,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.distribution_date'
                       : 'product_financial.rent_distribution',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.monthlyRentIncomeDistributionCycle}
@@ -121,7 +121,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.lockup_period')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.lockupPeriod}
@@ -135,7 +135,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.expiry'
                       : 'product_financial.expected_sale_date',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.expectedSaleDate}
@@ -145,7 +145,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.price')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={
@@ -165,7 +165,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 <DesView>
                   <P3Text
                     label={t('product_financial.net_deposit')}
-                    style={{ color: '#626368' }}
+                    style={{ color: AppColors.BLACK2 }}
                   />
                   <P3Text
                     label={currencyFormatter(
@@ -183,7 +183,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.annual_return'
                       : 'product_financial.net_rent_year',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={currencyFormatter(
@@ -197,7 +197,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.bankloan')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={
@@ -243,7 +243,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.type')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.propertyType}
@@ -253,7 +253,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.ground')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.ground}
@@ -263,7 +263,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.underground')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.underground}
@@ -274,7 +274,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                 <DesView>
                   <P3Text
                     label={t('product_highlight.unit')}
-                    style={{ color: '#626368' }}
+                    style={{ color: AppColors.BLACK2 }}
                   />
                   <P3Text
                     label={productDescription.unit}
@@ -285,7 +285,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.bedroom')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.bedroom}
@@ -295,7 +295,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.completion_date')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={moment(product.data.buildingCompletionDate).format(
@@ -307,7 +307,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.total_parking_available')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.totalParkingAvailable}
@@ -317,7 +317,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.air_conditioning')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.airConditioning}
@@ -327,7 +327,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.heating')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.heating}
@@ -337,7 +337,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.security_facilities')}
-                  style={{ color: '#626368', flex: 1 }}
+                  style={{ color: AppColors.BLACK2, flex: 1 }}
                 />
                 <P3Text
                   label={productDescription.securityFacilities}

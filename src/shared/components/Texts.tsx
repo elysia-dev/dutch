@@ -183,7 +183,7 @@ export const SubTitleText: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#626368',
+        color: AppColors.BLACK2,
         fontSize: 15,
         textAlign: 'left',
         fontFamily: AppFonts.Regular,
