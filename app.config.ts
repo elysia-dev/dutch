@@ -1,5 +1,4 @@
 import { ExpoConfig, ConfigContext } from '@expo/config';
-import AppColors from './src/enums/AppColors';
 
 let name = 'ElysiaStaging';
 let slug = 'ElysiaAppStaging';
@@ -26,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   splash: {
     image: './assets/splash.png',
-    backgroundColor: AppColors.MAIN,
+    backgroundColor: '#3679B5',
   },
   assetBundlePatterns: ['**/*'],
   notification: {
