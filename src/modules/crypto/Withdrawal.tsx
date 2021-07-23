@@ -194,7 +194,7 @@ const Withdrawal: React.FC = () => {
                 borderRadius: 5,
                 borderColor:
                   state.address && !isAddress(state.address)
-                    ? AppColors.RED
+                    ? AppColors.ERROR_RED
                     : AppColors.SUB_GREY,
                 padding: 10,
                 fontSize: 10,
@@ -228,7 +228,7 @@ const Withdrawal: React.FC = () => {
                 style={{
                   fontSize: 10,
                   right: 0,
-                  color: AppColors.RED,
+                  color: AppColors.ERROR_RED,
                   textAlign: 'left',
                   marginBottom: 5,
                 }}>
@@ -323,7 +323,6 @@ const Withdrawal: React.FC = () => {
 
               if (parseFloat(next) >= getBalance(asset.type)) {
                 // Maximum!
-
               } else {
                 setValue(next);
               }

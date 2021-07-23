@@ -13,7 +13,6 @@ enum AppColors {
   EL_BLUE = '#008DED',
   BNB_YELLOW = '#FFC434',
   WHITE = '#FFF',
-  RED = 'red',
   ERROR_RED = '#E53935',
   BLUE_2 = '#D0D8DF',
   MODAL_BACKGROUND = '#0000006F',
