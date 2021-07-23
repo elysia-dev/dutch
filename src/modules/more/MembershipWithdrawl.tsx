@@ -45,7 +45,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
         {
@@ -90,7 +90,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
               padding: 20,
               backgroundColor: AppColors.WHITE,
               elevation: 6,
-              shadowColor: '#1C1C1C4D',
+              shadowColor: AppColors.SHADOW_BLACK2,
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.5,
               shadowRadius: 4,

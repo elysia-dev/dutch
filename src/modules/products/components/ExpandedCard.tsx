@@ -300,7 +300,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
               width: 32,
               height: 32,
               borderRadius: 16,
-              backgroundColor: 'rgba(28,28,28,0.3)',
+              backgroundColor: AppColors.SHADOW_BLACK2,
             }}
           />
           <Image

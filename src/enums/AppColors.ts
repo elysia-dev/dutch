@@ -20,6 +20,7 @@ enum AppColors {
   MAIN_DARKER = '#2C6190',
   MAIN_LIGHTER = '#BDD3E6',
   SHADOW_BLACK = '#00000033',
+  SHADOW_BLACK2 = '#1C1C1C4D',
 }
 
 export default AppColors;
