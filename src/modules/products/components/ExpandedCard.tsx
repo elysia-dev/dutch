@@ -168,7 +168,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
           outputRange: [
             'rgba(255,255,255,0)',
             'rgba(255,255,255,0)',
-            'rgba(255,255,255,1)',
+            AppColors.WHITE,
           ],
         }),
         elevation: animatedValue.interpolate({

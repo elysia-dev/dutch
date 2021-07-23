@@ -180,7 +180,7 @@ const ProductBuying: FunctionComponent = () => {
                   width: 32,
                   height: 32,
                   borderRadius: 16,
-                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  backgroundColor: AppColors.BACKGROUND_WHITE,
                   marginLeft: 12,
                   marginTop: 32,
                 }}
