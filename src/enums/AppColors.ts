@@ -24,6 +24,7 @@ enum AppColors {
   CRITICAL_RED = '#C4302B',
   NOTICE_RED = '#FC5C4F',
   TRANSPARENT = 'transparent',
+  TEXT_GREY = '#A7A7A7',
 }
 
 export default AppColors;

@@ -145,7 +145,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           <View style={{ flex: 10, flexDirection: 'column' }}>
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}
@@ -153,7 +154,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK,
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK,
                 fontFamily:
                   status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,
@@ -174,7 +176,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   fontSize: 13,
                   textAlign: 'left',
                   marginBottom: 6,
-                  color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
+                  color:
+                    status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 }}
                 label={`- ${data.message}`}
               />
@@ -184,7 +187,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 <TouchableOpacity
                   onPress={() => setShowTx(!showTx)}
                   style={{
-                    backgroundColor: '#A7A7A7',
+                    backgroundColor: AppColors.TEXT_GREY,
                     borderRadius: 2,
                     width: 75,
                     height: 20,
@@ -237,7 +240,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             )}
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}

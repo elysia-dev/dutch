@@ -28,7 +28,11 @@ const Asset2Ownership: FunctionComponent = () => {
             }}>
             <P1Text
               label={'상품설명'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text
               label={
@@ -38,29 +42,49 @@ const Asset2Ownership: FunctionComponent = () => {
             />
             <P1Text
               label={'예상 수익률'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text label={`2년 보유시 최대 20%`} />
             <P1Text
               label={'예상 매각일'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text label={`2021.08`} />
             <P1Text
               label={'소유 개수'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text label={`${user.legacyAsset2Value.toString()}개`} />
             <P1Text
               label={'총액'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text
               label={`${commaFormatter(user.legacyAsset2Value * 625)}원`}
             />
             <P1Text
               label={'예상 최대 수익'}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text
               label={`${commaFormatter(user.legacyAsset2Value * 625 * 0.2)}원`}

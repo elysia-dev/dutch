@@ -30,7 +30,11 @@ const MyPage: FunctionComponent = () => {
             }}>
             <P1Text
               label={t('account_label.account_email')}
-              style={{ color: '#a7a7a7', marginTop: 20, marginBottom: 5 }}
+              style={{
+                color: AppColors.TEXT_GREY,
+                marginTop: 20,
+                marginBottom: 5,
+              }}
             />
             <P1Text label={user.email} style={{ fontSize: 15 }} />
             <View
@@ -97,7 +101,7 @@ const MyPage: FunctionComponent = () => {
                   />
                   <P3Text
                     label={t('more.delete_info')}
-                    style={{ color: '#a7a7a7' }}
+                    style={{ color: AppColors.TEXT_GREY }}
                   />
                 </View>
                 <Image

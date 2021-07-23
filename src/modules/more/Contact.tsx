@@ -129,7 +129,7 @@ const Contact: FunctionComponent = () => {
           />
           <P1Text
             style={{
-              color: '#A7A7A7',
+              color: AppColors.TEXT_GREY,
               fontSize: 12,
               textAlign: 'right',
               marginTop: 2,

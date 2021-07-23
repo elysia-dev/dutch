@@ -29,7 +29,8 @@ const Notifications: FunctionComponent = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
-  const { user, notifications, isWalletUser, Server, setNotifications } = useContext(UserContext);
+  const { user, notifications, isWalletUser, Server, setNotifications } =
+    useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const address = wallet?.getFirstAddress() || '';
 
@@ -47,14 +48,16 @@ const Notifications: FunctionComponent = () => {
   };
 
   const loadV2UserNotifications = () => {
-    EspressoV2.getNoficiations(address).then((res) => {
-      setNotifications(res.data);
-      setRefreshing(false);
-    }).catch((e) => {
-      if (e.response.status === 500) {
-        alert(t('account_errors.server'));
-      }
-    });
+    EspressoV2.getNoficiations(address)
+      .then((res) => {
+        setNotifications(res.data);
+        setRefreshing(false);
+      })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert(t('account_errors.server'));
+        }
+      });
   };
 
   const onRefresh = React.useCallback(() => {
@@ -158,7 +161,10 @@ const Notifications: FunctionComponent = () => {
         top: 0,
         backgroundColor: AppColors.WHITE,
       }}>
-      <AnimatedMainHeader title={t('notification_label.notification')} scrollY={scrollY} />
+      <AnimatedMainHeader
+        title={t('notification_label.notification')}
+        scrollY={scrollY}
+      />
       <Animated.ScrollView
         ref={ref}
         scrollEventThrottle={16}
@@ -185,7 +191,7 @@ const Notifications: FunctionComponent = () => {
             }}>
             <P1Text
               style={{
-                color: '#A7A7A7',
+                color: AppColors.TEXT_GREY,
                 textAlign: 'center',
                 fontSize: 15,
               }}

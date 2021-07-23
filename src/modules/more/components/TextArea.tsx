@@ -20,7 +20,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
     <View>
       <P3Text
         style={{
-          color: state.focus ? AppColors.MAIN : '#A7A7A7',
+          color: state.focus ? AppColors.MAIN : AppColors.TEXT_GREY,
           textAlign: 'left',
           marginBottom: 15,
         }}

@@ -63,7 +63,7 @@ export const TextField: FunctionComponent<Props> = ({
               ? '#C91725'
               : focusing === true
               ? AppColors.MAIN
-              : '#A7A7A7',
+              : AppColors.TEXT_GREY,
           fontFamily: AppFonts.Regular,
         }}
       />
@@ -77,7 +77,8 @@ export const TextField: FunctionComponent<Props> = ({
               ? AppColors.MAIN
               : AppColors.BLUE_2,
           marginBottom: props.helperText !== undefined ? 0 : 20,
-          color: props.editable === false ? '#A7A7A7' : AppColors.BLACK,
+          color:
+            props.editable === false ? AppColors.TEXT_GREY : AppColors.BLACK,
           fontFamily: AppFonts.Regular,
           width: '100%',
           height: 30,

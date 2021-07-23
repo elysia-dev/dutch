@@ -125,7 +125,7 @@ export const P3Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#A7A7A7',
+        color: AppColors.TEXT_GREY,
         fontSize: 12,
         textAlign: 'left',
         fontFamily: AppFonts.Regular,
@@ -144,7 +144,7 @@ export const P4Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#A7A7A7',
+        color: AppColors.TEXT_GREY,
         fontSize: 10,
         textAlign: 'left',
         fontFamily: AppFonts.Regular,
