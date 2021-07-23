@@ -145,7 +145,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           <View style={{ flex: 10, flexDirection: 'column' }}>
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}
@@ -174,7 +174,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   fontSize: 13,
                   textAlign: 'left',
                   marginBottom: 6,
-                  color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                  color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
                 }}
                 label={`- ${data.message}`}
               />
@@ -237,7 +237,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             )}
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                color: status === 'read' ? '#A7A7A7' : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}
