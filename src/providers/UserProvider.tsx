@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import moment from 'moment';
+import { composeInitialProps } from 'react-i18next';
 import Server from '../api/server';
 import { getToken, removeToken } from '../asyncStorages/token';
 import { IS_WALLET_USER } from '../constants/storage';
@@ -16,8 +18,6 @@ import NotificationData from '../types/NotificationData';
 import registerForPushNotificationsAsync from '../utiles/registerForPushNotificationsAsync';
 import Notification, { isNotification } from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
-import moment from 'moment';
-import { composeInitialProps } from 'react-i18next';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

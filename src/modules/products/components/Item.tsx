@@ -1,5 +1,6 @@
 import React, { createRef, FunctionComponent, useEffect, useState } from 'react';
 import { View, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AssetType from '../../../enums/AssetType';
 import PaymentCryptoType from '../../../enums/PaymentCryptoType';
 import CachedImage from '../../../shared/components/CachedImage';
@@ -7,10 +8,9 @@ import CachedImage from '../../../shared/components/CachedImage';
 import { H1Text, H2Text, P1Text, P2Text } from '../../../shared/components/Texts';
 import { Story } from '../../../types/product';
 
-import EL from '../../../../src/shared/assets/images/el.png';
-import ETH from '../../../../src/shared/assets/images/eth.png';
-import BNB from '../../../../src/shared/assets/images/bnb.png';
-import { useTranslation } from 'react-i18next';
+import EL from "../../../shared/assets/images/el.png";
+import ETH from "../../../shared/assets/images/eth.png";
+import BNB from "../../../shared/assets/images/bnb.png";
 
 interface Props {
   story: Story;
@@ -59,7 +59,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           }}
         />
         <View style={{
-          marginHorizontal: "5%"
+          marginHorizontal: "5%",
         }}>
           <View style={{
             height: 50,
@@ -67,7 +67,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             justifyContent: "space-between",
             borderBottomColor: "#F1F1F1",
             borderBottomWidth: 1,
-            alignItems: "center"
+            alignItems: "center",
           }}>
             <P1Text label={t("product_label.investment_type")} style={{ fontSize: 15 }} />
             <H2Text label={
@@ -83,12 +83,12 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
             justifyContent: "space-between",
             borderBottomColor: "#F1F1F1",
             borderBottomWidth: 1,
-            alignItems: "center"
+            alignItems: "center",
           }}>
             <P1Text label={t("product_label.payment_method")} style={{ fontSize: 15 }} />
             <View style={{
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}>
               <Image
                 style={{ width: 17, height: 17, marginRight: 5 }}

@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
 import { P1Text, P2Text, TitleText } from '../../shared/components/Texts';
 import Layout from './components/Layout';
 import NextButton from '../../shared/components/NextButton';
 import MnemonicView from './components/MnemonicView';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import CheckIcon from './components/CheckIcon';
 import WalletContext from '../../contexts/WalletContext';
-import { useTranslation } from 'react-i18next'
 
 interface IBackupSeedPharase {
   next: () => void;
@@ -22,7 +22,7 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
   return (
     <Layout>
       <TitleText
-        style={{ marginTop: 50, lineHeight: 35, }}
+        style={{ marginTop: 50, lineHeight: 35 }}
         label={t('recovery_key.backup_seed')}
       />
       <P2Text
@@ -33,7 +33,7 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
       <TouchableOpacity
         style={{ marginTop: 20 }}
         onPress={() => {
-          confirm(!confirmed)
+          confirm(!confirmed);
         }}
       >
         <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>

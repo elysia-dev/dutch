@@ -1,5 +1,5 @@
-import React from 'react';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+
 import { View, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import ChartTabDays from '../../../enums/ChartTabDays';

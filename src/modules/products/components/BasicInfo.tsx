@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Product from '../../../types/product';
 import {
   P1Text,
@@ -43,11 +43,11 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
       }}>
       <View
         style={{
-          marginBottom: 13
+          marginBottom: 13,
         }}>
         <H3Text style={{
           color: '#3679B5',
-          display: product.status === ProductStatus.SALE ? "flex" : "none"
+          display: product.status === ProductStatus.SALE ? "flex" : "none",
         }}
           label={"FUNDING"} />
         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center", width: "100%" }}>
@@ -67,7 +67,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
               <TouchableOpacity
                 onPress={() => {
                   Linking.openURL(
-                    getTokenLink(product.contractAddress, product.paymentMethod.toUpperCase() === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH)
+                    getTokenLink(product.contractAddress, product.paymentMethod.toUpperCase() === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH),
                   );
                 }}
                 style={{
@@ -92,29 +92,29 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         [
           [
             t('more_label.product_name'),
-            product.title
+            product.title,
           ],
           [
             t('dashboard_label.product_info'),
-            t('product_label.loan')
+            t('product_label.loan'),
           ],
           [
             t('product_label.expected_return'),
-            `+ ${product.expectedAnnualReturn}%`
+            `+ ${product.expectedAnnualReturn}%`,
           ],
           [
             t('product_label.available_token'),
-            `${commaFormatter(props.product.presentValue)} / ${commaFormatter(props.product.totalValue)}`
+            `${commaFormatter(props.product.presentValue)} / ${commaFormatter(props.product.totalValue)}`,
           ],
           [
             t('product_label.price_per_token'),
-            priceLabel
+            priceLabel,
           ],
         ].map(([leftContent, rightContent], index) => {
           // Finance Type 이 loan인 경우만 "product_label.loan"을 보여주어야 함
           // Finance Type 이 fund인 경우는 아무것도 보여주지 않음
           if (product.financeType !== 'loan' && index === 1) {
-            return <></>
+            return <></>;
           }
 
           return (
@@ -126,12 +126,12 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 paddingVertical: 20,
                 flexDirection: "row",
                 width: "100%",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}>
               <View style={{ flex: 1 }} >
                 <P2Text
                   style={{
-                    fontSize: 14
+                    fontSize: 14,
                   }}
                   label={leftContent}
                 />
@@ -140,7 +140,7 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
                 <H3Text
                   style={{
                     fontSize: 14,
-                    textAlign: 'right'
+                    textAlign: 'right',
                   }}
                   label={rightContent}
                 />

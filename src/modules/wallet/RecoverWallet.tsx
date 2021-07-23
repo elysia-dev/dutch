@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
+import { Keyboard } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import PasswordForm from '../account/PasswordForm';
 import WalletContext from '../../contexts/WalletContext';
-import { Keyboard } from 'react-native'
 import Loading from '../main/Loading';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { MainPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 
@@ -24,7 +24,7 @@ const RecoverWallet: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'RecoverWallet'>>();
 
   if (loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
@@ -40,8 +40,8 @@ const RecoverWallet: FunctionComponent = () => {
         await setTimeout(async () => {
           await restoreWallet(route.params.menmonic, password);
           newWalletUser();
-          navigation.navigate(MainPage.DashboardMain)
-        }, 500)
+          navigation.navigate(MainPage.DashboardMain);
+        }, 500);
       }}
       message1={t('account.create_password')}
       message2={t('account.password_confirm')}

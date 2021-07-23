@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
-import { useTranslation } from 'react-i18next';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
 

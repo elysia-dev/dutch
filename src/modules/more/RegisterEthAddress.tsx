@@ -21,6 +21,7 @@ import * as Haptics from 'expo-haptics';
 import Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 
+import { DAPP_URL, ETH_NETWORK } from 'react-native-dotenv';
 import {
   P1Text,
   TitleText,
@@ -33,7 +34,6 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import { BackButton } from '../../shared/components/BackButton';
 import { Modal } from '../../shared/components/Modal';
-import { DAPP_URL, ETH_NETWORK } from 'react-native-dotenv';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';

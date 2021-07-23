@@ -20,8 +20,8 @@ const CustomChartTooltip: React.FC<Props> = ({ value, position }) => {
   const maxPositionX = Dimensions.get('window').width * 0.9 - minPositionX;
   const maxDayPositionX =
     Dimensions.get('window').width * 0.9 - minDayPositionX;
-  //x position is problems...
-  //Why?
+  // x position is problems...
+  // Why?
 
   function dayPositionX(): number {
     return positionX <= maxDayPositionX * 0.1

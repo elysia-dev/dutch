@@ -14,6 +14,7 @@ import {
   useScrollToTop,
   useIsFocused,
 } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
@@ -27,7 +28,6 @@ import {
   MorePage,
   Page,
 } from '../../enums/pageEnum';
-import { useTranslation } from 'react-i18next';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
 import PreferenceContext from '../../contexts/PreferenceContext';

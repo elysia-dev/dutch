@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 
 interface IWordQuizeBox {
-  index: number
-  word: string
-  active: boolean
-  onPress: () => void
+  index: number;
+  word: string;
+  active: boolean;
+  onPress: () => void;
 }
 
 const WordQuizeBox: React.FC<IWordQuizeBox> = ({ index, word, active, onPress }) => {

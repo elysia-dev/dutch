@@ -20,7 +20,7 @@ import {
 import HTMLView, { HTMLViewNode } from 'react-native-htmlview';
 import { useNavigation } from '@react-navigation/native';
 import base64 from 'base-64';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import QuitIcon from '../images/quitbuttonblack.png';
 import { SubmitButton } from '../../../shared/components/SubmitButton';
 import { Story } from '../../../types/product';
@@ -191,12 +191,12 @@ const ExpandedItem: FunctionComponent<Props> = ({
           translateX: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [xOffset, 0],
-          })
+          }),
         }, {
           translateY: animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: [yOffset, 0],
-          })
+          }),
         }],
       }}>
       <ScrollView
@@ -226,7 +226,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
             }),
             width: animatedValue.interpolate({
               inputRange: [0, 1],
-              outputRange: [windowWidth-xOffset*2, windowWidth],
+              outputRange: [windowWidth - xOffset * 2, windowWidth],
             }),
             resizeMode: 'cover',
           }}
@@ -239,7 +239,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
               translateY: animatedValue.interpolate({
                 inputRange: [0, 1],
                 outputRange: [20, 40],
-              })
+              }),
             }],
             left: 20,
           }}>
@@ -319,7 +319,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         /* closed: 스크롤 중 닫을 시 버튼이 남아있지 않도록 */
         !state.closed && state.scrollY > 50 && (
           <SubmitButton
-            style={{ position: 'absolute', bottom: 10, }}
+            style={{ position: 'absolute', bottom: 10 }}
             title={t('product_label.more_info')}
             handler={() => {
               StatusBar.setHidden(false);
@@ -327,7 +327,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
                 screen: ProductPage.ProductBuying,
                 params: {
                   productId: story.productId,
-                }
+                },
               });
             }}
           />

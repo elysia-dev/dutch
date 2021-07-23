@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
+
 import EspressoV2 from '../api/EspressoV2';
 import PreferenceContext from '../contexts/PreferenceContext';
 import UserContext from '../contexts/UserContext';
@@ -15,16 +15,16 @@ const WalletProvider: React.FC = (props) => {
 
   const setLock = async () => {
     setState({
-      ...staticWalletInitialState
-    })
-  }
+      ...staticWalletInitialState,
+    });
+  };
 
   const loadNotifications = async () => {
     EspressoV2.getNoficiations(state?.wallet?.getFirstAddress() || '').then((res) => {
       setNotifications(res.data);
     }).catch((_e) => {
     });
-  }
+  };
 
   const unlock = async (password: string): Promise<void> => {
     try {
@@ -34,11 +34,11 @@ const WalletProvider: React.FC = (props) => {
         isUnlocked: true,
         wallet,
         password,
-      })
+      });
     } catch (e) {
       return Promise.reject(e);
     }
-  }
+  };
 
   const createNewWallet = async (password: string) => {
     const newWallet = await Wallet.createNewWallet();
@@ -46,18 +46,18 @@ const WalletProvider: React.FC = (props) => {
 
     registerForPushNotificationsAsync().then((token) => {
       if (token) {
-        EspressoV2.subscribe(newWallet?.getFirstNode()?.address || '', token)
+        EspressoV2.subscribe(newWallet?.getFirstNode()?.address || '', token);
         setNotification(true);
       }
-    })
+    });
 
     setState({
       ...state,
       isUnlocked: true,
-      password: password,
+      password,
       wallet: newWallet,
-    })
-  }
+    });
+  };
 
   const restoreWallet = async (mnemonic: string, password: string) => {
     const wallet = await Wallet.restoreWallet(mnemonic);
@@ -67,36 +67,36 @@ const WalletProvider: React.FC = (props) => {
     registerForPushNotificationsAsync().then((token) => {
       if (token) {
         try {
-          EspressoV2.subscribe(wallet?.getFirstNode()?.address || '', token)
+          EspressoV2.subscribe(wallet?.getFirstNode()?.address || '', token);
         } catch {
-          EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', token)
+          EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', token);
         }
         setNotification(true);
       }
-    })
+    });
 
     setState({
       ...state,
       isUnlocked: true,
-      password: password,
+      password,
       wallet,
-    })
-  }
+    });
+  };
 
   const clearWallet = async () => {
     await setNotification(false);
     await WalletStorage.clear();
-  }
+  };
 
   const validatePassword = (password: string): boolean => {
     return password === state.password;
-  }
+  };
 
   useEffect(() => {
     if (state.isUnlocked) {
-      loadNotifications()
+      loadNotifications();
     }
-  }, [state.isUnlocked])
+  }, [state.isUnlocked]);
 
   return (
     <WalletContext.Provider
@@ -113,6 +113,6 @@ const WalletProvider: React.FC = (props) => {
       {props.children}
     </WalletContext.Provider>
   );
-}
+};
 
 export default WalletProvider;

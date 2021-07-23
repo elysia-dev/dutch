@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 
 interface ICheckIcon {
-  checked: boolean,
+  checked: boolean;
 }
 
 const CheckIcon: React.FC<ICheckIcon> = (props) => {

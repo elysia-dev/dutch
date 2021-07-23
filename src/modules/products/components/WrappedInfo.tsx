@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import styled from 'styled-components/native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import Product from '../../../types/product';
 import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
-import moment from 'moment';
 
 const DesView = styled.View`
   margin-top: 18px;
@@ -40,7 +40,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
       <View
         style={{
           padding: 20,
-          marginBottom: 20
+          marginBottom: 20,
         }}>
         <H3Text
           label={t('product_label.property_info')}
@@ -356,7 +356,7 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
           )}
         </View>
       </View>
-      
+
     </View>
   );
 };

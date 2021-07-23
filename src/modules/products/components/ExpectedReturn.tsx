@@ -2,7 +2,7 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import Slider from '@react-native-community/slider';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Product from '../../../types/Product';
 import { P2Text, H3Text, P1Text, H2Text } from '../../../shared/components/Texts';
 import PreferenceContext from '../../../contexts/PreferenceContext';
@@ -16,7 +16,7 @@ interface State {
 }
 
 export const ExpectedReturn: FunctionComponent<Props> = (props) => {
-  const { currencyFormatter } = useContext(PreferenceContext)
+  const { currencyFormatter } = useContext(PreferenceContext);
 
   const { t } = useTranslation();
 
@@ -66,10 +66,10 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           marginTop: 5,
           marginBottom: 20,
         }}>
-        <P1Text 
+        <P1Text
           style={{
-            color: "#3679b5"
-            
+            color: "#3679b5",
+
           }}
           label={t('product_label.expected_return')} />
         <P1Text
@@ -83,7 +83,7 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           style={{ color: '#3679b5' }}
         />
       </View>
-      
+
     </View>
   );
 };

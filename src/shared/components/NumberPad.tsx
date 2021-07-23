@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import DialButton from './DialButton';
 import RemoveButton from './RemoveButton';
 
-const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeValue: () => void, height?: number }> = ({
+const NumberPad: FunctionComponent<{ addValue: (text: string) => void; removeValue: () => void; height?: number }> = ({
   addValue,
   removeValue,
 }) => {
@@ -22,11 +22,11 @@ const NumberPad: FunctionComponent<{ addValue: (text: string) => void, removeVal
               {
                 [0, 1, 2].map((index2) => {
                   const number = (index * 3 + index2 + 1).toString();
-                  return <DialButton key={number} value={number} pressHandler={() => { addValue(number) }} />
+                  return <DialButton key={number} value={number} pressHandler={() => { addValue(number); }} />;
                 })
               }
             </View>
-          )
+          );
         })
       }
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

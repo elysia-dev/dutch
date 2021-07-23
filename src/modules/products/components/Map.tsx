@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import Product from '../../../types/product';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import UserContext from '../../../contexts/UserContext';

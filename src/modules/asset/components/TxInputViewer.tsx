@@ -10,24 +10,24 @@ import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
-  purpose: PurposeType
-  current: string
+  purpose: PurposeType;
+  current: string;
   to: {
-    value: string, // 입력한 값
-    type: string, // 화폐 단위
-    price: number, // 토큰 가격
-    max: number, // 사용자가 구매/환불 가능한 최대 토큰 개수
-  }
+    value: string; // 입력한 값
+    type: string; // 화폐 단위
+    price: number; // 토큰 가격
+    max: number; // 사용자가 구매/환불 가능한 최대 토큰 개수
+  };
   from: {
-    value: string, // 입력한 값
-    type: string, // 화폐 단위
-    price: number, // 화폐 가격
-    max: number, // 사용자가 구매/환불 가능한 최대 금액
-  }
-  isOverMax: boolean,
-  estimatedGas: string,
-  gasCrypto: CryptoType,
-  insufficientGas: boolean,
+    value: string; // 입력한 값
+    type: string; // 화폐 단위
+    price: number; // 화폐 가격
+    max: number; // 사용자가 구매/환불 가능한 최대 금액
+  };
+  isOverMax: boolean;
+  estimatedGas: string;
+  gasCrypto: CryptoType;
+  insufficientGas: boolean;
 }
 
 const TxInputViewer: React.FC<Props> = ({
@@ -52,7 +52,7 @@ const TxInputViewer: React.FC<Props> = ({
         marginTop: Platform.OS === 'android' ? 40 : 20,
         marginBottom: Platform.OS === 'android' ? 60 : 30,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <LargeTextInput
@@ -98,6 +98,6 @@ const TxInputViewer: React.FC<Props> = ({
       </View>
     </View>
   );
-}
+};
 
 export default TxInputViewer;

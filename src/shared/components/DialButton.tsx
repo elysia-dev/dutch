@@ -1,9 +1,9 @@
-import React, {FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { TouchableHighlight } from 'react-native';
-import { H2Text } from '../../shared/components/Texts';
+import { H2Text } from "./Texts";
 import AppFonts from '../../enums/AppFonts';
 
-const DialButton: FunctionComponent<{ pressHandler: () => void, value: string }> = ({
+const DialButton: FunctionComponent<{ pressHandler: () => void; value: string }> = ({
   pressHandler,
   value,
 }) => {

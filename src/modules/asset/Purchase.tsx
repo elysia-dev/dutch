@@ -4,18 +4,18 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import CryptoType from '../../enums/CryptoType';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils, constants } from 'ethers';
+import { useTranslation } from 'react-i18next';
+import CryptoType from '../../enums/CryptoType';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
-import { ethers, utils, constants } from 'ethers';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
-import { useTranslation } from 'react-i18next';
 import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
@@ -47,7 +47,7 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
-    isApproved: [CryptoType.ETH, CryptoType.BNB].includes(from.type) ? true : false,
+    isApproved: !![CryptoType.ETH, CryptoType.BNB].includes(from.type),
   });
   const [current, setCurrent] = useState<'from' | 'to'>('to');
   const navigation = useNavigation();
@@ -78,8 +78,8 @@ const Purchase: FunctionComponent = () => {
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
             from: address,
-            value: utils.parseEther('0.5')
-          })
+            value: utils.parseEther('0.5'),
+          });
           break;
         default:
           estimateGas = await contract?.estimateGas.purchase(
@@ -134,7 +134,7 @@ const Purchase: FunctionComponent = () => {
             value: utils.parseEther(values.from)
               .mul(constants.WeiPerEther)
               .div(utils.parseEther(valueInDollar)), // dollar to crypto
-          })
+          });
 
           break;
         default:
@@ -142,7 +142,7 @@ const Purchase: FunctionComponent = () => {
             utils.parseEther(values.from)
               .mul(constants.WeiPerEther)
               .div(utils.parseEther(valueInDollar))
-          )
+          );
 
           if (!populatedTransaction) break;
 
@@ -180,11 +180,11 @@ const Purchase: FunctionComponent = () => {
     switch (state.step) {
       case TxStep.CheckAllowance:
         if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
-          setState({ ...state, step: TxStep.None })
-          return
+          setState({ ...state, step: TxStep.None });
+          return;
         } else if (!isWalletUser) {
-          setState({ ...state, step: TxStep.None })
-          return
+          setState({ ...state, step: TxStep.None });
+          return;
         }
 
         if (isWalletUser) {
@@ -196,20 +196,20 @@ const Purchase: FunctionComponent = () => {
                 ...state,
                 isApproved: true,
                 step: TxStep.None,
-              })
+              });
             } else {
               setState({
                 ...state,
                 isApproved: false,
                 step: TxStep.None,
-              })
+              });
             }
           }).catch((e: any) => {
             afterTxFailed(e.message);
             navigation.goBack();
-          })
+          });
         } else {
-          return
+
         }
         break;
 
@@ -226,12 +226,12 @@ const Purchase: FunctionComponent = () => {
                 isApproved: true,
                 txHash: tx,
                 step: TxStep.None,
-              })
+              });
             }).catch((e) => {
               afterTxFailed(e.message);
               navigation.goBack();
-            })
-          })
+            });
+          });
         break;
       case TxStep.Creating:
         createTx();
@@ -297,9 +297,9 @@ const Purchase: FunctionComponent = () => {
         createTx={() => {
           if (isWalletUser) {
             if (state.isApproved) {
-              setState({ ...state, step: TxStep.Creating })
+              setState({ ...state, step: TxStep.Creating });
             } else {
-              setState({ ...state, step: TxStep.Approving })
+              setState({ ...state, step: TxStep.Approving });
             }
           } else {
             Server.requestTransaction(

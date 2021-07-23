@@ -1,17 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useCallback, useEffect } from 'react';
-import { useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
 import { CURRENCY, LANGUAGE, NOTIFICATION } from '../constants/storage';
 import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
 import CurrencyType from '../enums/CurrencyType';
 import LocaleType from '../enums/LocaleType';
-import { useTranslation } from 'react-i18next'
 import currentLocalization from '../utiles/currentLocalization';
 import currencyFormatter from '../utiles/currencyFormatter';
 import EspressoV1 from '../api/EspressoV1';
 
 const PreferenceProvider: React.FC = (props) => {
-  const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState)
+  const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState);
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
@@ -25,7 +25,7 @@ const PreferenceProvider: React.FC = (props) => {
       language = currentLocalization();
     }
 
-    i18n.changeLanguage(language)
+    i18n.changeLanguage(language);
 
     setState({
       ...state,
@@ -35,33 +35,33 @@ const PreferenceProvider: React.FC = (props) => {
       language,
       notification,
       loaded: true,
-    })
-  }
+    });
+  };
 
   const setLanguage = async (language: LocaleType) => {
     await AsyncStorage.setItem(LANGUAGE, language);
-    i18n.changeLanguage(language)
+    i18n.changeLanguage(language);
     setState({
       ...state,
-      language
-    })
-  }
+      language,
+    });
+  };
 
   const setCurrency = async (currency: CurrencyType) => {
     await AsyncStorage.setItem(CURRENCY, currency);
     setState({
       ...state,
-      currency
-    })
-  }
+      currency,
+    });
+  };
 
   const setNotification = async (notification: boolean) => {
     await AsyncStorage.setItem(NOTIFICATION, notification.toString());
     setState({
       ...state,
       notification,
-    })
-  }
+    });
+  };
 
   const currencyFormattHandler = useCallback((value: number, fix?: number) => {
     return currencyFormatter(
@@ -70,11 +70,11 @@ const PreferenceProvider: React.FC = (props) => {
       value,
       fix || 2,
     );
-  }, [state.currency])
+  }, [state.currency]);
 
   useEffect(() => {
     loadPreferences();
-  }, [])
+  }, []);
 
   return (
     <PreferenceContext.Provider
@@ -89,6 +89,6 @@ const PreferenceProvider: React.FC = (props) => {
       {state.loaded && props.children}
     </PreferenceContext.Provider>
   );
-}
+};
 
 export default PreferenceProvider;
