@@ -51,7 +51,7 @@ export const Item: FunctionComponent<Props> = (props: Props) => {
           marginRight: 3,
           borderRadius: 10,
           shadowOffset: { width: 2, height: 2 },
-          shadowColor: '#00000033',
+          shadowColor: AppColors.SHADOW_BLACK,
           shadowOpacity: 0.8,
           shadowRadius: 5,
           marginTop: 15,

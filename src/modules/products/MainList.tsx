@@ -138,7 +138,7 @@ const MainList: FunctionComponent = () => {
               style={{
                 backgroundColor: AppColors.WHITE,
                 shadowOffset: { width: 1, height: 1 },
-                shadowColor: '#00000033',
+                shadowColor: AppColors.SHADOW_BLACK,
                 paddingTop: Platform.OS === 'android' ? 65 : 45,
                 width: '100%',
                 flexDirection: 'row',

@@ -19,6 +19,7 @@ enum AppColors {
   DEACTIVATED = '#CCCCCC',
   MAIN_DARKER = '#2C6190',
   MAIN_LIGHTER = '#BDD3E6',
+  SHADOW_BLACK = '#00000033',
 }
 
 export default AppColors;

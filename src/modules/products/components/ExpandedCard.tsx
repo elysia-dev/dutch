@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useState,
-  useRef,
-} from 'react';
+import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import {
   Animated,
   Image,
@@ -182,23 +177,26 @@ const ExpandedItem: FunctionComponent<Props> = ({
         }),
         height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
-        shadowColor: '#00000033',
+        shadowColor: AppColors.SHADOW_BLACK,
         shadowOpacity: animatedValue.interpolate({
           inputRange: [0, 1],
           outputRange: [0.6, 0],
         }),
         shadowRadius: 5,
-        transform: [{
-          translateX: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [xOffset, 0],
-          }),
-        }, {
-          translateY: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [yOffset, 0],
-          }),
-        }],
+        transform: [
+          {
+            translateX: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [xOffset, 0],
+            }),
+          },
+          {
+            translateY: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [yOffset, 0],
+            }),
+          },
+        ],
       }}>
       <ScrollView
         ref={scrollRef}
@@ -236,12 +234,14 @@ const ExpandedItem: FunctionComponent<Props> = ({
           style={{
             position: 'absolute',
             flexDirection: 'column',
-            transform: [{
-              translateY: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 40],
-              }),
-            }],
+            transform: [
+              {
+                translateY: animatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 40],
+                }),
+              },
+            ],
             left: 20,
           }}>
           <P1Text label={story.subTitle} />

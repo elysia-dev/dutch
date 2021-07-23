@@ -32,7 +32,11 @@ const Contact: FunctionComponent = () => {
       user.provider === ProviderType.GUEST ||
       user.provider === ProviderType.ETH
     ) {
-      Server.sendQuestionWithEmail(state.email, state.contents, language || LocaleType.EN)
+      Server.sendQuestionWithEmail(
+        state.email,
+        state.contents,
+        language || LocaleType.EN,
+      )
         .then((_res) => {
           alert(t('more.question_submitted'));
           setState({
@@ -100,7 +104,7 @@ const Contact: FunctionComponent = () => {
             borderRadius: 10,
             backgroundColor: AppColors.WHITE,
             shadowOffset: { width: 0, height: 2 },
-            shadowColor: '#00000029',
+            shadowColor: AppColors.SHADOW_BLACK,
             shadowOpacity: 0.8,
             shadowRadius: 6,
             marginBottom: 30,
@@ -109,14 +113,14 @@ const Contact: FunctionComponent = () => {
           }}>
           {(user.provider === ProviderType.GUEST ||
             user.provider === ProviderType.ETH) && (
-              <TextField
-                value={state.email}
-                label={t('more_label.reply_email')}
-                eventHandler={(input: string) =>
-                  setState({ ...state, email: input })
-                }
-              />
-            )}
+            <TextField
+              value={state.email}
+              label={t('more_label.reply_email')}
+              eventHandler={(input: string) =>
+                setState({ ...state, email: input })
+              }
+            />
+          )}
           <TextArea
             contents={state.contents}
             eventHandler={(input: string) =>
