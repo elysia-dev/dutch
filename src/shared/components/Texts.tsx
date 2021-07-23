@@ -16,8 +16,7 @@ export const H1Text: FunctionComponent<{
         fontFamily: AppFonts.Bold,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -36,8 +35,7 @@ export const H2Text: FunctionComponent<{
         fontFamily: AppFonts.Bold,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -57,8 +55,7 @@ export const P1Text: FunctionComponent<{
         lineHeight: 20,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -77,8 +74,7 @@ export const H3Text: FunctionComponent<{
         fontFamily: AppFonts.Bold,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -97,8 +93,7 @@ export const H4Text: FunctionComponent<{
         fontFamily: AppFonts.Bold,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -111,14 +106,13 @@ export const P2Text: FunctionComponent<{
   return (
     <Text
       style={{
-        color: '#838383',
+        color: AppColors.BLACK2,
         fontSize: 15,
         textAlign: 'left',
         fontFamily: AppFonts.Light,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -137,8 +131,7 @@ export const P3Text: FunctionComponent<{
         fontFamily: AppFonts.Regular,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -157,8 +150,7 @@ export const P4Text: FunctionComponent<{
         fontFamily: AppFonts.Regular,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -178,8 +170,7 @@ export const TitleText: FunctionComponent<{
         lineHeight: 28,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );
@@ -199,8 +190,7 @@ export const SubTitleText: FunctionComponent<{
         lineHeight: 20,
         ...(style as {}),
       }}
-      allowFontScaling={false}
-    >
+      allowFontScaling={false}>
       {label}
     </Text>
   );

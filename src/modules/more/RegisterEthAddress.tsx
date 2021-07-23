@@ -371,7 +371,10 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     marginTop: 30,
                     padding: 15,
                   }}>
-                  <P1Text label={'Address'} style={{ color: '#838383' }} />
+                  <P1Text
+                    label={'Address'}
+                    style={{ color: AppColors.BLACK2 }}
+                  />
                   <Pressable
                     onPressIn={(_nativeEvent) => {
                       setState({ ...state, pressed: true });
