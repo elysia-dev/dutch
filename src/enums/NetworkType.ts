@@ -1,6 +1,6 @@
 enum NetworkType {
   ETH = 'ETH',
-  BSC = 'BSC'
+  BSC = 'BSC',
 }
 
-export default NetworkType
+export default NetworkType;

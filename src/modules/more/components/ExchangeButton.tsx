@@ -5,10 +5,7 @@ import * as Linking from 'expo-linking';
 const ExchangeButton: React.FC<{
   url: string;
   img: number;
-}> = ({
-  url,
-  img,
-}) => {
+}> = ({ url, img }) => {
   return (
     <TouchableOpacity
       style={{

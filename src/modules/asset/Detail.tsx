@@ -183,10 +183,10 @@ const Detail: FunctionComponent = () => {
           filter === 0
             ? state.transactions
             : state.transactions.filter(
-              (tx) =>
-                (filter === 1 && tx.type === 'out') ||
-                (filter === 2 && tx.type === 'in'),
-            )
+                (tx) =>
+                  (filter === 1 && tx.type === 'out') ||
+                  (filter === 2 && tx.type === 'in'),
+              )
         }
         renderItem={({ item }) => {
           return (
@@ -211,216 +211,224 @@ const Detail: FunctionComponent = () => {
                 height: 200,
                 alignItems: 'center',
               }}>
-              {(
+              {
                 <P2Text
                   label={t('assets.null_transaction')}
                   style={{ textAlign: 'center', width: '100%' }}
                 />
-              )}
+              }
             </View>
           );
         }}
         horizontal={false}
         keyExtractor={(item, index) => String(index)}
         nestedScrollEnabled={false}
-        ListHeaderComponent={
-          () => {
-            return (
-              <>
-                <View
-                  style={{
-                    top: 0,
-                    width: '100%',
-                    height: 293,
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
-                  }}
-                >
-                  <ProductImageCarousel images={state.images} />
-                  <View style={{ position: 'absolute', padding: 20 }}>
-                    <View
-                      style={{
-                        position: 'absolute',
-                        width: 32,
-                        height: 32,
-                        borderRadius: 16,
-                        backgroundColor: AppColors.BACKGROUND_WHITE,
-                        marginLeft: 12,
-                        marginTop: 32,
-                      }}
-                    />
-                    <BackButton handler={() => navigation.goBack()} />
-                  </View>
-                </View>
-                <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-                  <H4Text
-                    style={{ marginTop: 20, color: AppColors.BLACK2 }}
-                    label={asset.unit + ' ' + t('main.assets')}
-                  />
-                  <TitleText
-                    style={{ marginTop: 10, color: AppColors.BLACK }}
-                    label={currencyFormatter(
-                      asset.value * getCryptoPrice(asset.type),
-                      2,
-                    )}
-                  />
+        ListHeaderComponent={() => {
+          return (
+            <>
+              <View
+                style={{
+                  top: 0,
+                  width: '100%',
+                  height: 293,
+                  borderBottomLeftRadius: 10,
+                  borderBottomRightRadius: 10,
+                }}>
+                <ProductImageCarousel images={state.images} />
+                <View style={{ position: 'absolute', padding: 20 }}>
                   <View
                     style={{
-                      marginTop: 20,
-                      height: 1,
-                      backgroundColor: AppColors.GREY,
+                      position: 'absolute',
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: AppColors.BACKGROUND_WHITE,
+                      marginLeft: 12,
+                      marginTop: 32,
                     }}
                   />
-                  {[
-                    { left: t('main.assets_name'), right: asset.title },
-                    {
-                      left: t('main.assets_value'),
-                      right: `${asset.value.toFixed(2)} ${asset.unit}`,
-                    },
-                    {
-                      left: t('main.assets_stake'),
-                      right: `${((asset.value / state.totalSupply) * 100).toFixed(2)}%`,
-                    },
-                  ].map((data, index) => {
-                    return (
-                      <View
-                        key={index}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          height: 60,
-                          borderBottomWidth: 1,
-                          borderBottomColor: AppColors.GREY,
-                        }}>
-                        <P1Text style={{ color: AppColors.BLACK2 }} label={data.left} />
-                        <H4Text style={{ color: AppColors.BLACK }} label={data.right} />
-                      </View>
-                    );
-                  })}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      height: 60,
-                      borderBottomWidth: 1,
-                      borderBottomColor: AppColors.GREY,
-                    }}>
-                    <H4Text
-                      style={{ color: AppColors.BLACK }}
-                      label={t('main.total_assets_yield')}
-                    />
-                    <View>
-                      <H4Text
-                        style={{ color: AppColors.MAIN, textAlign: 'right' }}
-                        label={currencyFormatter(state.reward, 2)}
+                  <BackButton handler={() => navigation.goBack()} />
+                </View>
+              </View>
+              <View style={{ marginLeft: '5%', marginRight: '5%' }}>
+                <H4Text
+                  style={{ marginTop: 20, color: AppColors.BLACK2 }}
+                  label={asset.unit + ' ' + t('main.assets')}
+                />
+                <TitleText
+                  style={{ marginTop: 10, color: AppColors.BLACK }}
+                  label={currencyFormatter(
+                    asset.value * getCryptoPrice(asset.type),
+                    2,
+                  )}
+                />
+                <View
+                  style={{
+                    marginTop: 20,
+                    height: 1,
+                    backgroundColor: AppColors.GREY,
+                  }}
+                />
+                {[
+                  { left: t('main.assets_name'), right: asset.title },
+                  {
+                    left: t('main.assets_value'),
+                    right: `${asset.value.toFixed(2)} ${asset.unit}`,
+                  },
+                  {
+                    left: t('main.assets_stake'),
+                    right: `${((asset.value / state.totalSupply) * 100).toFixed(
+                      2,
+                    )}%`,
+                  },
+                ].map((data, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        height: 60,
+                        borderBottomWidth: 1,
+                        borderBottomColor: AppColors.GREY,
+                      }}>
+                      <P1Text
+                        style={{ color: AppColors.BLACK2 }}
+                        label={data.left}
                       />
-                      {state.paymentMethod !== 'NONE' && (
-                        <H4Text
-                          style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                          label={`${(
-                            state.reward / getCryptoPrice(state.paymentMethod)
-                          ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
-                        />
-                      )}
+                      <H4Text
+                        style={{ color: AppColors.BLACK }}
+                        label={data.right}
+                      />
                     </View>
-                  </View>
-                  <View
-                    style={{
-                      marginTop: 20,
-                      marginBottom: 20,
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                    }}>
-                    {!asset.isLegacyOwnership && (
-                      <>
-                        <CircleButton
-                          title={t('main.ownership')}
-                          icon={'+'}
-                          disabled={state.productStatus !== ProductStatus.SALE}
-                          handler={() => {
-                            navigation.navigate(AssetPage.Purchase, {
-                              assetInCrypto: {
-                                type: state.paymentMethod,
-                                title: state.paymentMethod.toUpperCase(),
-                                unit: state.paymentMethod.toUpperCase(),
-                              },
-                              assetInToken: asset,
-                              contractAddress: state.contractAddress,
-                              productId: state.productId,
-                              remainingSupplyInToken: state.presentSupply,
-                            });
-                          }}
-                        />
-                        <CircleButton
-                          title={t('main.refund')}
-                          icon={'-'}
-                          handler={() => {
-                            navigation.navigate(AssetPage.Refund, {
-                              assetInCrypto: {
-                                type: state.paymentMethod,
-                                title: state.paymentMethod.toUpperCase(),
-                                unit: state.paymentMethod.toUpperCase(),
-                              },
-                              assetInToken: asset,
-                              contractAddress: state.contractAddress,
-                              productId: state.productId,
-                            });
-                          }}
-                        />
-                        <CircleButton
-                          title={t('main.return')}
-                          icon={'⤴'}
-                          handler={() => {
-                            navigation.navigate(AssetPage.Reward, {
-                              toCrypto: state.paymentMethod,
-                              toTitle: state.paymentMethod.toUpperCase(),
-                              contractAddress: state.contractAddress,
-                              productId: state.productId,
-                            });
-                          }}
-                        />
-                      </>
+                  );
+                })}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: 60,
+                    borderBottomWidth: 1,
+                    borderBottomColor: AppColors.GREY,
+                  }}>
+                  <H4Text
+                    style={{ color: AppColors.BLACK }}
+                    label={t('main.total_assets_yield')}
+                  />
+                  <View>
+                    <H4Text
+                      style={{ color: AppColors.MAIN, textAlign: 'right' }}
+                      label={currencyFormatter(state.reward, 2)}
+                    />
+                    {state.paymentMethod !== 'NONE' && (
+                      <H4Text
+                        style={{ color: AppColors.BLACK2, textAlign: 'right' }}
+                        label={`${(
+                          state.reward / getCryptoPrice(state.paymentMethod)
+                        ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                      />
                     )}
                   </View>
-                  {asset.isLegacyOwnership && (
-                    <View style={{ width: '100%', marginBottom: 20 }}>
-                      <NextButton
-                        disabled={state.legacyRefundStatus === 'pending'}
-                        title={t(
-                          state.legacyRefundStatus === 'pending'
-                            ? 'dashboard_label.withdraw_stake_pending'
-                            : 'dashboard_label.withdraw_stake_legacy',
-                        )}
+                </View>
+                <View
+                  style={{
+                    marginTop: 20,
+                    marginBottom: 20,
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                  }}>
+                  {!asset.isLegacyOwnership && (
+                    <>
+                      <CircleButton
+                        title={t('main.ownership')}
+                        icon={'+'}
+                        disabled={state.productStatus !== ProductStatus.SALE}
                         handler={() => {
-                          navigation.navigate(AssetPage.LegacyOwnershipRefund, {
-                            ownershipId: asset.ownershipId,
+                          navigation.navigate(AssetPage.Purchase, {
+                            assetInCrypto: {
+                              type: state.paymentMethod,
+                              title: state.paymentMethod.toUpperCase(),
+                              unit: state.paymentMethod.toUpperCase(),
+                            },
+                            assetInToken: asset,
+                            contractAddress: state.contractAddress,
+                            productId: state.productId,
+                            remainingSupplyInToken: state.presentSupply,
                           });
                         }}
                       />
-                    </View>
+                      <CircleButton
+                        title={t('main.refund')}
+                        icon={'-'}
+                        handler={() => {
+                          navigation.navigate(AssetPage.Refund, {
+                            assetInCrypto: {
+                              type: state.paymentMethod,
+                              title: state.paymentMethod.toUpperCase(),
+                              unit: state.paymentMethod.toUpperCase(),
+                            },
+                            assetInToken: asset,
+                            contractAddress: state.contractAddress,
+                            productId: state.productId,
+                          });
+                        }}
+                      />
+                      <CircleButton
+                        title={t('main.return')}
+                        icon={'⤴'}
+                        handler={() => {
+                          navigation.navigate(AssetPage.Reward, {
+                            toCrypto: state.paymentMethod,
+                            toTitle: state.paymentMethod.toUpperCase(),
+                            contractAddress: state.contractAddress,
+                            productId: state.productId,
+                          });
+                        }}
+                      />
+                    </>
                   )}
                 </View>
-                <View
-                  style={{ height: 15, backgroundColor: AppColors.BACKGROUND_GREY }}
+                {asset.isLegacyOwnership && (
+                  <View style={{ width: '100%', marginBottom: 20 }}>
+                    <NextButton
+                      disabled={state.legacyRefundStatus === 'pending'}
+                      title={t(
+                        state.legacyRefundStatus === 'pending'
+                          ? 'dashboard_label.withdraw_stake_pending'
+                          : 'dashboard_label.withdraw_stake_legacy',
+                      )}
+                      handler={() => {
+                        navigation.navigate(AssetPage.LegacyOwnershipRefund, {
+                          ownershipId: asset.ownershipId,
+                        });
+                      }}
+                    />
+                  </View>
+                )}
+              </View>
+              <View
+                style={{
+                  height: 15,
+                  backgroundColor: AppColors.BACKGROUND_GREY,
+                }}
+              />
+              <View style={{ marginLeft: '5%', marginRight: '5%' }}>
+                <H2Text
+                  label={t('main.transaction_list')}
+                  style={{ marginTop: 20 }}
                 />
-                <View style={{ marginLeft: '5%', marginRight: '5%' }}>
-                  <H2Text
-                    label={t('main.transaction_list')}
-                    style={{ marginTop: 20 }}
-                  />
-                  <View style={{ height: 20 }} />
-                  <SelectBox
-                    options={['ALL', 'OUT', 'IN']}
-                    selected={filter}
-                    select={(filter) => setFilter(filter)}
-                  />
-                </View>
-              </>
-            );
-          }
-        }
+                <View style={{ height: 20 }} />
+                <SelectBox
+                  options={['ALL', 'OUT', 'IN']}
+                  selected={filter}
+                  select={(filter) => setFilter(filter)}
+                />
+              </View>
+            </>
+          );
+        }}
         ListFooterComponent={() => {
           return (
             <TouchableOpacity

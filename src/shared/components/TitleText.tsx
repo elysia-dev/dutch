@@ -17,8 +17,7 @@ export const TitleText: FunctionComponent<{
         fontFamily: AppFonts.Bold,
         lineHeight: 28,
         ...(style as {}),
-      }}
-    >
+      }}>
       {label}
     </Text>
   );

@@ -76,8 +76,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
         backgroundColor: AppColors.WHITE,
         overflow: 'hidden',
         ...(props.style as {}),
-      }}
-    >
+      }}>
       <Animated.View
         style={{
           marginLeft: '5%',

@@ -164,30 +164,31 @@ const AssetProvider: React.FC = (props) => {
           paymentMethod: ownership.product.paymentMethod,
         } as Asset;
       });
-      if (address) {
-        const res = await EspressoV1.getAllProduct();
-        const result = await Promise.all(
-          res.data
-            .filter((product) => product.contractAddress)
-            .map(async (product, idx, arr) => {
-              const assetToken =
-                product.paymentMethod === PaymentCryptoType.BNB
-                  ? getBscAssetTokenContract(product?.contractAddress || '')
-                  : getAssetTokenContract(product?.contractAddress || '');
-              const balance: BigNumber = await assetToken?.balanceOf(address);
-              return {
-                title: product.data.descriptions[language || LocaleType.EN]?.title,
-                value: parseFloat(utils.formatEther(balance)),
-                type: CryptoType.ELA,
-                unit: CryptoType.ELA,
-                address: product.contractAddress,
-                image: product.data.images[0],
-                paymentMethod: product.paymentMethod,
-              } as Asset;
-            }),
-        );
-        result.forEach((v) => assets.push(v));
-      }
+    if (address) {
+      const res = await EspressoV1.getAllProduct();
+      const result = await Promise.all(
+        res.data
+          .filter((product) => product.contractAddress)
+          .map(async (product, idx, arr) => {
+            const assetToken =
+              product.paymentMethod === PaymentCryptoType.BNB
+                ? getBscAssetTokenContract(product?.contractAddress || '')
+                : getAssetTokenContract(product?.contractAddress || '');
+            const balance: BigNumber = await assetToken?.balanceOf(address);
+            return {
+              title:
+                product.data.descriptions[language || LocaleType.EN]?.title,
+              value: parseFloat(utils.formatEther(balance)),
+              type: CryptoType.ELA,
+              unit: CryptoType.ELA,
+              address: product.contractAddress,
+              image: product.data.images[0],
+              paymentMethod: product.paymentMethod,
+            } as Asset;
+          }),
+      );
+      result.forEach((v) => assets.push(v));
+    }
     if (address === undefined) {
       setState({
         ...state,

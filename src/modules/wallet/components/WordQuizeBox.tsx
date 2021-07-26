@@ -9,9 +9,15 @@ interface IWordQuizeBox {
   onPress: () => void;
 }
 
-const WordQuizeBox: React.FC<IWordQuizeBox> = ({ index, word, active, onPress }) => {
+const WordQuizeBox: React.FC<IWordQuizeBox> = ({
+  index,
+  word,
+  active,
+  onPress,
+}) => {
   return (
-    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+    <View
+      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
       <Text style={{ textAlign: 'center', marginRight: 10 }}>
         {`${index + 1}.`}
       </Text>
@@ -27,8 +33,7 @@ const WordQuizeBox: React.FC<IWordQuizeBox> = ({ index, word, active, onPress })
         }}
         onPress={() => {
           onPress();
-        }}
-      >
+        }}>
         <Text style={{ textAlign: 'center' }}>{word}</Text>
       </TouchableOpacity>
     </View>

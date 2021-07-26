@@ -4,4 +4,4 @@ enum PaymentCryptoType {
   BNB = 'bnb',
 }
 
-export default PaymentCryptoType
+export default PaymentCryptoType;

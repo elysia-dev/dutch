@@ -62,7 +62,8 @@ const TransactionProvider: React.FC = (props) => {
     if (
       state.transactions.filter((tx) => tx.status === TxStatus.Pending)
         .length === 0
-    ) return;
+    )
+      return;
 
     const timer = setTimeout(async () => {
       const txResponses = await Promise.all(

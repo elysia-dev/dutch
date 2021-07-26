@@ -114,7 +114,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
             label={t('account_label.account_email')}
             editable={false}
             value={route.params.email}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
           />
           <TextField
             label={t('account_label.authentication_code')}

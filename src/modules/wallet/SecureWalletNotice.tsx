@@ -20,14 +20,18 @@ const SecureWalletNotice: FunctionComponent = () => {
       <ConfirmBox
         style={{ marginTop: 50 }}
         confirmed={confirmed[0]}
-        toggleConfirm={() => { setConfirm([!confirmed[0], confirmed[1]]); }}
+        toggleConfirm={() => {
+          setConfirm([!confirmed[0], confirmed[1]]);
+        }}
         title={t('recovery_key.keep')}
         content={t('recovery_key.keep_content')}
       />
       <ConfirmBox
         style={{ marginTop: 20 }}
         confirmed={confirmed[1]}
-        toggleConfirm={() => { setConfirm([confirmed[0], !confirmed[1]]); }}
+        toggleConfirm={() => {
+          setConfirm([confirmed[0], !confirmed[1]]);
+        }}
         title={t('recovery_key.lost')}
         content={t('recovery_key.lost_content')}
       />
@@ -36,11 +40,14 @@ const SecureWalletNotice: FunctionComponent = () => {
         onPress={() => {
           const next = confirmed[0] && confirmed[1];
           setConfirm([!next, !next]);
-        }}
-      >
-        <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
+        }}>
+        <View
+          style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
           <CheckIcon checked={confirmed[0] && confirmed[1]} />
-          <P1Text style={{ marginLeft: 10 }} label={t('recovery_key.checkbox')} />
+          <P1Text
+            style={{ marginLeft: 10 }}
+            label={t('recovery_key.checkbox')}
+          />
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>

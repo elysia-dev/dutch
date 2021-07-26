@@ -6,6 +6,9 @@ export enum SignInStatus {
   EXPIRED = 'expired', // token 시간 만료
 }
 
-export type SignOut = SignInStatus.SIGNOUT | SignInStatus.DELETE | SignInStatus.EXPIRED
+export type SignOut =
+  | SignInStatus.SIGNOUT
+  | SignInStatus.DELETE
+  | SignInStatus.EXPIRED;
 
-export default SignInStatus
+export default SignInStatus;

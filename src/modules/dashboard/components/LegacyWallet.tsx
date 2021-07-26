@@ -12,47 +12,52 @@ interface Props {
   handler: () => void;
 }
 
-const LegacyWallet: FunctionComponent<Props> = ({
-  balance,
-  handler,
-}) => {
+const LegacyWallet: FunctionComponent<Props> = ({ balance, handler }) => {
   const { t } = useTranslation();
   const { currencyFormatter } = useContext(PreferenceContext);
 
   return (
     <View style={{ marginTop: 20 }}>
-      <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingBottom: 15,
-        marginBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: AppColors.GREY,
-      }}>
-        <H3Text label={t("dashboard_label.remaining_balance")} />
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingBottom: 15,
+          marginBottom: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: AppColors.GREY,
+        }}>
+        <H3Text label={t('dashboard_label.remaining_balance')} />
       </View>
       <TouchableOpacity
-        onPress={() => { handler(); }}
-        style={{ display: 'flex', flexDirection: 'row', height: 60, paddingTop: 5, paddingBottom: 5, alignItems: 'center' }}
-      >
+        onPress={() => {
+          handler();
+        }}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          height: 60,
+          paddingTop: 5,
+          paddingBottom: 5,
+          alignItems: 'center',
+        }}>
         <CryptoImage type={CryptoType.EL} />
         <View style={{ marginLeft: 15 }}>
           <P1Text label={'EL / USD'} />
         </View>
         <P1Text
           style={{ marginLeft: 'auto' }}
-          label={currencyFormatter(
-            balance,
-            2,
-          )}
+          label={currencyFormatter(balance, 2)}
         />
       </TouchableOpacity>
-      <View style={{
-        height: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: AppColors.GREY,
-      }} />
+      <View
+        style={{
+          height: 15,
+          borderBottomWidth: 1,
+          borderBottomColor: AppColors.GREY,
+        }}
+      />
     </View>
   );
 };

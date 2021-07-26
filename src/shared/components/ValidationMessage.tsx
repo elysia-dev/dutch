@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react";
-import { View, Image, Text } from "react-native";
-import WarningImg from "../assets/images/warning.png";
+import React, { FunctionComponent } from 'react';
+import { View, Image, Text } from 'react-native';
+import WarningImg from '../assets/images/warning.png';
 import AppColors from '../../enums/AppColors';
 
 interface Iprops {
@@ -9,7 +9,7 @@ interface Iprops {
 
 const ValidationMessage: FunctionComponent<Iprops> = ({ message }) => {
   return (
-    <View style={{ display: "flex", flexDirection: "row", paddingTop: 5 }}>
+    <View style={{ display: 'flex', flexDirection: 'row', paddingTop: 5 }}>
       <Image
         source={WarningImg}
         style={{
@@ -22,8 +22,7 @@ const ValidationMessage: FunctionComponent<Iprops> = ({ message }) => {
         style={{
           fontSize: 12,
           color: AppColors.BLACK,
-        }}
-      >
+        }}>
         {message}
       </Text>
     </View>

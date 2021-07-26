@@ -29,10 +29,7 @@ export const Account: FunctionComponent = () => {
   };
 
   return (
-    <Stack.Navigator
-      initialRouteName={initialRouteName()}
-      headerMode="none"
-    >
+    <Stack.Navigator initialRouteName={initialRouteName()} headerMode="none">
       <Stack.Screen
         name={AccountPage.IntroduceElysia}
         component={IntroduceElysia}

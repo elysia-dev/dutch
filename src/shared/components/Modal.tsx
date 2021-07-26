@@ -16,16 +16,14 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-      }}
-    >
+      }}>
       <RNModal animationType="slide" transparent={true} visible={props.visible}>
         <View
           style={{
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-          }}
-        >
+          }}>
           <View
             style={{
               backgroundColor: AppColors.WHITE,
@@ -33,8 +31,7 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
               alignItems: 'center',
               elevation: 10,
               width: '90%',
-            }}
-          >
+            }}>
             <TouchableOpacity
               onPress={props.modalHandler}
               style={{
@@ -44,8 +41,7 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
                 paddingRight: 20,
                 paddingBottom: 0,
                 paddingLeft: 0,
-              }}
-            >
+              }}>
               <Image
                 source={QuitButtonImg}
                 style={{
@@ -59,8 +55,7 @@ export const Modal: FunctionComponent<Props> = (props: Props) => {
                 paddingTop: 10,
                 paddingBottom: 20,
                 paddingHorizontal: 20,
-              }}
-            >
+              }}>
               {props.child}
             </View>
           </View>

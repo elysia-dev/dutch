@@ -24,15 +24,14 @@ const BorderButton: FunctionComponent<IBorderButton> = ({
       onPress={handler}
       disabled={disabled}
       style={{
-        ...style as {},
+        ...(style as {}),
         borderRadius: 5,
         justifyContent: 'center',
         alignContent: 'center',
         borderColor: disabled ? AppColors.GREY : AppColors.MAIN,
         borderWidth: 1,
         height: 50,
-      }}
-    >
+      }}>
       <Text
         style={{
           fontSize: 16,
