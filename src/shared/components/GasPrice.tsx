@@ -7,11 +7,11 @@ import AppColors from '../../enums/AppColors';
 import CryptoType from '../../enums/CryptoType';
 import { P3Text } from './Texts';
 
-const GasPrice: React.FC<{ estimatedGas: string; gasCrypto: CryptoType; insufficientGas: boolean }> = ({
-  estimatedGas,
-  gasCrypto,
-  insufficientGas,
-}) => {
+const GasPrice: React.FC<{
+  estimatedGas: string;
+  gasCrypto: CryptoType;
+  insufficientGas: boolean;
+}> = ({ estimatedGas, gasCrypto, insufficientGas }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
@@ -23,12 +23,23 @@ const GasPrice: React.FC<{ estimatedGas: string; gasCrypto: CryptoType; insuffic
   return (
     <>
       <P3Text
-        label={`${t('assets.transaction_fee')}: ${estimatedGas} ${gasCrypto} (${currencyFormatter(parseFloat(estimatedGas) * getCryptoPrice(gasCrypto))})`}
+        label={`${t(
+          'assets.transaction_fee',
+        )}: ${estimatedGas} ${gasCrypto} (${currencyFormatter(
+          parseFloat(estimatedGas) * getCryptoPrice(gasCrypto),
+        )})`}
         style={{ textAlign: 'center', marginBottom: insufficientGas ? 5 : 10 }}
       />
       <View>
         {insufficientGas && (
-          <Text style={{ fontSize: 10, right: 0, color: AppColors.RED, textAlign: 'center', marginBottom: 5 }}>
+          <Text
+            style={{
+              fontSize: 10,
+              right: 0,
+              color: AppColors.ERROR_RED,
+              textAlign: 'center',
+              marginBottom: 5,
+            }}>
             {t('assets.insufficient_eth', { crypto: gasCrypto })}
           </Text>
         )}

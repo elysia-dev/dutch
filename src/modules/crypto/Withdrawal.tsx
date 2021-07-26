@@ -7,7 +7,6 @@ import {
   Text,
   Keyboard,
   TouchableWithoutFeedback,
-  StyleSheet,
   Image,
   Dimensions,
 } from 'react-native';
@@ -169,7 +168,7 @@ const Withdrawal: React.FC = () => {
   }, [value, state.address]);
 
   return (
-    <View style={{ height: '100%', backgroundColor: '#fff' }}>
+    <View style={{ height: '100%', backgroundColor: AppColors.WHITE }}>
       <SheetHeader title={t('wallet.withdrawal')} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
@@ -195,7 +194,7 @@ const Withdrawal: React.FC = () => {
                 borderRadius: 5,
                 borderColor:
                   state.address && !isAddress(state.address)
-                    ? AppColors.RED
+                    ? AppColors.ERROR_RED
                     : AppColors.SUB_GREY,
                 padding: 10,
                 fontSize: 10,
@@ -229,7 +228,7 @@ const Withdrawal: React.FC = () => {
                 style={{
                   fontSize: 10,
                   right: 0,
-                  color: AppColors.RED,
+                  color: AppColors.ERROR_RED,
                   textAlign: 'left',
                   marginBottom: 5,
                 }}>
@@ -324,7 +323,6 @@ const Withdrawal: React.FC = () => {
 
               if (parseFloat(next) >= getBalance(asset.type)) {
                 // Maximum!
-
               } else {
                 setValue(next);
               }
@@ -365,7 +363,13 @@ const Withdrawal: React.FC = () => {
       {!state.scanned && (
         <BarCodeScanner
           onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+          }}
         />
       )}
       <OverlayLoading visible={loading} />

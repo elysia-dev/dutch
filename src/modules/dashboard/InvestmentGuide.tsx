@@ -1,13 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import investmentGuide1 from './images/investmentGuide1.png';
 import investmentGuide2 from './images/investmentGuide2.png';
@@ -15,20 +9,8 @@ import investmentGuide3 from './images/investmentGuide3.png';
 import investmentGuide4 from './images/investmentGuide4.png';
 import { H2Text, P1Text } from '../../shared/components/Texts';
 import QuitIcon from '../products/images/quitbutton.png';
-
-const GuideImage = styled.Image`
-  width: 90%;
-  margin: 10% 5% 30px 5%;
-  position: absolute;
-`;
-const Circle = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: #bdd3e6;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 10px;
-`;
+import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const InvestmentGuide: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -51,8 +33,18 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
     .fill(0)
     .map((_x, index) => {
       return (
-        <View style={styles.page} key={index}>
-          <GuideImage source={ReturnImage(index)} />
+        <View key={index}>
+          <Image
+            source={ReturnImage(index)}
+            style={{
+              width: '90%',
+              marginTop: '10%',
+              marginRight: '5%',
+              marginBottom: 30,
+              marginLeft: '5%',
+              position: 'absolute',
+            }}
+          />
           <View style={{ marginTop: 'auto', marginBottom: '35%' }}>
             <H2Text
               label={t('dashboard.investment_guide_header.' + index)}
@@ -76,15 +68,18 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
           }}
           key={index}>
           <Circle
-            style={[
-              state === index ? styles.enableCircle : styles.disableCircle,
-            ]}
+            style={{
+              backgroundColor:
+                state === index ? AppColors.MAIN : AppColors.MAIN_LIGHTER,
+              overflow: 'hidden',
+              margin: 10,
+            }}
           />
         </TouchableOpacity>
       );
     });
   return (
-    <View style={{ flex: 1, backgroundColor: '#FFF', paddingTop: 55 }}>
+    <View style={{ flex: 1, backgroundColor: AppColors.WHITE, paddingTop: 55 }}>
       <TouchableOpacity
         onPress={() => {
           navigation.goBack();
@@ -96,7 +91,7 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
         <Image source={QuitIcon} />
       </TouchableOpacity>
       <ViewPager
-        style={styles.viewPager}
+        style={{ flex: 1 }}
         initialPage={0}
         ref={viewPager}
         onPageSelected={(e) => {
@@ -116,17 +111,5 @@ const InvestmentGuide: FunctionComponent<{}> = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  viewPager: {
-    flex: 1,
-  },
-  page: {},
-  enableCircle: {
-    backgroundColor: '#3679B5',
-  },
-  disableCircle: {
-    backgroundColor: '#BDD3E6',
-  },
-});
 
 export default InvestmentGuide;

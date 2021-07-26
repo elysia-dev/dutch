@@ -1,25 +1,25 @@
 import React, { FunctionComponent } from 'react';
-import { StyleProp, TextStyle } from 'react-native';
-import styled from 'styled-components/native';
+import { StyleProp, TextStyle, Text } from 'react-native';
 import AppFonts from '../../enums/AppFonts';
-
-const Title = styled.Text`
-  color: #1c1c1c;
-  font-size: 28px;
-  font-weight: bold;
-  text-align: left;
-  font-family: '${AppFonts.Bold}';
-  line-height: 28px;
-`;
+import AppColors from '../../enums/AppColors';
 
 export const TitleText: FunctionComponent<{
   label: string;
   style?: StyleProp<TextStyle>;
-  // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
   return (
-    <Title allowFontScaling={false} style={style}>
+    <Text
+      allowFontScaling={false}
+      style={{
+        color: AppColors.BLACK,
+        fontSize: 28,
+        textAlign: 'left',
+        fontFamily: AppFonts.Bold,
+        lineHeight: 28,
+        ...(style as {}),
+      }}
+    >
       {label}
-    </Title>
+    </Text>
   );
 };

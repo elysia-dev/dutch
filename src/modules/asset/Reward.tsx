@@ -25,6 +25,7 @@ import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import GasPrice from '../../shared/components/GasPrice';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   Reward: {
@@ -176,7 +177,7 @@ const Reward: FunctionComponent = () => {
           style={{
             paddingLeft: 20,
             paddingRight: 20,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             height: '100%',
           }}>
           <CryptoInput

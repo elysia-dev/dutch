@@ -11,6 +11,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import { H1Text, P1Text, P3Text } from '../../shared/components/Texts';
 import currentLocalization from '../../utiles/currentLocalization';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   CertifyRecover: {
@@ -132,7 +133,7 @@ const CertifyRecover: FunctionComponent<{}> = () => {
                   marginLeft: 'auto',
                   lineHeight: 21,
                   height: 21,
-                  color: '#1c1c1c',
+                  color: AppColors.BLACK,
                 }}
                 label={`${t('account.expiration_time')}`}
               />

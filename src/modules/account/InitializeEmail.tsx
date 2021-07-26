@@ -12,6 +12,7 @@ import checkMail from '../../utiles/checkMail';
 import { SignInStatus } from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 const InitializeEmail: FunctionComponent = () => {
   const [state, setState] = useState({
@@ -56,7 +57,7 @@ const InitializeEmail: FunctionComponent = () => {
             justifyContent: 'center',
             alignSelf: 'center',
           }}>
-          <ActivityIndicator size="large" color="#3679B5" />
+          <ActivityIndicator size="large" color={AppColors.MAIN} />
         </View>
       </Modal>
       <AccountLayout
@@ -93,12 +94,12 @@ const InitializeEmail: FunctionComponent = () => {
               state.errorLength === 1
                 ? t('account.insert_account_email')
                 : state.errorReg === 1
-                  ? t('account.check_email')
-                  : t('account_label.continue')
+                ? t('account.check_email')
+                : t('account_label.continue')
             }
             handler={
               state.errorLength === 1 || state.errorReg === 1
-                ? () => { }
+                ? () => {}
                 : () => callEmailApi()
             }
             variant={

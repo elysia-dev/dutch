@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import AppColors from '../../enums/AppColors';
 
 const Loading: React.FC = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: '#3679B5' }}>
+    <View style={{ flex: 1, backgroundColor: AppColors.MAIN }}>
       <View
         style={{
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <ActivityIndicator size="large" color="#ffff" />
+        <ActivityIndicator size="large" color={AppColors.WHITE} />
       </View>
     </View>
   );

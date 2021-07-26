@@ -33,7 +33,7 @@ const Deposit: FunctionComponent<Props> = (props) => {
           paddingLeft: 20,
           paddingRight: 20,
           height: '100%',
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
         }}>
         <View
           style={{

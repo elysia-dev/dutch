@@ -1,9 +1,4 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useState,
-  useRef,
-} from 'react';
+import React, { FunctionComponent, useEffect, useState, useRef } from 'react';
 import {
   Animated,
   Image,
@@ -28,6 +23,7 @@ import { P1Text, H2Text } from '../../../shared/components/Texts';
 import { Page, ProductPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
 import useSafeAsync from '../../../utiles/useSafeAsync';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   story: Story;
@@ -49,7 +45,7 @@ const htmlStyles = StyleSheet.create({
   p: {
     fontSize: 15,
     lineHeight: 25,
-    color: '#626368',
+    color: AppColors.BLACK2,
     textAlign: 'left',
     marginLeft: '5%',
     marginRight: '5%',
@@ -170,9 +166,9 @@ const ExpandedItem: FunctionComponent<Props> = ({
         backgroundColor: animatedValue.interpolate({
           inputRange: [0, 0.9, 1],
           outputRange: [
-            'rgba(255,255,255,0)',
-            'rgba(255,255,255,0)',
-            'rgba(255,255,255,1)',
+            AppColors.TRANSPARENT,
+            AppColors.TRANSPARENT,
+            AppColors.WHITE,
           ],
         }),
         elevation: animatedValue.interpolate({
@@ -181,23 +177,26 @@ const ExpandedItem: FunctionComponent<Props> = ({
         }),
         height: on ? '100%' : 0,
         shadowOffset: { width: 2, height: 2 },
-        shadowColor: '#00000033',
+        shadowColor: AppColors.SHADOW_BLACK,
         shadowOpacity: animatedValue.interpolate({
           inputRange: [0, 1],
           outputRange: [0.6, 0],
         }),
         shadowRadius: 5,
-        transform: [{
-          translateX: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [xOffset, 0],
-          }),
-        }, {
-          translateY: animatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [yOffset, 0],
-          }),
-        }],
+        transform: [
+          {
+            translateX: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [xOffset, 0],
+            }),
+          },
+          {
+            translateY: animatedValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [yOffset, 0],
+            }),
+          },
+        ],
       }}>
       <ScrollView
         ref={scrollRef}
@@ -235,12 +234,14 @@ const ExpandedItem: FunctionComponent<Props> = ({
           style={{
             position: 'absolute',
             flexDirection: 'column',
-            transform: [{
-              translateY: animatedValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 40],
-              }),
-            }],
+            transform: [
+              {
+                translateY: animatedValue.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [20, 40],
+                }),
+              },
+            ],
             left: 20,
           }}>
           <P1Text label={story.subTitle} />
@@ -248,7 +249,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
         </Animated.View>
         <Animated.View
           style={{
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             paddingTop: 30,
             paddingBottom: 60,
             opacity: animatedValue.interpolate({
@@ -299,7 +300,7 @@ const ExpandedItem: FunctionComponent<Props> = ({
               width: 32,
               height: 32,
               borderRadius: 16,
-              backgroundColor: 'rgba(28,28,28,0.3)',
+              backgroundColor: AppColors.SHADOW_BLACK2,
             }}
           />
           <Image

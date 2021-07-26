@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { P1Text } from './Texts';
+import AppColors from '../../enums/AppColors';
 
 type Props = React.PropsWithChildren<{
   modalVisible: boolean;
@@ -29,7 +30,7 @@ const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
         <View
           style={{
             zIndex: 3,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             position: 'absolute',
             top: 0,
             width: '100%',
@@ -44,14 +45,14 @@ const IosPickerModal: FunctionComponent<Props> = (props: Props) => {
             <TouchableOpacity onPress={props.cancelHandler}>
               <P1Text
                 label={t('more_label.close')}
-                style={{ color: '#626368' }}
+                style={{ color: AppColors.BLACK2 }}
               />
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={props.doneHandler}>
             <P1Text
               label={t('more_label.done')}
-              style={{ color: '#3679B5' }}
+              style={{ color: AppColors.MAIN }}
             />
           </TouchableOpacity>
         </View>

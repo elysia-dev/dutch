@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import Product from '../../../types/product';
@@ -8,13 +7,8 @@ import { H3Text, P1Text, P3Text } from '../../../shared/components/Texts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import LocaleType from '../../../enums/LocaleType';
-
-const DesView = styled.View`
-  margin-top: 18px;
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
-`;
+import DesView from './DesView';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;
@@ -31,7 +25,8 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
 
   const product = props.product;
   // TODO : Add null guard languages & descrptions
-  const productDescription = product.data.descriptions[language || LocaleType.EN];
+  const productDescription =
+    product.data.descriptions[language || LocaleType.EN];
   // TODO : Add null guard languages & descrptions
   const isLoan = product.financeType === 'loan';
 
@@ -78,11 +73,11 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_financial.expected_annual_return')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.expectedAnnualReturn}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -92,21 +87,21 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.apr'
                       : 'product_financial.return_rent',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.data.returnOnRent}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_financial.return_sale')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={`${props.product.data.returnOnSale}%`}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -116,21 +111,21 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.distribution_date'
                       : 'product_financial.rent_distribution',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.monthlyRentIncomeDistributionCycle}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_financial.lockup_period')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.lockupPeriod}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
@@ -140,44 +135,44 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.expiry'
                       : 'product_financial.expected_sale_date',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.expectedSaleDate}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_financial.price')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={
                     isLoan
                       ? `₩ ${commaFormatter(
-                        parseFloat(product.data.propertyPrice),
-                      )}`
+                          parseFloat(product.data.propertyPrice),
+                        )}`
                       : currencyFormatter(
-                        parseFloat(product.data.propertyPrice),
-                        0,
-                      )
+                          parseFloat(product.data.propertyPrice),
+                          0,
+                        )
                   }
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               {!isLoan && (
                 <DesView>
                   <P3Text
                     label={t('product_financial.net_deposit')}
-                    style={{ color: '#626368' }}
+                    style={{ color: AppColors.BLACK2 }}
                   />
                   <P3Text
                     label={currencyFormatter(
                       parseFloat(product.data.netDeposit),
                       0,
                     )}
-                    style={{ color: '#1c1c1c' }}
+                    style={{ color: AppColors.BLACK }}
                   />
                 </DesView>
               )}
@@ -188,32 +183,29 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
                       ? 'product_financial.annual_return'
                       : 'product_financial.net_rent_year',
                   )}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={currencyFormatter(
                     parseFloat(product.data.netRentPerYear),
                     0,
                   )}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
 
               <DesView>
                 <P3Text
                   label={t('product_financial.bankloan')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={
                     isLoan
                       ? `₩ ${commaFormatter(parseFloat(product.data.bankLoan))}`
-                      : currencyFormatter(
-                        parseFloat(product.data.bankLoan),
-                        0,
-                      )
+                      : currencyFormatter(parseFloat(product.data.bankLoan), 0)
                   }
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
             </View>
@@ -251,112 +243,115 @@ const WrappedInfo: FunctionComponent<Props> = (props: Props) => {
               <DesView>
                 <P3Text
                   label={t('product_highlight.type')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.propertyType}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.ground')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.ground}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.underground')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.underground}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               {productDescription.unit && (
                 <DesView>
                   <P3Text
                     label={t('product_highlight.unit')}
-                    style={{ color: '#626368' }}
+                    style={{ color: AppColors.BLACK2 }}
                   />
                   <P3Text
                     label={productDescription.unit}
-                    style={{ color: '#1c1c1c' }}
+                    style={{ color: AppColors.BLACK }}
                   />
                 </DesView>
               )}
               <DesView>
                 <P3Text
                   label={t('product_highlight.bedroom')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.bedroom}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.completion_date')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
-                  label={
-                    moment(product.data.buildingCompletionDate).format('YYYY-MM-DD')
-                  }
-                  style={{ color: '#1c1c1c' }}
+                  label={moment(product.data.buildingCompletionDate).format(
+                    'YYYY-MM-DD',
+                  )}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.total_parking_available')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.totalParkingAvailable}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.air_conditioning')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.airConditioning}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.heating')}
-                  style={{ color: '#626368' }}
+                  style={{ color: AppColors.BLACK2 }}
                 />
                 <P3Text
                   label={productDescription.heating}
-                  style={{ color: '#1c1c1c' }}
+                  style={{ color: AppColors.BLACK }}
                 />
               </DesView>
               <DesView>
                 <P3Text
                   label={t('product_highlight.security_facilities')}
-                  style={{ color: '#626368', flex: 1 }}
+                  style={{ color: AppColors.BLACK2, flex: 1 }}
                 />
                 <P3Text
                   label={productDescription.securityFacilities}
-                  style={{ color: '#1c1c1c', flex: 4, textAlign: 'right' }}
+                  style={{
+                    color: AppColors.BLACK,
+                    flex: 4,
+                    textAlign: 'right',
+                  }}
                 />
               </DesView>
             </View>
           )}
         </View>
       </View>
-
     </View>
   );
 };

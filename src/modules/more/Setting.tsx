@@ -4,13 +4,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import {
-  View,
-  Switch,
-  Platform,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { View, Switch, Platform, TouchableOpacity, Image } from 'react-native';
 
 import { Picker } from '@react-native-community/picker';
 import { useNavigation } from '@react-navigation/native';
@@ -33,12 +27,22 @@ import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 
 const Setting: FunctionComponent = () => {
-  const { user, expoPushToken, isWalletUser, Server, setUserExpoPushToken } = useContext(UserContext);
+  const { user, expoPushToken, isWalletUser, Server, setUserExpoPushToken } =
+    useContext(UserContext);
   const navigation = useNavigation();
-  const { language, currency, notification, setLanguage, setCurrency, setNotification } = useContext(PreferenceContext);
+  const {
+    language,
+    currency,
+    notification,
+    setLanguage,
+    setCurrency,
+    setNotification,
+  } = useContext(PreferenceContext);
   const { wallet } = useContext(WalletContext);
   const [state, setState] = useState({
-    hasPermission: user.expoPushTokens?.includes(expoPushToken) || (isWalletUser && notification),
+    hasPermission:
+      user.expoPushTokens?.includes(expoPushToken) ||
+      (isWalletUser && notification),
     selectedCurrency: currency || CurrencyType.USD,
     showLanguageModal: false,
     showCurrencyModal: false,
@@ -74,7 +78,10 @@ const Setting: FunctionComponent = () => {
       registerForPushNotificationsAsync().then((expoPushToken) => {
         if (expoPushToken) {
           if (isWalletUser) {
-            EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', expoPushToken);
+            EspressoV2.subscribeExisted(
+              wallet?.getFirstNode()?.address || '',
+              expoPushToken,
+            );
           } else {
             Server.registerExpoPushToken(expoPushToken);
           }
@@ -85,7 +92,10 @@ const Setting: FunctionComponent = () => {
     } else {
       Notifications.getExpoPushTokenAsync().then((token) => {
         if (isWalletUser) {
-          EspressoV2.unsubsribe(wallet?.getFirstNode()?.address || '', expoPushToken);
+          EspressoV2.unsubsribe(
+            wallet?.getFirstNode()?.address || '',
+            expoPushToken,
+          );
         } else {
           Server.deleteExpoPushToken(token.data);
         }
@@ -110,15 +120,15 @@ const Setting: FunctionComponent = () => {
       <>
         <View
           style={{
-            borderBottomColor: '#F6F6F8',
+            borderBottomColor: AppColors.BACKGROUND_GREY,
             top: 22,
           }}>
           <H3Text
             label={t('more_label.app_setting')}
             style={{ color: AppColors.BLACK2 }}
           />
-          {
-            (user.provider !== ProviderType.GUEST || isWalletUser) && <View>
+          {(user.provider !== ProviderType.GUEST || isWalletUser) && (
+            <View>
               <View
                 style={{
                   marginTop: 30,
@@ -137,8 +147,10 @@ const Setting: FunctionComponent = () => {
                     }}
                   />
                   <Switch
-                    trackColor={{ false: '#767577', true: '#3679B5' }}
-                    thumbColor={state.hasPermission ? '#FFFFFF' : '#f4f3f4'}
+                    trackColor={{ false: '#767577', true: AppColors.MAIN }}
+                    thumbColor={
+                      state.hasPermission ? AppColors.WHITE : '#f4f3f4'
+                    }
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={activityToggleButton}
                     value={state.hasPermission}
@@ -149,7 +161,7 @@ const Setting: FunctionComponent = () => {
                 </View>
               </View>
             </View>
-          }
+          )}
           <View
             style={{
               flexDirection: 'row',
@@ -175,8 +187,19 @@ const Setting: FunctionComponent = () => {
               {Platform.OS === 'android' ? (
                 <View style={{ padding: 5 }}>
                   <P1Text
-                    style={{ position: 'absolute', textAlign: 'center', width: 80, top: 3 }}
-                    label={state.selectedLanguage === LocaleType.KO ? 'ko' : state.selectedLanguage === LocaleType.EN ? 'en' : 'ch'}
+                    style={{
+                      position: 'absolute',
+                      textAlign: 'center',
+                      width: 80,
+                      top: 3,
+                    }}
+                    label={
+                      state.selectedLanguage === LocaleType.KO
+                        ? 'ko'
+                        : state.selectedLanguage === LocaleType.EN
+                        ? 'en'
+                        : 'ch'
+                    }
                   />
                   <Picker
                     style={{
@@ -193,9 +216,21 @@ const Setting: FunctionComponent = () => {
                       });
                       setLanguage(itemValue.toString() as LocaleType);
                     }}>
-                    <Picker.Item label={'한국어'} value={LocaleType.KO} key={0} />
-                    <Picker.Item label={'English'} value={LocaleType.EN} key={1} />
-                    <Picker.Item label={'简体中文'} value={LocaleType.CH} key={2} />
+                    <Picker.Item
+                      label={'한국어'}
+                      value={LocaleType.KO}
+                      key={0}
+                    />
+                    <Picker.Item
+                      label={'English'}
+                      value={LocaleType.EN}
+                      key={1}
+                    />
+                    <Picker.Item
+                      label={'简体中文'}
+                      value={LocaleType.CH}
+                      key={2}
+                    />
                   </Picker>
                 </View>
               ) : (
@@ -211,7 +246,13 @@ const Setting: FunctionComponent = () => {
                     setState({ ...state, showLanguageModal: true });
                   }}>
                   <P1Text
-                    label={state.selectedLanguage === LocaleType.KO ? 'ko' : state.selectedLanguage === LocaleType.EN ? 'en' : 'ch'}
+                    label={
+                      state.selectedLanguage === LocaleType.KO
+                        ? 'ko'
+                        : state.selectedLanguage === LocaleType.EN
+                        ? 'en'
+                        : 'ch'
+                    }
                     style={{
                       textAlign: 'center',
                     }}
@@ -245,7 +286,12 @@ const Setting: FunctionComponent = () => {
               {Platform.OS === 'android' ? (
                 <View style={{ padding: 5 }}>
                   <P1Text
-                    style={{ position: 'absolute', textAlign: 'center', width: 80, top: 3 }}
+                    style={{
+                      position: 'absolute',
+                      textAlign: 'center',
+                      width: 80,
+                      top: 3,
+                    }}
                     label={currencyText()}
                   />
                   <Picker
@@ -308,7 +354,13 @@ const Setting: FunctionComponent = () => {
               )}
             </View>
           </View>
-          <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+          <View
+            style={{
+              marginTop: 30,
+              height: 2,
+              backgroundColor: AppColors.BACKGROUND_GREY,
+            }}
+          />
           <View
             style={{
               marginTop: 30,
@@ -331,43 +383,43 @@ const Setting: FunctionComponent = () => {
                 })
               }>
               <H3Text
-                label={
-                  t('more_label.version') +
-                  ` ${config.version}`
-                }
+                label={t('more_label.version') + ` ${config.version}`}
                 style={{ fontSize: 15 }}
               />
             </TouchableOpacity>
-            {checkLatestVersion(
-              config.version,
-              state.latestVersion,
-            ) && (
-                <TouchableOpacity
+            {checkLatestVersion(config.version, state.latestVersion) && (
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 30,
+                }}
+                onPress={() => {
+                  storeDeeplink('elysia/id1536733411', 'land.elysia');
+                }}>
+                <H3Text
+                  label={t('more_label.get_latest_version', {
+                    version: state.latestVersion,
+                  })}
+                  style={{ color: AppColors.CRITICAL_RED, fontSize: 15 }}
+                />
+                <Image
+                  source={require('./images/next_gray.png')}
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 30,
+                    width: 5,
+                    height: 8,
                   }}
-                  onPress={() => {
-                    storeDeeplink('elysia/id1536733411', 'land.elysia');
-                  }}>
-                  <H3Text
-                    label={t('more_label.get_latest_version', {
-                      version: state.latestVersion,
-                    })}
-                    style={{ color: '#CC3743', fontSize: 15 }}
-                  />
-                  <Image
-                    source={require('./images/next_gray.png')}
-                    style={{
-                      width: 5,
-                      height: 8,
-                    }}
-                  />
-                </TouchableOpacity>
-              )}
+                />
+              </TouchableOpacity>
+            )}
           </View>
-          <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+          <View
+            style={{
+              marginTop: 30,
+              height: 2,
+              backgroundColor: AppColors.BACKGROUND_GREY,
+            }}
+          />
         </View>
       </>
       <IosPickerModal

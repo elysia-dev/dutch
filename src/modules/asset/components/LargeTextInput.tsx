@@ -5,12 +5,13 @@ import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import GuideText from './GuideText';
 import AppColors from '../../../enums/AppColors';
+import PurposeType from '../../../enums/PurposeType';
 
 interface Props {
   current: string;
   value: string;
   type: string;
-  purposeType: string;
+  purpose: PurposeType;
   tokenType: string;
   priceInCryptocurrency: string;
   cryptocurrencyType: string;
@@ -20,7 +21,7 @@ const LargeTextInput: React.FC<Props> = ({
   current,
   value,
   type,
-  purposeType,
+  purpose,
   tokenType,
   priceInCryptocurrency,
   cryptocurrencyType,
@@ -30,7 +31,7 @@ const LargeTextInput: React.FC<Props> = ({
   if (value) {
     let valueFontSize = 30;
     if (value.length > 10) {
-      valueFontSize -= (value.length - 10);
+      valueFontSize -= value.length - 10;
     }
 
     return (
@@ -40,61 +41,68 @@ const LargeTextInput: React.FC<Props> = ({
             width: '100%',
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: current === 'to' ? 'flex-end' : 'space-between',
+            justifyContent: current === 'token' ? 'flex-end' : 'space-between',
             alignItems: 'flex-end',
             marginBottom: Platform.OS === 'ios' ? -2.5 : 0,
-          }}
-        >
-          {current === 'from' && <Text
-            style={{
-              fontSize: 25,
-              color: AppColors.BLACK2,
-              fontFamily: AppFonts.Bold,
-            }}
-          >
-            $
-          </Text>}
+          }}>
+          {current === 'fiat' && (
+            <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.BLACK2,
+                fontFamily: AppFonts.Bold,
+              }}>
+              $
+            </Text>
+          )}
           <View
             style={{
               height: 41.8,
               display: 'flex',
               justifyContent: 'flex-end',
-            }}
-          >
+            }}>
             <Text
               style={{
                 fontSize: valueFontSize,
                 color: AppColors.BLACK,
                 fontFamily: AppFonts.Bold,
-              }}
-            >
+              }}>
               {commaFormatter(value)}
             </Text>
           </View>
-          {current === 'to' && <Text
-            style={{
-              fontSize: 25,
-              color: AppColors.BLACK2,
-              fontFamily: AppFonts.Bold,
-            }}
-          >
-            {' ' + type}
-          </Text>}
+          {current === 'token' && (
+            <Text
+              style={{
+                fontSize: 25,
+                color: AppColors.BLACK2,
+                fontFamily: AppFonts.Bold,
+              }}>
+              {' ' + type}
+            </Text>
+          )}
         </View>
-        {current === 'to' && <GuideText
-          text={`$ ${commaFormatter(((Number(value)) * 5).toFixed(2))} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
-          style={{
-            width: '100%',
-            marginTop: 4,
-          }}
-        />}
-        {current === 'from' && <GuideText
-          text={`${commaFormatter((Number(value) / 5).toFixed(4))} ${tokenType} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
-          style={{
-            width: '100%',
-            marginTop: 4,
-          }}
-        />}
+        {current === 'token' && (
+          <GuideText
+            text={`$ ${commaFormatter(
+              (Number(value) * 5).toFixed(2),
+            )} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
+            style={{
+              width: '100%',
+              marginTop: 4,
+            }}
+          />
+        )}
+        {current === 'fiat' && (
+          <GuideText
+            text={`${commaFormatter(
+              (Number(value) / 5).toFixed(4),
+            )} ${tokenType} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
+            style={{
+              width: '100%',
+              marginTop: 4,
+            }}
+          />
+        )}
         <View
           style={{
             borderBottomWidth: 1,
@@ -116,9 +124,10 @@ const LargeTextInput: React.FC<Props> = ({
             fontFamily: AppFonts.Medium,
             marginTop: 12,
             marginBottom: 9,
-          }}
-        >
-          {current === 'to' ? t(`assets.${purposeType}_stake_placeholder`) : t(`assets.${purposeType}_value_placeholder`)}
+          }}>
+          {current === 'token'
+            ? t(`assets.${purpose}_stake_placeholder`)
+            : t(`assets.${purpose}_value_placeholder`)}
         </Text>
         <View
           style={{

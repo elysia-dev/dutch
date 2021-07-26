@@ -12,13 +12,13 @@ import PurposeType from '../../../enums/PurposeType';
 interface Props {
   purpose: PurposeType;
   current: string;
-  to: {
+  dataInToken: {
     value: string; // 입력한 값
     type: string; // 화폐 단위
     price: number; // 토큰 가격
     max: number; // 사용자가 구매/환불 가능한 최대 토큰 개수
   };
-  from: {
+  dataInFiat: {
     value: string; // 입력한 값
     type: string; // 화폐 단위
     price: number; // 화폐 가격
@@ -33,18 +33,20 @@ interface Props {
 const TxInputViewer: React.FC<Props> = ({
   purpose,
   current,
-  to,
-  from,
+  dataInToken,
+  dataInFiat,
   isOverMax,
   estimatedGas,
   gasCrypto,
   insufficientGas,
 }) => {
   const { t } = useTranslation();
-  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
-  const currentTab = current === 'to' ? to : from;
-  const maxLabel = current === 'to' ? t(`assets.${purposeType}_stake_available`) : t(`assets.${purposeType}_value_available`);
-  const maxValue = currentTab.max.toFixed(current === 'to' ? 4 : 2);
+  const currentTab = current === 'token' ? dataInToken : dataInFiat;
+  const maxLabel =
+    current === 'token'
+      ? t(`assets.${purpose}_stake_available`)
+      : t(`assets.${purpose}_value_available`);
+  const maxValue = currentTab.max.toFixed(current === 'token' ? 4 : 2);
 
   return (
     <View
@@ -53,16 +55,17 @@ const TxInputViewer: React.FC<Props> = ({
         marginBottom: Platform.OS === 'android' ? 60 : 30,
         display: 'flex',
         alignItems: 'center',
-      }}
-    >
+      }}>
       <LargeTextInput
         current={current}
         value={currentTab.value}
         type={currentTab.type}
-        purposeType={purposeType}
-        tokenType={to.type}
-        priceInCryptocurrency={commaFormatter((Number(from.value) / from.price).toFixed(2))}
-        cryptocurrencyType={from.type}
+        purpose={purpose}
+        tokenType={dataInToken.type}
+        priceInCryptocurrency={commaFormatter(
+          (Number(dataInFiat.value) / dataInFiat.price).toFixed(2),
+        )}
+        cryptocurrencyType={dataInFiat.type}
       />
       <View
         style={{
@@ -73,27 +76,38 @@ const TxInputViewer: React.FC<Props> = ({
           borderRadius: 5,
           paddingVertical: 12,
           paddingHorizontal: 10,
-        }}
-      >
+        }}>
         {isOverMax ? (
-          <GuideTextInvalid text={`${current === 'to' ? t(`assets.${purposeType}_stake_excess`) : t(`assets.${purposeType}_value_excess`)}`} />
+          <GuideTextInvalid
+            text={`${
+              current === 'token'
+                ? t(`assets.${purpose}_stake_excess`)
+                : t(`assets.${purpose}_value_excess`)
+            }`}
+          />
         ) : (
-          <GuideText text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`} />
+          <GuideText
+            text={`${maxLabel}: ${commaFormatter(maxValue)} ${currentTab.type}`}
+          />
         )}
         {insufficientGas ? (
-          <GuideTextInvalid text={t('assets.insufficient_gas')} style={{ marginTop: 5.5 }} />
+          <GuideTextInvalid
+            text={t('assets.insufficient_gas')}
+            style={{ marginTop: 5.5 }}
+          />
+        ) : estimatedGas ? (
+          <GuideText
+            text={`${t('assets.gas_price')}: ${commaFormatter(
+              estimatedGas,
+            )} ${gasCrypto}`}
+            style={{ marginTop: 6 }}
+          />
         ) : (
-          estimatedGas ? (
-            <GuideText
-              text={`${t('assets.gas_price')}: ${commaFormatter(estimatedGas)} ${gasCrypto}`}
-              style={{ marginTop: 6 }}
-            />
-          ) : ( // 빈 문자열이면
-            <GuideText
-              text="가스비를 추정할 수 없습니다."
-              style={{ marginTop: 6 }}
-            />
-          )
+          // 빈 문자열이면
+          <GuideText
+            text="가스비를 추정할 수 없습니다."
+            style={{ marginTop: 6 }}
+          />
         )}
       </View>
     </View>

@@ -3,12 +3,10 @@ import React, {
   useState,
   useEffect,
   useContext,
-  useRef,
 } from 'react';
 import { View, ScrollView, StatusBar, Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from '../../shared/components/BackButton';
 import WrappedInfo from './components/WrappedInfo';
@@ -24,12 +22,7 @@ import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
-
-const ProductInfoWrapper = styled.View`
-  background-color: #fff;
-  height: 100%;
-  width: 100%;
-`;
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   ProductBuying: {
@@ -78,7 +71,7 @@ const ProductBuying: FunctionComponent = () => {
     else if (state.product?.restrictedCountries?.includes(shortNationality)) {
       return t('product_label.restricted_country');
     } else if (state.product?.status === ProductStatus.SALE) {
-      return t('assets.invest');
+      return t('assets.purchase');
     }
     return '';
   };
@@ -116,19 +109,20 @@ const ProductBuying: FunctionComponent = () => {
       return alert(t('product.non_purchasable'));
     } else {
       navigation.navigate(ProductPage.Purchase, {
-        from: { // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
+        assetInCrypto: {
+          // 이거랑 to가 Asset 타입이어야 함!!!! 내 자산에서 살 때랑 똑같이
           type: state.product?.paymentMethod.toUpperCase() as CryptoType,
           unit: state.product?.paymentMethod.toUpperCase() as CryptoType,
           title: state.product?.paymentMethod.toUpperCase(),
           value: state.product?.totalValue, // 이것도 필요하던가... 아니 근데 이걸 나중에 잔고로 쓰기도 함....?ㅠㅠ
         },
-        to: {
+        assetInToken: {
           type: CryptoType.ELA,
           unit: state.product?.tokenName,
           title: state.product?.tokenName,
           value: state.product?.totalValue,
         },
-        toMax: parseFloat(state.product?.presentValue || '0'),
+        remainingSupplyInToken: parseFloat(state.product?.presentValue || '0'),
         contractAddress: state.product?.contractAddress,
         productId: state.product?.id,
       });
@@ -156,13 +150,18 @@ const ProductBuying: FunctionComponent = () => {
 
   return (
     <>
-      <ProductInfoWrapper>
+      <View
+        style={{
+          backgroundColor: AppColors.WHITE,
+          height: '100%',
+          width: '100%',
+        }}>
         <ScrollView
           scrollEnabled={true}
           scrollToOverflowEnabled={true}
           style={{
             height: '100%',
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
           }}>
           <View
             style={{
@@ -181,7 +180,7 @@ const ProductBuying: FunctionComponent = () => {
                   width: 32,
                   height: 32,
                   borderRadius: 16,
-                  backgroundColor: 'rgba(255,255,255,0.5)',
+                  backgroundColor: AppColors.BACKGROUND_WHITE,
                   marginLeft: 12,
                   marginTop: 32,
                 }}
@@ -199,7 +198,7 @@ const ProductBuying: FunctionComponent = () => {
             <View
               style={{
                 padding: 20,
-                borderBottomColor: '#F6F6F8',
+                borderBottomColor: AppColors.BACKGROUND_GREY,
                 borderBottomWidth: 5,
                 height: 198,
               }}>
@@ -209,7 +208,7 @@ const ProductBuying: FunctionComponent = () => {
           <View
             style={{
               padding: 20,
-              borderBottomColor: '#F6F6F8',
+              borderBottomColor: AppColors.BACKGROUND_GREY,
               borderBottomWidth: 5,
               height: 320,
             }}>
@@ -224,16 +223,16 @@ const ProductBuying: FunctionComponent = () => {
             backgroundColor:
               // eslint-disable-next-line no-nested-ternary
               state.product?.status === ProductStatus.TERMINATED
-                ? '#1c1c1c'
+                ? AppColors.BLACK
                 : user.provider === ProviderType.ETH || purchasability
-                ? '#3679B5'
-                : '#D0D8DF',
+                ? AppColors.MAIN
+                : AppColors.BLUE_2,
           }}
           disabled={state.product?.status === ProductStatus.TERMINATED}
           handler={submitButtonHandler}
           title={submitButtonTitle()}
         />
-      </ProductInfoWrapper>
+      </View>
     </>
   );
 };

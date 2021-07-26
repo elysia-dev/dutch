@@ -1,5 +1,11 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
@@ -22,24 +28,24 @@ import PurposeType from '../../../enums/PurposeType';
 interface ITxInput {
   purpose: PurposeType;
   title: string;
-  fromInputTitle: string;
-  toInputTitle: string;
-  from: Asset;
-  to: Asset;
-  toMax?: number;
-  fromMax?: number;
-  fromPrice: number;
-  toPrice: number;
-  fromBalance: number;
-  toBalance: number;
-  values: { from: string; to: string };
+  fiatInputTitle: string;
+  tokenInputTitle: string;
+  assetInCrypto: Asset;
+  assetInToken: Asset;
+  remainingSupplyInToken?: number;
+  remainingSupplyInCrypto?: number;
+  cryptoPrice: number;
+  tokenPrice: number;
+  balanceInCrypto: number;
+  balanceInToken: number;
+  values: { inFiat: string; inToken: string };
   current: string;
   step: TxStep;
   estimateGas?: string;
   disabled: boolean;
   isApproved: boolean;
-  setCurrent: Dispatch<SetStateAction<"from" | "to">>;
-  setValues: Dispatch<SetStateAction<{ from: string; to: string }>>;
+  setCurrent: Dispatch<SetStateAction<'token' | 'fiat'>>;
+  setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   createTx: () => void;
 }
 
@@ -55,16 +61,16 @@ interface ITxInput {
 const TxInput: React.FC<ITxInput> = ({
   purpose,
   title,
-  fromInputTitle,
-  toInputTitle,
-  from,
-  to,
-  fromMax,
-  toMax,
-  fromPrice,
-  toPrice,
-  fromBalance,
-  toBalance,
+  fiatInputTitle,
+  tokenInputTitle,
+  assetInCrypto,
+  assetInToken,
+  remainingSupplyInCrypto,
+  remainingSupplyInToken,
+  cryptoPrice,
+  tokenPrice,
+  balanceInCrypto,
+  balanceInToken,
   values,
   current,
   step,
@@ -79,31 +85,48 @@ const TxInput: React.FC<ITxInput> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
-  const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
+  const gasCrypto = [assetInCrypto.type, assetInToken.type].includes(
+    CryptoType.BNB,
+  )
+    ? CryptoType.BNB
+    : CryptoType.ETH;
   const insets = useSafeAreaInsets();
-  const valueInCrypto = parseFloat(values.from) / getCryptoPrice(from.type);
-  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    fromBalance < parseFloat(estimateGas) + valueInCrypto
-    : fromBalance < parseFloat(estimateGas);
-  const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
+  const valueInCrypto =
+    parseFloat(values.inFiat) / getCryptoPrice(assetInCrypto.type);
+  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(
+    assetInCrypto.type,
+  )
+    ? balanceInCrypto < parseFloat(estimateGas) + valueInCrypto
+    : balanceInCrypto < parseFloat(estimateGas);
 
-  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    valueInCrypto + Number(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
-    : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
+  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(
+    assetInCrypto.type,
+  )
+    ? valueInCrypto + parseFloat(estimateGas) >
+      (remainingSupplyInCrypto
+        ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
+        : balanceInCrypto)
+    : valueInCrypto >
+      (remainingSupplyInCrypto
+        ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
+        : balanceInCrypto);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader title={title} />
-      <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-      }}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
         <TouchableOpacity
-          onPress={() => setCurrent('to')}
+          onPress={() => setCurrent('token')}
           style={{
-            backgroundColor: current === 'to' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'to' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor:
+              current === 'token' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor:
+              current === 'token' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             display: 'flex',
             justifyContent: 'center',
@@ -112,22 +135,23 @@ const TxInput: React.FC<ITxInput> = ({
             borderBottomLeftRadius: 5,
             width: '45%',
             height: 37,
-          }}
-        >
+          }}>
           <Text
             style={{
-              color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED,
+              color:
+                current === 'token' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
-            }}
-          >
-            {toInputTitle}
+            }}>
+            {tokenInputTitle}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setCurrent('from')}
+          onPress={() => setCurrent('fiat')}
           style={{
-            backgroundColor: current === 'from' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'from' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor:
+              current === 'fiat' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor:
+              current === 'fiat' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -135,15 +159,14 @@ const TxInput: React.FC<ITxInput> = ({
             borderBottomRightRadius: 5,
             width: '45%',
             height: 37,
-          }}
-        >
+          }}>
           <Text
             style={{
-              color: current === 'from' ? AppColors.WHITE : AppColors.DEACTIVATED,
+              color:
+                current === 'fiat' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
-            }}
-          >
-            {fromInputTitle}
+            }}>
+            {fiatInputTitle}
           </Text>
         </TouchableOpacity>
       </View>
@@ -156,17 +179,21 @@ const TxInput: React.FC<ITxInput> = ({
         <TxInputViewer
           purpose={purpose}
           current={current}
-          to={{
-            value: values.to,
-            type: to.unit,
-            price: toPrice,
-            max: toMax ? Math.min(toMax, toBalance) : toBalance,
+          dataInToken={{
+            value: values.inToken,
+            type: assetInToken.unit,
+            price: tokenPrice,
+            max: remainingSupplyInToken
+              ? Math.min(remainingSupplyInToken, balanceInToken)
+              : balanceInToken,
           }}
-          from={{
-            value: values.from,
-            type: from.type,
-            price: fromPrice,
-            max: fromMax ? Math.min(fromMax, fromBalance) : fromBalance,
+          dataInFiat={{
+            value: values.inFiat,
+            type: assetInCrypto.type,
+            price: cryptoPrice,
+            max: remainingSupplyInCrypto
+              ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
+              : balanceInCrypto,
           }}
           isOverMax={isOverMax}
           estimatedGas={estimateGas}
@@ -175,53 +202,79 @@ const TxInput: React.FC<ITxInput> = ({
         />
         <NumberPadShortcut
           current={current}
-          values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
-          inputValue={current === 'to' ? values.to : values.from}
+          values={
+            current === 'token'
+              ? [0.01, 1, 10, 100, 1000]
+              : [10, 50, 100, 500, 1000]
+          }
+          inputValue={current === 'token' ? values.inToken : values.inFiat}
           setValues={setValues}
-          ELAPrice={toPrice}
+          ELAPrice={tokenPrice}
         />
         <NumberPad
           addValue={(text) => {
-            const before = current === 'from' ? values.from : values.to;
+            const before = current === 'fiat' ? values.inFiat : values.inToken;
             const includesComma = before.includes('.');
             if (
-              text === '.' && includesComma
-              || text !== '.' && !includesComma && before.length >= 12
-              || includesComma && before.split('.')[1].length >= (current === 'from' ? 2 : 6)
-              || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
+              (text === '.' && includesComma) ||
+              (text !== '.' && !includesComma && before.length >= 12) ||
+              (includesComma &&
+                before.split('.')[1].length >= (current === 'fiat' ? 2 : 6)) ||
+              (before
+                .split('')
+                .reduce((res, cur) => res && cur === '0', true) &&
+                text === '0')
             ) {
               return;
             }
 
-            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text;
-            const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
+            const next =
+              text === '.' && !before
+                ? '0.'
+                : text !== '0' && before === '0'
+                ? text
+                : before + text;
+            const removedDotNext =
+              next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
-            if (current === 'from') {
+            if (current === 'fiat') {
               setValues({
-                from: next,
-                to: decimalFormatter(parseFloat(removedDotNext) / toPrice, 6),
+                inFiat: next,
+                inToken: decimalFormatter(
+                  parseFloat(removedDotNext) / tokenPrice,
+                  6,
+                ),
               });
             } else {
               setValues({
-                from: decimalFormatter(parseFloat(removedDotNext) * toPrice, 2),
-                to: next,
+                inFiat: decimalFormatter(
+                  parseFloat(removedDotNext) * tokenPrice,
+                  2,
+                ),
+                inToken: next,
               });
             }
           }}
           removeValue={() => {
-            const before = current === 'from' ? values.from : values.to;
+            const before = current === 'fiat' ? values.inFiat : values.inToken;
 
             const next = before.slice(0, -1);
 
-            if (current === 'from') {
+            if (current === 'fiat') {
               setValues({
-                from: next,
-                to: decimalFormatter(parseFloat(next || '0') / toPrice, 6),
+                inFiat: next,
+                inToken: decimalFormatter(
+                  parseFloat(next || '0') / tokenPrice,
+                  6,
+                ),
               });
             } else {
               setValues({
-                from: decimalFormatter(parseFloat(next || '0') * toPrice, 2),
-                to: next,
+                inFiat: decimalFormatter(
+                  parseFloat(next || '0') * tokenPrice,
+                  2,
+                ),
+                inToken: next,
               });
             }
           }}
@@ -233,8 +286,7 @@ const TxInput: React.FC<ITxInput> = ({
           marginBottom: insets.bottom || 10,
           paddingLeft: '5%',
           paddingRight: '5%',
-        }}
-      >
+        }}>
         <NextButton
           disabled={isOverMax || disabled || insufficientGas}
           title={t('assets.done')}
@@ -251,18 +303,24 @@ const TxInput: React.FC<ITxInput> = ({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={title}
-        purposeType={purposeType}
-        assetTitle={to.title}
-        assetUnit={to.unit}
+        purpose={purpose}
+        assetTitle={assetInToken.title}
+        assetUnit={assetInToken.unit}
         values={values}
-        priceInCryptocurrency={fromPrice}
-        cryptocurrencyType={from.type}
+        priceInCryptocurrency={cryptoPrice}
+        cryptocurrencyType={assetInCrypto.type}
         estimateGas={estimateGas}
         gasCrypto={gasCrypto}
         isApproved={isApproved}
         createTx={createTx}
       />
-      <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
+      <OverlayLoading
+        visible={[
+          TxStep.Approving,
+          Platform.OS === 'android' && TxStep.CheckAllowance,
+          TxStep.Creating,
+        ].includes(step)}
+      />
     </View>
   );
 };

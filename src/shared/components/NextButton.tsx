@@ -24,7 +24,7 @@ const NextButton: FunctionComponent<INextButton> = ({
       onPress={handler}
       disabled={disabled}
       style={{
-        backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
+        backgroundColor: disabled ? AppColors.BLUE_2 : AppColors.MAIN,
         ...(style as {}),
         borderRadius: 5,
         justifyContent: 'center',
@@ -36,7 +36,7 @@ const NextButton: FunctionComponent<INextButton> = ({
           fontSize: 16,
           textAlign: 'center',
           fontFamily: AppFonts.Bold,
-          color: 'white',
+          color: '#F5F5F5',
         }}
         allowFontScaling={false}>
         {title}

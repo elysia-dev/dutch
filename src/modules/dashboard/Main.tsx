@@ -98,7 +98,7 @@ export const Main: React.FC = () => {
         style={{
           width: '100%',
           height: '100%',
-          backgroundColor: 'white',
+          backgroundColor: AppColors.WHITE,
         }}
         refreshControl={
           user.provider !== ProviderType.GUEST || isWalletUser ? (
@@ -137,7 +137,7 @@ export const Main: React.FC = () => {
                     onBtnRefresh();
                   }}>
                   {btnRefreshing ? (
-                    <ActivityIndicator size="small" color="#1c1c1c" />
+                    <ActivityIndicator size="small" color={AppColors.BLACK} />
                   ) : (
                     <Image
                       style={{ width: 20, height: 20 }}

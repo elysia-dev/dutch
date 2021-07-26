@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, ScrollView, Image, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -178,7 +178,7 @@ const Detail: FunctionComponent = () => {
   return (
     <>
       <FlatList
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: AppColors.WHITE }}
         data={
           filter === 0
             ? state.transactions
@@ -341,15 +341,15 @@ const Detail: FunctionComponent = () => {
                           disabled={state.productStatus !== ProductStatus.SALE}
                           handler={() => {
                             navigation.navigate(AssetPage.Purchase, {
-                              from: {
+                              assetInCrypto: {
                                 type: state.paymentMethod,
                                 title: state.paymentMethod.toUpperCase(),
                                 unit: state.paymentMethod.toUpperCase(),
                               },
-                              to: asset,
+                              assetInToken: asset,
                               contractAddress: state.contractAddress,
                               productId: state.productId,
-                              toMax: state.presentSupply,
+                              remainingSupplyInToken: state.presentSupply,
                             });
                           }}
                         />
@@ -358,12 +358,12 @@ const Detail: FunctionComponent = () => {
                           icon={'-'}
                           handler={() => {
                             navigation.navigate(AssetPage.Refund, {
-                              from: {
+                              assetInCrypto: {
                                 type: state.paymentMethod,
                                 title: state.paymentMethod.toUpperCase(),
                                 unit: state.paymentMethod.toUpperCase(),
                               },
-                              to: asset,
+                              assetInToken: asset,
                               contractAddress: state.contractAddress,
                               productId: state.productId,
                             });

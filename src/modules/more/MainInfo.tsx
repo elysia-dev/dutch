@@ -7,15 +7,12 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import styled from 'styled-components/native';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import * as Linking from 'expo-linking';
 import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native-gesture-handler';
 import { MorePage } from '../../enums/pageEnum';
 import Exchange00 from './images/bithumb_logo.png';
 import Exchange01 from './images/bithumb_global_logo.png';
-import Exchange02 from './images/boboo_logo.png';
 import Exchange03 from './images/gopax.png';
 import Exchange04 from './images/xt_logo.png';
 import { H3Text } from '../../shared/components/Texts';
@@ -27,18 +24,11 @@ import WalletContext from '../../contexts/WalletContext';
 import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
-
-const ExchangeImg = styled.Image`
-  width: 95px;
-  height: 95px;
-  resize-mode: contain;
-`;
+import ExchangeButton from './components/ExchangeButton';
 
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
-  const {
-    signOut,
-  } = useContext(UserContext);
+  const { signOut } = useContext(UserContext);
   const { setLock, clearWallet } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
@@ -71,7 +61,7 @@ const MainInfo: FunctionComponent = () => {
   const confirmSignOut = () => {
     // TODO : 더욱 강력한 경고 문구로 변경하기
     if (isWalletUser) {
-      if (Platform.OS !== "android") {
+      if (Platform.OS !== 'android') {
         return Alert.prompt(
           t('more_label.delete_address'),
           t('more.confirm_delete'),
@@ -90,7 +80,7 @@ const MainInfo: FunctionComponent = () => {
           [
             {
               text: 'Cancel',
-              onPress: () => { },
+              onPress: () => {},
               style: 'cancel',
             },
             {
@@ -116,7 +106,7 @@ const MainInfo: FunctionComponent = () => {
           [
             {
               text: 'Cancel',
-              onPress: () => { },
+              onPress: () => {},
               style: 'cancel',
             },
             {
@@ -138,7 +128,7 @@ const MainInfo: FunctionComponent = () => {
           [
             {
               text: 'Cancel',
-              onPress: () => { },
+              onPress: () => {},
               style: 'cancel',
             },
             {
@@ -162,7 +152,7 @@ const MainInfo: FunctionComponent = () => {
         width: '100%',
         height: '100%',
         top: 0,
-        backgroundColor: '#FFF',
+        backgroundColor: AppColors.WHITE,
       }}>
       <AnimatedMainHeader title={t('more_label.more')} scrollY={scrollY} />
       <Animated.ScrollView
@@ -188,7 +178,7 @@ const MainInfo: FunctionComponent = () => {
               label={t('more_label.my_info')}
               style={{ marginTop: 60, color: AppColors.BLACK2 }}
             />
-            {(!isWalletUser && !user.ethAddresses[0]) &&
+            {!isWalletUser && !user.ethAddresses[0] && (
               <View
                 style={{
                   height: 50,
@@ -219,7 +209,7 @@ const MainInfo: FunctionComponent = () => {
                             width: 8,
                             height: 8,
                             borderRadius: 4,
-                            backgroundColor: '#FC5C4F',
+                            backgroundColor: AppColors.NOTICE_RED,
                           }}
                         />
                       )}
@@ -227,7 +217,7 @@ const MainInfo: FunctionComponent = () => {
                   </View>
                 </TouchableOpacity>
               </View>
-            }
+            )}
 
             {!isPublicAddressUser && (
               <View
@@ -273,7 +263,7 @@ const MainInfo: FunctionComponent = () => {
                       justifyContent: 'space-between',
                     }}>
                     <H3Text
-                      label='My asset#2 ownership'
+                      label="My asset#2 ownership"
                       style={{ lineHeight: 50, fontSize: 15 }}
                     />
                   </View>
@@ -307,7 +297,13 @@ const MainInfo: FunctionComponent = () => {
               </View>
             )}
 
-            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+            <View
+              style={{
+                marginTop: 30,
+                height: 2,
+                backgroundColor: AppColors.BACKGROUND_GREY,
+              }}
+            />
 
             <H3Text
               label={t('more_label.service_center')}
@@ -408,7 +404,13 @@ const MainInfo: FunctionComponent = () => {
               </View>
             )}
 
-            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+            <View
+              style={{
+                marginTop: 30,
+                height: 2,
+                backgroundColor: AppColors.BACKGROUND_GREY,
+              }}
+            />
 
             <H3Text
               label={t('more_label.el_exchange')}
@@ -425,44 +427,22 @@ const MainInfo: FunctionComponent = () => {
                 flexDirection: 'row',
                 marginBottom: 20,
               }}>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5,
-                }}
-                onPress={() => Linking.openURL('https://www.bithumb.com')}>
-                <ExchangeImg source={Exchange00} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5,
-                }}
-                onPress={() =>
-                  Linking.openURL('https://www.bithumb.pro/en-us')
-                }>
-                <ExchangeImg source={Exchange01} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5,
-                }}
-                onPress={() => Linking.openURL('https://www.gopax.co.kr')}>
-                <ExchangeImg source={Exchange03} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  marginHorizontal: 5,
-                }}
-                onPress={() => Linking.openURL('https://www.xt.com')}>
-                <ExchangeImg source={Exchange04} />
-              </TouchableOpacity>
-
+              <ExchangeButton url="https://www.bithumb.com" img={Exchange00} />
+              <ExchangeButton
+                url="https://www.bithumb.pro/en-us"
+                img={Exchange01}
+              />
+              <ExchangeButton url="https://www.gopax.co.kr" img={Exchange03} />
+              <ExchangeButton url="https://www.xt.com" img={Exchange04} />
             </ScrollView>
 
-            <View style={{ marginTop: 30, height: 2, backgroundColor: AppColors.BACKGROUND_GREY }} />
+            <View
+              style={{
+                marginTop: 30,
+                height: 2,
+                backgroundColor: AppColors.BACKGROUND_GREY,
+              }}
+            />
 
             <View
               style={{
@@ -476,7 +456,10 @@ const MainInfo: FunctionComponent = () => {
                 style={{
                   width: '100%',
                   alignSelf: 'center',
-                  backgroundColor: (user.provider === ProviderType.ETH || isWalletUser) ? '#c4302b' : '#767577',
+                  backgroundColor:
+                    user.provider === ProviderType.ETH || isWalletUser
+                      ? AppColors.CRITICAL_RED
+                      : '#767577',
                 }}
               />
             </View>

@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Modal } from '../../shared/components/Modal';
@@ -9,12 +8,7 @@ import AcceptedImg from './images/accepted.png';
 import { AccountPage } from '../../enums/pageEnum';
 import PasswordForm from './PasswordForm';
 import UserContext from '../../contexts/UserContext';
-
-const Accepted = styled.Image`
-  width: 140px;
-  height: 140px;
-  margin: 10px auto;
-`;
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   RecoverPassword: {
@@ -40,7 +34,7 @@ const RecoverPassword: FunctionComponent = () => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          alert(t('recover_error'));
+          alert(t('account.recover_error'));
         } else if (e.reponse.status === 404) {
           alert(t('account.recover_verification_error'));
           navigation.navigate(AccountPage.InitializeEmail);
@@ -59,7 +53,8 @@ const RecoverPassword: FunctionComponent = () => {
           height: '100%',
           width: '100%',
           zIndex: state.modalVisible === false ? 0 : 999,
-          backgroundColor: state.modalVisible === false ? '#FFFFFF' : '#000000',
+          backgroundColor:
+            state.modalVisible === false ? AppColors.WHITE : AppColors.BLACK,
           display: state.modalVisible === false ? 'none' : 'flex',
           opacity: state.modalVisible === false ? 0 : 0.6,
         }}></View>
@@ -73,7 +68,15 @@ const RecoverPassword: FunctionComponent = () => {
         <Modal
           child={
             <View>
-              <Accepted source={AcceptedImg} />
+              <Image
+                source={AcceptedImg}
+                style={{
+                  width: 140,
+                  height: 140,
+                  marginVertical: 10,
+                  marginHorizontal: 'auto',
+                }}
+              />
               <TitleText
                 style={{
                   textAlign: 'center',

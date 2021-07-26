@@ -43,7 +43,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       {transaction.status === TxStatus.Pending ? (
         <ActivityIndicator
           size="small"
-          color="#1c1c1c"
+          color={AppColors.BLACK}
           style={{ marginLeft: 10 }}
         />
       ) : (
@@ -90,7 +90,13 @@ const TransactionItem: React.FC<ITransactionItem> = ({
               transaction.legacyType || '',
             ) || transaction.legacyType
               ? currencyFormatter(parseFloat(transaction.value))
-              : `${transaction.type === 'out' ? '-' : '+'} ${parseFloat(transaction.value) > 0.01 ? (Math.floor(parseFloat(transaction.value) * 100) / 100).toString() : '0.00...'} ${unit}`
+              : `${transaction.type === 'out' ? '-' : '+'} ${
+                  parseFloat(transaction.value) > 0.01
+                    ? (
+                        Math.floor(parseFloat(transaction.value) * 100) / 100
+                      ).toString()
+                    : '0.00...'
+                } ${unit}`
           }
         />
       </View>

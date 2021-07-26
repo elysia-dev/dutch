@@ -11,6 +11,7 @@ import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
+import AppColors from '../../enums/AppColors';
 
 const Contact: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -31,7 +32,11 @@ const Contact: FunctionComponent = () => {
       user.provider === ProviderType.GUEST ||
       user.provider === ProviderType.ETH
     ) {
-      Server.sendQuestionWithEmail(state.email, state.contents, language || LocaleType.EN)
+      Server.sendQuestionWithEmail(
+        state.email,
+        state.contents,
+        language || LocaleType.EN,
+      )
         .then((_res) => {
           alert(t('more.question_submitted'));
           setState({
@@ -75,9 +80,6 @@ const Contact: FunctionComponent = () => {
   };
 
   return (
-    // <SafeAreaView
-    //   style={{ width: '100%', height: '100%', backgroundColor: '#fff' }}
-    //   forceInset={{ bottom: 'always' }}>
     <WrapperLayout
       isScrolling={false}
       backButtonHandler={() => {
@@ -100,9 +102,9 @@ const Contact: FunctionComponent = () => {
             paddingTop: 15,
             paddingBottom: 15,
             borderRadius: 10,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             shadowOffset: { width: 0, height: 2 },
-            shadowColor: '#00000029',
+            shadowColor: AppColors.SHADOW_BLACK,
             shadowOpacity: 0.8,
             shadowRadius: 6,
             marginBottom: 30,
@@ -111,14 +113,14 @@ const Contact: FunctionComponent = () => {
           }}>
           {(user.provider === ProviderType.GUEST ||
             user.provider === ProviderType.ETH) && (
-              <TextField
-                value={state.email}
-                label={t('more_label.reply_email')}
-                eventHandler={(input: string) =>
-                  setState({ ...state, email: input })
-                }
-              />
-            )}
+            <TextField
+              value={state.email}
+              label={t('more_label.reply_email')}
+              eventHandler={(input: string) =>
+                setState({ ...state, email: input })
+              }
+            />
+          )}
           <TextArea
             contents={state.contents}
             eventHandler={(input: string) =>
@@ -127,7 +129,7 @@ const Contact: FunctionComponent = () => {
           />
           <P1Text
             style={{
-              color: '#A7A7A7',
+              color: AppColors.TEXT_GREY,
               fontSize: 12,
               textAlign: 'right',
               marginTop: 2,
@@ -142,15 +144,14 @@ const Contact: FunctionComponent = () => {
           style={{
             backgroundColor:
               !state.contents || state.contactRestriction
-                ? '#D0D8DF'
-                : '#3679B5',
+                ? AppColors.BLUE_2
+                : AppColors.MAIN,
           }}
           title={t('more_label.contact')}
           handler={() => callApi()}
         />
       }
     />
-    // </SafeAreaView>
   );
 };
 
