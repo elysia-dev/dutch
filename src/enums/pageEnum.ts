@@ -1,6 +1,7 @@
 export enum MainPage {
   DashboardMain = 'DashboardMain',
   ProductsMain = 'ProductsMain',
+  StakingMain = 'StakingMain',
   NotificationMain = 'NotificationMain',
   MoreMain = 'MoreMain',
 }

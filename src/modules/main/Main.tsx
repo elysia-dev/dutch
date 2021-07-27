@@ -7,6 +7,8 @@ import DashboardBlackPng from '../../shared/assets/images/dashboard_black.png';
 import DashboardPng from '../../shared/assets/images/dashboard.png';
 import ProductBlackPng from '../../shared/assets/images/product_black.png';
 import ProductPng from '../../shared/assets/images/product.png';
+import StakingPng from '../../shared/assets/images/staking.png';
+import StakingBlackPng from '../../shared/assets/images/staking_black.png';
 import NotificationBlackPng from '../../shared/assets/images/notification_black.png';
 import NotificationPng from '../../shared/assets/images/notification.png';
 import OptionsPng from '../../shared/assets/images/options.png';
@@ -14,6 +16,7 @@ import OptionsBlackPng from '../../shared/assets/images/options_black.png';
 import MainInfo from '../more/MainInfo';
 import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
+import { Main as StakingMain } from '../staking/Main';
 import Notifications from '../notification/Notifications';
 import UserContext from '../../contexts/UserContext';
 import { MainPage } from '../../enums/pageEnum';
@@ -64,6 +67,25 @@ const Main: FunctionComponent = () => {
             tabBarIcon: ({ focused }) => (
               <Image
                 source={focused ? ProductBlackPng : ProductPng}
+                style={{
+                  width: 30,
+                  height: 30,
+                  position: 'absolute',
+                  top: 8,
+                }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={MainPage.StakingMain}
+          component={StakingMain}
+          options={{
+            unmountOnBlur: true,
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={focused ? StakingBlackPng : StakingPng}
                 style={{
                   width: 30,
                   height: 30,
