@@ -9,11 +9,7 @@ interface ISelectBox {
   select: (id: number) => void;
 }
 
-export const SelectBox: React.FC<ISelectBox> = ({
-  options,
-  selected,
-  select,
-}) => {
+const SelectBox: React.FC<ISelectBox> = ({ options, selected, select }) => {
   return (
     <View
       style={{

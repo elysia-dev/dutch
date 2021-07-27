@@ -228,7 +228,6 @@ const Purchase: FunctionComponent = () => {
               afterTxFailed(e.message);
               navigation.goBack();
             });
-        } else {
         }
         break;
 
@@ -294,6 +293,9 @@ const Purchase: FunctionComponent = () => {
               ? TxStep.Created
               : TxStep.Failed,
         });
+        break;
+      default:
+        break;
     }
   }, [txResult.status]);
 
@@ -317,7 +319,7 @@ const Purchase: FunctionComponent = () => {
         step={state.step}
         setCurrent={setCurrent}
         setValues={setValues}
-        disabled={parseInt(values.inToken || '0') < 1}
+        disabled={parseInt(values.inToken || '0', 10) < 1}
         estimateGas={state.estimateGas}
         isApproved={state.isApproved}
         createTx={() => {

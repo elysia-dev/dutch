@@ -107,7 +107,6 @@ const Detail: FunctionComponent = () => {
         );
       }
     } catch (e) {
-      console.error(e);
       alert(t('account_errors.server'));
       navigation.goBack();
     }

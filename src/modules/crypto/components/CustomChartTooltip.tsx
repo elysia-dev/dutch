@@ -3,7 +3,6 @@ import { Dimensions, View } from 'react-native';
 import moment from 'moment';
 import { ChartDataPoint, XYValue } from 'react-native-responsive-linechart';
 import { Text } from 'react-native-svg';
-import ChartDataContext from '../../../contexts/ChartDataContext';
 import AppColors from '../../../enums/AppColors';
 
 type Props = {

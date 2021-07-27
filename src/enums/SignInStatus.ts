@@ -10,5 +10,3 @@ export type SignOut =
   | SignInStatus.SIGNOUT
   | SignInStatus.DELETE
   | SignInStatus.EXPIRED;
-
-export default SignInStatus;

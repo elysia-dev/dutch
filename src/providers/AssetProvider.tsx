@@ -11,7 +11,7 @@ import UserContext from '../contexts/UserContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
 import ProviderType from '../enums/ProviderType';
-import SignInStatus from '../enums/SignInStatus';
+import { SignInStatus } from '../enums/SignInStatus';
 import Asset from '../types/Asset';
 import {
   bscProvider,

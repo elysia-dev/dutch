@@ -5,7 +5,6 @@ import { ChartDataPoint } from 'react-native-responsive-linechart';
 import { View, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { add } from 'react-native-reanimated';
 import Asset, { defaultAsset } from '../../types/Asset';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';

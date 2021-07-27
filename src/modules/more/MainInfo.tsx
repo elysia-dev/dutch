@@ -21,7 +21,7 @@ import UserContext from '../../contexts/UserContext';
 import Setting from './Setting';
 import { SubmitButton } from '../../shared/components/SubmitButton';
 import WalletContext from '../../contexts/WalletContext';
-import SignInStatus from '../../enums/SignInStatus';
+import { SignInStatus } from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import ExchangeButton from './components/ExchangeButton';
