@@ -73,6 +73,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'no-plusplus': 'off',
     'no-unneeded-ternary': 'off',
+    'no-unused-expressions': 'off',
   },
   parser: '@typescript-eslint/parser',
   settings: {},
