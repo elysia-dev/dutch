@@ -102,5 +102,5 @@ export enum CryptoPage {
 
 export enum StakingPage {
   Main = 'Main',
-  Dashboard = 'Dashboard',
+  CurrentDashboard = 'CurrentDashboard',
 }

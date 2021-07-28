@@ -46,7 +46,7 @@ export const Main: React.FC = () => {
           }}
           onPress={() => {
             navigation.navigate(Page.Staking, {
-              screen: StakingPage.Dashboard,
+              screen: StakingPage.CurrentDashboard,
               params: {
                 type: 'EL',
               },
@@ -102,7 +102,7 @@ export const Main: React.FC = () => {
           }}
           onPress={() => {
             navigation.navigate(Page.Staking, {
-              screen: StakingPage.Dashboard,
+              screen: StakingPage.CurrentDashboard,
               params: {
                 type: 'ELFI',
               },
