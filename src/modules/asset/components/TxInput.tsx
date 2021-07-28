@@ -21,9 +21,10 @@ import UserContext from '../../../contexts/UserContext';
 import PriceContext from '../../../contexts/PriceContext';
 import AppFonts from '../../../enums/AppFonts';
 import decimalFormatter from '../../../utiles/decimalFormatter';
-import ConfirmationModal from './ConfirmationModal';
+import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
+import commaFormatter from '../../../utiles/commaFormatter';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -303,16 +304,31 @@ const TxInput: React.FC<ITxInput> = ({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={title}
-        purpose={purpose}
-        assetTitle={assetInToken.title}
-        assetUnit={assetInToken.unit}
-        values={values}
-        priceInCryptocurrency={cryptoPrice}
-        cryptocurrencyType={assetInCrypto.type}
-        estimateGas={estimateGas}
-        gasCrypto={gasCrypto}
+        subtitle={t(`assets.${purpose}_confirm`)}
+        list={[
+          {
+            label: t(`assets.${purpose}_confirm_product`),
+            value: `${assetInToken.title} (${assetInToken.unit})`,
+          },
+          {
+            label: t(`assets.${purpose}_confirm_value`),
+            value: `$ ${commaFormatter(values.inFiat)}`,
+            subvalue: `${commaFormatter(
+              (Number(values.inFiat) / cryptoPrice).toFixed(2),
+            )} ${assetInCrypto.type}`,
+          },
+          {
+            label: t(`assets.${purpose}_confirm_stake`),
+            value: `${commaFormatter(values.inToken)} ${assetInToken.unit}`,
+          },
+          {
+            label: t('assets.gas_price'),
+            value: `${commaFormatter(estimateGas)} ${gasCrypto}`,
+          },
+        ]}
         isApproved={isApproved}
-        createTx={createTx}
+        submitButtonText={t(`assets.${purpose}`)}
+        handler={createTx}
       />
       <OverlayLoading
         visible={[
