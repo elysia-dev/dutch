@@ -3,7 +3,7 @@ import { View, Text, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
-import GuideText from './GuideText';
+import GuideText from '../../../shared/components/GuideText';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
 
