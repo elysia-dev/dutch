@@ -43,6 +43,14 @@ export const Main: React.FC = () => {
             shadowOpacity: 1,
             elevation: 6,
             marginBottom: 30,
+          }}
+          onPress={() => {
+            navigation.navigate(Page.Staking, {
+              screen: StakingPage.Dashboard,
+              params: {
+                type: 'EL',
+              },
+            });
           }}>
           <View
             style={{
@@ -91,6 +99,14 @@ export const Main: React.FC = () => {
             shadowOpacity: 1,
             elevation: 6,
             marginBottom: 30,
+          }}
+          onPress={() => {
+            navigation.navigate(Page.Staking, {
+              screen: StakingPage.Dashboard,
+              params: {
+                type: 'ELFI',
+              },
+            });
           }}>
           <View
             style={{
