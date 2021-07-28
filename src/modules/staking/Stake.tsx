@@ -10,6 +10,7 @@ import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
+import ConfirmationModal from '../../shared/components/ConfirmationModal';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { type } = route.params;
@@ -124,22 +125,25 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           }}
         />
       </View>
-      {/* <ConfirmationModal
+      <ConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={title}
-        purpose={purpose}
-        assetTitle={assetInToken.title}
-        assetUnit={assetInToken.unit}
-        values={values}
-        priceInCryptocurrency={cryptoPrice}
-        cryptocurrencyType={assetInCrypto.type}
-        estimateGas={estimateGas}
-        gasCrypto={gasCrypto}
-        isApproved={isApproved}
-        createTx={createTx}
+        title={`${type} 스테이킹`}
+        subtitle="최종 확인을 해 주세요!"
+        list={[
+          { label: '스테이킹 회차', value: '1차 스테이킹' },
+          {
+            label: '스테이킹 수량',
+            value: '1,000,000 EL',
+            subvalue: '$ 5,000,000',
+          },
+          { label: '가스비', value: '0.5 ETH' },
+        ]}
+        isApproved={true}
+        submitButtonText="1차 스테이킹"
+        handler={() => console.log('스테이킹 페이지')}
       />
-      <OverlayLoading
+      {/* <OverlayLoading
         visible={[
           TxStep.Approving,
           Platform.OS === 'android' && TxStep.CheckAllowance,
