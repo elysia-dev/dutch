@@ -19,6 +19,7 @@ import WalletLogin from './src/modules/account/WalletLogin';
 import WalletRecover from './src/modules/account/WalletRecover';
 import Asset from './src/modules/asset';
 import Crypto from './src/modules/crypto';
+import Staking from './src/modules/staking';
 
 const RootStack = createStackNavigator();
 
@@ -55,6 +56,7 @@ const AppNavigator: React.FC = () => {
             <RootStack.Screen name={Page.Wallet} component={Wallet} />
             <RootStack.Screen name={Page.Asset} component={Asset} />
             <RootStack.Screen name={Page.Crypto} component={Crypto} />
+            <RootStack.Screen name={Page.Staking} component={Staking} />
           </>
         ) : (
           <>

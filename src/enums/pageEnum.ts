@@ -83,6 +83,7 @@ export enum Page {
   Wallet = 'Wallet',
   Asset = 'Asset',
   Crypto = 'Crypto',
+  Staking = 'Staking',
 }
 
 export enum AssetPage {
@@ -97,4 +98,9 @@ export enum CryptoPage {
   Detail = 'Detail',
   Deposit = 'Deposit',
   Withdrawal = 'Withdrawal',
+}
+
+export enum StakingPage {
+  Main = 'Main',
+  Dashboard = 'Dashboard',
 }
