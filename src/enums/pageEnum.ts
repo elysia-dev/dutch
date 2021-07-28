@@ -103,4 +103,8 @@ export enum CryptoPage {
 export enum StakingPage {
   Main = 'Main',
   CurrentDashboard = 'CurrentDashboard',
+  TotalDashboard = 'TotalDashboard',
+  Stake = 'Stake',
+  SelectUnstakingType = 'SelectUnstakingType',
+  Unstake = 'Unstake',
 }
