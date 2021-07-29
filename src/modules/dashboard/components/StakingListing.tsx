@@ -42,9 +42,9 @@ const StakingListing: React.FC = () => {
         <P1Text label="EL 스테이킹 및 ELFI 리워드" style={{ marginLeft: 15 }} />
       </View>
       <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox />
+        <StakingInfoBox type="EL" />
         <View style={{ marginTop: 8 }} />
-        <StakingInfoBox />
+        <StakingInfoBox type="EL" />
       </View>
       <View
         style={{
@@ -73,9 +73,9 @@ const StakingListing: React.FC = () => {
         />
       </View>
       <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox />
+        <StakingInfoBox type="ELFI" />
         <View style={{ marginTop: 8 }} />
-        <StakingInfoBox />
+        <StakingInfoBox type="ELFI" />
       </View>
     </View>
   );

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../../enums/AppColors';
 import { Page, StakingPage } from '../../../enums/pageEnum';
 
-const StakingInfoBox: React.FC = () => {
+const StakingInfoBox: React.FC<{ type: string }> = ({ type }) => {
   const navigation = useNavigation();
 
   return (
@@ -19,7 +19,7 @@ const StakingInfoBox: React.FC = () => {
       onPress={() => {
         navigation.navigate(Page.Staking, {
           screen: StakingPage.TotalDashboard,
-          // params: { type },
+          params: { type },
         });
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
