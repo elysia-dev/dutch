@@ -13,7 +13,7 @@ const BarGraph: React.FC = () => {
         marginBottom: 30,
       }}>
       {[1, 2, 3, 4, 5, 6].map((i) => {
-        return <Bar index={i} />;
+        return <Bar key={i} index={i} />;
       })}
     </View>
   );

@@ -34,6 +34,7 @@ const ConfirmationModal: React.FC<Props> = ({
     if (item.subvalue) {
       checklist.push(
         <View
+          key={item.label}
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -78,6 +79,7 @@ const ConfirmationModal: React.FC<Props> = ({
     } else {
       checklist.push(
         <View
+          key={item.label}
           style={{
             display: 'flex',
             flexDirection: 'row',

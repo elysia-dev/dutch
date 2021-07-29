@@ -4,7 +4,6 @@ import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 const BoxWithDivider: React.FC<{
-  // string 아니면 react component로 받도록 하자
   contents: { label: string; value: string }[];
   boxStyle?: StyleProp<ViewStyle>;
   innerBoxStyle?: StyleProp<ViewStyle>;
@@ -22,6 +21,7 @@ const BoxWithDivider: React.FC<{
       {contents.map((content, i) => {
         return (
           <View
+            key={String(content.label)}
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',

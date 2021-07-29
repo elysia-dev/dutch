@@ -59,7 +59,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
           />
           <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
-              return <MiningPlan />;
+              return <MiningPlan key={i} />;
             })}
           </ScrollView>
         </View>
