@@ -5,12 +5,8 @@ import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import { Page, StakingPage } from '../../enums/pageEnum';
-import AppFonts from '../../enums/AppFonts';
 import { TitleText, SubTitleText } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
-import BarGraph from './components/BarGraph';
-import BoxWithDivider from './components/BoxWithDivider';
-import MiningPlan from './components/MiningPlan';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { type } = route.params;
@@ -35,10 +31,10 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             style={{ fontSize: 14 }}
           />
           <TitleText label={`${type} 스테이킹`} style={{ fontSize: 22 }} />
+          <DotGraph current={1} />
           <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
         </View>
       </ScrollView>
-      <View></View>
       <NextButton
         title="1차 스테이킹"
         handler={() => {
