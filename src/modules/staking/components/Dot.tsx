@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const DotEnded: React.FC<{
+const Dot: React.FC<{
   cycle: number;
   status: 'ended' | 'inProgress' | 'scheduled';
 }> = ({ cycle, status }) => {
@@ -49,4 +49,4 @@ const DotEnded: React.FC<{
   );
 };
 
-export default DotEnded;
+export default Dot;
