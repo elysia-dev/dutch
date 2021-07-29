@@ -1,23 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
-import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 import { H4Text } from '../../../shared/components/Texts';
 import BoxWithDivider from './BoxWithDivider';
+import CardWithShadow from './CardWithShadow';
 
 const MiningPlan: React.FC<{}> = () => {
   return (
-    <View
+    <CardWithShadow
       style={{
-        backgroundColor: AppColors.WHITE,
         paddingVertical: 16,
         paddingHorizontal: 12,
         borderRadius: 5,
-        shadowColor: AppColors.SHADOW_BLACK,
-        shadowOffset: { width: 0, height: 0 },
-        shadowRadius: 6,
-        shadowOpacity: 1,
-        elevation: 6,
         marginVertical: 10,
         marginHorizontal: 6,
       }}>
@@ -44,7 +37,7 @@ const MiningPlan: React.FC<{}> = () => {
         labelStyle={{ fontSize: 12 }}
         valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
       />
-    </View>
+    </CardWithShadow>
   );
 };
 
