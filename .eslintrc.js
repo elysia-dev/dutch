@@ -66,7 +66,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'no-return-await': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
-    'import/no-extraneous-dependencies': 'off',
     'max-len': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
