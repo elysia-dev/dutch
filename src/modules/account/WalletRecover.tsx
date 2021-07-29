@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import NextButton from '../../shared/components/NextButton';
 import AccountLayout from '../../shared/components/AccountLayout';
 import WalletContext from '../../contexts/WalletContext';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import CheckIcon from '../wallet/components/CheckIcon';
 import { P1Text } from '../../shared/components/Texts';
 import UserContext from '../../contexts/UserContext';

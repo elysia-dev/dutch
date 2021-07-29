@@ -1,4 +1,4 @@
-export enum SignInStatus {
+enum SignInStatus {
   PENDING = 'pending',
   SIGNIN = 'signin',
   SIGNOUT = 'signout', // 유저가 계정 로그아웃

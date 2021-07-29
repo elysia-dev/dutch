@@ -9,7 +9,7 @@ import { Account } from './src/modules/account/Account';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Wallet from './src/modules/wallet/WalletMain';
-import { SignInStatus } from './src/enums/SignInStatus';
+import SignInStatus from './src/enums/SignInStatus';
 import BlockScreen from './src/modules/main/BlockScreen';
 import Loading from './src/modules/main/Loading';
 import { AccountPage, Page } from './src/enums/pageEnum';

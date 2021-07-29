@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SignInStatus, SignOut } from '../enums/SignInStatus';
+import SignInStatus, { SignOut } from '../enums/SignInStatus';
 import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import { OwnershipResponse } from '../types/AccountResponse';

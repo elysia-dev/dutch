@@ -10,7 +10,7 @@ import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
 import WithdrawnMember from './WithdrawnMember';
 import UserContext from '../../contexts/UserContext';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import IntroduceElysia from './IntroduceElysia';
 
 const Stack = createStackNavigator();
