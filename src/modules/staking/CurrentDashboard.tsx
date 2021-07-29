@@ -7,6 +7,7 @@ import NextButton from '../../shared/components/NextButton';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import { TitleText, SubTitleText } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
+import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
 
@@ -46,6 +47,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             ]}
           />
           <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
+          <BarGraph />
           <BoxWithDivider
             contents={[
               { label: '현 채굴량', value: '4,000 ELFI' },
