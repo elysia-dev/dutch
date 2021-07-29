@@ -8,6 +8,7 @@ import { Page, StakingPage } from '../../enums/pageEnum';
 import { TitleText, SubTitleText } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BoxWithDivider from './components/BoxWithDivider';
+import MiningPlan from './components/MiningPlan';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { type } = route.params;
@@ -52,6 +53,11 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             ]}
             innerBoxStyle={{ paddingVertical: 16 }}
           />
+          <ScrollView horizontal={true}>
+            {[1, 2, 3, 4, 5, 6].map((i) => {
+              return <MiningPlan />;
+            })}
+          </ScrollView>
         </View>
       </ScrollView>
       <NextButton
