@@ -1,8 +1,12 @@
 import React from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../../enums/AppColors';
+import { Page, StakingPage } from '../../../enums/pageEnum';
 
 const StakingInfoBox: React.FC = () => {
+  const navigation = useNavigation();
+
   return (
     <TouchableOpacity
       style={{
@@ -11,6 +15,12 @@ const StakingInfoBox: React.FC = () => {
         borderRadius: 5,
         paddingVertical: 12,
         paddingHorizontal: 24,
+      }}
+      onPress={() => {
+        navigation.navigate(Page.Staking, {
+          screen: StakingPage.TotalDashboard,
+          // params: { type },
+        });
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={{ fontSize: 12, color: AppColors.SUB_BLACK }}>
