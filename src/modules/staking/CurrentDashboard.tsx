@@ -34,7 +34,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             style={{ fontSize: 14 }}
           />
           <TitleText label={`${type} 스테이킹`} style={{ fontSize: 22 }} />
-          <DotGraph current={1} />
+          <DotGraph />
           <BoxWithDivider
             contents={[
               {
@@ -45,6 +45,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
               { label: '스테이킹 일수', value: '20일' },
               { label: '예상 수익률 (APR)', value: '98.10%' },
             ]}
+            boxStyle={{ marginBottom: 60 }}
           />
           <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
           <BarGraph />
@@ -54,8 +55,9 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
               { label: '총 채굴량', value: '3,000,000 ELFI' },
             ]}
             innerBoxStyle={{ paddingVertical: 16 }}
+            boxStyle={{ marginBottom: 27 }}
           />
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
               return <MiningPlan />;
             })}
