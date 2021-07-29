@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 import { H4Text } from '../../../shared/components/Texts';
@@ -10,12 +10,21 @@ const MiningPlan: React.FC<{}> = () => {
     <View
       style={{
         backgroundColor: AppColors.WHITE,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        borderRadius: 5,
         shadowColor: AppColors.SHADOW_BLACK,
         shadowOffset: { width: 0, height: 0 },
         shadowRadius: 6,
+        shadowOpacity: 1,
         elevation: 6,
+        marginVertical: 10,
+        marginHorizontal: 6,
       }}>
-      <H4Text label="1차 채굴 플랜" style={{ textAlign: 'center' }} />
+      <H4Text
+        label="1차 채굴 플랜"
+        style={{ textAlign: 'center', marginBottom: 10 }}
+      />
       <BoxWithDivider
         contents={[
           {
