@@ -1,10 +1,20 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import Bar from './Bar';
 
 const BarGraph: React.FC = () => {
   return (
-    <View>
-      <Text>BarGraph</Text>
+    <View
+      style={{
+        height: 60,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30,
+      }}>
+      {[1, 2, 3, 4, 5, 6].map((i) => {
+        return <Bar index={i} />;
+      })}
     </View>
   );
 };
