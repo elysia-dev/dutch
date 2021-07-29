@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
 
-const DotGraph: React.FC<{ current: number }> = ({ current }) => {
+const DotGraph: React.FC<{}> = () => {
   const dots = [];
   // 나중에는 회차 목록 가져와서 돌리는 걸로
   for (let i = 1; i <= 6; i++) {

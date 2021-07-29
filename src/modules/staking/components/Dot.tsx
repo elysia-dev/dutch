@@ -43,7 +43,7 @@ const DotEnded: React.FC<{
           fontFamily: AppFonts.Bold,
           color: AppColors.BLACK,
           fontSize: 12,
-          marginTop: 5,
+          marginTop: 6,
         }}>{`${cycle}차`}</Text>
     </View>
   );
