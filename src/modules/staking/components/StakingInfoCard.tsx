@@ -15,7 +15,6 @@ const StakingInfoCard: React.FC<{
   return (
     <CardWithShadow
       style={{
-        borderRadius: 5,
         shadowOpacity: cycleEnded ? 0 : 1,
         elevation: cycleEnded ? 0 : 6,
         borderColor: AppColors.SUB_GREY,

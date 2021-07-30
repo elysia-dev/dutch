@@ -15,6 +15,7 @@ const CardWithShadow: React.FC<{
         shadowRadius: 6,
         shadowOpacity: 1,
         elevation: 6,
+        borderRadius: 5,
         ...(style as {}),
       }}>
       {children}

@@ -10,7 +10,6 @@ const MiningPlan: React.FC<{}> = () => {
       style={{
         paddingVertical: 16,
         paddingHorizontal: 12,
-        borderRadius: 5,
         marginVertical: 10,
         marginHorizontal: 6,
       }}>
@@ -30,6 +29,7 @@ const MiningPlan: React.FC<{}> = () => {
           { label: '잔여 채굴량', value: '4,700,000 ELFI' },
           { label: 'ELFI 가격', value: '$ 5,000' },
         ]}
+        boxStyle={{ width: 300 }}
         innerBoxStyle={{
           paddingVertical: 12,
           paddingHorizontal: 15,
