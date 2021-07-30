@@ -12,6 +12,7 @@ import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
+import CryptoType from '../../enums/CryptoType';
 
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -30,10 +31,11 @@ export const Main: React.FC = () => {
         style={{
           marginTop: 45,
           alignItems: 'center',
+          paddingHorizontal: 20,
         }}>
         <TouchableOpacity
           style={{
-            width: 333,
+            width: '100%',
             height: 180,
             backgroundColor: AppColors.WHITE,
             borderRadius: 5,
@@ -48,7 +50,7 @@ export const Main: React.FC = () => {
             navigation.navigate(Page.Staking, {
               screen: StakingPage.CurrentDashboard,
               params: {
-                type: 'EL',
+                cryptoType: CryptoType.EL,
               },
             });
           }}>
@@ -89,7 +91,7 @@ export const Main: React.FC = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            width: 333,
+            width: '100%',
             height: 180,
             backgroundColor: AppColors.WHITE,
             borderRadius: 5,
@@ -104,7 +106,7 @@ export const Main: React.FC = () => {
             navigation.navigate(Page.Staking, {
               screen: StakingPage.CurrentDashboard,
               params: {
-                type: 'ELFI',
+                cryptoType: CryptoType.ELFI,
               },
             });
           }}>

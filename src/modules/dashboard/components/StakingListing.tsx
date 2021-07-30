@@ -8,7 +8,13 @@ import StakingInfoBox from './StakingInfoBox';
 
 const StakingListing: React.FC = () => {
   return (
-    <View>
+    <View
+      style={{
+        borderBottomWidth: 1,
+        borderBottomColor: AppColors.GREY,
+        paddingBottom: 12,
+        marginBottom: 10,
+      }}>
       <H3Text
         label="내 스테이킹 및 리워드"
         style={{
@@ -42,9 +48,9 @@ const StakingListing: React.FC = () => {
         <P1Text label="EL 스테이킹 및 ELFI 리워드" style={{ marginLeft: 15 }} />
       </View>
       <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox type="EL" />
+        <StakingInfoBox cryptoType={CryptoType.EL} />
         <View style={{ marginTop: 8 }} />
-        <StakingInfoBox type="EL" />
+        <StakingInfoBox cryptoType={CryptoType.EL} />
       </View>
       <View
         style={{
@@ -73,9 +79,9 @@ const StakingListing: React.FC = () => {
         />
       </View>
       <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox type="ELFI" />
+        <StakingInfoBox cryptoType={CryptoType.ELFI} />
         <View style={{ marginTop: 8 }} />
-        <StakingInfoBox type="ELFI" />
+        <StakingInfoBox cryptoType={CryptoType.ELFI} />
       </View>
     </View>
   );

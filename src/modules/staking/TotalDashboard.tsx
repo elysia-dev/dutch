@@ -9,7 +9,7 @@ import CircularButtonWithLabel from './components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
-  const { type } = route.params;
+  const { cryptoType } = route.params;
 
   return (
     <View
@@ -64,17 +64,17 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         />
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <CircularButtonWithLabel
-            cryptoType={type}
+            cryptoType={cryptoType}
             actionType="staking"
             isActive={true}
           />
           <CircularButtonWithLabel
-            cryptoType={type}
+            cryptoType={cryptoType}
             actionType="unstaking"
             isActive={true}
           />
           <CircularButtonWithLabel
-            cryptoType={type}
+            cryptoType={cryptoType}
             actionType="reward"
             isActive={true}
           />

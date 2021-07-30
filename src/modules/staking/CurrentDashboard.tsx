@@ -12,7 +12,7 @@ import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
-  const { type } = route.params;
+  const { cryptoType } = route.params;
   const navigation = useNavigation();
 
   return (
@@ -33,7 +33,10 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             label="보상으로 ELFI 수령하는"
             style={{ fontSize: 14 }}
           />
-          <TitleText label={`${type} 스테이킹`} style={{ fontSize: 22 }} />
+          <TitleText
+            label={`${cryptoType} 스테이킹`}
+            style={{ fontSize: 22 }}
+          />
           <DotGraph />
           <BoxWithDivider
             contents={[
@@ -69,7 +72,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         handler={() => {
           navigation.navigate(Page.Staking, {
             screen: StakingPage.Stake,
-            params: { type },
+            params: { cryptoType },
           });
         }}
         style={{

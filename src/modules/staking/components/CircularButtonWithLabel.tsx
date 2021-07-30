@@ -55,7 +55,7 @@ const CircularButtonWithLabel: React.FC<{
         onPress={() => {
           navigation.navigate(Page.Staking, {
             screen,
-            params: { type: cryptoType },
+            params: { cryptoType },
           });
         }}>
         <Image
