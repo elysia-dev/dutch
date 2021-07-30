@@ -1,13 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
-import AppFonts from '../../enums/AppFonts';
 import SheetHeader from '../../shared/components/SheetHeader';
-import { TitleText, H4Text, SubTitleText } from '../../shared/components/Texts';
+import { TitleText } from '../../shared/components/Texts';
 import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
-import CardWithShadow from './components/CardWithShadow';
 import CircularButtonWithLabel from './components/CircularButtonWithLabel';
+import StakingInfoCard from './components/StakingInfoCard';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { type } = route.params;
@@ -35,69 +34,23 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             {
               label: (
                 <>
-                  <CardWithShadow>
-                    <H4Text label="1차 스테이킹 APR" style={{ padding: 15 }} />
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        padding: 15,
-                        justifyContent: 'flex-end',
-                        borderTopColor: AppColors.SUB_GREY,
-                        borderTopWidth: 1,
-                      }}>
-                      <H4Text label="130,000" style={{ fontSize: 18 }} />
-                      <SubTitleText
-                        label=" EL"
-                        style={{
-                          fontSize: 14,
-                          fontFamily: AppFonts.Bold,
-                        }}
-                      />
-                    </View>
-                  </CardWithShadow>
-                  <CardWithShadow style={{ marginTop: 15 }}>
-                    <H4Text label="1차 스테이킹 수량" style={{ padding: 15 }} />
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        padding: 15,
-                        justifyContent: 'flex-end',
-                        borderTopColor: AppColors.SUB_GREY,
-                        borderTopWidth: 1,
-                      }}>
-                      <H4Text label="4.07" style={{ fontSize: 18 }} />
-                      <SubTitleText
-                        label=" %"
-                        style={{
-                          fontSize: 14,
-                          fontFamily: AppFonts.Bold,
-                        }}
-                      />
-                    </View>
-                  </CardWithShadow>
-                  <CardWithShadow style={{ marginTop: 15 }}>
-                    <H4Text label="1차 보상 수량" style={{ padding: 15 }} />
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        padding: 15,
-                        justifyContent: 'flex-end',
-                        borderTopColor: AppColors.SUB_GREY,
-                        borderTopWidth: 1,
-                      }}>
-                      <H4Text
-                        label="130,000"
-                        style={{ fontSize: 18, color: '#00BFFF' }}
-                      />
-                      <SubTitleText
-                        label=" ELFI"
-                        style={{
-                          fontSize: 14,
-                          fontFamily: AppFonts.Bold,
-                        }}
-                      />
-                    </View>
-                  </CardWithShadow>
+                  <StakingInfoCard
+                    label="1차 스테이킹 APR"
+                    value="130,000"
+                    unit="EL"
+                  />
+                  <StakingInfoCard
+                    label="1차 스테이킹 수량"
+                    value="4.07"
+                    unit="%"
+                    style={{ marginTop: 15 }}
+                  />
+                  <StakingInfoCard
+                    label="1차 보상 수량"
+                    value="130,000"
+                    unit="ELFI"
+                    style={{ marginTop: 15 }}
+                  />
                 </>
               ),
               value: '',
