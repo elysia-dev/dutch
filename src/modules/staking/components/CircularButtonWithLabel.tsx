@@ -10,12 +10,25 @@ const CircularButtonWithLabel: React.FC<{
   cryptoType: CryptoType;
   isActive: boolean;
   actionType: 'staking' | 'unstaking' | 'reward';
-}> = ({ cryptoType, isActive, actionType }) => {
+  selectedCycle: number;
+  currentCycle?: number;
+  isRewardAvailable?: boolean;
+  isMigrationAvailable?: boolean;
+}> = ({
+  cryptoType,
+  isActive,
+  actionType,
+  selectedCycle,
+  currentCycle,
+  isRewardAvailable,
+  isMigrationAvailable,
+}) => {
   const navigation = useNavigation();
 
   let source;
   let label;
   let screen: StakingPage;
+  let pageAfterSelection: StakingPage;
   switch (actionType) {
     case 'staking':
       if (isActive) {
@@ -33,7 +46,16 @@ const CircularButtonWithLabel: React.FC<{
         source = require('../images/unstaking_button_deactivated.png');
       }
       label = '언스테이킹';
-      screen = StakingPage.Unstake;
+      if (isRewardAvailable) {
+        screen = StakingPage.SelectUnstakingType;
+        if (isMigrationAvailable) {
+          pageAfterSelection = StakingPage.UnstakeAndMigrate;
+        } else {
+          pageAfterSelection = StakingPage.Unstake;
+        }
+      } else {
+        screen = StakingPage.Unstake;
+      }
       break;
     case 'reward':
       if (isActive) {
@@ -55,7 +77,12 @@ const CircularButtonWithLabel: React.FC<{
         onPress={() => {
           navigation.navigate(Page.Staking, {
             screen,
-            params: { cryptoType },
+            params: {
+              cryptoType,
+              selectedCycle,
+              currentCycle,
+              pageAfterSelection,
+            },
           });
         }}>
         <Image

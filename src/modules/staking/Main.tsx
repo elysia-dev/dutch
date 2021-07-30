@@ -11,6 +11,7 @@ import TouchableCardWithShadow from './components/TouchableCardWithShadow';
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
+  const currentCycle = 3; // dummy data
 
   return (
     <SafeAreaView
@@ -38,6 +39,8 @@ export const Main: React.FC = () => {
               screen: StakingPage.CurrentDashboard,
               params: {
                 cryptoType: CryptoType.EL,
+                rewardCryptoType: CryptoType.ELFI,
+                currentCycle,
               },
             });
           }}>
@@ -87,6 +90,8 @@ export const Main: React.FC = () => {
               screen: StakingPage.CurrentDashboard,
               params: {
                 cryptoType: CryptoType.ELFI,
+                rewardCryptoType: CryptoType.DAI,
+                currentCycle,
               },
             });
           }}>

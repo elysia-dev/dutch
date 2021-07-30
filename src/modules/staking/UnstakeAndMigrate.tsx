@@ -13,11 +13,48 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType, cycle } = route.params;
+  const { cryptoType, selectedCycle, currentCycle, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
+
+  let confirmationList;
+  if (earnReward) {
+    confirmationList = [
+      {
+        label: `언스테이킹 회차`,
+        value: `${selectedCycle}차 언스테이킹`,
+      },
+      {
+        label: `언스테이킹 수량`,
+        value: '1,000,000 EL',
+        subvalue: '$ 5,000,000',
+      },
+      { label: '마이그레이션 수량', value: '1,000,000 EL' },
+      {
+        label: '마이그레이션 위치',
+        value: `${selectedCycle}차 → ${currentCycle}차`,
+      },
+      { label: '보상 수량', value: '1,000 ELFI' },
+      { label: '가스비', value: '0.5 ETH' },
+    ];
+  } else {
+    confirmationList = [
+      { label: `언스테이킹 회차`, value: `${selectedCycle}차 언스테이킹` },
+      {
+        label: `언스테이킹 수량`,
+        value: '1,000,000 EL',
+        subvalue: '$ 5,000,000',
+      },
+      { label: '마이그레이션 수량', value: '1,000,000 EL' },
+      {
+        label: '마이그레이션 위치',
+        value: `${selectedCycle}차 → ${currentCycle}차`,
+      },
+      { label: '가스비', value: '0.5 ETH' },
+    ];
+  }
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -84,17 +121,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         setModalVisible={setModalVisible}
         title={`${cryptoType} 언스테이킹`}
         subtitle="최종 확인을 해 주세요!"
-        list={[
-          { label: `언스테이킹 회차`, value: `${cycle}차 언스테이킹` },
-          {
-            label: `언스테이킹 수량`,
-            value: '1,000,000 EL',
-            subvalue: '$ 5,000,000',
-          },
-          { label: '가스비', value: '0.5 ETH' },
-        ]}
+        list={confirmationList}
         isApproved={true}
-        submitButtonText={`${cycle}차 언스테이킹`}
+        submitButtonText={`${selectedCycle}차 언스테이킹`}
         handler={() => console.log('언스테이킹 해야 함')}
       />
       {/* <OverlayLoading

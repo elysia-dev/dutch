@@ -36,7 +36,7 @@ const StakingInfoCard: React.FC<{
           style={{
             fontSize: 18,
             color:
-              label === '1차 보상 수량' && !cycleEnded
+              label.includes('보상') && !cycleEnded
                 ? '#00BFFF'
                 : AppColors.BLACK,
           }}

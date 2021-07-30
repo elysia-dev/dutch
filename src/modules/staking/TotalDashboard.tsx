@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -10,6 +10,8 @@ import StakingInfoCard from './components/StakingInfoCard';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType } = route.params;
+  const currentCycle = 3; // dummy data
+  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
 
   return (
     <View
@@ -24,7 +26,10 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           label="EL 스테이킹 및 ELFI 리워드"
           style={{ fontSize: 22 }}
         />
-        <DotGraph />
+        <DotGraph
+          selectedCycle={selectedCycle}
+          setSelectedCycle={setSelectedCycle}
+        />
         <BoxWithDivider
           contents={[
             {
@@ -36,20 +41,20 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                 <>
                   <StakingInfoCard
                     cycleEnded={false}
-                    label="1차 스테이킹 APR"
+                    label={`${selectedCycle}차 스테이킹 APR`}
                     value="130,000"
                     unit="EL"
                   />
                   <StakingInfoCard
                     cycleEnded={false}
-                    label="1차 스테이킹 수량"
+                    label={`${selectedCycle}차 스테이킹 수량`}
                     value="4.07"
                     unit="%"
                     style={{ marginTop: 15 }}
                   />
                   <StakingInfoCard
                     cycleEnded={false}
-                    label="1차 보상 수량"
+                    label={`${selectedCycle}차 보상 수량`}
                     value="130,000"
                     unit="ELFI"
                     style={{ marginTop: 15 }}
@@ -66,16 +71,24 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="staking"
-            isActive={true}
+            isActive={currentCycle && currentCycle === selectedCycle}
+            selectedCycle={selectedCycle}
+            currentCycle={currentCycle}
           />
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="unstaking"
-            isActive={true}
+            isActive={currentCycle && currentCycle >= selectedCycle}
+            selectedCycle={selectedCycle}
+            currentCycle={currentCycle}
+            isRewardAvailable={currentCycle > selectedCycle} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
+            isMigrationAvailable={Boolean(currentCycle)}
           />
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="reward"
+            selectedCycle={selectedCycle}
+            currentCycle={currentCycle}
             isActive={true}
           />
         </View>

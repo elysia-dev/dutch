@@ -19,6 +19,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
         borderRadius: 5,
         paddingVertical: 12,
         paddingHorizontal: 24,
+        marginBottom: 10,
       }}
       onPress={() => {
         navigation.navigate(Page.Staking, {

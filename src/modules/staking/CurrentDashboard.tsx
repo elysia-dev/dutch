@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
@@ -12,8 +12,9 @@ import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
-  const { cryptoType } = route.params;
+  const { cryptoType, rewardCryptoType, currentCycle } = route.params;
   const navigation = useNavigation();
+  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
 
   return (
     <View
@@ -30,14 +31,17 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         <SheetHeader title="" />
         <View style={{ paddingHorizontal: 20 }}>
           <SubTitleText
-            label="보상으로 ELFI 수령하는"
+            label={`보상으로 ${rewardCryptoType} 수령하는`}
             style={{ fontSize: 14 }}
           />
           <TitleText
             label={`${cryptoType} 스테이킹`}
             style={{ fontSize: 22 }}
           />
-          <DotGraph />
+          <DotGraph
+            selectedCycle={selectedCycle}
+            setSelectedCycle={setSelectedCycle}
+          />
           <BoxWithDivider
             contents={[
               {
@@ -68,11 +72,11 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         </View>
       </ScrollView>
       <NextButton
-        title="1차 스테이킹"
+        title={`${currentCycle}차 스테이킹`}
         handler={() => {
           navigation.navigate(Page.Staking, {
             screen: StakingPage.Stake,
-            params: { cryptoType },
+            params: { cryptoType, selectedCycle: currentCycle },
           });
         }}
         style={{

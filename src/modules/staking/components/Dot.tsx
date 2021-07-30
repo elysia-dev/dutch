@@ -1,12 +1,14 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { Dispatch, SetStateAction } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 const Dot: React.FC<{
   cycle: number;
   status: 'ended' | 'inProgress' | 'scheduled';
-}> = ({ cycle, status }) => {
+  selected: boolean;
+  setSelectedCycle: Dispatch<SetStateAction<number>>;
+}> = ({ cycle, status, selected, setSelectedCycle }) => {
   let backgroundColor;
   let borderColor;
   switch (status) {
@@ -27,7 +29,12 @@ const Dot: React.FC<{
   }
 
   return (
-    <View style={{ alignItems: 'center' }}>
+    <TouchableOpacity
+      style={{ alignItems: 'center' }}
+      onPress={() => {
+        setSelectedCycle(cycle);
+      }}
+      activeOpacity={1}>
       <View
         style={{
           backgroundColor,
@@ -36,6 +43,11 @@ const Dot: React.FC<{
           borderWidth: 1,
           borderColor,
           borderRadius: 7.5,
+          shadowColor: AppColors.SHADOW_BLACK,
+          shadowRadius: 6,
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 1,
+          elevation: selected ? 6 : 0,
         }}
       />
       <Text
@@ -45,7 +57,7 @@ const Dot: React.FC<{
           fontSize: 12,
           marginTop: 6,
         }}>{`${cycle}차`}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

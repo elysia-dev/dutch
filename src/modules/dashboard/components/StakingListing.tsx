@@ -7,12 +7,19 @@ import CryptoType from '../../../enums/CryptoType';
 import StakingInfoBox from './StakingInfoBox';
 
 const StakingListing: React.FC = () => {
+  // dummy data
+  const myStakingList = {
+    EL: [1, 5],
+    ELFI: [1, 5],
+  };
+
   return (
     <View
       style={{
         borderBottomWidth: 1,
         borderBottomColor: AppColors.GREY,
         paddingBottom: 12,
+        marginTop: 12,
         marginBottom: 10,
       }}>
       <H3Text
@@ -47,10 +54,10 @@ const StakingListing: React.FC = () => {
         />
         <P1Text label="EL 스테이킹 및 ELFI 리워드" style={{ marginLeft: 15 }} />
       </View>
-      <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox cryptoType={CryptoType.EL} />
-        <View style={{ marginTop: 8 }} />
-        <StakingInfoBox cryptoType={CryptoType.EL} />
+      <View style={{ marginTop: 8 }}>
+        {myStakingList.EL.map((cycle) => {
+          return <StakingInfoBox cryptoType={CryptoType.EL} />;
+        })}
       </View>
       <View
         style={{
@@ -78,10 +85,10 @@ const StakingListing: React.FC = () => {
           style={{ marginLeft: 15 }}
         />
       </View>
-      <View style={{ marginVertical: 12 }}>
-        <StakingInfoBox cryptoType={CryptoType.ELFI} />
-        <View style={{ marginTop: 8 }} />
-        <StakingInfoBox cryptoType={CryptoType.ELFI} />
+      <View style={{ marginTop: 8 }}>
+        {myStakingList.ELFI.map((cycle) => {
+          return <StakingInfoBox cryptoType={CryptoType.ELFI} />;
+        })}
       </View>
     </View>
   );
