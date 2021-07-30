@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { SignInStatus, SignOut } from '../enums/SignInStatus';
-import {
-  API_URL
-} from 'react-native-dotenv';
+import SignInStatus, { SignOut } from '../enums/SignInStatus';
+import { API_URL } from 'react-native-dotenv';
 
 const baseURL = API_URL;
 

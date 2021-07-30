@@ -8,10 +8,7 @@ interface Props {
   style?: StyleProp<ViewStyle>;
 }
 
-const GuideTextInvalid: React.FC<Props> = ({
-  text,
-  style,
-}) => {
+const GuideTextInvalid: React.FC<Props> = ({ text, style }) => {
   return (
     <View
       style={{
@@ -21,8 +18,7 @@ const GuideTextInvalid: React.FC<Props> = ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: '100%',
-      }}
-    >
+      }}>
       <Image
         source={require('../images/alert_icon_xxhdpi.png')}
         style={{
@@ -37,8 +33,7 @@ const GuideTextInvalid: React.FC<Props> = ({
           color: AppColors.ERROR_RED,
           fontSize: 12,
           fontFamily: AppFonts.Medium,
-        }}
-      >
+        }}>
         {text}
       </Text>
     </View>

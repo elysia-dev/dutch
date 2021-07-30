@@ -3,7 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { CURRENCY, LANGUAGE, NOTIFICATION } from '../constants/storage';
-import PreferenceContext, { IStatePreferenceContext, statePreferenceInitialState } from '../contexts/PreferenceContext';
+import PreferenceContext, {
+  IStatePreferenceContext,
+  statePreferenceInitialState,
+} from '../contexts/PreferenceContext';
 import CurrencyType from '../enums/CurrencyType';
 import LocaleType from '../enums/LocaleType';
 import currentLocalization from '../utiles/currentLocalization';
@@ -11,13 +14,20 @@ import currencyFormatter from '../utiles/currencyFormatter';
 import EspressoV1 from '../api/EspressoV1';
 
 const PreferenceProvider: React.FC = (props) => {
-  const [state, setState] = useState<IStatePreferenceContext>(statePreferenceInitialState);
+  const [state, setState] = useState<IStatePreferenceContext>(
+    statePreferenceInitialState,
+  );
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
-    const currency: CurrencyType | null = await AsyncStorage.getItem(CURRENCY) as CurrencyType || CurrencyType.USD;
-    const notification: boolean = (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
-    let language: LocaleType | null = await AsyncStorage.getItem(LANGUAGE) as LocaleType;
+    const currency: CurrencyType | null =
+      ((await AsyncStorage.getItem(CURRENCY)) as CurrencyType) ||
+      CurrencyType.USD;
+    const notification: boolean =
+      (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
+    let language: LocaleType | null = (await AsyncStorage.getItem(
+      LANGUAGE,
+    )) as LocaleType;
 
     const allCurrency = (await EspressoV1.getAllCurrency()).data;
 
@@ -63,14 +73,25 @@ const PreferenceProvider: React.FC = (props) => {
     });
   };
 
-  const currencyFormattHandler = useCallback((value: number, fix?: number) => {
-    return currencyFormatter(
-      state.currency === CurrencyType.KRW ? '₩' : state.currency === CurrencyType.CNY ? '¥' : '$',
-      state.currency === CurrencyType.KRW ? state.krwPrice : state.currency === CurrencyType.CNY ? state.cnyPrice : 1,
-      value,
-      fix || 2,
-    );
-  }, [state.currency]);
+  const currencyFormattHandler = useCallback(
+    (value: number, fix?: number) => {
+      return currencyFormatter(
+        state.currency === CurrencyType.KRW
+          ? '₩'
+          : state.currency === CurrencyType.CNY
+          ? '¥'
+          : '$',
+        state.currency === CurrencyType.KRW
+          ? state.krwPrice
+          : state.currency === CurrencyType.CNY
+          ? state.cnyPrice
+          : 1,
+        value,
+        fix || 2,
+      );
+    },
+    [state.currency],
+  );
 
   useEffect(() => {
     loadPreferences();
@@ -84,8 +105,7 @@ const PreferenceProvider: React.FC = (props) => {
         setCurrency,
         setNotification,
         currencyFormatter: currencyFormattHandler,
-      }}
-    >
+      }}>
       {state.loaded && props.children}
     </PreferenceContext.Provider>
   );

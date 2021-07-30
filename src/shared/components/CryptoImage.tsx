@@ -1,10 +1,13 @@
 import React from 'react';
-import { Image, ImageStyle, StyleProp } from "react-native";
+import { Image, ImageStyle, StyleProp } from 'react-native';
 import CryptoType from '../../enums/CryptoType';
 import PaymentCryptoType from '../../enums/PaymentCryptoType';
 import CachedImage from './CachedImage';
 
-const CryptoImage: React.FC<{ type: CryptoType | PaymentCryptoType | string; style?: StyleProp<ImageStyle> }> = ({ type, style }) => {
+const CryptoImage: React.FC<{
+  type: CryptoType | PaymentCryptoType | string;
+  style?: StyleProp<ImageStyle>;
+}> = ({ type, style }) => {
   const SwitchIcon = (type: CryptoType | PaymentCryptoType | string) => {
     switch (type) {
       case CryptoType.EL:
@@ -18,7 +21,7 @@ const CryptoImage: React.FC<{ type: CryptoType | PaymentCryptoType | string; sty
         return require('../assets/images/bnb.png');
       case CryptoType.ELA:
         return require('../assets/images/asset.png');
-      case "none":
+      case 'none':
         return;
       default:
         return { uri: type };
@@ -35,7 +38,7 @@ const CryptoImage: React.FC<{ type: CryptoType | PaymentCryptoType | string; sty
           width: 40,
           height: 40,
           borderRadius: 40,
-          ...style as {},
+          ...(style as {}),
         }}
       />
     );
@@ -47,7 +50,7 @@ const CryptoImage: React.FC<{ type: CryptoType | PaymentCryptoType | string; sty
           width: 40,
           height: 40,
           borderRadius: 40,
-          ...style as {},
+          ...(style as {}),
         }}
       />
     );

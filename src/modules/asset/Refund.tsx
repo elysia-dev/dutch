@@ -194,7 +194,7 @@ const Refund: FunctionComponent = () => {
         balanceInToken={balanceInToken}
         current={current}
         step={state.step}
-        disabled={parseInt(values.inToken || '0') < 0.01}
+        disabled={parseInt(values.inToken || '0', 10) < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
         estimateGas={state.estimateGas}
@@ -205,7 +205,7 @@ const Refund: FunctionComponent = () => {
           } else {
             Server.requestTransaction(
               productId,
-              parseInt(values.inToken),
+              parseInt(values.inToken, 10),
               'refund',
             )
               .then((res) => {

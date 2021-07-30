@@ -40,12 +40,12 @@ const CheckMnemonic: FunctionComponent = () => {
             <TextField
               style={{ marginTop: 40 }}
               label={t('account_label.account_password')}
-              eventHandler={(input: string) =>
-                setPassword(input)
-              }
+              eventHandler={(input: string) => setPassword(input)}
               value={password}
               secure={true}
-              helperText={error ? t('account_errors.password_do_not_match') : undefined}
+              helperText={
+                error ? t('account_errors.password_do_not_match') : undefined
+              }
               helperIcon={error ? 'Error' : undefined}
             />
           </>
@@ -77,18 +77,27 @@ const CheckMnemonic: FunctionComponent = () => {
           style={{ marginTop: 10, lineHeight: 35, marginBottom: 25 }}
           label={t('recovery_key.backup_seed')}
         />
-        {
-          visible ?
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <MnemonicView mnemonic={wallet?.getMnemonic() || ''} />
-            </TouchableOpacity> :
-            <TouchableOpacity
-              style={{ height: 300, backgroundColor: AppColors.BACKGROUND_GREY, justifyContent: 'center', borderRadius: 5 }}
-              onPress={() => { setVisible(true); }}
-            >
-              <P1Text label={t('recovery_key.check_after_click')} style={{ textAlign: 'center' }} />
-            </TouchableOpacity>
-        }
+        {visible ? (
+          <TouchableOpacity onPress={() => setVisible(false)}>
+            <MnemonicView mnemonic={wallet?.getMnemonic() || ''} />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              height: 300,
+              backgroundColor: AppColors.BACKGROUND_GREY,
+              justifyContent: 'center',
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              setVisible(true);
+            }}>
+            <P1Text
+              label={t('recovery_key.check_after_click')}
+              style={{ textAlign: 'center' }}
+            />
+          </TouchableOpacity>
+        )}
       </BasicLayout>
     );
   }

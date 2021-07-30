@@ -9,7 +9,7 @@ import { TitleText } from '../../shared/components/Texts';
 import { AccountPage } from '../../enums/pageEnum';
 import AccountLayout from '../../shared/components/AccountLayout';
 import checkMail from '../../utiles/checkMail';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import { BackButton } from '../../shared/components/BackButton';
 import UserContext from '../../contexts/UserContext';
 import AppColors from '../../enums/AppColors';

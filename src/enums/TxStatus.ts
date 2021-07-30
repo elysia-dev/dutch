@@ -2,7 +2,7 @@ enum TxStatus {
   None = 'None',
   Pending = 'Pending',
   Success = 'Success',
-  Fail = 'Fail'
+  Fail = 'Fail',
 }
 
-export default TxStatus
+export default TxStatus;

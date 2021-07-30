@@ -37,16 +37,18 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               // eslint-disable-next-line no-unused-expressions
               state.step === 2
                 ? setState({
-                  ...state,
-                  step: 1,
-                  passwordConfirmation: '',
-                  errorLength: 0,
-                  errorReg: 0,
-                })
+                    ...state,
+                    step: 1,
+                    passwordConfirmation: '',
+                    errorLength: 0,
+                    errorReg: 0,
+                  })
                 : navigation.goBack();
             }}
           />
-          <TitleText label={state.step === 1 ? props.message1 : props.message2} />
+          <TitleText
+            label={state.step === 1 ? props.message1 : props.message2}
+          />
         </>
       }
       body={
@@ -92,8 +94,8 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               state.errorLength === 1
                 ? t('account_errors.password_too_short')
                 : state.errorLength === 0 && state.errorReg === 1
-                  ? t('account_errors.simple_password')
-                  : undefined
+                ? t('account_errors.simple_password')
+                : undefined
             }
             helperIcon={
               state.errorLength === 1 || state.errorReg === 1
@@ -107,7 +109,7 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
             <TextField
               label={t('account_label.account_email')}
               editable={false}
-              eventHandler={() => { }}
+              eventHandler={() => {}}
               value={props.email}
             />
           )}
@@ -143,8 +145,8 @@ const PasswordForm: FunctionComponent<Props> = (props: Props) => {
               }
               variant={
                 !state.passwordConfirmation ||
-                  state.errorLength !== 0 ||
-                  state.errorReg !== 0
+                state.errorLength !== 0 ||
+                state.errorReg !== 0
                   ? 'GrayTheme'
                   : undefined
               }

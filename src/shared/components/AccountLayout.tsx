@@ -1,5 +1,10 @@
 import React, { FunctionComponent } from 'react';
-import { Platform, KeyboardAvoidingView, View, SafeAreaView } from 'react-native';
+import {
+  Platform,
+  KeyboardAvoidingView,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import AppColors from '../../enums/AppColors';
 
 interface Props {
@@ -8,7 +13,7 @@ interface Props {
   button: React.ReactNode;
 }
 
-const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
+const ConditionalKeyboardAvoidingView: FunctionComponent = (props) =>
   Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
       behavior={'padding'}
@@ -19,7 +24,7 @@ const ConditionalKeyboardAvoidingView: FunctionComponent = props =>
     <View style={{ flex: 1 }}>{props.children}</View>
   );
 
-const AccountLayout: FunctionComponent<Props> = props => {
+const AccountLayout: FunctionComponent<Props> = (props) => {
   return (
     <SafeAreaView
       style={{
@@ -27,8 +32,7 @@ const AccountLayout: FunctionComponent<Props> = props => {
         height: '100%',
         backgroundColor: AppColors.WHITE,
         overflow: 'hidden',
-      }}
-    >
+      }}>
       <ConditionalKeyboardAvoidingView>
         <View style={{ marginLeft: '5%', marginRight: '5%' }}>
           {props.title}

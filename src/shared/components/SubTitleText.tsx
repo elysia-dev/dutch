@@ -14,8 +14,7 @@ export const SubTitleText: FunctionComponent<{
         textAlign: 'left',
         lineHeight: 20,
         ...(style as {}),
-      }}
-    >
+      }}>
       {label}
     </Text>
   );

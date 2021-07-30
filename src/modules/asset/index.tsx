@@ -18,25 +18,15 @@ export const Main = () => {
       screenOptions={{
         headerShown: false,
         stackPresentation: 'formSheet',
-      }}
-    >
+      }}>
       <RootStack.Screen
         name={AssetPage.Detail}
         component={Detail}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
-        name={AssetPage.Purchase}
-        component={Purchase}
-      />
-      <RootStack.Screen
-        name={AssetPage.Refund}
-        component={Refund}
-      />
-      <RootStack.Screen
-        name={AssetPage.Reward}
-        component={Reward}
-      />
+      <RootStack.Screen name={AssetPage.Purchase} component={Purchase} />
+      <RootStack.Screen name={AssetPage.Refund} component={Refund} />
+      <RootStack.Screen name={AssetPage.Reward} component={Reward} />
       <RootStack.Screen
         name={AssetPage.LegacyOwnershipRefund}
         component={LegacyOwnershipRefund}

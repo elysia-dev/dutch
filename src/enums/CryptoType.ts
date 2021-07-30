@@ -5,4 +5,4 @@ enum CryptoType {
   ELA = 'ELA',
 }
 
-export default CryptoType
+export default CryptoType;

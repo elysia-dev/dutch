@@ -1,6 +1,6 @@
 enum NotificationStatus {
   READ = 'read',
-  UNREAD = 'unread'
+  UNREAD = 'unread',
 }
 
 export default NotificationStatus;

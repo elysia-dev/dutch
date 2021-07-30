@@ -4,7 +4,12 @@ import AppColors from '../../enums/AppColors';
 
 const BlockScreen: FunctionComponent = () => {
   return (
-    <View style={{ width: '100%', height: '100%', backgroundColor: AppColors.MAIN }}>
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: AppColors.MAIN,
+      }}>
       <Image
         style={{
           width: '100%',

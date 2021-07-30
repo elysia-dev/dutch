@@ -22,8 +22,7 @@ const ConfirmBox: React.FC<IConfirmBox> = (props) => {
           borderRadius: 5,
           borderColor: AppColors.GREY,
         }}
-        onPress={props.toggleConfirm}
-      >
+        onPress={props.toggleConfirm}>
         <View style={{ padding: 15, display: 'flex', flexDirection: 'row' }}>
           <CheckIcon checked={props.confirmed} />
           <H3Text label={props.title} style={{ marginLeft: 10 }} />

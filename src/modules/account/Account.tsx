@@ -10,7 +10,7 @@ import CertifyRecover from './CertifyRecover';
 import ExpiredAccount from './ExpiredAccount';
 import WithdrawnMember from './WithdrawnMember';
 import UserContext from '../../contexts/UserContext';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import IntroduceElysia from './IntroduceElysia';
 
 const Stack = createStackNavigator();
@@ -29,10 +29,7 @@ export const Account: FunctionComponent = () => {
   };
 
   return (
-    <Stack.Navigator
-      initialRouteName={initialRouteName()}
-      headerMode="none"
-    >
+    <Stack.Navigator initialRouteName={initialRouteName()} headerMode="none">
       <Stack.Screen
         name={AccountPage.IntroduceElysia}
         component={IntroduceElysia}

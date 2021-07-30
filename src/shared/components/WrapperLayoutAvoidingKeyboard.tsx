@@ -71,8 +71,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
           height: '100%',
           backgroundColor: AppColors.WHITE,
           overflow: 'hidden',
-        }}
-      >
+        }}>
         <Animated.View
           style={{
             marginLeft: '5%',
@@ -89,37 +88,37 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             style={[
               props.backButtonHandler !== undefined
                 ? {
-                  transform: [
-                    {
-                      translateX: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, 30, 30],
-                      }),
-                    },
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -57, -57],
-                      }),
-                    },
-                  ],
-                }
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, 30, 30],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  }
                 : {
-                  transform: [
-                    {
-                      translateX: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -17, -17],
-                      }),
-                    },
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -57, -57],
-                      }),
-                    },
-                  ],
-                },
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -17, -17],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  },
             ]}>
             <Animated.Text
               allowFontScaling={false}

@@ -9,7 +9,12 @@ import getTxScanLink from '../utiles/getTxScanLink';
 
 type TxHandlers = {
   afterTxCreated: (txHash: string, networkType?: NetworkType) => void;
-  afterTxHashCreated: (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => void;
+  afterTxHashCreated: (
+    address: string,
+    contractAddress: string,
+    txHash: string,
+    networkType?: NetworkType,
+  ) => void;
   afterTxFailed: (description?: string) => void;
 };
 
@@ -25,44 +30,49 @@ const useTxHandler = (): TxHandlers => {
       onPress: () => {
         navigation.navigate(MainPage.DashboardMain, {
           refresh: true,
-        })
+        });
       },
-      duration: 3000
+      duration: 3000,
     });
-  }
+  };
 
-  const afterTxHashCreated = (address: string, contractAddress: string, txHash: string, networkType?: NetworkType) => {
-    EspressoV2.createPendingTxNotification(address, contractAddress, txHash).then((res) => alert(
-      JSON.stringify(res)
-    ))
+  const afterTxHashCreated = (
+    address: string,
+    contractAddress: string,
+    txHash: string,
+    networkType?: NetworkType,
+  ) => {
+    EspressoV2.createPendingTxNotification(
+      address,
+      contractAddress,
+      txHash,
+    ).then((res) => alert(JSON.stringify(res)));
 
     showMessage({
       message: t('transaction.pending'),
       description: txHash,
       type: 'info',
       onPress: () => {
-        Linking.openURL(
-          getTxScanLink(txHash, networkType)
-        )
+        Linking.openURL(getTxScanLink(txHash, networkType));
       },
-      duration: 3000
+      duration: 3000,
     });
-  }
+  };
 
   const afterTxFailed = (description?: string) => {
     showMessage({
       message: t('transaction.fail'),
       description,
       type: 'danger',
-      duration: 3000
+      duration: 3000,
     });
-  }
+  };
 
   return {
     afterTxCreated,
     afterTxHashCreated,
     afterTxFailed,
   };
-}
+};
 
 export default useTxHandler;

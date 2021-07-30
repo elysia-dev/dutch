@@ -1,17 +1,15 @@
 /* eslint-disable no-nested-ternary */
 import React, { useContext } from 'react';
-import {
-  NavigationContainer,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import FlashMessage from "react-native-flash-message";
+import FlashMessage from 'react-native-flash-message';
 import { More } from './src/modules/more/More';
 import Products from './src/modules/products';
 import { Account } from './src/modules/account/Account';
 import { Dashboard } from './src/modules/dashboard/Dashboard';
 import Main from './src/modules/main/Main';
 import Wallet from './src/modules/wallet/WalletMain';
-import { SignInStatus } from './src/enums/SignInStatus';
+import SignInStatus from './src/enums/SignInStatus';
 import BlockScreen from './src/modules/main/BlockScreen';
 import Loading from './src/modules/main/Loading';
 import { AccountPage, Page } from './src/enums/pageEnum';
@@ -39,8 +37,14 @@ const AppNavigator: React.FC = () => {
           />
         ) : isWalletUser && !isUnlocked ? (
           <>
-            <RootStack.Screen name={AccountPage.WalletLogin} component={WalletLogin} />
-            <RootStack.Screen name={AccountPage.WalletRecover} component={WalletRecover} />
+            <RootStack.Screen
+              name={AccountPage.WalletLogin}
+              component={WalletLogin}
+            />
+            <RootStack.Screen
+              name={AccountPage.WalletRecover}
+              component={WalletRecover}
+            />
           </>
         ) : signedIn === SignInStatus.SIGNIN ? (
           <>
@@ -64,7 +68,7 @@ const AppNavigator: React.FC = () => {
         />
       </RootStack.Navigator>
       <FlashMessage position="top" />
-    </NavigationContainer >
+    </NavigationContainer>
   );
 };
 

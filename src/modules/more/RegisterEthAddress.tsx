@@ -37,7 +37,7 @@ import { Modal } from '../../shared/components/Modal';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import { getToken, setToken } from '../../asyncStorages/token';
