@@ -1,7 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
 
-const Circle: FunctionComponent<{ style: StyleProp<ViewStyle> }> = ({ style }) => {
+const Circle: FunctionComponent<{ style: StyleProp<ViewStyle> }> = ({
+  style,
+}) => {
   return (
     <View
       style={{

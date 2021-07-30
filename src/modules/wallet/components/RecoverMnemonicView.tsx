@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 
 interface INemonicView {
@@ -7,10 +7,7 @@ interface INemonicView {
   setMnemonic: (value: string, index: number) => void;
 }
 
-const MnemonicView: React.FC<INemonicView> = ({
-  mnemonic,
-  setMnemonic,
-}) => {
+const MnemonicView: React.FC<INemonicView> = ({ mnemonic, setMnemonic }) => {
   return (
     <View
       style={{
@@ -23,32 +20,31 @@ const MnemonicView: React.FC<INemonicView> = ({
         alignContent: 'space-around',
         justifyContent: 'space-around',
         flexWrap: 'wrap',
-      }}
-    >
-      {
-        mnemonic.map((word, index) => {
-          return (
-            <View key={index} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text>{`${index + 1}.`}</Text>
-              <TextInput
-                style={{
-                  marginLeft: 5,
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: AppColors.GREY,
-                  borderStyle: 'dashed',
-                  width: 100,
-                  height: 40,
-                  padding: 10,
-                }}
-                autoCapitalize={'none'}
-                value={word}
-                onChangeText={(text) => setMnemonic(text, index)}
-              />
-            </View>
-          );
-        })
-      }
+      }}>
+      {mnemonic.map((word, index) => {
+        return (
+          <View
+            key={index}
+            style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>{`${index + 1}.`}</Text>
+            <TextInput
+              style={{
+                marginLeft: 5,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: AppColors.GREY,
+                borderStyle: 'dashed',
+                width: 100,
+                height: 40,
+                padding: 10,
+              }}
+              autoCapitalize={'none'}
+              value={word}
+              onChangeText={(text) => setMnemonic(text, index)}
+            />
+          </View>
+        );
+      })}
     </View>
   );
 };

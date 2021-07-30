@@ -14,7 +14,7 @@ interface IAssetListing {
   itemPressHandler: (asset: Asset) => void;
 }
 
-export const AssetListing: React.FC<IAssetListing> = ({
+const AssetListing: React.FC<IAssetListing> = ({
   title,
   assets,
   itemPressHandler,

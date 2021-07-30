@@ -17,17 +17,14 @@ const images = [
     require('./images/monthlyReport_unread.png'),
   ],
   [
-  require('./images/newDevice_read.png'),
+    require('./images/newDevice_read.png'),
     require('./images/newDevice_unread.png'),
   ],
   [
     require('./images/productNotice_read.png'),
     require('./images/productNotice_unread.png'),
   ],
-  [
-    require('./images/profit_read.png'),
-    require('./images/profit_unread.png'),
-  ],
+  [require('./images/profit_read.png'), require('./images/profit_unread.png')],
   [
     require('./images/successKyc_read.png'),
     require('./images/successKyc_unread.png'),
@@ -36,9 +33,6 @@ const images = [
     require('./images/weeklyReport_read.png'),
     require('./images/weeklyReport_unread.png'),
   ],
-  [
-    require('./images/next_read.png'),
-    require('./images/next_unread.png'),
-  ],
+  [require('./images/next_read.png'), require('./images/next_unread.png')],
 ];
 export default images;

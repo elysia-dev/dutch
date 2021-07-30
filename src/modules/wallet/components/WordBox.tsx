@@ -16,8 +16,7 @@ const WordBox: React.FC<IWordBox> = ({ index, word }) => {
         borderColor: AppColors.MAIN,
         width: 150,
         padding: 8,
-      }}
-    >
+      }}>
       <Text style={{ textAlign: 'center' }}>{`${index}. ${word}`}</Text>
     </View>
   );

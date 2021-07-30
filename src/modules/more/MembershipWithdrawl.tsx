@@ -7,7 +7,7 @@ import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import UserContext from '../../contexts/UserContext';
 import AppColors from '../../enums/AppColors';
 

@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { TouchableHighlight } from 'react-native';
-import { H2Text } from "./Texts";
+import { H2Text } from './Texts';
 import AppFonts from '../../enums/AppFonts';
 
-const DialButton: FunctionComponent<{ pressHandler: () => void; value: string }> = ({
-  pressHandler,
-  value,
-}) => {
+const DialButton: FunctionComponent<{
+  pressHandler: () => void;
+  value: string;
+}> = ({ pressHandler, value }) => {
   return (
     <TouchableHighlight
       style={{
@@ -17,10 +17,12 @@ const DialButton: FunctionComponent<{ pressHandler: () => void; value: string }>
         marginHorizontal: 4,
       }}
       onPress={() => pressHandler()}
-      underlayColor='#F0F0F0'
-      activeOpacity={0.5}
-    >
-      <H2Text label={value} style={{ textAlign: 'center', fontFamily: AppFonts.Medium }} />
+      underlayColor="#F0F0F0"
+      activeOpacity={0.5}>
+      <H2Text
+        label={value}
+        style={{ textAlign: 'center', fontFamily: AppFonts.Medium }}
+      />
     </TouchableHighlight>
   );
 };

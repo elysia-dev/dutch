@@ -50,8 +50,7 @@ const AssetGraph: React.FC<IAssetGraph> = ({
             flexDirection: 'row',
             justifyContent: 'space-around',
             padding: 10,
-          }}
-        >
+          }}>
           <ActivityIndicator size="large" color={lineColor} />
         </View>
       ) : (

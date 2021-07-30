@@ -82,7 +82,6 @@ const Withdrawal: React.FC = () => {
           value: utils.parseEther(value || '0').toHexString(),
         });
       }
-    } catch (e) {
     } finally {
       if (estimatedGas) {
         setEstimatedGas(

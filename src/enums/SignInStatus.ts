@@ -1,4 +1,4 @@
-export enum SignInStatus {
+enum SignInStatus {
   PENDING = 'pending',
   SIGNIN = 'signin',
   SIGNOUT = 'signout', // 유저가 계정 로그아웃
@@ -6,6 +6,9 @@ export enum SignInStatus {
   EXPIRED = 'expired', // token 시간 만료
 }
 
-export type SignOut = SignInStatus.SIGNOUT | SignInStatus.DELETE | SignInStatus.EXPIRED
+export type SignOut =
+  | SignInStatus.SIGNOUT
+  | SignInStatus.DELETE
+  | SignInStatus.EXPIRED;
 
-export default SignInStatus
+export default SignInStatus;

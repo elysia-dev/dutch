@@ -108,7 +108,7 @@ const ResetPassword: FunctionComponent = () => {
               <TextField
                 label={t('account_label.new_password')}
                 value={state.password}
-                eventHandler={() => { }}
+                eventHandler={() => {}}
                 editable={false}
                 secure={true}
               />
@@ -121,7 +121,7 @@ const ResetPassword: FunctionComponent = () => {
               eventHandler={
                 state.step === 1
                   ? (input: string) => setState({ ...state, password: input })
-                  : () => { }
+                  : () => {}
               }
               secure={true}
               helperText={
@@ -139,7 +139,7 @@ const ResetPassword: FunctionComponent = () => {
           <TextField
             label={t('account_label.current_password')}
             editable={false}
-            eventHandler={() => { }}
+            eventHandler={() => {}}
             value={route.params.currentPassword}
             secure={true}
           />

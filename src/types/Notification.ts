@@ -11,7 +11,9 @@ type Notification = {
   createdAt: Date;
 };
 
-export function isNotification(notification: Notification): notification is Notification {
+export function isNotification(
+  notification: Notification,
+): notification is Notification {
   return (notification as Notification).notificationType !== undefined;
 }
 

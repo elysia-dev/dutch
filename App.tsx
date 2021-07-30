@@ -38,7 +38,6 @@ const App = () => {
         await Updates.fetchUpdateAsync();
         await Updates.reloadAsync();
       }
-    } catch (e) {
     } finally {
       setLoading(false);
     }

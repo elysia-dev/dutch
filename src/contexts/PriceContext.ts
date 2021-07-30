@@ -2,16 +2,16 @@ import { createContext } from 'react';
 import CryptoType from '../enums/CryptoType';
 
 export type PriceState = {
-  elPrice: number
-  ethPrice: number
+  elPrice: number;
+  ethPrice: number;
   bnbPrice: number;
   gasPrice: string;
   bscGasPrice: string;
   priceLoaded: boolean;
-}
+};
 
 export interface IPriceContext extends PriceState {
-  getCryptoPrice: (cryptoType: CryptoType) => number
+  getCryptoPrice: (cryptoType: CryptoType) => number;
 }
 
 export const initialPriceState = {
@@ -21,12 +21,12 @@ export const initialPriceState = {
   gasPrice: '6800000000',
   bscGasPrice: '19950000000',
   priceLoaded: false,
-}
+};
 
 export const initialPriceContext = {
   ...initialPriceState,
   getCryptoPrice: (_cryptoType: CryptoType) => 0,
-}
+};
 
 const PriceContext = createContext<IPriceContext>(initialPriceContext);
 

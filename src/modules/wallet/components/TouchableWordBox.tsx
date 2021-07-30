@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 
 interface ITouchableWordBox {
@@ -8,7 +8,11 @@ interface ITouchableWordBox {
   onPress: () => void;
 }
 
-const TouchableWordBox: React.FC<ITouchableWordBox> = ({ selected, word, onPress }) => {
+const TouchableWordBox: React.FC<ITouchableWordBox> = ({
+  selected,
+  word,
+  onPress,
+}) => {
   return (
     <TouchableOpacity
       disabled={selected}
@@ -21,8 +25,7 @@ const TouchableWordBox: React.FC<ITouchableWordBox> = ({ selected, word, onPress
       }}
       onPress={() => {
         !selected && onPress();
-      }}
-    >
+      }}>
       <Text style={{ textAlign: 'center' }}>{word}</Text>
     </TouchableOpacity>
   );

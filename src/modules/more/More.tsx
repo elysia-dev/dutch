@@ -26,7 +26,10 @@ export const More = () => {
       <Stack.Screen name={MorePage.Setting} component={Setting} />
       <Stack.Screen name={MorePage.TermsOfUse} component={TermsOfUse} />
       <Stack.Screen name={MorePage.PrivacyPolicy} component={PrivacyPolicy} />
-      <Stack.Screen name={MorePage.Asset2Ownership} component={Asset2Ownership} />
+      <Stack.Screen
+        name={MorePage.Asset2Ownership}
+        component={Asset2Ownership}
+      />
       <Stack.Screen
         name={AccountPage.CurrentPassword}
         component={CurrentPassword}
@@ -39,22 +42,13 @@ export const More = () => {
         name={MorePage.RegisterEthAddress}
         component={RegisterEthAddress}
       />
-      <Stack.Screen
-        name={MorePage.WhatsNew}
-        component={WhatsNew}
-      />
-      <Stack.Screen
-        name={MorePage.HelpDesk}
-        component={HelpDesk}
-      />
+      <Stack.Screen name={MorePage.WhatsNew} component={WhatsNew} />
+      <Stack.Screen name={MorePage.HelpDesk} component={HelpDesk} />
       <Stack.Screen
         name={MorePage.MembershipWithdrawl}
         component={MembershipWithdrawl}
       />
-      <Stack.Screen
-        name={MorePage.MyPage}
-        component={MyPage}
-      />
+      <Stack.Screen name={MorePage.MyPage} component={MyPage} />
       <Stack.Screen name={MorePage.CheckMnemonic} component={CheckMnemonic} />
     </Stack.Navigator>
   );

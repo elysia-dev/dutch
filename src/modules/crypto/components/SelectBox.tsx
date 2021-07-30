@@ -13,7 +13,7 @@ interface ISelectBox {
   selectType: string;
 }
 
-export const SelectBox: React.FC<ISelectBox> = ({
+const SelectBox: React.FC<ISelectBox> = ({
   options,
   selected,
   select,

@@ -11,7 +11,7 @@ export type WalletContextType = {
   createNewWallet: (password: string) => Promise<void>;
   restoreWallet: (password: string, seed: string) => Promise<void>;
   validatePassword: (password: string) => boolean;
-  clearWallet: () => Promise<void>,
+  clearWallet: () => Promise<void>;
 };
 
 export type WalletStateType = {
@@ -19,24 +19,26 @@ export type WalletStateType = {
   isCreated: boolean;
   password: string | undefined;
   wallet: Wallet | undefined;
-}
+};
 
 export const staticWalletInitialState = {
   isUnlocked: false,
   isCreated: false,
   password: undefined,
   wallet: undefined,
-}
+};
 
 export const walletInitialState = {
   ...staticWalletInitialState,
-  setLock: () => { },
-  unlock: async (_password: string) => { },
-  createNewWallet: async (_password: string) => { },
-  restoreWallet: async (_password: string, _seed: string) => { },
-  validatePassword: (_password: string) => { return false },
-  clearWallet: async () => { },
-}
+  setLock: () => {},
+  unlock: async (_password: string) => {},
+  createNewWallet: async (_password: string) => {},
+  restoreWallet: async (_password: string, _seed: string) => {},
+  validatePassword: (_password: string) => {
+    return false;
+  },
+  clearWallet: async () => {},
+};
 
 const WalletContext = createContext<WalletContextType>(walletInitialState);
 

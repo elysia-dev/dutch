@@ -3,7 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import EspressoV2 from '../api/EspressoV2';
 import PreferenceContext from '../contexts/PreferenceContext';
 import UserContext from '../contexts/UserContext';
-import WalletContext, { staticWalletInitialState, WalletStateType } from "../contexts/WalletContext";
+import WalletContext, {
+  staticWalletInitialState,
+  WalletStateType,
+} from '../contexts/WalletContext';
 import Wallet from '../core/Wallet';
 import WalletStorage from '../core/WalletStorage';
 import registerForPushNotificationsAsync from '../utiles/registerForPushNotificationsAsync';
@@ -20,10 +23,11 @@ const WalletProvider: React.FC = (props) => {
   };
 
   const loadNotifications = async () => {
-    EspressoV2.getNoficiations(state?.wallet?.getFirstAddress() || '').then((res) => {
-      setNotifications(res.data);
-    }).catch((_e) => {
-    });
+    EspressoV2.getNoficiations(state?.wallet?.getFirstAddress() || '')
+      .then((res) => {
+        setNotifications(res.data);
+      })
+      .catch((_e) => {});
   };
 
   const unlock = async (password: string): Promise<void> => {
@@ -69,7 +73,10 @@ const WalletProvider: React.FC = (props) => {
         try {
           EspressoV2.subscribe(wallet?.getFirstNode()?.address || '', token);
         } catch {
-          EspressoV2.subscribeExisted(wallet?.getFirstNode()?.address || '', token);
+          EspressoV2.subscribeExisted(
+            wallet?.getFirstNode()?.address || '',
+            token,
+          );
         }
         setNotification(true);
       }
@@ -108,8 +115,7 @@ const WalletProvider: React.FC = (props) => {
         restoreWallet,
         validatePassword,
         clearWallet,
-      }}
-    >
+      }}>
       {props.children}
     </WalletContext.Provider>
   );

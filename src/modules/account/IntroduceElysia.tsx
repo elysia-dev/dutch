@@ -1,8 +1,4 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useContext,
-} from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 import {
   View,
   Image,
@@ -102,8 +98,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           onPress={() => {
             viewPager.current?.setPage(index);
           }}
-          key={index}
-        >
+          key={index}>
           <Circle
             style={{
               backgroundColor: state === index ? '#4E5968' : '#A8A8A8',

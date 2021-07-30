@@ -15,7 +15,7 @@ interface IAssetItem {
   touchable?: boolean;
 }
 
-export const AssetItem: React.FC<IAssetItem> = ({
+const AssetItem: React.FC<IAssetItem> = ({
   asset,
   onPress = () => {},
   touchable = true,

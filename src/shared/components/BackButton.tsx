@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 import {
   View,
   GestureResponderEvent,
@@ -6,9 +6,9 @@ import {
   ViewStyle,
   Image,
   TouchableOpacity,
-} from "react-native";
-import BackButtonImg from "../assets/images/backbutton.png";
-import BackButtonWhiteImg from "../assets/images/backbutton_white.png";
+} from 'react-native';
+import BackButtonImg from '../assets/images/backbutton.png';
+import BackButtonWhiteImg from '../assets/images/backbutton_white.png';
 
 export const BackButton: FunctionComponent<{
   handler: (event: GestureResponderEvent) => void;
@@ -23,8 +23,7 @@ export const BackButton: FunctionComponent<{
           backgroundColor: 'transparent',
           marginBottom: 25,
           marginTop: 13,
-        }}
-      >
+        }}>
         <Image
           source={isWhite === true ? BackButtonWhiteImg : BackButtonImg}
           style={{
