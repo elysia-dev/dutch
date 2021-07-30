@@ -8,6 +8,7 @@ import TotalDashboard from './TotalDashboard';
 import Stake from './Stake';
 import SelectUnstakingType from './SelectUnstakingType';
 import Unstake from './Unstake';
+import UnstakeAndMigrate from './UnstakeAndMigrate';
 
 enableScreens();
 
@@ -35,6 +36,10 @@ export const Main = () => {
         component={SelectUnstakingType}
       />
       <RootStack.Screen name={StakingPage.Unstake} component={Unstake} />
+      <RootStack.Screen
+        name={StakingPage.UnstakeAndMigrate}
+        component={UnstakeAndMigrate}
+      />
     </RootStack.Navigator>
   );
 };
