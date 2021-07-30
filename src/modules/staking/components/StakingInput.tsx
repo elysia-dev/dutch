@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppColors from '../../../enums/AppColors';
-import GuideText from '../../../shared/components/GuideText';
 import SheetHeader from '../../../shared/components/SheetHeader';
 import LargeTextInput from './LargeTextInput';
 import NumberPadShortcut from './NumberPadShortcut';
@@ -12,6 +11,7 @@ import UserContext from '../../../contexts/UserContext';
 import AppFonts from '../../../enums/AppFonts';
 import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import CryptoType from '../../../enums/CryptoType';
+import InputInfoBox from './InputInfoBox';
 
 const StakingInput: React.FC<{
   cryptoType: CryptoType;
@@ -66,24 +66,7 @@ const StakingInput: React.FC<{
           flex: 1,
         }}>
         <LargeTextInput value={value} />
-        <View
-          style={{
-            marginTop: 10,
-            width: '100%',
-            borderColor: AppColors.SUB_GREY,
-            borderWidth: 1,
-            borderRadius: 5,
-            paddingVertical: 12,
-            paddingHorizontal: 10,
-            marginBottom: Platform.OS === 'android' ? 60 : 30,
-          }}>
-          <GuideText text={`${action} 달러 가치 : $100.00`} />
-          <GuideText
-            text={`${action} 가능 수량 : 100,000 EL`}
-            style={{ marginTop: 6 }}
-          />
-          <GuideText text="예상 가스비 : 0.01 ETH" style={{ marginTop: 6 }} />
-        </View>
+        <InputInfoBox />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
           inputValue={value}
