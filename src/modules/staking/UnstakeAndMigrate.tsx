@@ -1,70 +1,34 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AppColors from '../../../enums/AppColors';
-import SheetHeader from '../../../shared/components/SheetHeader';
-import LargeTextInput from './LargeTextInput';
-import NumberPadShortcut from './NumberPadShortcut';
-import NumberPad from '../../../shared/components/NumberPad';
-import NextButton from '../../../shared/components/NextButton';
-import UserContext from '../../../contexts/UserContext';
-import AppFonts from '../../../enums/AppFonts';
-import ConfirmationModal from '../../../shared/components/ConfirmationModal';
-import CryptoType from '../../../enums/CryptoType';
-import InputInfoBox from './InputInfoBox';
+import AppColors from '../../enums/AppColors';
+import SheetHeader from '../../shared/components/SheetHeader';
+import LargeTextInput from './components/LargeTextInput';
+import NumberPadShortcut from './components/NumberPadShortcut';
+import NumberPad from '../../shared/components/NumberPad';
+import NextButton from '../../shared/components/NextButton';
+import UserContext from '../../contexts/UserContext';
+import AppFonts from '../../enums/AppFonts';
+import ConfirmationModal from '../../shared/components/ConfirmationModal';
+import InputInfoBox from './components/InputInfoBox';
 
-const StakingInput: React.FC<{
-  cryptoType: CryptoType;
-  actionType: 'staking' | 'unstaking' | 'reward';
-  cycle: number;
-}> = ({ cryptoType, actionType, cycle }) => {
+const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
+  const { cryptoType, cycle } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const action = actionType === 'staking' ? '스테이킹' : '언스테이킹'; // 보상수령은 나중에..
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`${cryptoType} ${action}`} />
-      {actionType === 'staking' && (
-        <View
-          style={{
-            alignSelf: 'center',
-            borderColor: AppColors.SUB_GREY,
-            borderRadius: 5,
-            borderWidth: 1,
-            width: '90%',
-            height: 45,
-            padding: 12,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: AppColors.BLACK,
-              fontFamily: AppFonts.Bold,
-              fontSize: 14,
-            }}>
-            1차 스테이킹 APR
-          </Text>
-          <Text
-            style={{
-              color: AppColors.BLACK,
-              fontFamily: AppFonts.Bold,
-              fontSize: 14,
-            }}>
-            120.32%
-          </Text>
-        </View>
-      )}
+      <SheetHeader title={`${cryptoType} 언스테이킹`} />
       <View
         style={{
           marginTop: Platform.OS === 'android' ? 20 : 10,
           paddingHorizontal: 20,
           flex: 1,
         }}>
+        <LargeTextInput value={value} />
         <LargeTextInput value={value} />
         <InputInfoBox />
         <NumberPadShortcut
@@ -110,7 +74,7 @@ const StakingInput: React.FC<{
             if (isWalletUser) {
               setModalVisible(true);
             } else {
-              console.log('스테이킹/언스테이킹/보상수령 해야 함');
+              console.log('언스테이킹 해야 함');
             }
           }}
         />
@@ -118,20 +82,20 @@ const StakingInput: React.FC<{
       <ConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={`${cryptoType} ${action}`}
+        title={`${cryptoType} 언스테이킹`}
         subtitle="최종 확인을 해 주세요!"
         list={[
-          { label: `${action} 회차`, value: `${cycle}차 스테이킹` },
+          { label: `언스테이킹 회차`, value: `${cycle}차 언스테이킹` },
           {
-            label: `${action} 수량`,
+            label: `언스테이킹 수량`,
             value: '1,000,000 EL',
             subvalue: '$ 5,000,000',
           },
           { label: '가스비', value: '0.5 ETH' },
         ]}
         isApproved={true}
-        submitButtonText={`${cycle}차 ${action}`}
-        handler={() => console.log('스테이킹/언스테이킹/보상수령 해야 함')}
+        submitButtonText={`${cycle}차 언스테이킹`}
+        handler={() => console.log('언스테이킹 해야 함')}
       />
       {/* <OverlayLoading
         visible={[
@@ -144,4 +108,4 @@ const StakingInput: React.FC<{
   );
 };
 
-export default StakingInput;
+export default UnstakeAndMigrate;
