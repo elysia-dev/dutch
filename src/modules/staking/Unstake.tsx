@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import StakingInput from './components/StakingInput';
 
-const Unstake: React.FC = () => {
-  return (
-    <View>
-      <Text>Unstake</Text>
-    </View>
-  );
+const Unstake: React.FC<{ route: any }> = ({ route }) => {
+  const { type } = route.params;
+
+  return <StakingInput cryptoType={type} actionType="unstaking" cycle={1} />;
 };
 
 export default Unstake;
