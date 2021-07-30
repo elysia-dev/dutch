@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import AppFonts from '../../enums/AppFonts';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -8,11 +7,10 @@ import { TitleText, H4Text, SubTitleText } from '../../shared/components/Texts';
 import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CardWithShadow from './components/CardWithShadow';
-import { Page, StakingPage } from '../../enums/pageEnum';
+import CircularButtonWithLabel from './components/CircularButtonWithLabel';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { type } = route.params;
-  const navigation = useNavigation();
 
   return (
     <View
@@ -109,81 +107,21 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           innerBoxStyle={{ paddingVertical: 25, paddingHorizontal: 19 }}
         />
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(Page.Staking, {
-                  screen: StakingPage.Stake,
-                  params: { type },
-                });
-              }}>
-              <Image
-                source={require('./images/staking_button.png')}
-                style={{
-                  width: 72,
-                  height: 72,
-                }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: AppFonts.Medium,
-                fontSize: 13,
-                color: AppColors.BLACK,
-              }}>
-              스테이킹
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate(Page.Staking, {
-                  screen: StakingPage.Unstake,
-                  params: { type },
-                });
-              }}>
-              <Image
-                source={require('./images/unstaking_button.png')}
-                style={{
-                  width: 72,
-                  height: 72,
-                }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: AppFonts.Medium,
-                fontSize: 13,
-                color: AppColors.BLACK,
-              }}>
-              언스테이킹
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                // navigation.navigate(Page.Staking, {
-                //   screen: StakingPage.Unstake,
-                //   // params: { type },
-                // });
-              }}>
-              <Image
-                source={require('./images/reward_button.png')}
-                style={{
-                  width: 72,
-                  height: 72,
-                }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                fontFamily: AppFonts.Medium,
-                fontSize: 13,
-                color: AppColors.BLACK,
-              }}>
-              보상 수령
-            </Text>
-          </View>
+          <CircularButtonWithLabel
+            cryptoType={type}
+            actionType="staking"
+            isActive={true}
+          />
+          <CircularButtonWithLabel
+            cryptoType={type}
+            actionType="unstaking"
+            isActive={true}
+          />
+          <CircularButtonWithLabel
+            cryptoType={type}
+            actionType="reward"
+            isActive={true}
+          />
         </View>
       </View>
     </View>
