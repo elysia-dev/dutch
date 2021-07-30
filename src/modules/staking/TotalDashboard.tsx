@@ -35,17 +35,20 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
               label: (
                 <>
                   <StakingInfoCard
+                    cycleEnded={false}
                     label="1차 스테이킹 APR"
                     value="130,000"
                     unit="EL"
                   />
                   <StakingInfoCard
+                    cycleEnded={false}
                     label="1차 스테이킹 수량"
                     value="4.07"
                     unit="%"
                     style={{ marginTop: 15 }}
                   />
                   <StakingInfoCard
+                    cycleEnded={false}
                     label="1차 보상 수량"
                     value="130,000"
                     unit="ELFI"

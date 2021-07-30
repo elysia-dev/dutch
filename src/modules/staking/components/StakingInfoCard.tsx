@@ -6,13 +6,23 @@ import AppFonts from '../../../enums/AppFonts';
 import AppColors from '../../../enums/AppColors';
 
 const StakingInfoCard: React.FC<{
+  cycleEnded: boolean;
   label: string;
   value: string;
   unit: string;
   style?: StyleProp<ViewStyle>;
-}> = ({ label, value, unit, style }) => {
+}> = ({ cycleEnded, label, value, unit, style }) => {
   return (
-    <CardWithShadow style={{ borderRadius: 5, ...(style as {}) }}>
+    <CardWithShadow
+      style={{
+        borderRadius: 5,
+        shadowOpacity: cycleEnded ? 0 : 1,
+        elevation: cycleEnded ? 0 : 6,
+        borderColor: AppColors.SUB_GREY,
+        borderWidth: cycleEnded ? 1 : 0,
+        backgroundColor: cycleEnded ? '#F8F8F8' : AppColors.WHITE,
+        ...(style as {}),
+      }}>
       <H4Text label={label} style={{ padding: 15 }} />
       <View
         style={{
@@ -23,10 +33,13 @@ const StakingInfoCard: React.FC<{
           borderTopWidth: 1,
         }}>
         <H4Text
-          label={value}
+          label={cycleEnded ? '-' : value}
           style={{
             fontSize: 18,
-            color: label === '1차 보상 수량' ? '#00BFFF' : AppColors.BLACK,
+            color:
+              label === '1차 보상 수량' && !cycleEnded
+                ? '#00BFFF'
+                : AppColors.BLACK,
           }}
         />
         <SubTitleText
