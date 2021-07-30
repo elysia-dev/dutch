@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  Animated,
-  View,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { SafeAreaView, Animated, View, Text, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
+import TouchableCardWithShadow from './components/TouchableCardWithShadow';
 
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -33,17 +27,10 @@ export const Main: React.FC = () => {
           alignItems: 'center',
           paddingHorizontal: 20,
         }}>
-        <TouchableOpacity
+        <TouchableCardWithShadow
           style={{
             width: '100%',
             height: 180,
-            backgroundColor: AppColors.WHITE,
-            borderRadius: 5,
-            shadowColor: AppColors.SHADOW_BLACK,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 6,
-            shadowOpacity: 1,
-            elevation: 6,
             marginBottom: 30,
           }}
           onPress={() => {
@@ -88,18 +75,11 @@ export const Main: React.FC = () => {
               기간 : 2021.07.26 19:00:00 ~ 2021.08.26 19:00:00 (KST)
             </Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableCardWithShadow>
+        <TouchableCardWithShadow
           style={{
             width: '100%',
             height: 180,
-            backgroundColor: AppColors.WHITE,
-            borderRadius: 5,
-            shadowColor: AppColors.SHADOW_BLACK,
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 6,
-            shadowOpacity: 1,
-            elevation: 6,
             marginBottom: 30,
           }}
           onPress={() => {
@@ -144,7 +124,7 @@ export const Main: React.FC = () => {
               기간 : 2021.07.26 19:00:00 ~ 2021.08.26 19:00:00 (KST)
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableCardWithShadow>
       </View>
     </SafeAreaView>
   );
