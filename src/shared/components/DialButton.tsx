@@ -14,6 +14,7 @@ const DialButton: FunctionComponent<{
         height: 50,
         borderRadius: 8,
         justifyContent: 'center',
+        alignItems: 'center',
         marginHorizontal: 4,
       }}
       onPress={() => pressHandler()}
