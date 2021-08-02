@@ -19,33 +19,26 @@ const LargeTextInput: React.FC<{
       <>
         <View
           style={{
-            width: '100%',
-            display: 'flex',
             flexDirection: 'row',
             justifyContent: 'flex-end',
             alignItems: 'flex-end',
-            marginBottom: Platform.OS === 'ios' ? -2.5 : 0,
+            marginTop: 30,
           }}>
-          <View
+          <Text
             style={{
-              height: 61,
-              display: 'flex',
-              justifyContent: 'flex-end',
+              fontSize: valueFontSize,
+              color: AppColors.BLACK,
+              fontFamily: AppFonts.Bold,
             }}>
-            <Text
-              style={{
-                fontSize: valueFontSize,
-                color: AppColors.BLACK,
-                fontFamily: AppFonts.Bold,
-              }}>
-              {commaFormatter(value)}
-            </Text>
-          </View>
+            {commaFormatter(value)}
+          </Text>
           <Text
             style={{
               fontSize: 25,
               color: AppColors.BLACK2,
               fontFamily: AppFonts.Bold,
+              marginBottom: 1,
+              marginLeft: 5,
             }}>
             {unit}
           </Text>
@@ -69,8 +62,7 @@ const LargeTextInput: React.FC<{
             textAlign: 'center',
             color: AppColors.DEACTIVATED,
             fontFamily: AppFonts.Medium,
-            marginTop: 12,
-            marginBottom: 9,
+            marginTop: 30 + (Platform.OS === 'ios' ? 6.5 : 7.625),
           }}>
           {placeholder}
         </Text>
