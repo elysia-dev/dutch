@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, Platform } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import AppColors from '../../../enums/AppColors';
 
-const LargeTextInput: React.FC<{ value: string }> = ({ value }) => {
-  const { t } = useTranslation();
-
+const LargeTextInput: React.FC<{
+  placeholder: string;
+  value: string;
+  unit: string;
+}> = ({ placeholder, value, unit }) => {
   if (value) {
     let valueFontSize = 30;
     if (value.length > 10) {
@@ -46,7 +47,7 @@ const LargeTextInput: React.FC<{ value: string }> = ({ value }) => {
               color: AppColors.BLACK2,
               fontFamily: AppFonts.Bold,
             }}>
-            EL
+            {unit}
           </Text>
         </View>
         <View
@@ -64,14 +65,14 @@ const LargeTextInput: React.FC<{ value: string }> = ({ value }) => {
       <>
         <Text
           style={{
-            fontSize: 30,
+            fontSize: 25,
             textAlign: 'center',
             color: AppColors.DEACTIVATED,
             fontFamily: AppFonts.Medium,
             marginTop: 12,
             marginBottom: 9,
           }}>
-          몇 개를 스테이킹할까요?
+          {placeholder}
         </Text>
         <View
           style={{

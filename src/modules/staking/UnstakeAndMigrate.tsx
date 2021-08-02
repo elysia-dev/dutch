@@ -65,8 +65,12 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           paddingHorizontal: 20,
           flex: 1,
         }}>
-        <LargeTextInput value={value} />
-        <LargeTextInput value={value} />
+        <LargeTextInput placeholder="몇 개를 언스테이킹할까요?" value={value} />
+        <LargeTextInput
+          placeholder="몇 개를 마이그레이션할까요?"
+          value={value}
+          unit={cryptoType}
+        />
         <InputInfoBox />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}

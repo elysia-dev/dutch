@@ -58,7 +58,11 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           paddingHorizontal: 20,
           flex: 1,
         }}>
-        <LargeTextInput value={value} />
+        <LargeTextInput
+          placeholder="몇 개를 스테이킹할까요?"
+          value={value}
+          unit={cryptoType}
+        />
         <InputInfoBox />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
