@@ -99,6 +99,8 @@ const CircularButtonWithLabel: React.FC<{
           fontFamily: AppFonts.Medium,
           fontSize: 13,
           color: isActive ? AppColors.BLACK : AppColors.BLUE_2,
+          textAlign: 'center',
+          marginTop: 4,
         }}>
         {label}
       </Text>

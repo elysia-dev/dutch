@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -14,11 +14,10 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const [selectedCycle, setSelectedCycle] = useState(currentCycle);
 
   return (
-    <View
+    <ScrollView
       style={{
         backgroundColor: AppColors.WHITE,
         height: '100%',
-        width: '100%',
       }}>
       <SheetHeader title="" />
       <View style={{ paddingHorizontal: 20 }}>
@@ -67,7 +66,13 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           boxStyle={{ marginTop: -10 }}
           innerBoxStyle={{ paddingVertical: 25, paddingHorizontal: 19 }}
         />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginTop: 12,
+            marginBottom: 24,
+          }}>
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="staking"
@@ -93,7 +98,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
