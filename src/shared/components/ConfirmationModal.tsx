@@ -132,7 +132,7 @@ const ConfirmationModal: React.FC<Props> = ({
         <View
           style={{
             width: '100%',
-            height: 572,
+            height: 620,
             display: 'flex',
             backgroundColor: AppColors.MODAL_BACKGROUND,
           }}>
