@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -7,11 +7,40 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from './components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
+import { getElStakingPoolContract } from '../../utiles/getContract';
+import CryptoType from '../../enums/CryptoType';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType } = route.params;
-  const currentRound = 3; // dummy data
-  const [selectedRound, setSelectedRound] = useState(currentRound);
+  const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const [selectedRound, setSelectedRound] = useState(round);
+  const [poolData, setPoolData] = useState({
+    rewardPerSecond: 0,
+    rewardIndex: 0,
+    startTimestamp: 0,
+    endTimestamp: 0,
+    totalPrincipal: 0,
+    lastUpdateTimestamp: 0,
+  });
+  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  let currentRound = 0;
+  contract?.currentRound().then((res: any) => {
+    currentRound = res;
+  });
+
+  useEffect(() => {
+    contract?.getPoolData(currentRound).then((res: any) => {
+      setPoolData({
+        rewardPerSecond: res[0],
+        rewardIndex: res[1],
+        startTimestamp: res[2],
+        endTimestamp: res[3],
+        totalPrincipal: res[4],
+        lastUpdateTimestamp: res[5],
+      });
+    });
+  }, [selectedRound]);
 
   return (
     <ScrollView
@@ -22,7 +51,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
       <SheetHeader title="" />
       <View style={{ paddingHorizontal: 20 }}>
         <TitleText
-          label="EL 스테이킹 및 ELFI 리워드"
+          label={`${cryptoType} 스테이킹 및 ${rewardCryptoType} 리워드`}
           style={{ fontSize: 22 }}
         />
         <DotGraph
@@ -33,7 +62,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           contents={[
             {
               label: '기간',
-              value: '2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)',
+              value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
             },
             {
               label: (
@@ -41,21 +70,21 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   <StakingInfoCard
                     roundEnded={false}
                     label={`${selectedRound}차 스테이킹 APR`}
-                    value="130,000"
-                    unit="EL"
+                    value="(어떻게구하는거지)"
+                    unit="%"
                   />
                   <StakingInfoCard
                     roundEnded={false}
                     label={`${selectedRound}차 스테이킹 수량`}
-                    value="4.07"
-                    unit="%"
+                    value={stakingAmount || '-'}
+                    unit={cryptoType}
                     style={{ marginTop: 15 }}
                   />
                   <StakingInfoCard
                     roundEnded={false}
                     label={`${selectedRound}차 보상 수량`}
-                    value="130,000"
-                    unit="ELFI"
+                    value={rewardAmount || '-'}
+                    unit={rewardCryptoType}
                     style={{ marginTop: 15 }}
                   />
                 </>
@@ -76,14 +105,14 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="staking"
-            isActive={currentRound && currentRound === selectedRound}
+            isActive={Boolean(currentRound) && currentRound === selectedRound}
             selectedRound={selectedRound}
             currentRound={currentRound}
           />
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="unstaking"
-            isActive={currentRound && currentRound >= selectedRound}
+            isActive={Boolean(currentRound) && currentRound >= selectedRound}
             selectedRound={selectedRound}
             currentRound={currentRound}
             isRewardAvailable={currentRound > selectedRound} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요

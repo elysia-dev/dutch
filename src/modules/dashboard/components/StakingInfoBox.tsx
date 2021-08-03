@@ -32,7 +32,7 @@ const StakingInfoBox: React.FC<{
       onPress={() => {
         navigation.navigate(Page.Staking, {
           screen: StakingPage.TotalDashboard,
-          params: { cryptoType, round },
+          params: { cryptoType, round, stakingAmount, rewardAmount },
         });
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
