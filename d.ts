@@ -26,4 +26,5 @@ declare module 'react-native-dotenv' {
   export const APP_GOOGLE_MAP_API_ANDROID: string;
   export const APP_GOOGLE_MAP_API_IOS: string;
   export const APP_ENV: string;
+  export const EL_STAKING_POOL_ADDRESS: string;
 }

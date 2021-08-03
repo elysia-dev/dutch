@@ -13,11 +13,13 @@ import {
   INFURA_PROJECT_ID,
   BSC_RPC_ENDPOINT,
   EL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import AssetTokenBnbAbi from '../abi/AssetTokenBnb.json';
 import ERC20Abi from '../abi/ERC20Abi.json';
 import AssetTokenEthAbi from '../abi/AssetTokenEthAbi.json';
 import AssetTokenAbi from '../abi/AssetTokenAbi.json';
+import StakingPoolAbi from '../abi/StakingPoolAbi.json';
 import CryptoType from '../enums/CryptoType';
 
 export function isAddress(value: any): string | false {
@@ -77,6 +79,10 @@ export function getAssetTokenFromCryptoType(
     default:
       return getAssetTokenContract(address);
   }
+}
+
+export function getElStakingPoolContract(): Contract | null {
+  return getContract(EL_STAKING_POOL_ADDRESS, StakingPoolAbi);
 }
 
 export default getContract;
