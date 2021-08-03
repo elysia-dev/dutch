@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -10,11 +10,58 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
+import { getElStakingPoolContract } from '../../utiles/getContract';
+import UserContext from '../../contexts/UserContext';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
-  const { cryptoType, rewardCryptoType, currentRound } = route.params;
+  const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
+  const [poolData, setPoolData] = useState({
+    rewardPerSecond: 0,
+    rewardIndex: 0,
+    startTimestamp: 0,
+    endTimestamp: 0,
+    totalPrincipal: 0,
+    lastUpdateTimestamp: 0,
+  });
+  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  let currentRound = 0;
+  contract?.currentRound().then((res: any) => {
+    currentRound = res;
+  });
   const [selectedRound, setSelectedRound] = useState(currentRound);
+  const { isWalletUser, user } = useContext(UserContext);
+
+  // let nextButtonTitle;
+  // let nextButtonDisabled;
+  // if (!(isWalletUser || user.ethAddresses[0])) {
+  //   nextButtonTitle = '지갑 연결 필요';
+  //   nextButtonDisabled = true;
+  // } else if (!currentRound) {
+  //   nextButtonTitle = 'COMMING SOON!';
+  //   nextButtonDisabled = true;
+  // } else if (!currentRound) {
+  //   nextButtonTitle = '스테이킹 기간 종료';
+  //   nextButtonDisabled = true;
+  // } else {
+  //   nextButtonTitle = `${currentRound}차 스테이킹`;
+  //   nextButtonDisabled = false;
+  // }
+  const nextButtonTitle = `${currentRound}차 스테이킹`;
+  const nextButtonDisabled = false;
+
+  useEffect(() => {
+    contract?.getPoolData(currentRound).then((res: any) => {
+      setPoolData({
+        rewardPerSecond: res[0],
+        rewardIndex: res[1],
+        startTimestamp: res[2],
+        endTimestamp: res[3],
+        totalPrincipal: res[4],
+        lastUpdateTimestamp: res[5],
+      });
+    });
+  }, []);
 
   return (
     <View
@@ -46,39 +93,49 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             contents={[
               {
                 label: '기간',
-                value: '2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)',
+                value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
               },
-              { label: '현재 진행 회차', value: '1차' },
+              { label: '현재 진행 회차', value: `${currentRound}차` },
               { label: '스테이킹 일수', value: '20일' },
-              { label: '예상 수익률 (APR)', value: '98.10%' },
+              { label: '예상 수익률 (APR)', value: `${'(모름)'}%` },
             ]}
             boxStyle={{ marginBottom: 60 }}
           />
-          <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
+          <TitleText
+            label={`${rewardCryptoType} 채굴 플랜`}
+            style={{ fontSize: 22 }}
+          />
           <BarGraph />
           <BoxWithDivider
             contents={[
-              { label: '현 채굴량', value: '4,000 ELFI' },
-              { label: '총 채굴량', value: '3,000,000 ELFI' },
+              { label: '현 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
+              { label: '총 채굴량', value: `3,000,000 ${rewardCryptoType}` },
             ]}
             innerBoxStyle={{ paddingVertical: 16 }}
             boxStyle={{ marginBottom: 27 }}
           />
           <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
-              return <MiningPlan key={i} />;
+              return (
+                <MiningPlan
+                  key={i}
+                  round={i}
+                  rewardCryptoType={rewardCryptoType}
+                />
+              );
             })}
           </ScrollView>
         </View>
       </ScrollView>
       <NextButton
-        title={`${currentRound}차 스테이킹`}
+        title={nextButtonTitle}
         handler={() => {
           navigation.navigate(Page.Staking, {
             screen: StakingPage.Stake,
             params: { cryptoType, selectedRound: currentRound },
           });
         }}
+        disabled={nextButtonDisabled}
         style={{
           marginBottom: 20,
           marginHorizontal: 16,
