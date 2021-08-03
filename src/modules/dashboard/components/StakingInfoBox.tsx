@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../../enums/AppColors';
 import { Page, StakingPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
 import CryptoType from '../../../enums/CryptoType';
+import PriceContext from '../../../contexts/PriceContext';
+import commaFormatter from '../../../utiles/commaFormatter';
 
-const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
-  cryptoType,
-}) => {
+const StakingInfoBox: React.FC<{
+  cryptoType: CryptoType;
+  round: number;
+  stakingAmount: number;
+  rewardAmount: number;
+}> = ({ cryptoType, round, stakingAmount, rewardAmount }) => {
   const navigation = useNavigation();
+  const { getCryptoPrice } = useContext(PriceContext);
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
 
   return (
     <TouchableOpacity
@@ -24,7 +32,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
       onPress={() => {
         navigation.navigate(Page.Staking, {
           screen: StakingPage.TotalDashboard,
-          params: { cryptoType },
+          params: { cryptoType, round },
         });
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -34,7 +42,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          1차 스테이킹
+          {`${round}차 스테이킹`}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -43,7 +51,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            1,000,000 EL
+            {`${commaFormatter(stakingAmount)} ${cryptoType} `}
           </Text>
           <Text
             style={{
@@ -51,7 +59,9 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            (=$5,000,000)
+            {`(= $ ${commaFormatter(
+              stakingAmount * getCryptoPrice(cryptoType),
+            )})`}
           </Text>
         </View>
       </View>
@@ -67,7 +77,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          1차 리워드
+          {`${round}차 리워드`}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -76,7 +86,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            500 ELFI
+            {`${commaFormatter(rewardAmount)} ${rewardCryptoType} `}
           </Text>
           <Text
             style={{
@@ -84,7 +94,9 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            (=$500,000)
+            {`(= $ ${commaFormatter(
+              rewardAmount * getCryptoPrice(rewardCryptoType),
+            )})`}
           </Text>
         </View>
       </View>

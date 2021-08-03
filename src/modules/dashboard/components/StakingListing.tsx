@@ -54,7 +54,15 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
           const stakingAmount = res[2].toNumber(); // principal
           const rewardAmount = res[1].toNumber();
           // if (stakingAmount) {
-          return <StakingInfoBox key={round} cryptoType={CryptoType.EL} />;
+          return (
+            <StakingInfoBox
+              key={round}
+              cryptoType={CryptoType.EL}
+              round={round}
+              stakingAmount={stakingAmount}
+              rewardAmount={rewardAmount}
+            />
+          );
           // }
         }),
       );
