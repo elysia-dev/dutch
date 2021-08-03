@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, StyleProp, ViewStyle } from 'react-native';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import AppColors from '../../../enums/AppColors';
@@ -8,7 +8,8 @@ const LargeTextInput: React.FC<{
   placeholder: string;
   value: string;
   unit: string;
-}> = ({ placeholder, value, unit }) => {
+  style?: StyleProp<ViewStyle>;
+}> = ({ placeholder, value, unit, style }) => {
   if (value) {
     let valueFontSize = 30;
     if (value.length > 10) {
@@ -23,6 +24,7 @@ const LargeTextInput: React.FC<{
             justifyContent: 'flex-end',
             alignItems: 'flex-end',
             marginTop: 30,
+            ...(style as {}),
           }}>
           <Text
             style={{
@@ -62,7 +64,9 @@ const LargeTextInput: React.FC<{
             textAlign: 'center',
             color: AppColors.DEACTIVATED,
             fontFamily: AppFonts.Medium,
-            marginTop: 30 + (Platform.OS === 'ios' ? 6.5 : 7.625),
+            marginTop: 30,
+            paddingTop: Platform.OS === 'ios' ? 6.5 : 7.625,
+            ...(style as {}),
           }}>
           {placeholder}
         </Text>
