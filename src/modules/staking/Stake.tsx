@@ -11,6 +11,9 @@ import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
 import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
+import PriceContext from '../../contexts/PriceContext';
+import AssetContext from '../../contexts/AssetContext';
+import decimalFormatter from '../../utiles/decimalFormatter';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -18,6 +21,8 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
+  const { getCryptoPrice } = useContext(PriceContext);
+  const { getBalance } = useContext(AssetContext);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -49,7 +54,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          120.32%
+          (모름) %
         </Text>
       </View>
       <View
@@ -63,7 +68,19 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           value={value}
           unit={cryptoType}
         />
-        <InputInfoBox />
+        <InputInfoBox
+          list={[
+            `스테이킹 달러 가치: $ ${decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            )}`,
+            `스테이킹 가능 수량: ${decimalFormatter(
+              getBalance(cryptoType),
+              6,
+            )} ${cryptoType}`,
+            `예상 가스비: ${'(모름)'}`,
+          ]}
+        />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
           inputValue={value}
@@ -121,10 +138,13 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           { label: `스테이킹 회차`, value: `${selectedRound}차 스테이킹` },
           {
             label: `스테이킹 수량`,
-            value: '1,000,000 EL',
-            subvalue: '$ 5,000,000',
+            value: `${value} ${cryptoType}`,
+            subvalue: `$ ${decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            )}`,
           },
-          { label: '가스비', value: '0.5 ETH' },
+          { label: '가스비', value: '(모름)' },
         ]}
         isApproved={true}
         submitButtonText={`${selectedRound}차 스테이킹`}

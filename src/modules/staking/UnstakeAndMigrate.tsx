@@ -8,16 +8,37 @@ import NumberPadShortcut from './components/NumberPadShortcut';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
-import AppFonts from '../../enums/AppFonts';
 import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
+import PriceContext from '../../contexts/PriceContext';
+import decimalFormatter from '../../utiles/decimalFormatter';
+import { getElStakingPoolContract } from '../../utiles/getContract';
+import WalletContext from '../../contexts/WalletContext';
+import CryptoType from '../../enums/CryptoType';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
   const [value, setValue] = useState('');
-  const { isWalletUser } = useContext(UserContext);
+  const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
+  const { getCryptoPrice } = useContext(PriceContext);
+  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  const { wallet } = useContext(WalletContext);
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+
+  let principal = 0;
+  let reward = 0;
+  contract
+    ?.getUserData(
+      selectedRound,
+      isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
+    )
+    .then((res: any) => {
+      principal = res[2]; // userPrincipal
+      reward = res[1]; // userReward
+    });
 
   let confirmationList;
   if (earnReward) {
@@ -28,31 +49,51 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       },
       {
         label: `언스테이킹 수량`,
-        value: '1,000,000 EL',
-        subvalue: '$ 5,000,000',
+        value: `${value} ${cryptoType}`,
+        subvalue: `$ ${decimalFormatter(
+          parseFloat(value || '0') * getCryptoPrice(cryptoType),
+          6,
+        )}`,
       },
-      { label: '마이그레이션 수량', value: '1,000,000 EL' },
+      {
+        label: '마이그레이션 수량',
+        value: `${principal - parseFloat(value)} ${cryptoType}`,
+        subvalue: `$ ${decimalFormatter(
+          (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+          6,
+        )}`,
+      },
       {
         label: '마이그레이션 위치',
         value: `${selectedRound}차 → ${currentRound}차`,
       },
-      { label: '보상 수량', value: '1,000 ELFI' },
-      { label: '가스비', value: '0.5 ETH' },
+      { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
+      { label: '가스비', value: '(모름)' },
     ];
   } else {
     confirmationList = [
       { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
       {
         label: `언스테이킹 수량`,
-        value: '1,000,000 EL',
-        subvalue: '$ 5,000,000',
+        value: `${value} ${cryptoType}`,
+        subvalue: `$ ${decimalFormatter(
+          parseFloat(value || '0') * getCryptoPrice(cryptoType),
+          6,
+        )}`,
       },
-      { label: '마이그레이션 수량', value: '1,000,000 EL' },
+      {
+        label: '마이그레이션 수량',
+        value: `${principal - parseFloat(value)} ${cryptoType}`,
+        subvalue: `$ ${decimalFormatter(
+          (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+          6,
+        )}`,
+      },
       {
         label: '마이그레이션 위치',
         value: `${selectedRound}차 → ${currentRound}차`,
       },
-      { label: '가스비', value: '0.5 ETH' },
+      { label: '가스비', value: '(모름)' },
     ];
   }
 
@@ -72,10 +113,16 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         />
         <LargeTextInput
           placeholder="몇 개를 마이그레이션할까요?"
-          value={value}
+          value={principal - parseFloat(value)}
           unit={cryptoType}
         />
-        <InputInfoBox />
+        <InputInfoBox
+          list={[
+            `입력 가능 수량: ${decimalFormatter(principal, 6)} ${cryptoType}`,
+            `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
+            `예상 가스비: ${'(모름)'}`,
+          ]}
+        />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
           inputValue={value}
