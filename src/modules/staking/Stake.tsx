@@ -13,7 +13,7 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType, selectedCycle } = route.params;
+  const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -118,7 +118,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         title={`${cryptoType} 스테이킹`}
         subtitle="최종 확인을 해 주세요!"
         list={[
-          { label: `스테이킹 회차`, value: `${selectedCycle}차 스테이킹` },
+          { label: `스테이킹 회차`, value: `${selectedRound}차 스테이킹` },
           {
             label: `스테이킹 수량`,
             value: '1,000,000 EL',
@@ -127,7 +127,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           { label: '가스비', value: '0.5 ETH' },
         ]}
         isApproved={true}
-        submitButtonText={`${selectedCycle}차 스테이킹`}
+        submitButtonText={`${selectedRound}차 스테이킹`}
         handler={() => console.log('스테이킹 해야 함')}
       />
       {/* <OverlayLoading

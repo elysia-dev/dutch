@@ -4,9 +4,9 @@ import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
 
 const DotGraph: React.FC<{
-  selectedCycle: number;
-  setSelectedCycle: Dispatch<SetStateAction<number>>;
-}> = ({ selectedCycle, setSelectedCycle }) => {
+  selectedRound: number;
+  setSelectedRound: Dispatch<SetStateAction<number>>;
+}> = ({ selectedRound, setSelectedRound }) => {
   const dots = [];
   // 나중에는 회차 목록 가져와서 돌리는 걸로
   for (let i = 1; i <= 6; i++) {
@@ -14,10 +14,10 @@ const DotGraph: React.FC<{
     dots.push(
       <Dot
         key={i}
-        cycle={i}
+        round={i}
         status={'scheduled'}
-        selected={selectedCycle === i ? true : false}
-        setSelectedCycle={setSelectedCycle}
+        selected={selectedRound === i ? true : false}
+        setSelectedRound={setSelectedRound}
       />,
     );
   }

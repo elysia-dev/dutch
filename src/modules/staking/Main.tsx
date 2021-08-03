@@ -11,7 +11,7 @@ import TouchableCardWithShadow from './components/TouchableCardWithShadow';
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
-  const currentCycle = 3; // dummy data
+  const currentRound = 3; // dummy data
 
   return (
     <SafeAreaView
@@ -40,7 +40,7 @@ export const Main: React.FC = () => {
               params: {
                 cryptoType: CryptoType.EL,
                 rewardCryptoType: CryptoType.ELFI,
-                currentCycle,
+                currentRound,
               },
             });
           }}>
@@ -91,7 +91,7 @@ export const Main: React.FC = () => {
               params: {
                 cryptoType: CryptoType.ELFI,
                 rewardCryptoType: CryptoType.DAI,
-                currentCycle,
+                currentRound,
               },
             });
           }}>

@@ -10,16 +10,16 @@ const CircularButtonWithLabel: React.FC<{
   cryptoType: CryptoType;
   isActive: boolean;
   actionType: 'staking' | 'unstaking' | 'reward';
-  selectedCycle: number;
-  currentCycle?: number;
+  selectedRound: number;
+  currentRound?: number;
   isRewardAvailable?: boolean;
   isMigrationAvailable?: boolean;
 }> = ({
   cryptoType,
   isActive,
   actionType,
-  selectedCycle,
-  currentCycle,
+  selectedRound,
+  currentRound,
   isRewardAvailable,
   isMigrationAvailable,
 }) => {
@@ -79,8 +79,8 @@ const CircularButtonWithLabel: React.FC<{
             screen,
             params: {
               cryptoType,
-              selectedCycle,
-              currentCycle,
+              selectedRound,
+              currentRound,
               pageAfterSelection,
             },
           });

@@ -4,11 +4,11 @@ import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 const Dot: React.FC<{
-  cycle: number;
+  round: number;
   status: 'ended' | 'inProgress' | 'scheduled';
   selected: boolean;
-  setSelectedCycle: Dispatch<SetStateAction<number>>;
-}> = ({ cycle, status, selected, setSelectedCycle }) => {
+  setSelectedRound: Dispatch<SetStateAction<number>>;
+}> = ({ round, status, selected, setSelectedRound }) => {
   let backgroundColor;
   let borderColor;
   switch (status) {
@@ -32,7 +32,7 @@ const Dot: React.FC<{
     <TouchableOpacity
       style={{ alignItems: 'center' }}
       onPress={() => {
-        setSelectedCycle(cycle);
+        setSelectedRound(round);
       }}
       activeOpacity={1}>
       <View
@@ -56,7 +56,7 @@ const Dot: React.FC<{
           color: AppColors.BLACK,
           fontSize: 12,
           marginTop: 6,
-        }}>{`${cycle}차`}</Text>
+        }}>{`${round}차`}</Text>
     </TouchableOpacity>
   );
 };

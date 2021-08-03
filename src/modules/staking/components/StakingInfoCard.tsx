@@ -6,20 +6,20 @@ import AppFonts from '../../../enums/AppFonts';
 import AppColors from '../../../enums/AppColors';
 
 const StakingInfoCard: React.FC<{
-  cycleEnded: boolean;
+  roundEnded: boolean;
   label: string;
   value: string;
   unit: string;
   style?: StyleProp<ViewStyle>;
-}> = ({ cycleEnded, label, value, unit, style }) => {
+}> = ({ roundEnded, label, value, unit, style }) => {
   return (
     <CardWithShadow
       style={{
-        shadowOpacity: cycleEnded ? 0 : 1,
-        elevation: cycleEnded ? 0 : 6,
+        shadowOpacity: roundEnded ? 0 : 1,
+        elevation: roundEnded ? 0 : 6,
         borderColor: AppColors.SUB_GREY,
-        borderWidth: cycleEnded ? 1 : 0,
-        backgroundColor: cycleEnded ? '#F8F8F8' : AppColors.WHITE,
+        borderWidth: roundEnded ? 1 : 0,
+        backgroundColor: roundEnded ? '#F8F8F8' : AppColors.WHITE,
         ...(style as {}),
       }}>
       <H4Text label={label} style={{ padding: 15 }} />
@@ -32,11 +32,11 @@ const StakingInfoCard: React.FC<{
           borderTopWidth: 1,
         }}>
         <H4Text
-          label={cycleEnded ? '-' : value}
+          label={roundEnded ? '-' : value}
           style={{
             fontSize: 18,
             color:
-              label.includes('보상') && !cycleEnded
+              label.includes('보상') && !roundEnded
                 ? '#00BFFF'
                 : AppColors.BLACK,
           }}

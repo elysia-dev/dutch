@@ -12,9 +12,9 @@ import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
-  const { cryptoType, rewardCryptoType, currentCycle } = route.params;
+  const { cryptoType, rewardCryptoType, currentRound } = route.params;
   const navigation = useNavigation();
-  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
+  const [selectedRound, setSelectedRound] = useState(currentRound);
 
   return (
     <View
@@ -39,8 +39,8 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             style={{ fontSize: 22 }}
           />
           <DotGraph
-            selectedCycle={selectedCycle}
-            setSelectedCycle={setSelectedCycle}
+            selectedRound={selectedRound}
+            setSelectedRound={setSelectedRound}
           />
           <BoxWithDivider
             contents={[
@@ -72,11 +72,11 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         </View>
       </ScrollView>
       <NextButton
-        title={`${currentCycle}차 스테이킹`}
+        title={`${currentRound}차 스테이킹`}
         handler={() => {
           navigation.navigate(Page.Staking, {
             screen: StakingPage.Stake,
-            params: { cryptoType, selectedCycle: currentCycle },
+            params: { cryptoType, selectedRound: currentRound },
           });
         }}
         style={{

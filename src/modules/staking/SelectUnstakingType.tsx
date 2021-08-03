@@ -11,7 +11,7 @@ import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 
 const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType, pageAfterSelection, selectedCycle, currentCycle } =
+  const { cryptoType, pageAfterSelection, selectedRound, currentRound } =
     route.params;
   const navigation = useNavigation();
 
@@ -25,8 +25,8 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
               screen: pageAfterSelection,
               params: {
                 cryptoType,
-                selectedCycle,
-                currentCycle,
+                selectedRound,
+                currentRound,
                 earnReward: true,
               },
             });
@@ -70,8 +70,8 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
               screen: pageAfterSelection,
               params: {
                 cryptoType,
-                selectedCycle,
-                currentCycle,
+                selectedRound,
+                currentRound,
                 earnReward: false,
               },
             });

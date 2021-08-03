@@ -10,8 +10,8 @@ import StakingInfoCard from './components/StakingInfoCard';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType } = route.params;
-  const currentCycle = 3; // dummy data
-  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
+  const currentRound = 3; // dummy data
+  const [selectedRound, setSelectedRound] = useState(currentRound);
 
   return (
     <ScrollView
@@ -26,8 +26,8 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           style={{ fontSize: 22 }}
         />
         <DotGraph
-          selectedCycle={selectedCycle}
-          setSelectedCycle={setSelectedCycle}
+          selectedRound={selectedRound}
+          setSelectedRound={setSelectedRound}
         />
         <BoxWithDivider
           contents={[
@@ -39,21 +39,21 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
               label: (
                 <>
                   <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 스테이킹 APR`}
+                    roundEnded={false}
+                    label={`${selectedRound}차 스테이킹 APR`}
                     value="130,000"
                     unit="EL"
                   />
                   <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 스테이킹 수량`}
+                    roundEnded={false}
+                    label={`${selectedRound}차 스테이킹 수량`}
                     value="4.07"
                     unit="%"
                     style={{ marginTop: 15 }}
                   />
                   <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 보상 수량`}
+                    roundEnded={false}
+                    label={`${selectedRound}차 보상 수량`}
                     value="130,000"
                     unit="ELFI"
                     style={{ marginTop: 15 }}
@@ -76,24 +76,24 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="staking"
-            isActive={currentCycle && currentCycle === selectedCycle}
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
+            isActive={currentRound && currentRound === selectedRound}
+            selectedRound={selectedRound}
+            currentRound={currentRound}
           />
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="unstaking"
-            isActive={currentCycle && currentCycle >= selectedCycle}
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
-            isRewardAvailable={currentCycle > selectedCycle} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
-            isMigrationAvailable={Boolean(currentCycle)}
+            isActive={currentRound && currentRound >= selectedRound}
+            selectedRound={selectedRound}
+            currentRound={currentRound}
+            isRewardAvailable={currentRound > selectedRound} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
+            isMigrationAvailable={Boolean(currentRound)}
           />
           <CircularButtonWithLabel
             cryptoType={cryptoType}
             actionType="reward"
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
+            selectedRound={selectedRound}
+            currentRound={currentRound}
             isActive={true}
           />
         </View>
