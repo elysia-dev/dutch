@@ -46,6 +46,7 @@ const StakingInfoCard: React.FC<{
           style={{
             fontSize: 14,
             fontFamily: AppFonts.Bold,
+            marginTop: 2,
           }}
         />
       </View>
