@@ -15,6 +15,7 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import { getElStakingPoolContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
+import AppFonts from '../../enums/AppFonts';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -102,7 +103,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       <SheetHeader title={`${cryptoType} 언스테이킹`} />
       <View
         style={{
-          marginTop: Platform.OS === 'android' ? 20 : 10,
+          // marginTop: Platform.OS === 'android' ? 20 : 10,
           paddingHorizontal: 20,
           flex: 1,
         }}>
@@ -110,11 +111,23 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           placeholder="몇 개를 언스테이킹할까요?"
           value={value}
           unit={cryptoType}
+          style={{ marginTop: 0 }}
         />
+        <Text
+          style={{
+            fontFamily: AppFonts.Bold,
+            fontSize: 30,
+            color: '#646464',
+            textAlign: 'center',
+            marginVertical: 10,
+          }}>
+          ↕
+        </Text>
         <LargeTextInput
           placeholder="몇 개를 마이그레이션할까요?"
           value={principal - parseFloat(value)}
           unit={cryptoType}
+          style={{ marginTop: 0 }}
         />
         <InputInfoBox
           list={[
