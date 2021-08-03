@@ -11,7 +11,6 @@ import TouchableCardWithShadow from './components/TouchableCardWithShadow';
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
-  const currentRound = 3; // dummy data
 
   return (
     <SafeAreaView
@@ -40,7 +39,6 @@ export const Main: React.FC = () => {
               params: {
                 cryptoType: CryptoType.EL,
                 rewardCryptoType: CryptoType.ELFI,
-                currentRound,
               },
             });
           }}>
@@ -75,7 +73,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : 2021.07.26 19:00:00 ~ 2021.08.26 19:00:00 (KST)
+              기간 : (모름)
             </Text>
           </View>
         </TouchableCardWithShadow>
@@ -91,7 +89,6 @@ export const Main: React.FC = () => {
               params: {
                 cryptoType: CryptoType.ELFI,
                 rewardCryptoType: CryptoType.DAI,
-                currentRound,
               },
             });
           }}>
@@ -126,7 +123,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : 2021.07.26 19:00:00 ~ 2021.08.26 19:00:00 (KST)
+              기간 : (모름)
             </Text>
           </View>
         </TouchableCardWithShadow>
