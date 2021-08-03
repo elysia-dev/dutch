@@ -1,17 +1,72 @@
-import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from 'react';
+import { View } from 'react-native';
+import { Contract } from '@ethersproject/contracts';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 import StakingInfoBox from './StakingInfoBox';
+import { getElStakingPoolContract } from '../../../utiles/getContract';
+import WalletContext from '../../../contexts/WalletContext';
 
-const StakingListing: React.FC = () => {
-  // dummy data
-  const myStakingList = {
-    EL: [1, 5],
-    ELFI: [1, 5],
-  };
+const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
+  user,
+  isWalletUser,
+}) => {
+  const { wallet } = useContext(WalletContext);
+  const userAddress = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
+  const elStakingPoolContract = getElStakingPoolContract();
+  const elfiStakingPoolContract = null; // 나중에 elfi 컨트랙트도 추가
+  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+
+  async function getRoundData(type: CryptoType): Promise<void> {
+    let contract: Contract | null;
+    let infoBoxes: React.ReactNode[];
+    let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
+    if (type === CryptoType.EL) {
+      contract = elStakingPoolContract;
+      infoBoxes = elStakingInfoBoxes;
+      setInfoBoxes = setElStakingInfoBoxes;
+    } else {
+      // type === CryptoType.ELFI
+      contract = elfiStakingPoolContract;
+      infoBoxes = elfiStakingInfoBoxes;
+      setInfoBoxes = setElfiStakingInfoBoxes;
+    }
+
+    const tempBoxes = [] as React.ReactNode[];
+    for (let round = 1; round <= 6; round++) {
+      tempBoxes.push(
+        contract?.getUserData(round, userAddress).then((res: any) => {
+          const stakingAmount = res[2].toNumber(); // principal
+          const rewardAmount = res[1].toNumber();
+          // if (stakingAmount) {
+          return <StakingInfoBox key={round} cryptoType={CryptoType.EL} />;
+          // }
+        }),
+      );
+    }
+
+    setInfoBoxes(await Promise.all(tempBoxes));
+  }
+
+  useEffect(() => {
+    getRoundData(CryptoType.EL);
+    getRoundData(CryptoType.ELFI);
+  }, []);
 
   return (
     <View
@@ -54,11 +109,7 @@ const StakingListing: React.FC = () => {
         />
         <P1Text label="EL 스테이킹 및 ELFI 리워드" style={{ marginLeft: 15 }} />
       </View>
-      <View style={{ marginTop: 8 }}>
-        {myStakingList.EL.map((cycle) => {
-          return <StakingInfoBox cryptoType={CryptoType.EL} />;
-        })}
-      </View>
+      <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
       <View
         style={{
           display: 'flex',
@@ -85,11 +136,7 @@ const StakingListing: React.FC = () => {
           style={{ marginLeft: 15 }}
         />
       </View>
-      <View style={{ marginTop: 8 }}>
-        {myStakingList.ELFI.map((cycle) => {
-          return <StakingInfoBox cryptoType={CryptoType.ELFI} />;
-        })}
-      </View>
+      <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>
     </View>
   );
 };
