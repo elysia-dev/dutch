@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppFonts from '../../../enums/AppFonts';
+import CryptoType from '../../../enums/CryptoType';
 import { H4Text } from '../../../shared/components/Texts';
 import BoxWithDivider from './BoxWithDivider';
 import CardWithShadow from './CardWithShadow';
+import PriceContext from '../../../contexts/PriceContext';
 
-const MiningPlan: React.FC<{}> = () => {
+const MiningPlan: React.FC<{
+  round: number;
+  rewardCryptoType: CryptoType;
+}> = ({ round, rewardCryptoType }) => {
+  const { getCryptoPrice } = useContext(PriceContext);
+
   return (
     <CardWithShadow
       style={{
@@ -14,20 +21,26 @@ const MiningPlan: React.FC<{}> = () => {
         marginHorizontal: 6,
       }}>
       <H4Text
-        label="1차 채굴 플랜"
+        label={`${round}차 채굴 플랜`}
         style={{ textAlign: 'center', marginBottom: 10 }}
       />
       <BoxWithDivider
         contents={[
           {
             label: '기간',
-            value: '2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)',
+            value: '(모름)\n~ (모름) (KST)',
           },
-          { label: '1차 총 채굴량', value: '5,000,000 ELFI' },
-          { label: '1일 채굴량', value: '25,000 ELFI' },
-          { label: '누적 채굴량', value: '300,000 ELFI' },
-          { label: '잔여 채굴량', value: '4,700,000 ELFI' },
-          { label: 'ELFI 가격', value: '$ 5,000' },
+          {
+            label: `${round}차 총 채굴량`,
+            value: `500,000 ${rewardCryptoType}`,
+          },
+          { label: '1일 채굴량', value: `25,000 ${rewardCryptoType}` },
+          { label: '누적 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
+          { label: '잔여 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
+          {
+            label: `${rewardCryptoType} 가격`,
+            value: `$ ${getCryptoPrice(rewardCryptoType)}`,
+          },
         ]}
         boxStyle={{ width: 300 }}
         innerBoxStyle={{
