@@ -14,6 +14,8 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, pageAfterSelection, selectedRound, currentRound } =
     route.params;
   const navigation = useNavigation();
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -49,19 +51,19 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
                 style={{ color: AppColors.BLACK, lineHeight: 20 }}
               />
               <P1Text
-                label="ELFI 토큰도 같이 출금하기"
+                label={`${rewardCryptoType} 토큰도 같이 출금하기`}
                 style={{ fontFamily: AppFonts.Bold }}
               />
             </View>
             <CryptoImage
-              type={CryptoType.EL}
+              type={cryptoType}
               style={{
                 position: 'absolute',
                 right: 28,
                 zIndex: 2,
               }}
             />
-            <CryptoImage type={CryptoType.ELFI} />
+            <CryptoImage type={rewardCryptoType} />
           </View>
         </TouchableCardWithShadow>
         <TouchableCardWithShadow
@@ -91,15 +93,15 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
             }}>
             <View>
               <P4Text
-                label="ELFI 토큰은 나중에 수취하고"
+                label={`${rewardCryptoType} 토큰은 나중에 수취하고`}
                 style={{ color: AppColors.BLACK, lineHeight: 20 }}
               />
               <P1Text
-                label="EL 토큰만 전송하기"
+                label={`${cryptoType} 토큰만 전송하기`}
                 style={{ fontFamily: AppFonts.Bold }}
               />
             </View>
-            <CryptoImage type={CryptoType.EL} />
+            <CryptoImage type={cryptoType} />
           </View>
         </TouchableCardWithShadow>
       </View>
