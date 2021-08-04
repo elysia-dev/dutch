@@ -10,8 +10,12 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
-import { getElStakingPoolContract } from '../../utiles/getContract';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
 import UserContext from '../../contexts/UserContext';
+import CryptoType from '../../enums/CryptoType';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -24,7 +28,10 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     totalPrincipal: 0,
     lastUpdateTimestamp: 0,
   });
-  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
   let currentRound = 0;
   contract?.currentRound().then((res: any) => {
     currentRound = res;

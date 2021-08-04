@@ -12,7 +12,10 @@ import { H3Text, P1Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 import StakingInfoBox from './StakingInfoBox';
-import { getElStakingPoolContract } from '../../../utiles/getContract';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../../utiles/getContract';
 import WalletContext from '../../../contexts/WalletContext';
 
 const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
@@ -24,7 +27,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const elStakingPoolContract = getElStakingPoolContract();
-  const elfiStakingPoolContract = null; // 나중에 elfi 컨트랙트도 추가
+  const elfiStakingPoolContract = getElfiStakingPoolContract();
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
   );

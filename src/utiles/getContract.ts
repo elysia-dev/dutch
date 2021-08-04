@@ -85,4 +85,8 @@ export function getElStakingPoolContract(): Contract | null {
   return getContract(EL_STAKING_POOL_ADDRESS, StakingPoolAbi);
 }
 
+export function getElfiStakingPoolContract(): Contract | null {
+  return null; // not yet implemented
+}
+
 export default getContract;

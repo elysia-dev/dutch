@@ -7,7 +7,10 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from './components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
-import { getElStakingPoolContract } from '../../utiles/getContract';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
@@ -23,7 +26,10 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     totalPrincipal: 0,
     lastUpdateTimestamp: 0,
   });
-  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
   let currentRound = 0;
   contract?.currentRound().then((res: any) => {
     currentRound = res;

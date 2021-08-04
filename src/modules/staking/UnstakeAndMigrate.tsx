@@ -12,7 +12,10 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import { getElStakingPoolContract } from '../../utiles/getContract';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
@@ -24,7 +27,10 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const contract = getElStakingPoolContract(); // 나중에 elfi 분기 추가
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
   const { wallet } = useContext(WalletContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
