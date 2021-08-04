@@ -39,9 +39,9 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
-  let currentRound = 0;
+  const [currentRound, setCurrentRound] = useState(0);
   contract?.currentRound().then((res: any) => {
-    currentRound = res;
+    setCurrentRound(res);
   });
   const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
@@ -79,7 +79,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         lastUpdateTimestamp: res[5],
       });
     });
-  }, []);
+  }, [currentRound]);
 
   return (
     <View

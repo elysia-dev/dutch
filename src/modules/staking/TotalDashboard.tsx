@@ -31,13 +31,13 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
-  let currentRound = 0;
+  const [currentRound, setCurrentRound] = useState(0);
   contract?.currentRound().then((res: any) => {
-    currentRound = res;
+    setCurrentRound(res);
   });
 
   useEffect(() => {
-    contract?.getPoolData(currentRound).then((res: any) => {
+    contract?.getPoolData(selectedRound).then((res: any) => {
       setPoolData({
         rewardPerSecond: res[0],
         rewardIndex: res[1],
