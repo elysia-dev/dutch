@@ -14,6 +14,7 @@ import {
   BSC_RPC_ENDPOINT,
   EL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import AssetTokenBnbAbi from '../abi/AssetTokenBnb.json';
 import ERC20Abi from '../abi/ERC20Abi.json';
@@ -86,7 +87,7 @@ export function getElStakingPoolContract(): Contract | null {
 }
 
 export function getElfiStakingPoolContract(): Contract | null {
-  return null; // not yet implemented
+  return getContract(ELFI_STAKING_POOL_ADDRESS, StakingPoolAbi);
 }
 
 export default getContract;
