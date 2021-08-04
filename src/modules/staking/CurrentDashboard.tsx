@@ -16,6 +16,12 @@ import {
 } from '../../utiles/getContract';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
+import {
+  ROUND_DURATION,
+  TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
+  TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
+} from '../../constants/staking';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -38,6 +44,10 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   });
   const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
+  const totalAmountOfReward =
+    cryptoType === CryptoType.EL
+      ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
+      : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
 
   // let nextButtonTitle;
   // let nextButtonDisabled;
@@ -103,7 +113,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
                 value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
               },
               { label: '현재 진행 회차', value: `${currentRound}차` },
-              { label: '스테이킹 일수', value: '20일' },
+              { label: '스테이킹 일수', value: `${ROUND_DURATION}일` },
               { label: '예상 수익률 (APR)', value: `${'(모름)'}%` },
             ]}
             boxStyle={{ marginBottom: 60 }}
@@ -116,7 +126,12 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
           <BoxWithDivider
             contents={[
               { label: '현 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
-              { label: '총 채굴량', value: `3,000,000 ${rewardCryptoType}` },
+              {
+                label: '총 채굴량',
+                value: `${commaFormatter(
+                  totalAmountOfReward,
+                )} ${rewardCryptoType}`,
+              },
             ]}
             innerBoxStyle={{ paddingVertical: 16 }}
             boxStyle={{ marginBottom: 27 }}
