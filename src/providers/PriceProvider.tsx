@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 
 import CoingeckoClient from '../api/CoingeckoClient';
+import UniswapClient from '../api/UniswapClient';
 import { PRICE_DATA } from '../constants/storage';
 import PriceContext, {
   PriceState,
@@ -21,11 +22,15 @@ const PriceProvider: React.FC = (props) => {
 
     try {
       const priceRes = await CoingeckoClient.getElAndEthPrice();
+      const elfiPriceRes = await UniswapClient.getELFIPRice();
 
       priceData = {
         ethPrice: priceRes.data.ethereum.usd,
         elPrice: priceRes.data.elysia.usd,
         bnbPrice: priceRes.data.binancecoin.usd,
+        elfiPrice: parseFloat(
+          elfiPriceRes.data.data.token.tokenDayData[0].priceUSD,
+        ),
         daiPrice: priceRes.data.dai.usd,
         gasPrice: (await provider.getGasPrice()).toString(),
         bscGasPrice: (await bscProvider.getGasPrice()).toString(),
