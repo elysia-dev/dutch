@@ -12,6 +12,7 @@ import {
   getElfiStakingPoolContract,
 } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
+import calcAPR from '../../utiles/calculateAPR';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -76,7 +77,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   <StakingInfoCard
                     roundEnded={false}
                     label={`${selectedRound}차 스테이킹 APR`}
-                    value="(어떻게구하는거지)"
+                    value={calcAPR(cryptoType, selectedRound).toString()}
                     unit="%"
                   />
                   <StakingInfoCard

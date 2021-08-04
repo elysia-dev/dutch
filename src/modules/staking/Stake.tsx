@@ -14,6 +14,7 @@ import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import AssetContext from '../../contexts/AssetContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
+import calcAPR from '../../utiles/calculateAPR';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -46,7 +47,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          1차 스테이킹 APR
+          {`${selectedRound}차 스테이킹 APR`}
         </Text>
         <Text
           style={{
@@ -54,7 +55,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          (모름) %
+          {`${calcAPR(cryptoType, selectedRound).toString()} %`}
         </Text>
       </View>
       <View
