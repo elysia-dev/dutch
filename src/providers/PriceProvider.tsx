@@ -26,6 +26,7 @@ const PriceProvider: React.FC = (props) => {
         ethPrice: priceRes.data.ethereum.usd,
         elPrice: priceRes.data.elysia.usd,
         bnbPrice: priceRes.data.binancecoin.usd,
+        daiPrice: priceRes.data.dai.usd,
         gasPrice: (await provider.getGasPrice()).toString(),
         bscGasPrice: (await bscProvider.getGasPrice()).toString(),
         priceLoaded: true,
@@ -51,6 +52,8 @@ const PriceProvider: React.FC = (props) => {
       case CryptoType.ELA:
         // Fix ELA $5
         return 5;
+      case CryptoType.DAI:
+        return state.daiPrice;
       default:
         return 0;
     }
