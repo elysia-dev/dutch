@@ -281,9 +281,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         <P3Text
           label={
             transaction.status !== TxStatus.Pending ? (
-              moment(transaction.createdAt).format('YYYY-MM-DD') +
-              ' | ' +
-              moment(transaction.createdAt).format('HH:mm:ss')
+              moment(transaction.createdAt).format('YYYY-MM-DD | HH:mm:ss')
             ) : (
               <TouchableOpacity
                 onPress={() => setIsModalViasible((prev) => !prev)}>
