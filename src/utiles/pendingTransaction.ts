@@ -51,9 +51,10 @@ export const getPendingTx = (
     }
     return tx.cryptoType === assetType && tx.status === TxStatus.Pending;
   });
-  let isPendingTx = 0;
+  let isCurrentPendingTx = true;
   if (pendingTxs.length > 0) {
-    isPendingTx = resTx.findIndex((tx) => pendingTxs[0].txHash === tx.txHash);
+    isCurrentPendingTx =
+      resTx.findIndex((tx) => pendingTxs[0].txHash === tx.txHash) !== -1;
   }
-  return { isPendingTx, pendingTxs };
+  return { isCurrentPendingTx, pendingTxs };
 };
