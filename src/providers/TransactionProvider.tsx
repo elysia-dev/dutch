@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
-
 import { showMessage } from 'react-native-flash-message';
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
@@ -23,28 +22,29 @@ const TransactionProvider: React.FC = (props) => {
   const { t } = useTranslation();
 
   const addPendingTransaction = async (pendingTx: CryptoTransaction) => {
+    if (pendingTx.blockNumber) {
+      setState({
+        ...state,
+        transactions: [{ ...pendingTx, status: TxStatus.Success }],
+      });
+      return;
+    }
     await AsyncStorage.setItem(
       PENDING_TRANSACTIONS,
       JSON.stringify([
         { ...pendingTx, status: TxStatus.Pending },
-        ...state.transactions.filter((tx) => tx.status === TxStatus.Pending),
+        ...state.transactions,
       ]),
     );
-
     setState({
       ...state,
-      transactions: [
-        { ...pendingTx, status: TxStatus.Pending },
-        ...state.transactions,
-      ],
-      counter: state.counter + 1,
+      transactions: [{ ...pendingTx, status: TxStatus.Pending }],
     });
   };
 
   useEffect(() => {
-    async () => {
+    (async () => {
       let transactions = [];
-
       try {
         transactions = JSON.parse(
           (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
@@ -55,16 +55,17 @@ const TransactionProvider: React.FC = (props) => {
           transactions,
         });
       }
-    };
+    })();
   }, []);
 
   useEffect(() => {
     if (
       state.transactions.filter((tx) => tx.status === TxStatus.Pending)
         .length === 0
-    ) return;
+    )
+      return;
 
-    const timer = setTimeout(async () => {
+    let timer = setTimeout(async () => {
       const txResponses = await Promise.all(
         state.transactions
           .filter((tx) => tx.status === TxStatus.Pending)
