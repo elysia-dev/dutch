@@ -31,7 +31,7 @@ import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
-import { changeTxStatus, getPanadingTx } from '../../utiles/pendingTransaction';
+import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -101,12 +101,19 @@ const Detail: React.FC = () => {
     } finally {
       if (newTxs.length !== 0) {
         if (state.page === 1) {
-          const {isPendingTx, pendingTxs} = getPanadingTx(transactions, newTxs, '', asset.type);
+          const { isCurrentPendingTx, pendingTxs } = getPendingTx(
+            transactions,
+            newTxs,
+            '',
+            asset.type,
+          );
           setState({
             ...state,
             page: 2,
             lastPage: false,
-            transactions: isPendingTx !== -1 ? newTxs : pendingTxs.concat(newTxs),
+            transactions: isCurrentPendingTx
+              ? newTxs
+              : pendingTxs.concat(newTxs),
             loading: false,
           });
         } else {
@@ -127,17 +134,42 @@ const Detail: React.FC = () => {
       }
     }
   };
-
+  const addPendingTx = () => {
+    const pendingTxs = transactions.filter(
+      (tx) =>
+        tx.status === TxStatus.Pending ||
+        tx.cryptoType === CryptoType.ELA ||
+        tx.cryptoType === asset.type,
+    );
+    const notPendingTxs = state.transactions.filter(
+      (tx) => tx.status !== TxStatus.Pending,
+    );
+    if (pendingTxs.length > 0) {
+      pendingTxs.concat(notPendingTxs);
+      setState({
+        ...state,
+        transactions: pendingTxs.concat(notPendingTxs),
+      });
+      return;
+    }
+  };
   useEffect(() => {
     loadTxs();
   }, []);
-
   useEffect(() => {
+    addPendingTx();
+    const successTx = transactions.filter(
+      (tx) => tx.status === TxStatus.Success,
+    );
+    let resentTx = state.transactions.findIndex(
+      (tx) => tx.txHash === successTx[0]?.txHash,
+    );
+    state.transactions[resentTx] = successTx[0];
     setState({
       ...state,
-      transactions: changeTxStatus(asset, state, transactions),
+      transactions: [...state.transactions],
     });
-  },[transactions])
+  }, [transactions]);
 
   useEffect(() => {
     if (address) {
