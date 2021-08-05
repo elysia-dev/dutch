@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
+import { ethers, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../enums/CryptoType';
 import WalletContext from '../../contexts/WalletContext';
@@ -20,9 +20,17 @@ import PaymentSelection from './components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
-import { getAssetTokenFromCryptoType, getElysiaContract } from '../../utiles/getContract';
+import {
+  getAssetTokenFromCryptoType,
+  getElysiaContract,
+  provider,
+} from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
+import TransactionContext from '../../contexts/TransactionContext';
+import moment from 'moment';
+import { purchaseProduct } from '../../utiles/createTransction';
+import { Platform } from 'react-native';
 
 type ParamList = {
   Purchase: {
@@ -62,23 +70,23 @@ const Purchase: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const { getBalance } = useContext(AssetContext);
-
-  const fromMax = (toMax || 0) * 5 / getCryptoPrice(from.type);
+  const { addPendingTransaction } = useContext(TransactionContext);
+  const { waitTxResult, loadV2UserBalances } = useContext(AssetContext);
+  const fromMax = ((toMax || 0) * 5) / getCryptoPrice(from.type);
   const fromPrice = getCryptoPrice(from.type);
   const toPrice = getCryptoPrice(CryptoType.ELA);
   const fromBalance = getBalance(from.type);
-  const toBalance = fromBalance * fromPrice / toPrice;
+  const toBalance = (fromBalance * fromPrice) / toPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
-
     try {
       switch (from.type) {
         case CryptoType.ETH:
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
             from: address,
-            value: utils.parseEther('0.5'),
+            value: utils.parseEther('0.00001'), // 현재 가지고 있는 자산만큼 넣어주자
           });
           break;
         default:
@@ -89,7 +97,6 @@ const Purchase: FunctionComponent = () => {
             },
           );
       }
-
       if (estimateGas) {
         setState({
           ...state,
@@ -107,9 +114,10 @@ const Purchase: FunctionComponent = () => {
       });
     }
   };
-
   useEffect(() => {
-    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
 
     if (address) {
       estimateGas(address);
@@ -117,62 +125,52 @@ const Purchase: FunctionComponent = () => {
   }, []);
 
   const createTx = async () => {
-    let populatedTransaction: ethers.PopulatedTransaction | undefined;
-    let txRes: ethers.providers.TransactionResponse | undefined;
-    const valueInDollar = String(getCryptoPrice(from.type));
-
     try {
-      switch (from.type) {
-        case (CryptoType.ETH, CryptoType.BNB):
-          populatedTransaction = await contract?.populateTransaction.purchase();
-
-          if (!populatedTransaction) break;
-
-          txRes = await wallet?.getFirstSigner(from.type).sendTransaction({
-            to: populatedTransaction.to,
-            data: populatedTransaction.data,
-            value: utils.parseEther(values.from)
-              .mul(constants.WeiPerEther)
-              .div(utils.parseEther(valueInDollar)), // dollar to crypto
-          });
-
-          break;
-        default:
-          populatedTransaction = await contract?.populateTransaction.purchase(
-            utils.parseEther(values.from)
-              .mul(constants.WeiPerEther)
-              .div(utils.parseEther(valueInDollar))
-          );
-
-          if (!populatedTransaction) break;
-
-          txRes = await wallet?.getFirstSigner().sendTransaction({
-            to: populatedTransaction.to,
-            data: populatedTransaction.data,
-          });
-
-          break;
-      }
-
-      if (from.type === CryptoType.BNB) {
-        setState({
-          ...state,
-          txHash: txRes?.hash || '',
-        });
-      }
+      const txRes = await purchaseProduct(
+        gasPrice,
+        bscGasPrice,
+        from.type,
+        contract,
+        values.from,
+        wallet,
+        getCryptoPrice,
+      );
+      afterTxHashCreated(
+        wallet?.getFirstAddress() || '',
+        contractAddress,
+        txRes?.hash || '',
+        NetworkType.ETH,
+      );
+      waitTxResult(contractAddress, 2); // status는 enum-pending으로 변경
+      console.log(txRes);
+      addPendingTransaction({
+        txHash: txRes?.hash,
+        cryptoType: CryptoType.ELA,
+        value: values.to,
+        createdAt: '',
+        type: 'in',
+        blockNumber: 0,
+        productId: productId,
+        valueFrom: values.from,
+      });
+      navigation.goBack();
+      const successTx = await txRes?.wait();
+      const date = await provider.getBlock(successTx?.blockNumber || '');
+      waitTxResult('', 3);
+      loadV2UserBalances(true);
+      addPendingTransaction({
+        txHash: txRes?.hash,
+        cryptoType: CryptoType.ELA,
+        value: values.to,
+        createdAt: moment.unix(date.timestamp).toString(),
+        type: 'in',
+        blockNumber: successTx?.blockNumber,
+        productId: productId,
+      });
     } catch (e) {
+      console.log(e);
       afterTxFailed(e.message);
       navigation.goBack();
-    } finally {
-      if (from.type !== CryptoType.BNB && txRes) {
-        afterTxHashCreated(
-          wallet?.getFirstAddress() || '',
-          contractAddress,
-          txRes.hash || '',
-          NetworkType.ETH,
-        );
-        navigation.goBack();
-      }
     }
   };
 
@@ -188,49 +186,53 @@ const Purchase: FunctionComponent = () => {
         }
 
         if (isWalletUser) {
-          getElysiaContract()?.allowance(
-            wallet?.getFirstNode()?.address, contractAddress
-          ).then((res: BigNumber) => {
-            if (!res.isZero()) {
-              setState({
-                ...state,
-                isApproved: true,
-                step: TxStep.None,
-              });
-            } else {
-              setState({
-                ...state,
-                isApproved: false,
-                step: TxStep.None,
-              });
-            }
-          }).catch((e: any) => {
-            afterTxFailed(e.message);
-            navigation.goBack();
-          });
+          getElysiaContract()
+            ?.allowance(wallet?.getFirstNode()?.address, contractAddress)
+            .then((res: BigNumber) => {
+              if (!res.isZero()) {
+                setState({
+                  ...state,
+                  isApproved: true,
+                  step: TxStep.None,
+                });
+              } else {
+                setState({
+                  ...state,
+                  isApproved: false,
+                  step: TxStep.None,
+                });
+              }
+            })
+            .catch((e: any) => {
+              afterTxFailed(e.message);
+              navigation.goBack();
+            });
         } else {
-
         }
         break;
 
       case TxStep.Approving:
-        getElysiaContract()?.populateTransaction
-          .approve(contractAddress, '1' + '0'.repeat(30))
-          .then(populatedTransaction => {
-            wallet?.getFirstSigner().sendTransaction({
-              to: populatedTransaction.to,
-              data: populatedTransaction.data,
-            }).then((tx: any) => {
-              setState({
-                ...state,
-                isApproved: true,
-                txHash: tx,
-                step: TxStep.None,
+        getElysiaContract()
+          ?.populateTransaction.approve(contractAddress, '1' + '0'.repeat(30))
+          .then((populatedTransaction) => {
+            wallet
+              ?.getFirstSigner()
+              .sendTransaction({
+                to: populatedTransaction.to,
+                data: populatedTransaction.data,
+              })
+              .then((tx: any) => {
+                setState({
+                  ...state,
+                  isApproved: true,
+                  txHash: tx,
+                  step: TxStep.None,
+                });
+              })
+              .catch((e) => {
+                afterTxFailed(e.message);
+                navigation.goBack();
               });
-            }).catch((e) => {
-              afterTxFailed(e.message);
-              navigation.goBack();
-            });
           });
         break;
       case TxStep.Creating:
@@ -306,13 +308,14 @@ const Purchase: FunctionComponent = () => {
               productId,
               parseFloat(values.to),
               'buying',
-            ).then((res) => {
-              setState({
-                ...state,
-                stage: 1,
-                espressoTxId: res.data.id,
-              });
-            })
+            )
+              .then((res) => {
+                setState({
+                  ...state,
+                  stage: 1,
+                  espressoTxId: res.data.id,
+                });
+              })
               .catch((e) => {
                 if (e.response.status === 400) {
                   alert(t('product.transaction_error'));
