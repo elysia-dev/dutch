@@ -22,7 +22,9 @@ type AssetTxData = {
 };
 
 type StakingTxData = {
-  type: 'stake' | 'unstake' | 'unstakeAndMigrate' | 'reward'; // migrate는 어떻게 할지..??
+  type: 'stake' | 'unstake' | 'reward';
+  rewardValue?: number;
+  migrationValue?: number;
 };
 
 const PaymentSelection: React.FC<{
@@ -62,8 +64,8 @@ const PaymentSelection: React.FC<{
   } else {
     // if page is 'staking'
     // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
-    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`;
-    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&contractAddress=${contractAddress}&ethAddresses=${user.ethAddresses}&language=${user.language}`;
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&contractAddress=${contractAddress}&ethAddresses=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
   }
 
   useEffect(() => {

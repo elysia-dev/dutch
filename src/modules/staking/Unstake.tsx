@@ -183,6 +183,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
       page="staking"
       stakingTxData={{
         type: 'unstake',
+        rewardValue: earnReward && reward,
       }}
       contractAddress={contract?.address}
     />
