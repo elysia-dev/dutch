@@ -32,7 +32,14 @@ const PaymentSelection: React.FC<{
   assetTxData?: AssetTxData;
   stakingTxData?: StakingTxData;
   espressoTxId?: string;
-}> = ({ value, contractAddress, assetTxData, stakingTxData, espressoTxId }) => {
+}> = ({
+  value,
+  page,
+  contractAddress,
+  assetTxData,
+  stakingTxData,
+  espressoTxId,
+}) => {
   useEffect(() => {}, []);
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -47,6 +54,18 @@ const PaymentSelection: React.FC<{
   const appState = useAppState();
   const insets = useSafeAreaInsets();
 
+  let imtokenURL: string;
+  let metamaskURL: string;
+  if (page === 'asset') {
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`;
+  } else {
+    // if page is 'staking'
+    // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&contractAddress=${contractAddress}&ethAddresses=${user.ethAddresses}&language=${user.language}`;
+  }
+
   useEffect(() => {
     if (appState === 'active' && espressoTxId) {
       Server.getTransactionRequest(espressoTxId).catch(async () => {
@@ -59,17 +78,13 @@ const PaymentSelection: React.FC<{
   const linkDapp = () => {
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
-        Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
-        ).catch((_e) => {
+        Linking.openURL(imtokenURL).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
         navigation.goBack();
         break;
       case WalletType.METAMASK_MOBILE:
-        Linking.openURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
-        ).catch((_e) => {
+        Linking.openURL(metamaskURL).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });
         navigation.goBack();
@@ -148,14 +163,16 @@ const PaymentSelection: React.FC<{
               setState({ ...state, wallet: WalletType.METAMASK_MOBILE })
             }
           />
-          <WalletSelectionButton
-            title={t('product.metamask_pc')}
-            type={WalletType.METAMASK_PC}
-            selected={wallet === WalletType.METAMASK_PC}
-            modeHandler={() =>
-              setState({ ...state, wallet: WalletType.METAMASK_PC })
-            }
-          />
+          {page === 'asset' && (
+            <WalletSelectionButton
+              title={t('product.metamask_pc')}
+              type={WalletType.METAMASK_PC}
+              selected={wallet === WalletType.METAMASK_PC}
+              modeHandler={() =>
+                setState({ ...state, wallet: WalletType.METAMASK_PC })
+              }
+            />
+          )}
           {wallet === WalletType.METAMASK_PC && (
             <>
               {user.provider === ProviderType.ETH && (
