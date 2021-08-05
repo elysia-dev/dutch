@@ -18,6 +18,7 @@ import { useContext } from 'react';
 import PriceContext from '../../../contexts/PriceContext';
 import AppColors from '../../../enums/AppColors';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface AccelerateItem {
   isModalViasible: boolean;
@@ -51,6 +52,11 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const [isAssetDisabled, setIsAssetDisabled] = useState(false);
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+  const isCryptoBnb =
+    paymentMethod === 'NONE'
+      ? txCryptoType === CryptoType.BNB
+      : paymentMethod === CryptoType.BNB;
 
   return (
     <Modal transparent={true} visible={isModalViasible} animationType="slide">
@@ -86,14 +92,14 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               }}
             />
           </TouchableOpacity>
-          <H3Text label={'가속화'} />
+          <H3Text label={t('assets.accelerate')} />
         </View>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <H4Text label={'GAS 가격 (Gwei)'} />
+          <H4Text label={t('assets.accelerate_gas_price')} />
           <Image style={{ width: 18, height: 18 }} source={HelpQuestionImg} />
         </View>
         <View
@@ -201,7 +207,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
                 color: AppColors.ERROR_RED,
               }}
               onLayout={() => setIsAssetDisabled(true)}>
-              자금이 부족합니다.
+              {t('assets.accelerate_insufficient')}
             </Text>
           ) : (
             <Text
@@ -213,7 +219,9 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               onTextLayout={() => {
                 if (
                   Number(updateGasPrice) <
-                  Number(utils.formatUnits(gasPrice || bscGasPrice, 9))
+                  Number(
+                    utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9),
+                  )
                 ) {
                   setIsDisabled(true);
                   return;
@@ -221,11 +229,8 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
                 setIsDisabled(false);
                 setIsAssetDisabled(false);
               }}>
-              가속화 수수료 : {gasFee}{' '}
-              {paymentMethod === CryptoType.BNB ||
-              txCryptoType === CryptoType.BNB
-                ? CryptoType.BNB
-                : CryptoType.ETH}
+              {t('assets.accelerate_gas_fee')} : {gasFee}{' '}
+              {isCryptoBnb ? CryptoType.BNB : CryptoType.ETH}
             </Text>
           )}
           <Text
@@ -234,12 +239,9 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               fontWeight: '500',
             }}>
             {parseFloat(
-              utils.formatUnits(
-                paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
-                9,
-              ),
+              utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9),
             )}{' '}
-            Gwei이상을 입력해주세요.
+            {t('assets.accelerate_gas_fee_guide')}
           </Text>
         </View>
         <View
@@ -252,9 +254,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
           }}
         />
         <Text style={{ fontSize: 12, lineHeight: 20 }}>
-          * 현재 설정하신 가스 가격이 낮아 요청하신 거래가 지연되고 있습니다.
-          {'\n'}
-          &nbsp;&nbsp; 거래를 빠르게 진행하기 위해 가스 가격을 조정해주세요.
+          {t('assets.transaction_delay_guide')}
         </Text>
         <TouchableOpacity
           style={{
@@ -278,7 +278,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               color: AppColors.WHITE,
               textAlign: 'center',
             }}>
-            저장
+            {t('assets.accelerate_send')}
           </Text>
         </TouchableOpacity>
       </View>
