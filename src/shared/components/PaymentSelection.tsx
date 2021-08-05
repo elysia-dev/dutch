@@ -1,12 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useState } from 'react';
+import { View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { DAPP_URL } from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
@@ -20,68 +14,7 @@ import { TextField } from './TextField';
 import UserContext from '../../contexts/UserContext';
 import SheetHeader from './SheetHeader';
 import AppColors from '../../enums/AppColors';
-
-type ButtonProps = {
-  title: string;
-  selected: boolean;
-  modeHandler: () => void;
-  type: string;
-};
-
-const buttonImage = (type: string, selected: boolean) => {
-  switch (type) {
-    case WalletType.METAMASK_MOBILE:
-      return selected
-        ? require('../assets/images/selected_mobile.png')
-        : require('../assets/images/mobile.png');
-    case WalletType.METAMASK_PC:
-      return selected
-        ? require('../assets/images/selected_desktop.png')
-        : require('../assets/images/desktop.png');
-    case WalletType.IMTOKEN_MOBILE:
-      return selected
-        ? require('../assets/images/selected_imtoken.png')
-        : require('../assets/images/imtoken.png');
-    default:
-  }
-};
-
-const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
-  return (
-    <TouchableOpacity
-      onPress={props.modeHandler}
-      style={{
-        width: '100%',
-        height: 50,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
-        padding: 15,
-        flexDirection: 'row',
-        marginBottom: 15,
-      }}>
-      <Image
-        style={{ alignSelf: 'center' }}
-        source={buttonImage(props.type, props.selected)}></Image>
-      <Text
-        style={{
-          flex: 5,
-          fontSize: 14,
-          paddingLeft: 10,
-          fontWeight: props.selected ? 'bold' : 'normal',
-          color: AppColors.BLACK,
-          alignSelf: 'center',
-        }}>
-        {props.title}
-      </Text>
-      {props.selected && (
-        <Image
-          style={{ alignSelf: 'center' }}
-          source={require('../assets/images/bluebuttoncheck.png')}></Image>
-      )}
-    </TouchableOpacity>
-  );
-};
+import WalletSelectionButton from './WalletSelectionButton';
 
 const PaymentSelection: React.FC<{
   espressoTxId: string;
@@ -197,7 +130,7 @@ const PaymentSelection: React.FC<{
           backgroundColor: AppColors.WHITE,
         }}>
         <View style={{ marginTop: 40 }}>
-          <MetaMaskButton
+          <WalletSelectionButton
             title={t('product.metamask_mobile')}
             type={WalletType.METAMASK_MOBILE}
             selected={wallet === WalletType.METAMASK_MOBILE}
@@ -205,7 +138,7 @@ const PaymentSelection: React.FC<{
               setState({ ...state, wallet: WalletType.METAMASK_MOBILE })
             }
           />
-          <MetaMaskButton
+          <WalletSelectionButton
             title={t('product.metamask_pc')}
             type={WalletType.METAMASK_PC}
             selected={wallet === WalletType.METAMASK_PC}
@@ -227,7 +160,7 @@ const PaymentSelection: React.FC<{
               )}
             </>
           )}
-          <MetaMaskButton
+          <WalletSelectionButton
             title={t('product.imtoken_mobile')}
             type={WalletType.IMTOKEN_MOBILE}
             selected={wallet === WalletType.IMTOKEN_MOBILE}
