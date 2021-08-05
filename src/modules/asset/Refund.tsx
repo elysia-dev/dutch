@@ -230,9 +230,12 @@ const Refund: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.inToken)}
-      productId={productId}
-      type={'refund'}
+      value={parseFloat(values.inToken)}
+      page="asset"
+      assetTxData={{
+        productId,
+        type: 'refund',
+      }}
       contractAddress={contractAddress}
       espressoTxId={state.espressoTxId}
     />

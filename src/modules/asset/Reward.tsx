@@ -254,9 +254,12 @@ const Reward: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat((interest / getCryptoPrice(toCrypto)).toFixed(4))}
-      productId={productId}
-      type={'interest'}
+      value={parseFloat((interest / getCryptoPrice(toCrypto)).toFixed(4))}
+      page="asset"
+      assetTxData={{
+        productId,
+        type: 'interest',
+      }}
       contractAddress={contractAddress}
       espressoTxId={state.espressoTxId}
     />

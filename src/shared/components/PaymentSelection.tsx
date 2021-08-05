@@ -16,13 +16,23 @@ import SheetHeader from './SheetHeader';
 import AppColors from '../../enums/AppColors';
 import WalletSelectionButton from './WalletSelectionButton';
 
-const PaymentSelection: React.FC<{
-  espressoTxId: string;
-  valueTo: number;
+type AssetTxData = {
   productId: number;
-  type: string;
+  type: 'buying' | 'refund' | 'interest';
+};
+
+type StakingTxData = {
+  type: 'stake' | 'unstake' | 'reward'; // migrate는 어떻게 할지..??
+};
+
+const PaymentSelection: React.FC<{
+  value: number;
+  page: 'asset' | 'staking'; // 좋은 이름인지는 모르겠다,,,
   contractAddress: string;
-}> = ({ espressoTxId, valueTo, productId, type, contractAddress }) => {
+  assetTxData?: AssetTxData;
+  stakingTxData?: StakingTxData;
+  espressoTxId?: string;
+}> = ({ value, contractAddress, assetTxData, stakingTxData, espressoTxId }) => {
   useEffect(() => {}, []);
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -50,7 +60,7 @@ const PaymentSelection: React.FC<{
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
         Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
         ).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
@@ -58,7 +68,7 @@ const PaymentSelection: React.FC<{
         break;
       case WalletType.METAMASK_MOBILE:
         Linking.openURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${productId}&value=${valueTo}&type=${type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
+          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
         ).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });

@@ -357,9 +357,12 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.inToken)}
-      productId={productId}
-      type={'buying'}
+      value={parseFloat(values.inToken)}
+      page="asset"
+      assetTxData={{
+        productId,
+        type: 'buying',
+      }}
       contractAddress={contractAddress}
       espressoTxId={state.espressoTxId}
     />
