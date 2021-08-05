@@ -108,7 +108,7 @@ const Detail: FunctionComponent = () => {
           asset.address,
           state.page,
         );
-        const { isPendingTx, pendingTxs } = getPendingTx(
+        const { isCurrentPendingTx, pendingTxs } = getPendingTx(
           transactions,
           resState.transactions,
           resState.productId,
@@ -118,10 +118,9 @@ const Detail: FunctionComponent = () => {
           totalSupply: resState.totalSupply,
           presentSupply: resState.presentSupply,
           reward: resState.reward,
-          transactions:
-            isPendingTx !== -1
-              ? resState.transactions
-              : pendingTxs.concat(resState.transactions),
+          transactions: isCurrentPendingTx
+            ? resState.transactions
+            : pendingTxs.concat(resState.transactions),
           contractAddress: resState.contractAddress,
           paymentMethod: resState.paymentMethod,
           images: resState.images,
