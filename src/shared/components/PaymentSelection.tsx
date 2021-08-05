@@ -84,12 +84,12 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
 };
 
 const PaymentSelection: React.FC<{
-  espressTxId: string;
+  espressoTxId: string;
   valueTo: number;
   productId: number;
   type: string;
   contractAddress: string;
-}> = ({ espressTxId, valueTo, productId, type, contractAddress }) => {
+}> = ({ espressoTxId, valueTo, productId, type, contractAddress }) => {
   useEffect(() => {}, []);
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -105,8 +105,8 @@ const PaymentSelection: React.FC<{
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    if (appState === 'active' && espressTxId) {
-      Server.getTransactionRequest(espressTxId).catch(async () => {
+    if (appState === 'active' && espressoTxId) {
+      Server.getTransactionRequest(espressoTxId).catch(async () => {
         await refreshUser();
         navigation.goBack();
       });
@@ -139,7 +139,7 @@ const PaymentSelection: React.FC<{
           if (!email) {
             return alert(t('account.check_email'));
           } else {
-            Server.sendEmailForTransaction(espressTxId, email)
+            Server.sendEmailForTransaction(espressoTxId, email)
               .then((_res) => {
                 setState({ ...state, emailRestriction: true });
                 alert(t('product.send_purchase_link'));
@@ -158,7 +158,7 @@ const PaymentSelection: React.FC<{
               });
           }
         } else {
-          Server.sendEmailForTransaction(espressTxId)
+          Server.sendEmailForTransaction(espressoTxId)
             .then((_res) => {
               setState({ ...state, emailRestriction: true });
               alert(t('product.send_purchase_link'));

@@ -234,7 +234,7 @@ const Refund: FunctionComponent = () => {
       productId={productId}
       type={'refund'}
       contractAddress={contractAddress}
-      espressTxId={state.espressoTxId}
+      espressoTxId={state.espressoTxId}
     />
   );
 };

@@ -258,7 +258,7 @@ const Reward: FunctionComponent = () => {
       productId={productId}
       type={'interest'}
       contractAddress={contractAddress}
-      espressTxId={state.espressoTxId}
+      espressoTxId={state.espressoTxId}
     />
   );
 };

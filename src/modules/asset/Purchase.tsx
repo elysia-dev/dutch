@@ -361,7 +361,7 @@ const Purchase: FunctionComponent = () => {
       productId={productId}
       type={'buying'}
       contractAddress={contractAddress}
-      espressTxId={state.espressoTxId}
+      espressoTxId={state.espressoTxId}
     />
   );
 };
