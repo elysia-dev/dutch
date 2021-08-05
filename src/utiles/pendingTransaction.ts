@@ -39,7 +39,7 @@ export const changeTxStatus = (
   return [...state.transactions];
 };
 
-export const getPanadingTx = (
+export const getPendingTx = (
   transactions: CryptoTransaction[],
   resTx: CryptoTransaction[],
   resProductId: number | '',
