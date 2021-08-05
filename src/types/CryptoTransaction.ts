@@ -16,6 +16,9 @@ type CryptoTransaction = {
   blockNumber: number | undefined;
   status?: TxStatus;
   cryptoType?: CryptoType;
+  productId ?: number;
+  valueFrom ?: string;
+  toAddress ?: string;
 };
 
 export default CryptoTransaction;
