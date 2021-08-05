@@ -11,15 +11,15 @@ import * as Linking from 'expo-linking';
 import { DAPP_URL } from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SubmitButton } from '../../../shared/components/SubmitButton';
-import useAppState from '../../../hooks/useAppState';
-import WalletType from '../../../enums/WalletType';
-import storeDeeplink from '../../../utiles/storeDeeplink';
-import ProviderType from '../../../enums/ProviderType';
-import { TextField } from '../../../shared/components/TextField';
-import UserContext from '../../../contexts/UserContext';
-import SheetHeader from '../../../shared/components/SheetHeader';
-import AppColors from '../../../enums/AppColors';
+import { SubmitButton } from './SubmitButton';
+import useAppState from '../../hooks/useAppState';
+import WalletType from '../../enums/WalletType';
+import storeDeeplink from '../../utiles/storeDeeplink';
+import ProviderType from '../../enums/ProviderType';
+import { TextField } from './TextField';
+import UserContext from '../../contexts/UserContext';
+import SheetHeader from './SheetHeader';
+import AppColors from '../../enums/AppColors';
 
 type ButtonProps = {
   title: string;
@@ -32,16 +32,16 @@ const buttonImage = (type: string, selected: boolean) => {
   switch (type) {
     case WalletType.METAMASK_MOBILE:
       return selected
-        ? require('../images/selected_mobile.png')
-        : require('../images/mobile.png');
+        ? require('../assets/images/selected_mobile.png')
+        : require('../assets/images/mobile.png');
     case WalletType.METAMASK_PC:
       return selected
-        ? require('../images/selected_desktop.png')
-        : require('../images/desktop.png');
+        ? require('../assets/images/selected_desktop.png')
+        : require('../assets/images/desktop.png');
     case WalletType.IMTOKEN_MOBILE:
       return selected
-        ? require('../images/selected_imtoken.png')
-        : require('../images/imtoken.png');
+        ? require('../assets/images/selected_imtoken.png')
+        : require('../assets/images/imtoken.png');
     default:
   }
 };
@@ -77,7 +77,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
       {props.selected && (
         <Image
           style={{ alignSelf: 'center' }}
-          source={require('../images/bluebuttoncheck.png')}></Image>
+          source={require('../assets/images/bluebuttoncheck.png')}></Image>
       )}
     </TouchableOpacity>
   );

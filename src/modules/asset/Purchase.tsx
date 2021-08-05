@@ -16,7 +16,7 @@ import TxStatus from '../../enums/TxStatus';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
-import PaymentSelection from './components/PaymentSelection';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';

@@ -17,7 +17,7 @@ import useTxHandler from '../../hooks/useTxHandler';
 import CryptoInput from './components/CryptoInput';
 import NextButton from '../../shared/components/NextButton';
 import OverlayLoading from '../../shared/components/OverlayLoading';
-import PaymentSelection from './components/PaymentSelection';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import SheetHeader from '../../shared/components/SheetHeader';
