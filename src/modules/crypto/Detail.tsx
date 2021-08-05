@@ -31,6 +31,7 @@ import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
+import { changeTxStatus, getPanadingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -48,7 +49,7 @@ const Detail: React.FC = () => {
   const [filterDay, setFilterDay] = useState<number>(7);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const { transactions, counter } = useContext(TransactionContext);
+  const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
   const [graphData, setGraphData] = useState<ChartDataPoint[] | undefined>([]);
   const [state, setState] = useState<{
@@ -100,21 +101,12 @@ const Detail: React.FC = () => {
     } finally {
       if (newTxs.length !== 0) {
         if (state.page === 1) {
-          const pendingTxs = transactions.filter(
-            (tx) =>
-              tx.cryptoType === asset.type && tx.status === TxStatus.Pending,
-          );
-
+          const {isPendingTx, pendingTxs} = getPanadingTx(transactions, newTxs, '', asset.type);
           setState({
             ...state,
             page: 2,
             lastPage: false,
-            transactions: pendingTxs.concat(
-              newTxs.filter(
-                (tx) =>
-                  tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash),
-              ),
-            ),
+            transactions: isPendingTx !== -1 ? newTxs : pendingTxs.concat(newTxs),
             loading: false,
           });
         } else {
@@ -139,6 +131,13 @@ const Detail: React.FC = () => {
   useEffect(() => {
     loadTxs();
   }, []);
+
+  useEffect(() => {
+    setState({
+      ...state,
+      transactions: changeTxStatus(asset, state, transactions),
+    });
+  },[transactions])
 
   useEffect(() => {
     if (address) {
@@ -174,21 +173,6 @@ const Detail: React.FC = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const assetTxs = transactions.filter((tx) => tx.cryptoType === asset.type);
-
-    if (assetTxs) {
-      setState({
-        ...state,
-        transactions: assetTxs.concat(
-          state.transactions.filter(
-            (tx) => tx.txHash && !assetTxs.find((t) => t.txHash === tx.txHash),
-          ),
-        ),
-      });
-    }
-  }, [counter]);
 
   return (
     <>
