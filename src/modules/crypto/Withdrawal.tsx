@@ -27,12 +27,13 @@ import AssetContext from '../../contexts/AssetContext';
 import commaFormatter from '../../utiles/commaFormatter';
 import NumberPad from '../../shared/components/NumberPad';
 import CryptoType from '../../enums/CryptoType';
-import { getElysiaContract } from '../../utiles/getContract';
+import { getElysiaContract, provider } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
+import { sendCryptoAsset } from '../../utiles/createTransction';
 
 type ParamList = {
   Withdrawal: {
@@ -46,10 +47,10 @@ type ParamList = {
 const Withdrawal: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Withdrawal'>>();
   const { asset } = route.params;
+  const { addPendingTransaction } = useContext(TransactionContext);
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
-  const { addPendingTransaction } = useContext(TransactionContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -99,47 +100,40 @@ const Withdrawal: React.FC = () => {
 
   const sendTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
-    setLoading(true);
 
     try {
-      if (asset.type === CryptoType.EL) {
-        const elContract = getElysiaContract();
-        const populatedTransaction =
-          await elContract?.populateTransaction.transfer(
-            state.address,
-            utils.parseEther(value),
-          );
-
-        if (!populatedTransaction) return;
-
-        txRes = await wallet?.getFirstSigner().sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        });
-      } else {
-        txRes = await wallet?.getFirstSigner(asset.type).sendTransaction({
-          to: state.address,
-          value: utils.parseEther(value).toHexString(),
-        });
-      }
+      txRes = await sendCryptoAsset(
+        gasPrice,
+        bscGasPrice,
+        asset.type,
+        state.address,
+        value,
+        wallet,
+      );
+      addPendingTransaction({
+        txHash: txRes?.hash,
+        cryptoType: asset.type,
+        value,
+        createdAt: '',
+        type: 'out',
+        blockNumber: 0,
+        toAddress: state.address,
+      });
+      navigation.goBack();
+      const re = await txRes?.wait();
+      const date = await provider.getBlock(re?.blockNumber || '');
+      addPendingTransaction({
+        txHash: txRes?.hash,
+        cryptoType: asset.type,
+        value,
+        createdAt: moment.unix(date.timestamp).toString(),
+        type: 'out',
+        blockNumber: re?.blockNumber,
+      });
     } catch (e) {
       alert(e);
-    } finally {
-      if (txRes) {
-        await addPendingTransaction({
-          txHash: txRes.hash,
-          cryptoType: asset.type,
-          value,
-          createdAt: moment().toString(),
-          type: 'out',
-          blockNumber: Number(txRes.blockNumber),
-        });
-      }
-      setLoading(false);
-      navigation.goBack();
     }
   };
-
   const openBarcodeScanner = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
 
@@ -324,7 +318,6 @@ const Withdrawal: React.FC = () => {
 
               if (parseFloat(next) >= getBalance(asset.type)) {
                 // Maximum!
-
               } else {
                 setValue(next);
               }
