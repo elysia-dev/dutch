@@ -1,5 +1,5 @@
 enum Accelerate {
-    Accelerate= "accelerate"
-  }
-  
-  export default Accelerate
+  Accelerate = 'accelerate',
+}
+
+export default Accelerate;
