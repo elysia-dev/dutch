@@ -141,8 +141,6 @@ const Purchase: FunctionComponent = () => {
         txRes?.hash || '',
         NetworkType.ETH,
       );
-      waitTxResult(contractAddress, 2); // status는 enum-pending으로 변경
-      console.log(txRes);
       addPendingTransaction({
         txHash: txRes?.hash,
         cryptoType: CryptoType.ELA,
@@ -153,11 +151,10 @@ const Purchase: FunctionComponent = () => {
         productId: productId,
         valueFrom: values.from,
       });
+      loadV2UserBalances(true);
       navigation.goBack();
       const successTx = await txRes?.wait();
       const date = await provider.getBlock(successTx?.blockNumber || '');
-      waitTxResult('', 3);
-      loadV2UserBalances(true);
       addPendingTransaction({
         txHash: txRes?.hash,
         cryptoType: CryptoType.ELA,
