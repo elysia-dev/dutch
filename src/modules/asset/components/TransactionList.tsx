@@ -58,6 +58,7 @@ const TransactionList: React.FC<ITransactionList> = ({
               transaction={item}
               unit={unit}
               networkType={networkType}
+              paymentMethod={'NONE'}
             />
           );
         }}
