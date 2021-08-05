@@ -19,12 +19,14 @@ import {
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectionVisible, setSelectionVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const contract =
@@ -104,110 +106,125 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     ];
   }
 
-  return (
-    <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`${cryptoType} 언스테이킹`} />
-      <View
-        style={{
-          // marginTop: Platform.OS === 'android' ? 20 : 10,
-          paddingHorizontal: 20,
-          flex: 1,
-        }}>
-        <LargeTextInput
-          placeholder="몇 개를 언스테이킹할까요?"
-          value={value}
-          unit={cryptoType}
-          style={{ marginTop: 0 }}
-        />
-        <Text
+  if (!selectionVisible) {
+    return (
+      <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
+        <SheetHeader title={`${cryptoType} 언스테이킹`} />
+        <View
           style={{
-            fontFamily: AppFonts.Bold,
-            fontSize: 30,
-            color: '#646464',
-            textAlign: 'center',
-            marginVertical: 10,
+            // marginTop: Platform.OS === 'android' ? 20 : 10,
+            paddingHorizontal: 20,
+            flex: 1,
           }}>
-          ↕
-        </Text>
-        <LargeTextInput
-          placeholder="몇 개를 마이그레이션할까요?"
-          value={principal - parseFloat(value)}
-          unit={cryptoType}
-          style={{ marginTop: 0 }}
-        />
-        <InputInfoBox
-          list={[
-            `입력 가능 수량: ${decimalFormatter(principal, 6)} ${cryptoType}`,
-            `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
-            `예상 가스비: ${'(모름)'}`,
-          ]}
-        />
-        <NumberPadShortcut
-          values={[0.01, 1, 10, 100, 1000]}
-          inputValue={value}
-          setValue={setValue}
-        />
-        <NumberPad
-          addValue={(text) => {
-            const includesComma = value.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && value.length >= 12) ||
-              (includesComma && value.split('.')[1].length >= 6) ||
-              (value.split('').reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
-              return;
-            }
+          <LargeTextInput
+            placeholder="몇 개를 언스테이킹할까요?"
+            value={value}
+            unit={cryptoType}
+            style={{ marginTop: 0 }}
+          />
+          <Text
+            style={{
+              fontFamily: AppFonts.Bold,
+              fontSize: 30,
+              color: '#646464',
+              textAlign: 'center',
+              marginVertical: 10,
+            }}>
+            ↕
+          </Text>
+          <LargeTextInput
+            placeholder="몇 개를 마이그레이션할까요?"
+            value={principal - parseFloat(value)}
+            unit={cryptoType}
+            style={{ marginTop: 0 }}
+          />
+          <InputInfoBox
+            list={[
+              `입력 가능 수량: ${decimalFormatter(principal, 6)} ${cryptoType}`,
+              `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
+              `예상 가스비: ${'(모름)'}`,
+            ]}
+          />
+          <NumberPadShortcut
+            values={[0.01, 1, 10, 100, 1000]}
+            inputValue={value}
+            setValue={setValue}
+          />
+          <NumberPad
+            addValue={(text) => {
+              const includesComma = value.includes('.');
+              if (
+                (text === '.' && includesComma) ||
+                (text !== '.' && !includesComma && value.length >= 12) ||
+                (includesComma && value.split('.')[1].length >= 6) ||
+                (value
+                  .split('')
+                  .reduce((res, cur) => res && cur === '0', true) &&
+                  text === '0')
+              ) {
+                return;
+              }
 
-            const next =
-              text === '.' && !value
-                ? '0.'
-                : text !== '0' && value === '0'
-                ? text
-                : value + text;
+              const next =
+                text === '.' && !value
+                  ? '0.'
+                  : text !== '0' && value === '0'
+                  ? text
+                  : value + text;
 
-            setValue(next);
-          }}
-          removeValue={() => setValue(value.slice(0, -1))}
+              setValue(next);
+            }}
+            removeValue={() => setValue(value.slice(0, -1))}
+          />
+        </View>
+        <View
+          style={{
+            marginBottom: insets.bottom || 10,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+          }}>
+          <NextButton
+            title="입력 완료"
+            disabled={!value}
+            handler={() => {
+              if (isWalletUser) {
+                setModalVisible(true);
+              } else {
+                setSelectionVisible(true);
+              }
+            }}
+          />
+        </View>
+        <ConfirmationModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title={`${cryptoType} 언스테이킹`}
+          subtitle="최종 확인을 해 주세요!"
+          list={confirmationList}
+          isApproved={true}
+          submitButtonText={`${selectedRound}차 언스테이킹`}
+          handler={() => console.log('내부 지갑 계정 트랜잭션')}
         />
+        {/* <OverlayLoading
+          visible={[
+            TxStep.Approving,
+            Platform.OS === 'android' && TxStep.CheckAllowance,
+            TxStep.Creating,
+          ].includes(step)}
+        /> */}
       </View>
-      <View
-        style={{
-          marginBottom: insets.bottom || 10,
-          paddingLeft: '5%',
-          paddingRight: '5%',
-        }}>
-        <NextButton
-          title="입력 완료"
-          disabled={!value}
-          handler={() => {
-            if (isWalletUser) {
-              setModalVisible(true);
-            } else {
-              console.log('언스테이킹 해야 함');
-            }
-          }}
-        />
-      </View>
-      <ConfirmationModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={`${cryptoType} 언스테이킹`}
-        subtitle="최종 확인을 해 주세요!"
-        list={confirmationList}
-        isApproved={true}
-        submitButtonText={`${selectedRound}차 언스테이킹`}
-        handler={() => console.log('언스테이킹 해야 함')}
-      />
-      {/* <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
-      /> */}
-    </View>
+    );
+  }
+
+  return (
+    <PaymentSelection
+      value={parseFloat(value)}
+      page="staking"
+      stakingTxData={{
+        type: 'unstakeAndMigrate',
+      }}
+      contractAddress={contract?.address}
+    />
   );
 };
 

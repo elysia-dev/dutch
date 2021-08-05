@@ -22,7 +22,7 @@ type AssetTxData = {
 };
 
 type StakingTxData = {
-  type: 'stake' | 'unstake' | 'reward'; // migrate는 어떻게 할지..??
+  type: 'stake' | 'unstake' | 'unstakeAndMigrate' | 'reward'; // migrate는 어떻게 할지..??
 };
 
 const PaymentSelection: React.FC<{
