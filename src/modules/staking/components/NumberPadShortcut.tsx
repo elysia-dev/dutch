@@ -6,20 +6,14 @@ import AppColors from '../../../enums/AppColors';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
-  // current: string;
   values: number[];
   inputValue: string;
-  // setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
-  // ELAPrice: number;
   setValue: Dispatch<SetStateAction<string>>;
 }
 
 const NumberPadShortcut: React.FC<Props> = ({
-  // current,
   values,
   inputValue,
-  // setValues,
-  // ELAPrice,
   setValue,
 }) => {
   const buttons = values.map((value) => {
@@ -43,7 +37,6 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontSize: 12,
             fontFamily: AppFonts.Medium,
           }}>
-          {/* {`${current === 'token' ? '+' : '$'}${commaFormatter(value)}`} */}
           {`+${commaFormatter(value)}`}
         </Text>
       </TouchableOpacity>
@@ -51,20 +44,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   });
 
   function addValue(value: number) {
-    // const newInputValue = parseFloat(inputValue || '0') + value;
     const newValue = parseFloat(inputValue || '0') + value;
-
-    // if (current === 'fiat') {
-    //   setValues({
-    //     inFiat: decimalFormatter(newInputValue, 2),
-    //     inToken: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),
-    //   });
-    // } else {
-    //   setValues({
-    //     inFiat: decimalFormatter(newInputValue * ELAPrice, 2),
-    //     inToken: sliceZero(decimalFormatter(newInputValue, 6)),
-    //   });
-    // }
     setValue(decimalFormatter(newValue, 6));
   }
 
