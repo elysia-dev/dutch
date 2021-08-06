@@ -44,3 +44,11 @@ const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
 };
 
 export default calculateAPR;
+
+export function aprFormatter(apr: BigNumber) {
+  if (apr.toString().length <= 20) {
+    return apr.toString();
+  } else {
+    return '∞';
+  }
+}

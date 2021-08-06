@@ -14,7 +14,7 @@ import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import AssetContext from '../../contexts/AssetContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import calculateAPR from '../../utiles/calculateAPR';
+import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -55,7 +55,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          {`${calculateAPR(cryptoType, selectedRound).toString()} %`}
+          {`${aprFormatter(calculateAPR(cryptoType, selectedRound))} %`}
         </Text>
       </View>
       <View
