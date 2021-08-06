@@ -25,6 +25,7 @@ import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
 import commaFormatter from '../../../utiles/commaFormatter';
+import isNumericStringAppendable from '../../../utiles/isNumericStringAppendable';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -215,17 +216,8 @@ const TxInput: React.FC<ITxInput> = ({
         <NumberPad
           addValue={(text) => {
             const before = current === 'fiat' ? values.inFiat : values.inToken;
-            const includesComma = before.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && before.length >= 12) ||
-              (includesComma &&
-                before.split('.')[1].length >= (current === 'fiat' ? 2 : 6)) ||
-              (before
-                .split('')
-                .reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
+            const maxFraction = current === 'fiat' ? 2 : 6;
+            if (!isNumericStringAppendable(before, text, 12, maxFraction)) {
               return;
             }
 

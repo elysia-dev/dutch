@@ -11,6 +11,7 @@ import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
 import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedCycle, currentCycle, earnReward } = route.params;
@@ -79,16 +80,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         />
         <NumberPad
           addValue={(text) => {
-            const includesComma = value.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && value.length >= 12) ||
-              (includesComma && value.split('.')[1].length >= 6) ||
-              (value.split('').reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
-              return;
-            }
+            if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
             const next =
               text === '.' && !value
