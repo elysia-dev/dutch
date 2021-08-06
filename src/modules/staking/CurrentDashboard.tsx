@@ -20,6 +20,7 @@ import {
   ROUND_DURATION,
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
+  STAKING_POOL_ROUND,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -39,16 +40,16 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
-  const [currentRound, setCurrentRound] = useState(0);
-  contract?.currentRound().then((res: any) => {
-    setCurrentRound(res);
-  });
+  const [currentRound, setCurrentRound] = useState(1);
   const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
   const totalAmountOfReward =
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
+
+  // 현재 진행중인 회차가 없고, 진행 예정인 회차가 있을 경우도 생각해야 함!!!!
+  // 기간 데이터의 마지막 날짜와 지금 시간을 비교하자
 
   // let nextButtonTitle;
   // let nextButtonDisabled;
@@ -67,6 +68,12 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   // }
   const nextButtonTitle = `${currentRound}차 스테이킹`;
   const nextButtonDisabled = false;
+
+  useEffect(() => {
+    contract?.currentRound().then((res: any) => {
+      setCurrentRound(res);
+    });
+  }, []);
 
   useEffect(() => {
     contract?.getPoolData(currentRound).then((res: any) => {
@@ -111,7 +118,9 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             contents={[
               {
                 label: '기간',
-                value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
+                value: `${STAKING_POOL_ROUND[currentRound - 1].startedAt}\n~ ${
+                  STAKING_POOL_ROUND[currentRound - 1].endedAt
+                } (KST)`,
               },
               { label: '현재 진행 회차', value: `${currentRound}차` },
               { label: '스테이킹 일수', value: `${ROUND_DURATION}일` },

@@ -11,6 +11,7 @@ import {
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
   ELFI_PER_ROUND_ON_EL_STAKING_POOL,
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
+  STAKING_POOL_ROUND,
 } from '../../../constants/staking';
 import {
   getElStakingPoolContract,
@@ -74,7 +75,9 @@ const MiningPlan: React.FC<{
         contents={[
           {
             label: '기간',
-            value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
+            value: `${STAKING_POOL_ROUND[round - 1].startedAt}\n~ ${
+              STAKING_POOL_ROUND[round - 1].endedAt
+            } (KST)`,
           },
           {
             label: `${round}차 총 채굴량`,
