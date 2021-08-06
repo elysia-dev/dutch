@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: number }> = ({ round }) => {
+const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6 }> = ({ round }) => {
   return (
     <View style={{ width: '16.7%' }}>
       <View

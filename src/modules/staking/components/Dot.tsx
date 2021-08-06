@@ -4,7 +4,7 @@ import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
 const Dot: React.FC<{
-  cycle: number;
+  cycle: 1 | 2 | 3 | 4 | 5 | 6;
   status: 'ended' | 'inProgress' | 'scheduled';
   selected: boolean;
   setSelectedCycle: Dispatch<SetStateAction<number>>;
