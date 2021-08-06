@@ -50,18 +50,6 @@ const NumberPadShortcut: React.FC<Props> = ({
     );
   });
 
-  function sliceZero(value: string) {
-    let newValue = value;
-    for (let i = value.length - 1; i > 0; i--) {
-      if (value[i] === '0') {
-        newValue = newValue.slice(0, -1);
-      } else {
-        break;
-      }
-    }
-    return newValue;
-  }
-
   function addValue(value: number) {
     // const newInputValue = parseFloat(inputValue || '0') + value;
     const newValue = parseFloat(inputValue || '0') + value;
