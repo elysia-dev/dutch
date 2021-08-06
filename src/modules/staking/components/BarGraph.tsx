@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import Bar from './Bar';
 
 const BarGraph: React.FC = () => {
@@ -13,7 +13,7 @@ const BarGraph: React.FC = () => {
         marginBottom: 30,
       }}>
       {[1, 2, 3, 4, 5, 6].map((i) => {
-        return <Bar key={i} index={i} />;
+        return <Bar key={i} round={i} />;
       })}
     </View>
   );
