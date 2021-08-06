@@ -46,7 +46,7 @@ const Dot: React.FC<{
           shadowColor: AppColors.SHADOW_BLACK,
           shadowRadius: 6,
           shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 1,
+          shadowOpacity: selected ? 1 : 0,
           elevation: selected ? 6 : 0,
         }}
       />
