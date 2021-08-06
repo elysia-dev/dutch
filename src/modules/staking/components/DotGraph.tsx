@@ -7,21 +7,6 @@ const DotGraph: React.FC<{
   selectedCycle: number;
   setSelectedCycle: Dispatch<SetStateAction<number>>;
 }> = ({ selectedCycle, setSelectedCycle }) => {
-  const dots = [];
-  // 나중에는 회차 목록 가져와서 돌리는 걸로
-  for (let i = 1; i <= 6; i++) {
-    // 날짜로 하는 게 나으려나...? 각 회차가 자기 상태도 갖고 있나??
-    dots.push(
-      <Dot
-        key={i}
-        cycle={i}
-        status={'scheduled'}
-        selected={selectedCycle === i ? true : false}
-        setSelectedCycle={setSelectedCycle}
-      />,
-    );
-  }
-
   return (
     <View>
       <View
@@ -47,7 +32,17 @@ const DotGraph: React.FC<{
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        {dots}
+        {[1, 2, 3, 4, 5, 6].map((i) => {
+          return (
+            <Dot
+              key={i}
+              cycle={i}
+              status={'scheduled'}
+              selected={selectedCycle === i ? true : false}
+              setSelectedCycle={setSelectedCycle}
+            />
+          );
+        })}
       </View>
     </View>
   );
