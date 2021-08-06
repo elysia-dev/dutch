@@ -314,7 +314,7 @@ const TxInput: React.FC<ITxInput> = ({
             label: t(`assets.${purpose}_confirm_value`),
             value: `$ ${commaFormatter(values.inFiat)}`,
             subvalue: `${commaFormatter(
-              (Number(values.inFiat) / cryptoPrice).toFixed(2),
+              decimalFormatter(Number(values.inFiat) / cryptoPrice, 2),
             )} ${assetInCrypto.type}`,
           },
           {

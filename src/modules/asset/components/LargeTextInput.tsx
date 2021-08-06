@@ -6,6 +6,7 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import GuideText from '../../../shared/components/GuideText';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
   current: string;
@@ -84,7 +85,7 @@ const LargeTextInput: React.FC<Props> = ({
         {current === 'token' && (
           <GuideText
             text={`$ ${commaFormatter(
-              (Number(value) * 5).toFixed(2),
+              decimalFormatter(Number(value) * 5, 2),
             )} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
             style={{
               width: '100%',
@@ -95,7 +96,7 @@ const LargeTextInput: React.FC<Props> = ({
         {current === 'fiat' && (
           <GuideText
             text={`${commaFormatter(
-              (Number(value) / 5).toFixed(4),
+              decimalFormatter(Number(value) / 5, 4),
             )} ${tokenType} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
             style={{
               width: '100%',
