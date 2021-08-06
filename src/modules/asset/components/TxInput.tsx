@@ -26,6 +26,7 @@ import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
 import commaFormatter from '../../../utiles/commaFormatter';
 import isNumericStringAppendable from '../../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../../utiles/newInputValueFormatter';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -221,12 +222,7 @@ const TxInput: React.FC<ITxInput> = ({
               return;
             }
 
-            const next =
-              text === '.' && !before
-                ? '0.'
-                : text !== '0' && before === '0'
-                ? text
-                : before + text;
+            const next = newInputValueFormatter(before, text);
             const removedDotNext =
               next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 

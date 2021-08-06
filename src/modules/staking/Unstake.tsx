@@ -12,6 +12,7 @@ import AppFonts from '../../enums/AppFonts';
 import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedCycle, earnReward } = route.params;
@@ -68,13 +69,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
           addValue={(text) => {
             if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-            const next =
-              text === '.' && !value
-                ? '0.'
-                : text !== '0' && value === '0'
-                ? text
-                : value + text;
-
+            const next = newInputValueFormatter(value, text);
             setValue(next);
           }}
           removeValue={() => setValue(value.slice(0, -1))}

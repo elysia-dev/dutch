@@ -33,6 +33,7 @@ import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 type ParamList = {
   Withdrawal: {
@@ -305,16 +306,8 @@ const Withdrawal: React.FC = () => {
             addValue={(text) => {
               if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-              const next =
-                text === '.' && !value
-                  ? '0.'
-                  : text !== '0' && value === '0'
-                  ? text
-                  : value + text;
-
-              if (parseFloat(next) >= getBalance(asset.type)) {
-                // Maximum!
-              } else {
+              const next = newInputValueFormatter(value, text);
+              if (parseFloat(next) < getBalance(asset.type)) {
                 setValue(next);
               }
             }}
