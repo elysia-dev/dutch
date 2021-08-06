@@ -22,7 +22,7 @@ import {
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
-import calcAPR from '../../utiles/calculateAPR';
+import calculateAPR from '../../utiles/calculateAPR';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -117,7 +117,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
               { label: '스테이킹 일수', value: `${ROUND_DURATION}일` },
               {
                 label: '예상 수익률 (APR)',
-                value: `${calcAPR(cryptoType, currentRound).toString()}%`,
+                value: `${calculateAPR(cryptoType, currentRound).toString()}%`,
               },
             ]}
             boxStyle={{ marginBottom: 60 }}

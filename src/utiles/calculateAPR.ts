@@ -11,7 +11,7 @@ import {
 } from '../constants/staking';
 import PriceContext from '../contexts/PriceContext';
 
-const calcAPR = (cryptoType: CryptoType, round: number): BigNumber => {
+const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
   const { getCryptoPrice } = useContext(PriceContext);
   const contract =
     cryptoType === CryptoType.EL
@@ -43,4 +43,4 @@ const calcAPR = (cryptoType: CryptoType, round: number): BigNumber => {
     .div(principal.mul(utils.parseEther(principalPrice.toFixed(4))));
 };
 
-export default calcAPR;
+export default calculateAPR;
