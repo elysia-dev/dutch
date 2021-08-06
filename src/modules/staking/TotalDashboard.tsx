@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
 import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
-import CircularButtonWithLabel from './components/CircularButtonWithLabel';
+import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
+import { Page, StakingPage } from '../../enums/pageEnum';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType } = route.params;
   const currentCycle = 3; // dummy data
   const [selectedCycle, setSelectedCycle] = useState(currentCycle);
+  const navigation = useNavigation();
+  const isRewardAvailable = currentCycle > selectedCycle; // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
+  const isMigrationAvailable = Boolean(currentCycle);
 
   return (
     <ScrollView
@@ -78,27 +83,47 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             marginBottom: 24,
           }}>
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="staking"
-            isActive={currentCycle && currentCycle === selectedCycle}
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
+            icon="+"
+            disabled={!(currentCycle && currentCycle === selectedCycle)}
+            label="스테이킹"
+            pressHandler={() => {
+              navigation.navigate(Page.Staking, {
+                screen: StakingPage.Stake,
+                params: {
+                  cryptoType,
+                  selectedCycle,
+                  currentCycle,
+                },
+              });
+            }}
           />
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="unstaking"
-            isActive={currentCycle && currentCycle >= selectedCycle}
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
-            isRewardAvailable={currentCycle > selectedCycle} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
-            isMigrationAvailable={Boolean(currentCycle)}
+            icon="-"
+            disabled={!(currentCycle && currentCycle >= selectedCycle)}
+            label="언스테이킹"
+            pressHandler={() => {
+              navigation.navigate(Page.Staking, {
+                screen: isRewardAvailable
+                  ? StakingPage.SelectUnstakingType
+                  : StakingPage.Unstake,
+                params: {
+                  cryptoType,
+                  selectedCycle,
+                  currentCycle,
+                  pageAfterSelection: isMigrationAvailable
+                    ? StakingPage.UnstakeAndMigrate
+                    : StakingPage.Unstake,
+                },
+              });
+            }}
           />
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="reward"
-            selectedCycle={selectedCycle}
-            currentCycle={currentCycle}
-            isActive={true}
+            icon="⤴"
+            disabled={false}
+            label="보상 수령"
+            pressHandler={() => {
+              console.log('아직 보상 수령 페이지가 없음');
+            }}
           />
         </View>
       </View>
