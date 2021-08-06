@@ -7,6 +7,7 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from './components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
+import BoxWithDividerContent from './components/BoxWithDividerContent';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType } = route.params;
@@ -29,43 +30,46 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           selectedCycle={selectedCycle}
           setSelectedCycle={setSelectedCycle}
         />
-        <BoxWithDivider
-          contents={[
-            {
-              label: '기간',
-              value: '2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)',
-            },
-            {
-              label: (
-                <>
-                  <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 스테이킹 APR`}
-                    value="130,000"
-                    unit="EL"
-                  />
-                  <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 스테이킹 수량`}
-                    value="4.07"
-                    unit="%"
-                    style={{ marginTop: 15 }}
-                  />
-                  <StakingInfoCard
-                    cycleEnded={false}
-                    label={`${selectedCycle}차 보상 수량`}
-                    value="130,000"
-                    unit="ELFI"
-                    style={{ marginTop: 15 }}
-                  />
-                </>
-              ),
-              value: '',
-            },
-          ]}
-          boxStyle={{ marginTop: -10 }}
-          innerBoxStyle={{ paddingVertical: 25, paddingHorizontal: 19 }}
-        />
+        <BoxWithDivider style={{ marginTop: -10 }}>
+          <BoxWithDividerContent
+            isFirst={true}
+            label="기간"
+            value={`2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)`}
+            style={{
+              paddingVertical: 25,
+              paddingHorizontal: 19,
+            }}
+          />
+          <View
+            style={{
+              justifyContent: 'center',
+              borderTopColor: AppColors.SUB_GREY,
+              borderTopWidth: 1,
+              paddingVertical: 25,
+              paddingHorizontal: 19,
+            }}>
+            <StakingInfoCard
+              cycleEnded={false}
+              label={`${selectedCycle}차 스테이킹 APR`}
+              value="130,000"
+              unit="EL"
+            />
+            <StakingInfoCard
+              cycleEnded={false}
+              label={`${selectedCycle}차 스테이킹 수량`}
+              value="4.07"
+              unit="%"
+              style={{ marginTop: 15 }}
+            />
+            <StakingInfoCard
+              cycleEnded={false}
+              label={`${selectedCycle}차 보상 수량`}
+              value="130,000"
+              unit="ELFI"
+              style={{ marginTop: 15 }}
+            />
+          </View>
+        </BoxWithDivider>
         <View
           style={{
             flexDirection: 'row',

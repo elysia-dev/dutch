@@ -10,6 +10,7 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
+import BoxWithDividerContent from './components/BoxWithDividerContent';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType, currentCycle } = route.params;
@@ -42,28 +43,31 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             selectedCycle={selectedCycle}
             setSelectedCycle={setSelectedCycle}
           />
-          <BoxWithDivider
-            contents={[
-              {
-                label: '기간',
-                value: '2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)',
-              },
-              { label: '현재 진행 회차', value: '1차' },
-              { label: '스테이킹 일수', value: '20일' },
-              { label: '예상 수익률 (APR)', value: '98.10%' },
-            ]}
-            boxStyle={{ marginBottom: 60 }}
-          />
+          <BoxWithDivider style={{ marginBottom: 60 }}>
+            <BoxWithDividerContent
+              isFirst={true}
+              label="기간"
+              value={`2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)`}
+            />
+            <BoxWithDividerContent label="현재 진행 회차" value="1차" />
+            <BoxWithDividerContent label="스테이킹 일수" value="20일" />
+            <BoxWithDividerContent label="예상 수익률 (APR)" value="98.10%" />
+          </BoxWithDivider>
           <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
           <BarGraph />
-          <BoxWithDivider
-            contents={[
-              { label: '현 채굴량', value: '4,000 ELFI' },
-              { label: '총 채굴량', value: '3,000,000 ELFI' },
-            ]}
-            innerBoxStyle={{ paddingVertical: 16 }}
-            boxStyle={{ marginBottom: 27 }}
-          />
+          <BoxWithDivider style={{ marginBottom: 27 }}>
+            <BoxWithDividerContent
+              isFirst={true}
+              label="현 채굴량"
+              value="4,000 ELFI"
+              style={{ paddingVertical: 16 }}
+            />
+            <BoxWithDividerContent
+              label="총 채굴량"
+              value="3,000,000 ELFI"
+              style={{ paddingVertical: 16 }}
+            />
+          </BoxWithDivider>
           <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
               return <MiningPlan key={i} />;
