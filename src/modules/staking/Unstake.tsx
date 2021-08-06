@@ -21,29 +21,26 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
 
-  let confirmationList;
-  if (earnReward) {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedCycle}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: '1,000,000 EL',
-        subvalue: '$ 5,000,000',
-      },
-      { label: '보상 수량', value: '1,000 ELFI' },
-      { label: '가스비', value: '0.5 ETH' },
-    ];
-  } else {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedCycle}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: '1,000,000 EL',
-        subvalue: '$ 5,000,000',
-      },
-      { label: '가스비', value: '0.5 ETH' },
-    ];
-  }
+  const confirmationList = earnReward
+    ? [
+        { label: `언스테이킹 회차`, value: `${selectedCycle}차 언스테이킹` },
+        {
+          label: `언스테이킹 수량`,
+          value: '1,000,000 EL',
+          subvalue: '$ 5,000,000',
+        },
+        { label: '보상 수량', value: '1,000 ELFI' },
+        { label: '가스비', value: '0.5 ETH' },
+      ]
+    : [
+        { label: `언스테이킹 회차`, value: `${selectedCycle}차 언스테이킹` },
+        {
+          label: `언스테이킹 수량`,
+          value: '1,000,000 EL',
+          subvalue: '$ 5,000,000',
+        },
+        { label: '가스비', value: '0.5 ETH' },
+      ];
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
