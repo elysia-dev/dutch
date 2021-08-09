@@ -53,7 +53,6 @@ const MiningPlan: React.FC<{
   }
 
   const cumulativeMinted = calculateMinted(cryptoType, round, currentRound);
-  console.log(round, decimalFormatter(cumulativeMinted, 1));
 
   useEffect(() => {
     contract?.getPoolData(round).then((res: any) => {

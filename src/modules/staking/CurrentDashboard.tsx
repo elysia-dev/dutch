@@ -157,6 +157,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
                     (totalMinted, round) =>
                       totalMinted +
                       calculateMinted(cryptoType, round, currentRound),
+                    0,
                   ),
                   5,
                 ),
