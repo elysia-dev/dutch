@@ -47,30 +47,18 @@ const NumberPadShortcut: React.FC<Props> = ({
     );
   });
 
-  function sliceZero(value: string) {
-    let newValue = value;
-    for (let i = value.length - 1; i > 0; i--) {
-      if (value[i] === '0') {
-        newValue = newValue.slice(0, -1);
-      } else {
-        break;
-      }
-    }
-    return newValue;
-  }
-
   function addValue(value: number) {
     const newInputValue = parseFloat(inputValue || '0') + value;
 
     if (current === 'fiat') {
       setValues({
         inFiat: decimalFormatter(newInputValue, 2),
-        inToken: sliceZero(decimalFormatter(newInputValue / ELAPrice, 6)),
+        inToken: decimalFormatter(newInputValue / ELAPrice, 6),
       });
     } else {
       setValues({
         inFiat: decimalFormatter(newInputValue * ELAPrice, 2),
-        inToken: sliceZero(decimalFormatter(newInputValue, 6)),
+        inToken: decimalFormatter(newInputValue, 6),
       });
     }
   }

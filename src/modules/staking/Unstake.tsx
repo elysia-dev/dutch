@@ -18,6 +18,8 @@ import {
 } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward } = route.params;
@@ -46,35 +48,32 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
       reward = res[1]; // userReward
     });
 
-  let confirmationList;
-  if (earnReward) {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
-        )}`,
-      },
-      { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
-      { label: '가스비', value: '(모름)' },
-    ];
-  } else {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
-        )}`,
-      },
-      { label: '가스비', value: '(모름)' },
-    ];
-  }
+  const confirmationList = earnReward
+    ? [
+        { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
+        {
+          label: `언스테이킹 수량`,
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${decimalFormatter(
+            parseFloat(value || '0') * getCryptoPrice(cryptoType),
+            6,
+          )}`,
+        },
+        { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
+        { label: '가스비', value: '(모름)' },
+      ]
+    : [
+        { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
+        {
+          label: `언스테이킹 수량`,
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${decimalFormatter(
+            parseFloat(value || '0') * getCryptoPrice(cryptoType),
+            6,
+          )}`,
+        },
+        { label: '가스비', value: '(모름)' },
+      ];
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -110,24 +109,9 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         />
         <NumberPad
           addValue={(text) => {
-            const includesComma = value.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && value.length >= 12) ||
-              (includesComma && value.split('.')[1].length >= 6) ||
-              (value.split('').reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
-              return;
-            }
+            if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-            const next =
-              text === '.' && !value
-                ? '0.'
-                : text !== '0' && value === '0'
-                ? text
-                : value + text;
-
+            const next = newInputValueFormatter(value, text);
             setValue(next);
           }}
           removeValue={() => setValue(value.slice(0, -1))}

@@ -28,6 +28,7 @@ import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMinted from '../../utiles/calculateMinted';
 import decimalFormatter from '../../utiles/decimalFormatter';
+import BoxWithDividerContent from './components/BoxWithDividerContent';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -120,55 +121,56 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             selectedRound={selectedRound}
             setSelectedRound={setSelectedRound}
           />
-          <BoxWithDivider
-            contents={[
-              {
-                label: '기간',
-                value: `${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
-                  STAKING_POOL_ROUNDS[currentRound - 1].endedAt
-                } (KST)`,
-              },
-              { label: '현재 진행 회차', value: `${currentRound}차` },
-              { label: '스테이킹 일수', value: `${ROUND_DURATION}일` },
-              {
-                label: '예상 수익률 (APR)',
-                value: `${aprFormatter(
-                  calculateAPR(cryptoType, currentRound),
-                )}%`,
-              },
-            ]}
-            boxStyle={{ marginBottom: 60 }}
-          />
+          <BoxWithDivider style={{ marginBottom: 60 }}>
+            <BoxWithDividerContent
+              isFirst={true}
+              label="기간"
+              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
+                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
+              } (KST)`}
+            />
+            <BoxWithDividerContent
+              label="현재 진행 회차"
+              value={`${currentRound}차`}
+            />
+            <BoxWithDividerContent
+              label="스테이킹 일수"
+              value={`${ROUND_DURATION}일`}
+            />
+            <BoxWithDividerContent
+              label="예상 수익률 (APR)"
+              value={`${aprFormatter(calculateAPR(cryptoType, currentRound))}%`}
+            />
+          </BoxWithDivider>
           <TitleText
             label={`${rewardCryptoType} 채굴 플랜`}
             style={{ fontSize: 22 }}
           />
           <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
-          <BoxWithDivider
-            contents={[
-              {
-                label: '현 채굴량',
-                value: `${commaFormatter(
-                  decimalFormatter(
-                    [1, 2, 3, 4, 5, 6].reduce(
-                      (totalMinted, round) =>
-                        totalMinted +
-                        calculateMinted(cryptoType, round, currentRound),
-                    ),
-                    5,
+          <BoxWithDivider style={{ marginBottom: 27 }}>
+            <BoxWithDividerContent
+              isFirst={true}
+              label="현 채굴량"
+              value={`${commaFormatter(
+                decimalFormatter(
+                  [1, 2, 3, 4, 5, 6].reduce(
+                    (totalMinted, round) =>
+                      totalMinted +
+                      calculateMinted(cryptoType, round, currentRound),
                   ),
-                )} ${rewardCryptoType}`,
-              },
-              {
-                label: '총 채굴량',
-                value: `${commaFormatter(
-                  totalAmountOfReward,
-                )} ${rewardCryptoType}`,
-              },
-            ]}
-            innerBoxStyle={{ paddingVertical: 16 }}
-            boxStyle={{ marginBottom: 27 }}
-          />
+                  5,
+                ),
+              )} ${rewardCryptoType}`}
+              style={{ paddingVertical: 16 }}
+            />
+            <BoxWithDividerContent
+              label="총 채굴량"
+              value={`${commaFormatter(
+                totalAmountOfReward,
+              )} ${rewardCryptoType}`}
+              style={{ paddingVertical: 16 }}
+            />
+          </BoxWithDivider>
           <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
               return (

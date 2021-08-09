@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: number; percent: number }> = ({
+const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
   round,
   percent,
 }) => {

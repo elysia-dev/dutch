@@ -19,6 +19,8 @@ import {
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -149,24 +151,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         />
         <NumberPad
           addValue={(text) => {
-            const includesComma = value.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && value.length >= 12) ||
-              (includesComma && value.split('.')[1].length >= 6) ||
-              (value.split('').reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
-              return;
-            }
+            if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-            const next =
-              text === '.' && !value
-                ? '0.'
-                : text !== '0' && value === '0'
-                ? text
-                : value + text;
-
+            const next = newInputValueFormatter(value, text);
             setValue(next);
           }}
           removeValue={() => setValue(value.slice(0, -1))}

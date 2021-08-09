@@ -29,90 +29,6 @@ const ConfirmationModal: React.FC<Props> = ({
   const { t } = useTranslation();
   const [disabled, setDisabled] = useState(false);
 
-  const checklist = [];
-  list.forEach((item) => {
-    if (item.subvalue) {
-      checklist.push(
-        <View
-          key={item.label}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderBottomWidth: 1,
-            borderBottomColor: AppColors.GREY,
-            alignItems: 'center',
-            height: 64,
-          }}>
-          <Text
-            style={{
-              fontSize: 14,
-              color: AppColors.BLACK2,
-              marginLeft: 5,
-              fontFamily: AppFonts.Regular,
-            }}>
-            {item.label}
-          </Text>
-          <View style={{ marginRight: 5 }}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: 'bold',
-                color: AppColors.BLACK,
-                textAlign: 'right',
-                fontFamily: AppFonts.Bold,
-              }}>
-              {item.value}
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: AppColors.SUB_BLACK,
-                textAlign: 'right',
-                fontFamily: AppFonts.Regular,
-              }}>
-              {item.subvalue}
-            </Text>
-          </View>
-        </View>,
-      );
-    } else {
-      checklist.push(
-        <View
-          key={item.label}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            borderBottomWidth: 1,
-            borderBottomColor: AppColors.GREY,
-            alignItems: 'center',
-            height: 50,
-          }}>
-          <Text
-            style={{
-              fontSize: 14,
-              color: AppColors.BLACK2,
-              marginLeft: 5,
-              fontFamily: AppFonts.Regular,
-            }}>
-            {item.label}
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: 'bold',
-              color: AppColors.BLACK,
-              marginRight: 5,
-              fontFamily: AppFonts.Bold,
-            }}>
-            {item.value}
-          </Text>
-        </View>,
-      );
-    }
-  });
-
   return (
     <Modal transparent={true} visible={modalVisible} animationType={'slide'}>
       <View
@@ -181,7 +97,53 @@ const ConfirmationModal: React.FC<Props> = ({
                 }}>
                 {subtitle}
               </Text>
-              {checklist}
+              {list.map((item) => {
+                return (
+                  <View
+                    key={item.label}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      borderBottomWidth: 1,
+                      borderBottomColor: AppColors.GREY,
+                      alignItems: 'center',
+                      height: item.subvalue ? 64 : 50,
+                      paddingHorizontal: 5,
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: AppColors.BLACK2,
+                        fontFamily: AppFonts.Regular,
+                      }}>
+                      {item.label}
+                    </Text>
+                    <View>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: AppColors.BLACK,
+                          textAlign: 'right',
+                          fontFamily: AppFonts.Bold,
+                        }}>
+                        {item.value}
+                      </Text>
+                      {item.subvalue && (
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: AppColors.SUB_BLACK,
+                            textAlign: 'right',
+                            fontFamily: AppFonts.Regular,
+                          }}>
+                          {item.subvalue}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                );
+              })}
               <Text
                 style={{
                   fontSize: 12,
