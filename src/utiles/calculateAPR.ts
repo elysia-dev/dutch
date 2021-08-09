@@ -10,6 +10,8 @@ import {
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
 } from '../constants/staking';
 import PriceContext from '../contexts/PriceContext';
+import decimalFormatter from './decimalFormatter';
+import commaFormatter from './commaFormatter';
 
 const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
   const { getCryptoPrice } = useContext(PriceContext);
@@ -46,9 +48,12 @@ const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
 export default calculateAPR;
 
 export function aprFormatter(apr: BigNumber) {
-  if (apr.toString().length <= 20) {
-    return apr.toString();
-  } else {
+  const formattedAPR = commaFormatter(
+    decimalFormatter(parseFloat(apr.toString()), 5),
+  );
+  if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
     return '∞';
+  } else {
+    return formattedAPR;
   }
 }
