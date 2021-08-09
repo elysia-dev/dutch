@@ -101,12 +101,13 @@ const Detail: React.FC = () => {
     } finally {
       if (newTxs.length !== 0) {
         if (state.page === 1) {
-          const { isCurrentPendingTx, pendingTxs } = getPendingTx(
-            transactions,
-            newTxs,
-            '',
-            asset.type,
-          );
+          const pendingTxs = getPendingTx(transactions, '', asset.type);
+          let isCurrentPendingTx = true;
+          if (pendingTxs.length > 0) {
+            isCurrentPendingTx =
+              newTxs.findIndex((tx) => pendingTxs[0].txHash === tx.txHash) !==
+              -1;
+          }
           setState({
             ...state,
             page: 2,
@@ -134,7 +135,11 @@ const Detail: React.FC = () => {
       }
     }
   };
-  const addPendingTx = () => {
+
+  useEffect(() => {
+    loadTxs();
+  }, []);
+  useEffect(() => {
     const pendingTxs = transactions.filter(
       (tx) =>
         tx.status === TxStatus.Pending ||
@@ -152,12 +157,6 @@ const Detail: React.FC = () => {
       });
       return;
     }
-  };
-  useEffect(() => {
-    loadTxs();
-  }, []);
-  useEffect(() => {
-    addPendingTx();
     const successTx = transactions.filter(
       (tx) => tx.status === TxStatus.Success,
     );
