@@ -23,6 +23,7 @@ const Bar: React.FC<{ round: number; percent: number }> = ({
         style={{
           width: '100%',
           position: 'absolute',
+          overflow: 'hidden',
         }}>
         <View
           style={{
