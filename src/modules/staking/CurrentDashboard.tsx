@@ -20,7 +20,7 @@ import {
   ROUND_DURATION,
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
-  STAKING_POOL_ROUND,
+  STAKING_POOL_ROUNDS,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -118,8 +118,8 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             contents={[
               {
                 label: '기간',
-                value: `${STAKING_POOL_ROUND[currentRound - 1].startedAt}\n~ ${
-                  STAKING_POOL_ROUND[currentRound - 1].endedAt
+                value: `${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
+                  STAKING_POOL_ROUNDS[currentRound - 1].endedAt
                 } (KST)`,
               },
               { label: '현재 진행 회차', value: `${currentRound}차` },

@@ -17,7 +17,7 @@ export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
 // YYYY.MM.DD hh:mm:ss
 // MM.DD.YYYY hh:mm:ss
 
-export const STAKING_POOL_ROUND = [
+export const STAKING_POOL_ROUNDS = [
   {
     startedAt: '2021.08.04 00:00:00',
     endedAt: '2021.08.04 23:59:59',

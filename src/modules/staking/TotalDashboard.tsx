@@ -13,7 +13,7 @@ import {
 } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
-import { STAKING_POOL_ROUND } from '../../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -70,8 +70,8 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           contents={[
             {
               label: '기간',
-              value: `${STAKING_POOL_ROUND[selectedRound - 1].startedAt}\n~ ${
-                STAKING_POOL_ROUND[selectedRound - 1].endedAt
+              value: `${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
+                STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
               } (KST)`,
             },
             {
