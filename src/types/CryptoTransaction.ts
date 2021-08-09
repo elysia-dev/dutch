@@ -2,7 +2,7 @@ import CryptoType from '../enums/CryptoType';
 import TxStatus from '../enums/TxStatus';
 
 type CryptoTransaction = {
-  type: 'in' | 'out' | 'reward';
+  type: 'in' | 'out' | 'reward' | 'fail';
   legacyType?:
     | 'ownership'
     | 'refund'
@@ -14,11 +14,12 @@ type CryptoTransaction = {
   txHash?: string;
   createdAt: string;
   blockNumber: number | undefined;
-  status?: TxStatus;
+  status?: TxStatus | number;
   cryptoType?: CryptoType;
-  productId ?: number;
-  valueFrom ?: string;
-  toAddress ?: string;
+  productId?: number;
+  valueFrom?: string;
+  toAddress?: string;
+  faliTxStatus?: number;
 };
 
 export default CryptoTransaction;
