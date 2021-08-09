@@ -14,10 +14,12 @@ import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
 import TouchableCardWithShadow from './components/TouchableCardWithShadow';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
+  const totalStakingPeriod = `${STAKING_POOL_ROUNDS[0].startedAt} ~ ${STAKING_POOL_ROUNDS[5].endedAt} (KST)`;
 
   return (
     <SafeAreaView
@@ -83,7 +85,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : (모름)
+              {`기간 : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>
@@ -136,7 +138,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : (모름)
+              {`기간 : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>
