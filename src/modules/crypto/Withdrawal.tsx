@@ -34,6 +34,8 @@ import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
 import { sendCryptoAsset } from '../../utiles/createTransction';
+import { useTransferTx } from '../../hooks/useTransferTx copy';
+import TransferType from '../../enums/TransferType';
 
 type ParamList = {
   Withdrawal: {
@@ -61,6 +63,7 @@ const Withdrawal: React.FC = () => {
     ? getBalance(gasCrypto) < parseFloat(estimatedGas) + parseFloat(value)
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
+  const changeSetTransfer = useTransferTx(asset.type);
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -99,41 +102,16 @@ const Withdrawal: React.FC = () => {
   };
 
   const sendTx = async () => {
-    let txRes: ethers.providers.TransactionResponse | undefined;
-
-    try {
-      txRes = await sendCryptoAsset(
-        gasPrice,
-        bscGasPrice,
-        asset.type,
-        state.address,
-        value,
-        wallet,
-      );
-      addPendingTransaction({
-        txHash: txRes?.hash,
-        cryptoType: asset.type,
-        value,
-        createdAt: '',
-        type: 'out',
-        blockNumber: 0,
-        toAddress: state.address,
-      });
-      navigation.goBack();
-      const re = await txRes?.wait();
-      const date = await provider.getBlock(re?.blockNumber || '');
-      addPendingTransaction({
-        txHash: txRes?.hash,
-        cryptoType: asset.type,
-        value,
-        createdAt: moment.unix(date.timestamp).toString(),
-        type: 'out',
-        blockNumber: re?.blockNumber,
-      });
-    } catch (e) {
-      alert(e);
-    }
+    changeSetTransfer(
+      TransferType.Send,
+      null,
+      '',
+      value,
+      undefined,
+      state.address,
+    );
   };
+
   const openBarcodeScanner = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
 
