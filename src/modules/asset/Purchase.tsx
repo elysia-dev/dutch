@@ -31,6 +31,8 @@ import TransactionContext from '../../contexts/TransactionContext';
 import moment from 'moment';
 import { purchaseProduct } from '../../utiles/createTransction';
 import { Platform } from 'react-native';
+import { useTransferTx } from '../../hooks/useTransferTx copy';
+import TransferType from '../../enums/TransferType';
 
 type ParamList = {
   Purchase: {
@@ -65,13 +67,13 @@ const Purchase: FunctionComponent = () => {
     state.txHash,
     from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
+
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const { getBalance } = useContext(AssetContext);
-  const { addPendingTransaction } = useContext(TransactionContext);
-  const { waitTxResult, loadV2UserBalances } = useContext(AssetContext);
+  const changeSetTransfer = useTransferTx(from.type, productId);
   const fromMax = ((toMax || 0) * 5) / getCryptoPrice(from.type);
   const fromPrice = getCryptoPrice(from.type);
   const toPrice = getCryptoPrice(CryptoType.ELA);
@@ -124,51 +126,8 @@ const Purchase: FunctionComponent = () => {
     }
   }, []);
 
-  const createTx = async () => {
-    try {
-      const txRes = await purchaseProduct(
-        gasPrice,
-        bscGasPrice,
-        from.type,
-        contract,
-        values.from,
-        wallet,
-        getCryptoPrice,
-      );
-      afterTxHashCreated(
-        wallet?.getFirstAddress() || '',
-        contractAddress,
-        txRes?.hash || '',
-        NetworkType.ETH,
-      );
-      addPendingTransaction({
-        txHash: txRes?.hash,
-        cryptoType: CryptoType.ELA,
-        value: values.to,
-        createdAt: '',
-        type: 'in',
-        blockNumber: 0,
-        productId: productId,
-        valueFrom: values.from,
-      });
-      loadV2UserBalances(true);
-      navigation.goBack();
-      const successTx = await txRes?.wait();
-      const date = await provider.getBlock(successTx?.blockNumber || '');
-      addPendingTransaction({
-        txHash: txRes?.hash,
-        cryptoType: CryptoType.ELA,
-        value: values.to,
-        createdAt: moment.unix(date.timestamp).toString(),
-        type: 'in',
-        blockNumber: successTx?.blockNumber,
-        productId: productId,
-      });
-    } catch (e) {
-      console.log(e);
-      afterTxFailed(e.message);
-      navigation.goBack();
-    }
+  const createTx = () => {
+    changeSetTransfer(TransferType.PurChase, contract, values.from, values.to);
   };
 
   useEffect(() => {
