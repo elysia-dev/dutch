@@ -35,6 +35,7 @@ import PriceContext from '../../contexts/PriceContext';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type ParamList = {
   Main: {
@@ -44,13 +45,15 @@ type ParamList = {
 
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
-  const { assets, assetLoaded, loadV2UserBalances } = useContext(AssetContext);
+  const { assets, assetLoaded, assetTxWait, loadV2UserBalances } =
+    useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'Main'>>();
   const { elPrice, getCryptoPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
   const { currencyFormatter } = useContext(PreferenceContext);
+  const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
@@ -90,7 +93,6 @@ export const Main: React.FC = () => {
       }
     }
   }, [isFocused]);
-
   return (
     <>
       <ScrollView
@@ -197,6 +199,12 @@ export const Main: React.FC = () => {
           <AssetListing
             title={t('main.my_assets')}
             assets={assets.filter((item) => {
+              if (
+                transactions[0].productId === item.productId &&
+                item.value <= 0
+              ) {
+                return true;
+              }
               return item.type === CryptoType.ELA && item.value > 0;
             })}
             itemPressHandler={(asset) => {
