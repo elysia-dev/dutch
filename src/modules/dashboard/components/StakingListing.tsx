@@ -60,7 +60,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
           return (
             <StakingInfoBox
               key={round}
-              cryptoType={CryptoType.EL}
+              cryptoType={type}
               round={round}
               stakingAmount={stakingAmount}
               rewardAmount={rewardAmount}
