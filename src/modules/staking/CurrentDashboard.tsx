@@ -111,6 +111,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             style={{ fontSize: 22 }}
           />
           <DotGraph
+            currentRound={currentRound}
             selectedRound={selectedRound}
             setSelectedRound={setSelectedRound}
           />
