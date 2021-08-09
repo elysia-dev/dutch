@@ -65,6 +65,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         <DotGraph
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
+          currentRound={currentRound}
         />
         <BoxWithDivider
           contents={[
