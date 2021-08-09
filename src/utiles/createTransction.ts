@@ -18,7 +18,6 @@ export const purchaseProduct = async (
   let populatedTransaction: ethers.PopulatedTransaction | undefined;
   const valueInDollar = String(getCryptoPrice(fromType));
   const isAccelerate = accelerate === Accelerate.Accelerate;
-  console.log(bscGasPrice);
   try {
     if (fromType !== CryptoType.EL) {
       populatedTransaction = await contract?.populateTransaction.purchase();
@@ -51,7 +50,7 @@ export const purchaseProduct = async (
         data: populatedTransaction.data,
         gasPrice: isAccelerate
           ? utils.parseUnits(updateGasPrice || '', 'gwei')
-          : BigNumber.from('100'),
+          : BigNumber.from(gasPrice),
       });
     }
   } catch (e) {
@@ -70,7 +69,6 @@ export const sendCryptoAsset = async (
   accelerate?: Accelerate,
 ) => {
   const isAccelerate = accelerate === Accelerate.Accelerate;
-
   if (assetType === CryptoType.EL) {
     const elContract = getElysiaContract();
     const populatedTransaction = await elContract?.populateTransaction.transfer(
@@ -84,7 +82,7 @@ export const sendCryptoAsset = async (
       data: populatedTransaction.data,
       gasPrice: isAccelerate
         ? utils.parseUnits(updateGasPrice || '', 'gwei')
-        : BigNumber.from('100'),
+        : BigNumber.from(gasPrice),
     });
   } else {
     return await wallet?.getFirstSigner(assetType).sendTransaction({
@@ -94,7 +92,7 @@ export const sendCryptoAsset = async (
         ? utils.parseUnits(updateGasPrice || '', 'gwei')
         : assetType === CryptoType.BNB
         ? BigNumber.from(bscGasPrice)
-        : BigNumber.from('100'),
+        : BigNumber.from(gasPrice),
     });
   }
 };
