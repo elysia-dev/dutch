@@ -108,11 +108,14 @@ const Detail: FunctionComponent = () => {
           asset.address,
           state.page,
         );
-        const { isCurrentPendingTx, pendingTxs } = getPendingTx(
-          transactions,
-          resState.transactions,
-          resState.productId,
-        );
+        const pendingTxs = getPendingTx(transactions, resState.productId);
+        let isCurrentPendingTx = true;
+        if (pendingTxs.length > 0) {
+          isCurrentPendingTx =
+            resState.transactions.findIndex(
+              (tx) => pendingTxs[0].txHash === tx.txHash,
+            ) !== -1;
+        }
         setState({
           page: 1,
           totalSupply: resState.totalSupply,
