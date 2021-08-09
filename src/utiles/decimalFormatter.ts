@@ -5,11 +5,13 @@ const decimalFormatter = (num: number, place: number) => {
     str = String(num.toFixed(place));
   }
 
-  for (let i = str.length - 1; i > 0; i--) {
-    if (str[i] === '0') {
-      str = str.slice(0, -1);
-    } else {
-      break;
+  if (str.indexOf('.') !== -1) {
+    for (let i = str.length - 1; i > 0; i--) {
+      if (str[i] === '0') {
+        str = str.slice(0, -1);
+      } else {
+        break;
+      }
     }
   }
 
