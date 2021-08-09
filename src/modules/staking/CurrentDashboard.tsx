@@ -141,7 +141,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             label={`${rewardCryptoType} 채굴 플랜`}
             style={{ fontSize: 22 }}
           />
-          <BarGraph />
+          <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
           <BoxWithDivider
             contents={[
               { label: '현 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },

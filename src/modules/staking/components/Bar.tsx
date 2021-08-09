@@ -3,7 +3,10 @@ import { View, Text } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: number }> = ({ round }) => {
+const Bar: React.FC<{ round: number; percent: number }> = ({
+  round,
+  percent,
+}) => {
   return (
     <View style={{ width: '16.7%' }}>
       <View
@@ -27,8 +30,9 @@ const Bar: React.FC<{ round: number }> = ({ round }) => {
             backgroundColor: '#3ECFFF',
             borderTopLeftRadius: round === 1 ? 4 : 0,
             borderBottomLeftRadius: round === 1 ? 4 : 0,
-            borderTopRightRadius: round === 6 ? 4 : 0,
-            borderBottomRightRadius: round === 6 ? 4 : 0,
+            borderTopRightRadius: round === 6 || percent < 100 ? 4 : 0,
+            borderBottomRightRadius: round === 6 || percent < 100 ? 4 : 0,
+            width: `${percent}%`,
           }}
         />
         <Text
@@ -39,7 +43,7 @@ const Bar: React.FC<{ round: number }> = ({ round }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 12,
           }}>
-          1차
+          {`${round}차`}
         </Text>
         <View
           style={{
