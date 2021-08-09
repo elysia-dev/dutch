@@ -34,7 +34,7 @@ const PriceProvider: React.FC = (props) => {
     }
   };
 
-  const getCryptoPrice = (cryptoType: CryptoType): number => {
+  const getCryptoPrice = (cryptoType: CryptoType | 'NONE'): number => {
     switch (cryptoType) {
       case CryptoType.BNB:
         return state.bnbPrice;
