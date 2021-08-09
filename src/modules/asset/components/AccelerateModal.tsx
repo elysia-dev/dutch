@@ -13,12 +13,15 @@ import BackButtonImg from '../../../shared/assets/images/backbutton.png';
 import { H3Text, H4Text } from '../../../shared/components/Texts';
 import HelpQuestionImg from '../../../shared/assets/images/HelpQuestion.png';
 import CryptoType from '../../../enums/CryptoType';
-import { utils } from 'ethers';
+import { Contract, utils } from 'ethers';
 import { useContext } from 'react';
 import PriceContext from '../../../contexts/PriceContext';
 import AppColors from '../../../enums/AppColors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useTransferTx } from '../../../hooks/useTransferTx copy';
+import TransferType from '../../../enums/TransferType';
+import Accelerate from '../../../enums/Accelerate';
 
 interface AccelerateItem {
   isModalViasible: boolean;
@@ -29,10 +32,14 @@ interface AccelerateItem {
   valueInCryto: number;
   gasFee: string;
   crytoValue?: number;
-  speedUp: () => void;
   isDisabled: boolean;
+  contract?: Contract | null;
   setIsDisabled: (prev: boolean) => void;
   txCryptoType?: CryptoType;
+  productId?: number;
+  valueFrom?: string;
+  value?: string;
+  address?: string;
 }
 
 const AccelerateModal: React.FC<AccelerateItem> = ({
@@ -44,15 +51,28 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   valueInCryto,
   gasFee,
   crytoValue,
-  speedUp,
   isDisabled,
+  contract,
   setIsDisabled,
   txCryptoType,
+  productId,
+  valueFrom,
+  value,
+  address,
 }) => {
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const [isAssetDisabled, setIsAssetDisabled] = useState(false);
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const changeSetTransfer = useTransferTx(
+    paymentMethod === 'NONE' && txCryptoType
+      ? txCryptoType
+      : paymentMethod !== 'NONE'
+      ? paymentMethod
+      : CryptoType.ELA,
+    productId,
+  );
+  const isPaymentMethod = paymentMethod === 'NONE';
   const isCryptoBnb =
     paymentMethod === 'NONE'
       ? txCryptoType === CryptoType.BNB
@@ -270,7 +290,17 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             justifyContent: 'center',
           }}
           disabled={isDisabled || isAssetDisabled}
-          onPress={() => speedUp()}>
+          onPress={() => {
+            changeSetTransfer(
+              isPaymentMethod ? TransferType.Send : TransferType.PurChase,
+              isPaymentMethod ? null : contract ? contract : null,
+              valueFrom || '',
+              value ? value : '',
+              Accelerate.Accelerate,
+              address,
+              updateGasPrice,
+            );
+          }}>
           <Text
             style={{
               fontSize: 16,
