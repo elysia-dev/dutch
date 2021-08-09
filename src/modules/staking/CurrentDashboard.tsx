@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
@@ -21,6 +22,7 @@ import {
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
+  STAKING_POOL_ROUNDS_MOMENT,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -48,26 +50,27 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
 
-  // 현재 진행중인 회차가 없고, 진행 예정인 회차가 있을 경우도 생각해야 함!!!!
-  // 기간 데이터의 마지막 날짜와 지금 시간을 비교하자
-
-  // let nextButtonTitle;
-  // let nextButtonDisabled;
-  // if (!(isWalletUser || user.ethAddresses[0])) {
-  //   nextButtonTitle = '지갑 연결 필요';
-  //   nextButtonDisabled = true;
-  // } else if (!currentRound) {
-  //   nextButtonTitle = 'COMMING SOON!';
-  //   nextButtonDisabled = true;
-  // } else if (!currentRound) {
-  //   nextButtonTitle = '스테이킹 기간 종료';
-  //   nextButtonDisabled = true;
-  // } else {
-  //   nextButtonTitle = `${currentRound}차 스테이킹`;
-  //   nextButtonDisabled = false;
-  // }
-  const nextButtonTitle = `${currentRound}차 스테이킹`;
-  const nextButtonDisabled = false;
+  let nextButtonTitle;
+  let nextButtonDisabled;
+  if (!(isWalletUser || user.ethAddresses[0])) {
+    nextButtonTitle = '지갑 연결 필요';
+    nextButtonDisabled = true;
+  } else if (
+    !currentRound ||
+    moment().isBetween(
+      STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+      STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+    )
+  ) {
+    nextButtonTitle = 'COMMING SOON!';
+    nextButtonDisabled = true;
+  } else if (moment().isAfter(STAKING_POOL_ROUNDS_MOMENT[5].endedAt)) {
+    nextButtonTitle = '스테이킹 기간 종료';
+    nextButtonDisabled = true;
+  } else {
+    nextButtonTitle = `${currentRound}차 스테이킹`;
+    nextButtonDisabled = false;
+  }
 
   useEffect(() => {
     contract?.currentRound().then((res: any) => {
