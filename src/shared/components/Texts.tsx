@@ -103,7 +103,7 @@ const P3Title = styled.Text`
 `;
 
 export const P3Text: FunctionComponent<{
-  label: string;
+  label: string | JSX.Element;
   style?: StyleProp<TextStyle>;
   // handler: (event: GestureResponderEvent) => void;
 }> = ({ label, style }) => {
