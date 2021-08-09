@@ -5,6 +5,7 @@ import TxStatus from '../enums/TxStatus';
 import Asset from '../types/Asset';
 import AssetDetail from '../types/AssetDetail';
 import CryptoTransaction from '../types/CryptoTransaction';
+import { provider } from './getContract';
 
 export const changeTxStatus = (
   asset: Asset,
@@ -18,21 +19,21 @@ export const changeTxStatus = (
     | AssetDetail,
   transactions: CryptoTransaction[],
 ) => {
-  const pendingTxs = transactions.filter((tx) => {
-    const isPending = tx.status === TxStatus.Pending;
-    if (tx.cryptoType === CryptoType.ELA) {
-      return isPending && tx.cryptoType === CryptoType.ELA;
-    }
-    return isPending && tx.cryptoType === asset.type;
-  });
+  const pendingTxs = transactions.filter(
+    (tx) =>
+      tx.status === TxStatus.Pending ||
+      tx.cryptoType === CryptoType.ELA ||
+      tx.cryptoType === asset.type,
+  );
   const notPendingTxs = state.transactions.filter(
     (tx) => tx.status !== TxStatus.Pending,
   );
   if (pendingTxs.length > 0) {
     return pendingTxs.concat(notPendingTxs);
   }
+  let resentTx;
   const successTx = transactions.filter((tx) => tx.status === TxStatus.Success);
-  let resentTx = state.transactions.findIndex(
+  resentTx = state.transactions.findIndex(
     (tx) => tx.txHash === successTx[0]?.txHash,
   );
   state.transactions[resentTx] = successTx[0];
@@ -41,7 +42,6 @@ export const changeTxStatus = (
 
 export const getPendingTx = (
   transactions: CryptoTransaction[],
-  resTx: CryptoTransaction[],
   resProductId: number | '',
   assetType?: CryptoType,
 ) => {
@@ -51,10 +51,5 @@ export const getPendingTx = (
     }
     return tx.cryptoType === assetType && tx.status === TxStatus.Pending;
   });
-  let isCurrentPendingTx = true;
-  if (pendingTxs.length > 0) {
-    isCurrentPendingTx =
-      resTx.findIndex((tx) => pendingTxs[0].txHash === tx.txHash) !== -1;
-  }
-  return { isCurrentPendingTx, pendingTxs };
+  return pendingTxs;
 };
