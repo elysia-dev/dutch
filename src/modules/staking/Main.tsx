@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Animated, View, Text, Platform } from 'react-native';
+import {
+  SafeAreaView,
+  Animated,
+  View,
+  Text,
+  Platform,
+  Image,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
@@ -48,7 +55,10 @@ export const Main: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>img</Text>
+            <Image
+              source={require('./images/el_staking_visualization.png')}
+              width={304}
+            />
           </View>
           <View
             style={{
@@ -98,7 +108,10 @@ export const Main: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>img</Text>
+            <Image
+              source={require('./images/elfi_staking_visualization.png')}
+              width={304}
+            />
           </View>
           <View
             style={{
