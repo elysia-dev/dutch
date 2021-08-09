@@ -32,6 +32,8 @@ import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 type ParamList = {
   Withdrawal: {
@@ -302,27 +304,10 @@ const Withdrawal: React.FC = () => {
           </View>
           <NumberPad
             addValue={(text) => {
-              if (
-                (text === '.' && value.includes('.')) ||
-                value.length > 18 ||
-                (value
-                  .split('')
-                  .reduce((res, cur) => res && cur === '0', true) &&
-                  text === '0')
-              ) {
-                return;
-              }
+              if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-              const next =
-                text === '.' && !value
-                  ? '0.'
-                  : text !== '0' && value === '0'
-                  ? text
-                  : value + text;
-
-              if (parseFloat(next) >= getBalance(asset.type)) {
-                // Maximum!
-              } else {
+              const next = newInputValueFormatter(value, text);
+              if (parseFloat(next) < getBalance(asset.type)) {
                 setValue(next);
               }
             }}

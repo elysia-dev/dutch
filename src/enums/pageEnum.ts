@@ -1,6 +1,7 @@
 export enum MainPage {
   DashboardMain = 'DashboardMain',
   ProductsMain = 'ProductsMain',
+  StakingMain = 'StakingMain',
   NotificationMain = 'NotificationMain',
   MoreMain = 'MoreMain',
 }
@@ -82,6 +83,7 @@ export enum Page {
   Wallet = 'Wallet',
   Asset = 'Asset',
   Crypto = 'Crypto',
+  Staking = 'Staking',
 }
 
 export enum AssetPage {
@@ -96,4 +98,14 @@ export enum CryptoPage {
   Detail = 'Detail',
   Deposit = 'Deposit',
   Withdrawal = 'Withdrawal',
+}
+
+export enum StakingPage {
+  Main = 'Main',
+  CurrentDashboard = 'CurrentDashboard',
+  TotalDashboard = 'TotalDashboard',
+  Stake = 'Stake',
+  SelectUnstakingType = 'SelectUnstakingType',
+  Unstake = 'Unstake',
+  UnstakeAndMigrate = 'UnstakeAndMigrate',
 }

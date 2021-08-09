@@ -35,6 +35,7 @@ import PriceContext from '../../contexts/PriceContext';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
+import StakingListing from './components/StakingListing';
 
 type ParamList = {
   Main: {
@@ -208,6 +209,8 @@ export const Main: React.FC = () => {
               });
             }}
           />
+          <View style={{ height: 25 }} />
+          <StakingListing />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}

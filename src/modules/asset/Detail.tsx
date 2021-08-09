@@ -29,7 +29,7 @@ import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import txResponseToTx from '../../utiles/txResponseToTx';
-import CircleButton from './components/CircleButton';
+import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
 import OverlayLoading from '../../shared/components/OverlayLoading';
@@ -340,11 +340,11 @@ const Detail: FunctionComponent = () => {
                   }}>
                   {!asset.isLegacyOwnership && (
                     <>
-                      <CircleButton
-                        title={t('main.ownership')}
+                      <CircularButtonWithLabel
+                        label={t('main.ownership')}
                         icon={'+'}
                         disabled={state.productStatus !== ProductStatus.SALE}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Purchase, {
                             assetInCrypto: {
                               type: state.paymentMethod,
@@ -358,10 +358,10 @@ const Detail: FunctionComponent = () => {
                           });
                         }}
                       />
-                      <CircleButton
-                        title={t('main.refund')}
+                      <CircularButtonWithLabel
+                        label={t('main.refund')}
                         icon={'-'}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Refund, {
                             assetInCrypto: {
                               type: state.paymentMethod,
@@ -374,10 +374,10 @@ const Detail: FunctionComponent = () => {
                           });
                         }}
                       />
-                      <CircleButton
-                        title={t('main.return')}
+                      <CircularButtonWithLabel
+                        label={t('main.return')}
                         icon={'⤴'}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Reward, {
                             toCrypto: state.paymentMethod,
                             toTitle: state.paymentMethod.toUpperCase(),

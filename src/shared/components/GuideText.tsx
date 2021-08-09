@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleProp, TextStyle } from 'react-native';
-import AppColors from '../../../enums/AppColors';
-import AppFonts from '../../../enums/AppFonts';
+import AppColors from '../../enums/AppColors';
+import AppFonts from '../../enums/AppFonts';
 
 interface Props {
   text: string;

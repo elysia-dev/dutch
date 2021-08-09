@@ -21,6 +21,10 @@ const CryptoImage: React.FC<{
         return require('../assets/images/bnb.png');
       case CryptoType.ELA:
         return require('../assets/images/asset.png');
+      case CryptoType.ELFI:
+        return require('../assets/images/elfi.png');
+      case CryptoType.DAI:
+        return require('../assets/images/dai.png');
       case 'none':
         return;
       default:

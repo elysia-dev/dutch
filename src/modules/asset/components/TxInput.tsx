@@ -21,9 +21,12 @@ import UserContext from '../../../contexts/UserContext';
 import PriceContext from '../../../contexts/PriceContext';
 import AppFonts from '../../../enums/AppFonts';
 import decimalFormatter from '../../../utiles/decimalFormatter';
-import ConfirmationModal from './ConfirmationModal';
+import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
+import commaFormatter from '../../../utiles/commaFormatter';
+import isNumericStringAppendable from '../../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../../utiles/newInputValueFormatter';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -214,26 +217,12 @@ const TxInput: React.FC<ITxInput> = ({
         <NumberPad
           addValue={(text) => {
             const before = current === 'fiat' ? values.inFiat : values.inToken;
-            const includesComma = before.includes('.');
-            if (
-              (text === '.' && includesComma) ||
-              (text !== '.' && !includesComma && before.length >= 12) ||
-              (includesComma &&
-                before.split('.')[1].length >= (current === 'fiat' ? 2 : 6)) ||
-              (before
-                .split('')
-                .reduce((res, cur) => res && cur === '0', true) &&
-                text === '0')
-            ) {
+            const maxFraction = current === 'fiat' ? 2 : 6;
+            if (!isNumericStringAppendable(before, text, 12, maxFraction)) {
               return;
             }
 
-            const next =
-              text === '.' && !before
-                ? '0.'
-                : text !== '0' && before === '0'
-                ? text
-                : before + text;
+            const next = newInputValueFormatter(before, text);
             const removedDotNext =
               next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
@@ -303,16 +292,31 @@ const TxInput: React.FC<ITxInput> = ({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={title}
-        purpose={purpose}
-        assetTitle={assetInToken.title}
-        assetUnit={assetInToken.unit}
-        values={values}
-        priceInCryptocurrency={cryptoPrice}
-        cryptocurrencyType={assetInCrypto.type}
-        estimateGas={estimateGas}
-        gasCrypto={gasCrypto}
+        subtitle={t(`assets.${purpose}_confirm`)}
+        list={[
+          {
+            label: t(`assets.${purpose}_confirm_product`),
+            value: `${assetInToken.title} (${assetInToken.unit})`,
+          },
+          {
+            label: t(`assets.${purpose}_confirm_value`),
+            value: `$ ${commaFormatter(values.inFiat)}`,
+            subvalue: `${commaFormatter(
+              decimalFormatter(Number(values.inFiat) / cryptoPrice, 2),
+            )} ${assetInCrypto.type}`,
+          },
+          {
+            label: t(`assets.${purpose}_confirm_stake`),
+            value: `${commaFormatter(values.inToken)} ${assetInToken.unit}`,
+          },
+          {
+            label: t('assets.gas_price'),
+            value: `${commaFormatter(estimateGas)} ${gasCrypto}`,
+          },
+        ]}
         isApproved={isApproved}
-        createTx={createTx}
+        submitButtonText={t(`assets.${purpose}`)}
+        handler={createTx}
       />
       <OverlayLoading
         visible={[
