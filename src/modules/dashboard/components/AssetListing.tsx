@@ -7,6 +7,8 @@ import Asset from '../../../types/Asset';
 import AssetItem from './AssetItem';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
+import TransactionContext from '../../../contexts/TransactionContext';
+import CryptoType from '../../../enums/CryptoType';
 
 interface IAssetListing {
   title: string;
@@ -21,8 +23,8 @@ export const AssetListing: React.FC<IAssetListing> = ({
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
+  const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
-
   return (
     <View>
       <View
