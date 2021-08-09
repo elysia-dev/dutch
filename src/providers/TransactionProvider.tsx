@@ -15,32 +15,62 @@ import { bscProvider, provider } from '../utiles/getContract';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
+import { ethers } from 'ethers';
+import moment from 'moment';
 
 const TransactionProvider: React.FC = (props) => {
   const { refreshBalance } = useContext(AssetContext);
+  const [txRe, setTxRe] = useState<ethers.providers.TransactionReceipt>();
   const [state, setState] = useState<TransactionType>(initialTransactions);
   const { t } = useTranslation();
 
-  const addPendingTransaction = async (pendingTx: CryptoTransaction) => {
-    if (pendingTx.blockNumber) {
+  const addPendingTransaction = async (
+    txRes: ethers.providers.TransactionResponse | undefined,
+    pendingTx: CryptoTransaction,
+  ) => {
+    try {
+      await AsyncStorage.setItem(
+        PENDING_TRANSACTIONS,
+        JSON.stringify([{ ...pendingTx, status: TxStatus.Pending }]),
+      );
       setState({
         ...state,
-        transactions: [{ ...pendingTx, status: TxStatus.Success }],
+        transactions: [{ ...pendingTx, status: TxStatus.Pending }],
       });
-      return;
+
+      const txResult = await txRes?.wait();
+      if (txResult) {
+        setTxRe(txResult);
+      }
+    } catch (e) {
+      console.log(e);
     }
-    await AsyncStorage.setItem(
-      PENDING_TRANSACTIONS,
-      JSON.stringify([
-        { ...pendingTx, status: TxStatus.Pending },
-        ...state.transactions,
-      ]),
-    );
-    setState({
-      ...state,
-      transactions: [{ ...pendingTx, status: TxStatus.Pending }],
-    });
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (txRe) {
+          const date = await provider.getBlock(txRe?.blockNumber || '');
+          const txIdx = state.transactions.findIndex((tx) => {
+            return txRe?.transactionHash === tx.txHash;
+          });
+          state.transactions[txIdx] = {
+            ...state.transactions[txIdx],
+            createdAt: moment.unix(date.timestamp).toString(),
+            blockNumber: txRe?.blockNumber,
+            status: TxStatus.Success,
+          };
+          setState({
+            ...state,
+            transactions: [...state.transactions],
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [txRe]);
 
   useEffect(() => {
     (async () => {
