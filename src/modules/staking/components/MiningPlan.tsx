@@ -17,14 +17,19 @@ import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
 } from '../../../utiles/getContract';
+import calculateMinted from '../../../utiles/calculateMinted';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 const MiningPlan: React.FC<{
   round: number;
-  rewardCryptoType: CryptoType;
-}> = ({ round, rewardCryptoType }) => {
+  cryptoType: CryptoType;
+  currentRound: number;
+}> = ({ round, cryptoType, currentRound }) => {
   const { getCryptoPrice } = useContext(PriceContext);
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const contract =
-    rewardCryptoType === CryptoType.ELFI
+    cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
   const [poolData, setPoolData] = useState({
@@ -38,13 +43,15 @@ const MiningPlan: React.FC<{
 
   let rewardPerDay;
   let rewardPerRound;
-  if (rewardCryptoType === CryptoType.ELFI) {
+  if (cryptoType === CryptoType.EL) {
     rewardPerDay = ELFI_PER_DAY_ON_EL_STAKING_POOL;
     rewardPerRound = ELFI_PER_ROUND_ON_EL_STAKING_POOL;
   } else {
     rewardPerDay = DAI_PER_DAY_ON_ELFI_STAKING_POOL;
     rewardPerRound = DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
   }
+
+  const cumulativeMinted = calculateMinted(cryptoType, round, currentRound);
 
   useEffect(() => {
     contract?.getPoolData(round).then((res: any) => {
@@ -87,8 +94,18 @@ const MiningPlan: React.FC<{
             label: '1일 채굴량',
             value: `${commaFormatter(rewardPerDay)} ${rewardCryptoType}`,
           },
-          { label: '누적 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
-          { label: '잔여 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
+          {
+            label: '누적 채굴량',
+            value: `${commaFormatter(
+              decimalFormatter(cumulativeMinted, 5),
+            )} ${rewardCryptoType}`,
+          },
+          {
+            label: '잔여 채굴량',
+            value: `${commaFormatter(
+              decimalFormatter(rewardPerRound - cumulativeMinted, 5),
+            )} ${rewardCryptoType}`,
+          },
           {
             label: `${rewardCryptoType} 가격`,
             value: `$ ${getCryptoPrice(rewardCryptoType)}`,

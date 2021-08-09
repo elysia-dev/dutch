@@ -26,6 +26,8 @@ import {
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
+import calculateMinted from '../../utiles/calculateMinted';
+import decimalFormatter from '../../utiles/decimalFormatter';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -144,7 +146,19 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
           <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
           <BoxWithDivider
             contents={[
-              { label: '현 채굴량', value: `${'(모름)'} ${rewardCryptoType}` },
+              {
+                label: '현 채굴량',
+                value: `${commaFormatter(
+                  decimalFormatter(
+                    [1, 2, 3, 4, 5, 6].reduce(
+                      (totalMinted, round) =>
+                        totalMinted +
+                        calculateMinted(cryptoType, round, currentRound),
+                    ),
+                    5,
+                  ),
+                )} ${rewardCryptoType}`,
+              },
               {
                 label: '총 채굴량',
                 value: `${commaFormatter(
@@ -161,7 +175,8 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
                 <MiningPlan
                   key={i}
                   round={i}
-                  rewardCryptoType={rewardCryptoType}
+                  cryptoType={cryptoType}
+                  currentRound={currentRound}
                 />
               );
             })}
