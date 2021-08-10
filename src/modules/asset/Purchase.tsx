@@ -33,6 +33,7 @@ import { purchaseProduct } from '../../utiles/createTransction';
 import { Platform } from 'react-native';
 import { useTransferTx } from '../../hooks/useTransferTx copy';
 import TransferType from '../../enums/TransferType';
+import AssetProvider from '../../providers/AssetProvider';
 
 type ParamList = {
   Purchase: {
@@ -72,7 +73,7 @@ const Purchase: FunctionComponent = () => {
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
-  const { getBalance } = useContext(AssetContext);
+  const { getBalance, assets } = useContext(AssetContext);
   const changeSetTransfer = useTransferTx(from.type, productId);
   const fromMax = ((toMax || 0) * 5) / getCryptoPrice(from.type);
   const fromPrice = getCryptoPrice(from.type);
@@ -88,7 +89,7 @@ const Purchase: FunctionComponent = () => {
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
             from: address,
-            value: utils.parseEther('0.00001'), // 현재 가지고 있는 자산만큼 넣어주자
+            value: utils.parseEther('0.1'),
           });
           break;
         default:
