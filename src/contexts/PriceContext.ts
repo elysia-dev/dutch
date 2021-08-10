@@ -11,7 +11,7 @@ export type PriceState = {
 }
 
 export interface IPriceContext extends PriceState {
-  getCryptoPrice: (cryptoType: CryptoType) => number
+  getCryptoPrice: (cryptoType: CryptoType | 'NONE') => number
 }
 
 export const initialPriceState = {
@@ -25,7 +25,7 @@ export const initialPriceState = {
 
 export const initialPriceContext = {
   ...initialPriceState,
-  getCryptoPrice: (_cryptoType: CryptoType) => 0,
+  getCryptoPrice: (_cryptoType: CryptoType | 'NONE') => 0,
 }
 
 const PriceContext = createContext<IPriceContext>(initialPriceContext);
