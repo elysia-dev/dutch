@@ -258,32 +258,28 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           }
         />
       </View>
-      {isModalViasible && (
-        <View>
-          <AccelerateModal
-            isModalViasible={isModalViasible}
-            setIsModalViasible={setIsModalViasible}
-            getEstimateGas={getEstimateGas}
-            updateGasPrice={updateGasPrice}
-            paymentMethod={paymentMethod}
-            valueInCryto={valueInCryto}
-            gasFee={gasFee}
-            crytoValue={crytoValue?.value}
-            contract={contract}
-            isDisabled={isDisabled}
-            setIsDisabled={setIsDisabled}
-            txCryptoType={transaction.cryptoType}
-            productId={transaction.productId}
-            valueFrom={
-              paymentMethod === 'NONE'
-                ? transaction.value
-                : transaction.valueFrom
-            }
-            value={transaction.value}
-            address={transaction.toAddress}
-          />
-        </View>
-      )}
+      <View>
+        <AccelerateModal
+          isModalViasible={isModalViasible}
+          setIsModalViasible={setIsModalViasible}
+          getEstimateGas={getEstimateGas}
+          updateGasPrice={updateGasPrice}
+          paymentMethod={paymentMethod}
+          valueInCryto={valueInCryto}
+          gasFee={gasFee}
+          crytoValue={crytoValue?.value}
+          contract={contract}
+          isDisabled={isDisabled}
+          setIsDisabled={setIsDisabled}
+          txCryptoType={transaction.cryptoType}
+          productId={transaction.productId}
+          valueFrom={
+            paymentMethod === 'NONE' ? transaction.value : transaction.valueFrom
+          }
+          value={transaction.value}
+          address={transaction.toAddress}
+        />
+      </View>
     </View>
   );
 };
