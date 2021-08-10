@@ -324,7 +324,11 @@
       "return": "Return",
       "transaction_list": "Transaction record",
       "my_address": "My deposit address",
-      "copy_address": "Copy address"
+      "copy_address": "Copy address",
+      "my_staking": "My staking and rewards",
+      "staking_by_crypto": "{{stakingCrypto}} staking and {{rewardCrypto}} rewards",
+      "staking_amount": "{{round}}$t(ordinal_suffix.{{round}}) round staking",
+      "reward_amount": "{{round}}$t(ordinal_suffix.{{round}}) round rewards"
     },
     "recovery_key": {
       "keep": "Save your recovery key",
@@ -406,6 +410,7 @@
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."
-    }
+    },
+    "ordinal_suffix": ["", "st", "nd", "rd", "th", "th", "th"]
   }
 }

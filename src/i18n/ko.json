@@ -321,7 +321,11 @@
       "return": "이자",
       "transaction_list": "거래기록",
       "my_address": "내 입금주소",
-      "copy_address": "입금 주소 복사"
+      "copy_address": "입금 주소 복사",
+      "my_staking": "내 스테이킹 및 리워드",
+      "staking_by_crypto": "{{stakingCrypto}} 스테이킹 및 {{rewardCrypto}} 리워드",
+      "staking_amount": "{{round}}차 스테이킹",
+      "reward_amount": "{{round}}차 리워드"
     },
     "recovery_key": {
       "keep": "복구키 보관",

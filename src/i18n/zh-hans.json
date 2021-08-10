@@ -317,7 +317,11 @@
       "return": "提取",
       "transaction_list": "交易记录",
       "my_address": "我的钱包地址",
-      "copy_address": "复制收款地址"
+      "copy_address": "复制收款地址",
+      "my_staking": "我的Staking和奖励",
+      "staking_by_crypto": "{{stakingCrypto}}代币Staking和{{rewardCrypto}}代币奖励",
+      "staking_amount": "第$t(numeral_character.{{round}})轮Staking",
+      "reward_amount": "第$t(numeral_character.{{round}})轮奖励"
     },
     "recovery_key": {
       "keep": "存档密匙词组",
@@ -399,6 +403,7 @@
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
-    }
+    },
+    "numeral_character": ["", "一", "二", "三", "四", "五", "六"]
   }
 }
