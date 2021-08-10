@@ -45,8 +45,7 @@ type ParamList = {
 
 export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
-  const { assets, assetLoaded, assetTxWait, loadV2UserBalances } =
-    useContext(AssetContext);
+  const { assets, assetLoaded, loadV2UserBalances } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'Main'>>();
   const { elPrice, getCryptoPrice } = useContext(PriceContext);
   const navigation = useNavigation();
