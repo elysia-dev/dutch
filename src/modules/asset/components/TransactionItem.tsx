@@ -55,7 +55,6 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const { currencyFormatter } = useContext(PreferenceContext);
   const { assets } = useContext(AssetContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { waitTxResult } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const [crytoValue, setCrytoValue] = useState<Asset>();
   const [isModalViasible, setIsModalViasible] = useState(false);
@@ -92,7 +91,6 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         paymentMethod === CryptoType.EL
       ) {
         if (paymentMethod === 'NONE') {
-          console.log(transaction.toAddress);
           estimateGas = await elContract?.estimateGas.transfer(
             transaction.toAddress,
             utils.parseEther(transaction.value || '0.1'),
