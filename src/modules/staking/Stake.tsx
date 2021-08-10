@@ -1,6 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils, constants } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -18,15 +20,60 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
+import WalletContext from '../../contexts/WalletContext';
+import CryptoType from '../../enums/CryptoType';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
-  const { isWalletUser } = useContext(UserContext);
+  const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
+  const { wallet } = useContext(WalletContext);
+  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
+
+  const estimateGas = async (address: string) => {
+    let estimateGas: BigNumber | undefined;
+
+    try {
+      estimateGas = await contract?.estimateGas.purchase({
+        from: address,
+        value: utils.parseEther('0.5'),
+      });
+
+      if (estimateGas) {
+        setEstimatedGasPrice(
+          utils.formatEther(
+            estimateGas.mul(
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      setEstimatedGasPrice('');
+    }
+  };
+
+  useEffect(() => {
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
+    }
+  }, []);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -83,7 +130,9 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             `스테이킹 가능 수량: ${commaFormatter(
               decimalFormatter(getBalance(cryptoType), 6),
             )} ${cryptoType}`,
-            `예상 가스비: ${'(모름)'}`,
+            estimagedGasPrice
+              ? `예상 가스비: ${estimagedGasPrice} ETH`
+              : '가스비를 추정할 수 없습니다.',
           ]}
           isInvalid={parseFloat(value) > getBalance(cryptoType)}
           invalidText={`보유하신 ${cryptoType} 잔액이 부족합니다.`}

@@ -1,6 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils, constants } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -36,6 +38,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { wallet } = useContext(WalletContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
 
   let principal = 0;
   let reward = 0;
@@ -80,6 +83,39 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         { label: '가스비', value: '(모름)' },
       ];
 
+  const estimateGas = async (address: string) => {
+    let estimateGas: BigNumber | undefined;
+
+    try {
+      estimateGas = await contract?.estimateGas.purchase({
+        from: address,
+        value: utils.parseEther('0.5'),
+      });
+
+      if (estimateGas) {
+        setEstimatedGasPrice(
+          utils.formatEther(
+            estimateGas.mul(
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      setEstimatedGasPrice('');
+    }
+  };
+
+  useEffect(() => {
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
+    }
+  }, []);
+
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader title={`${cryptoType} 언스테이킹`} />
@@ -105,7 +141,9 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
             `언스테이킹 가능 수량: ${commaFormatter(
               decimalFormatter(principal, 6),
             )} ${cryptoType}`,
-            `예상 가스비: ${'(모름)'}`,
+            estimagedGasPrice
+              ? `예상 가스비: ${estimagedGasPrice} ETH`
+              : '가스비를 추정할 수 없습니다.',
           ]}
           isInvalid={parseFloat(value) > principal}
           invalidText={'언스테이킹 가능 수량을 초과했습니다.'}
