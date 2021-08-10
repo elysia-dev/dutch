@@ -33,14 +33,6 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
-  const [poolData, setPoolData] = useState({
-    rewardPerSecond: 0,
-    rewardIndex: 0,
-    startTimestamp: 0,
-    endTimestamp: 0,
-    totalPrincipal: 0,
-    lastUpdateTimestamp: 0,
-  });
   const contract =
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
@@ -80,19 +72,6 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
       setCurrentRound(res);
     });
   }, []);
-
-  useEffect(() => {
-    contract?.getPoolData(currentRound).then((res: any) => {
-      setPoolData({
-        rewardPerSecond: res[0],
-        rewardIndex: res[1],
-        startTimestamp: res[2],
-        endTimestamp: res[3],
-        totalPrincipal: res[4],
-        lastUpdateTimestamp: res[5],
-      });
-    });
-  }, [currentRound]);
 
   return (
     <View

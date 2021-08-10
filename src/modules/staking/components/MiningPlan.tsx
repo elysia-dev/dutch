@@ -33,14 +33,6 @@ const MiningPlan: React.FC<{
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
-  const [poolData, setPoolData] = useState({
-    rewardPerSecond: 0,
-    rewardIndex: 0,
-    startTimestamp: 0,
-    endTimestamp: 0,
-    totalPrincipal: 0,
-    lastUpdateTimestamp: 0,
-  });
 
   let rewardPerDay;
   let rewardPerRound;
@@ -53,19 +45,6 @@ const MiningPlan: React.FC<{
   }
 
   const cumulativeMinted = calculateMinted(cryptoType, round, currentRound);
-
-  useEffect(() => {
-    contract?.getPoolData(round).then((res: any) => {
-      setPoolData({
-        rewardPerSecond: res[0],
-        rewardIndex: res[1],
-        startTimestamp: res[2],
-        endTimestamp: res[3],
-        totalPrincipal: res[4],
-        lastUpdateTimestamp: res[5],
-      });
-    });
-  }, []);
 
   return (
     <CardWithShadow

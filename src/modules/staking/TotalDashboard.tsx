@@ -25,14 +25,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
-  const [poolData, setPoolData] = useState({
-    rewardPerSecond: 0,
-    rewardIndex: 0,
-    startTimestamp: 0,
-    endTimestamp: 0,
-    totalPrincipal: 0,
-    lastUpdateTimestamp: 0,
-  });
   const contract =
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
@@ -51,17 +43,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     : user.ethAddresses[0];
 
   useEffect(() => {
-    contract?.getPoolData(selectedRound).then((res: any) => {
-      setPoolData({
-        rewardPerSecond: res[0],
-        rewardIndex: res[1],
-        startTimestamp: res[2],
-        endTimestamp: res[3],
-        totalPrincipal: res[4],
-        lastUpdateTimestamp: res[5],
-      });
-    });
-
     contract?.getUserData(selectedRound, userAddress).then((res: any) => {
       setUserReward(res[1].toNumber());
       setUserPrincipal(res[2].toNumber());
