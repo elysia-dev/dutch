@@ -165,7 +165,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
               navigation.navigate(Page.Staking, {
                 screen: StakingPage.Reward,
                 params: {
-                  cryptoType,
+                  rewardCryptoType,
                   selectedRound,
                   currentRound,
                 },
