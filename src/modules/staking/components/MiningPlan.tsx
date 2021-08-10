@@ -18,7 +18,7 @@ import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
 } from '../../../utiles/getContract';
-import calculateMinted from '../../../utiles/calculateMinted';
+import calculateMined from '../../../utiles/calculateMined';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 
 const MiningPlan: React.FC<{
@@ -44,7 +44,7 @@ const MiningPlan: React.FC<{
     rewardPerRound = DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
   }
 
-  const cumulativeMinted = calculateMinted(cryptoType, round, currentRound);
+  const cumulativeMined = calculateMined(cryptoType, round, currentRound);
 
   return (
     <CardWithShadow
@@ -95,7 +95,7 @@ const MiningPlan: React.FC<{
         <BoxWithDividerContent
           label="누적 채굴량"
           value={`${commaFormatter(
-            decimalFormatter(cumulativeMinted, 5),
+            decimalFormatter(cumulativeMined, 5),
           )} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,
@@ -107,7 +107,7 @@ const MiningPlan: React.FC<{
         <BoxWithDividerContent
           label="잔여 채굴량"
           value={`${commaFormatter(
-            decimalFormatter(rewardPerRound - cumulativeMinted, 5),
+            decimalFormatter(rewardPerRound - cumulativeMined, 5),
           )} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,

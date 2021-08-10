@@ -26,7 +26,7 @@ import {
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
-import calculateMinted from '../../utiles/calculateMinted';
+import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 
@@ -133,9 +133,9 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
               value={`${commaFormatter(
                 decimalFormatter(
                   [1, 2, 3, 4, 5, 6].reduce(
-                    (totalMinted, round) =>
-                      totalMinted +
-                      calculateMinted(cryptoType, round, currentRound),
+                    (totalMined, round) =>
+                      totalMined +
+                      calculateMined(cryptoType, round, currentRound),
                     0,
                   ),
                   5,

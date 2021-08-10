@@ -6,13 +6,13 @@ import {
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
 } from '../../../constants/staking';
 import CryptoType from '../../../enums/CryptoType';
-import calculateMinted from '../../../utiles/calculateMinted';
+import calculateMined from '../../../utiles/calculateMined';
 
 const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
   currentRound,
   cryptoType,
 }) => {
-  const mintedPerRound =
+  const minedPerRound =
     cryptoType === CryptoType.EL
       ? ELFI_PER_ROUND_ON_EL_STAKING_POOL
       : DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
@@ -32,7 +32,7 @@ const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
             key={i}
             round={i}
             percent={
-              (calculateMinted(cryptoType, i, currentRound) / mintedPerRound) *
+              (calculateMined(cryptoType, i, currentRound) / minedPerRound) *
               100
             }
           />
