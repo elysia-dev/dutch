@@ -159,10 +159,17 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           />
           <CircularButtonWithLabel
             icon="⤴"
-            disabled={false}
+            disabled={!isRewardAvailable}
             label="보상 수령"
             pressHandler={() => {
-              console.log('아직 보상 수령 페이지가 없음');
+              navigation.navigate(Page.Staking, {
+                screen: StakingPage.Reward,
+                params: {
+                  cryptoType,
+                  selectedRound,
+                  currentRound,
+                },
+              });
             }}
           />
         </View>
