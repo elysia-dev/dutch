@@ -43,7 +43,10 @@ const TransactionProvider: React.FC = (props) => {
         setTxRe(txResult);
       }
     } catch (e) {
-      console.log(e);
+      setState({
+        ...state,
+        transactions: [{ ...pendingTx, status: TxStatus.Fail }],
+      });
     }
   };
 
