@@ -20,6 +20,7 @@ import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward } = route.params;
@@ -54,9 +55,11 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         {
           label: `언스테이킹 수량`,
           value: `${value} ${cryptoType}`,
-          subvalue: `$ ${decimalFormatter(
-            parseFloat(value || '0') * getCryptoPrice(cryptoType),
-            6,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
           )}`,
         },
         { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
@@ -67,9 +70,11 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         {
           label: `언스테이킹 수량`,
           value: `${value} ${cryptoType}`,
-          subvalue: `$ ${decimalFormatter(
-            parseFloat(value || '0') * getCryptoPrice(cryptoType),
-            6,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
           )}`,
         },
         { label: '가스비', value: '(모름)' },
@@ -91,13 +96,14 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         />
         <InputInfoBox
           list={[
-            `언스테이킹 달러 가치: $ ${decimalFormatter(
-              parseFloat(value || '0') * getCryptoPrice(cryptoType),
-              6,
+            `언스테이킹 달러 가치: $ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                6,
+              ),
             )}`,
-            `언스테이킹 가능 수량: ${decimalFormatter(
-              principal,
-              6,
+            `언스테이킹 가능 수량: ${commaFormatter(
+              decimalFormatter(principal, 6),
             )} ${cryptoType}`,
             `예상 가스비: ${'(모름)'}`,
           ]}

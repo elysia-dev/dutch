@@ -21,6 +21,7 @@ import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -59,17 +60,21 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       {
         label: `언스테이킹 수량`,
         value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
+        subvalue: `$ ${commaFormatter(
+          decimalFormatter(
+            parseFloat(value || '0') * getCryptoPrice(cryptoType),
+            6,
+          ),
         )}`,
       },
       {
         label: '마이그레이션 수량',
         value: `${principal - parseFloat(value)} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
-          6,
+        subvalue: `$ ${commaFormatter(
+          decimalFormatter(
+            (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+            6,
+          ),
         )}`,
       },
       {
@@ -85,17 +90,21 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       {
         label: `언스테이킹 수량`,
         value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
+        subvalue: `$ ${commaFormatter(
+          decimalFormatter(
+            parseFloat(value || '0') * getCryptoPrice(cryptoType),
+            6,
+          ),
         )}`,
       },
       {
         label: '마이그레이션 수량',
         value: `${principal - parseFloat(value)} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
-          6,
+        subvalue: `$ ${commaFormatter(
+          decimalFormatter(
+            (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+            6,
+          ),
         )}`,
       },
       {
@@ -139,7 +148,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         />
         <InputInfoBox
           list={[
-            `입력 가능 수량: ${decimalFormatter(principal, 6)} ${cryptoType}`,
+            `입력 가능 수량: ${commaFormatter(
+              decimalFormatter(principal, 6),
+            )} ${cryptoType}`,
             `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
             `예상 가스비: ${'(모름)'}`,
           ]}

@@ -17,6 +17,7 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -73,13 +74,14 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         />
         <InputInfoBox
           list={[
-            `스테이킹 달러 가치: $ ${decimalFormatter(
-              parseFloat(value || '0') * getCryptoPrice(cryptoType),
-              6,
+            `스테이킹 달러 가치: $ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                6,
+              ),
             )}`,
-            `스테이킹 가능 수량: ${decimalFormatter(
-              getBalance(cryptoType),
-              6,
+            `스테이킹 가능 수량: ${commaFormatter(
+              decimalFormatter(getBalance(cryptoType), 6),
             )} ${cryptoType}`,
             `예상 가스비: ${'(모름)'}`,
           ]}
@@ -129,9 +131,11 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           {
             label: `스테이킹 수량`,
             value: `${value} ${cryptoType}`,
-            subvalue: `$ ${decimalFormatter(
-              parseFloat(value || '0') * getCryptoPrice(cryptoType),
-              6,
+            subvalue: `$ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                6,
+              ),
             )}`,
           },
           { label: '가스비', value: '(모름)' },
