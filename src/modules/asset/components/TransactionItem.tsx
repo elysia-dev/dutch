@@ -57,7 +57,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { wallet } = useContext(WalletContext);
   const [crytoValue, setCrytoValue] = useState<Asset>();
-  const [isModalViasible, setIsModalViasible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [updateGasPrice, setUpdateGasPrice] = useState('1');
   const [contract, setContract] = useState<Contract | null>();
   const [gasFee, setGasFee] = useState('0');
@@ -132,7 +132,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   };
 
   useEffect(() => {
-    if (!isModalViasible) return;
+    if (!isModalVisible) return;
     setUpdateGasPrice(
       parseInt(
         utils.formatUnits(
@@ -164,7 +164,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     setContract(
       getAssetTokenFromCryptoType(paymentMethod, contractAddress || ''),
     );
-  }, [isModalViasible, valueInCryto]);
+  }, [isModalVisible, valueInCryto]);
   return (
     <View
       style={{
@@ -216,7 +216,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
               moment(transaction.createdAt).format('YYYY-MM-DD | HH:mm:ss')
             ) : (
               <TouchableOpacity
-                onPress={() => setIsModalViasible((prev) => !prev)}>
+                onPress={() => setIsModalVisible((prev) => !prev)}>
                 <View
                   style={{
                     width: 50,
@@ -260,8 +260,8 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       </View>
       <View>
         <AccelerateModal
-          isModalViasible={isModalViasible}
-          setIsModalViasible={setIsModalViasible}
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
           getEstimateGas={getEstimateGas}
           updateGasPrice={updateGasPrice}
           paymentMethod={paymentMethod}
