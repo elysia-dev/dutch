@@ -24,8 +24,8 @@ import TransferType from '../../../enums/TransferType';
 import Accelerate from '../../../enums/Accelerate';
 
 interface AccelerateItem {
-  isModalViasible: boolean;
-  setIsModalViasible: (prev: boolean) => void;
+  isModalVisible: boolean;
+  setIsModalVisible: (prev: boolean) => void;
   getEstimateGas: (text: string) => void;
   updateGasPrice: string;
   paymentMethod: CryptoType | 'NONE';
@@ -43,8 +43,8 @@ interface AccelerateItem {
 }
 
 const AccelerateModal: React.FC<AccelerateItem> = ({
-  isModalViasible,
-  setIsModalViasible,
+  isModalVisible,
+  setIsModalVisible,
   getEstimateGas,
   updateGasPrice,
   paymentMethod,
@@ -79,7 +79,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
       : paymentMethod === CryptoType.BNB;
 
   return (
-    <Modal transparent={true} visible={isModalViasible} animationType="slide">
+    <Modal transparent={true} visible={isModalVisible} animationType="slide">
       <View
         style={{
           flex: 1,
@@ -103,7 +103,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               position: 'absolute',
               left: -8,
             }}
-            onPress={() => setIsModalViasible(false)}>
+            onPress={() => setIsModalVisible(false)}>
             <Image
               source={BackButtonImg}
               style={{
@@ -300,6 +300,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               address,
               updateGasPrice,
             );
+            setIsModalVisible(false);
           }}>
           <Text
             style={{
