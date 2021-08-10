@@ -9,6 +9,7 @@ import Stake from './Stake';
 import SelectUnstakingType from './SelectUnstakingType';
 import Unstake from './Unstake';
 import UnstakeAndMigrate from './UnstakeAndMigrate';
+import Reward from './Reward';
 
 enableScreens();
 
@@ -40,6 +41,7 @@ export const Main = () => {
         name={StakingPage.UnstakeAndMigrate}
         component={UnstakeAndMigrate}
       />
+      <RootStack.Screen name={StakingPage.Reward} component={Reward} />
     </RootStack.Navigator>
   );
 };
