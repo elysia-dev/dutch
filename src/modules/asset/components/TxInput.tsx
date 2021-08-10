@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { Text, View, Dimensions, TouchableOpacity, Platform, ActivityIndicator, Modal } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
@@ -18,6 +18,7 @@ import decimalFormatter from '../../../utiles/decimalFormatter';
 import ConfirmationModal from './ConfirmationModal';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
+import { useEffect } from 'react';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -86,10 +87,16 @@ const TxInput: React.FC<ITxInput> = ({
     fromBalance < parseFloat(estimateGas) + valueInCrypto
     : fromBalance < parseFloat(estimateGas);
   const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
-
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
     valueInCrypto + Number(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
     : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
+  const [isVisible, setIsVisible] = useState(false);
+
+    // useEffect(() => {
+    //   if([TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)){
+    //     setIsVisible(true)
+    //   }
+    // },[step])
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -248,7 +255,7 @@ const TxInput: React.FC<ITxInput> = ({
         />
       </View>
       <ConfirmationModal
-        modalVisible={modalVisible}
+        modalVisible={isVisible ? false : modalVisible}
         setModalVisible={setModalVisible}
         title={title}
         purposeType={purposeType}
@@ -262,7 +269,7 @@ const TxInput: React.FC<ITxInput> = ({
         isApproved={isApproved}
         createTx={createTx}
       />
-      <OverlayLoading visible={[TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)} />
+      {/* <OverlayLoading visible={isVisible} /> */}
     </View>
   );
 };
