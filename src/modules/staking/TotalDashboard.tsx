@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
@@ -17,6 +17,8 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
+import WalletContext from '../../contexts/WalletContext';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -40,8 +42,13 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     setCurrentRound(res);
   });
   const navigation = useNavigation();
-  const isRewardAvailable = currentRound > selectedRound; // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
-  const isMigrationAvailable = Boolean(currentRound);
+  const [userReward, setUserReward] = useState(0);
+  const [userPrincipal, setUserPrincipal] = useState(0);
+  const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
+  const userAddress = isWalletUser // 이거 아예 함수로 만들어야겠는데...
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
   useEffect(() => {
     contract?.getPoolData(selectedRound).then((res: any) => {
@@ -53,6 +60,11 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         totalPrincipal: res[4],
         lastUpdateTimestamp: res[5],
       });
+    });
+
+    contract?.getUserData(selectedRound, userAddress).then((res: any) => {
+      setUserReward(res[1].toNumber());
+      setUserPrincipal(res[2].toNumber());
     });
   }, [selectedRound]);
 
@@ -124,7 +136,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           }}>
           <CircularButtonWithLabel
             icon="+"
-            disabled={!(currentRound && currentRound === selectedRound)}
+            disabled={!(currentRound && currentRound === selectedRound)} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
             label="스테이킹"
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
@@ -139,27 +151,28 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           />
           <CircularButtonWithLabel
             icon="-"
-            disabled={!(currentRound && currentRound >= selectedRound)}
+            disabled={!userPrincipal}
             label="언스테이킹"
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
-                screen: isRewardAvailable
+                screen: userReward
                   ? StakingPage.SelectUnstakingType
                   : StakingPage.Unstake,
                 params: {
                   cryptoType,
                   selectedRound,
                   currentRound,
-                  pageAfterSelection: isMigrationAvailable
-                    ? StakingPage.UnstakeAndMigrate
-                    : StakingPage.Unstake,
+                  pageAfterSelection:
+                    selectedRound <= currentRound
+                      ? StakingPage.UnstakeAndMigrate
+                      : StakingPage.Unstake,
                 },
               });
             }}
           />
           <CircularButtonWithLabel
             icon="⤴"
-            disabled={!isRewardAvailable}
+            disabled={!userReward}
             label="보상 수령"
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
