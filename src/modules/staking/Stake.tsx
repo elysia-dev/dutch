@@ -83,6 +83,8 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             )} ${cryptoType}`,
             `예상 가스비: ${'(모름)'}`,
           ]}
+          isInvalid={parseFloat(value) > getBalance(cryptoType)}
+          invalidText={`보유하신 ${cryptoType} 잔액이 부족합니다.`}
         />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
@@ -107,7 +109,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         }}>
         <NextButton
           title="입력 완료"
-          disabled={!value}
+          disabled={!value || parseFloat(value) > getBalance(cryptoType)}
           handler={() => {
             if (isWalletUser) {
               setModalVisible(true);

@@ -143,6 +143,8 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
             `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
             `예상 가스비: ${'(모름)'}`,
           ]}
+          isInvalid={parseFloat(value) > principal}
+          invalidText={'언스테이킹 가능 수량을 초과했습니다.'}
         />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
@@ -167,7 +169,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         }}>
         <NextButton
           title="입력 완료"
-          disabled={!value}
+          disabled={!value || parseFloat(value) > principal}
           handler={() => {
             if (isWalletUser) {
               setModalVisible(true);
