@@ -55,6 +55,7 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
               <P1Text
                 label={t('staking.unstake_with_reward', {
                   rewardCrypto: rewardCryptoType,
+                  stakingCrypto: cryptoType,
                 })}
                 style={{ fontFamily: AppFonts.Bold }}
               />
