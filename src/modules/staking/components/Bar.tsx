@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
@@ -7,6 +8,8 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
   round,
   percent,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={{ width: '16.7%' }}>
       <View
@@ -44,7 +47,7 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
             fontFamily: AppFonts.Bold,
             fontSize: 12,
           }}>
-          {`${round}차`}
+          {t('staking.round_with_affix', { round })}
         </Text>
         <View
           style={{

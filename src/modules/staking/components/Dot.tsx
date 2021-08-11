@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
@@ -9,6 +10,8 @@ const Dot: React.FC<{
   selected: boolean;
   setSelectedRound: Dispatch<SetStateAction<number>>;
 }> = ({ round, status, selected, setSelectedRound }) => {
+  const { t } = useTranslation();
+
   let backgroundColor;
   let borderColor;
   switch (status) {
@@ -56,7 +59,9 @@ const Dot: React.FC<{
           color: AppColors.BLACK,
           fontSize: 12,
           marginTop: 6,
-        }}>{`${round}차`}</Text>
+        }}>
+        {t('staking.round_with_affix', { round })}
+      </Text>
     </TouchableOpacity>
   );
 };

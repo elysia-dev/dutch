@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
@@ -44,11 +45,12 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
+  const { t } = useTranslation();
 
   let nextButtonTitle;
   let nextButtonDisabled;
   if (!(isWalletUser || user.ethAddresses[0])) {
-    nextButtonTitle = '지갑 연결 필요';
+    nextButtonTitle = t('staking.need_wallet');
     nextButtonDisabled = true;
   } else if (
     !currentRound ||
@@ -57,13 +59,13 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
       STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
     )
   ) {
-    nextButtonTitle = 'COMMING SOON!';
+    nextButtonTitle = t('staking.comming_soon');
     nextButtonDisabled = true;
   } else if (moment().isAfter(STAKING_POOL_ROUNDS_MOMENT[5].endedAt)) {
-    nextButtonTitle = '스테이킹 기간 종료';
+    nextButtonTitle = t('staking.staking_ended');
     nextButtonDisabled = true;
   } else {
-    nextButtonTitle = `${currentRound}차 스테이킹`;
+    nextButtonTitle = t('staking.nth_staking', { round: currentRound });
     nextButtonDisabled = false;
   }
 
@@ -88,11 +90,15 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         <SheetHeader title="" />
         <View style={{ paddingHorizontal: 20 }}>
           <SubTitleText
-            label={`보상으로 ${rewardCryptoType} 수령하는`}
+            label={t('staking.staking_with_type_subtitle', {
+              rewardCrypto: rewardCryptoType,
+            })}
             style={{ fontSize: 14 }}
           />
           <TitleText
-            label={`${cryptoType} 스테이킹`}
+            label={t('staking.staking_with_type', {
+              stakingCrypto: cryptoType,
+            })}
             style={{ fontSize: 22 }}
           />
           <DotGraph
@@ -103,33 +109,33 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
           <BoxWithDivider style={{ marginBottom: 60 }}>
             <BoxWithDividerContent
               isFirst={true}
-              label="기간"
+              label={t('staking.schedule')}
               value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
                 STAKING_POOL_ROUNDS[currentRound - 1].endedAt
               } (KST)`}
             />
             <BoxWithDividerContent
-              label="현재 진행 회차"
+              label={t('staking.current_round')}
               value={`${currentRound}차`}
             />
             <BoxWithDividerContent
-              label="스테이킹 일수"
+              label={t('staking.staking_days')}
               value={`${ROUND_DURATION}일`}
             />
             <BoxWithDividerContent
-              label="예상 수익률 (APR)"
+              label={t('staking.apr')}
               value={`${aprFormatter(calculateAPR(cryptoType, currentRound))}%`}
             />
           </BoxWithDivider>
           <TitleText
-            label={`${rewardCryptoType} 채굴 플랜`}
+            label={t('staking.mining_plan', { rewardCrypto: rewardCryptoType })}
             style={{ fontSize: 22 }}
           />
           <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
           <BoxWithDivider style={{ marginBottom: 27 }}>
             <BoxWithDividerContent
               isFirst={true}
-              label="현 채굴량"
+              label={t('staking.current_mined')}
               value={`${commaFormatter(
                 decimalFormatter(
                   [1, 2, 3, 4, 5, 6].reduce(
@@ -144,7 +150,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
               style={{ paddingVertical: 16 }}
             />
             <BoxWithDividerContent
-              label="총 채굴량"
+              label={t('staking.total_mining_supply')}
               value={`${commaFormatter(
                 totalAmountOfReward,
               )} ${rewardCryptoType}`}

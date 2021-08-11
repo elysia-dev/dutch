@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import CryptoInput from '../asset/components/CryptoInput';
@@ -28,6 +29,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     rewardCryptoType === CryptoType.ELFI
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
+  const { t } = useTranslation();
 
   useEffect(() => {
     contract
@@ -42,7 +44,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`보상 수령`} />
+      <SheetHeader title={t('staking.claim_rewards')} />
       <View
         style={{
           paddingHorizontal: 20,
@@ -50,7 +52,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
           alignItems: 'center',
         }}>
         <CryptoInput
-          title={'보상'}
+          title={t('staking.rewards')}
           value={commaFormatter(decimalFormatter(value, 5))}
           subValue={`$ ${commaFormatter(
             decimalFormatter(value * getCryptoPrice(rewardCryptoType), 5),
@@ -75,7 +77,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
             bottom: insets.bottom || 10,
           }}>
           <NextButton
-            title={'수령하기'}
+            title={t('staking.claim')}
             disabled={false}
             handler={() => {
               if (isWalletUser) {

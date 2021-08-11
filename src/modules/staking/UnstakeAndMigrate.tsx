@@ -3,6 +3,7 @@ import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -40,6 +41,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { t } = useTranslation();
 
   let principal = 0;
   let reward = 0;
@@ -57,11 +59,11 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   if (earnReward) {
     confirmationList = [
       {
-        label: `언스테이킹 회차`,
-        value: `${selectedRound}차 언스테이킹`,
+        label: t('staking.unstaking_round'),
+        value: t('staking.nth_unstaking', { round: selectedRound }),
       },
       {
-        label: `언스테이킹 수량`,
+        label: t('staking.unstaking_supply'),
         value: `${value} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
@@ -71,7 +73,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         )}`,
       },
       {
-        label: '마이그레이션 수량',
+        label: t('staking.migration_supply'),
         value: `${principal - parseFloat(value)} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
@@ -81,17 +83,25 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         )}`,
       },
       {
-        label: '마이그레이션 위치',
-        value: `${selectedRound}차 → ${currentRound}차`,
+        label: t('staking.migration_destination'),
+        value: `${t('staking.round_with_affix', {
+          round: selectedRound,
+        })} → ${t('staking.round_with_affix', { round: currentRound })}`,
       },
-      { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
-      { label: '가스비', value: '(모름)' },
+      {
+        label: t('staking.reward_supply'),
+        value: `${reward} ${rewardCryptoType}`,
+      },
+      { label: t('staking.gas_price'), value: '(모름)' },
     ];
   } else {
     confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
       {
-        label: `언스테이킹 수량`,
+        label: t('staking.unstaking_round'),
+        value: t('staking.nth_unstaking', { round: selectedRound }),
+      },
+      {
+        label: t('staking.unstaking_supply'),
         value: `${value} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
@@ -101,7 +111,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         )}`,
       },
       {
-        label: '마이그레이션 수량',
+        label: t('staking.migration_supply'),
         value: `${principal - parseFloat(value)} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
@@ -111,10 +121,12 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         )}`,
       },
       {
-        label: '마이그레이션 위치',
-        value: `${selectedRound}차 → ${currentRound}차`,
+        label: t('staking.migration_destination'),
+        value: `${t('staking.round_with_affix', {
+          round: selectedRound,
+        })} → ${t('staking.round_with_affix', { round: currentRound })}`,
       },
-      { label: '가스비', value: '(모름)' },
+      { label: t('staking.gas_price'), value: '(모름)' },
     ];
   }
 
@@ -153,7 +165,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`${cryptoType} 언스테이킹`} />
+      <SheetHeader
+        title={t('stking.nth_unstaking', { round: selectedRound })}
+      />
       <View
         style={{
           // marginTop: Platform.OS === 'android' ? 20 : 10,
@@ -161,7 +175,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           flex: 1,
         }}>
         <LargeTextInput
-          placeholder="몇 개를 언스테이킹할까요?"
+          placeholder={t('staking.unstaking_placeholder')}
           value={value}
           unit={cryptoType}
           style={{ marginTop: 0 }}
@@ -177,7 +191,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           ↕
         </Text>
         <LargeTextInput
-          placeholder="몇 개를 마이그레이션할까요?"
+          placeholder={t('staking.migration_placeholder')}
           value={principal - parseFloat(value)}
           unit={cryptoType}
           style={{ marginTop: 0 }}
@@ -187,13 +201,18 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
             `입력 가능 수량: ${commaFormatter(
               decimalFormatter(principal, 6),
             )} ${cryptoType}`,
-            `마이그레이션 위치: ${selectedRound}차 → ${currentRound}차`,
+            `${t('staking.migration_destination')}: ${t(
+              'staking.round_with_affix',
+              {
+                round: selectedRound,
+              },
+            )} → ${t('staking.round_with_affix', { round: currentRound })}`,
             estimagedGasPrice
-              ? `예상 가스비: ${estimagedGasPrice} ETH`
-              : '가스비를 추정할 수 없습니다.',
+              ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+              : t('staking.cannot_estimate_gas'),
           ]}
           isInvalid={parseFloat(value) > principal}
-          invalidText={'언스테이킹 가능 수량을 초과했습니다.'}
+          invalidText={t('staking.unstaking_value_excess')}
         />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
@@ -217,7 +236,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           paddingRight: '5%',
         }}>
         <NextButton
-          title="입력 완료"
+          title={t('staking.done')}
           disabled={!value || parseFloat(value) > principal}
           handler={() => {
             if (isWalletUser) {
@@ -231,11 +250,11 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       <ConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={`${cryptoType} 언스테이킹`}
-        subtitle="최종 확인을 해 주세요!"
+        title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
+        subtitle={t('staking.confirmation_title')}
         list={confirmationList}
         isApproved={true}
-        submitButtonText={`${selectedRound}차 언스테이킹`}
+        submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
         handler={() => console.log('언스테이킹 해야 함')}
       />
       {/* <OverlayLoading

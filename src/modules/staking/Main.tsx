@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import AppFonts from '../../enums/AppFonts';
@@ -20,6 +21,7 @@ export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
   const totalStakingPeriod = `${STAKING_POOL_ROUNDS[0].startedAt} ~ ${STAKING_POOL_ROUNDS[5].endedAt} (KST)`;
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView
@@ -29,7 +31,7 @@ export const Main: React.FC = () => {
         top: 0,
         backgroundColor: AppColors.WHITE,
       }}>
-      <AnimatedMainHeader title={'스테이킹'} scrollY={scrollY} />
+      <AnimatedMainHeader title={t('staking.staking')} scrollY={scrollY} />
       <View
         style={{
           marginTop: 45,
@@ -76,7 +78,9 @@ export const Main: React.FC = () => {
                 lineHeight: 17,
                 fontFamily: AppFonts.Bold,
               }}>
-              EL 스테이킹
+              {t('staking.staking_with_type', {
+                stakingCrypto: CryptoType.EL,
+              })}
             </Text>
             <Text
               style={{
@@ -85,7 +89,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              {`기간 : ${totalStakingPeriod}`}
+              {`${t('staking.schedule')} : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>
@@ -129,7 +133,9 @@ export const Main: React.FC = () => {
                 lineHeight: 17,
                 fontFamily: AppFonts.Bold,
               }}>
-              ELFI 스테이킹
+              {t('staking.staking_with_type', {
+                stakingCrypto: CryptoType.ELFI,
+              })}
             </Text>
             <Text
               style={{
@@ -138,7 +144,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              {`기간 : ${totalStakingPeriod}`}
+              {`${t('staking.schedule')} : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>

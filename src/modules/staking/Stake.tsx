@@ -3,6 +3,7 @@ import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -41,6 +42,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
+  const { t } = useTranslation();
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -77,7 +79,9 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`${cryptoType} 스테이킹`} />
+      <SheetHeader
+        title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
+      />
       <View
         style={{
           alignSelf: 'center',
@@ -97,7 +101,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          {`${selectedRound}차 스테이킹 APR`}
+          {t('staking.nth_apr', { round: selectedRound })}
         </Text>
         <Text
           style={{
@@ -115,27 +119,29 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           flex: 1,
         }}>
         <LargeTextInput
-          placeholder="몇 개를 스테이킹할까요?"
+          placeholder={t('staking.staking_placeholder')}
           value={value}
           unit={cryptoType}
         />
         <InputInfoBox
           list={[
-            `스테이킹 달러 가치: $ ${commaFormatter(
+            `${t('staking.staking_in_dollars')}: $ ${commaFormatter(
               decimalFormatter(
                 parseFloat(value || '0') * getCryptoPrice(cryptoType),
                 6,
               ),
             )}`,
-            `스테이킹 가능 수량: ${commaFormatter(
+            `${t('staking.staking_supply_available')}: ${commaFormatter(
               decimalFormatter(getBalance(cryptoType), 6),
             )} ${cryptoType}`,
             estimagedGasPrice
-              ? `예상 가스비: ${estimagedGasPrice} ETH`
-              : '가스비를 추정할 수 없습니다.',
+              ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+              : t('staking.cannot_estimate_gas'),
           ]}
           isInvalid={parseFloat(value) > getBalance(cryptoType)}
-          invalidText={`보유하신 ${cryptoType} 잔액이 부족합니다.`}
+          invalidText={t('staking.insufficient_crypto', {
+            stakingCrypto: cryptoType,
+          })}
         />
         <NumberPadShortcut
           values={[0.01, 1, 10, 100, 1000]}
@@ -159,7 +165,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           paddingRight: '5%',
         }}>
         <NextButton
-          title="입력 완료"
+          title={t('staking.done')}
           disabled={!value || parseFloat(value) > getBalance(cryptoType)}
           handler={() => {
             if (isWalletUser) {
@@ -173,12 +179,15 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
       <ConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        title={`${cryptoType} 스테이킹`}
-        subtitle="최종 확인을 해 주세요!"
+        title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
+        subtitle={t('staking.confirmation_title')}
         list={[
-          { label: `스테이킹 회차`, value: `${selectedRound}차 스테이킹` },
           {
-            label: `스테이킹 수량`,
+            label: t('staking.staking_round'),
+            value: t('staking.nth_staking', { round: selectedRound }),
+          },
+          {
+            label: t('staking.staking_supply'),
             value: `${value} ${cryptoType}`,
             subvalue: `$ ${commaFormatter(
               decimalFormatter(
@@ -187,10 +196,10 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
               ),
             )}`,
           },
-          { label: '가스비', value: '(모름)' },
+          { label: t('staking.gas_price'), value: '(모름)' },
         ]}
         isApproved={true}
-        submitButtonText={`${selectedRound}차 스테이킹`}
+        submitButtonText={t('staking.nth_staking', { round: selectedRound })}
         handler={() => console.log('스테이킹 해야 함')}
       />
       {/* <OverlayLoading

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -41,6 +42,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const userAddress = isWalletUser // 이거 아예 함수로 만들어야겠는데...
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const { t } = useTranslation();
 
   useEffect(() => {
     contract?.getUserData(selectedRound, userAddress).then((res: any) => {
@@ -58,7 +60,10 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
       <SheetHeader title="" />
       <View style={{ paddingHorizontal: 20 }}>
         <TitleText
-          label={`${cryptoType} 스테이킹 및 ${rewardCryptoType} 리워드`}
+          label={t('main.staking_by_crypto', {
+            stakingCrypto: cryptoType,
+            rewardCrypto: rewardCryptoType,
+          })}
           style={{ fontSize: 22 }}
         />
         <DotGraph
@@ -69,7 +74,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         <BoxWithDivider style={{ marginTop: -10 }}>
           <BoxWithDividerContent
             isFirst={true}
-            label="기간"
+            label={t('staking.schedule')}
             value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
               STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
             } (KST)`}
@@ -88,20 +93,20 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             }}>
             <StakingInfoCard
               roundEnded={false}
-              label={`${selectedRound}차 스테이킹 APR`}
+              label={t('staking.nth_apr', { round: selectedRound })}
               value={aprFormatter(calculateAPR(cryptoType, selectedRound))}
               unit="EL"
             />
             <StakingInfoCard
               roundEnded={false}
-              label={`${selectedRound}차 스테이킹 수량`}
+              label={t('staking.nth_principal', { round: selectedRound })}
               value={stakingAmount || '-'}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
               roundEnded={false}
-              label={`${selectedRound}차 보상 수량`}
+              label={t('staking.nth_reward', { round: selectedRound })}
               value={rewardAmount || '-'}
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
@@ -118,7 +123,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             icon="+"
             disabled={!(currentRound && currentRound === selectedRound)} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
-            label="스테이킹"
+            label={t('staking.stake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen: StakingPage.Stake,
@@ -133,7 +138,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             icon="-"
             disabled={!userPrincipal}
-            label="언스테이킹"
+            label={t('staking.unstake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen: userReward
@@ -154,7 +159,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           <CircularButtonWithLabel
             icon="⤴"
             disabled={!userReward}
-            label="보상 수령"
+            label={t('staking.claim_rewards')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen: StakingPage.Reward,
