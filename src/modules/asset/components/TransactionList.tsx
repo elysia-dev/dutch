@@ -12,6 +12,7 @@ import CryptoTransaction from '../../../types/CryptoTransaction';
 import TransactionItem from './TransactionItem';
 import NetworkType from '../../../enums/NetworkType';
 import { Item } from '../../products/components/Item';
+import CryptoType from '../../../enums/CryptoType';
 
 interface ITransactionList {
   data: CryptoTransaction[];
@@ -58,7 +59,7 @@ const TransactionList: React.FC<ITransactionList> = ({
               transaction={item}
               unit={unit}
               networkType={networkType}
-              paymentMethod={'NONE'}
+              paymentMethod={CryptoType.None}
             />
           );
         }}
