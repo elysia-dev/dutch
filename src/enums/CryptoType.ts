@@ -3,6 +3,7 @@ enum CryptoType {
   ETH = 'ETH',
   BNB = 'BNB',
   ELA = 'ELA',
+  None = 'NONE',
 }
 
-export default CryptoType
+export default CryptoType;
