@@ -1,7 +1,6 @@
 enum TransferType {
-  PurChase = 'purchase',
+  Purchase = 'purchase',
   Send = 'send',
-  NONE = 'NONE',
 }
 
 export default TransferType;
