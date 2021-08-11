@@ -357,7 +357,7 @@ const Detail: FunctionComponent = () => {
                       style={{ color: AppColors.MAIN, textAlign: 'right' }}
                       label={currencyFormatter(state.reward, 2)}
                     />
-                    {state.paymentMethod !== 'NONE' && (
+                    {state.paymentMethod !== CryptoType.None && (
                       <H4Text
                         style={{ color: AppColors.BLACK2, textAlign: 'right' }}
                         label={`${(
