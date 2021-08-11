@@ -19,16 +19,18 @@ import PriceContext from '../../../contexts/PriceContext';
 import AppColors from '../../../enums/AppColors';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTransferTx } from '../../../hooks/useTransferTx copy';
+import createTransferTx from '../../../utiles/createTransferTx';
 import TransferType from '../../../enums/TransferType';
 import Accelerate from '../../../enums/Accelerate';
+import TransactionContext from '../../../contexts/TransactionContext';
+import WalletContext from '../../../contexts/WalletContext';
 
 interface AccelerateItem {
   isModalVisible: boolean;
   setIsModalVisible: (prev: boolean) => void;
   getEstimateGas: (text: string) => void;
   updateGasPrice: string;
-  paymentMethod: CryptoType | 'NONE';
+  paymentMethod: CryptoType;
   valueInCryto: number;
   gasFee: string;
   crytoValue?: number;
@@ -60,21 +62,21 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   value,
   address,
 }) => {
-  const { gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
+  const { addPendingTransaction } = useContext(TransactionContext);
+  const { wallet } = useContext(WalletContext);
   const [isAssetDisabled, setIsAssetDisabled] = useState(false);
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const changeSetTransfer = useTransferTx(
-    paymentMethod === 'NONE' && txCryptoType
+  const cryptoType =
+    paymentMethod === CryptoType.None && txCryptoType
       ? txCryptoType
-      : paymentMethod !== 'NONE'
+      : paymentMethod !== CryptoType.None
       ? paymentMethod
-      : CryptoType.ELA,
-    productId,
-  );
-  const isPaymentMethod = paymentMethod === 'NONE';
+      : CryptoType.ELA;
+  const isPaymentMethod = paymentMethod === CryptoType.None;
   const isCryptoBnb =
-    paymentMethod === 'NONE'
+    paymentMethod === CryptoType.None
       ? txCryptoType === CryptoType.BNB
       : paymentMethod === CryptoType.BNB;
 
@@ -218,7 +220,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             alignItems: 'flex-end',
           }}>
           {Number(crytoValue) - Number(gasFee) < 0 ||
-          (paymentMethod === 'NONE' &&
+          (paymentMethod === CryptoType.None &&
             valueInCryto + Number(gasFee) > Number(crytoValue)) ? (
             <Text
               style={{
@@ -291,8 +293,15 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
           }}
           disabled={isDisabled || isAssetDisabled}
           onPress={() => {
-            changeSetTransfer(
-              isPaymentMethod ? TransferType.Send : TransferType.PurChase,
+            createTransferTx(
+              gasPrice,
+              bscGasPrice,
+              getCryptoPrice,
+              wallet,
+              addPendingTransaction,
+              cryptoType,
+              isPaymentMethod ? TransferType.Send : TransferType.Purchase,
+              productId || 0,
               isPaymentMethod ? null : contract ? contract : null,
               valueFrom || '',
               value ? value : '',
