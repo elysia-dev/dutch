@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 
 import CoingeckoClient from '../api/CoingeckoClient';
 import { PRICE_DATA } from '../constants/storage';
-import PriceContext, { PriceState, initialPriceState } from '../contexts/PriceContext';
+import PriceContext, {
+  PriceState,
+  initialPriceState,
+} from '../contexts/PriceContext';
 import CryptoType from '../enums/CryptoType';
 import { provider, bscProvider } from '../utiles/getContract';
 
@@ -11,7 +14,10 @@ const PriceProvider: React.FC = (props) => {
   const [state, setState] = useState<PriceState>(initialPriceState);
 
   const loadPrices = async () => {
-    let priceData = JSON.parse((await AsyncStorage.getItem(PRICE_DATA)) || JSON.stringify(initialPriceState)) as PriceState;
+    let priceData = JSON.parse(
+      (await AsyncStorage.getItem(PRICE_DATA)) ||
+        JSON.stringify(initialPriceState),
+    ) as PriceState;
 
     try {
       const priceRes = await CoingeckoClient.getElAndEthPrice();
@@ -34,7 +40,7 @@ const PriceProvider: React.FC = (props) => {
     }
   };
 
-  const getCryptoPrice = (cryptoType: CryptoType | 'NONE'): number => {
+  const getCryptoPrice = (cryptoType: CryptoType): number => {
     switch (cryptoType) {
       case CryptoType.BNB:
         return state.bnbPrice;
@@ -59,8 +65,7 @@ const PriceProvider: React.FC = (props) => {
       value={{
         ...state,
         getCryptoPrice,
-      }}
-    >
+      }}>
       {props.children}
     </PriceContext.Provider>
   );
