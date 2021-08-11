@@ -395,6 +395,7 @@
       "transaction_fee": "手续费",
       "insufficient_eth": "{{crypto}} 余额不足。",
       "insufficient_gas": "gas费用不足。",
+      "cannot_estimate_gas": "暂时无法预测手续费(gas费用)。",
       "done": "输入完成",
       "gas_price": "gas费用",
       "confirm_gas": "因为使用以太坊网络，所以会产生gas费用（类似于手续费）。",

@@ -402,6 +402,7 @@
       "transaction_fee": "Transaction fee",
       "insufficient_eth": "Your {{crypto}} balance is insufficient.",
       "insufficient_gas": "Insufficient gas fee",
+      "cannot_estimate_gas": "Cannot estimate transaction fee.",
       "done": "Input complete",
       "gas_price": "Gas Fees",
       "confirm_gas": "Fees are required to successfully conduct a transaction on the Ethereum network",

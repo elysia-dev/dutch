@@ -399,6 +399,7 @@
       "transaction_fee": "네트워크 수수료",
       "insufficient_eth": "{{crypto}}가 부족합니다.",
       "insufficient_gas": "가스비가 부족합니다.",
+      "cannot_estimate_gas": "가스비를 추정할 수 없습니다.",
       "done": "입력 완료",
       "gas_price": "가스비",
       "confirm_gas": "이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.",
