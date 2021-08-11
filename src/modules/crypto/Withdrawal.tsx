@@ -1,5 +1,5 @@
 /* eslint-disable radix */
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -17,7 +17,6 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber, ethers, utils } from 'ethers';
 import { isAddress } from '@ethersproject/address';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import moment from 'moment';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -33,8 +32,7 @@ import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
-import { sendCryptoAsset } from '../../utiles/createTransction';
-import { useTransferTx } from '../../hooks/useTransferTx copy';
+import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 
 type ParamList = {
@@ -52,7 +50,7 @@ const Withdrawal: React.FC = () => {
   const { addPendingTransaction } = useContext(TransactionContext);
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
-  const { gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,7 +61,6 @@ const Withdrawal: React.FC = () => {
     ? getBalance(gasCrypto) < parseFloat(estimatedGas) + parseFloat(value)
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
-  const changeSetTransfer = useTransferTx(asset.type);
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -102,8 +99,16 @@ const Withdrawal: React.FC = () => {
   };
 
   const sendTx = async () => {
-    changeSetTransfer(
+    navigation.goBack();
+    createTransferTx(
+      gasPrice,
+      bscGasPrice,
+      getCryptoPrice,
+      wallet,
+      addPendingTransaction,
+      asset.type,
       TransferType.Send,
+      0,
       null,
       '',
       value,
