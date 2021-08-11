@@ -11,7 +11,7 @@ export const purchaseProduct = async (
   contract: ethers.Contract | null,
   valuesFrom: string,
   wallet: Wallet | undefined,
-  getCryptoPrice: (cryptoType: CryptoType | 'NONE') => number,
+  getCryptoPrice: (cryptoType: CryptoType) => number,
   updateGasPrice?: string,
   accelerate?: Accelerate,
 ) => {
