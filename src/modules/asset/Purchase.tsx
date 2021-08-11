@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils } from 'ethers';
+import { utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../enums/CryptoType';
 import WalletContext from '../../contexts/WalletContext';
@@ -23,17 +23,12 @@ import NetworkType from '../../enums/NetworkType';
 import {
   getAssetTokenFromCryptoType,
   getElysiaContract,
-  provider,
 } from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
 import TransactionContext from '../../contexts/TransactionContext';
-import moment from 'moment';
-import { purchaseProduct } from '../../utiles/createTransction';
-import { Platform } from 'react-native';
-import { useTransferTx } from '../../hooks/useTransferTx copy';
+import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
-import AssetProvider from '../../providers/AssetProvider';
 
 type ParamList = {
   Purchase: {
@@ -74,7 +69,7 @@ const Purchase: FunctionComponent = () => {
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
   const { getBalance, assets } = useContext(AssetContext);
-  const changeSetTransfer = useTransferTx(from.type, productId);
+  const { addPendingTransaction } = useContext(TransactionContext);
   const fromMax = ((toMax || 0) * 5) / getCryptoPrice(from.type);
   const fromPrice = getCryptoPrice(from.type);
   const toPrice = getCryptoPrice(CryptoType.ELA);
@@ -128,7 +123,20 @@ const Purchase: FunctionComponent = () => {
   }, []);
 
   const createTx = () => {
-    changeSetTransfer(TransferType.PurChase, contract, values.from, values.to);
+    navigation.goBack();
+    createTransferTx(
+      gasPrice,
+      bscGasPrice,
+      getCryptoPrice,
+      wallet,
+      addPendingTransaction,
+      from.type,
+      TransferType.Purchase,
+      productId,
+      contract,
+      values.from,
+      values.to,
+    );
   };
 
   useEffect(() => {
