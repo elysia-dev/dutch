@@ -9,7 +9,7 @@ type AssetDetail = {
   reward: number;
   transactions: CryptoTransaction[];
   contractAddress: string;
-  paymentMethod: CryptoType | 'NONE';
+  paymentMethod: CryptoType;
   legacyRefundStatus?: string;
   images: string[];
   productId: number;
