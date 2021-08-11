@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Animated, View, Text, Platform } from 'react-native';
+import {
+  SafeAreaView,
+  Animated,
+  View,
+  Text,
+  Platform,
+  Image,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
 import TouchableCardWithShadow from './components/TouchableCardWithShadow';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
+  const totalStakingPeriod = `${STAKING_POOL_ROUNDS[0].startedAt} ~ ${STAKING_POOL_ROUNDS[5].endedAt} (KST)`;
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView
@@ -20,7 +31,7 @@ export const Main: React.FC = () => {
         top: 0,
         backgroundColor: AppColors.WHITE,
       }}>
-      <AnimatedMainHeader title={'스테이킹'} scrollY={scrollY} />
+      <AnimatedMainHeader title={t('staking.staking')} scrollY={scrollY} />
       <View
         style={{
           marginTop: 45,
@@ -48,7 +59,10 @@ export const Main: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>img</Text>
+            <Image
+              source={require('./images/el_staking_visualization.png')}
+              width={304}
+            />
           </View>
           <View
             style={{
@@ -64,7 +78,9 @@ export const Main: React.FC = () => {
                 lineHeight: 17,
                 fontFamily: AppFonts.Bold,
               }}>
-              EL 스테이킹
+              {t('staking.staking_with_type', {
+                stakingCrypto: CryptoType.EL,
+              })}
             </Text>
             <Text
               style={{
@@ -73,7 +89,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : (모름)
+              {`${t('staking.schedule')} : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>
@@ -98,7 +114,10 @@ export const Main: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text>img</Text>
+            <Image
+              source={require('./images/elfi_staking_visualization.png')}
+              width={304}
+            />
           </View>
           <View
             style={{
@@ -114,7 +133,9 @@ export const Main: React.FC = () => {
                 lineHeight: 17,
                 fontFamily: AppFonts.Bold,
               }}>
-              ELFI 스테이킹
+              {t('staking.staking_with_type', {
+                stakingCrypto: CryptoType.ELFI,
+              })}
             </Text>
             <Text
               style={{
@@ -123,7 +144,7 @@ export const Main: React.FC = () => {
                 lineHeight: Platform.OS === 'ios' ? 24 : 20,
                 fontFamily: AppFonts.Regular,
               }}>
-              기간 : (모름)
+              {`${t('staking.schedule')} : ${totalStakingPeriod}`}
             </Text>
           </View>
         </TouchableCardWithShadow>

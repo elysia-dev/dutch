@@ -13,3 +13,66 @@ export const TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL =
   ELFI_PER_ROUND_ON_EL_STAKING_POOL * NUMBER_OF_ROUNDS;
 export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL * NUMBER_OF_ROUNDS;
+
+// YYYY.MM.DD hh:mm:ss
+// MM.DD.YYYY hh:mm:ss
+
+export const STAKING_POOL_ROUNDS = [
+  {
+    startedAt: '2021.08.04 00:00:00',
+    endedAt: '2021.08.04 23:59:59',
+  },
+  {
+    startedAt: '2021.08.05 00:00:00',
+    endedAt: '2021.08.05 23:59:59',
+  },
+  {
+    startedAt: '2021.08.06 00:00:00',
+    endedAt: '2021.08.06 23:59:59',
+  },
+  {
+    startedAt: '2021.08.09 00:00:00',
+    endedAt: '2021.08.09 23:59:59',
+  },
+  {
+    startedAt: '2021.08.10 00:00:00',
+    endedAt: '2021.08.10 23:59:59',
+  },
+  {
+    startedAt: '2021.08.11 00:00:00',
+    endedAt: '2021.08.11 23:59:59',
+  },
+];
+
+import moment from 'moment';
+
+const inputFormat = 'YYYY.MM.DD hh:mm:ss Z';
+const outputFormat = 'YYYY.MM.DD hh:mm:ss'; // for ko and zh-hans
+// 'MM.DD.YYYY hh:mm:ss' for en
+
+export const STAKING_POOL_ROUNDS_MOMENT = [
+  {
+    startedAt: moment('2021.08.04 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.04 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.05 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.05 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.06 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.06 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.09 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.09 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.10 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.10 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.11 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.11 23:59:59 +9:00', inputFormat),
+  },
+];

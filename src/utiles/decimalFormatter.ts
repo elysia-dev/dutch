@@ -1,10 +1,21 @@
 const decimalFormatter = (num: number, place: number) => {
-  const str = String(num);
+  let str = String(num);
+
   if (str.indexOf('.') !== -1 && str.indexOf('.') <= str.length - (place + 1)) {
-    return String(num.toFixed(place));
-  } else {
-    return str;
+    str = String(num.toFixed(place));
   }
+
+  if (str.indexOf('.') !== -1) {
+    for (let i = str.length - 1; i > 0; i--) {
+      if (str[i] === '0') {
+        str = str.slice(0, -1);
+      } else {
+        break;
+      }
+    }
+  }
+
+  return str;
 };
 
 export default decimalFormatter;

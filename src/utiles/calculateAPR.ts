@@ -10,8 +10,10 @@ import {
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
 } from '../constants/staking';
 import PriceContext from '../contexts/PriceContext';
+import decimalFormatter from './decimalFormatter';
+import commaFormatter from './commaFormatter';
 
-const calcAPR = (cryptoType: CryptoType, round: number): BigNumber => {
+const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
   const { getCryptoPrice } = useContext(PriceContext);
   const contract =
     cryptoType === CryptoType.EL
@@ -43,4 +45,15 @@ const calcAPR = (cryptoType: CryptoType, round: number): BigNumber => {
     .div(principal.mul(utils.parseEther(principalPrice.toFixed(4))));
 };
 
-export default calcAPR;
+export default calculateAPR;
+
+export function aprFormatter(apr: BigNumber) {
+  const formattedAPR = commaFormatter(
+    decimalFormatter(parseFloat(apr.toString()), 5),
+  );
+  if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
+    return '∞';
+  } else {
+    return formattedAPR;
+  }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import CryptoImage from '../../shared/components/CryptoImage';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -16,10 +17,13 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
   const navigation = useNavigation();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const { t } = useTranslation();
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={`${cryptoType} 언스테이킹`} />
+      <SheetHeader
+        title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
+      />
       <View style={{ paddingHorizontal: 20, marginTop: 30 }}>
         <TouchableCardWithShadow
           onPress={() => {
@@ -47,11 +51,14 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
             }}>
             <View>
               <P4Text
-                label="가스비 절감을 위해"
+                label={t('staking.unstake_with_reward_subtitle')}
                 style={{ color: AppColors.BLACK, lineHeight: 20 }}
               />
               <P1Text
-                label={`${rewardCryptoType} 토큰도 같이 출금하기`}
+                label={t('staking.unstake_with_reward', {
+                  rewardCrypto: rewardCryptoType,
+                  stakingCrypto: cryptoType,
+                })}
                 style={{ fontFamily: AppFonts.Bold }}
               />
             </View>
@@ -93,11 +100,13 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
             }}>
             <View>
               <P4Text
-                label={`${rewardCryptoType} 토큰은 나중에 수취하고`}
+                label={t('staking.unstake_only_subtitle', {
+                  rewardCrypto: rewardCryptoType,
+                })}
                 style={{ color: AppColors.BLACK, lineHeight: 20 }}
               />
               <P1Text
-                label={`${cryptoType} 토큰만 전송하기`}
+                label={t('staking.unstake_only', { stakingCrypto: cryptoType })}
                 style={{ fontFamily: AppFonts.Bold }}
               />
             </View>

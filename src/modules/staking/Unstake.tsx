@@ -1,6 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils, constants } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -19,6 +22,9 @@ import {
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import PaymentSelection from '../../shared/components/PaymentSelection';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward } = route.params;
@@ -35,6 +41,8 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { wallet } = useContext(WalletContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { t } = useTranslation();
 
   let principal = 0;
   let reward = 0;
@@ -48,40 +56,85 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
       reward = res[1]; // userReward
     });
 
-  let confirmationList;
-  if (earnReward) {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
-        )}`,
-      },
-      { label: '보상 수량', value: `${reward} ${rewardCryptoType}` },
-      { label: '가스비', value: '(모름)' },
-    ];
-  } else {
-    confirmationList = [
-      { label: `언스테이킹 회차`, value: `${selectedRound}차 언스테이킹` },
-      {
-        label: `언스테이킹 수량`,
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${decimalFormatter(
-          parseFloat(value || '0') * getCryptoPrice(cryptoType),
-          6,
-        )}`,
-      },
-      { label: '가스비', value: '(모름)' },
-    ];
-  }
+  const confirmationList = earnReward
+    ? [
+        {
+          label: t('staking.unstaking_round'),
+          value: t('staking.nth_unstaking', { round: selectedRound }),
+        },
+        {
+          label: t('staking.unstaking_supply'),
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        {
+          label: t('staking.reward_supply'),
+          value: `${reward} ${rewardCryptoType}`,
+        },
+        { label: t('staking.gas_price'), value: '(모름)' },
+      ]
+    : [
+        {
+          label: t('staking.unstaking_round'),
+          value: t('staking.nth_unstaking', { round: selectedRound }),
+        },
+        {
+          label: t('staking.unstaking_supply'),
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        { label: t('staking.gas_price'), value: '(모름)' },
+      ];
+
+  const estimateGas = async (address: string) => {
+    let estimateGas: BigNumber | undefined;
+
+    try {
+      estimateGas = await contract?.estimateGas.purchase({
+        from: address,
+        value: utils.parseEther('0.5'),
+      });
+
+      if (estimateGas) {
+        setEstimatedGasPrice(
+          utils.formatEther(
+            estimateGas.mul(
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      setEstimatedGasPrice('');
+    }
+  };
+
+  useEffect(() => {
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
+    }
+  }, []);
 
   if (!selectionVisible) {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-        <SheetHeader title={`${cryptoType} 언스테이킹`} />
+        <SheetHeader
+          title={t('staking.nth_unstaking', { round: selectedRound })}
+        />
         <View
           style={{
             marginTop: Platform.OS === 'android' ? 20 : 10,
@@ -89,22 +142,27 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
             flex: 1,
           }}>
           <LargeTextInput
-            placeholder="몇 개를 언스테이킹할까요?"
+            placeholder={t('staking.unstaking_placeholder')}
             value={value}
             unit={cryptoType}
           />
           <InputInfoBox
             list={[
-              `언스테이킹 달러 가치: $ ${decimalFormatter(
-                parseFloat(value || '0') * getCryptoPrice(cryptoType),
-                6,
+              `${t('staking.unstaking_in_dollars')}: $ ${commaFormatter(
+                decimalFormatter(
+                  parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                  6,
+                ),
               )}`,
-              `언스테이킹 가능 수량: ${decimalFormatter(
-                principal,
-                6,
+              `${t('staking.unstaking_supply_available')}: ${commaFormatter(
+                decimalFormatter(principal, 6),
               )} ${cryptoType}`,
-              `예상 가스비: ${'(모름)'}`,
+              estimagedGasPrice
+                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                : t('staking.cannot_estimate_gas'),
             ]}
+            isInvalid={parseFloat(value) > principal}
+            invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
             values={[0.01, 1, 10, 100, 1000]}
@@ -113,66 +171,53 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
           />
           <NumberPad
             addValue={(text) => {
-              const includesComma = value.includes('.');
-              if (
-                (text === '.' && includesComma) ||
-                (text !== '.' && !includesComma && value.length >= 12) ||
-                (includesComma && value.split('.')[1].length >= 6) ||
-                (value
-                  .split('')
-                  .reduce((res, cur) => res && cur === '0', true) &&
-                  text === '0')
-              ) {
-                return;
-              }
+              if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-              const next =
-                text === '.' && !value
-                  ? '0.'
-                  : text !== '0' && value === '0'
-                  ? text
-                  : value + text;
-
+              const next = newInputValueFormatter(value, text);
               setValue(next);
             }}
             removeValue={() => setValue(value.slice(0, -1))}
           />
-        </View>
-        <View
-          style={{
-            marginBottom: insets.bottom || 10,
-            paddingLeft: '5%',
-            paddingRight: '5%',
-          }}>
-          <NextButton
-            title="입력 완료"
-            disabled={!value}
-            handler={() => {
-              if (isWalletUser) {
-                setModalVisible(true);
-              } else {
-                setSelectionVisible(true);
-              }
-            }}
+          <View
+            style={{
+              marginBottom: insets.bottom || 10,
+              paddingLeft: '5%',
+              paddingRight: '5%',
+            }}>
+            <NextButton
+              title={t('staking.done')}
+              disabled={!value || parseFloat(value) > principal}
+              handler={() => {
+                if (isWalletUser) {
+                  setModalVisible(true);
+                } else {
+                  setSelectionVisible(true);
+                }
+              }}
+            />
+          </View>
+          <ConfirmationModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            title={t('staking.staking_by_crypto', {
+              stakingCrypto: cryptoType,
+            })}
+            subtitle={t('staking.confirmation_title')}
+            list={confirmationList}
+            isApproved={true}
+            submitButtonText={t('staking.nth_unstaking', {
+              round: selectedRound,
+            })}
+            handler={() => console.log('내부 지갑 계정 트랜잭션')}
           />
+          {/* <OverlayLoading
+            visible={[
+              TxStep.Approving,
+              Platform.OS === 'android' && TxStep.CheckAllowance,
+              TxStep.Creating,
+            ].includes(step)}
+          /> */}
         </View>
-        <ConfirmationModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          title={`${cryptoType} 언스테이킹`}
-          subtitle="최종 확인을 해 주세요!"
-          list={confirmationList}
-          isApproved={true}
-          submitButtonText={`${selectedRound}차 언스테이킹`}
-          handler={() => console.log('내부 지갑 계정 트랜잭션')}
-        />
-        {/* <OverlayLoading
-          visible={[
-            TxStep.Approving,
-            Platform.OS === 'android' && TxStep.CheckAllowance,
-            TxStep.Creating,
-          ].includes(step)}
-        /> */}
       </View>
     );
   }

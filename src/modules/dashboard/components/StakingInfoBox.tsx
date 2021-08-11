@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import { Page, StakingPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
@@ -18,6 +19,7 @@ const StakingInfoBox: React.FC<{
   const { getCryptoPrice } = useContext(PriceContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -42,7 +44,7 @@ const StakingInfoBox: React.FC<{
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          {`${round}차 스테이킹`}
+          {t('main.staking_amount', { round })}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -77,7 +79,7 @@ const StakingInfoBox: React.FC<{
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          {`${round}차 리워드`}
+          {t('main.reward_amount', { round })}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text

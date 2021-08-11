@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { View } from 'react-native';
 import { Contract } from '@ethersproject/contracts';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
@@ -34,6 +35,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
   const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
   );
+  const { t } = useTranslation();
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: Contract | null;
@@ -60,7 +62,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
           return (
             <StakingInfoBox
               key={round}
-              cryptoType={CryptoType.EL}
+              cryptoType={type}
               round={round}
               stakingAmount={stakingAmount}
               rewardAmount={rewardAmount}
@@ -89,7 +91,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
         marginBottom: 10,
       }}>
       <H3Text
-        label="내 스테이킹 및 리워드"
+        label={t('main.my_staking')}
         style={{
           paddingBottom: 15,
           marginBottom: 10,
@@ -118,7 +120,13 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
             backgroundColor: 'lime',
           }}
         />
-        <P1Text label="EL 스테이킹 및 ELFI 리워드" style={{ marginLeft: 15 }} />
+        <P1Text
+          label={t('main.staking_by_crypto', {
+            stakingCrypto: CryptoType.EL,
+            rewardCrypto: CryptoType.ELFI,
+          })}
+          style={{ marginLeft: 15 }}
+        />
       </View>
       <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
       <View
@@ -143,7 +151,10 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
           }}
         />
         <P1Text
-          label="ELFI 스테이킹 및 DAI 리워드"
+          label={t('main.staking_by_crypto', {
+            stakingCrypto: CryptoType.ELFI,
+            rewardCrypto: CryptoType.DAI,
+          })}
           style={{ marginLeft: 15 }}
         />
       </View>

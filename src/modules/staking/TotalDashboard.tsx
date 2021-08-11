@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
 import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
-import CircularButtonWithLabel from './components/CircularButtonWithLabel';
+import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
 import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
 } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
-import calcAPR from '../../utiles/calculateAPR';
+import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
+import BoxWithDividerContent from './components/BoxWithDividerContent';
+import { Page, StakingPage } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
+import WalletContext from '../../contexts/WalletContext';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
-  const [poolData, setPoolData] = useState({
-    rewardPerSecond: 0,
-    rewardIndex: 0,
-    startTimestamp: 0,
-    endTimestamp: 0,
-    totalPrincipal: 0,
-    lastUpdateTimestamp: 0,
-  });
   const contract =
     cryptoType === CryptoType.EL
       ? getElStakingPoolContract()
@@ -35,17 +34,20 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   contract?.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
+  const navigation = useNavigation();
+  const [userReward, setUserReward] = useState(0);
+  const [userPrincipal, setUserPrincipal] = useState(0);
+  const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
+  const userAddress = isWalletUser // 이거 아예 함수로 만들어야겠는데...
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
+  const { t } = useTranslation();
 
   useEffect(() => {
-    contract?.getPoolData(selectedRound).then((res: any) => {
-      setPoolData({
-        rewardPerSecond: res[0],
-        rewardIndex: res[1],
-        startTimestamp: res[2],
-        endTimestamp: res[3],
-        totalPrincipal: res[4],
-        lastUpdateTimestamp: res[5],
-      });
+    contract?.getUserData(selectedRound, userAddress).then((res: any) => {
+      setUserReward(res[1].toNumber());
+      setUserPrincipal(res[2].toNumber());
     });
   }, [selectedRound]);
 
@@ -58,50 +60,59 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
       <SheetHeader title="" />
       <View style={{ paddingHorizontal: 20 }}>
         <TitleText
-          label={`${cryptoType} 스테이킹 및 ${rewardCryptoType} 리워드`}
+          label={t('main.staking_by_crypto', {
+            stakingCrypto: cryptoType,
+            rewardCrypto: rewardCryptoType,
+          })}
           style={{ fontSize: 22 }}
         />
         <DotGraph
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
+          currentRound={currentRound}
         />
-        <BoxWithDivider
-          contents={[
-            {
-              label: '기간',
-              value: `${poolData.startTimestamp}\n~ ${poolData.endTimestamp} (KST)`,
-            },
-            {
-              label: (
-                <>
-                  <StakingInfoCard
-                    roundEnded={false}
-                    label={`${selectedRound}차 스테이킹 APR`}
-                    value={calcAPR(cryptoType, selectedRound).toString()}
-                    unit="%"
-                  />
-                  <StakingInfoCard
-                    roundEnded={false}
-                    label={`${selectedRound}차 스테이킹 수량`}
-                    value={stakingAmount || '-'}
-                    unit={cryptoType}
-                    style={{ marginTop: 15 }}
-                  />
-                  <StakingInfoCard
-                    roundEnded={false}
-                    label={`${selectedRound}차 보상 수량`}
-                    value={rewardAmount || '-'}
-                    unit={rewardCryptoType}
-                    style={{ marginTop: 15 }}
-                  />
-                </>
-              ),
-              value: '',
-            },
-          ]}
-          boxStyle={{ marginTop: -10 }}
-          innerBoxStyle={{ paddingVertical: 25, paddingHorizontal: 19 }}
-        />
+        <BoxWithDivider style={{ marginTop: -10 }}>
+          <BoxWithDividerContent
+            isFirst={true}
+            label={t('staking.schedule')}
+            value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
+              STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
+            } (KST)`}
+            style={{
+              paddingVertical: 25,
+              paddingHorizontal: 19,
+            }}
+          />
+          <View
+            style={{
+              justifyContent: 'center',
+              borderTopColor: AppColors.SUB_GREY,
+              borderTopWidth: 1,
+              paddingVertical: 25,
+              paddingHorizontal: 19,
+            }}>
+            <StakingInfoCard
+              roundEnded={false}
+              label={t('staking.nth_apr', { round: selectedRound })}
+              value={aprFormatter(calculateAPR(cryptoType, selectedRound))}
+              unit="EL"
+            />
+            <StakingInfoCard
+              roundEnded={false}
+              label={t('staking.nth_principal', { round: selectedRound })}
+              value={stakingAmount || '-'}
+              unit={cryptoType}
+              style={{ marginTop: 15 }}
+            />
+            <StakingInfoCard
+              roundEnded={false}
+              label={t('staking.nth_reward', { round: selectedRound })}
+              value={rewardAmount || '-'}
+              unit={rewardCryptoType}
+              style={{ marginTop: 15 }}
+            />
+          </View>
+        </BoxWithDivider>
         <View
           style={{
             flexDirection: 'row',
@@ -110,27 +121,55 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             marginBottom: 24,
           }}>
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="staking"
-            isActive={Boolean(currentRound) && currentRound === selectedRound}
-            selectedRound={selectedRound}
-            currentRound={currentRound}
+            icon="+"
+            disabled={!(currentRound && currentRound === selectedRound)} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
+            label={t('staking.stake')}
+            pressHandler={() => {
+              navigation.navigate(Page.Staking, {
+                screen: StakingPage.Stake,
+                params: {
+                  cryptoType,
+                  selectedRound,
+                  currentRound,
+                },
+              });
+            }}
           />
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="unstaking"
-            isActive={Boolean(currentRound) && currentRound >= selectedRound}
-            selectedRound={selectedRound}
-            currentRound={currentRound}
-            isRewardAvailable={currentRound > selectedRound} // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
-            isMigrationAvailable={Boolean(currentRound)}
+            icon="-"
+            disabled={!userPrincipal}
+            label={t('staking.unstake')}
+            pressHandler={() => {
+              navigation.navigate(Page.Staking, {
+                screen: userReward
+                  ? StakingPage.SelectUnstakingType
+                  : StakingPage.Unstake,
+                params: {
+                  cryptoType,
+                  selectedRound,
+                  currentRound,
+                  pageAfterSelection:
+                    selectedRound <= currentRound
+                      ? StakingPage.UnstakeAndMigrate
+                      : StakingPage.Unstake,
+                },
+              });
+            }}
           />
           <CircularButtonWithLabel
-            cryptoType={cryptoType}
-            actionType="reward"
-            selectedRound={selectedRound}
-            currentRound={currentRound}
-            isActive={true}
+            icon="⤴"
+            disabled={!userReward}
+            label={t('staking.claim_rewards')}
+            pressHandler={() => {
+              navigation.navigate(Page.Staking, {
+                screen: StakingPage.Reward,
+                params: {
+                  rewardCryptoType,
+                  selectedRound,
+                  currentRound,
+                },
+              });
+            }}
           />
         </View>
       </View>
