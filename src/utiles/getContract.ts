@@ -66,7 +66,7 @@ export function getBscAssetTokenContract(address: string): Contract | null {
 }
 
 export function getAssetTokenFromCryptoType(
-  cryptoType: CryptoType | 'NONE',
+  cryptoType: CryptoType,
   address: string,
 ): Contract | null {
   switch (cryptoType) {
