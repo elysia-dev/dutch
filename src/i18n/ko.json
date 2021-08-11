@@ -464,7 +464,9 @@
       "done": "입력 완료",
       "nth_unstaking": "{{round}}차 언스테이킹",
       "gas_price": "가스비",
-      "unstaking_value_excess": "언스테이킹 가능 수량을 초과했습니다."
+      "unstaking_value_excess": "언스테이킹 가능 수량을 초과했습니다.",
+      "rewards": "보상",
+      "claim": "수령하기"
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."
