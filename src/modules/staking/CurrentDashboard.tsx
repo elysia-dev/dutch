@@ -54,10 +54,11 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     nextButtonDisabled = true;
   } else if (
     !currentRound ||
-    moment().isBetween(
-      STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
-      STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
-    )
+    (currentRound !== 6 &&
+      moment().isBetween(
+        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+      ))
   ) {
     nextButtonTitle = t('staking.comming_soon');
     nextButtonDisabled = true;
