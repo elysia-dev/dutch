@@ -25,7 +25,6 @@ export default async function createTransferTx(
   address?: string,
   updateGasPrice?: string,
 ) {
-  if (transferType === TransferType.None) return;
   try {
     let txRes: ethers.providers.TransactionResponse | undefined;
     if (transferType === TransferType.Purchase) {
