@@ -20,7 +20,6 @@ import AssetContext from '../../../contexts/AssetContext';
 import {
   getAssetTokenFromCryptoType,
   getElysiaContract,
-  provider,
 } from '../../../utiles/getContract';
 import CryptoType from '../../../enums/CryptoType';
 import { BigNumber, Contract, ethers, utils } from 'ethers';
@@ -30,19 +29,14 @@ import useTxHandler from '../../../hooks/useTxHandler';
 import TransactionContext from '../../../contexts/TransactionContext';
 import { useEffect } from 'react';
 import Asset from '../../../types/Asset';
-import {
-  purchaseProduct,
-  sendCryptoAsset,
-} from '../../../utiles/createTransction';
 import AccelerateModal from './AccelerateModal';
-import Accelerate from '../../../enums/Accelerate';
 
 interface ITransactionItem {
   transaction: CryptoTransaction;
   unit: string;
   networkType: NetworkType;
   contractAddress?: string;
-  paymentMethod: CryptoType | 'NONE';
+  paymentMethod: CryptoType;
 }
 
 const TransactionItem: React.FC<ITransactionItem> = ({
@@ -69,7 +63,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const getEstimateGas = async (text: string) => {
     let estimateGas: BigNumber | undefined;
     const isCryptoBnb =
-      paymentMethod === 'NONE'
+      paymentMethod === CryptoType.None
         ? transaction.cryptoType === CryptoType.BNB
         : paymentMethod === CryptoType.BNB;
     if (text.includes('-') || text[0] === '.') return;
@@ -90,7 +84,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         transaction.cryptoType === CryptoType.EL ||
         paymentMethod === CryptoType.EL
       ) {
-        if (paymentMethod === 'NONE') {
+        if (paymentMethod === CryptoType.None) {
           estimateGas = await elContract?.estimateGas.transfer(
             transaction.toAddress,
             utils.parseEther(transaction.value || '0.1'),
@@ -107,7 +101,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           );
         }
       } else {
-        if (paymentMethod === 'NONE') {
+        if (paymentMethod === CryptoType.None) {
           estimateGas = await wallet
             ?.getFirstSigner(transaction.cryptoType)
             ?.estimateGas({
@@ -117,7 +111,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         } else {
           estimateGas = await contract?.estimateGas.purchase({
             from: wallet?.getFirstAddress() || '',
-            value: utils.parseEther('0.00001'),
+            value: utils.parseEther('0.1'),
           });
         }
       }
@@ -160,7 +154,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         return asset.type === CryptoType.BNB && asset.unit === CryptoType.BNB;
       }),
     );
-    if (paymentMethod === 'NONE') return;
+    if (paymentMethod === CryptoType.None) return;
     setContract(
       getAssetTokenFromCryptoType(paymentMethod, contractAddress || ''),
     );
@@ -274,7 +268,9 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           txCryptoType={transaction.cryptoType}
           productId={transaction.productId}
           valueFrom={
-            paymentMethod === 'NONE' ? transaction.value : transaction.valueFrom
+            paymentMethod === CryptoType.None
+              ? transaction.value
+              : transaction.valueFrom
           }
           value={transaction.value}
           address={transaction.toAddress}
