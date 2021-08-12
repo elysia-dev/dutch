@@ -99,7 +99,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
 
     try {
       estimateGas = await contract?.estimateGas.withdraw(
-        utils.parseEther(value),
+        utils.parseEther('0.01'),
         { from: address },
       );
 

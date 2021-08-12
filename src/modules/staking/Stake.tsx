@@ -48,9 +48,10 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.stake(utils.parseEther(value), {
-        from: address,
-      });
+      estimateGas = await contract?.estimateGas.stake(
+        utils.parseEther('0.01'),
+        { from: address },
+      );
 
       if (estimateGas) {
         setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));

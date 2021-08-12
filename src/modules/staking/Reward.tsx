@@ -40,10 +40,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.claim(
-        utils.parseEther(String(selectedRound)),
-        { from: address },
-      );
+      estimateGas = await contract?.estimateGas.claim({ from: address });
 
       if (estimateGas) {
         setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
