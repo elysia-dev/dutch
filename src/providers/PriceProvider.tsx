@@ -57,6 +57,8 @@ const PriceProvider: React.FC = (props) => {
       case CryptoType.ELA:
         // Fix ELA $5
         return 5;
+      case CryptoType.ELFI:
+        return state.elfiPrice;
       case CryptoType.DAI:
         return state.daiPrice;
       default:
