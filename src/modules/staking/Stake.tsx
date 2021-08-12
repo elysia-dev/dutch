@@ -222,6 +222,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
       page="staking"
       stakingTxData={{
         type: 'stake',
+        unit: cryptoType,
       }}
       contractAddress={contract?.address}
     />

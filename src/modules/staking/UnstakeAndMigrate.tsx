@@ -283,6 +283,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       page="staking"
       stakingTxData={{
         type: 'unstake',
+        unit: cryptoType,
         rewardValue: earnReward && reward,
         migrationValue: principal - parseFloat(value),
       }}

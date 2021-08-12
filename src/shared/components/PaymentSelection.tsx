@@ -15,6 +15,7 @@ import UserContext from '../../contexts/UserContext';
 import SheetHeader from './SheetHeader';
 import AppColors from '../../enums/AppColors';
 import WalletSelectionButton from './WalletSelectionButton';
+import CryptoType from '../../enums/CryptoType';
 
 type AssetTxData = {
   productId: number;
@@ -23,6 +24,7 @@ type AssetTxData = {
 
 type StakingTxData = {
   type: 'stake' | 'unstake' | 'reward';
+  unit: CryptoType;
   rewardValue?: number;
   migrationValue?: number;
 };
@@ -64,8 +66,8 @@ const PaymentSelection: React.FC<{
   } else {
     // if page is 'staking'
     // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
-    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
-    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&contractAddress=${contractAddress}&ethAddresses=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
   }
 
   useEffect(() => {
