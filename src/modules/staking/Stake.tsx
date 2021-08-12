@@ -34,7 +34,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice } = useContext(PriceContext);
+  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
@@ -48,19 +48,12 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.purchase({
+      estimateGas = await contract?.estimateGas.stake(utils.parseEther(value), {
         from: address,
-        value: utils.parseEther('0.5'),
       });
 
       if (estimateGas) {
-        setEstimatedGasPrice(
-          utils.formatEther(
-            estimateGas.mul(
-              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
-            ),
-          ),
-        );
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
     } catch (e) {
       setEstimatedGasPrice('');

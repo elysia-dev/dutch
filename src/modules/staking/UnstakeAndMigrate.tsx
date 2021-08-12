@@ -134,19 +134,13 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.purchase({
-        from: address,
-        value: utils.parseEther('0.5'),
-      });
+      estimateGas = await contract?.estimateGas.withdraw(
+        utils.parseEther(String(principal - parseFloat(value))),
+        { from: address },
+      );
 
       if (estimateGas) {
-        setEstimatedGasPrice(
-          utils.formatEther(
-            estimateGas.mul(
-              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
-            ),
-          ),
-        );
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
     } catch (e) {
       setEstimatedGasPrice('');
