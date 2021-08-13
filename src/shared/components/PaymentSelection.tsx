@@ -25,6 +25,7 @@ type AssetTxData = {
 type StakingTxData = {
   type: 'stake' | 'unstake' | 'reward';
   unit: CryptoType;
+  round?: number; // 원래 1~6이지만 지금 테스트 중인 라운드가 7을 넘어서서... // stake는안필요함
   rewardValue?: number;
   migrationValue?: number;
 };
@@ -66,8 +67,8 @@ const PaymentSelection: React.FC<{
   } else {
     // if page is 'staking'
     // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
-    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
-    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
   }
 
   useEffect(() => {

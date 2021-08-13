@@ -102,6 +102,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
       stakingTxData={{
         type: 'reward',
         unit: rewardCryptoType,
+        round: selectedRound,
         rewardValue: value,
       }}
       contractAddress={contract?.address}
