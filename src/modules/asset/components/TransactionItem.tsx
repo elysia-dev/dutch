@@ -56,66 +56,57 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const [contract, setContract] = useState<Contract | null>();
   const [gasFee, setGasFee] = useState('0');
   const [valueInCryto, setValueInCryto] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
   const elContract = getElysiaContract();
   const { t } = useTranslation();
 
+  const onChangeGasPrice = (inputGasPrice: string) => {
+    setChangedGasPrice(inputGasPrice);
+    getEstimateGas(inputGasPrice);
+  };
+
   const getEstimateGas = async (inputGasPrice: string) => {
     let estimateGas: BigNumber | undefined;
-    const isCryptoBnb =
-      paymentMethod === CryptoType.None
-        ? transaction.cryptoType === CryptoType.BNB
-        : paymentMethod === CryptoType.BNB;
+    const currentCryptoType =
+      (transaction.cryptoType === CryptoType.EL ||
+        paymentMethod === CryptoType.EL) &&
+      CryptoType.EL;
 
-    if (
-      inputGasPrice[0] === '.' ||
-      inputGasPrice.includes('-') ||
-      inputGasPrice.length > 10 ||
-      inputGasPrice.match(/[.]/g)?.length === 2 ||
-      (changedGasPrice
-        .split('')
-        .reduce((res, cur) => res && cur === '0', true) &&
-        inputGasPrice === '0')
-    ) {
-      return;
-    }
-
-    setChangedGasPrice(inputGasPrice);
     try {
-      if (
-        transaction.cryptoType === CryptoType.EL ||
-        paymentMethod === CryptoType.EL
-      ) {
-        if (paymentMethod === CryptoType.None) {
-          estimateGas = await elContract?.estimateGas.transfer(
-            transaction.toAddress,
-            utils.parseEther(transaction.value || '0.1'),
-            {
-              from: wallet?.getFirstAddress(),
-            },
-          );
-        } else {
-          estimateGas = await contract?.estimateGas.purchase(
-            utils.parseEther('100'),
-            {
+      switch (currentCryptoType) {
+        case CryptoType.EL:
+          if (paymentMethod === CryptoType.None) {
+            estimateGas = await elContract?.estimateGas.transfer(
+              transaction.toAddress,
+              utils.parseEther(transaction.value || '0.1'),
+              {
+                from: wallet?.getFirstAddress(),
+              },
+            );
+          } else {
+            estimateGas = await contract?.estimateGas.purchase(
+              utils.parseEther('100'),
+              {
+                from: wallet?.getFirstAddress() || '',
+              },
+            );
+          }
+          break;
+
+        default:
+          if (paymentMethod === CryptoType.None) {
+            estimateGas = await wallet
+              ?.getFirstSigner(transaction.cryptoType)
+              ?.estimateGas({
+                to: transaction.toAddress,
+                value: utils.parseEther(transaction.value || '0').toHexString(),
+              });
+          } else {
+            estimateGas = await contract?.estimateGas.purchase({
               from: wallet?.getFirstAddress() || '',
-            },
-          );
-        }
-      } else {
-        if (paymentMethod === CryptoType.None) {
-          estimateGas = await wallet
-            ?.getFirstSigner(transaction.cryptoType)
-            ?.estimateGas({
-              to: transaction.toAddress,
-              value: utils.parseEther(transaction.value || '0').toHexString(),
+              value: utils.parseEther('0.1'),
             });
-        } else {
-          estimateGas = await contract?.estimateGas.purchase({
-            from: wallet?.getFirstAddress() || '',
-            value: utils.parseEther('0.1'),
-          });
-        }
+          }
+          break;
       }
       if (estimateGas) {
         setGasFee(
@@ -134,7 +125,11 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     setChangedGasPrice(
       parseInt(
         utils.formatUnits(
-          paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
+          paymentMethod === CryptoType.BNB
+            ? bscGasPrice
+            : transaction.cryptoType === CryptoType.BNB
+            ? bscGasPrice
+            : gasPrice,
           9,
         ),
       ).toFixed(0),
@@ -260,7 +255,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         <AccelerateModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          getEstimateGas={getEstimateGas}
+          onChangeGasPrice={onChangeGasPrice}
           changedGasPrice={changedGasPrice}
           paymentMethod={paymentMethod}
           valueInCryto={valueInCryto}

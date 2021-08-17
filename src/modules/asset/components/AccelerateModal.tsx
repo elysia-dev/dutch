@@ -87,6 +87,22 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
     return false;
   };
 
+  const isInputGasPriceRegex = (inputGasPrice: string) => {
+    if (
+      inputGasPrice[0] === '.' ||
+      inputGasPrice.includes('-') ||
+      inputGasPrice.length > 10 ||
+      inputGasPrice.match(/[.]/g)?.length === 2 ||
+      (changedGasPrice
+        .split('')
+        .reduce((res, cur) => res && cur === '0', true) &&
+        inputGasPrice === '0')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Modal transparent={true} visible={isModalVisible} animationType="slide">
       <View
@@ -155,6 +171,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               if (isRowPrevGasPrise(text)) {
                 setIsDisabled(true);
               }
+              if (isInputGasPriceRegex(text)) return;
               onChangeGasPrice(text);
             }}
             value={changedGasPrice}
