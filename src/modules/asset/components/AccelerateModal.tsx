@@ -28,7 +28,7 @@ import WalletContext from '../../../contexts/WalletContext';
 interface AccelerateItem {
   isModalVisible: boolean;
   setIsModalVisible: (prev: boolean) => void;
-  getEstimateGas: (text: string) => void;
+  onChangeGasPrice: (text: string) => void;
   changedGasPrice: string;
   paymentMethod: CryptoType;
   valueInCryto: number;
@@ -45,7 +45,7 @@ interface AccelerateItem {
 const AccelerateModal: React.FC<AccelerateItem> = ({
   isModalVisible,
   setIsModalVisible,
-  getEstimateGas,
+  onChangeGasPrice,
   changedGasPrice,
   paymentMethod,
   valueInCryto,
@@ -155,7 +155,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               if (isRowPrevGasPrise(text)) {
                 setIsDisabled(true);
               }
-              getEstimateGas(text);
+              onChangeGasPrice(text);
             }}
             value={changedGasPrice}
           />
@@ -170,7 +170,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             }}>
             <TouchableOpacity
               onPress={() =>
-                getEstimateGas(String(Number(changedGasPrice) + 1))
+                onChangeGasPrice(String(Number(changedGasPrice) + 1))
               }>
               <View
                 style={{
@@ -201,7 +201,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             />
             <TouchableOpacity
               onPress={() =>
-                getEstimateGas(String(Number(changedGasPrice) - 1))
+                onChangeGasPrice(String(Number(changedGasPrice) - 1))
               }>
               <View
                 style={{
