@@ -29,7 +29,7 @@ interface AccelerateItem {
   isModalVisible: boolean;
   setIsModalVisible: (prev: boolean) => void;
   getEstimateGas: (text: string) => void;
-  updateGasPrice: string;
+  changedGasPrice: string;
   paymentMethod: CryptoType;
   valueInCryto: number;
   gasFee: string;
@@ -48,7 +48,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   isModalVisible,
   setIsModalVisible,
   getEstimateGas,
-  updateGasPrice,
+  changedGasPrice,
   paymentMethod,
   valueInCryto,
   gasFee,
@@ -145,7 +145,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             }}
             keyboardType="numeric"
             onChangeText={(text) => getEstimateGas(text)}
-            value={updateGasPrice}
+            value={changedGasPrice}
           />
           <View
             style={{
@@ -158,7 +158,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             }}>
             <TouchableOpacity
               onPress={() =>
-                getEstimateGas(String(Number(updateGasPrice) + 1))
+                getEstimateGas(String(Number(changedGasPrice) + 1))
               }>
               <View
                 style={{
@@ -189,7 +189,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
             />
             <TouchableOpacity
               onPress={() =>
-                getEstimateGas(String(Number(updateGasPrice) - 1))
+                getEstimateGas(String(Number(changedGasPrice) - 1))
               }>
               <View
                 style={{
@@ -240,7 +240,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               }}
               onTextLayout={() => {
                 if (
-                  Number(updateGasPrice) <
+                  Number(changedGasPrice) <
                   Number(
                     utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9),
                   )
@@ -307,7 +307,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               value ? value : '',
               Accelerate.Accelerate,
               address,
-              updateGasPrice,
+              changedGasPrice,
             );
             setIsModalVisible(false);
           }}>

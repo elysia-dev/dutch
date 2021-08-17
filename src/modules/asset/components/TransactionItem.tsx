@@ -52,7 +52,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const { wallet } = useContext(WalletContext);
   const [crytoValue, setCrytoValue] = useState<Asset>();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [updateGasPrice, setUpdateGasPrice] = useState('1');
+  const [changedGasPrice, setChangedGasPrice] = useState('1');
   const [contract, setContract] = useState<Contract | null>();
   const [gasFee, setGasFee] = useState('0');
   const [valueInCryto, setValueInCryto] = useState(0);
@@ -67,7 +67,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         ? transaction.cryptoType === CryptoType.BNB
         : paymentMethod === CryptoType.BNB;
     if (text.includes('-') || text[0] === '.') return;
-    if (updateGasPrice.includes('.')) {
+    if (changedGasPrice.includes('.')) {
       if (text.match(/[.]/g)?.length === 2) return;
     }
     if (
@@ -78,7 +78,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     } else {
       setIsDisabled(false);
     }
-    setUpdateGasPrice(text);
+    setChangedGasPrice(text);
     try {
       if (
         transaction.cryptoType === CryptoType.EL ||
@@ -127,7 +127,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
 
   useEffect(() => {
     if (!isModalVisible) return;
-    setUpdateGasPrice(
+    setChangedGasPrice(
       parseInt(
         utils.formatUnits(
           paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
@@ -257,7 +257,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           getEstimateGas={getEstimateGas}
-          updateGasPrice={updateGasPrice}
+          changedGasPrice={changedGasPrice}
           paymentMethod={paymentMethod}
           valueInCryto={valueInCryto}
           gasFee={gasFee}
