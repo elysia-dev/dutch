@@ -80,14 +80,6 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       return;
     }
 
-    if (
-      Number(inputGasPrice) <
-      Number(utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9))
-    ) {
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
     setChangedGasPrice(inputGasPrice);
     try {
       if (
@@ -275,8 +267,6 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           gasFee={gasFee}
           crytoValue={crytoValue?.value}
           contract={contract}
-          isDisabled={isDisabled}
-          setIsDisabled={setIsDisabled}
           txCryptoType={transaction.cryptoType}
           productId={transaction.productId}
           valueFrom={
