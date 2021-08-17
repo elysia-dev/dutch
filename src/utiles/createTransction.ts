@@ -12,7 +12,7 @@ export const purchaseProduct = async (
   valuesFrom: string,
   wallet: Wallet | undefined,
   getCryptoPrice: (cryptoType: CryptoType) => number,
-  updateGasPrice?: string,
+  changedGasPrice?: string,
   accelerate?: Accelerate,
 ) => {
   let populatedTransaction: ethers.PopulatedTransaction | undefined;
@@ -32,7 +32,7 @@ export const purchaseProduct = async (
           .mul(constants.WeiPerEther)
           .div(utils.parseEther(valueInDollar)), // dollar to crypto
         gasPrice: isAccelerate
-          ? utils.parseUnits(updateGasPrice || '', 'gwei')
+          ? utils.parseUnits(changedGasPrice || '', 'gwei')
           : fromType === CryptoType.BNB
           ? BigNumber.from(bscGasPrice)
           : BigNumber.from(gasPrice),
@@ -49,8 +49,8 @@ export const purchaseProduct = async (
         to: populatedTransaction.to,
         data: populatedTransaction.data,
         gasPrice: isAccelerate
-          ? utils.parseUnits(updateGasPrice || '', 'gwei')
-          : BigNumber.from(gasPrice),
+          ? utils.parseUnits(changedGasPrice || '', 'gwei')
+          : BigNumber.from('100'),
       });
     }
   } catch (e) {
@@ -65,7 +65,7 @@ export const sendCryptoAsset = async (
   address?: string,
   value?: string,
   wallet?: Wallet,
-  updateGasPrice?: string,
+  changedGasPrice?: string,
   accelerate?: Accelerate,
 ) => {
   const isAccelerate = accelerate === Accelerate.Accelerate;
@@ -81,7 +81,7 @@ export const sendCryptoAsset = async (
       to: populatedTransaction.to,
       data: populatedTransaction.data,
       gasPrice: isAccelerate
-        ? utils.parseUnits(updateGasPrice || '', 'gwei')
+        ? utils.parseUnits(changedGasPrice || '', 'gwei')
         : BigNumber.from(gasPrice),
     });
   } else {
@@ -89,7 +89,7 @@ export const sendCryptoAsset = async (
       to: address,
       value: utils.parseEther(value || '').toHexString(),
       gasPrice: isAccelerate
-        ? utils.parseUnits(updateGasPrice || '', 'gwei')
+        ? utils.parseUnits(changedGasPrice || '', 'gwei')
         : assetType === CryptoType.BNB
         ? BigNumber.from(bscGasPrice)
         : BigNumber.from(gasPrice),
