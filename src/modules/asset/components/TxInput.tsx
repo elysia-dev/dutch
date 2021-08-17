@@ -1,5 +1,13 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { Text, View, Dimensions, TouchableOpacity, Platform, ActivityIndicator, Modal } from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Platform,
+  ActivityIndicator,
+  Modal,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
@@ -39,7 +47,7 @@ interface ITxInput {
   estimateGas?: string;
   disabled: boolean;
   isApproved: boolean;
-  setCurrent: Dispatch<SetStateAction<"from" | "to">>;
+  setCurrent: Dispatch<SetStateAction<'from' | 'to'>>;
   setValues: Dispatch<SetStateAction<{ from: string; to: string }>>;
   createTx: () => void;
 }
@@ -80,37 +88,37 @@ const TxInput: React.FC<ITxInput> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
-  const gasCrypto = [from.type, to.type].includes(CryptoType.BNB) ? CryptoType.BNB : CryptoType.ETH;
+  const gasCrypto = [from.type, to.type].includes(CryptoType.BNB)
+    ? CryptoType.BNB
+    : CryptoType.ETH;
   const insets = useSafeAreaInsets();
   const valueInCrypto = parseFloat(values.from) / getCryptoPrice(from.type);
-  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    fromBalance < parseFloat(estimateGas) + valueInCrypto
+  const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(from.type)
+    ? fromBalance < parseFloat(estimateGas) + valueInCrypto
     : fromBalance < parseFloat(estimateGas);
   const purposeType = purpose === PurposeType.Purchase ? 'invest' : 'refund';
-  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type) ?
-    valueInCrypto + Number(estimateGas) > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
+  const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(from.type)
+    ? valueInCrypto + Number(estimateGas) >
+      (fromMax ? Math.min(fromMax, fromBalance) : fromBalance)
     : valueInCrypto > (fromMax ? Math.min(fromMax, fromBalance) : fromBalance);
   const [isVisible, setIsVisible] = useState(false);
-
-    // useEffect(() => {
-    //   if([TxStep.Approving, Platform.OS === 'android' && TxStep.CheckAllowance, TxStep.Creating].includes(step)){
-    //     setIsVisible(true)
-    //   }
-    // },[step])
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader title={title} />
-      <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-      }}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
         <TouchableOpacity
           onPress={() => setCurrent('to')}
           style={{
-            backgroundColor: current === 'to' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'to' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor:
+              current === 'to' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor:
+              current === 'to' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             display: 'flex',
             justifyContent: 'center',
@@ -119,22 +127,22 @@ const TxInput: React.FC<ITxInput> = ({
             borderBottomLeftRadius: 5,
             width: '45%',
             height: 37,
-          }}
-        >
+          }}>
           <Text
             style={{
               color: current === 'to' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
-            }}
-          >
+            }}>
             {toInputTitle}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setCurrent('from')}
           style={{
-            backgroundColor: current === 'from' ? AppColors.MAIN : AppColors.WHITE,
-            borderColor: current === 'from' ? AppColors.MAIN : AppColors.BLUISH_GREY,
+            backgroundColor:
+              current === 'from' ? AppColors.MAIN : AppColors.WHITE,
+            borderColor:
+              current === 'from' ? AppColors.MAIN : AppColors.BLUISH_GREY,
             borderWidth: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -142,14 +150,13 @@ const TxInput: React.FC<ITxInput> = ({
             borderBottomRightRadius: 5,
             width: '45%',
             height: 37,
-          }}
-        >
+          }}>
           <Text
             style={{
-              color: current === 'from' ? AppColors.WHITE : AppColors.DEACTIVATED,
+              color:
+                current === 'from' ? AppColors.WHITE : AppColors.DEACTIVATED,
               fontFamily: AppFonts.Regular,
-            }}
-          >
+            }}>
             {fromInputTitle}
           </Text>
         </TouchableOpacity>
@@ -182,7 +189,11 @@ const TxInput: React.FC<ITxInput> = ({
         />
         <NumberPadShortcut
           current={current}
-          values={current === 'to' ? [0.01, 1, 10, 100, 1000] : [10, 50, 100, 500, 1000]}
+          values={
+            current === 'to'
+              ? [0.01, 1, 10, 100, 1000]
+              : [10, 50, 100, 500, 1000]
+          }
           inputValue={current === 'to' ? values.to : values.from}
           setValues={setValues}
           ELAPrice={toPrice}
@@ -192,16 +203,26 @@ const TxInput: React.FC<ITxInput> = ({
             const before = current === 'from' ? values.from : values.to;
             const includesComma = before.includes('.');
             if (
-              text === '.' && includesComma
-              || text !== '.' && !includesComma && before.length >= 12
-              || includesComma && before.split('.')[1].length >= (current === 'from' ? 2 : 6)
-              || before.split('').reduce((res, cur) => res && cur === '0', true) && text === '0'
+              (text === '.' && includesComma) ||
+              (text !== '.' && !includesComma && before.length >= 12) ||
+              (includesComma &&
+                before.split('.')[1].length >= (current === 'from' ? 2 : 6)) ||
+              (before
+                .split('')
+                .reduce((res, cur) => res && cur === '0', true) &&
+                text === '0')
             ) {
               return;
             }
 
-            const next = text === '.' && !before ? '0.' : text !== '0' && before === '0' ? text : before + text;
-            const removedDotNext = next[next.length - 1] === '.' ? next.slice(0, -1) : next;
+            const next =
+              text === '.' && !before
+                ? '0.'
+                : text !== '0' && before === '0'
+                ? text
+                : before + text;
+            const removedDotNext =
+              next[next.length - 1] === '.' ? next.slice(0, -1) : next;
 
             if (current === 'from') {
               setValues({
@@ -240,8 +261,7 @@ const TxInput: React.FC<ITxInput> = ({
           marginBottom: insets.bottom || 10,
           paddingLeft: '5%',
           paddingRight: '5%',
-        }}
-      >
+        }}>
         <NextButton
           disabled={isOverMax || disabled || insufficientGas}
           title={t('assets.done')}
@@ -269,7 +289,6 @@ const TxInput: React.FC<ITxInput> = ({
         isApproved={isApproved}
         createTx={createTx}
       />
-      {/* <OverlayLoading visible={isVisible} /> */}
     </View>
   );
 };
