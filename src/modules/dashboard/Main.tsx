@@ -210,7 +210,7 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          <StakingListing user={user} isWalletUser={isWalletUser} />
+          <StakingListing />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}

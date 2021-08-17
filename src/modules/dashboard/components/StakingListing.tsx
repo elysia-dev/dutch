@@ -18,12 +18,11 @@ import {
   getElfiStakingPoolContract,
 } from '../../../utiles/getContract';
 import WalletContext from '../../../contexts/WalletContext';
+import UserContext from '../../../contexts/UserContext';
 
-const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
-  user,
-  isWalletUser,
-}) => {
+const StakingListing: React.FC<{}> = () => {
   const { wallet } = useContext(WalletContext);
+  const { user, isWalletUser } = useContext(UserContext);
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
