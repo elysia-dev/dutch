@@ -150,7 +150,6 @@ const Detail: React.FC = () => {
       (tx) => tx.status !== TxStatus.Pending,
     );
     if (pendingTxs.length > 0) {
-      pendingTxs.concat(notPendingTxs);
       setState({
         ...state,
         transactions: pendingTxs.concat(notPendingTxs),
