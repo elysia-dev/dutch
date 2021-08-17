@@ -34,9 +34,7 @@ interface AccelerateItem {
   valueInCryto: number;
   gasFee: string;
   crytoValue?: number;
-  isDisabled: boolean;
   contract?: Contract | null;
-  setIsDisabled: (prev: boolean) => void;
   txCryptoType?: CryptoType;
   productId?: number;
   valueFrom?: string;
@@ -53,9 +51,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   valueInCryto,
   gasFee,
   crytoValue,
-  isDisabled,
   contract,
-  setIsDisabled,
   txCryptoType,
   productId,
   valueFrom,
@@ -66,6 +62,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
   const { addPendingTransaction } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
   const [isAssetDisabled, setIsAssetDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const cryptoType =
@@ -79,6 +76,16 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
     paymentMethod === CryptoType.None
       ? txCryptoType === CryptoType.BNB
       : paymentMethod === CryptoType.BNB;
+
+  const isRowPrevGasPrise = (inputGasPrice: string) => {
+    if (
+      Number(inputGasPrice) <
+      Number(utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9))
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <Modal transparent={true} visible={isModalVisible} animationType="slide">
@@ -144,7 +151,12 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
               fontSize: 30,
             }}
             keyboardType="numeric"
-            onChangeText={(text) => getEstimateGas(text)}
+            onChangeText={(text) => {
+              if (isRowPrevGasPrise(text)) {
+                setIsDisabled(true);
+              }
+              getEstimateGas(text);
+            }}
             value={changedGasPrice}
           />
           <View
@@ -239,12 +251,7 @@ const AccelerateModal: React.FC<AccelerateItem> = ({
                 color: AppColors.BLACK,
               }}
               onTextLayout={() => {
-                if (
-                  Number(changedGasPrice) <
-                  Number(
-                    utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9),
-                  )
-                ) {
+                if (isRowPrevGasPrise(changedGasPrice)) {
                   setIsDisabled(true);
                   return;
                 }
