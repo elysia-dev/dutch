@@ -61,7 +61,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
 
   const onChangeGasPrice = (inputGasPrice: string) => {
     setChangedGasPrice(inputGasPrice);
-    getEstimateGas(inputGasPrice);
+    setEstimateGas(inputGasPrice);
   };
 
   const estimateElGas = async (): Promise<BigNumber | undefined> => {
@@ -94,7 +94,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     }
   };
 
-  const getEstimateGas = async (inputGasPrice: string) => {
+  const setEstimateGas = async (inputGasPrice: string) => {
     let estimateGas: BigNumber | undefined;
     const currentCryptoType =
       (transaction.cryptoType === CryptoType.EL ||
@@ -136,7 +136,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         ),
       ).toFixed(0),
     );
-    getEstimateGas(
+    setEstimateGas(
       parseInt(
         utils.formatUnits(
           paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
