@@ -64,6 +64,36 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     getEstimateGas(inputGasPrice);
   };
 
+  const estimateElGas = async (): Promise<BigNumber | undefined> => {
+    if (paymentMethod === CryptoType.None) {
+      return await elContract?.estimateGas.transfer(
+        transaction.toAddress,
+        utils.parseEther(transaction.value || '0.1'),
+        {
+          from: wallet?.getFirstAddress(),
+        },
+      );
+    } else {
+      return await contract?.estimateGas.purchase(utils.parseEther('100'), {
+        from: wallet?.getFirstAddress() || '',
+      });
+    }
+  };
+
+  const estimateEthorBscGas = async (): Promise<BigNumber | undefined> => {
+    if (paymentMethod === CryptoType.None) {
+      return await wallet?.getFirstSigner(transaction.cryptoType)?.estimateGas({
+        to: transaction.toAddress,
+        value: utils.parseEther(transaction.value || '0').toHexString(),
+      });
+    } else {
+      return await contract?.estimateGas.purchase({
+        from: wallet?.getFirstAddress() || '',
+        value: utils.parseEther('0.1'),
+      });
+    }
+  };
+
   const getEstimateGas = async (inputGasPrice: string) => {
     let estimateGas: BigNumber | undefined;
     const currentCryptoType =
@@ -74,38 +104,10 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     try {
       switch (currentCryptoType) {
         case CryptoType.EL:
-          if (paymentMethod === CryptoType.None) {
-            estimateGas = await elContract?.estimateGas.transfer(
-              transaction.toAddress,
-              utils.parseEther(transaction.value || '0.1'),
-              {
-                from: wallet?.getFirstAddress(),
-              },
-            );
-          } else {
-            estimateGas = await contract?.estimateGas.purchase(
-              utils.parseEther('100'),
-              {
-                from: wallet?.getFirstAddress() || '',
-              },
-            );
-          }
+          estimateGas = await estimateElGas();
           break;
-
         default:
-          if (paymentMethod === CryptoType.None) {
-            estimateGas = await wallet
-              ?.getFirstSigner(transaction.cryptoType)
-              ?.estimateGas({
-                to: transaction.toAddress,
-                value: utils.parseEther(transaction.value || '0').toHexString(),
-              });
-          } else {
-            estimateGas = await contract?.estimateGas.purchase({
-              from: wallet?.getFirstAddress() || '',
-              value: utils.parseEther('0.1'),
-            });
-          }
+          estimateGas = await estimateEthorBscGas();
           break;
       }
       if (estimateGas) {
