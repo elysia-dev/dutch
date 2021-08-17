@@ -60,25 +60,25 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const elContract = getElysiaContract();
   const { t } = useTranslation();
 
-  const getEstimateGas = async (text: string) => {
+  const getEstimateGas = async (inputGasPrice: string) => {
     let estimateGas: BigNumber | undefined;
     const isCryptoBnb =
       paymentMethod === CryptoType.None
         ? transaction.cryptoType === CryptoType.BNB
         : paymentMethod === CryptoType.BNB;
-    if (text.includes('-') || text[0] === '.') return;
+    if (inputGasPrice.includes('-') || inputGasPrice[0] === '.') return;
     if (changedGasPrice.includes('.')) {
-      if (text.match(/[.]/g)?.length === 2) return;
+      if (inputGasPrice.match(/[.]/g)?.length === 2) return;
     }
     if (
-      Number(text) <
+      Number(inputGasPrice) <
       Number(utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9))
     ) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
     }
-    setChangedGasPrice(text);
+    setChangedGasPrice(inputGasPrice);
     try {
       if (
         transaction.cryptoType === CryptoType.EL ||
@@ -117,7 +117,9 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       }
       if (estimateGas) {
         setGasFee(
-          utils.formatEther(estimateGas.mul(utils.parseUnits(text, 'gwei'))),
+          utils.formatEther(
+            estimateGas.mul(utils.parseUnits(inputGasPrice, 'gwei')),
+          ),
         );
       }
     } catch (e) {
