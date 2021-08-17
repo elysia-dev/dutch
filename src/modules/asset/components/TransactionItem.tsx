@@ -59,11 +59,6 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   const elContract = getElysiaContract();
   const { t } = useTranslation();
 
-  const onChangeGasPrice = (inputGasPrice: string) => {
-    setChangedGasPrice(inputGasPrice);
-    setEstimateGas(inputGasPrice);
-  };
-
   const estimateElGas = async (): Promise<BigNumber | undefined> => {
     if (paymentMethod === CryptoType.None) {
       return await elContract?.estimateGas.transfer(
@@ -120,6 +115,11 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const onChangeGasPrice = (inputGasPrice: string) => {
+    setChangedGasPrice(inputGasPrice);
+    setEstimateGas(inputGasPrice);
   };
 
   useEffect(() => {
