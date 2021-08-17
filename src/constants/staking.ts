@@ -19,28 +19,28 @@ export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
 
 export const STAKING_POOL_ROUNDS = [
   {
-    startedAt: '2021.08.04 00:00:00',
-    endedAt: '2021.08.04 23:59:59',
+    startedAt: '2021.08.17 00:00:00',
+    endedAt: '2021.08.17 23:59:59',
   },
   {
-    startedAt: '2021.08.05 00:00:00',
-    endedAt: '2021.08.05 23:59:59',
+    startedAt: '2021.08.18 00:00:00',
+    endedAt: '2021.08.18 23:59:59',
   },
   {
-    startedAt: '2021.08.06 00:00:00',
-    endedAt: '2021.08.06 23:59:59',
+    startedAt: '2021.08.19 00:00:00',
+    endedAt: '2021.08.19 23:59:59',
   },
   {
-    startedAt: '2021.08.09 00:00:00',
-    endedAt: '2021.08.09 23:59:59',
+    startedAt: '2021.08.20 00:00:00',
+    endedAt: '2021.08.20 23:59:59',
   },
   {
-    startedAt: '2021.08.10 00:00:00',
-    endedAt: '2021.08.10 23:59:59',
+    startedAt: '2021.08.23 00:00:00',
+    endedAt: '2021.08.23 23:59:59',
   },
   {
-    startedAt: '2021.08.11 00:00:00',
-    endedAt: '2021.08.11 23:59:59',
+    startedAt: '2021.08.24 00:00:00',
+    endedAt: '2021.08.24 23:59:59',
   },
 ];
 
@@ -52,27 +52,27 @@ const outputFormat = 'YYYY.MM.DD hh:mm:ss'; // for ko and zh-hans
 
 export const STAKING_POOL_ROUNDS_MOMENT = [
   {
-    startedAt: moment('2021.08.04 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.04 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.17 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.17 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.05 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.05 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.18 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.18 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.06 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.06 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.19 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.19 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.09 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.09 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.20 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.20 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.10 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.10 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.23 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.23 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.11 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.11 23:59:59 +9:00', inputFormat),
+    startedAt: moment('2021.08.24 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.24 23:59:59 +9:00', inputFormat),
   },
 ];
