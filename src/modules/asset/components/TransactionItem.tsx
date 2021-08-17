@@ -66,10 +66,20 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       paymentMethod === CryptoType.None
         ? transaction.cryptoType === CryptoType.BNB
         : paymentMethod === CryptoType.BNB;
-    if (inputGasPrice.includes('-') || inputGasPrice[0] === '.') return;
-    if (changedGasPrice.includes('.')) {
-      if (inputGasPrice.match(/[.]/g)?.length === 2) return;
+
+    if (
+      inputGasPrice[0] === '.' ||
+      inputGasPrice.includes('-') ||
+      inputGasPrice.length > 10 ||
+      inputGasPrice.match(/[.]/g)?.length === 2 ||
+      (changedGasPrice
+        .split('')
+        .reduce((res, cur) => res && cur === '0', true) &&
+        inputGasPrice === '0')
+    ) {
+      return;
     }
+
     if (
       Number(inputGasPrice) <
       Number(utils.formatUnits(isCryptoBnb ? bscGasPrice : gasPrice, 9))
