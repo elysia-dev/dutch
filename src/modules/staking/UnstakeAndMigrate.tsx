@@ -30,6 +30,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
+  const { gasPrice } = useContext(PriceContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
@@ -129,6 +130,30 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       { label: t('staking.gas_price'), value: '(모름)' },
     ];
   }
+  const migrate = async () => {
+    try {
+      const { to, data } = await contract?.populateTransaction.migrate(
+        utils.parseUnits('1'),
+        6,
+      );
+      return await wallet?.getFirstSigner().sendTransaction({
+        to,
+        data,
+        gasLimit: BigNumber.from(170353), // 가스를 안 넣어주니 에러 발생
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onPressMigrate = async () => {
+    try {
+      const resTx = await migrate();
+      const successTx = resTx?.wait();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -186,7 +211,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         </Text>
         <LargeTextInput
           placeholder={t('staking.migration_placeholder')}
-          value={principal - parseFloat(value)}
+          value={String(principal - parseFloat(value))}
           unit={cryptoType}
           style={{ marginTop: 0 }}
         />
@@ -249,7 +274,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         list={confirmationList}
         isApproved={true}
         submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
-        handler={() => console.log('언스테이킹 해야 함')}
+        handler={() => onPressMigrate()}
       />
       {/* <OverlayLoading
         visible={[
