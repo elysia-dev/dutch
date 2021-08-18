@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Platform } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
+import { ethers, utils, constants, ContractTransaction } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -24,9 +24,18 @@ import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
+  provider,
+  getErc20Contract,
+  getStakingPoolContract,
 } from '../../utiles/getContract';
+import {
+  ELFI_ADDRESS,
+  EL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
+import { useNavigation } from '@react-navigation/native';
+import useTxHandler from '../../hooks/useTxHandler';
+import NetworkType from '../../enums/NetworkType';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -36,23 +45,34 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const crytoBalance = getBalance(cryptoType);
   const { wallet } = useContext(WalletContext);
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
+  const navigation = useNavigation();
   const { t } = useTranslation();
+  const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
+    value: '0',
+  });
+  const { ercAddress, signer } = {
+    ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+    signer: wallet?.getFirstSigner() || provider,
+  };
+  const erc20Contract = getErc20Contract(ercAddress, signer);
+  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
-  const estimateGas = async (address: string) => {
+  const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
-
     try {
-      estimateGas = await contract?.estimateGas.stake(
-        utils.parseEther('0.01'),
-        { from: address },
+      estimateGas = await stakingPoolContract?.estimateGas.stake(
+        utils.parseEther('100'),
+        {
+          from: address,
+        },
       );
-
       if (estimateGas) {
         setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
@@ -61,13 +81,79 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
-  useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
+  const setAllowance = async () => {
+    try {
+      const allowance: BigNumber = await erc20Contract.allowance(
+        wallet?.getFirstNode()?.address || '',
+        EL_STAKING_POOL_ADDRESS,
+      );
+      setAllowanceInfo({
+        ...allowanceInfo,
+        value: utils.formatEther(allowance),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const isAllowanceForApprove = (): boolean => {
+    return Number(allowanceInfo.value) < crytoBalance;
+  };
+
+  const setApporve = async () => {
+    try {
+      if (isAllowanceForApprove()) {
+        await approve();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const approve = async () => {
+    try {
+      await erc20Contract.approve(
+        EL_STAKING_POOL_ADDRESS,
+        '1' + '0'.repeat(30),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const stake = async () => {
+    try {
+      return await stakingPoolContract.stake(utils.parseUnits(value), {
+        gasLimit: BigNumber.from('170000'),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onPressStaking = async () => {
+    try {
+      await setApporve();
+      const resTx = await stake();
+      afterTxHashCreated(
+        address || '',
+        EL_ADDRESS,
+        resTx?.hash || '',
+        NetworkType.ETH,
+      );
+      navigation.goBack();
+      const successTx = await resTx?.wait();
+      afterTxCreated(successTx?.transactionHash || '');
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     if (address) {
-      estimateGas(address);
+      setAllowance();
+      estimateGas();
     }
   }, []);
 
@@ -194,7 +280,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         ]}
         isApproved={true}
         submitButtonText={t('staking.nth_staking', { round: selectedRound })}
-        handler={() => console.log('스테이킹 해야 함')}
+        handler={() => onPressStaking()}
       />
       {/* <OverlayLoading
         visible={[
