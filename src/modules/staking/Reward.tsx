@@ -69,6 +69,28 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     // }
   }, []);
 
+  const claim = async () => {
+    try {
+      const { to, data } = await contract?.populateTransaction.claim('1');
+      return await wallet?.getFirstSigner().sendTransaction({
+        to,
+        data,
+        gasLimit: BigNumber.from(130353), // 수정해야되는 부분
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onPressClaim = async () => {
+    try {
+      const resTx = await claim();
+      const successTx = await resTx?.wait();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const address = isWalletUser
       ? wallet?.getFirstAddress()
@@ -119,7 +141,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
             disabled={false}
             handler={() => {
               if (isWalletUser) {
-                console.log('보상 수령 해야 함 (내부 지갑 유저)');
+                onPressClaim();
               } else {
                 console.log('보상 수령 해야 함 (외부 지갑 유저)');
               }
