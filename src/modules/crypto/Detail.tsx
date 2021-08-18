@@ -136,25 +136,30 @@ const Detail: React.FC = () => {
     }
   };
 
+  const isSuccessTx = (sendingTxStatus?: TxStatus) => {
+    return sendingTxStatus === TxStatus.Success;
+  };
+
+  const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
+    let resentTx = state.transactions.findIndex(
+      (tx) => tx.txHash === sendingTx.txHash,
+    );
+    state.transactions[resentTx] = sendingTx;
+  };
+
   useEffect(() => {
-    loadTxs();
-  }, []);
-  useEffect(() => {
+    const sendingTx = transactions[0];
     const notPendingTxs = state.transactions.filter(
       (tx) => tx.status !== TxStatus.Pending,
     );
-    const successTx = transactions.filter(
-      (tx) => tx.status === TxStatus.Success,
-    );
-    let resentTx = state.transactions.findIndex(
-      (tx) => tx.txHash === successTx[0]?.txHash,
-    );
-    state.transactions[resentTx] = successTx[0];
+    if (isSuccessTx(sendingTx.status)) {
+      changedTxStatusToSuccess(sendingTx);
+    }
     setState({
       ...state,
       transactions:
-        transactions[0].status === TxStatus.Pending
-          ? [...transactions, ...notPendingTxs]
+        sendingTx.status === TxStatus.Pending
+          ? [sendingTx, ...notPendingTxs]
           : [...state.transactions],
     });
   }, [transactions]);
@@ -193,6 +198,10 @@ const Detail: React.FC = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    loadTxs();
+  }, []);
 
   return (
     <>
