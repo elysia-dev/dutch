@@ -50,7 +50,7 @@ export const purchaseProduct = async (
         data: populatedTransaction.data,
         gasPrice: isAccelerate
           ? utils.parseUnits(changedGasPrice || '', 'gwei')
-          : BigNumber.from('100'),
+          : BigNumber.from(gasPrice),
       });
     }
   } catch (e) {
