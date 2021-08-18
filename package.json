@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
+    "@elysia-dev/contract-typechain": "^1.1.0",
     "@ethersproject/address": "^5.4.0",
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/constants": "^5.4.0",
@@ -41,7 +42,7 @@
     "bignumber.js": "^9.0.1",
     "bsc-scan": "^1.1.0",
     "crypto-es": "^1.2.7",
-    "ethers": "^5.0.24",
+    "ethers": "5.2.0",
     "expo": "^41.0.0",
     "expo-barcode-scanner": "~10.1.2",
     "expo-clipboard": "~1.0.2",
