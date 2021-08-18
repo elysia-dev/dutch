@@ -75,7 +75,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
     }
   };
 
-  const estimateEthorBscGas = async (): Promise<BigNumber | undefined> => {
+  const estimateEthOrBscGas = async (): Promise<BigNumber | undefined> => {
     if (paymentMethod === CryptoType.None) {
       return await wallet?.getFirstSigner(transaction.cryptoType)?.estimateGas({
         to: transaction.toAddress,
@@ -102,7 +102,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           estimateGas = await estimateElGas();
           break;
         default:
-          estimateGas = await estimateEthorBscGas();
+          estimateGas = await estimateEthOrBscGas();
           break;
       }
       if (estimateGas) {
