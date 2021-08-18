@@ -140,22 +140,9 @@ const Detail: React.FC = () => {
     loadTxs();
   }, []);
   useEffect(() => {
-    const pendingTxs = transactions.filter(
-      (tx) =>
-        tx.status === TxStatus.Pending ||
-        tx.cryptoType === CryptoType.ELA ||
-        tx.cryptoType === asset.type,
-    );
     const notPendingTxs = state.transactions.filter(
       (tx) => tx.status !== TxStatus.Pending,
     );
-    if (pendingTxs.length > 0) {
-      setState({
-        ...state,
-        transactions: pendingTxs.concat(notPendingTxs),
-      });
-      return;
-    }
     const successTx = transactions.filter(
       (tx) => tx.status === TxStatus.Success,
     );
@@ -165,7 +152,10 @@ const Detail: React.FC = () => {
     state.transactions[resentTx] = successTx[0];
     setState({
       ...state,
-      transactions: [...state.transactions],
+      transactions:
+        transactions[0].status === TxStatus.Pending
+          ? [...transactions, ...notPendingTxs]
+          : [...state.transactions],
     });
   }, [transactions]);
 
