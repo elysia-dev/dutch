@@ -14,7 +14,7 @@ type CryptoTransaction = {
   txHash?: string;
   createdAt: string;
   blockNumber: number | undefined;
-  status?: TxStatus | number;
+  status?: TxStatus;
   cryptoType?: CryptoType;
   productId?: number;
   valueFrom?: string;
