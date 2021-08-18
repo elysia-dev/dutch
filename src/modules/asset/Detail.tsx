@@ -41,7 +41,7 @@ import TransactionItem from './components/TransactionItem';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
 import { provider } from '../../utiles/getContract';
-import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
+import { getPendingTx } from '../../utiles/pendingTransaction';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -201,10 +201,31 @@ const Detail: FunctionComponent = () => {
     loadDetailTx();
   }, []);
 
+  const isSuccessTx = (sendingTxStatus?: TxStatus) => {
+    return sendingTxStatus === TxStatus.Success;
+  };
+
+  const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
+    let resentTx = state.transactions.findIndex(
+      (tx) => tx.txHash === sendingTx?.txHash,
+    );
+    state.transactions[resentTx] = sendingTx;
+  };
+
   useEffect(() => {
+    const sendingTx = transactions[0];
+    const notPendingTxs = state.transactions.filter(
+      (tx) => tx.status !== TxStatus.Pending,
+    );
+    if (isSuccessTx(sendingTx?.status)) {
+      changedTxStatusToSuccess(sendingTx);
+    }
     setState({
       ...state,
-      transactions: changeTxStatus(asset, state, transactions),
+      transactions:
+        sendingTx?.status === TxStatus.Pending
+          ? [sendingTx, ...notPendingTxs]
+          : [...state.transactions],
     });
   }, [transactions]);
 
