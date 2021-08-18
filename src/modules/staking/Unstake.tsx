@@ -121,6 +121,33 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     }
   }, []);
 
+  const unStake = async () => {
+    try {
+      const { to, data } = await contract?.populateTransaction.withdraw(
+        utils.parseUnits('1'),
+        7,
+      );
+
+      return await wallet?.getFirstSigner().sendTransaction({
+        to,
+        data,
+        gasLimit: BigNumber.from(130353), // 가스를 안 넣어주니 에러 발생
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onPressUnstaking = async () => {
+    try {
+      const resTx = await unStake();
+      // navigation.goBack();
+      const successTx = resTx?.wait();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader
@@ -196,7 +223,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         list={confirmationList}
         isApproved={true}
         submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
-        handler={() => console.log('언스테이킹 해야 함')}
+        handler={() => onPressUnstaking()}
       />
       {/* <OverlayLoading
         visible={[
