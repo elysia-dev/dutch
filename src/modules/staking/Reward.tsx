@@ -10,16 +10,17 @@ import CryptoInput from '../asset/components/CryptoInput';
 import PriceContext from '../../contexts/PriceContext';
 import NextButton from '../../shared/components/NextButton';
 import GasPrice from '../../shared/components/GasPrice';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../utiles/getContract';
+import { provider, getStakingPoolContract } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import AssetContext from '../../contexts/AssetContext';
+import { ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
+import useTxHandler from '../../hooks/useTxHandler';
+import NetworkType from '../../enums/NetworkType';
+import { useNavigation } from '@react-navigation/native';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { rewardCryptoType, selectedRound, currentRound } = route.params;
@@ -27,20 +28,31 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const [value, setValue] = useState(0);
-  const contract =
-    rewardCryptoType === CryptoType.ELFI
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const { t } = useTranslation();
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const navigation = useNavigation();
   const { getBalance } = useContext(AssetContext);
+  const { ercAddress, signer } = {
+    ercAddress: rewardCryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+    signer: wallet?.getFirstSigner() || provider,
+  };
+  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
-  const estimateGas = async (address: string) => {
+  const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.claim({ from: address });
+      estimateGas = await stakingPoolContract?.estimateGas.claim(
+        selectedRound,
+        {
+          from: address,
+        },
+      );
 
       if (estimateGas) {
         setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
@@ -50,33 +62,9 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
-  useEffect(() => {
-    contract
-      ?.getUserData(
-        selectedRound,
-        isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
-      )
-      .then((res: any) => {
-        setValue(res[1]); // userReward
-      });
-
-    // const address = isWalletUser
-    //   ? wallet?.getFirstAddress()
-    //   : user.ethAddresses[0];
-
-    // if (address) {
-    //   estimateGas(address);
-    // }
-  }, []);
-
   const claim = async () => {
     try {
-      const { to, data } = await contract?.populateTransaction.claim('1');
-      return await wallet?.getFirstSigner().sendTransaction({
-        to,
-        data,
-        gasLimit: BigNumber.from(130353), // 수정해야되는 부분
-      });
+      return await stakingPoolContract.claim('1');
     } catch (error) {
       console.log(error);
     }
@@ -85,19 +73,29 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   const onPressClaim = async () => {
     try {
       const resTx = await claim();
+      afterTxHashCreated(
+        address || '',
+        EL_ADDRESS,
+        resTx?.hash || '',
+        NetworkType.ETH,
+      );
+      navigation.goBack();
       const successTx = await resTx?.wait();
+      afterTxCreated(successTx?.transactionHash || '');
     } catch (error) {
+      afterTxFailed('Transaction failed');
       console.log(error);
     }
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
-
+    stakingPoolContract
+      ?.getUserData(selectedRound, address || '')
+      .then((res: any) => {
+        setValue(res[1]); // userReward
+      });
     if (address) {
-      estimateGas(address);
+      estimateGas();
     }
   }, []);
 
