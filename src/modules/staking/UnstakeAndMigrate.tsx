@@ -18,6 +18,8 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
+  provider,
+  getStakingPoolContract,
 } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
@@ -25,6 +27,10 @@ import AppFonts from '../../enums/AppFonts';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
+import { ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
+import useTxHandler from '../../hooks/useTxHandler';
+import { useNavigation } from '@react-navigation/native';
+import NetworkType from '../../enums/NetworkType';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -34,23 +40,26 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const { wallet } = useContext(WalletContext);
+  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const navigation = useNavigation();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { t } = useTranslation();
+  const { ercAddress, signer } = {
+    ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+    signer: wallet?.getFirstSigner() || provider,
+  };
+  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
   let principal = 0;
   let reward = 0;
-  contract
-    ?.getUserData(
-      selectedRound,
-      isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
-    )
+  stakingPoolContract
+    ?.getUserData(selectedRound, address || '')
     .then((res: any) => {
       principal = res[2]; // userPrincipal
       reward = res[1]; // userReward
@@ -130,40 +139,16 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       { label: t('staking.gas_price'), value: '(모름)' },
     ];
   }
-  const migrate = async () => {
-    try {
-      const { to, data } = await contract?.populateTransaction.migrate(
-        utils.parseUnits('1'),
-        6,
-      );
-      return await wallet?.getFirstSigner().sendTransaction({
-        to,
-        data,
-        gasLimit: BigNumber.from(170353), // 가스를 안 넣어주니 에러 발생
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const onPressMigrate = async () => {
-    try {
-      const resTx = await migrate();
-      const successTx = resTx?.wait();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const estimateGas = async (address: string) => {
+  const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.withdraw(
-        utils.parseEther('0.01'),
+      estimateGas = await stakingPoolContract.estimateGas.migrate(
+        utils.parseEther('1'),
+        utils.parseEther(selectedRound || currentRound),
         { from: address },
       );
-
       if (estimateGas) {
         setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
@@ -172,13 +157,38 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
-  useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
+  const migrate = async () => {
+    try {
+      return await stakingPoolContract.migrate(
+        utils.parseUnits('1'),
+        selectedRound || currentRound,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const onPressMigrate = async () => {
+    try {
+      const resTx = await migrate();
+      afterTxHashCreated(
+        address || '',
+        EL_ADDRESS,
+        resTx?.hash || '',
+        NetworkType.ETH,
+      );
+      navigation.goBack();
+      const successTx = await resTx?.wait();
+      afterTxCreated(successTx?.transactionHash || '');
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     if (address) {
-      estimateGas(address);
+      estimateGas();
     }
   }, []);
 
