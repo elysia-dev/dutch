@@ -152,13 +152,13 @@ const Detail: React.FC = () => {
     const notPendingTxs = state.transactions.filter(
       (tx) => tx.status !== TxStatus.Pending,
     );
-    if (isSuccessTx(sendingTx.status)) {
+    if (isSuccessTx(sendingTx?.status)) {
       changedTxStatusToSuccess(sendingTx);
     }
     setState({
       ...state,
       transactions:
-        sendingTx.status === TxStatus.Pending
+        sendingTx?.status === TxStatus.Pending
           ? [sendingTx, ...notPendingTxs]
           : [...state.transactions],
     });
