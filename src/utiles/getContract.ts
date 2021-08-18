@@ -7,7 +7,11 @@ import '@ethersproject/shims';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
-import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
+import {
+  InfuraProvider,
+  JsonRpcProvider,
+  Provider,
+} from '@ethersproject/providers';
 import {
   ETH_NETWORK,
   INFURA_PROJECT_ID,
@@ -22,6 +26,13 @@ import AssetTokenEthAbi from '../abi/AssetTokenEthAbi.json';
 import AssetTokenAbi from '../abi/AssetTokenAbi.json';
 import StakingPoolAbi from '../abi/StakingPoolAbi.json';
 import CryptoType from '../enums/CryptoType';
+import { Signer } from '@ethersproject/abstract-signer';
+import {
+  ERC20,
+  ERC20__factory,
+  StakingPool,
+  StakingPool__factory,
+} from '@elysia-dev/contract-typechain';
 
 export function isAddress(value: any): string | false {
   try {
@@ -39,7 +50,6 @@ export function getBscContract(address: string, ABI: any): Contract {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`);
   }
-
   return new Contract(address, ABI, bscProvider);
 }
 
@@ -88,6 +98,19 @@ export function getElStakingPoolContract(): Contract | null {
 
 export function getElfiStakingPoolContract(): Contract | null {
   return getContract(ELFI_STAKING_POOL_ADDRESS, StakingPoolAbi);
+}
+
+export function getErc20Contract(
+  address: string,
+  signer: Provider | Signer,
+): ERC20 {
+  return ERC20__factory.connect(address, signer);
+}
+export function getStakingPoolContract(
+  stakingPooladdress: string,
+  signer: Provider | Signer,
+): StakingPool {
+  return StakingPool__factory.connect(stakingPooladdress, signer);
 }
 
 export default getContract;
