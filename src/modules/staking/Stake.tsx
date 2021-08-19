@@ -30,6 +30,7 @@ import {
 } from '../../utiles/getContract';
 import {
   ELFI_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
   EL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
@@ -54,12 +55,16 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
-  const { ercAddress, signer } = {
+  const { ercAddress, stakingAddress, signer } = {
     ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+    stakingAddress:
+      cryptoType === CryptoType.EL
+        ? EL_STAKING_POOL_ADDRESS
+        : ELFI_STAKING_POOL_ADDRESS,
     signer: wallet?.getFirstSigner() || provider,
   };
   const erc20Contract = getErc20Contract(ercAddress, signer);
-  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
