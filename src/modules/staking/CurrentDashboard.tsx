@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
@@ -30,6 +29,8 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
+import getStakingStatus from '../../utiles/getStakingStatus';
+import StakingStatus from '../../enums/StakingStatus';
 
 type ParamList = {
   CurrentDashboard: {
@@ -54,28 +55,26 @@ const CurrentDashboard: React.FC = () => {
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
   const { t } = useTranslation();
+  const stakingStatus = getStakingStatus(currentRound);
 
-  let nextButtonTitle;
-  let nextButtonDisabled;
+  let nextButtonTitle = '';
   if (!(isWalletUser || user.ethAddresses[0])) {
     nextButtonTitle = t('staking.need_wallet');
-    nextButtonDisabled = true;
-  } else if (
-    !currentRound ||
-    (currentRound !== 6 &&
-      moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
-        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
-      ))
-  ) {
-    nextButtonTitle = t('staking.comming_soon');
-    nextButtonDisabled = true;
-  } else if (moment().isAfter(STAKING_POOL_ROUNDS_MOMENT[5].endedAt)) {
-    nextButtonTitle = t('staking.staking_ended');
-    nextButtonDisabled = true;
   } else {
-    nextButtonTitle = t('staking.nth_staking', { round: currentRound });
-    nextButtonDisabled = false;
+    switch (stakingStatus) {
+      case StakingStatus.NOT_YET_STARTED:
+      case StakingStatus.ROUND_NOT_IN_PROGRESS:
+        nextButtonTitle = t('staking.comming_soon');
+        break;
+      case StakingStatus.ROUND_IN_PROGRESS:
+        nextButtonTitle = t('staking.nth_staking', { round: currentRound });
+        break;
+      case StakingStatus.ENDED:
+        nextButtonTitle = t('staking.staking_ended');
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {
@@ -187,7 +186,7 @@ const CurrentDashboard: React.FC = () => {
             params: { cryptoType, selectedRound: currentRound },
           });
         }}
-        disabled={nextButtonDisabled}
+        disabled={stakingStatus !== StakingStatus.ROUND_IN_PROGRESS}
         style={{
           marginBottom: 20,
           marginHorizontal: 16,
