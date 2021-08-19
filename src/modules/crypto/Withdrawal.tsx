@@ -1,5 +1,5 @@
 /* eslint-disable radix */
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -16,7 +16,6 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber, ethers, utils } from 'ethers';
 import { isAddress } from '@ethersproject/address';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
-import moment from 'moment';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -26,12 +25,14 @@ import AssetContext from '../../contexts/AssetContext';
 import commaFormatter from '../../utiles/commaFormatter';
 import NumberPad from '../../shared/components/NumberPad';
 import CryptoType from '../../enums/CryptoType';
-import { getElysiaContract } from '../../utiles/getContract';
+import { getElysiaContract, provider } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
+import createTransferTx from '../../utiles/createTransferTx';
+import TransferType from '../../enums/TransferType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
@@ -47,10 +48,10 @@ type ParamList = {
 const Withdrawal: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Withdrawal'>>();
   const { asset } = route.params;
+  const { addPendingTransaction } = useContext(TransactionContext);
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
-  const { gasPrice, bscGasPrice } = useContext(PriceContext);
-  const { addPendingTransaction } = useContext(TransactionContext);
+  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -98,46 +99,22 @@ const Withdrawal: React.FC = () => {
   };
 
   const sendTx = async () => {
-    let txRes: ethers.providers.TransactionResponse | undefined;
-    setLoading(true);
-
-    try {
-      if (asset.type === CryptoType.EL) {
-        const elContract = getElysiaContract();
-        const populatedTransaction =
-          await elContract?.populateTransaction.transfer(
-            state.address,
-            utils.parseEther(value),
-          );
-
-        if (!populatedTransaction) return;
-
-        txRes = await wallet?.getFirstSigner().sendTransaction({
-          to: populatedTransaction.to,
-          data: populatedTransaction.data,
-        });
-      } else {
-        txRes = await wallet?.getFirstSigner(asset.type).sendTransaction({
-          to: state.address,
-          value: utils.parseEther(value).toHexString(),
-        });
-      }
-    } catch (e) {
-      alert(e);
-    } finally {
-      if (txRes) {
-        await addPendingTransaction({
-          txHash: txRes.hash,
-          cryptoType: asset.type,
-          value,
-          createdAt: moment().toString(),
-          type: 'out',
-          blockNumber: Number(txRes.blockNumber),
-        });
-      }
-      setLoading(false);
-      navigation.goBack();
-    }
+    navigation.goBack();
+    createTransferTx(
+      gasPrice,
+      bscGasPrice,
+      getCryptoPrice,
+      wallet,
+      addPendingTransaction,
+      asset.type,
+      TransferType.Send,
+      0,
+      null,
+      '',
+      value,
+      undefined,
+      state.address,
+    );
   };
 
   const openBarcodeScanner = async () => {
@@ -305,7 +282,7 @@ const Withdrawal: React.FC = () => {
           <NumberPad
             addValue={(text) => {
               if (!isNumericStringAppendable(value, text, 12, 6)) return;
-
+              
               const next = newInputValueFormatter(value, text);
               if (parseFloat(next) < getBalance(asset.type)) {
                 setValue(next);

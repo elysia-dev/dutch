@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { createContext } from 'react';
 import CryptoTransaction from '../types/CryptoTransaction';
 
@@ -7,7 +8,11 @@ export type TransactionType = {
 };
 
 export interface ITransactionContext extends TransactionType {
-  addPendingTransaction: (tx: CryptoTransaction) => void;
+  
+  addPendingTransaction: (
+    txRes: ethers.providers.TransactionResponse | undefined,
+    tx: CryptoTransaction,
+  ) => void;
 }
 
 export const initialTransactions = {

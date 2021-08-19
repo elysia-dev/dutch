@@ -399,7 +399,14 @@
       "gas_price": "가스비",
       "confirm_gas": "이더리움 기반 네트워크를 사용하기 때문에 가스비(사용거래 수수료)가 발생합니다.",
       "check_allowance_guide": "해당 컨트랙트에게 사용자의 자산 활용 권한을 허용해야 합니다.",
-      "check_allowance": "허용합니다"
+      "check_allowance": "허용합니다",
+      "transaction_delay_guide": "* 현재 설정하신 가스 가격이 낮아 요청하신 거래가 지연되고 있습니다.\n   거래를 빠르게 진행하기 위해 가스 가격을 조정해주세요.",
+      "accelerate": "가속화",
+      "accelerate_gas_price": "GAS 가격 (Gwei)",
+      "accelerate_gas_fee": "가속화 수수료",
+      "accelerate_gas_fee_guide": "Gwei이상을 입력해주세요.",
+      "accelerate_insufficient": "자금이 부족합니다.",
+      "accelerate_send": "저장"
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

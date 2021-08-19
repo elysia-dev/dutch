@@ -60,6 +60,7 @@ const AssetProvider: React.FC = (props) => {
             isLegacyOwnership: ownership.isLegacy,
             image: ownership.product.data.images[0],
             paymentMethod: ownership.product.paymentMethod,
+            productId: ownership.id,
           } as Asset;
         });
 
@@ -84,6 +85,7 @@ const AssetProvider: React.FC = (props) => {
               address: product.contractAddress,
               image: product.data.images[0],
               paymentMethod: product.paymentMethod,
+              productId: product.id,
             } as Asset;
           }),
       );
@@ -162,6 +164,7 @@ const AssetProvider: React.FC = (props) => {
           isLegacyOwnership: ownership.isLegacy,
           image: ownership.product.data.images[0],
           paymentMethod: ownership.product.paymentMethod,
+          productId: ownership.id,
         } as Asset;
       });
     if (address) {
@@ -184,6 +187,7 @@ const AssetProvider: React.FC = (props) => {
               address: product.contractAddress,
               image: product.data.images[0],
               paymentMethod: product.paymentMethod,
+              productId: product.id,
             } as Asset;
           }),
       );

@@ -38,6 +38,10 @@ import { Transaction as TransactionType } from '../../types/Transaction';
 import LoadDetail from '../../utiles/LoadLagacyDetail';
 import AssetDetail from '../../types/AssetDetail';
 import TransactionItem from './components/TransactionItem';
+import TransactionContext from '../../contexts/TransactionContext';
+import TxStatus from '../../enums/TxStatus';
+import { provider } from '../../utiles/getContract';
+import { getPendingTx } from '../../utiles/pendingTransaction';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -64,6 +68,7 @@ const Detail: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Detail'>>();
   const asset = route.params.asset;
   const { currencyFormatter } = useContext(PreferenceContext);
+  const { transactions } = useContext(TransactionContext);
   const { Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { t } = useTranslation();
@@ -97,14 +102,35 @@ const Detail: FunctionComponent = () => {
         );
       } else {
         const productData = await EspressoV2.getProduct(asset.address || '');
-        setState(
-          await loadDetail.loadV2Detail(
-            productData.data,
-            userAddress,
-            asset.address,
-            state.page,
-          ),
+        const resState = await loadDetail.loadV2Detail(
+          productData.data,
+          userAddress,
+          asset.address,
+          state.page,
         );
+        const pendingTxs = getPendingTx(transactions, resState.productId);
+        let isCurrentPendingTx = true;
+        if (pendingTxs.length > 0) {
+          isCurrentPendingTx =
+            resState.transactions.findIndex(
+              (tx) => pendingTxs[0].txHash === tx.txHash,
+            ) !== -1;
+        }
+        setState({
+          page: 1,
+          totalSupply: resState.totalSupply,
+          presentSupply: resState.presentSupply,
+          reward: resState.reward,
+          transactions: isCurrentPendingTx
+            ? resState.transactions
+            : pendingTxs.concat(resState.transactions),
+          contractAddress: resState.contractAddress,
+          paymentMethod: resState.paymentMethod,
+          images: resState.images,
+          productId: resState.productId, // for v1 user
+          productStatus: ProductStatus.SALE,
+          loaded: resState.loaded,
+        });
       }
     } catch (e) {
       alert(t('account_errors.server'));
@@ -121,13 +147,13 @@ const Detail: FunctionComponent = () => {
         res = await EspressoV2.getBscErc20Transaction(
           userAddress || '',
           asset.address || '',
-          state.page,
+          state.page + 1,
         );
       } else {
         res = await EspressoV2.getErc20Transaction(
           userAddress || '',
           asset.address || '',
-          state.page,
+          state.page + 1,
         );
       }
 
@@ -174,6 +200,34 @@ const Detail: FunctionComponent = () => {
     loadDetailTx();
   }, []);
 
+  const isSuccessTx = (sendingTxStatus?: TxStatus) => {
+    return sendingTxStatus === TxStatus.Success;
+  };
+
+  const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
+    let resentTx = state.transactions.findIndex(
+      (tx) => tx.txHash === sendingTx?.txHash,
+    );
+    state.transactions[resentTx] = sendingTx;
+  };
+
+  useEffect(() => {
+    const sendingTx = transactions[0];
+    const notPendingTxs = state.transactions.filter(
+      (tx) => tx.status !== TxStatus.Pending,
+    );
+    if (isSuccessTx(sendingTx?.status)) {
+      changedTxStatusToSuccess(sendingTx);
+    }
+    setState({
+      ...state,
+      transactions:
+        sendingTx?.status === TxStatus.Pending
+          ? [sendingTx, ...notPendingTxs]
+          : [...state.transactions],
+    });
+  }, [transactions]);
+
   return (
     <>
       <FlatList
@@ -191,6 +245,8 @@ const Detail: FunctionComponent = () => {
           return (
             <View style={{ marginLeft: '5%', marginRight: '5%' }}>
               <TransactionItem
+                paymentMethod={state.paymentMethod}
+                contractAddress={state.contractAddress}
                 transaction={item}
                 unit={route.params.asset.unit}
                 networkType={
@@ -321,7 +377,7 @@ const Detail: FunctionComponent = () => {
                       style={{ color: AppColors.MAIN, textAlign: 'right' }}
                       label={currencyFormatter(state.reward, 2)}
                     />
-                    {state.paymentMethod !== 'NONE' && (
+                    {state.paymentMethod !== CryptoType.None && (
                       <H4Text
                         style={{ color: AppColors.BLACK2, textAlign: 'right' }}
                         label={`${(
