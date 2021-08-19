@@ -9,11 +9,7 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-  getStakingPoolContract,
-} from '../../utiles/getContract';
+import { getStakingPoolContract } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import { STAKING_POOL_ROUNDS } from '../../constants/staking';
@@ -164,13 +160,14 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           />
           <CircularButtonWithLabel
             icon="-"
-            disabled={!userPrincipal}
+            disabled={userPrincipal === '-'}
             label={t('staking.unstake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
-                screen: userReward
-                  ? StakingPage.SelectUnstakingType
-                  : StakingPage.Unstake,
+                screen:
+                  userReward !== '-'
+                    ? StakingPage.SelectUnstakingType
+                    : StakingPage.Unstake,
                 params: {
                   cryptoType,
                   selectedRound,
@@ -185,7 +182,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           />
           <CircularButtonWithLabel
             icon="⤴"
-            disabled={!userReward}
+            disabled={userReward === '-'}
             label={t('staking.claim_rewards')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
@@ -194,7 +191,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   rewardCryptoType,
                   selectedRound,
                   currentRound,
-                  userReward: userReward.replaceAll(',', ''),
                 },
               });
             }}
