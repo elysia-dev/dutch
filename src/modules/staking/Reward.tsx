@@ -17,7 +17,12 @@ import commaFormatter from '../../utiles/commaFormatter';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import AssetContext from '../../contexts/AssetContext';
-import { ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
+import {
+  ELFI_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import useTxHandler from '../../hooks/useTxHandler';
 import NetworkType from '../../enums/NetworkType';
 import { useNavigation } from '@react-navigation/native';
@@ -34,11 +39,14 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const navigation = useNavigation();
   const { getBalance } = useContext(AssetContext);
-  const { ercAddress, signer } = {
-    ercAddress: rewardCryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+  const { stakingAddress, signer } = {
+    stakingAddress:
+      rewardCryptoType === CryptoType.EL
+        ? EL_STAKING_POOL_ADDRESS
+        : ELFI_STAKING_POOL_ADDRESS,
     signer: wallet?.getFirstSigner() || provider,
   };
-  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
