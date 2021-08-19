@@ -102,15 +102,15 @@ export function getElfiStakingPoolContract(): Contract | null {
 
 export function getErc20Contract(
   address: string,
-  signer: Provider | Signer,
+  signer?: Provider | Signer,
 ): ERC20 {
-  return ERC20__factory.connect(address, signer);
+  return ERC20__factory.connect(address, signer || provider);
 }
 export function getStakingPoolContract(
   stakingPooladdress: string,
-  signer: Provider | Signer,
+  signer?: Provider | Signer,
 ): StakingPool {
-  return StakingPool__factory.connect(stakingPooladdress, signer);
+  return StakingPool__factory.connect(stakingPooladdress, signer || provider);
 }
 
 export default getContract;
