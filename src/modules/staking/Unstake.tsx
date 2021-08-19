@@ -27,7 +27,12 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
-import { ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
+import {
+  ELFI_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import { useNavigation } from '@react-navigation/native';
 import NetworkType from '../../enums/NetworkType';
 
@@ -49,11 +54,14 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { t } = useTranslation();
-  const { ercAddress, signer } = {
-    ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
+  const { stakingAddress, signer } = {
+    stakingAddress:
+      cryptoType === CryptoType.EL
+        ? EL_STAKING_POOL_ADDRESS
+        : ELFI_STAKING_POOL_ADDRESS,
     signer: wallet?.getFirstSigner() || provider,
   };
-  const stakingPoolContract = getStakingPoolContract(ercAddress, signer);
+  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
