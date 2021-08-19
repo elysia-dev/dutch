@@ -29,9 +29,10 @@ import {
 } from 'react-native-dotenv';
 import { useNavigation } from '@react-navigation/native';
 import NetworkType from '../../enums/NetworkType';
+import useStakingInfo from '../../hooks/useStakingInfo';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType, selectedRound, earnReward } = route.params;
+  const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -56,14 +57,11 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
 
-  let principal = 0;
-  let reward = 0;
-  stakingPoolContract
-    ?.getUserData(selectedRound, address || '')
-    .then((res: any) => {
-      principal = res[2]; // userPrincipal
-      reward = res[1]; // userReward
-    });
+  const { principal, reward } = useStakingInfo(
+    stakingPoolContract,
+    selectedRound,
+    address || '',
+  );
 
   const confirmationList = earnReward
     ? [
@@ -85,7 +83,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
           label: t('staking.reward_supply'),
           value: `${reward} ${rewardCryptoType}`,
         },
-        { label: t('staking.gas_price'), value: '(모름)' },
+        { label: t('staking.gas_price'), value: estimagedGasPrice },
       ]
     : [
         {
@@ -102,7 +100,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
             ),
           )}`,
         },
-        { label: t('staking.gas_price'), value: '(모름)' },
+        { label: t('staking.gas_price'), value: estimagedGasPrice },
       ];
 
   const estimateGas = async () => {
