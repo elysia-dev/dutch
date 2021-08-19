@@ -15,12 +15,7 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-  provider,
-  getStakingPoolContract,
-} from '../../utiles/getContract';
+import { provider, getStakingPoolContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';

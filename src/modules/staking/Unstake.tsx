@@ -15,12 +15,7 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-  provider,
-  getStakingPoolContract,
-} from '../../utiles/getContract';
+import { provider, getStakingPoolContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
@@ -45,10 +40,6 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const navigation = useNavigation();
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const { wallet } = useContext(WalletContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;

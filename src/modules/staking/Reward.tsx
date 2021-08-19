@@ -18,7 +18,6 @@ import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import AssetContext from '../../contexts/AssetContext';
 import {
-  ELFI_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
   EL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
