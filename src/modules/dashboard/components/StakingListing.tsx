@@ -18,12 +18,11 @@ import {
   getElfiStakingPoolContract,
 } from '../../../utiles/getContract';
 import WalletContext from '../../../contexts/WalletContext';
+import UserContext from '../../../contexts/UserContext';
 
-const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
-  user,
-  isWalletUser,
-}) => {
+const StakingListing: React.FC<{}> = () => {
   const { wallet } = useContext(WalletContext);
+  const { user, isWalletUser } = useContext(UserContext);
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -46,7 +45,6 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
       infoBoxes = elStakingInfoBoxes;
       setInfoBoxes = setElStakingInfoBoxes;
     } else {
-      // type === CryptoType.ELFI
       contract = elfiStakingPoolContract;
       infoBoxes = elfiStakingInfoBoxes;
       setInfoBoxes = setElfiStakingInfoBoxes;
@@ -56,19 +54,19 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
     for (let round = 1; round <= 6; round++) {
       tempBoxes.push(
         contract?.getUserData(round, userAddress).then((res: any) => {
-          const stakingAmount = res[2].toNumber(); // principal
-          const rewardAmount = res[1].toNumber();
-          // if (stakingAmount) {
-          return (
-            <StakingInfoBox
-              key={round}
-              cryptoType={type}
-              round={round}
-              stakingAmount={stakingAmount}
-              rewardAmount={rewardAmount}
-            />
-          );
-          // }
+          const stakingAmount = res[2]; // principal
+          const rewardAmount = res[1];
+          if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+            return (
+              <StakingInfoBox
+                key={round}
+                cryptoType={type}
+                round={round}
+                stakingAmount={stakingAmount}
+                rewardAmount={rewardAmount}
+              />
+            );
+          }
         }),
       );
     }

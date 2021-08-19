@@ -1,31 +1,13 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
-import moment from 'moment';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
-import { STAKING_POOL_ROUNDS_MOMENT } from '../../../constants/staking';
+import getRoundStatus from '../../../utiles/geRoundStatus';
 
 const DotGraph: React.FC<{
-  currentRound: number;
   selectedRound: number;
   setSelectedRound: Dispatch<SetStateAction<number>>;
-}> = ({ currentRound, selectedRound, setSelectedRound }) => {
-  function getDotStatus(dotRound: number) {
-    const roundStartDate = STAKING_POOL_ROUNDS_MOMENT[dotRound - 1].startedAt;
-    const roundEndDate = STAKING_POOL_ROUNDS_MOMENT[dotRound - 1].endedAt;
-    if (currentRound && dotRound < currentRound) {
-      return 'ended';
-    } else if (
-      currentRound &&
-      dotRound === currentRound &&
-      moment().isBetween(roundStartDate, roundEndDate)
-    ) {
-      return 'inProgress';
-    } else {
-      return 'scheduled';
-    }
-  }
-
+}> = ({ selectedRound, setSelectedRound }) => {
   return (
     <View>
       <View
@@ -56,7 +38,7 @@ const DotGraph: React.FC<{
             <Dot
               key={i}
               round={i}
-              status={getDotStatus(i)}
+              status={getRoundStatus(i)}
               selected={selectedRound === i ? true : false}
               setSelectedRound={setSelectedRound}
             />

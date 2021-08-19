@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -27,7 +28,17 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 
-const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  UnstakeAndMigrate: {
+    cryptoType: CryptoType;
+    selectedRound: number;
+    currentRound: number;
+    earnReward: boolean;
+  };
+};
+
+const UnstakeAndMigrate: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'UnstakeAndMigrate'>>();
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
@@ -136,19 +147,13 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.purchase({
-        from: address,
-        value: utils.parseEther('0.5'),
-      });
+      estimateGas = await contract?.estimateGas.withdraw(
+        utils.parseEther('0.01'),
+        { from: address },
+      );
 
       if (estimateGas) {
-        setEstimatedGasPrice(
-          utils.formatEther(
-            estimateGas.mul(
-              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
-            ),
-          ),
-        );
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
     } catch (e) {
       setEstimatedGasPrice('');

@@ -2,6 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { BigNumber } from '@ethersproject/bignumber';
+import { ethers, utils, constants } from 'ethers';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import CryptoInput from '../asset/components/CryptoInput';
@@ -18,11 +21,20 @@ import commaFormatter from '../../utiles/commaFormatter';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import PaymentSelection from '../../shared/components/PaymentSelection';
+import AssetContext from '../../contexts/AssetContext';
 
-const Reward: React.FC<{ route: any }> = ({ route }) => {
-  const { rewardCryptoType, selectedRound, currentRound } = route.params;
+type ParamList = {
+  Reward: {
+    rewardCryptoType: CryptoType;
+    selectedRound: number;
+  };
+};
+
+const Reward: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'Reward'>>();
+  const { rewardCryptoType, selectedRound } = route.params;
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice } = useContext(PriceContext);
+  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const [value, setValue] = useState(0);
@@ -32,6 +44,22 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
       : getElfiStakingPoolContract();
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
+  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { getBalance } = useContext(AssetContext);
+
+  const estimateGas = async (address: string) => {
+    let estimateGas: BigNumber | undefined;
+
+    try {
+      estimateGas = await contract?.estimateGas.claim({ from: address });
+
+      if (estimateGas) {
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
+      }
+    } catch (e) {
+      setEstimatedGasPrice('');
+    }
+  };
 
   useEffect(() => {
     contract
@@ -42,6 +70,24 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
       .then((res: any) => {
         setValue(res[1]); // userReward
       });
+
+    // const address = isWalletUser
+    //   ? wallet?.getFirstAddress()
+    //   : user.ethAddresses[0];
+
+    // if (address) {
+    //   estimateGas(address);
+    // }
+  }, []);
+
+  useEffect(() => {
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
+
+    if (address) {
+      estimateGas(address);
+    }
   }, []);
 
   if (!selectionVisible) {
@@ -67,11 +113,13 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
             style={{ width: '100%' }}
           />
           <View style={{ height: 10 }} />
-          {/* <GasPrice
-            estimatedGas={state.estimateGas}
-            gasCrypto={gasCrypto}
-            insufficientGas={insufficientGas}
-          /> */}
+          <GasPrice
+            estimatedGas={estimagedGasPrice}
+            gasCrypto={CryptoType.ETH}
+            insufficientGas={
+              getBalance(CryptoType.ETH) < parseFloat(estimagedGasPrice)
+            }
+          />
           <View
             style={{
               position: 'absolute',

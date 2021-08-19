@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -29,13 +30,21 @@ import {
   getElfiStakingPoolContract,
 } from '../../utiles/getContract';
 
-const Stake: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  Stake: {
+    cryptoType: CryptoType;
+    selectedRound: number;
+  };
+};
+
+const Stake: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'Stake'>>();
   const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice } = useContext(PriceContext);
+  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
@@ -50,19 +59,13 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.purchase({
-        from: address,
-        value: utils.parseEther('0.5'),
-      });
+      estimateGas = await contract?.estimateGas.stake(
+        utils.parseEther('0.01'),
+        { from: address },
+      );
 
       if (estimateGas) {
-        setEstimatedGasPrice(
-          utils.formatEther(
-            estimateGas.mul(
-              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
-            ),
-          ),
-        );
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
     } catch (e) {
       setEstimatedGasPrice('');

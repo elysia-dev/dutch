@@ -1,0 +1,8 @@
+enum StakingStatus {
+  NOT_YET_STARTED = 'NOT_YET_STARTED',
+  ROUND_IN_PROGRESS = 'ROUND_IN_PROGRESS',
+  ROUND_NOT_IN_PROGRESS = 'ROUND_NOT_IN_PROGRESS',
+  ENDED = 'ENDED',
+}
+
+export default StakingStatus;

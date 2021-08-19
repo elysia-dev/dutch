@@ -47,13 +47,27 @@ const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
 
 export default calculateAPR;
 
+function getQuotientFromBigNumber(
+  dividend: BigNumber,
+  divisor: number,
+): number {
+  return parseInt(String(parseFloat(dividend.toString()) / divisor), 10);
+}
+
 export function aprFormatter(apr: BigNumber) {
-  const formattedAPR = commaFormatter(
-    decimalFormatter(parseFloat(apr.toString()), 5),
-  );
-  if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
+  const aprIntegerLength = apr.toString().split('.')[0].length;
+
+  if (aprIntegerLength > 15) {
     return '∞';
+  } else if (aprIntegerLength > 12) {
+    return getQuotientFromBigNumber(apr, 1000000000000) + 'T';
+  } else if (aprIntegerLength > 9) {
+    return getQuotientFromBigNumber(apr, 1000000000) + 'B';
+  } else if (aprIntegerLength > 6) {
+    return getQuotientFromBigNumber(apr, 1000000) + 'M';
+  } else if (aprIntegerLength > 3) {
+    return getQuotientFromBigNumber(apr, 1000) + 'K';
   } else {
-    return formattedAPR;
+    return commaFormatter(decimalFormatter(parseFloat(apr.toString()), 5));
   }
 }

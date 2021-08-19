@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -26,13 +27,22 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 
-const Unstake: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  Unstake: {
+    cryptoType: CryptoType;
+    selectedRound: number;
+    earnReward?: boolean; // 안 넘겨주면 false 취급함
+  };
+};
+
+const Unstake: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'Unstake'>>();
   const { cryptoType, selectedRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice } = useContext(PriceContext);
+  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const contract =
     cryptoType === CryptoType.EL
@@ -100,19 +110,13 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     let estimateGas: BigNumber | undefined;
 
     try {
-      estimateGas = await contract?.estimateGas.purchase({
-        from: address,
-        value: utils.parseEther('0.5'),
-      });
+      estimateGas = await contract?.estimateGas.withdraw(
+        utils.parseEther('0.01'),
+        { from: address },
+      );
 
       if (estimateGas) {
-        setEstimatedGasPrice(
-          utils.formatEther(
-            estimateGas.mul(
-              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
-            ),
-          ),
-        );
+        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
       }
     } catch (e) {
       setEstimatedGasPrice('');
