@@ -25,6 +25,7 @@ import {
   ELFI_STAKING_POOL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
+import { BigNumber, utils } from 'ethers';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -32,8 +33,8 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
   const navigation = useNavigation();
-  const [userReward, setUserReward] = useState(0);
-  const [userPrincipal, setUserPrincipal] = useState(0);
+  const [userReward, setUserReward] = useState('-');
+  const [userPrincipal, setUserPrincipal] = useState('-');
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
@@ -56,9 +57,16 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   useEffect(() => {
     stakingPoolContract
       .getUserData(selectedRound, address || '')
-      .then((res: any) => {
-        setUserReward(res[1]);
-        setUserPrincipal(res[2]);
+      .then((res: BigNumber[]) => {
+        setUserReward(
+          res[1].toHexString() !== '0x00' ? utils.formatEther(res[1]) : '-',
+        );
+        setUserPrincipal(
+          res[2].toHexString() !== '0x00' ? utils.formatEther(res[2]) : '-',
+        );
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }, [selectedRound]);
 
@@ -111,14 +119,14 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_principal', { round: selectedRound })}
-              value={stakingAmount || '-'}
+              value={userPrincipal || '-'}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_reward', { round: selectedRound })}
-              value={rewardAmount || '-'}
+              value={userReward || '-'}
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />
