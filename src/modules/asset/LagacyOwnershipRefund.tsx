@@ -1,7 +1,5 @@
 /* eslint-disable radix */
-import React, {
-  FunctionComponent, useContext,
-} from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -10,6 +8,7 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import { P1Text } from '../../shared/components/Texts';
 import SheetHeader from '../../shared/components/SheetHeader';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   LegacyOwnershipRefund: {
@@ -48,7 +47,7 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
           paddingLeft: 20,
           paddingRight: 20,
           height: '100%',
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
         }}>
         <View
           style={{
@@ -56,17 +55,14 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
             alignContent: 'space-between',
             position: 'relative',
             width: '100%',
-            backgroundColor: '#F6F6F8',
+            backgroundColor: AppColors.BACKGROUND_GREY,
             borderWidth: 2,
-            borderColor: '#F1F1F1',
+            borderColor: AppColors.GREY,
             borderRadius: 10,
             padding: 15,
             marginTop: 30,
-          }}
-        >
-          <P1Text
-            label={t('legacy.refund_notice')}
-          />
+          }}>
+          <P1Text label={t('legacy.refund_notice')} />
         </View>
         <SubmitButton
           style={{
@@ -78,7 +74,9 @@ const LegacyOwnershipRefund: FunctionComponent = () => {
             marginRight: 'auto',
             marginTop: 20,
           }}
-          handler={() => { callApi(); }}
+          handler={() => {
+            callApi();
+          }}
           title={t('product_label.legacy_refund')}
         />
       </View>

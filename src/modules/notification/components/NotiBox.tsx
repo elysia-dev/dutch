@@ -20,6 +20,7 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 import AppFonts from '../../../enums/AppFonts';
 import getTxScanLink from '../../../utiles/getTxScanLink';
 import NetworkType from '../../../enums/NetworkType';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   notification: Notification;
@@ -109,7 +110,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           ...notification,
           status:
             notification.status === NotificationStatus.READ ||
-              notification.id === props.notification.id
+            notification.id === props.notification.id
               ? NotificationStatus.READ
               : NotificationStatus.UNREAD,
         })),
@@ -120,7 +121,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         width: '100%',
         flex: 1,
         marginBottom: 40,
@@ -144,7 +145,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
           <View style={{ flex: 10, flexDirection: 'column' }}>
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}
@@ -152,7 +154,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             />
             <P1Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#1c1c1c',
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK,
                 fontFamily:
                   status === 'read' ? AppFonts.Regular : AppFonts.Bold,
                 marginBottom: 6,
@@ -161,10 +164,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 month: data.month,
                 week: data.week,
                 device: data.message,
-                profit: currencyFormatter(
-                  parseFloat(data.message),
-                  4,
-                ),
+                profit: currencyFormatter(parseFloat(data.message), 4),
                 tokenName: data.tokenName,
                 tokenAmount: data.tokenAmount,
                 paymentMethod: data.paymentMethod?.toUpperCase(),
@@ -176,7 +176,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   fontSize: 13,
                   textAlign: 'left',
                   marginBottom: 6,
-                  color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                  color:
+                    status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 }}
                 label={`- ${data.message}`}
               />
@@ -186,7 +187,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 <TouchableOpacity
                   onPress={() => setShowTx(!showTx)}
                   style={{
-                    backgroundColor: '#A7A7A7',
+                    backgroundColor: AppColors.TEXT_GREY,
                     borderRadius: 2,
                     width: 75,
                     height: 20,
@@ -197,7 +198,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <P4Text
-                      style={{ color: '#fff', textAlign: 'center' }}
+                      style={{ color: AppColors.WHITE, textAlign: 'center' }}
                       label={
                         showTx
                           ? t('dashboard_label.fold')
@@ -239,7 +240,8 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             )}
             <P3Text
               style={{
-                color: status === 'read' ? '#A7A7A7' : '#4e4e4e',
+                color:
+                  status === 'read' ? AppColors.TEXT_GREY : AppColors.BLACK2,
                 fontSize: 13,
                 marginBottom: 6,
               }}
@@ -255,11 +257,11 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
             {(type === NotificationType.PRODUCT_NOTICE ||
               type === NotificationType.ONBOARDING_NEW_USER ||
               type === NotificationType.ONBOARDING_CONNECT_WALLET) && (
-                <Image
-                  style={{ left: 10, width: 6, height: 9 }}
-                  source={images[9][status === 'read' ? 0 : 1]}
-                />
-              )}
+              <Image
+                style={{ left: 10, width: 6, height: 9 }}
+                source={images[9][status === 'read' ? 0 : 1]}
+              />
+            )}
           </View>
           {type === NotificationType.PENDING_TRANSACTION && (
             <View
@@ -268,7 +270,7 @@ const NotiBox: FunctionComponent<Props> = (props: Props) => {
                 alignContent: 'center',
                 justifyContent: 'center',
               }}>
-              <ActivityIndicator size="small" color="#3679B5" />
+              <ActivityIndicator size="small" color={AppColors.MAIN} />
             </View>
           )}
         </View>

@@ -7,17 +7,11 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
 } from 'react-native';
-import styled from 'styled-components/native';
 import AppFonts from '../../enums/AppFonts';
 import { BackButton } from './BackButton';
-
-const Wrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  height: 100%;
-  background-color: #fff;
-  overflow: hidden;
-`;
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   title: string;
@@ -71,7 +65,13 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <Wrapper>
+      <SafeAreaView
+        style={{
+          paddingTop: Platform.OS === 'android' ? 25 : 0,
+          height: '100%',
+          backgroundColor: AppColors.WHITE,
+          overflow: 'hidden',
+        }}>
         <Animated.View
           style={{
             marginLeft: '5%',
@@ -88,37 +88,37 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             style={[
               props.backButtonHandler !== undefined
                 ? {
-                  transform: [
-                    {
-                      translateX: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, 30, 30],
-                      }),
-                    },
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -57, -57],
-                      }),
-                    },
-                  ],
-                }
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, 30, 30],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  }
                 : {
-                  transform: [
-                    {
-                      translateX: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -17, -17],
-                      }),
-                    },
-                    {
-                      translateY: scrollY.interpolate({
-                        inputRange: [-1000, 0, 50, 1000],
-                        outputRange: [0, 0, -57, -57],
-                      }),
-                    },
-                  ],
-                },
+                    transform: [
+                      {
+                        translateX: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -17, -17],
+                        }),
+                      },
+                      {
+                        translateY: scrollY.interpolate({
+                          inputRange: [-1000, 0, 50, 1000],
+                          outputRange: [0, 0, -57, -57],
+                        }),
+                      },
+                    ],
+                  },
             ]}>
             <Animated.Text
               allowFontScaling={false}
@@ -173,7 +173,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
             )}
           </ConditionalKeyboardAvoidingView>
         </ScrollingView>
-      </Wrapper>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };

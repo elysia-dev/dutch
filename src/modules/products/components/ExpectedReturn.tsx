@@ -4,8 +4,14 @@ import Slider from '@react-native-community/slider';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Product from '../../../types/Product';
-import { P2Text, H3Text, P1Text, H2Text } from '../../../shared/components/Texts';
+import {
+  P2Text,
+  H3Text,
+  P1Text,
+  H2Text,
+} from '../../../shared/components/Texts';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   product: Product;
@@ -29,14 +35,17 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         width: '100%',
         borderRadius: 5,
       }}>
-      <H3Text style={{ paddingBottom: 20 }} label={t('dashboard_label.expected_profit')} />
+      <H3Text
+        style={{ paddingBottom: 20 }}
+        label={t('dashboard_label.expected_profit')}
+      />
       <View style={{ paddingTop: 10 }}>
         <Slider
           minimumValue={0}
           maximumValue={parseInt(props.product.presentValue, 10)}
-          minimumTrackTintColor={'#3679B5'}
-          maximumTrackTintColor={'#626368'}
-          thumbTintColor={'#3679B5'}
+          minimumTrackTintColor={AppColors.MAIN}
+          maximumTrackTintColor={AppColors.BLACK2}
+          thumbTintColor={AppColors.MAIN}
           value={state.tokenCount}
           step={1}
           onValueChange={(token: number) => {
@@ -52,12 +61,7 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
           marginBottom: 5,
         }}>
         <P1Text label={t('product_label.investment')} />
-        <P1Text
-          label={currencyFormatter(
-            state.tokenCount * 5,
-            2,
-          )}
-        />
+        <P1Text label={currencyFormatter(state.tokenCount * 5, 2)} />
       </View>
       <View
         style={{
@@ -68,22 +72,21 @@ export const ExpectedReturn: FunctionComponent<Props> = (props) => {
         }}>
         <P1Text
           style={{
-            color: "#3679b5",
-
+            color: AppColors.MAIN,
           }}
-          label={t('product_label.expected_return')} />
+          label={t('product_label.expected_return')}
+        />
         <P1Text
           label={currencyFormatter(
             0.01 *
-            parseFloat(props.product.expectedAnnualReturn) *
-            5 *
-            state.tokenCount,
+              parseFloat(props.product.expectedAnnualReturn) *
+              5 *
+              state.tokenCount,
             2,
           )}
-          style={{ color: '#3679b5' }}
+          style={{ color: AppColors.MAIN }}
         />
       </View>
-
     </View>
   );
 };

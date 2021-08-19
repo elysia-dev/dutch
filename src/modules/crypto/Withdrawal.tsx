@@ -7,7 +7,6 @@ import {
   Text,
   Keyboard,
   TouchableWithoutFeedback,
-  StyleSheet,
   Image,
   Dimensions,
 } from 'react-native';
@@ -34,6 +33,8 @@ import GasPrice from '../../shared/components/GasPrice';
 import TransactionContext from '../../contexts/TransactionContext';
 import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
+import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
+import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 
 type ParamList = {
   Withdrawal: {
@@ -84,7 +85,6 @@ const Withdrawal: React.FC = () => {
           value: utils.parseEther(value || '0').toHexString(),
         });
       }
-    } catch (e) {
     } finally {
       if (estimatedGas) {
         setEstimatedGas(
@@ -146,7 +146,7 @@ const Withdrawal: React.FC = () => {
   }, [value, state.address]);
 
   return (
-    <View style={{ height: '100%', backgroundColor: '#fff' }}>
+    <View style={{ height: '100%', backgroundColor: AppColors.WHITE }}>
       <SheetHeader title={t('wallet.withdrawal')} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
@@ -172,7 +172,7 @@ const Withdrawal: React.FC = () => {
                 borderRadius: 5,
                 borderColor:
                   state.address && !isAddress(state.address)
-                    ? AppColors.RED
+                    ? AppColors.ERROR_RED
                     : AppColors.SUB_GREY,
                 padding: 10,
                 fontSize: 10,
@@ -206,7 +206,7 @@ const Withdrawal: React.FC = () => {
                 style={{
                   fontSize: 10,
                   right: 0,
-                  color: AppColors.RED,
+                  color: AppColors.ERROR_RED,
                   textAlign: 'left',
                   marginBottom: 5,
                 }}>
@@ -281,27 +281,10 @@ const Withdrawal: React.FC = () => {
           </View>
           <NumberPad
             addValue={(text) => {
-              if (
-                (text === '.' && value.includes('.')) ||
-                value.length > 18 ||
-                (value
-                  .split('')
-                  .reduce((res, cur) => res && cur === '0', true) &&
-                  text === '0')
-              ) {
-                return;
-              }
-
-              const next =
-                text === '.' && !value
-                  ? '0.'
-                  : text !== '0' && value === '0'
-                  ? text
-                  : value + text;
-
-              if (parseFloat(next) >= getBalance(asset.type)) {
-                // Maximum!
-              } else {
+              if (!isNumericStringAppendable(value, text, 12, 6)) return;
+              
+              const next = newInputValueFormatter(value, text);
+              if (parseFloat(next) < getBalance(asset.type)) {
                 setValue(next);
               }
             }}
@@ -341,7 +324,13 @@ const Withdrawal: React.FC = () => {
       {!state.scanned && (
         <BarCodeScanner
           onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+          }}
         />
       )}
       <OverlayLoading visible={loading} />

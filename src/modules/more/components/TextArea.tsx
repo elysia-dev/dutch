@@ -3,6 +3,7 @@ import { View, TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { P3Text } from '../../../shared/components/Texts';
 import AppFonts from '../../../enums/AppFonts';
+import AppColors from '../../../enums/AppColors';
 
 interface Props {
   eventHandler: (input: string) => void;
@@ -19,7 +20,7 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
     <View>
       <P3Text
         style={{
-          color: state.focus ? '#3679B5' : '#A7A7A7',
+          color: state.focus ? AppColors.MAIN : AppColors.TEXT_GREY,
           textAlign: 'left',
           marginBottom: 15,
         }}
@@ -31,8 +32,8 @@ export const TextArea: FunctionComponent<Props> = (props: Props) => {
         maxLength={1000}
         allowFontScaling={false}
         style={{
-          backgroundColor: '#F6F6F8',
-          borderColor: state.focus ? '#3679B5' : '#D0D8DF',
+          backgroundColor: AppColors.BACKGROUND_GREY,
+          borderColor: state.focus ? AppColors.MAIN : AppColors.BLUE_2,
           borderRadius: 10,
           borderWidth: 1,
           width: '100%',

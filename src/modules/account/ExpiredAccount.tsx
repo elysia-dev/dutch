@@ -4,15 +4,23 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { AccountPage } from '../../enums/pageEnum';
 import { H3Text, P1Text } from '../../shared/components/Texts';
+import AppColors from '../../enums/AppColors';
 
 const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
-  nextHandler = () => { navigation.navigate(AccountPage.IntroduceElysia); },
+  nextHandler = () => {
+    navigation.navigate(AccountPage.IntroduceElysia);
+  },
 }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
   return (
-    <View style={{ width: '100%', height: '100%', backgroundColor: '#3679B5' }}>
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: AppColors.MAIN,
+      }}>
       <Image
         style={{
           width: 120,
@@ -27,18 +35,20 @@ const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
         style={{
           position: 'relative',
           top: 100,
-          color: '#fff',
+          color: AppColors.WHITE,
           textAlign: 'center',
         }}
         label={t('account.expired_logout')}
       />
       <TouchableOpacity
-        onPress={() => { nextHandler(); }}
+        onPress={() => {
+          nextHandler();
+        }}
         style={{
           position: 'absolute',
           bottom: '20%',
           alignSelf: 'center',
-          backgroundColor: '#2C6190',
+          backgroundColor: AppColors.MAIN_DARKER,
           width: 200,
           height: 50,
           justifyContent: 'center',
@@ -47,7 +57,7 @@ const ExpiredAccount: React.FC<{ nextHandler?: () => void }> = ({
         }}>
         <H3Text
           style={{
-            color: '#fff',
+            color: AppColors.WHITE,
             fontSize: 16,
             textAlign: 'center',
           }}

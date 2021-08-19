@@ -14,17 +14,13 @@ const Main: React.FC = () => {
       screenOptions={{
         headerShown: false,
         stackPresentation: 'formSheet',
-      }}
-    >
+      }}>
       <RootStack.Screen
         name={ProductPage.ProductBuying}
         component={ProductBuying}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
-        name={ProductPage.Purchase}
-        component={Purchase}
-      />
+      <RootStack.Screen name={ProductPage.Purchase} component={Purchase} />
       <RootStack.Screen
         name={ProductPage.PropertyInfomation}
         component={PropertyInfomation}

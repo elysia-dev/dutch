@@ -34,11 +34,14 @@ const BackupSeedPharase: React.FC<IBackupSeedPharase> = ({ next }) => {
         style={{ marginTop: 20 }}
         onPress={() => {
           confirm(!confirmed);
-        }}
-      >
-        <View style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
+        }}>
+        <View
+          style={{ display: 'flex', flexDirection: 'row', marginRight: '5%' }}>
           <CheckIcon checked={confirmed} />
-          <P1Text style={{ marginLeft: 10 }} label={t('recovery_key.backup_seed_checkbox')} />
+          <P1Text
+            style={{ marginLeft: 10 }}
+            label={t('recovery_key.backup_seed_checkbox')}
+          />
         </View>
       </TouchableOpacity>
       <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>

@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
+import AppColors from '../../../enums/AppColors';
 import CachedImage from '../../../shared/components/CachedImage';
 import { H1Text, P1Text } from '../../../shared/components/Texts';
 import Product from '../../../types/product';
@@ -45,14 +46,18 @@ export const PostItem: FunctionComponent<Props> = (props: Props) => {
               }}>
               <View style={{ width: '100%', height: '100%' }}>
                 <P1Text
-                  style={{ color: '#FFF', marginLeft: 20, marginTop: 20 }}
+                  style={{
+                    color: AppColors.WHITE,
+                    marginLeft: 20,
+                    marginTop: 20,
+                  }}
                   label={props.product?.title || 'Asset'}
                 />
                 <H1Text
                   style={{
                     marginTop: 45,
                     textAlign: 'center',
-                    color: '#Fff',
+                    color: AppColors.WHITE,
                   }}
                   label={'CLOSED'}
                 />

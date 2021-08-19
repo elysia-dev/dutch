@@ -14,19 +14,17 @@ const RemoveButton: FunctionComponent<{ pressHandler: () => void }> = ({
         marginHorizontal: 4,
       }}
       onPress={() => pressHandler()}
-      underlayColor='#F0F0F0'
-      activeOpacity={0.5}
-    >
+      underlayColor="#F0F0F0"
+      activeOpacity={0.5}>
       <View
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-        }}
-      >
+        }}>
         <Image
           source={require('../assets/images/delete_icon_xxhdpi.png')}
-          resizeMethod='scale'
+          resizeMethod="scale"
           style={{ width: 42, height: 42 }}
         />
       </View>

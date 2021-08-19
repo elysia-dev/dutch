@@ -19,6 +19,7 @@ import ProviderType from '../../../enums/ProviderType';
 import { TextField } from '../../../shared/components/TextField';
 import UserContext from '../../../contexts/UserContext';
 import SheetHeader from '../../../shared/components/SheetHeader';
+import AppColors from '../../../enums/AppColors';
 
 type ButtonProps = {
   title: string;
@@ -54,7 +55,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         height: 50,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: props.selected ? '#3679B5' : '#D0D8DF',
+        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
         padding: 15,
         flexDirection: 'row',
         marginBottom: 15,
@@ -68,7 +69,7 @@ const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
           fontSize: 14,
           paddingLeft: 10,
           fontWeight: props.selected ? 'bold' : 'normal',
-          color: '#1C1C1C',
+          color: AppColors.BLACK,
           alignSelf: 'center',
         }}>
         {props.title}
@@ -185,7 +186,7 @@ const PaymentSelection: React.FC<{
   return (
     <View
       style={{
-        backgroundColor: '#fff',
+        backgroundColor: AppColors.WHITE,
         height: '100%',
       }}>
       <SheetHeader title={t('product.select_payment')} />
@@ -193,7 +194,7 @@ const PaymentSelection: React.FC<{
         style={{
           paddingLeft: 20,
           paddingRight: 20,
-          backgroundColor: '#fff',
+          backgroundColor: AppColors.WHITE,
         }}>
         <View style={{ marginTop: 40 }}>
           <MetaMaskButton
@@ -253,10 +254,10 @@ const PaymentSelection: React.FC<{
             backgroundColor:
               // eslint-disable-next-line no-nested-ternary
               wallet === WalletType.METAMASK_MOBILE
-                ? '#3679B5'
+                ? AppColors.MAIN
                 : emailRestriction
-                ? '#D0D8DF'
-                : '#3679B5',
+                ? AppColors.BLUE_2
+                : AppColors.MAIN,
           }}
           handler={linkDapp}></SubmitButton>
       </View>

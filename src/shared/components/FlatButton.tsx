@@ -6,6 +6,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { P3Text } from './Texts';
+import AppColors from '../../enums/AppColors';
 
 export const FlatButton: FunctionComponent<{
   title: string;
@@ -17,7 +18,7 @@ export const FlatButton: FunctionComponent<{
       <P3Text
         label={title}
         style={{
-          color: '#1c1c1c',
+          color: AppColors.BLACK,
           fontSize: 13,
           lineHeight: 15,
           textAlign: 'center',

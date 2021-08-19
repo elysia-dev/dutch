@@ -346,11 +346,17 @@ const PrivacyPolicy: FunctionComponent<{}> = () => {
       isScrolling={true}
       title={'PRIVACY POLICY'}
       body={
-        <P1Text label={data} style={{ marginLeft: "5%", marginRight: "5%", marginBottom: 50, lineHeight: 20 }} />
+        <P1Text
+          label={data}
+          style={{
+            marginLeft: '5%',
+            marginRight: '5%',
+            marginBottom: 50,
+            lineHeight: 20,
+          }}
+        />
       }
-      button={
-        <></>
-      }
+      button={<></>}
     />
   );
 };

@@ -6,4 +6,4 @@ enum AppFonts {
   Bold = 'SpoqaHanSansNeoBold',
 }
 
-export default AppFonts
+export default AppFonts;

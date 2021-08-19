@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FunctionComponent, useState, useContext } from 'react';
-import { View, Modal } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Modal, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import WrapperLayout from '../../shared/components/WrapperLayout';
 import { P1Text, H2Text } from '../../shared/components/Texts';
@@ -14,20 +13,8 @@ import { SubmitButton } from '../../shared/components/SubmitButton';
 import AcceptedImg from '../account/images/accepted.png';
 import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
-
-const Accepted = styled.Image`
-  width: 140px;
-  height: 140px;
-  margin: 10px auto;
-`;
-const InformationCircle = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: #3679b5;
-  border-radius: 10px;
-  margin-right: 10px;
-  top: 6px;
-`;
+import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const RemainingBalance: FunctionComponent<{}> = () => {
   const defaultUser = {
@@ -71,14 +58,26 @@ const RemainingBalance: FunctionComponent<{}> = () => {
                   marginBottom: 10,
                   marginRight: '5%',
                 }}>
-                <InformationCircle />
+                <Circle
+                  style={{
+                    backgroundColor: AppColors.MAIN,
+                    marginRight: 10,
+                    top: 6,
+                  }}
+                />
                 <P1Text
                   label={t('dashboard.remaining_text.0')}
                   style={{ fontSize: 14, lineHeight: 22 }}
                 />
               </View>
               <View style={{ flexDirection: 'row', marginRight: '5%' }}>
-                <InformationCircle />
+                <Circle
+                  style={{
+                    backgroundColor: AppColors.MAIN,
+                    marginRight: 10,
+                    top: 6,
+                  }}
+                />
                 <P1Text
                   label={t('dashboard.remaining_text.1')}
                   style={{ fontSize: 14, lineHeight: 22 }}
@@ -108,7 +107,15 @@ const RemainingBalance: FunctionComponent<{}> = () => {
             <Modals
               child={
                 <View>
-                  <Accepted source={AcceptedImg} />
+                  <Image
+                    source={AcceptedImg}
+                    style={{
+                      width: 140,
+                      height: 140,
+                      marginVertical: 10,
+                      marginHorizontal: 'auto',
+                    }}
+                  />
                   <H2Text
                     style={{
                       textAlign: 'center',
@@ -121,7 +128,7 @@ const RemainingBalance: FunctionComponent<{}> = () => {
                     style={{
                       marginBottom: 40,
                       textAlign: 'center',
-                      color: '#626368',
+                      color: AppColors.BLACK2,
                     }}
                     label={t('dashboard.remaining_withdraw_popup.1')}
                   />
@@ -142,13 +149,13 @@ const RemainingBalance: FunctionComponent<{}> = () => {
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
                 ? t('dashboard_label.remaining_withdraw')
                 : user.legacyWalletRefundStatus === LegacyRefundStatus.PENDING
-                  ? t('dashboard_label.remaining_withdraw_pending')
-                  : t('dashboard_label.remaining_withdraw_other')
+                ? t('dashboard_label.remaining_withdraw_pending')
+                : t('dashboard_label.remaining_withdraw_other')
             }
             handler={
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE
                 ? () => setState({ ...state, modalVisible: true })
-                : () => { }
+                : () => {}
             }
             variant={
               user.legacyWalletRefundStatus === LegacyRefundStatus.NONE

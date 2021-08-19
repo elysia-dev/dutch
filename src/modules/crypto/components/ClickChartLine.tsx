@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import AppColors from '../../../enums/AppColors';
 
 interface IChartLine {
   chartLoc: number;
@@ -55,14 +56,14 @@ const ClickChartLine: React.FC<IChartLine> = ({
         <Text
           style={{
             fontSize: 10,
-            color: '#C3C3C3',
+            color: AppColors.SUB_BLACK,
           }}>
           {chartDate}
         </Text>
         <Text
           style={{
             fontSize: 14,
-            color: '#848484',
+            color: AppColors.SUB_BLACK,
             fontWeight: '700',
           }}>
           {chartToken}

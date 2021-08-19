@@ -1,5 +1,5 @@
 export enum LoadingStatus {
-    NONE = 'none',
-    PENDING = 'pending',
-    SUCCESS = 'success',
-  }
+  NONE = 'none',
+  PENDING = 'pending',
+  SUCCESS = 'success',
+}

@@ -1,32 +1,7 @@
-import React, { Component, FunctionComponent } from 'react';
-import { Modal as RNModal, TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native';
+import React, { FunctionComponent } from 'react';
+import { Modal as RNModal, TouchableOpacity, View, Image } from 'react-native';
 import QuitButtonImg from '../assets/images/quitbutton.png';
-
-const CenteredView = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const ModalView = styled.View`
-  background-color: #fff;
-  border-radius: 20px;
-  align-items: center;
-  elevation: 10;
-  width: 90%;
-`;
-const ModalBtnWrapper = styled.View`
-  padding: 10px 20px 20px 20px;
-`;
-const ModalButton = styled.TouchableOpacity`
-  border-radius: 20px;
-  padding: 20px 20px 0px 0px;
-  align-self: flex-end;
-`;
-const QuitBtn = styled.Image`
-  width: 13px;
-  height: 13px;
-`;
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   visible: boolean;
@@ -36,19 +11,56 @@ interface Props {
 
 export const Modal: FunctionComponent<Props> = (props: Props) => {
   return (
-    <CenteredView>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       <RNModal animationType="slide" transparent={true} visible={props.visible}>
-        <CenteredView>
-          <ModalView>
-            <ModalButton onPress={props.modalHandler}>
-              <QuitBtn source={QuitButtonImg} />
-            </ModalButton>
-            <ModalBtnWrapper>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: AppColors.WHITE,
+              borderRadius: 20,
+              alignItems: 'center',
+              elevation: 10,
+              width: '90%',
+            }}>
+            <TouchableOpacity
+              onPress={props.modalHandler}
+              style={{
+                borderRadius: 20,
+                alignSelf: 'flex-end',
+                paddingTop: 20,
+                paddingRight: 20,
+                paddingBottom: 0,
+                paddingLeft: 0,
+              }}>
+              <Image
+                source={QuitButtonImg}
+                style={{
+                  width: 13,
+                  height: 13,
+                }}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                paddingTop: 10,
+                paddingBottom: 20,
+                paddingHorizontal: 20,
+              }}>
               {props.child}
-            </ModalBtnWrapper>
-          </ModalView>
-        </CenteredView>
+            </View>
+          </View>
+        </View>
       </RNModal>
-    </CenteredView>
+    </View>
   );
 };

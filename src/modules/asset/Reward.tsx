@@ -1,5 +1,8 @@
 import React, {
-  FunctionComponent, useContext, useEffect, useState,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
 } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -25,6 +28,7 @@ import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import GasPrice from '../../shared/components/GasPrice';
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   Reward: {
@@ -54,10 +58,14 @@ const Reward: FunctionComponent = () => {
   });
   const { t } = useTranslation();
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
-  const gasCrypto = toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
+  const gasCrypto =
+    toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
   const contract = getAssetTokenFromCryptoType(toCrypto, contractAddress);
-  const txResult = useWatingTx(state.txHash, toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH);
+  const txResult = useWatingTx(
+    state.txHash,
+    toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+  );
   const insets = useSafeAreaInsets();
 
   const estimateGas = async (address: string) => {
@@ -71,7 +79,9 @@ const Reward: FunctionComponent = () => {
         setState({
           ...state,
           estimateGas: utils.formatEther(
-            estimateGas.mul(toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice),
+            estimateGas.mul(
+              toCrypto === CryptoType.ETH ? gasPrice : bscGasPrice,
+            ),
           ),
         });
       }
@@ -84,7 +94,9 @@ const Reward: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const address = isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0];
+    const address = isWalletUser
+      ? wallet?.getFirstAddress()
+      : user.ethAddresses[0];
 
     if (address) {
       estimateGas(address);
@@ -92,7 +104,9 @@ const Reward: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const address = isWalletUser ? wallet?.getFirstNode()?.address : user.ethAddresses[0];
+    const address = isWalletUser
+      ? wallet?.getFirstNode()?.address
+      : user.ethAddresses[0];
 
     contract?.getReward(address).then((res: BigNumber) => {
       setInterest(parseFloat(utils.formatEther(res)));
@@ -103,7 +117,8 @@ const Reward: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
-      const populatedTransaction = await contract?.populateTransaction.claimReward();
+      const populatedTransaction =
+        await contract?.populateTransaction.claimReward();
 
       if (!populatedTransaction) return;
 
@@ -167,7 +182,6 @@ const Reward: FunctionComponent = () => {
     }
   }, [txResult.status]);
 
-
   if (state.stage === 0) {
     return (
       <View style={{ height: '100%' }}>
@@ -176,7 +190,7 @@ const Reward: FunctionComponent = () => {
           style={{
             paddingLeft: 20,
             paddingRight: 20,
-            backgroundColor: '#fff',
+            backgroundColor: AppColors.WHITE,
             height: '100%',
           }}>
           <CryptoInput
@@ -184,13 +198,10 @@ const Reward: FunctionComponent = () => {
             cryptoTitle={toTitle}
             cryptoType={toCrypto}
             style={{ marginTop: 20 }}
-            value={(interest / (getCryptoPrice(toCrypto))).toFixed(4)}
-            subValue={currencyFormatter(
-              interest,
-              4,
-            )}
+            value={(interest / getCryptoPrice(toCrypto)).toFixed(4)}
+            subValue={currencyFormatter(interest, 4)}
             active={true}
-            onPress={() => { }}
+            onPress={() => {}}
           />
           <View style={{ height: 10 }} />
           <GasPrice
@@ -207,8 +218,7 @@ const Reward: FunctionComponent = () => {
             bottom: insets.bottom || 10,
             paddingLeft: '5%',
             paddingRight: '5%',
-          }}
-        >
+          }}>
           <NextButton
             disabled={!(interest > 0) || insufficientGas}
             title={t('assets.yield_reward')}
@@ -244,11 +254,12 @@ const Reward: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat((interest / (getCryptoPrice(toCrypto))).toFixed(4))}
+      valueTo={parseFloat((interest / getCryptoPrice(toCrypto)).toFixed(4))}
       productId={productId}
       type={'interest'}
       contractAddress={contractAddress}
-      espressTxId={state.espressoTxId} />
+      espressTxId={state.espressoTxId}
+    />
   );
 };
 

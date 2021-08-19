@@ -37,7 +37,7 @@ import { Modal } from '../../shared/components/Modal';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import { getToken, setToken } from '../../asyncStorages/token';
@@ -47,6 +47,7 @@ import { Page } from '../../enums/pageEnum';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 import PriceContext from '../../contexts/PriceContext';
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   resetHandler: () => void;
@@ -91,7 +92,7 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
         height: 50,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: props.selected ? '#3679B5' : '#D0D8DF',
+        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
         paddingVertical: 15,
         paddingHorizontal: 25,
         flexDirection: 'row',
@@ -107,7 +108,7 @@ const WalletButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
           paddingLeft: 10,
           paddingRight: 30,
           fontWeight: props.selected ? 'bold' : 'normal',
-          color: '#1C1C1C',
+          color: AppColors.BLACK,
           textAlign: 'center',
           alignSelf: 'center',
         }}
@@ -284,11 +285,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   height: 240,
                   borderRadius: 10,
                   elevation: 6,
-                  shadowColor: '#1C1C1C4D',
+                  shadowColor: AppColors.SHADOW_BLACK2,
                   shadowOffset: { width: 1, height: 2 },
                   shadowOpacity: 0.7,
                   shadowRadius: 4,
-                  backgroundColor: '#fff',
+                  backgroundColor: AppColors.WHITE,
                   flexDirection: 'column',
                   padding: 20,
                 }}>
@@ -304,10 +305,10 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                     style={{
                       width: 40,
                       height: 40,
-                      backgroundColor: '#fff',
+                      backgroundColor: AppColors.WHITE,
                       elevation: 2,
                       borderRadius: 21,
-                      shadowColor: '#1C1C1C4D',
+                      shadowColor: AppColors.SHADOW_BLACK2,
                       shadowOffset: { width: 0, height: 1 },
                       shadowOpacity: 0.6,
                       shadowRadius: 2,
@@ -363,14 +364,17 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                   style={{
                     width: '100%',
                     height: 110,
-                    backgroundColor: '#F6F6F8',
+                    backgroundColor: AppColors.BACKGROUND_GREY,
                     borderRadius: 10,
-                    borderColor: '#F1F1F1',
+                    borderColor: AppColors.GREY,
                     borderWidth: 2,
                     marginTop: 30,
                     padding: 15,
                   }}>
-                  <P1Text label={'Address'} style={{ color: '#838383' }} />
+                  <P1Text
+                    label={'Address'}
+                    style={{ color: AppColors.BLACK2 }}
+                  />
                   <Pressable
                     onPressIn={(_nativeEvent) => {
                       setState({ ...state, pressed: true });
@@ -382,7 +386,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
                       marginTop: 10,
                       backgroundColor: state.pressed
                         ? 'rgba(0,0,0,0.07)'
-                        : 'rgba(0,0,0,0)',
+                        : AppColors.TRANSPARENT,
 
                       borderRadius: 10,
                     }}
@@ -522,7 +526,7 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
             <P2Text
               label={t('more.find_more')}
               style={{
-                color: '#626368',
+                color: AppColors.BLACK2,
                 textAlign: 'center',
                 top: 5,
                 marginBottom: 40,

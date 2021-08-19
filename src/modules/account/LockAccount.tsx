@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import styled from 'styled-components/native';
 import { useTranslation } from 'react-i18next';
 import { TextField } from '../../shared/components/TextField';
 import { SubmitButton } from '../../shared/components/SubmitButton';
@@ -14,12 +13,7 @@ import AccountLayout from '../../shared/components/AccountLayout';
 import UserContext from '../../contexts/UserContext';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
-
-const LockAccountImg = styled.Image`
-  width: 100%;
-  resize-mode: center;
-  margin-top: 53px;
-`;
+import AppColors from '../../enums/AppColors';
 
 type ParamList = {
   LockAccount: {
@@ -93,7 +87,16 @@ const LockAccount: FunctionComponent = () => {
     <AccountLayout
       title={
         <View>
-          {!state.focusing && <LockAccountImg source={LockAccountPng} />}
+          {!state.focusing && (
+            <Image
+              source={LockAccountPng}
+              style={{
+                width: '100%',
+                resizeMode: 'center',
+                marginTop: 53,
+              }}
+            />
+          )}
         </View>
       }
       body={
@@ -108,7 +111,7 @@ const LockAccount: FunctionComponent = () => {
               label={t('account.lockdown')}
             />
             <P1Text
-              style={{ marginTop: 10, color: '#626368' }}
+              style={{ marginTop: 10, color: AppColors.BLACK2 }}
               label={t('account.lockdown_text')}
             />
             <View style={{ marginTop: 20 }} />
@@ -123,7 +126,7 @@ const LockAccount: FunctionComponent = () => {
               <P3Text
                 style={{
                   marginLeft: 'auto',
-                  color: '#1c1c1c',
+                  color: AppColors.BLACK,
                   fontSize: 13,
                   marginRight: '2%',
                   lineHeight: 21,

@@ -7,19 +7,13 @@ import {
   Animated,
   StyleProp,
   ViewStyle,
+  SafeAreaView,
 } from 'react-native';
-import styled from 'styled-components/native';
 import { BackButton } from './BackButton';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
-
-const Wrapper = styled.SafeAreaView`
-  padding-top: ${Platform.OS === 'android' ? '25px' : '0px'};
-  height: 100%;
-  background-color: #fff;
-  overflow: hidden;
-`;
+import AppColors from '../../enums/AppColors';
 
 interface Props {
   title: string;
@@ -75,7 +69,14 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
   const languageType = user.language;
 
   return (
-    <Wrapper style={props.style}>
+    <SafeAreaView
+      style={{
+        paddingTop: Platform.OS === 'android' ? 25 : 0,
+        height: '100%',
+        backgroundColor: AppColors.WHITE,
+        overflow: 'hidden',
+        ...(props.style as {}),
+      }}>
       <Animated.View
         style={{
           marginLeft: '5%',
@@ -255,7 +256,7 @@ const WrapperLayout: FunctionComponent<Props> = (props) => {
           )}
         </ConditionalKeyboardAvoidingView>
       </ScrollingView>
-    </Wrapper>
+    </SafeAreaView>
   );
 };
 

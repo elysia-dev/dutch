@@ -1,9 +1,14 @@
-import { Signer } from "@ethersproject/abstract-signer";
-import { HDNode, entropyToMnemonic, mnemonicToSeed, defaultPath } from "ethers/lib/utils";
+import { Signer } from '@ethersproject/abstract-signer';
+import {
+  HDNode,
+  entropyToMnemonic,
+  mnemonicToSeed,
+  defaultPath,
+} from 'ethers/lib/utils';
 import { bscProvider, provider } from '../utiles/getContract';
 import * as Random from 'expo-random';
 import * as ethers from 'ethers';
-import CryptoType from "../enums/CryptoType";
+import CryptoType from '../enums/CryptoType';
 
 interface SerializedWallet {
   seed: string;
@@ -20,14 +25,14 @@ class Wallet {
     this.seed = seed;
     this.mnemonic = mnemonic;
     this.root = HDNode.fromSeed(seed);
-    this.nodes = [this.root.derivePath(defaultPath)]
+    this.nodes = [this.root.derivePath(defaultPath)];
   }
 
   serialize(): SerializedWallet {
     return {
       seed: this.seed,
       mnemonic: this.mnemonic,
-    }
+    };
   }
 
   getRoot(): HDNode {
@@ -39,7 +44,7 @@ class Wallet {
   }
 
   getMnemonic(): string {
-    return this.mnemonic
+    return this.mnemonic;
   }
 
   getFirstNode(): HDNode | undefined {
@@ -47,11 +52,14 @@ class Wallet {
   }
 
   getFirstAddress(): string {
-    return this.nodes[0]?.address || ''
+    return this.nodes[0]?.address || '';
   }
 
   getFirstSigner(cryptoType?: CryptoType): Signer {
-    return new ethers.Wallet(this.nodes[0].privateKey, cryptoType === CryptoType.BNB ? bscProvider : provider)
+    return new ethers.Wallet(
+      this.nodes[0].privateKey,
+      cryptoType === CryptoType.BNB ? bscProvider : provider,
+    );
   }
 
   static deserialize(data: SerializedWallet): Wallet {

@@ -1,13 +1,14 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import styled from 'styled-components/native';
 
 import DashboardBlackPng from '../../shared/assets/images/dashboard_black.png';
 import DashboardPng from '../../shared/assets/images/dashboard.png';
 import ProductBlackPng from '../../shared/assets/images/product_black.png';
 import ProductPng from '../../shared/assets/images/product.png';
+import StakingPng from '../../shared/assets/images/staking.png';
+import StakingBlackPng from '../../shared/assets/images/staking_black.png';
 import NotificationBlackPng from '../../shared/assets/images/notification_black.png';
 import NotificationPng from '../../shared/assets/images/notification.png';
 import OptionsPng from '../../shared/assets/images/options.png';
@@ -15,16 +16,11 @@ import OptionsBlackPng from '../../shared/assets/images/options_black.png';
 import MainInfo from '../more/MainInfo';
 import MainList from '../products/MainList';
 import { Main as DashBoardMain } from '../dashboard/Main';
+import { Main as StakingMain } from '../staking/Main';
 import Notifications from '../notification/Notifications';
 import UserContext from '../../contexts/UserContext';
 import { MainPage } from '../../enums/pageEnum';
-
-const Icon = styled.Image`
-  position: absolute;
-  top: 8px;
-  width: 26px;
-  height: 26px;
-`;
+import AppColors from '../../enums/AppColors';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +29,7 @@ const Main: FunctionComponent = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: '#FFF' }}
+      style={{ flex: 1, backgroundColor: AppColors.WHITE }}
       forceInset={{ top: 'never', bottom: 'always' }}>
       <Tab.Navigator
         initialRouteName="DashboardMain"
@@ -50,11 +46,13 @@ const Main: FunctionComponent = () => {
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon
+              <Image
                 source={focused ? DashboardBlackPng : DashboardPng}
                 style={{
                   width: 30,
                   height: 30,
+                  position: 'absolute',
+                  top: 8,
                 }}
               />
             ),
@@ -67,11 +65,32 @@ const Main: FunctionComponent = () => {
             unmountOnBlur: true,
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
-              <Icon
+              <Image
                 source={focused ? ProductBlackPng : ProductPng}
                 style={{
                   width: 30,
                   height: 30,
+                  position: 'absolute',
+                  top: 8,
+                }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name={MainPage.StakingMain}
+          component={StakingMain}
+          options={{
+            unmountOnBlur: true,
+            tabBarLabel: '',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={focused ? StakingBlackPng : StakingPng}
+                style={{
+                  width: 30,
+                  height: 30,
+                  position: 'absolute',
+                  top: 8,
                 }}
               />
             ),
@@ -84,28 +103,30 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
+                <Image
                   source={focused ? NotificationBlackPng : NotificationPng}
                   style={{
                     height: 30,
                     width: 25,
+                    position: 'absolute',
+                    top: 8,
                   }}
                 />
                 {notifications.filter(
                   (notification) => notification.status === 'unread',
                 ).length > 0 && (
-                    <View
-                      style={{
-                        position: 'absolute',
-                        top: 10,
-                        right: 25,
-                        width: 8,
-                        height: 8,
-                        borderRadius: 4,
-                        backgroundColor: '#FC5C4F',
-                      }}
-                    />
-                  )}
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 10,
+                      right: 25,
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: AppColors.NOTICE_RED,
+                    }}
+                  />
+                )}
               </>
             ),
           }}
@@ -117,15 +138,16 @@ const Main: FunctionComponent = () => {
             tabBarLabel: '',
             tabBarIcon: ({ focused }) => (
               <>
-                <Icon
+                <Image
                   style={{
                     top: 20,
                     height: 5,
                     width: 25,
+                    position: 'absolute',
                   }}
                   source={focused ? OptionsBlackPng : OptionsPng}
                 />
-                {(!isWalletUser && !(user.ethAddresses?.length > 0)) && (
+                {!isWalletUser && !(user.ethAddresses?.length > 0) && (
                   <View
                     style={{
                       position: 'absolute',
@@ -134,7 +156,7 @@ const Main: FunctionComponent = () => {
                       width: 8,
                       height: 8,
                       borderRadius: 4,
-                      backgroundColor: '#FC5C4F',
+                      backgroundColor: AppColors.NOTICE_RED,
                     }}
                   />
                 )}

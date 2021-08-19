@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View, ScrollView, Image, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ import PriceContext from '../../contexts/PriceContext';
 import EspressoV2 from '../../api/EspressoV2';
 import WalletContext from '../../contexts/WalletContext';
 import txResponseToTx from '../../utiles/txResponseToTx';
-import CircleButton from './components/CircleButton';
+import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
 import OverlayLoading from '../../shared/components/OverlayLoading';
@@ -133,7 +133,6 @@ const Detail: FunctionComponent = () => {
         });
       }
     } catch (e) {
-      console.error(e);
       alert(t('account_errors.server'));
       navigation.goBack();
     }
@@ -232,7 +231,7 @@ const Detail: FunctionComponent = () => {
   return (
     <>
       <FlatList
-        style={{ backgroundColor: 'white' }}
+        style={{ backgroundColor: AppColors.WHITE }}
         data={
           filter === 0
             ? state.transactions
@@ -397,44 +396,44 @@ const Detail: FunctionComponent = () => {
                   }}>
                   {!asset.isLegacyOwnership && (
                     <>
-                      <CircleButton
-                        title={t('main.ownership')}
+                      <CircularButtonWithLabel
+                        label={t('main.ownership')}
                         icon={'+'}
                         disabled={state.productStatus !== ProductStatus.SALE}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Purchase, {
-                            from: {
+                            assetInCrypto: {
                               type: state.paymentMethod,
                               title: state.paymentMethod.toUpperCase(),
                               unit: state.paymentMethod.toUpperCase(),
                             },
-                            to: asset,
+                            assetInToken: asset,
                             contractAddress: state.contractAddress,
                             productId: state.productId,
-                            toMax: state.presentSupply,
+                            remainingSupplyInToken: state.presentSupply,
                           });
                         }}
                       />
-                      <CircleButton
-                        title={t('main.refund')}
+                      <CircularButtonWithLabel
+                        label={t('main.refund')}
                         icon={'-'}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Refund, {
-                            from: {
+                            assetInCrypto: {
                               type: state.paymentMethod,
                               title: state.paymentMethod.toUpperCase(),
                               unit: state.paymentMethod.toUpperCase(),
                             },
-                            to: asset,
+                            assetInToken: asset,
                             contractAddress: state.contractAddress,
                             productId: state.productId,
                           });
                         }}
                       />
-                      <CircleButton
-                        title={t('main.return')}
+                      <CircularButtonWithLabel
+                        label={t('main.return')}
                         icon={'⤴'}
-                        handler={() => {
+                        pressHandler={() => {
                           navigation.navigate(AssetPage.Reward, {
                             toCrypto: state.paymentMethod,
                             toTitle: state.paymentMethod.toUpperCase(),

@@ -173,7 +173,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
       {transaction.status === TxStatus.Pending ? (
         <ActivityIndicator
           size="small"
-          color="#1c1c1c"
+          color={AppColors.BLACK}
           style={{ marginLeft: 10 }}
         />
       ) : (

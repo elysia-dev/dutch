@@ -13,7 +13,7 @@ import { WalletPage } from '../../enums/pageEnum';
 type State = {
   currentIndex: number;
   mnemonic: string[];
-}
+};
 
 const RecoverSeedPharase: FunctionComponent = () => {
   const navigation = useNavigation();
@@ -41,7 +41,12 @@ const RecoverSeedPharase: FunctionComponent = () => {
           setState({ ...state, mnemonic });
         }}
       />
-      <View style={{ position: 'absolute', bottom: insets.bottom || 10, width: '100%' }}>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: insets.bottom || 10,
+          width: '100%',
+        }}>
         <NextButton
           title={t('recovery_key.insert_seed_btn')}
           disabled={!isValidMnemonic(state.mnemonic.join(' '))}

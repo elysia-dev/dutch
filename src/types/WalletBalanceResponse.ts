@@ -1,16 +1,16 @@
-import CryptoType from "../enums/CryptoType";
+import CryptoType from '../enums/CryptoType';
 
 type TokenBalance = {
-  name: string,
-  balance: number,
-  symbol: CryptoType | string,
-  address: string,
-}
+  name: string;
+  balance: number;
+  symbol: CryptoType | string;
+  address: string;
+};
 
 type WalletBalanceResponse = {
-  ethBalance: number,
-  bnbBalance: number,
-  tokens: TokenBalance[]
-}
+  ethBalance: number;
+  bnbBalance: number;
+  tokens: TokenBalance[];
+};
 
-export default WalletBalanceResponse
+export default WalletBalanceResponse;

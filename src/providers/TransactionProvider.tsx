@@ -173,9 +173,7 @@ const TransactionProvider: React.FC = (props) => {
       await AsyncStorage.setItem(
         PENDING_TRANSACTIONS,
         JSON.stringify(
-          transactions.filter((tx) => {
-            tx.status === TxStatus.Pending;
-          }),
+          transactions.filter((tx) => tx.status === TxStatus.Pending),
         ),
       );
 

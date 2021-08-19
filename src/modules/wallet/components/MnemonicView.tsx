@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from "react-native";
+import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import WordBox from './WordBox';
 
@@ -9,9 +9,7 @@ interface INemonicView {
 
 const MnemonicView: React.FC<INemonicView> = (props) => {
   const wordListing = props.mnemonic.split(' ').map((word, index) => {
-    return (
-      <WordBox key={index} index={index + 1} word={word} />
-    );
+    return <WordBox key={index} index={index + 1} word={word} />;
   });
   return (
     <View
@@ -22,19 +20,18 @@ const MnemonicView: React.FC<INemonicView> = (props) => {
         padding: 15,
         height: 320,
         display: 'flex',
-        flexDirection: "row",
+        flexDirection: 'row',
         alignContent: 'space-between',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-      }}
-    >
+      }}>
       <View
         style={{
-          alignItems: "center",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems: 'center',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           flex: 1,
-      }}>
+        }}>
         {wordListing[0]}
         {wordListing[1]}
         {wordListing[2]}
@@ -44,11 +41,11 @@ const MnemonicView: React.FC<INemonicView> = (props) => {
       </View>
       <View
         style={{
-          alignItems: "center",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems: 'center',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           flex: 1,
-      }}>
+        }}>
         {wordListing[6]}
         {wordListing[7]}
         {wordListing[8]}

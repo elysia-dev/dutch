@@ -8,6 +8,7 @@ export type TransactionType = {
 };
 
 export interface ITransactionContext extends TransactionType {
+  
   addPendingTransaction: (
     txRes: ethers.providers.TransactionResponse | undefined,
     tx: CryptoTransaction,

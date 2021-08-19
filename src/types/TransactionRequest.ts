@@ -1,3 +1,3 @@
 export type TransactionRequestResponse = {
-    id: string;
+  id: string;
 };

@@ -1,11 +1,5 @@
-import React, {
-  FunctionComponent,
-  useState,
-  useContext,
-  useEffect,
-} from 'react';
+import React, { FunctionComponent, useState, useContext } from 'react';
 import {
-  StyleSheet,
   View,
   Image,
   TouchableOpacity,
@@ -15,7 +9,6 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ViewPager from '@react-native-community/viewpager';
-import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-navigation';
 import { useTranslation } from 'react-i18next';
 import { H1Text, H2Text, P1Text } from '../../shared/components/Texts';
@@ -25,15 +18,8 @@ import LocaleType from '../../enums/LocaleType';
 import { FlatButton } from '../../shared/components/FlatButton';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import UserContext from '../../contexts/UserContext';
-
-const Circle = styled.View`
-  width: 10px;
-  height: 10px;
-  background-color: #a8a8a8;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 6px;
-`;
+import Circle from '../../shared/components/Circle';
+import AppColors from '../../enums/AppColors';
 
 const IntroduceElysia: FunctionComponent<{}> = () => {
   const navigation = useNavigation();
@@ -114,9 +100,11 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           }}
           key={index}>
           <Circle
-            style={[
-              state === index ? styles.enableCircle : styles.disableCircle,
-            ]}
+            style={{
+              backgroundColor: state === index ? '#4E5968' : '#A8A8A8',
+              overflow: 'hidden',
+              margin: 6,
+            }}
           />
         </TouchableOpacity>
       );
@@ -140,7 +128,7 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
           style={{
             position: 'absolute',
             zIndex: 5,
-            backgroundColor: '#3679B5',
+            backgroundColor: AppColors.MAIN,
             bottom: scrollX.interpolate({
               inputRange: [-1, 0, 1, 2, 2.3, 2.5, 2.7, 3, 3.3, 3.4, 3.6, 4, 5],
               outputRange: [
@@ -252,16 +240,5 @@ const IntroduceElysia: FunctionComponent<{}> = () => {
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  viewPager: {
-    flex: 1,
-  },
-  enableCircle: {
-    backgroundColor: '#4E5968',
-  },
-  disableCircle: {
-    backgroundColor: '#A8A8A8',
-  },
-});
 
 export default IntroduceElysia;

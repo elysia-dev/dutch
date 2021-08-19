@@ -8,6 +8,7 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
 import Asset from '../../../types/Asset';
 import commaFormatter from '../../../utiles/commaFormatter';
+import AppColors from '../../../enums/AppColors';
 
 interface IAssetItem {
   asset: Asset;
@@ -15,7 +16,7 @@ interface IAssetItem {
   touchable?: boolean;
 }
 
-export const AssetItem: React.FC<IAssetItem> = ({
+const AssetItem: React.FC<IAssetItem> = ({
   asset,
   onPress = () => {},
   touchable = true,
@@ -23,6 +24,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
   const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { transactions } = useContext(TransactionContext);
+  
   return (
     <TouchableOpacity
       onPress={() => onPress(asset)}
@@ -39,7 +41,7 @@ export const AssetItem: React.FC<IAssetItem> = ({
         <>
           <CryptoImage
             type={asset.image!}
-            style={{ borderColor: '#F1F1F1', borderWidth: 1 }}
+            style={{ borderColor: AppColors.GREY, borderWidth: 1 }}
           />
           <CryptoImage
             type={asset.paymentMethod!}

@@ -7,8 +7,9 @@ import { H2Text, P3Text } from '../../shared/components/Texts';
 import { TextField } from '../../shared/components/TextField';
 import AccountLayout from '../../shared/components/AccountLayout';
 import { BackButton } from '../../shared/components/BackButton';
-import { SignInStatus } from '../../enums/SignInStatus';
+import SignInStatus from '../../enums/SignInStatus';
 import UserContext from '../../contexts/UserContext';
+import AppColors from '../../enums/AppColors';
 
 const MembershipWithdrawl: FunctionComponent = () => {
   const { user, ownerships } = useContext(UserContext);
@@ -44,7 +45,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => { },
+          onPress: () => {},
           style: 'cancel',
         },
         {
@@ -87,9 +88,9 @@ const MembershipWithdrawl: FunctionComponent = () => {
               height: 'auto',
               flexDirection: 'column',
               padding: 20,
-              backgroundColor: '#fff',
+              backgroundColor: AppColors.WHITE,
               elevation: 6,
-              shadowColor: '#1C1C1C4D',
+              shadowColor: AppColors.SHADOW_BLACK2,
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.5,
               shadowRadius: 4,
@@ -109,12 +110,12 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 <P3Text
                   label={'*  '}
                   style={{
-                    color: '#CC3743',
+                    color: AppColors.CRITICAL_RED,
                   }}
                 />
                 <P3Text
                   label={t('more.withdrawl_check_1', { legacyOwnerships })}
-                  style={{ color: '#1C1C1C', lineHeight: 18 }}
+                  style={{ color: AppColors.BLACK, lineHeight: 18 }}
                 />
               </View>
             )}
@@ -128,7 +129,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                 <P3Text
                   label={'*  '}
                   style={{
-                    color: '#CC3743',
+                    color: AppColors.CRITICAL_RED,
                   }}
                 />
                 <P3Text
@@ -136,7 +137,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
                     legacyEl: user.legacyUsd,
                     legacyUsd: user.legacyUsd,
                   })}
-                  style={{ color: '#1C1C1C', lineHeight: 18 }}
+                  style={{ color: AppColors.BLACK, lineHeight: 18 }}
                 />
               </View>
             )}
@@ -149,12 +150,12 @@ const MembershipWithdrawl: FunctionComponent = () => {
               <P3Text
                 label={'*  '}
                 style={{
-                  color: '#CC3743',
+                  color: AppColors.CRITICAL_RED,
                 }}
               />
               <P3Text
                 label={t('more.withdrawl_check_3')}
-                style={{ color: '#1C1C1C', lineHeight: 18 }}
+                style={{ color: AppColors.BLACK, lineHeight: 18 }}
               />
             </View>
             <View
@@ -166,12 +167,12 @@ const MembershipWithdrawl: FunctionComponent = () => {
               <P3Text
                 label={'*  '}
                 style={{
-                  color: '#CC3743',
+                  color: AppColors.CRITICAL_RED,
                 }}
               />
               <P3Text
                 label={t('more.withdrawl_check_4')}
-                style={{ color: '#1C1C1C', lineHeight: 18 }}
+                style={{ color: AppColors.BLACK, lineHeight: 18 }}
               />
             </View>
           </View>
@@ -182,7 +183,7 @@ const MembershipWithdrawl: FunctionComponent = () => {
           title={t('more_label.agree_withdrawl')}
           handler={confirmWithdrawl}
           style={{
-            backgroundColor: password ? '#3679B5' : '#D0D8DF',
+            backgroundColor: password ? AppColors.MAIN : AppColors.BLUE_2,
           }}
           disabled={!password}
         />

@@ -32,9 +32,9 @@ import TransferType from '../../enums/TransferType';
 
 type ParamList = {
   Purchase: {
-    from: Asset;
-    to: Asset;
-    toMax: number;
+    assetInCrypto: Asset;
+    assetInToken: Asset;
+    remainingSupplyInToken: number;
     contractAddress: string;
     productId: number; // legacy
   };
@@ -42,10 +42,16 @@ type ParamList = {
 
 const Purchase: FunctionComponent = () => {
   const route = useRoute<RouteProp<ParamList, 'Purchase'>>();
-  const { from, to, toMax, contractAddress, productId } = route.params;
+  const {
+    assetInCrypto,
+    assetInToken,
+    remainingSupplyInToken,
+    contractAddress,
+    productId,
+  } = route.params;
   const [values, setValues] = useState({
-    from: '',
-    to: '',
+    inFiat: '',
+    inToken: '',
   });
   const [state, setState] = useState({
     txHash: '',
@@ -53,33 +59,38 @@ const Purchase: FunctionComponent = () => {
     espressoTxId: '',
     stage: 0,
     estimateGas: '',
-    isApproved: !![CryptoType.ETH, CryptoType.BNB].includes(from.type),
+    isApproved: !![CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type),
   });
-  const [current, setCurrent] = useState<'from' | 'to'>('to');
+  const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const navigation = useNavigation();
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(
     state.txHash,
-    from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+    assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
 
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(from.type, contractAddress);
+  const contract = getAssetTokenFromCryptoType(
+    assetInCrypto.type,
+    contractAddress,
+  );
   const { getBalance, assets } = useContext(AssetContext);
   const { addPendingTransaction } = useContext(TransactionContext);
-  const fromMax = ((toMax || 0) * 5) / getCryptoPrice(from.type);
-  const fromPrice = getCryptoPrice(from.type);
-  const toPrice = getCryptoPrice(CryptoType.ELA);
-  const fromBalance = getBalance(from.type);
-  const toBalance = (fromBalance * fromPrice) / toPrice;
+
+  const remainingSupplyInCrypto =
+    ((remainingSupplyInToken || 0) * 5) / getCryptoPrice(assetInCrypto.type);
+  const cryptoPrice = getCryptoPrice(assetInCrypto.type);
+  const tokenPrice = getCryptoPrice(CryptoType.ELA);
+  const balanceInCrypto = getBalance(assetInCrypto.type);
+  const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
     try {
-      switch (from.type) {
+      switch (assetInCrypto.type) {
         case CryptoType.ETH:
         case CryptoType.BNB:
           estimateGas = await contract?.estimateGas.purchase({
@@ -100,7 +111,7 @@ const Purchase: FunctionComponent = () => {
           ...state,
           estimateGas: utils.formatEther(
             estimateGas.mul(
-              from.type !== CryptoType.BNB ? gasPrice : bscGasPrice,
+              assetInCrypto.type === CryptoType.ETH ? gasPrice : bscGasPrice,
             ),
           ),
         });
@@ -130,19 +141,19 @@ const Purchase: FunctionComponent = () => {
       getCryptoPrice,
       wallet,
       addPendingTransaction,
-      from.type,
+      assetInCrypto.type,
       TransferType.Purchase,
       productId,
       contract,
-      values.from,
-      values.to,
+      values.inFiat,
+      values.inToken,
     );
   };
-
+  
   useEffect(() => {
     switch (state.step) {
       case TxStep.CheckAllowance:
-        if ([CryptoType.ETH, CryptoType.BNB].includes(from.type)) {
+        if ([CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type)) {
           setState({ ...state, step: TxStep.None });
           return;
         } else if (!isWalletUser) {
@@ -172,7 +183,6 @@ const Purchase: FunctionComponent = () => {
               afterTxFailed(e.message);
               navigation.goBack();
             });
-        } else {
         }
         break;
 
@@ -206,11 +216,14 @@ const Purchase: FunctionComponent = () => {
       case TxStep.Created:
         afterTxCreated(
           state.txHash,
-          from.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+          assetInCrypto.type === CryptoType.BNB
+            ? NetworkType.BSC
+            : NetworkType.ETH,
         );
         navigation.goBack();
         break;
       default:
+        break;
     }
   }, [state.step]);
 
@@ -235,6 +248,9 @@ const Purchase: FunctionComponent = () => {
               ? TxStep.Created
               : TxStep.Failed,
         });
+        break;
+      default:
+        break;
     }
   }, [txResult.status]);
 
@@ -242,23 +258,23 @@ const Purchase: FunctionComponent = () => {
     return (
       <TxInput
         purpose={PurposeType.Purchase}
-        title={t('assets.invest')}
-        fromInputTitle={t('assets.invest_value')}
-        toInputTitle={t('assets.invest_stake')}
-        from={from}
-        to={to}
-        toMax={toMax}
-        fromMax={fromMax}
-        toBalance={toBalance}
-        fromBalance={fromBalance}
+        title={t('assets.purchase')}
+        fiatInputTitle={t('assets.purchase_value')}
+        tokenInputTitle={t('assets.purchase_stake')}
+        assetInCrypto={assetInCrypto}
+        assetInToken={assetInToken}
+        remainingSupplyInToken={remainingSupplyInToken}
+        remainingSupplyInCrypto={remainingSupplyInCrypto}
+        balanceInToken={balanceInToken}
+        balanceInCrypto={balanceInCrypto}
         values={values}
-        fromPrice={fromPrice}
-        toPrice={toPrice}
+        cryptoPrice={cryptoPrice}
+        tokenPrice={tokenPrice}
         current={current}
         step={state.step}
         setCurrent={setCurrent}
         setValues={setValues}
-        disabled={parseInt(values.to || '0') < 1}
+        disabled={parseInt(values.inToken || '0', 10) < 1}
         estimateGas={state.estimateGas}
         isApproved={state.isApproved}
         createTx={() => {
@@ -271,7 +287,7 @@ const Purchase: FunctionComponent = () => {
           } else {
             Server.requestTransaction(
               productId,
-              parseFloat(values.to),
+              parseFloat(values.inToken),
               'buying',
             )
               .then((res) => {
@@ -296,7 +312,7 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.to)}
+      valueTo={parseFloat(values.inToken)}
       productId={productId}
       type={'buying'}
       contractAddress={contractAddress}

@@ -36,6 +36,7 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 import TransactionContext from '../../contexts/TransactionContext';
+import StakingListing from './components/StakingListing';
 
 type ParamList = {
   Main: {
@@ -99,7 +100,7 @@ export const Main: React.FC = () => {
         style={{
           width: '100%',
           height: '100%',
-          backgroundColor: 'white',
+          backgroundColor: AppColors.WHITE,
         }}
         refreshControl={
           user.provider !== ProviderType.GUEST || isWalletUser ? (
@@ -138,7 +139,7 @@ export const Main: React.FC = () => {
                     onBtnRefresh();
                   }}>
                   {btnRefreshing ? (
-                    <ActivityIndicator size="small" color="#1c1c1c" />
+                    <ActivityIndicator size="small" color={AppColors.BLACK} />
                   ) : (
                     <Image
                       style={{ width: 20, height: 20 }}
@@ -215,6 +216,8 @@ export const Main: React.FC = () => {
               });
             }}
           />
+          <View style={{ height: 25 }} />
+          <StakingListing />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
