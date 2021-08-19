@@ -12,6 +12,7 @@ import StakingInfoCard from './components/StakingInfoCard';
 import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
+  getStakingPoolContract,
 } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -20,35 +21,45 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
+import {
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
-  const [currentRound, setCurrentRound] = useState(0);
-  contract?.currentRound().then((res: any) => {
-    setCurrentRound(res);
-  });
   const navigation = useNavigation();
   const [userReward, setUserReward] = useState(0);
   const [userPrincipal, setUserPrincipal] = useState(0);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const userAddress = isWalletUser // 이거 아예 함수로 만들어야겠는데...
+  const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
+  const { stakingAddress, signer } = {
+    stakingAddress:
+      cryptoType === CryptoType.EL
+        ? EL_STAKING_POOL_ADDRESS
+        : ELFI_STAKING_POOL_ADDRESS,
+    signer: wallet?.getFirstSigner(),
+  };
+  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const [currentRound, setCurrentRound] = useState(0);
+  stakingPoolContract.currentRound().then((res: any) => {
+    setCurrentRound(res);
+  });
 
   useEffect(() => {
-    contract?.getUserData(selectedRound, userAddress).then((res: any) => {
-      setUserReward(res[1].toNumber());
-      setUserPrincipal(res[2].toNumber());
-    });
+    stakingPoolContract
+      .getUserData(selectedRound, address || '')
+      .then((res: any) => {
+        setUserReward(res[1]);
+        setUserPrincipal(res[2]);
+      });
   }, [selectedRound]);
 
   return (
