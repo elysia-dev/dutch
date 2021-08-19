@@ -43,7 +43,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
-  console.log(stakingAmount.isZero());
 
   useEffect(() => {
     contract?.getUserData(selectedRound, userAddress).then((res: any) => {
