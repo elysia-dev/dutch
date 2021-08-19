@@ -281,7 +281,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
               ),
             )}`,
           },
-          { label: t('staking.gas_price'), value: '(모름)' },
+          { label: t('staking.gas_price'), value: estimagedGasPrice },
         ]}
         isApproved={true}
         submitButtonText={t('staking.nth_staking', { round: selectedRound })}
