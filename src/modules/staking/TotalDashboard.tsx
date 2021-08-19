@@ -26,6 +26,8 @@ import {
   EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import { BigNumber, utils } from 'ethers';
+import decimalFormatter from '../../utiles/decimalFormatter';
+import commaFormatter from '../../utiles/commaFormatter';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -54,16 +56,22 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     setCurrentRound(res);
   });
 
+  const formatAmount = (amount: BigNumber) => {
+    return commaFormatter(
+      decimalFormatter(Number(utils.formatEther(amount)), 5),
+    );
+  };
+
+  const indicateAmount = (amount: BigNumber) => {
+    return amount.toHexString() !== '0x00' ? formatAmount(amount) : '-';
+  };
+
   useEffect(() => {
     stakingPoolContract
       .getUserData(selectedRound, address || '')
       .then((res: BigNumber[]) => {
-        setUserReward(
-          res[1].toHexString() !== '0x00' ? utils.formatEther(res[1]) : '-',
-        );
-        setUserPrincipal(
-          res[2].toHexString() !== '0x00' ? utils.formatEther(res[2]) : '-',
-        );
+        setUserReward(indicateAmount(res[1]));
+        setUserPrincipal(indicateAmount(res[2]));
       })
       .catch((e) => {
         console.log(e);
@@ -119,14 +127,14 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_principal', { round: selectedRound })}
-              value={userPrincipal || '-'}
+              value={userPrincipal}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_reward', { round: selectedRound })}
-              value={userReward || '-'}
+              value={userReward}
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />
@@ -186,6 +194,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   rewardCryptoType,
                   selectedRound,
                   currentRound,
+                  userReward: userReward.replaceAll(',', ''),
                 },
               });
             }}
