@@ -25,23 +25,22 @@ import {
 import useTxHandler from '../../hooks/useTxHandler';
 import NetworkType from '../../enums/NetworkType';
 import { useNavigation } from '@react-navigation/native';
+import useStakingInfo from '../../hooks/useStakingInfo';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
-  const { rewardCryptoType, selectedRound, currentRound, userReward } =
-    route.params;
+  const { rewardCryptoType, selectedRound, currentRound } = route.params;
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
-  const [value, setValue] = useState(Number(userReward));
   const { t } = useTranslation();
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const navigation = useNavigation();
   const { getBalance } = useContext(AssetContext);
   const { stakingAddress, signer } = {
     stakingAddress:
-      rewardCryptoType === CryptoType.EL
+      rewardCryptoType === CryptoType.ELFI
         ? EL_STAKING_POOL_ADDRESS
         : ELFI_STAKING_POOL_ADDRESS,
     signer: wallet?.getFirstSigner() || provider,
@@ -50,6 +49,11 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const { reward } = useStakingInfo(
+    stakingPoolContract,
+    selectedRound,
+    address || '',
+  );
 
   const estimateGas = async () => {
     let estimateGas: BigNumber | undefined;
@@ -97,11 +101,6 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   };
 
   useEffect(() => {
-    // stakingPoolContract
-    //   ?.getUserData(selectedRound, address || '')
-    //   .then((res: any) => {
-    //     setValue(res[1]); // userReward
-    //   });
     if (address) {
       estimateGas();
     }
@@ -118,9 +117,9 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
         }}>
         <CryptoInput
           title={t('staking.rewards')}
-          value={commaFormatter(decimalFormatter(value, 5))}
+          value={commaFormatter(decimalFormatter(reward, 5))}
           subValue={`$ ${commaFormatter(
-            decimalFormatter(value * getCryptoPrice(rewardCryptoType), 5),
+            decimalFormatter(reward * getCryptoPrice(rewardCryptoType), 5),
           )}`}
           cryptoTitle={rewardCryptoType}
           cryptoType={rewardCryptoType}
