@@ -23,10 +23,6 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import {
-<<<<<<< HEAD
-=======
-  ELFI_ADDRESS,
->>>>>>> d9e5108c92fd13ccec01fad348ea61864b162f96
   ELFI_STAKING_POOL_ADDRESS,
   EL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
