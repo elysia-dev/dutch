@@ -23,6 +23,7 @@ import {
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
@@ -42,6 +43,7 @@ const UnstakeAndMigrate: React.FC = () => {
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectionVisible, setSelectionVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const contract =
@@ -168,108 +170,131 @@ const UnstakeAndMigrate: React.FC = () => {
     }
   }, []);
 
-  return (
-    <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader
-        title={t('stking.nth_unstaking', { round: selectedRound })}
-      />
-      <View
-        style={{
-          // marginTop: Platform.OS === 'android' ? 20 : 10,
-          paddingHorizontal: 20,
-          flex: 1,
-        }}>
-        <LargeTextInput
-          placeholder={t('staking.unstaking_placeholder')}
-          value={value}
-          unit={cryptoType}
-          style={{ marginTop: 0 }}
+  if (!selectionVisible) {
+    return (
+      <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
+        <SheetHeader
+          title={t('staking.unstaking_with_type', {
+            stakingCrypto: cryptoType,
+          })}
         />
-        <Text
+        <View
           style={{
-            fontFamily: AppFonts.Bold,
-            fontSize: 30,
-            color: '#646464',
-            textAlign: 'center',
-            marginVertical: 10,
+            // marginTop: Platform.OS === 'android' ? 20 : 10,
+            paddingHorizontal: 20,
+            flex: 1,
           }}>
-          ↕
-        </Text>
-        <LargeTextInput
-          placeholder={t('staking.migration_placeholder')}
-          value={principal - parseFloat(value)}
-          unit={cryptoType}
-          style={{ marginTop: 0 }}
-        />
-        <InputInfoBox
-          list={[
-            `입력 가능 수량: ${commaFormatter(
-              decimalFormatter(principal, 6),
-            )} ${cryptoType}`,
-            `${t('staking.migration_destination')}: ${t(
-              'staking.round_with_affix',
-              {
-                round: selectedRound,
-              },
-            )} → ${t('staking.round_with_affix', { round: currentRound })}`,
-            estimagedGasPrice
-              ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
-              : t('staking.cannot_estimate_gas'),
-          ]}
-          isInvalid={parseFloat(value) > principal}
-          invalidText={t('staking.unstaking_value_excess')}
-        />
-        <NumberPadShortcut
-          values={[0.01, 1, 10, 100, 1000]}
-          inputValue={value}
-          setValue={setValue}
-        />
-        <NumberPad
-          addValue={(text) => {
-            if (!isNumericStringAppendable(value, text, 12, 6)) return;
+          <LargeTextInput
+            placeholder={t('staking.unstaking_placeholder')}
+            value={value}
+            unit={cryptoType}
+            style={{ marginTop: 0 }}
+          />
+          <Text
+            style={{
+              fontFamily: AppFonts.Bold,
+              fontSize: 30,
+              color: '#646464',
+              textAlign: 'center',
+              marginVertical: 10,
+            }}>
+            ↕
+          </Text>
+          <LargeTextInput
+            placeholder={t('staking.migration_placeholder')}
+            value={principal - parseFloat(value)}
+            unit={cryptoType}
+            style={{ marginTop: 0 }}
+          />
+          <InputInfoBox
+            list={[
+              `입력 가능 수량: ${commaFormatter(
+                decimalFormatter(principal, 6),
+              )} ${cryptoType}`,
+              `${t('staking.migration_destination')}: ${t(
+                'staking.round_with_affix',
+                {
+                  round: selectedRound,
+                },
+              )} → ${t('staking.round_with_affix', { round: currentRound })}`,
+              estimagedGasPrice
+                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                : t('staking.cannot_estimate_gas'),
+            ]}
+            isInvalid={parseFloat(value) > principal}
+            invalidText={t('staking.unstaking_value_excess')}
+          />
+          <NumberPadShortcut
+            values={[0.01, 1, 10, 100, 1000]}
+            inputValue={value}
+            setValue={setValue}
+          />
+          <NumberPad
+            addValue={(text) => {
+              if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-            const next = newInputValueFormatter(value, text);
-            setValue(next);
-          }}
-          removeValue={() => setValue(value.slice(0, -1))}
+              const next = newInputValueFormatter(value, text);
+              setValue(next);
+            }}
+            removeValue={() => setValue(value.slice(0, -1))}
+          />
+        </View>
+        <View
+          style={{
+            marginBottom: insets.bottom || 10,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+          }}>
+          <NextButton
+            title={t('staking.done')}
+            disabled={!value || parseFloat(value) > principal}
+            handler={() => {
+              if (isWalletUser) {
+                setModalVisible(true);
+              } else {
+                setSelectionVisible(true);
+              }
+            }}
+          />
+        </View>
+        <ConfirmationModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title={t('staking.unstaking_with_type', {
+            stakingCrypto: cryptoType,
+          })}
+          subtitle={t('staking.confirmation_title')}
+          list={confirmationList}
+          isApproved={true}
+          submitButtonText={t('staking.nth_unstaking', {
+            round: selectedRound,
+          })}
+          handler={() => console.log('내부 지갑 계정 트랜잭션')}
         />
+        {/* <OverlayLoading
+          visible={[
+            TxStep.Approving,
+            Platform.OS === 'android' && TxStep.CheckAllowance,
+            TxStep.Creating,
+          ].includes(step)}
+        /> */}
       </View>
-      <View
-        style={{
-          marginBottom: insets.bottom || 10,
-          paddingLeft: '5%',
-          paddingRight: '5%',
-        }}>
-        <NextButton
-          title={t('staking.done')}
-          disabled={!value || parseFloat(value) > principal}
-          handler={() => {
-            if (isWalletUser) {
-              setModalVisible(true);
-            } else {
-              console.log('언스테이킹 해야 함');
-            }
-          }}
-        />
-      </View>
-      <ConfirmationModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
-        subtitle={t('staking.confirmation_title')}
-        list={confirmationList}
-        isApproved={true}
-        submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
-        handler={() => console.log('언스테이킹 해야 함')}
-      />
-      {/* <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
-      /> */}
-    </View>
+    );
+  }
+
+  return (
+    <PaymentSelection
+      value={parseFloat(value)}
+      page="staking"
+      stakingTxData={{
+        type: 'unstake',
+        unit: cryptoType,
+        round: selectedRound,
+        rewardValue: earnReward && reward,
+        migrationValue: principal - parseFloat(value),
+      }}
+      contractAddress={contract?.address}
+    />
   );
 };
 

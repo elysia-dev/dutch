@@ -31,7 +31,9 @@ const SelectUnstakingType: React.FC = () => {
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={t('staking.')} />
+      <SheetHeader
+        title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
+      />
       <View style={{ paddingHorizontal: 20, marginTop: 30 }}>
         <TouchableCardWithShadow
           onPress={() => {

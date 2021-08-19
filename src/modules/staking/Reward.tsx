@@ -20,6 +20,7 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import AssetContext from '../../contexts/AssetContext';
 
 type ParamList = {
@@ -42,6 +43,7 @@ const Reward: React.FC = () => {
       ? getElStakingPoolContract()
       : getElfiStakingPoolContract();
   const { t } = useTranslation();
+  const [selectionVisible, setSelectionVisible] = useState(false);
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { getBalance } = useContext(AssetContext);
 
@@ -88,55 +90,71 @@ const Reward: React.FC = () => {
     }
   }, []);
 
-  return (
-    <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader title={t('staking.claim_rewards')} />
-      <View
-        style={{
-          paddingHorizontal: 20,
-          flex: 1,
-          alignItems: 'center',
-        }}>
-        <CryptoInput
-          title={t('staking.rewards')}
-          value={commaFormatter(decimalFormatter(value, 5))}
-          subValue={`$ ${commaFormatter(
-            decimalFormatter(value * getCryptoPrice(rewardCryptoType), 5),
-          )}`}
-          cryptoTitle={rewardCryptoType}
-          cryptoType={rewardCryptoType}
-          onPress={() => {}}
-          active={true}
-          style={{ width: '100%' }}
-        />
-        <View style={{ height: 10 }} />
-        <GasPrice
-          estimatedGas={estimagedGasPrice}
-          gasCrypto={CryptoType.ETH}
-          insufficientGas={
-            getBalance(CryptoType.ETH) < parseFloat(estimagedGasPrice)
-          }
-        />
+  if (!selectionVisible) {
+    return (
+      <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
+        <SheetHeader title={t('staking.claim_rewards')} />
         <View
           style={{
-            position: 'absolute',
-            width: '100%',
-            bottom: insets.bottom || 10,
+            paddingHorizontal: 20,
+            flex: 1,
+            alignItems: 'center',
           }}>
-          <NextButton
-            title={t('staking.claim')}
-            disabled={false}
-            handler={() => {
-              if (isWalletUser) {
-                console.log('보상 수령 해야 함 (내부 지갑 유저)');
-              } else {
-                console.log('보상 수령 해야 함 (외부 지갑 유저)');
-              }
-            }}
+          <CryptoInput
+            title={t('staking.rewards')}
+            value={commaFormatter(decimalFormatter(value, 5))}
+            subValue={`$ ${commaFormatter(
+              decimalFormatter(value * getCryptoPrice(rewardCryptoType), 5),
+            )}`}
+            cryptoTitle={rewardCryptoType}
+            cryptoType={rewardCryptoType}
+            onPress={() => {}}
+            active={true}
+            style={{ width: '100%' }}
           />
+          <View style={{ height: 10 }} />
+          <GasPrice
+            estimatedGas={estimagedGasPrice}
+            gasCrypto={CryptoType.ETH}
+            insufficientGas={
+              getBalance(CryptoType.ETH) < parseFloat(estimagedGasPrice)
+            }
+          />
+          <View
+            style={{
+              position: 'absolute',
+              width: '100%',
+              bottom: insets.bottom || 10,
+            }}>
+            <NextButton
+              title={t('staking.claim')}
+              disabled={false}
+              handler={() => {
+                if (isWalletUser) {
+                  console.log('보상 수령 해야 함 (내부 지갑 유저)');
+                } else {
+                  setSelectionVisible(true);
+                }
+              }}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    );
+  }
+
+  return (
+    <PaymentSelection
+      value={0}
+      page="staking"
+      stakingTxData={{
+        type: 'reward',
+        unit: rewardCryptoType,
+        round: selectedRound,
+        rewardValue: value,
+      }}
+      contractAddress={contract?.address}
+    />
   );
 };
 
