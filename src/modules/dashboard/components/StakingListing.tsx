@@ -56,17 +56,17 @@ const StakingListing: React.FC<{}> = () => {
         contract?.getUserData(round, userAddress).then((res: any) => {
           const stakingAmount = res[2]; // principal
           const rewardAmount = res[1];
-          // if (stakingAmount) {
-          return (
-            <StakingInfoBox
-              key={round}
-              cryptoType={type}
-              round={round}
-              stakingAmount={stakingAmount}
-              rewardAmount={rewardAmount}
-            />
-          );
-          // }
+          if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+            return (
+              <StakingInfoBox
+                key={round}
+                cryptoType={type}
+                round={round}
+                stakingAmount={stakingAmount}
+                rewardAmount={rewardAmount}
+              />
+            );
+          }
         }),
       );
     }
