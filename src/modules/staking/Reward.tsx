@@ -27,13 +27,14 @@ import NetworkType from '../../enums/NetworkType';
 import { useNavigation } from '@react-navigation/native';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
-  const { rewardCryptoType, selectedRound, currentRound } = route.params;
+  const { rewardCryptoType, selectedRound, currentRound, userReward } =
+    route.params;
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(Number(userReward));
   const { t } = useTranslation();
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const navigation = useNavigation();
@@ -71,7 +72,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
 
   const claim = async () => {
     try {
-      return await stakingPoolContract.claim('1');
+      return await stakingPoolContract.claim(selectedRound);
     } catch (error) {
       console.log(error);
     }
@@ -96,11 +97,11 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   };
 
   useEffect(() => {
-    stakingPoolContract
-      ?.getUserData(selectedRound, address || '')
-      .then((res: any) => {
-        setValue(res[1]); // userReward
-      });
+    // stakingPoolContract
+    //   ?.getUserData(selectedRound, address || '')
+    //   .then((res: any) => {
+    //     setValue(res[1]); // userReward
+    //   });
     if (address) {
       estimateGas();
     }
