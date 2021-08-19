@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import CryptoInput from '../asset/components/CryptoInput';
@@ -21,8 +22,16 @@ import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 import AssetContext from '../../contexts/AssetContext';
 
-const Reward: React.FC<{ route: any }> = ({ route }) => {
-  const { rewardCryptoType, selectedRound, currentRound } = route.params;
+type ParamList = {
+  Reward: {
+    rewardCryptoType: CryptoType;
+    selectedRound: number;
+  };
+};
+
+const Reward: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'Reward'>>();
+  const { rewardCryptoType, selectedRound } = route.params;
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);

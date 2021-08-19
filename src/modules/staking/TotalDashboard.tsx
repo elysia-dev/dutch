@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BigNumber } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -21,7 +22,17 @@ import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
 
-const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  TotalDashboard: {
+    cryptoType: CryptoType;
+    round: number;
+    stakingAmount: BigNumber;
+    rewardAmount: BigNumber;
+  };
+};
+
+const TotalDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'TotalDashboard'>>();
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
@@ -130,7 +141,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                 params: {
                   cryptoType,
                   selectedRound,
-                  currentRound,
                 },
               });
             }}
@@ -166,7 +176,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                 params: {
                   rewardCryptoType,
                   selectedRound,
-                  currentRound,
                 },
               });
             }}

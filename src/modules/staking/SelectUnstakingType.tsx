@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import CryptoImage from '../../shared/components/CryptoImage';
@@ -11,7 +11,17 @@ import { P1Text, P4Text } from '../../shared/components/Texts';
 import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 
-const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  SelectUnstakingType: {
+    cryptoType: CryptoType;
+    selectedRound: number;
+    currentRound: number;
+    pageAfterSelection: StakingPage;
+  };
+};
+
+const SelectUnstakingType: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'SelectUnstakingType'>>();
   const { cryptoType, pageAfterSelection, selectedRound, currentRound } =
     route.params;
   const navigation = useNavigation();

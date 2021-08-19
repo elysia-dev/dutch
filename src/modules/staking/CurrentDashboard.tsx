@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -31,7 +31,15 @@ import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 
-const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
+type ParamList = {
+  CurrentDashboard: {
+    cryptoType: CryptoType;
+    rewardCryptoType: CryptoType;
+  };
+};
+
+const CurrentDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
   const contract =
@@ -190,4 +198,4 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   );
 };
 
-export default DashBoard;
+export default CurrentDashboard;
