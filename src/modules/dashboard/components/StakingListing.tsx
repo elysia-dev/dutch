@@ -16,8 +16,16 @@ import StakingInfoBox from './StakingInfoBox';
 import {
   getElStakingPoolContract,
   getElfiStakingPoolContract,
+  getStakingPoolContract,
+  provider,
 } from '../../../utiles/getContract';
 import WalletContext from '../../../contexts/WalletContext';
+import {
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
+import { StakingPool } from '@elysia-dev/contract-typechain';
+import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 
 const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
   user,
@@ -27,8 +35,6 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-  const elStakingPoolContract = getElStakingPoolContract();
-  const elfiStakingPoolContract = getElfiStakingPoolContract();
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
   );
@@ -38,16 +44,21 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
   const { t } = useTranslation();
 
   async function getRoundData(type: CryptoType): Promise<void> {
-    let contract: Contract | null;
+    let contract: StakingPool;
     let infoBoxes: React.ReactNode[];
     let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
     if (type === CryptoType.EL) {
-      contract = elStakingPoolContract;
+      contract = getStakingPoolContract(
+        EL_STAKING_POOL_ADDRESS,
+        wallet?.getFirstSigner(),
+      );
       infoBoxes = elStakingInfoBoxes;
       setInfoBoxes = setElStakingInfoBoxes;
     } else {
-      // type === CryptoType.ELFI
-      contract = elfiStakingPoolContract;
+      contract = getStakingPoolContract(
+        ELFI_STAKING_POOL_ADDRESS,
+        wallet?.getFirstSigner(),
+      );
       infoBoxes = elfiStakingInfoBoxes;
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
@@ -55,21 +66,26 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
     const tempBoxes = [] as React.ReactNode[];
     for (let round = 1; round <= 6; round++) {
       tempBoxes.push(
-        contract?.getUserData(round, userAddress).then((res: any) => {
-          const stakingAmount = res[2].toNumber(); // principal
-          const rewardAmount = res[1].toNumber();
-          // if (stakingAmount) {
-          return (
-            <StakingInfoBox
-              key={round}
-              cryptoType={type}
-              round={round}
-              stakingAmount={stakingAmount}
-              rewardAmount={rewardAmount}
-            />
-          );
-          // }
-        }),
+        contract
+          .getUserData(round, userAddress)
+          .then((res: any) => {
+            const stakingAmount = Number(utils.formatEther(res[2])); // principal
+            const rewardAmount = Number(utils.formatEther(res[1]));
+            if (stakingAmount) {
+              return (
+                <StakingInfoBox
+                  key={round}
+                  cryptoType={type}
+                  round={round}
+                  stakingAmount={stakingAmount}
+                  rewardAmount={rewardAmount}
+                />
+              );
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          }),
       );
     }
 
@@ -78,7 +94,7 @@ const StakingListing: React.FC<{ user: any; isWalletUser: boolean }> = ({
 
   useEffect(() => {
     getRoundData(CryptoType.EL);
-    getRoundData(CryptoType.ELFI);
+    // getRoundData(CryptoType.ELFI);
   }, []);
 
   return (
