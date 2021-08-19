@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
+import RoundStatus from '../../../enums/RoundStatus';
 
 const Dot: React.FC<{
   round: 1 | 2 | 3 | 4 | 5 | 6;
-  status: 'ended' | 'inProgress' | 'scheduled';
+  status: RoundStatus;
   selected: boolean;
   setSelectedRound: Dispatch<SetStateAction<number>>;
 }> = ({ round, status, selected, setSelectedRound }) => {
@@ -15,15 +16,15 @@ const Dot: React.FC<{
   let backgroundColor;
   let borderColor;
   switch (status) {
-    case 'ended':
+    case RoundStatus.ENDED:
       backgroundColor = AppColors.MAIN;
       borderColor = AppColors.MAIN;
       break;
-    case 'inProgress':
+    case RoundStatus.IN_PROGRESS:
       backgroundColor = AppColors.WHITE;
       borderColor = AppColors.MAIN;
       break;
-    case 'scheduled':
+    case RoundStatus.SCHEDULED:
       backgroundColor = AppColors.DEACTIVATED;
       borderColor = AppColors.DEACTIVATED;
       break;

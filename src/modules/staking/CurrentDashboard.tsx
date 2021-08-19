@@ -111,7 +111,6 @@ const CurrentDashboard: React.FC = () => {
             style={{ fontSize: 22 }}
           />
           <DotGraph
-            currentRound={currentRound}
             selectedRound={selectedRound}
             setSelectedRound={setSelectedRound}
           />
