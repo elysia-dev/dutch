@@ -43,6 +43,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
+  console.log(stakingAmount.isZero());
 
   useEffect(() => {
     contract?.getUserData(selectedRound, userAddress).then((res: any) => {
@@ -100,14 +101,14 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_principal', { round: selectedRound })}
-              value={stakingAmount || '-'}
+              value={stakingAmount.isZero() ? '-' : stakingAmount.toString()}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_reward', { round: selectedRound })}
-              value={rewardAmount || '-'}
+              value={rewardAmount.isZero() ? '-' : rewardAmount.toString()}
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />

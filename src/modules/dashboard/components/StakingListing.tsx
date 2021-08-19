@@ -45,7 +45,6 @@ const StakingListing: React.FC<{}> = () => {
       infoBoxes = elStakingInfoBoxes;
       setInfoBoxes = setElStakingInfoBoxes;
     } else {
-      // type === CryptoType.ELFI
       contract = elfiStakingPoolContract;
       infoBoxes = elfiStakingInfoBoxes;
       setInfoBoxes = setElfiStakingInfoBoxes;
@@ -55,8 +54,8 @@ const StakingListing: React.FC<{}> = () => {
     for (let round = 1; round <= 6; round++) {
       tempBoxes.push(
         contract?.getUserData(round, userAddress).then((res: any) => {
-          const stakingAmount = res[2].toNumber(); // principal
-          const rewardAmount = res[1].toNumber();
+          const stakingAmount = res[2]; // principal
+          const rewardAmount = res[1];
           // if (stakingAmount) {
           return (
             <StakingInfoBox
