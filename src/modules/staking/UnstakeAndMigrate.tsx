@@ -36,6 +36,7 @@ import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
+import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -66,6 +67,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     : user.ethAddresses[0];
 
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
+  const [isLoading, setIsLoading] = useState(false);
   const { principal, reward } = useStakingInfo(
     stakingPoolContract,
     selectedRound,
@@ -209,8 +211,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressUnstaking = async () => {
     try {
-      setModalVisible(false);
+      setIsLoading(true);
       const resTx = await unStake();
+      setIsLoading(false);
       navigation.goBack();
       afterTxHashCreated(
         address || '',
@@ -221,6 +224,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       const successTx = await resTx?.wait();
       afterTxCreated(successTx?.transactionHash || '');
     } catch (error) {
+      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
@@ -234,18 +238,20 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         setIsFinishRound(true);
         return;
       }
-      setModalVisible(false);
+      setIsLoading(true);
       const resTx = await migrate();
+      setIsLoading(false);
+      navigation.goBack();
       afterTxHashCreated(
         address || '',
         EL_ADDRESS,
         resTx?.hash || '',
         NetworkType.ETH,
       );
-      navigation.goBack();
       const successTx = await resTx?.wait();
       afterTxCreated(successTx?.transactionHash || '');
     } catch (error) {
+      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
@@ -263,7 +269,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     if (!modalVisible && !isFinishRound) {
       setStakingType(StakingType.Migrate);
     }
-  }, [modalVisible]);
+  }, [modalVisible, isFinishRound]);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -350,7 +356,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
           }}
         />
       </View>
-      <ConfirmationModal
+      <StakingConfrimModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
@@ -363,6 +369,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
             ? onPressMigrate()
             : onPressUnstaking()
         }
+        isLoading={isLoading}
       />
       <FinishedRoundModal
         isFinishRound={isFinishRound}
