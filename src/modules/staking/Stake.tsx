@@ -39,6 +39,7 @@ import useTxHandler from '../../hooks/useTxHandler';
 import NetworkType from '../../enums/NetworkType';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
+import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -57,6 +58,8 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
+  const [isApprove, setIsApprove] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { ercAddress, stakingAddress, signer } = {
     ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
     stakingAddress:
@@ -87,14 +90,13 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   };
 
   const isAllowanceForApprove = (): boolean => {
-    return Number(allowanceInfo.value) < crytoBalance;
+    return Number(allowanceInfo.value) > crytoBalance;
   };
 
   const setApporve = async () => {
     try {
-      if (isAllowanceForApprove()) {
-        await approve();
-      }
+      await approve();
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -123,8 +125,13 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressStaking = async () => {
     try {
-      await setApporve();
+      setIsLoading(true);
+      if (!isApprove) {
+        setApporve();
+        return;
+      }
       const resTx = await stake();
+      setIsLoading(false);
       afterTxHashCreated(
         address || '',
         EL_ADDRESS,
@@ -135,6 +142,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
       const successTx = await resTx?.wait();
       afterTxCreated(successTx?.transactionHash || '');
     } catch (error) {
+      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
@@ -239,6 +247,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           disabled={!value || parseFloat(value) > getBalance(cryptoType)}
           handler={() => {
             if (isWalletUser) {
+              setIsApprove(isAllowanceForApprove);
               setModalVisible(true);
             } else {
               console.log('스테이킹 해야 함');
@@ -246,7 +255,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           }}
         />
       </View>
-      <ConfirmationModal
+      <StakingConfrimModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
@@ -268,9 +277,10 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
           },
           { label: t('staking.gas_price'), value: estimagedGasPrice },
         ]}
-        isApproved={true}
+        isApproved={isApprove}
         submitButtonText={t('staking.nth_staking', { round: selectedRound })}
         handler={() => onPressStaking()}
+        isLoading={isLoading}
       />
       {/* <OverlayLoading
         visible={[
