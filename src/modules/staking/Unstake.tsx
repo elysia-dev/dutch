@@ -53,17 +53,17 @@ const Unstake: React.FC = () => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { t } = useTranslation();
+  const [principal, setPrincipal] = useState(0);
+  const [reward, setReward] = useState(0);
 
-  let principal = 0;
-  let reward = 0;
   contract
     ?.getUserData(
       selectedRound,
       isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
     )
     .then((res: any) => {
-      principal = res[2]; // userPrincipal
-      reward = res[1]; // userReward
+      setPrincipal(res[2]); // userPrincipal
+      setReward(res[1]); // userReward
     });
 
   const confirmationList = earnReward
