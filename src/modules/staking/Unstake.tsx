@@ -30,6 +30,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import NetworkType from '../../enums/NetworkType';
 import useStakingInfo from '../../hooks/useStakingInfo';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
@@ -43,7 +45,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { wallet } = useContext(WalletContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const { t } = useTranslation();
   const { stakingAddress, signer } = {
     stakingAddress:
@@ -103,26 +105,9 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         { label: t('staking.gas_price'), value: estimagedGasPrice },
       ];
 
-  const estimateGas = async () => {
-    let estimateGas: BigNumber | undefined;
-
-    try {
-      estimateGas = await stakingPoolContract.estimateGas.withdraw(
-        utils.parseEther('1'),
-        selectedRound, //round
-        { from: address },
-      );
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
-      }
-    } catch (e) {
-      setEstimatedGasPrice('');
-    }
-  };
-
   useEffect(() => {
     if (address) {
-      estimateGas();
+      setEstimateGas(stakingPoolContract, StakingType.Unstake, selectedRound);
     }
   }, []);
 

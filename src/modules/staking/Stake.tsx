@@ -37,6 +37,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import useTxHandler from '../../hooks/useTxHandler';
 import NetworkType from '../../enums/NetworkType';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -49,7 +51,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const crytoBalance = getBalance(cryptoType);
   const { wallet } = useContext(WalletContext);
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
@@ -61,30 +63,13 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
       cryptoType === CryptoType.EL
         ? EL_STAKING_POOL_ADDRESS
         : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner() || provider,
+    signer: wallet?.getFirstSigner(),
   };
   const erc20Contract = getErc20Contract(ercAddress, signer);
   const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-
-  const estimateGas = async () => {
-    let estimateGas: BigNumber | undefined;
-    try {
-      estimateGas = await stakingPoolContract?.estimateGas.stake(
-        utils.parseEther('100'),
-        {
-          from: address,
-        },
-      );
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
-      }
-    } catch (e) {
-      setEstimatedGasPrice('');
-    }
-  };
 
   const setAllowance = async () => {
     try {
@@ -158,7 +143,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   useEffect(() => {
     if (address) {
       setAllowance();
-      estimateGas();
+      setEstimateGas(stakingPoolContract, StakingType.Stake);
     }
   }, []);
 

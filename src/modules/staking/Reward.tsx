@@ -26,6 +26,8 @@ import useTxHandler from '../../hooks/useTxHandler';
 import NetworkType from '../../enums/NetworkType';
 import { useNavigation } from '@react-navigation/native';
 import useStakingInfo from '../../hooks/useStakingInfo';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { rewardCryptoType, selectedRound, currentRound } = route.params;
@@ -35,7 +37,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { wallet } = useContext(WalletContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const navigation = useNavigation();
   const { getBalance } = useContext(AssetContext);
   const { stakingAddress, signer } = {
@@ -54,25 +56,6 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     selectedRound,
     address || '',
   );
-
-  const estimateGas = async () => {
-    let estimateGas: BigNumber | undefined;
-
-    try {
-      estimateGas = await stakingPoolContract?.estimateGas.claim(
-        selectedRound,
-        {
-          from: address,
-        },
-      );
-
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
-      }
-    } catch (e) {
-      setEstimatedGasPrice('');
-    }
-  };
 
   const claim = async () => {
     try {
@@ -102,7 +85,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
 
   useEffect(() => {
     if (address) {
-      estimateGas();
+      setEstimateGas(stakingPoolContract, StakingType.Reward, selectedRound);
     }
   }, []);
 

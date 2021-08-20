@@ -34,6 +34,8 @@ import moment from 'moment';
 import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -41,7 +43,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { isWalletUser, user } = useContext(UserContext);
   const { gasPrice } = useContext(PriceContext);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isfinishRound, setIsFinishRound] = useState(false);
+  const [isFinishRound, setIsFinishRound] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const { wallet } = useContext(WalletContext);
@@ -49,7 +51,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const navigation = useNavigation();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const { t } = useTranslation();
   const { stakingAddress, signer } = {
     stakingAddress:
@@ -63,7 +65,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
 
-  const [stakingType, setStakingType] = useState('migrate');
+  const [stakingType, setStakingType] = useState(StakingType.Migrate);
   const { principal, reward } = useStakingInfo(
     stakingPoolContract,
     selectedRound,
@@ -164,23 +166,6 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
-  const estimateGas = async () => {
-    let estimateGas: BigNumber | undefined;
-
-    try {
-      estimateGas = await stakingPoolContract.estimateGas.migrate(
-        utils.parseEther('1'),
-        utils.parseEther(selectedRound),
-        { from: address },
-      );
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
-      }
-    } catch (e) {
-      setEstimatedGasPrice('');
-    }
-  };
-
   const isProgressRound = () => {
     return moment().isBetween(
       STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
@@ -209,7 +194,6 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       }),
     ]);
     setModalVisible(true);
-    setStakingType('unstake');
   };
 
   const unStake = async () => {
@@ -245,16 +229,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const onPressMigrate = async () => {
     try {
       if (!isProgressRound()) {
-        let estimateGas: BigNumber | undefined;
-        estimateGas = await stakingPoolContract.estimateGas.withdraw(
-          utils.parseEther('1'),
-          selectedRound,
-          { from: address },
-        );
-        console.log(estimateGas);
-        if (estimateGas) {
-          setConfirmations(utils.formatEther(estimateGas.mul(gasPrice)));
-        }
+        setStakingType(StakingType.Unstake);
         setModalVisible(false);
         setIsFinishRound(true);
         return;
@@ -278,13 +253,15 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   useEffect(() => {
     if (address) {
-      estimateGas();
+      setEstimateGas(stakingPoolContract, stakingType, selectedRound);
+      if (stakingType === StakingType.Unstake)
+        setConfirmations(estimagedGasPrice);
     }
-  }, []);
+  }, [stakingType, estimagedGasPrice]);
 
   useEffect(() => {
-    if (!modalVisible) {
-      setStakingType('migrate');
+    if (!modalVisible && !isFinishRound) {
+      setStakingType(StakingType.Migrate);
     }
   }, [modalVisible]);
 
@@ -382,11 +359,13 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         isApproved={true}
         submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
         handler={() =>
-          stakingType === 'migrate' ? onPressMigrate() : onPressUnstaking()
+          stakingType === StakingType.Migrate
+            ? onPressMigrate()
+            : onPressUnstaking()
         }
       />
       <FinishedRoundModal
-        isfinishRound={isfinishRound}
+        isFinishRound={isFinishRound}
         setIsFinishRound={setIsFinishRound}
         handler={() => confirmExcludeMigrate()}
         currentRound={currentRound}
