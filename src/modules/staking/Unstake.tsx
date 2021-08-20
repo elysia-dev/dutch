@@ -56,16 +56,6 @@ const Unstake: React.FC = () => {
   const [principal, setPrincipal] = useState(0);
   const [reward, setReward] = useState(0);
 
-  contract
-    ?.getUserData(
-      selectedRound,
-      isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
-    )
-    .then((res: any) => {
-      setPrincipal(res[2]); // userPrincipal
-      setReward(res[1]); // userReward
-    });
-
   const confirmationList = earnReward
     ? [
         {
@@ -131,6 +121,16 @@ const Unstake: React.FC = () => {
     if (address) {
       estimateGas(address);
     }
+
+    contract
+      ?.getUserData(
+        selectedRound,
+        isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
+      )
+      .then((res: any) => {
+        setPrincipal(res[2]); // userPrincipal
+        setReward(res[1]); // userReward
+      });
   }, []);
 
   if (!selectionVisible) {
@@ -234,7 +234,7 @@ const Unstake: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward && reward,
+        rewardValue: earnReward ? reward : 0,
       }}
       contractAddress={contract?.address}
     />
