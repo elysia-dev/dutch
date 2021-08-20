@@ -47,11 +47,17 @@ const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
 
 export default calculateAPR;
 
-function getQuotientFromBigNumber(
+function bigNumberDivisionFormatter(
   dividend: BigNumber,
   divisor: number,
-): number {
-  return parseInt(String(parseFloat(dividend.toString()) / divisor), 10);
+  decimalPlace: number,
+) {
+  return {
+    quotient: parseInt(String(parseFloat(dividend.toString()) / divisor), 10),
+    remainder: (parseFloat(dividend.toString()) % divisor)
+      .toString()
+      .substring(0, decimalPlace),
+  };
 }
 
 export function aprFormatter(apr: BigNumber) {
@@ -60,13 +66,25 @@ export function aprFormatter(apr: BigNumber) {
   if (aprIntegerLength > 15) {
     return '∞';
   } else if (aprIntegerLength > 12) {
-    return getQuotientFromBigNumber(apr, 1000000000000) + 'T';
+    const { quotient, remainder } = bigNumberDivisionFormatter(
+      apr,
+      1000000000000,
+      2,
+    );
+    return `${quotient}.${remainder}T`;
   } else if (aprIntegerLength > 9) {
-    return getQuotientFromBigNumber(apr, 1000000000) + 'B';
+    const { quotient, remainder } = bigNumberDivisionFormatter(
+      apr,
+      1000000000,
+      2,
+    );
+    return `${quotient}.${remainder}B`;
   } else if (aprIntegerLength > 6) {
-    return getQuotientFromBigNumber(apr, 1000000) + 'M';
+    const { quotient, remainder } = bigNumberDivisionFormatter(apr, 1000000, 2);
+    return `${quotient}.${remainder}M`;
   } else if (aprIntegerLength > 3) {
-    return getQuotientFromBigNumber(apr, 1000) + 'K';
+    const { quotient, remainder } = bigNumberDivisionFormatter(apr, 1000, 2);
+    return `${quotient}.${remainder}K`;
   } else {
     return commaFormatter(decimalFormatter(parseFloat(apr.toString()), 5));
   }
