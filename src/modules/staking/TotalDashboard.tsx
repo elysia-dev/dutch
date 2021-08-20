@@ -105,7 +105,7 @@ const TotalDashboard: React.FC = () => {
               roundEnded={false}
               label={t('staking.nth_apr', { round: selectedRound })}
               value={aprFormatter(calculateAPR(cryptoType, selectedRound))}
-              unit="EL"
+              unit="%"
             />
             <StakingInfoCard
               roundEnded={false}
