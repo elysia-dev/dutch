@@ -55,18 +55,8 @@ const UnstakeAndMigrate: React.FC = () => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { t } = useTranslation();
-
-  let principal = 0;
-  let reward = 0;
-  contract
-    ?.getUserData(
-      selectedRound,
-      isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
-    )
-    .then((res: any) => {
-      principal = res[2]; // userPrincipal
-      reward = res[1]; // userReward
-    });
+  const [principal, setPrincipal] = useState(0);
+  const [reward, setReward] = useState(0);
 
   let confirmationList;
   if (earnReward) {
@@ -168,6 +158,16 @@ const UnstakeAndMigrate: React.FC = () => {
     if (address) {
       estimateGas(address);
     }
+
+    contract
+      ?.getUserData(
+        selectedRound,
+        isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
+      )
+      .then((res: any) => {
+        setPrincipal(res[2]); // userPrincipal
+        setReward(res[1]); // userReward
+      });
   }, []);
 
   if (!selectionVisible) {
@@ -290,7 +290,7 @@ const UnstakeAndMigrate: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward && reward,
+        rewardValue: earnReward ? reward : 0,
         migrationValue: principal - parseFloat(value),
       }}
       contractAddress={contract?.address}
