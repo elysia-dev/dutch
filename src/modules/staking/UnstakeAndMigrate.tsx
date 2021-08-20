@@ -191,7 +191,8 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
       ...confirmationList.filter((text) => {
         return !(
           text.label === t('staking.migration_supply') ||
-          text.label === t('staking.migration_destination')
+          text.label === t('staking.migration_destination') ||
+          text.label === t('staking.reward_supply')
         );
       }),
     ]);
