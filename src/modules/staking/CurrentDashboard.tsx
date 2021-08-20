@@ -12,10 +12,7 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../utiles/getContract';
+import { getStakingPoolContract } from '../../utiles/getContract';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import {
@@ -30,22 +27,33 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
+import {
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
+import WalletContext from '../../contexts/WalletContext';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const [currentRound, setCurrentRound] = useState(1);
   const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
   const totalAmountOfReward =
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
   const { t } = useTranslation();
+
+  const { stakingAddress, signer } = {
+    stakingAddress:
+      rewardCryptoType === CryptoType.ELFI
+        ? EL_STAKING_POOL_ADDRESS
+        : ELFI_STAKING_POOL_ADDRESS,
+    signer: wallet?.getFirstSigner(),
+  };
+  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
 
   let nextButtonTitle;
   let nextButtonDisabled;
@@ -71,7 +79,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   }
 
   useEffect(() => {
-    contract?.currentRound().then((res: any) => {
+    stakingPoolContract?.currentRound().then((res: any) => {
       setCurrentRound(res);
     });
   }, []);
@@ -111,8 +119,8 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             <BoxWithDividerContent
               isFirst={true}
               label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
-                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
+              value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
+                STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
               } (KST)`}
             />
             <BoxWithDividerContent
