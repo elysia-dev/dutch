@@ -6,22 +6,21 @@ import AppColors from '../../../enums/AppColors';
 import { STAKING_POOL_ROUNDS } from '../../../constants/staking';
 
 interface Props {
-  isfinishRound: boolean;
+  isFinishRound: boolean;
   setIsFinishRound: Dispatch<SetStateAction<boolean>>;
   handler: () => void;
   currentRound: number;
 }
 
 const FinishedRoundModal: React.FC<Props> = ({
-  isfinishRound,
+  isFinishRound,
   setIsFinishRound,
   handler,
   currentRound,
 }) => {
   const { t } = useTranslation();
-  const [disabled, setDisabled] = useState(false);
   return (
-    <Modal transparent={true} visible={isfinishRound}>
+    <Modal transparent={true} visible={isFinishRound}>
       <View
         style={{
           flex: 1,
@@ -52,23 +51,9 @@ const FinishedRoundModal: React.FC<Props> = ({
                   color: AppColors.BLACK,
                   fontSize: 13,
                 }}>
-                {`${currentRound}차 스테이킹 기간이 종료되어`}
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: AppColors.BLACK,
-                  fontSize: 13,
-                }}>
-                마이그레이션이 불가능합니다.
-              </Text>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: AppColors.BLACK,
-                  fontSize: 13,
-                }}>
-                마이그레이션을 제외하고 계속 진행하겠습니까?
+                {t('staking.ended_round_migration_notice', {
+                  round: currentRound,
+                })}
               </Text>
             </View>
           </View>
@@ -115,10 +100,8 @@ const FinishedRoundModal: React.FC<Props> = ({
             }}>
             <TouchableOpacity
               onPress={() => {
-                //   setDisabled(true);
                 setIsFinishRound(false);
               }}
-              disabled={disabled}
               style={{
                 borderWidth: 1,
                 borderColor: AppColors.MAIN,
@@ -137,7 +120,7 @@ const FinishedRoundModal: React.FC<Props> = ({
                   fontFamily: AppFonts.Bold,
                   color: AppColors.MAIN,
                 }}>
-                취소
+                {t('assets.cancel')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -145,7 +128,6 @@ const FinishedRoundModal: React.FC<Props> = ({
                 handler();
                 setIsFinishRound(false);
               }}
-              disabled={disabled}
               style={{
                 backgroundColor: AppColors.MAIN,
                 borderRadius: 5,
@@ -162,7 +144,7 @@ const FinishedRoundModal: React.FC<Props> = ({
                   fontFamily: AppFonts.Bold,
                   color: AppColors.WHITE,
                 }}>
-                확인
+                {t('assets.confirm')}
               </Text>
             </TouchableOpacity>
           </View>
