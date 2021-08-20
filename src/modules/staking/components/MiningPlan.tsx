@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
+import CryptoType from '../../../enums/CryptoType';
 import { H4Text } from '../../../shared/components/Texts';
 import BoxWithDivider from './BoxWithDivider';
 import CardWithShadow from './CardWithShadow';
 import BoxWithDividerContent from './BoxWithDividerContent';
+import PriceContext from '../../../contexts/PriceContext';
+import commaFormatter from '../../../utiles/commaFormatter';
+import {
+  ELFI_PER_DAY_ON_EL_STAKING_POOL,
+  DAI_PER_DAY_ON_ELFI_STAKING_POOL,
+  ELFI_PER_ROUND_ON_EL_STAKING_POOL,
+  DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
+  STAKING_POOL_ROUNDS,
+} from '../../../constants/staking';
+import calculateMined from '../../../utiles/calculateMined';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
-const MiningPlan: React.FC<{}> = () => {
+const MiningPlan: React.FC<{
+  round: number;
+  cryptoType: CryptoType;
+  currentRound: number;
+}> = ({ round, cryptoType, currentRound }) => {
+  const { getCryptoPrice } = useContext(PriceContext);
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const { t } = useTranslation();
+
+  let rewardPerDay;
+  let rewardPerRound;
+  if (cryptoType === CryptoType.EL) {
+    rewardPerDay = ELFI_PER_DAY_ON_EL_STAKING_POOL;
+    rewardPerRound = ELFI_PER_ROUND_ON_EL_STAKING_POOL;
+  } else {
+    rewardPerDay = DAI_PER_DAY_ON_ELFI_STAKING_POOL;
+    rewardPerRound = DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
+  }
+
+  const cumulativeMined = calculateMined(cryptoType, round, currentRound);
+
   return (
     <CardWithShadow
       style={{
@@ -15,14 +49,16 @@ const MiningPlan: React.FC<{}> = () => {
         marginHorizontal: 6,
       }}>
       <H4Text
-        label="1차 채굴 플랜"
+        label={t('staking.nth_mining_plan', { round })}
         style={{ textAlign: 'center', marginBottom: 10 }}
       />
       <BoxWithDivider style={{ width: 300 }}>
         <BoxWithDividerContent
           isFirst={true}
-          label="기간"
-          value={`2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)`}
+          label={t('staking.schedule')}
+          value={`${STAKING_POOL_ROUNDS[round - 1].startedAt}\n~ ${
+            STAKING_POOL_ROUNDS[round - 1].endedAt
+          } (KST)`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
@@ -31,8 +67,8 @@ const MiningPlan: React.FC<{}> = () => {
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label="1차 총 채굴량"
-          value="5,000,000 ELFI"
+          label={t('staking.nth_mining_supply', { round })}
+          value={`${commaFormatter(rewardPerRound)} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
@@ -41,8 +77,8 @@ const MiningPlan: React.FC<{}> = () => {
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label="1일 채굴량"
-          value="25,000 ELFI"
+          label={t('staking.mining_supply_per_day')}
+          value={`${commaFormatter(rewardPerDay)} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
@@ -51,8 +87,10 @@ const MiningPlan: React.FC<{}> = () => {
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label="누적 채굴량"
-          value="300,000 ELFI"
+          label={t('staking.cumulative mining supply')}
+          value={`${commaFormatter(
+            decimalFormatter(cumulativeMined, 5),
+          )} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
@@ -61,8 +99,10 @@ const MiningPlan: React.FC<{}> = () => {
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label="잔여 채굴량"
-          value="4,700,000 ELFI"
+          label={t('staking.remaining mining supply')}
+          value={`${commaFormatter(
+            decimalFormatter(rewardPerRound - cumulativeMined, 5),
+          )} ${rewardCryptoType}`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
@@ -71,8 +111,8 @@ const MiningPlan: React.FC<{}> = () => {
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label="ELFI 가격"
-          value="$ 5,000"
+          label={t('staking.reward_price', { rewardCrypto: rewardCryptoType })}
+          value={`$ ${getCryptoPrice(rewardCryptoType)}`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,

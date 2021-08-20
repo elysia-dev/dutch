@@ -1,9 +1,15 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6 }> = ({ round }) => {
+const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
+  round,
+  percent,
+}) => {
+  const { t } = useTranslation();
+
   return (
     <View style={{ width: '16.7%' }}>
       <View
@@ -20,6 +26,7 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6 }> = ({ round }) => {
         style={{
           width: '100%',
           position: 'absolute',
+          overflow: 'hidden',
         }}>
         <View
           style={{
@@ -27,8 +34,9 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6 }> = ({ round }) => {
             backgroundColor: '#3ECFFF',
             borderTopLeftRadius: round === 1 ? 4 : 0,
             borderBottomLeftRadius: round === 1 ? 4 : 0,
-            borderTopRightRadius: round === 6 ? 4 : 0,
-            borderBottomRightRadius: round === 6 ? 4 : 0,
+            borderTopRightRadius: round === 6 || percent < 100 ? 4 : 0,
+            borderBottomRightRadius: round === 6 || percent < 100 ? 4 : 0,
+            width: `${percent}%`,
           }}
         />
         <Text
@@ -39,7 +47,7 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6 }> = ({ round }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 12,
           }}>
-          {`${round}차`}
+          {t('staking.round_with_affix', { round })}
         </Text>
         <View
           style={{

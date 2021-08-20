@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { BigNumber } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -8,16 +10,57 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
+import CryptoType from '../../enums/CryptoType';
+import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
+import UserContext from '../../contexts/UserContext';
+import WalletContext from '../../contexts/WalletContext';
 
-const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType } = route.params;
-  const currentCycle = 3; // dummy data
-  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
+type ParamList = {
+  TotalDashboard: {
+    cryptoType: CryptoType;
+    round: number;
+    stakingAmount: BigNumber;
+    rewardAmount: BigNumber;
+  };
+};
+
+const TotalDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'TotalDashboard'>>();
+  const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const [selectedRound, setSelectedRound] = useState(round);
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
+  const [currentRound, setCurrentRound] = useState(0);
+  contract?.currentRound().then((res: any) => {
+    setCurrentRound(res);
+  });
   const navigation = useNavigation();
-  const isRewardAvailable = currentCycle > selectedCycle; // 현재회차가없으면끝났다는표시라도받아야하고, 받을보상이있는지 확인필요
-  const isMigrationAvailable = Boolean(currentCycle);
+  const [userReward, setUserReward] = useState(0);
+  const [userPrincipal, setUserPrincipal] = useState(0);
+  const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
+  const userAddress = isWalletUser // 이거 아예 함수로 만들어야겠는데...
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    contract?.getUserData(selectedRound, userAddress).then((res: any) => {
+      setUserReward(res[1].toNumber());
+      setUserPrincipal(res[2].toNumber());
+    });
+  }, [selectedRound]);
 
   return (
     <ScrollView
@@ -28,18 +71,23 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
       <SheetHeader title="" />
       <View style={{ paddingHorizontal: 20 }}>
         <TitleText
-          label="EL 스테이킹 및 ELFI 리워드"
+          label={t('main.staking_by_crypto', {
+            stakingCrypto: cryptoType,
+            rewardCrypto: rewardCryptoType,
+          })}
           style={{ fontSize: 22 }}
         />
         <DotGraph
-          selectedCycle={selectedCycle}
-          setSelectedCycle={setSelectedCycle}
+          selectedRound={selectedRound}
+          setSelectedRound={setSelectedRound}
         />
         <BoxWithDivider style={{ marginTop: -10 }}>
           <BoxWithDividerContent
             isFirst={true}
-            label="기간"
-            value={`2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)`}
+            label={t('staking.schedule')}
+            value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
+              STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
+            } (KST)`}
             style={{
               paddingVertical: 25,
               paddingHorizontal: 19,
@@ -54,23 +102,23 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
               paddingHorizontal: 19,
             }}>
             <StakingInfoCard
-              cycleEnded={false}
-              label={`${selectedCycle}차 스테이킹 APR`}
-              value="130,000"
-              unit="EL"
+              roundEnded={false}
+              label={t('staking.nth_apr', { round: selectedRound })}
+              value={aprFormatter(calculateAPR(cryptoType, selectedRound))}
+              unit="%"
             />
             <StakingInfoCard
-              cycleEnded={false}
-              label={`${selectedCycle}차 스테이킹 수량`}
-              value="4.07"
-              unit="%"
+              roundEnded={false}
+              label={t('staking.nth_principal', { round: selectedRound })}
+              value={stakingAmount.isZero() ? '-' : stakingAmount.toString()}
+              unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
-              cycleEnded={false}
-              label={`${selectedCycle}차 보상 수량`}
-              value="130,000"
-              unit="ELFI"
+              roundEnded={false}
+              label={t('staking.nth_reward', { round: selectedRound })}
+              value={rewardAmount.isZero() ? '-' : rewardAmount.toString()}
+              unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />
           </View>
@@ -84,45 +132,51 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           }}>
           <CircularButtonWithLabel
             icon="+"
-            disabled={!(currentCycle && currentCycle === selectedCycle)}
-            label="스테이킹"
+            disabled={!(currentRound && currentRound === selectedRound)} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
+            label={t('staking.stake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen: StakingPage.Stake,
                 params: {
                   cryptoType,
-                  selectedCycle,
-                  currentCycle,
+                  selectedRound,
                 },
               });
             }}
           />
           <CircularButtonWithLabel
             icon="-"
-            disabled={!(currentCycle && currentCycle >= selectedCycle)}
-            label="언스테이킹"
+            disabled={!userPrincipal}
+            label={t('staking.unstake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
-                screen: isRewardAvailable
+                screen: userReward
                   ? StakingPage.SelectUnstakingType
                   : StakingPage.Unstake,
                 params: {
                   cryptoType,
-                  selectedCycle,
-                  currentCycle,
-                  pageAfterSelection: isMigrationAvailable
-                    ? StakingPage.UnstakeAndMigrate
-                    : StakingPage.Unstake,
+                  selectedRound,
+                  currentRound,
+                  pageAfterSelection:
+                    selectedRound <= currentRound
+                      ? StakingPage.UnstakeAndMigrate
+                      : StakingPage.Unstake,
                 },
               });
             }}
           />
           <CircularButtonWithLabel
             icon="⤴"
-            disabled={false}
-            label="보상 수령"
+            disabled={!userReward}
+            label={t('staking.claim_rewards')}
             pressHandler={() => {
-              console.log('아직 보상 수령 페이지가 없음');
+              navigation.navigate(Page.Staking, {
+                screen: StakingPage.Reward,
+                params: {
+                  rewardCryptoType,
+                  selectedRound,
+                },
+              });
             }}
           />
         </View>

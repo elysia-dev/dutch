@@ -105,7 +105,7 @@ const TxInputViewer: React.FC<Props> = ({
         ) : (
           // 빈 문자열이면
           <GuideText
-            text="가스비를 추정할 수 없습니다."
+            text={t('assets.cannot_estimate_gas')}
             style={{ marginTop: 6 }}
           />
         )}

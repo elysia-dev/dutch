@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { BigNumber, utils } from 'ethers';
 import AppColors from '../../../enums/AppColors';
 import { Page, StakingPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
 import CryptoType from '../../../enums/CryptoType';
+import PriceContext from '../../../contexts/PriceContext';
+import commaFormatter from '../../../utiles/commaFormatter';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
-const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
-  cryptoType,
-}) => {
+const StakingInfoBox: React.FC<{
+  cryptoType: CryptoType;
+  round: number;
+  stakingAmount: BigNumber;
+  rewardAmount: BigNumber;
+}> = ({ cryptoType, round, stakingAmount, rewardAmount }) => {
   const navigation = useNavigation();
+  const { getCryptoPrice } = useContext(PriceContext);
+  const rewardCryptoType =
+    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
+  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -24,7 +36,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
       onPress={() => {
         navigation.navigate(Page.Staking, {
           screen: StakingPage.TotalDashboard,
-          params: { cryptoType },
+          params: { cryptoType, round, stakingAmount, rewardAmount },
         });
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -34,7 +46,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          1차 스테이킹
+          {t('main.staking_amount', { round })}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -43,7 +55,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            1,000,000 EL
+            {`${commaFormatter(stakingAmount.toString())} ${cryptoType} `}
           </Text>
           <Text
             style={{
@@ -51,7 +63,20 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            (=$5,000,000)
+            {`(= $ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(
+                  utils
+                    .formatEther(
+                      stakingAmount.mul(
+                        utils.parseEther(getCryptoPrice(cryptoType).toString()),
+                      ),
+                    )
+                    .toString(),
+                ),
+                2,
+              ),
+            )})`}
           </Text>
         </View>
       </View>
@@ -67,7 +92,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
             color: AppColors.SUB_BLACK,
             fontFamily: AppFonts.Regular,
           }}>
-          1차 리워드
+          {t('main.reward_amount', { round })}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text
@@ -76,7 +101,7 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            500 ELFI
+            {`${commaFormatter(rewardAmount.toString())} ${rewardCryptoType} `}
           </Text>
           <Text
             style={{
@@ -84,7 +109,20 @@ const StakingInfoBox: React.FC<{ cryptoType: CryptoType }> = ({
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            (=$500,000)
+            {`(= $ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(
+                  utils.formatEther(
+                    rewardAmount.mul(
+                      utils.parseEther(
+                        getCryptoPrice(rewardCryptoType).toString(),
+                      ),
+                    ),
+                  ),
+                ),
+                2,
+              ),
+            )})`}
           </Text>
         </View>
       </View>

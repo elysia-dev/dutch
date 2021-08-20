@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
@@ -10,12 +11,77 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
+import {
+  getElStakingPoolContract,
+  getElfiStakingPoolContract,
+} from '../../utiles/getContract';
+import UserContext from '../../contexts/UserContext';
+import CryptoType from '../../enums/CryptoType';
+import {
+  ROUND_DURATION,
+  TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
+  TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
+  STAKING_POOL_ROUNDS,
+  STAKING_POOL_ROUNDS_MOMENT,
+} from '../../constants/staking';
+import commaFormatter from '../../utiles/commaFormatter';
+import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
+import calculateMined from '../../utiles/calculateMined';
+import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
+import getStakingStatus from '../../utiles/getStakingStatus';
+import StakingStatus from '../../enums/StakingStatus';
 
-const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
-  const { cryptoType, rewardCryptoType, currentCycle } = route.params;
+type ParamList = {
+  CurrentDashboard: {
+    cryptoType: CryptoType;
+    rewardCryptoType: CryptoType;
+  };
+};
+
+const CurrentDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
+  const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
-  const [selectedCycle, setSelectedCycle] = useState(currentCycle);
+  const contract =
+    cryptoType === CryptoType.EL
+      ? getElStakingPoolContract()
+      : getElfiStakingPoolContract();
+  const [currentRound, setCurrentRound] = useState(1);
+  const [selectedRound, setSelectedRound] = useState(currentRound);
+  const { isWalletUser, user } = useContext(UserContext);
+  const totalAmountOfReward =
+    cryptoType === CryptoType.EL
+      ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
+      : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
+  const { t } = useTranslation();
+  const stakingStatus = getStakingStatus(currentRound);
+
+  let nextButtonTitle = '';
+  if (!(isWalletUser || user.ethAddresses[0])) {
+    nextButtonTitle = t('staking.need_wallet');
+  } else {
+    switch (stakingStatus) {
+      case StakingStatus.NOT_YET_STARTED:
+      case StakingStatus.ROUND_NOT_IN_PROGRESS:
+        nextButtonTitle = t('staking.comming_soon');
+        break;
+      case StakingStatus.ROUND_IN_PROGRESS:
+        nextButtonTitle = t('staking.nth_staking', { round: currentRound });
+        break;
+      case StakingStatus.ENDED:
+        nextButtonTitle = t('staking.staking_ended');
+        break;
+      default:
+        break;
+    }
+  }
+
+  useEffect(() => {
+    contract?.currentRound().then((res: any) => {
+      setCurrentRound(res);
+    });
+  }, []);
 
   return (
     <View
@@ -32,57 +98,95 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
         <SheetHeader title="" />
         <View style={{ paddingHorizontal: 20 }}>
           <SubTitleText
-            label={`보상으로 ${rewardCryptoType} 수령하는`}
+            label={t('staking.staking_with_type_subtitle', {
+              rewardCrypto: rewardCryptoType,
+            })}
             style={{ fontSize: 14 }}
           />
           <TitleText
-            label={`${cryptoType} 스테이킹`}
+            label={t('staking.staking_with_type', {
+              stakingCrypto: cryptoType,
+            })}
             style={{ fontSize: 22 }}
           />
           <DotGraph
-            selectedCycle={selectedCycle}
-            setSelectedCycle={setSelectedCycle}
+            selectedRound={selectedRound}
+            setSelectedRound={setSelectedRound}
           />
           <BoxWithDivider style={{ marginBottom: 60 }}>
             <BoxWithDividerContent
               isFirst={true}
-              label="기간"
-              value={`2021.07.25 19:00:00\n~ 2021.09.25 19:00:00 (KST)`}
+              label={t('staking.schedule')}
+              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
+                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
+              } (KST)`}
             />
-            <BoxWithDividerContent label="현재 진행 회차" value="1차" />
-            <BoxWithDividerContent label="스테이킹 일수" value="20일" />
-            <BoxWithDividerContent label="예상 수익률 (APR)" value="98.10%" />
+            <BoxWithDividerContent
+              label={t('staking.current_round')}
+              value={`${currentRound}차`}
+            />
+            <BoxWithDividerContent
+              label={t('staking.staking_days')}
+              value={`${ROUND_DURATION}일`}
+            />
+            <BoxWithDividerContent
+              label={t('staking.apr')}
+              value={`${aprFormatter(calculateAPR(cryptoType, currentRound))}%`}
+            />
           </BoxWithDivider>
-          <TitleText label="ELFI 채굴 플랜" style={{ fontSize: 22 }} />
-          <BarGraph />
+          <TitleText
+            label={t('staking.mining_plan', { rewardCrypto: rewardCryptoType })}
+            style={{ fontSize: 22 }}
+          />
+          <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
           <BoxWithDivider style={{ marginBottom: 27 }}>
             <BoxWithDividerContent
               isFirst={true}
-              label="현 채굴량"
-              value="4,000 ELFI"
+              label={t('staking.current_mined')}
+              value={`${commaFormatter(
+                decimalFormatter(
+                  [1, 2, 3, 4, 5, 6].reduce(
+                    (totalMined, round) =>
+                      totalMined +
+                      calculateMined(cryptoType, round, currentRound),
+                    0,
+                  ),
+                  5,
+                ),
+              )} ${rewardCryptoType}`}
               style={{ paddingVertical: 16 }}
             />
             <BoxWithDividerContent
-              label="총 채굴량"
-              value="3,000,000 ELFI"
+              label={t('staking.total_mining_supply')}
+              value={`${commaFormatter(
+                totalAmountOfReward,
+              )} ${rewardCryptoType}`}
               style={{ paddingVertical: 16 }}
             />
           </BoxWithDivider>
           <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
-              return <MiningPlan key={i} />;
+              return (
+                <MiningPlan
+                  key={i}
+                  round={i}
+                  cryptoType={cryptoType}
+                  currentRound={currentRound}
+                />
+              );
             })}
           </ScrollView>
         </View>
       </ScrollView>
       <NextButton
-        title={`${currentCycle}차 스테이킹`}
+        title={nextButtonTitle}
         handler={() => {
           navigation.navigate(Page.Staking, {
             screen: StakingPage.Stake,
-            params: { cryptoType, selectedCycle: currentCycle },
+            params: { cryptoType, selectedRound: currentRound },
           });
         }}
+        disabled={stakingStatus !== StakingStatus.ROUND_IN_PROGRESS}
         style={{
           marginBottom: 20,
           marginHorizontal: 16,
@@ -92,4 +196,4 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   );
 };
 
-export default DashBoard;
+export default CurrentDashboard;

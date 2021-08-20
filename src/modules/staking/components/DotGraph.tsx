@@ -2,11 +2,12 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
+import getRoundStatus from '../../../utiles/geRoundStatus';
 
 const DotGraph: React.FC<{
-  selectedCycle: number;
-  setSelectedCycle: Dispatch<SetStateAction<number>>;
-}> = ({ selectedCycle, setSelectedCycle }) => {
+  selectedRound: number;
+  setSelectedRound: Dispatch<SetStateAction<number>>;
+}> = ({ selectedRound, setSelectedRound }) => {
   return (
     <View>
       <View
@@ -36,10 +37,10 @@ const DotGraph: React.FC<{
           return (
             <Dot
               key={i}
-              cycle={i}
-              status={'scheduled'}
-              selected={selectedCycle === i ? true : false}
-              setSelectedCycle={setSelectedCycle}
+              round={i}
+              status={getRoundStatus(i)}
+              selected={selectedRound === i ? true : false}
+              setSelectedRound={setSelectedRound}
             />
           );
         })}

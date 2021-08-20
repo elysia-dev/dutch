@@ -108,4 +108,5 @@ export enum StakingPage {
   SelectUnstakingType = 'SelectUnstakingType',
   Unstake = 'Unstake',
   UnstakeAndMigrate = 'UnstakeAndMigrate',
+  Reward = 'Reward',
 }
