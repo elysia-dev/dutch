@@ -67,45 +67,62 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     address || '',
   );
 
-  const confirmationList = earnReward
-    ? [
-        {
-          label: t('staking.unstaking_round'),
-          value: t('staking.nth_unstaking', { round: selectedRound }),
-        },
-        {
-          label: t('staking.unstaking_supply'),
-          value: `${value} ${cryptoType}`,
-          subvalue: `$ ${commaFormatter(
-            decimalFormatter(
-              parseFloat(value || '0') * getCryptoPrice(cryptoType),
-              6,
-            ),
-          )}`,
-        },
-        {
-          label: t('staking.reward_supply'),
-          value: `${reward} ${rewardCryptoType}`,
-        },
-        { label: t('staking.gas_price'), value: estimagedGasPrice },
-      ]
-    : [
-        {
-          label: t('staking.unstaking_round'),
-          value: t('staking.nth_unstaking', { round: selectedRound }),
-        },
-        {
-          label: t('staking.unstaking_supply'),
-          value: `${value} ${cryptoType}`,
-          subvalue: `$ ${commaFormatter(
-            decimalFormatter(
-              parseFloat(value || '0') * getCryptoPrice(cryptoType),
-              6,
-            ),
-          )}`,
-        },
-        { label: t('staking.gas_price'), value: estimagedGasPrice },
-      ];
+  const confirmationList = [
+    {
+      label: t('staking.unstaking_round'),
+      value: t('staking.nth_unstaking', { round: selectedRound }),
+    },
+    {
+      label: t('staking.unstaking_supply'),
+      value: `${value} ${cryptoType}`,
+      subvalue: `$ ${commaFormatter(
+        decimalFormatter(
+          parseFloat(value || '0') * getCryptoPrice(cryptoType),
+          6,
+        ),
+      )}`,
+    },
+    { label: t('staking.gas_price'), value: estimagedGasPrice },
+  ];
+  // const confirmationList = earnReward
+  //   ? [
+  //       {
+  //         label: t('staking.unstaking_round'),
+  //         value: t('staking.nth_unstaking', { round: selectedRound }),
+  //       },
+  //       {
+  //         label: t('staking.unstaking_supply'),
+  //         value: `${value} ${cryptoType}`,
+  //         subvalue: `$ ${commaFormatter(
+  //           decimalFormatter(
+  //             parseFloat(value || '0') * getCryptoPrice(cryptoType),
+  //             6,
+  //           ),
+  //         )}`,
+  //       },
+  //       {
+  //         label: t('staking.reward_supply'),
+  //         value: `${reward} ${rewardCryptoType}`,
+  //       },
+  //       { label: t('staking.gas_price'), value: estimagedGasPrice },
+  //     ]
+  //   : [
+  //       {
+  //         label: t('staking.unstaking_round'),
+  //         value: t('staking.nth_unstaking', { round: selectedRound }),
+  //       },
+  //       {
+  //         label: t('staking.unstaking_supply'),
+  //         value: `${value} ${cryptoType}`,
+  //         subvalue: `$ ${commaFormatter(
+  //           decimalFormatter(
+  //             parseFloat(value || '0') * getCryptoPrice(cryptoType),
+  //             6,
+  //           ),
+  //         )}`,
+  //       },
+  //       { label: t('staking.gas_price'), value: estimagedGasPrice },
+  //     ];
 
   useEffect(() => {
     if (address) {
