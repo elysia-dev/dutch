@@ -457,7 +457,7 @@
       "migration_destination": "转移位置",
       "migration_supply": "转移数量",
       "reward_supply": "奖励数量",
-      "ended_round_migration_notice": "第$t(numeral_character.{{round}})轮Staking已经结束，不能再操作转移。除了转移以外，您可以继续进行其他操作。",
+      "ended_round_migration_notice": "第$t(numeral_character.{{round}})轮Staking已经结束，\n 不能再操作转移。除了转移以外， \n 您可以继续进行其他操作。",
       "done": "输入完成",
       "gas_price": "gas费用",
       "nth_unstaking": "第$t(numeral_character.{{round}})轮Unstaking",
