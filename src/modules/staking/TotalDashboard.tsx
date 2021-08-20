@@ -165,7 +165,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  userReward !== '-'
+                  userReward !== '-' || selectedRound !== currentRound
                     ? StakingPage.SelectUnstakingType
                     : StakingPage.Unstake,
                 params: {
