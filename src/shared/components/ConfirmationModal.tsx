@@ -175,10 +175,9 @@ const ConfirmationModal: React.FC<Props> = ({
                   setDisabled(true);
                   handler();
                 }}
-                disabled={disabled && !modalVisible}
+                disabled={disabled}
                 style={{
-                  backgroundColor:
-                    disabled && !modalVisible ? AppColors.GREY : AppColors.MAIN,
+                  backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
                   borderRadius: 5,
                   justifyContent: 'center',
                   alignContent: 'center',
