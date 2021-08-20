@@ -32,6 +32,7 @@ import NetworkType from '../../enums/NetworkType';
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
+import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
@@ -46,6 +47,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const { stakingAddress, signer } = {
     stakingAddress:
@@ -124,8 +126,10 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressUnstaking = async () => {
     try {
+      setIsLoading(true);
       const resTx = await unStake();
       navigation.goBack();
+      setIsLoading(false);
       afterTxHashCreated(
         address || '',
         EL_ADDRESS,
@@ -135,6 +139,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
       const successTx = await resTx?.wait();
       afterTxCreated(successTx?.transactionHash || '');
     } catch (error) {
+      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
@@ -207,7 +212,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
           }}
         />
       </View>
-      <ConfirmationModal
+      <StakingConfrimModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         title={t('staking.staking_by_crypto', { stakingCrypto: cryptoType })}
@@ -216,14 +221,8 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
         isApproved={true}
         submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
         handler={() => onPressUnstaking()}
+        isLoading={isLoading}
       />
-      {/* <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
-      /> */}
     </View>
   );
 };
