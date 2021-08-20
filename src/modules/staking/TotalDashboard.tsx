@@ -12,7 +12,10 @@ import StakingInfoCard from './components/StakingInfoCard';
 import { getStakingPoolContract } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
-import { STAKING_POOL_ROUNDS } from '../../constants/staking';
+import {
+  STAKING_POOL_ROUNDS,
+  STAKING_POOL_ROUNDS_MOMENT,
+} from '../../constants/staking';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
@@ -24,6 +27,7 @@ import {
 import { BigNumber, utils } from 'ethers';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
+import moment from 'moment';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -48,6 +52,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   };
   const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const [currentRound, setCurrentRound] = useState(0);
+  const [isProgressRound, setIsProgressRound] = useState(false);
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -72,6 +77,12 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
       .catch((e) => {
         console.log(e);
       });
+    setIsProgressRound(
+      !moment().isBetween(
+        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].startedAt,
+        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
+      ),
+    );
   }, [selectedRound]);
 
   return (
@@ -145,7 +156,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
           }}>
           <CircularButtonWithLabel
             icon="+"
-            disabled={!(currentRound && currentRound === selectedRound)} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
+            disabled={isProgressRound} // 현재 '진행 중'인 라운드가 있는지 알아야 함...
             label={t('staking.stake')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
@@ -165,7 +176,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  userReward !== '-' || selectedRound !== currentRound
+                  selectedRound !== currentRound
                     ? StakingPage.SelectUnstakingType
                     : StakingPage.Unstake,
                 params: {
@@ -173,9 +184,8 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   selectedRound,
                   currentRound,
                   pageAfterSelection:
-                    selectedRound <= currentRound
-                      ? StakingPage.UnstakeAndMigrate
-                      : StakingPage.Unstake,
+                    selectedRound < currentRound &&
+                    StakingPage.UnstakeAndMigrate,
                 },
               });
             }}
