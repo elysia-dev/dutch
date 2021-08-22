@@ -40,6 +40,7 @@ import NetworkType from '../../enums/NetworkType';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
+import useStakingByType from '../../hooks/useStakingByType';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -49,17 +50,15 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const { afterTxFailed } = useTxHandler();
   const crytoBalance = getBalance(cryptoType);
   const { wallet } = useContext(WalletContext);
   const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
-  const navigation = useNavigation();
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
   const [isApprove, setIsApprove] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const { ercAddress, stakingAddress, signer } = {
     ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
     stakingAddress:
@@ -73,6 +72,8 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const { isLoading, initStaking, setIsLoading } =
+    useStakingByType(stakingPoolContract);
 
   const setAllowance = async () => {
     try {
@@ -112,37 +113,15 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
       console.log(error);
     }
   };
-
-  const stake = async () => {
-    try {
-      return await stakingPoolContract.stake(utils.parseUnits(value), {
-        gasLimit: BigNumber.from('170000'),
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const onPressStaking = async () => {
     try {
-      setIsLoading(true);
       if (!isApprove) {
+        setIsLoading(true);
         setApporve();
         return;
       }
-      const resTx = await stake();
-      setIsLoading(false);
-      afterTxHashCreated(
-        address || '',
-        EL_ADDRESS,
-        resTx?.hash || '',
-        NetworkType.ETH,
-      );
-      navigation.goBack();
-      const successTx = await resTx?.wait();
-      afterTxCreated(successTx?.transactionHash || '');
+      initStaking(value, selectedRound, StakingType.Stake);
     } catch (error) {
-      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
