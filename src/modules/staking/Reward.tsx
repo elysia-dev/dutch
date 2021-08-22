@@ -28,6 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
+import useStakingByType from '../../hooks/useStakingByType';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { rewardCryptoType, selectedRound, currentRound } = route.params;
@@ -45,9 +46,10 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
       rewardCryptoType === CryptoType.ELFI
         ? EL_STAKING_POOL_ADDRESS
         : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner() || provider,
+    signer: wallet?.getFirstSigner(),
   };
   const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const { isLoading, initStaking } = useStakingByType(stakingPoolContract);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -57,26 +59,9 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     address || '',
   );
 
-  const claim = async () => {
-    try {
-      return await stakingPoolContract.claim(selectedRound);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const onPressClaim = async () => {
     try {
-      const resTx = await claim();
-      afterTxHashCreated(
-        address || '',
-        EL_ADDRESS,
-        resTx?.hash || '',
-        NetworkType.ETH,
-      );
-      navigation.goBack();
-      const successTx = await resTx?.wait();
-      afterTxCreated(successTx?.transactionHash || '');
+      initStaking('', selectedRound, StakingType.Reward);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -134,6 +119,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
                 console.log('보상 수령 해야 함 (외부 지갑 유저)');
               }
             }}
+            isLoading={isLoading}
           />
         </View>
       </View>
