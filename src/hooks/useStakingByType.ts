@@ -50,6 +50,24 @@ const useStakingByType = (stakingPoolContract: StakingPool) => {
     }
   };
 
+  const migrate = async (value: string, round: number) => {
+    try {
+      setResTx(
+        await stakingPoolContract.migrate(utils.parseUnits(value), round),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const claim = async (round: number) => {
+    try {
+      setResTx(await stakingPoolContract.claim(round));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const initStaking = async (
     value: string,
     round: number,
@@ -57,11 +75,17 @@ const useStakingByType = (stakingPoolContract: StakingPool) => {
   ) => {
     setIsLoading(true);
     switch (type) {
+      case StakingType.Stake:
+        await stake(value);
+        break;
       case StakingType.Unstake:
         await unStake(value, round);
         break;
+      case StakingType.Migrate:
+        await migrate(value, round);
+        break;
       default:
-        await stake(value);
+        await claim(round);
         break;
     }
   };
