@@ -1,4 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   ScrollView,
   View,
@@ -36,6 +42,15 @@ import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 import StakingListing from './components/StakingListing';
+import { StakingPool } from '@elysia-dev/contract-typechain';
+import { getStakingPoolContract } from '../../utiles/getContract';
+import {
+  ELFI_STAKING_POOL_ADDRESS,
+  EL_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
+import WalletContext from '../../contexts/WalletContext';
+import { utils } from 'ethers';
+import StakingInfoBox from './components/StakingInfoBox';
 
 type ParamList = {
   Main: {
@@ -57,6 +72,67 @@ export const Main: React.FC = () => {
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [btnRefreshing, setBtnRefreshing] = React.useState(false);
+  const { wallet } = useContext(WalletContext);
+  const userAddress = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
+
+  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+
+  async function getRoundData(type: CryptoType): Promise<void> {
+    let contract: StakingPool;
+    let infoBoxes: React.ReactNode[];
+    let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
+    if (type === CryptoType.EL) {
+      contract = getStakingPoolContract(
+        EL_STAKING_POOL_ADDRESS,
+        wallet?.getFirstSigner(),
+      );
+      infoBoxes = elStakingInfoBoxes;
+      setInfoBoxes = setElStakingInfoBoxes;
+    } else {
+      contract = getStakingPoolContract(
+        ELFI_STAKING_POOL_ADDRESS,
+        wallet?.getFirstSigner(),
+      );
+      infoBoxes = elfiStakingInfoBoxes;
+      setInfoBoxes = setElfiStakingInfoBoxes;
+    }
+
+    const tempBoxes = [] as React.ReactNode[];
+    for (let round = 1; round <= 6; round++) {
+      tempBoxes.push(
+        contract
+          .getUserData(round, userAddress || '')
+          .then((res: any) => {
+            const stakingAmount = Number(utils.formatEther(res[2])); // principal
+            const rewardAmount = Number(utils.formatEther(res[1]));
+            console.log(rewardAmount);
+            if (stakingAmount) {
+              return (
+                <StakingInfoBox
+                  key={round}
+                  cryptoType={type}
+                  round={round}
+                  stakingAmount={stakingAmount}
+                  rewardAmount={rewardAmount}
+                />
+              );
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          }),
+      );
+    }
+
+    setInfoBoxes(await Promise.all(tempBoxes));
+  }
 
   const loadBalances = async () => {
     if (!isWalletUser) {
@@ -77,6 +153,7 @@ export const Main: React.FC = () => {
   const onBtnRefresh = async () => {
     setBtnRefreshing(true);
     try {
+      getRoundData(CryptoType.EL);
       await loadBalances();
     } finally {
       setBtnRefreshing(false);
@@ -85,6 +162,7 @@ export const Main: React.FC = () => {
 
   useEffect(() => {
     if (isFocused) {
+      getRoundData(CryptoType.EL);
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });
         onRefresh();
@@ -210,7 +288,10 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          <StakingListing user={user} isWalletUser={isWalletUser} />
+          <StakingListing
+            elStakingInfoBoxes={elStakingInfoBoxes}
+            elfiStakingInfoBoxes={elfiStakingInfoBoxes}
+          />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
