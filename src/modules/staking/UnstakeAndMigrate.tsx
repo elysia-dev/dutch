@@ -37,6 +37,7 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
+import useStakingByType from '../../hooks/useStakingByType';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
@@ -52,14 +53,13 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const navigation = useNavigation();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const { t } = useTranslation();
   const { stakingAddress, signer } = {
     stakingAddress:
       cryptoType === CryptoType.EL
         ? EL_STAKING_POOL_ADDRESS
         : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner() || provider,
+    signer: wallet?.getFirstSigner(),
   };
   const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
   const address = isWalletUser
@@ -67,12 +67,13 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     : user.ethAddresses[0];
 
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
-  const [isLoading, setIsLoading] = useState(false);
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
   const { principal, reward } = useStakingInfo(
     stakingPoolContract,
     selectedRound,
     address || '',
   );
+  const { isLoading, initStaking } = useStakingByType(stakingPoolContract);
   const [confirmationList, setConfirmationList] = useState<
     {
       label: string;
@@ -175,17 +176,6 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     );
   };
 
-  const migrate = async () => {
-    try {
-      return await stakingPoolContract.migrate(
-        utils.parseUnits(String(principal - parseFloat(value))),
-        selectedRound,
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const confirmExcludeMigrate = async () => {
     setConfirmationList([
       ...confirmationList.filter((text) => {
@@ -199,33 +189,10 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     setModalVisible(true);
   };
 
-  const unStake = async () => {
-    try {
-      return await stakingPoolContract.withdraw(
-        utils.parseUnits(value),
-        selectedRound,
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const onPressUnstaking = async () => {
     try {
-      setIsLoading(true);
-      const resTx = await unStake();
-      setIsLoading(false);
-      navigation.goBack();
-      afterTxHashCreated(
-        address || '',
-        EL_ADDRESS,
-        resTx?.hash || '',
-        NetworkType.ETH,
-      );
-      const successTx = await resTx?.wait();
-      afterTxCreated(successTx?.transactionHash || '');
+      initStaking(value, selectedRound, StakingType.Unstake);
     } catch (error) {
-      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
@@ -239,20 +206,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         setIsFinishRound(true);
         return;
       }
-      setIsLoading(true);
-      const resTx = await migrate();
-      setIsLoading(false);
-      navigation.goBack();
-      afterTxHashCreated(
-        address || '',
-        EL_ADDRESS,
-        resTx?.hash || '',
-        NetworkType.ETH,
-      );
-      const successTx = await resTx?.wait();
-      afterTxCreated(successTx?.transactionHash || '');
+      const migrateAmount = String(principal - parseFloat(value));
+      initStaking(migrateAmount, selectedRound, StakingType.Migrate);
     } catch (error) {
-      setIsLoading(false);
       afterTxFailed('Transaction failed');
       console.log(error);
     }
