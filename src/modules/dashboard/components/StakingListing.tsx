@@ -1,31 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Contract } from '@ethersproject/contracts';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
-import StakingInfoBox from './StakingInfoBox';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-  getStakingPoolContract,
-  provider,
-} from '../../../utiles/getContract';
-import WalletContext from '../../../contexts/WalletContext';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
-import { StakingPool } from '@elysia-dev/contract-typechain';
-import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 
 const StakingListing: React.FC<{
   elStakingInfoBoxes: any;
