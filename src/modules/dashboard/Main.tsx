@@ -43,7 +43,6 @@ import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 import StakingListing from './components/StakingListing';
 import { StakingPool } from '@elysia-dev/contract-typechain';
-import { getStakingPoolContract } from '../../utiles/getContract';
 import {
   ELFI_STAKING_POOL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
@@ -51,6 +50,7 @@ import {
 import WalletContext from '../../contexts/WalletContext';
 import { utils } from 'ethers';
 import StakingInfoBox from './components/StakingInfoBox';
+import useStakingPool from '../../hooks/useStakingPool';
 
 type ParamList = {
   Main: {
@@ -76,6 +76,8 @@ export const Main: React.FC = () => {
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const elContract = useStakingPool(CryptoType.EL);
+  const elfiContract = useStakingPool(CryptoType.ELFI);
 
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
@@ -89,17 +91,11 @@ export const Main: React.FC = () => {
     let infoBoxes: React.ReactNode[];
     let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
     if (type === CryptoType.EL) {
-      contract = getStakingPoolContract(
-        EL_STAKING_POOL_ADDRESS,
-        wallet?.getFirstSigner(),
-      );
+      contract = elContract;
       infoBoxes = elStakingInfoBoxes;
       setInfoBoxes = setElStakingInfoBoxes;
     } else {
-      contract = getStakingPoolContract(
-        ELFI_STAKING_POOL_ADDRESS,
-        wallet?.getFirstSigner(),
-      );
+      contract = elfiContract;
       infoBoxes = elfiStakingInfoBoxes;
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
@@ -112,7 +108,6 @@ export const Main: React.FC = () => {
           .then((res: any) => {
             const stakingAmount = Number(utils.formatEther(res[2])); // principal
             const rewardAmount = Number(utils.formatEther(res[1]));
-            console.log(rewardAmount);
             if (stakingAmount) {
               return (
                 <StakingInfoBox
@@ -154,6 +149,7 @@ export const Main: React.FC = () => {
     setBtnRefreshing(true);
     try {
       getRoundData(CryptoType.EL);
+      // getRoundData(CryptoType.ELFI)
       await loadBalances();
     } finally {
       setBtnRefreshing(false);
@@ -163,6 +159,7 @@ export const Main: React.FC = () => {
   useEffect(() => {
     if (isFocused) {
       getRoundData(CryptoType.EL);
+      // getRoundData(CryptoType.ELFI);
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });
         onRefresh();
