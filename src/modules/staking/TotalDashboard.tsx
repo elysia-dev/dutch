@@ -9,7 +9,6 @@ import BoxWithDivider from './components/BoxWithDivider';
 import DotGraph from './components/DotGraph';
 import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import StakingInfoCard from './components/StakingInfoCard';
-import { getStakingPoolContract } from '../../utiles/getContract';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import {
@@ -20,14 +19,11 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
 import { BigNumber, utils } from 'ethers';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import moment from 'moment';
+import useStakingPool from '../../hooks/useStakingPool';
 
 const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
@@ -43,16 +39,10 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
-  const { stakingAddress, signer } = {
-    stakingAddress:
-      cryptoType === CryptoType.EL
-        ? EL_STAKING_POOL_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner(),
-  };
-  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const stakingPoolContract = useStakingPool(cryptoType);
   const [currentRound, setCurrentRound] = useState(0);
   const [isProgressRound, setIsProgressRound] = useState(false);
+
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -198,6 +188,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
               navigation.navigate(Page.Staking, {
                 screen: StakingPage.Reward,
                 params: {
+                  cryptoType,
                   rewardCryptoType,
                   selectedRound,
                   currentRound,
