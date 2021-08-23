@@ -66,7 +66,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     selectedRound,
     address || '',
   );
-  const { isLoading, initStaking } = useStakingByType(stakingPoolContract);
+  const { isLoading, stakeByType } = useStakingByType(stakingPoolContract);
 
   const confirmationList = [
     {
@@ -133,7 +133,7 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressUnstaking = async () => {
     try {
-      await initStaking(value, selectedRound, StakingType.Unstake);
+      await stakeByType(value, selectedRound, StakingType.Unstake);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);

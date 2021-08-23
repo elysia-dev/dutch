@@ -17,16 +17,14 @@ import useTxHandler from './useTxHandler';
 
 const useStakingByType = (stakingPoolContract: StakingPool) => {
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const [successTx, setSuccessTx] = useState<TransactionReceipt>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const { afterTxHashCreated, afterTxCreated } = useTxHandler();
   const navigation = useNavigation();
 
   const waitTx = async () => {
     try {
-      setSuccessTx(await resTx?.wait());
+      await resTx?.wait();
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +66,7 @@ const useStakingByType = (stakingPoolContract: StakingPool) => {
     }
   };
 
-  const initStaking = async (
+  const stakeByType = async (
     value: string,
     round: number,
     type: StakingType,
@@ -101,13 +99,14 @@ const useStakingByType = (stakingPoolContract: StakingPool) => {
 
   useEffect(() => {
     if (resTx) {
+      setIsLoading(false);
       navigation.goBack();
       noticeTxStatus();
       waitTx();
     }
   }, [resTx]);
 
-  return { isLoading, initStaking, setIsLoading };
+  return { isLoading, stakeByType, setIsLoading };
 };
 
 export default useStakingByType;

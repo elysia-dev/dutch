@@ -49,7 +49,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
     signer: wallet?.getFirstSigner(),
   };
   const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
-  const { isLoading, initStaking } = useStakingByType(stakingPoolContract);
+  const { isLoading, stakeByType } = useStakingByType(stakingPoolContract);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -61,7 +61,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressClaim = async () => {
     try {
-      initStaking('', selectedRound, StakingType.Reward);
+      stakeByType('', selectedRound, StakingType.Reward);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);

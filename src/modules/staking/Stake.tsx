@@ -72,7 +72,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-  const { isLoading, initStaking, setIsLoading } =
+  const { isLoading, stakeByType, setIsLoading } =
     useStakingByType(stakingPoolContract);
 
   const setAllowance = async () => {
@@ -120,7 +120,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         setApporve();
         return;
       }
-      initStaking(value, selectedRound, StakingType.Stake);
+      stakeByType(value, selectedRound, StakingType.Stake);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);

@@ -73,7 +73,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
     selectedRound,
     address || '',
   );
-  const { isLoading, initStaking } = useStakingByType(stakingPoolContract);
+  const { isLoading, stakeByType } = useStakingByType(stakingPoolContract);
   const [confirmationList, setConfirmationList] = useState<
     {
       label: string;
@@ -191,7 +191,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressUnstaking = async () => {
     try {
-      initStaking(value, selectedRound, StakingType.Unstake);
+      stakeByType(value, selectedRound, StakingType.Unstake);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -207,7 +207,7 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         return;
       }
       const migrateAmount = String(principal - parseFloat(value));
-      initStaking(migrateAmount, selectedRound, StakingType.Migrate);
+      stakeByType(migrateAmount, selectedRound, StakingType.Migrate);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
