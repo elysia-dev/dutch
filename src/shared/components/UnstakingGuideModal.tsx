@@ -59,10 +59,10 @@ const UnstakingGuideModal: React.FC<Props> = ({
                 marginBottom: 10,
               }}>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Bold }}>
-                [{t('staking.unstake')}]
+                {t('staking.unstaking_help')}
               </Text>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Regular }}>
-                이란?
+                {/* 이란? */}
               </Text>
             </View>
             <View
@@ -78,7 +78,7 @@ const UnstakingGuideModal: React.FC<Props> = ({
                   lineHeight: 18,
                   fontFamily: AppFonts.Regular,
                 }}>
-                {t('staking.unstaking_explain')}
+                {t('staking.unstaking_help_description')}
               </Text>
             </View>
             <View
@@ -87,10 +87,10 @@ const UnstakingGuideModal: React.FC<Props> = ({
                 marginBottom: 10,
               }}>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Bold }}>
-                [{t('staking.migration')}]
+                {t('staking.migration _help')}
               </Text>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Regular }}>
-                이란?
+                {/* 이란? */}
               </Text>
             </View>
             <View
@@ -105,7 +105,7 @@ const UnstakingGuideModal: React.FC<Props> = ({
                   lineHeight: 18,
                   fontFamily: AppFonts.Regular,
                 }}>
-                {t('staking.migration_explain')}
+                {t('staking.migration_help_description')}
               </Text>
             </View>
             <View
