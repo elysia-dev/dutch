@@ -1,66 +1,24 @@
-import { StakingPool } from '@elysia-dev/contract-typechain';
-import {
-  Transaction,
-  utils,
-} from '@elysia-dev/contract-typechain/node_modules/ethers';
-import {
-  TransactionReceipt,
-  TransactionResponse,
-} from '@ethersproject/providers';
+import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
+import { TransactionResponse } from '@ethersproject/providers';
 import { useNavigation } from '@react-navigation/native';
-import { ContractTransaction } from 'ethers';
-import { id } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
+import CryptoType from '../enums/CryptoType';
 import NetworkType from '../enums/NetworkType';
 import StakingType from '../enums/StakingType';
+import useStakingPool from './useStakingPool';
 import useTxHandler from './useTxHandler';
 
-const useStakingByType = (stakingPoolContract: StakingPool) => {
+const useStakingByType = (crytoType: CryptoType) => {
   const [resTx, setResTx] = useState<TransactionResponse>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const stakingPoolContract = useStakingPool(crytoType);
   const navigation = useNavigation();
 
   const waitTx = async () => {
     try {
       await resTx?.wait();
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const unStake = async (value: string, round: number) => {
-    try {
-      setResTx(
-        await stakingPoolContract.withdraw(utils.parseUnits(value), round),
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const stake = async (value: string) => {
-    try {
-      setResTx(await stakingPoolContract.stake(utils.parseUnits(value)));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const migrate = async (value: string, round: number) => {
-    try {
-      setResTx(
-        await stakingPoolContract.migrate(utils.parseUnits(value), round),
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const claim = async (round: number) => {
-    try {
-      setResTx(await stakingPoolContract.claim(round));
     } catch (error) {
       console.log(error);
     }
@@ -74,16 +32,20 @@ const useStakingByType = (stakingPoolContract: StakingPool) => {
     setIsLoading(true);
     switch (type) {
       case StakingType.Stake:
-        await stake(value);
+        setResTx(await stakingPoolContract.stake(utils.parseUnits(value)));
         break;
       case StakingType.Unstake:
-        await unStake(value, round);
+        setResTx(
+          await stakingPoolContract.withdraw(utils.parseUnits(value), round),
+        );
         break;
       case StakingType.Migrate:
-        await migrate(value, round);
+        setResTx(
+          await stakingPoolContract.migrate(utils.parseUnits(value), round),
+        );
         break;
       default:
-        await claim(round);
+        setResTx(await stakingPoolContract.claim(round));
         break;
     }
   };
