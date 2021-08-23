@@ -7,8 +7,8 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 
 const StakingListing: React.FC<{
-  elStakingInfoBoxes: any;
-  elfiStakingInfoBoxes: any;
+  elStakingInfoBoxes: React.ReactNode[];
+  elfiStakingInfoBoxes: React.ReactNode[];
 }> = ({ elStakingInfoBoxes, elfiStakingInfoBoxes }) => {
   const { t } = useTranslation();
 
