@@ -74,6 +74,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const setApporve = async () => {
     try {
       await approve();
+      setIsApprove(true);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
