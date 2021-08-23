@@ -24,7 +24,11 @@ const InputInfoBox: React.FC<{
           marginBottom: 8,
         }}>
         {list.map((text, i) => (
-          <GuideText text={text} style={{ marginTop: i === 0 ? 0 : 6 }} />
+          <GuideText
+            key={i}
+            text={text}
+            style={{ marginTop: i === 0 ? 0 : 6 }}
+          />
         ))}
       </View>
       {isInvalid ? (
