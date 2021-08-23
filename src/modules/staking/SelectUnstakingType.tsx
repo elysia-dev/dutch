@@ -74,7 +74,7 @@ const SelectUnstakingType: React.FC<{ route: any }> = ({ route }) => {
         <TouchableCardWithShadow
           onPress={() => {
             navigation.navigate(Page.Staking, {
-              screen: pageAfterSelection,
+              screen: StakingPage.Unstake,
               params: {
                 cryptoType,
                 selectedRound,
