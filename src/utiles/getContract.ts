@@ -7,32 +7,18 @@ import '@ethersproject/shims';
 import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { getAddress } from '@ethersproject/address';
-import {
-  InfuraProvider,
-  JsonRpcProvider,
-  Provider,
-} from '@ethersproject/providers';
+import { InfuraProvider, JsonRpcProvider } from '@ethersproject/providers';
 import {
   ETH_NETWORK,
   INFURA_PROJECT_ID,
   BSC_RPC_ENDPOINT,
   EL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-  ELFI_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import AssetTokenBnbAbi from '../abi/AssetTokenBnb.json';
 import ERC20Abi from '../abi/ERC20Abi.json';
 import AssetTokenEthAbi from '../abi/AssetTokenEthAbi.json';
 import AssetTokenAbi from '../abi/AssetTokenAbi.json';
-import StakingPoolAbi from '../abi/StakingPoolAbi.json';
 import CryptoType from '../enums/CryptoType';
-import { Signer } from '@ethersproject/abstract-signer';
-import {
-  ERC20,
-  ERC20__factory,
-  StakingPool,
-  StakingPool__factory,
-} from '@elysia-dev/contract-typechain';
 
 export function isAddress(value: any): string | false {
   try {
