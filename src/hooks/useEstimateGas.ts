@@ -29,12 +29,12 @@ const useEstimateGas = (
       switch (stakingType) {
         case StakingType.Stake:
           estimateGas = await stakingPoolContract?.estimateGas.stake(
-            utils.parseEther('100'),
+            utils.parseEther('1'),
           );
           break;
         case StakingType.Unstake:
           estimateGas = await stakingPoolContract?.estimateGas.withdraw(
-            utils.parseEther('100'),
+            utils.parseEther('1'),
             round || '',
           );
           break;
@@ -45,7 +45,7 @@ const useEstimateGas = (
           break;
         default:
           estimateGas = await stakingPoolContract?.estimateGas.migrate(
-            utils.parseEther('100'),
+            utils.parseEther('1'),
             round || '',
           );
           break;
