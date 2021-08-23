@@ -12,7 +12,6 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
-import { getStakingPoolContract } from '../../utiles/getContract';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import {
@@ -32,6 +31,7 @@ import {
   EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import WalletContext from '../../contexts/WalletContext';
+import useStakingPool from '../../hooks/useStakingPool';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -45,15 +45,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
   const { t } = useTranslation();
-
-  const { stakingAddress, signer } = {
-    stakingAddress:
-      rewardCryptoType === CryptoType.ELFI
-        ? EL_STAKING_POOL_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner(),
-  };
-  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const stakingPoolContract = useStakingPool(cryptoType);
 
   let nextButtonTitle;
   let nextButtonDisabled;
@@ -119,8 +111,8 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             <BoxWithDividerContent
               isFirst={true}
               label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
-                STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
+              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
+                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
               } (KST)`}
             />
             <BoxWithDividerContent
