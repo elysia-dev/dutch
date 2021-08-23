@@ -1,29 +1,35 @@
-import { StakingPool } from '@elysia-dev/contract-typechain';
 import { utils } from 'ethers';
-import { useEffect, useState } from 'react';
-import { AppState, AppStateStatus } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import WalletContext from '../contexts/WalletContext';
+import CryptoType from '../enums/CryptoType';
+import useStakingPool from './useStakingPool';
 
-const useStakingInfo = (
-  stakingPoolContract: StakingPool,
-  selectedRound: number,
-  address: string,
-) => {
-  const [principal, setPrincipal] = useState<number>(0);
-  const [reward, setReward] = useState<number>(0);
+const useStakingInfo = (crytoType: CryptoType, selectedRound: number) => {
+  const [userStakedData, setUserStakedData] = useState<{
+    principal: number;
+    reward: number;
+  }>({
+    principal: 0,
+    reward: 0,
+  });
+  const { wallet } = useContext(WalletContext);
+  const stakingPoolContract = useStakingPool(crytoType);
 
   useEffect(() => {
     stakingPoolContract
-      ?.getUserData(selectedRound, address)
+      ?.getUserData(selectedRound, wallet?.getFirstAddress() || '')
       .then((res: any) => {
-        setPrincipal(Number(utils.formatEther(res[2]))); // userPrincipal
-        setReward(Number(utils.formatEther(res[1]))); // userReward
+        setUserStakedData({
+          principal: Number(utils.formatEther(res[2])),
+          reward: Number(utils.formatEther(res[1])),
+        });
       })
       .catch((e) => {
         console.log(e);
       });
   }, []);
 
-  return { principal, reward };
+  return userStakedData;
 };
 
 export default useStakingInfo;
