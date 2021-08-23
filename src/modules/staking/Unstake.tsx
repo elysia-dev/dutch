@@ -21,19 +21,12 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
+
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-import BackButtonImg from '../../shared/assets/images/backbutton.png';
-import { H3Text, H4Text } from '../../shared/components/Texts';
-import useStakingPool from '../../hooks/useStakingPool';
-// import HelpQuestionImg from '../../shared/assets/images/HelpQuestion.png';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
