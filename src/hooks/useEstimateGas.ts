@@ -1,38 +1,29 @@
-import { StakingPool } from '@elysia-dev/contract-typechain';
 import { BigNumber, utils } from 'ethers';
-import { StringMap } from 'i18next';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PriceContext from '../contexts/PriceContext';
+import CryptoType from '../enums/CryptoType';
 import StakingType from '../enums/StakingType';
+import useStakingPool from './useStakingPool';
 
 type info = {
   estimagedGasPrice: string;
-  setEstimateGas: (
-    stakingPoolContract: StakingPool,
-    stakingType: StakingType,
-    round?: number,
-  ) => Promise<void>;
+  setEstimateGas: (stakingType: StakingType, round?: number) => Promise<void>;
 };
 
-const useEstimateGas = (): info => {
+const useEstimateGas = (
+  crytoType: CryptoType,
+  stakingType: StakingType,
+  round?: number,
+): info => {
   const [estimagedGasPrice, setEstimatedGasPrice] = useState<string>('');
   const { gasPrice } = useContext(PriceContext);
+  const stakingPoolContract = useStakingPool(crytoType);
 
-  const setEstimateGas = async (
-    stakingPoolContract: StakingPool,
-    stakingType: StakingType,
-    round?: number,
-  ) => {
-    setEstimatedGasPrice(
-      (await estimateGasByType(stakingPoolContract, stakingType, round)) || '',
-    );
+  const setEstimateGas = async (stakingType: StakingType, round?: number) => {
+    setEstimatedGasPrice((await estimateGasByType(stakingType, round)) || '');
   };
 
-  const estimateGasByType = async (
-    stakingPoolContract: StakingPool,
-    stakingType: string,
-    round?: number,
-  ) => {
+  const estimateGasByType = async (stakingType: string, round?: number) => {
     let estimateGas: BigNumber | undefined;
     try {
       switch (stakingType) {
@@ -66,6 +57,10 @@ const useEstimateGas = (): info => {
       return '';
     }
   };
+
+  useEffect(() => {
+    setEstimateGas(stakingType, round);
+  }, []);
 
   return { estimagedGasPrice, setEstimateGas };
 };
