@@ -92,25 +92,4 @@ export function getAssetTokenFromCryptoType(
   }
 }
 
-export function getElStakingPoolContract(): Contract | null {
-  return getContract(EL_STAKING_POOL_ADDRESS, StakingPoolAbi);
-}
-
-export function getElfiStakingPoolContract(): Contract | null {
-  return getContract(ELFI_STAKING_POOL_ADDRESS, StakingPoolAbi);
-}
-
-export function getErc20Contract(
-  address: string,
-  signer?: Provider | Signer,
-): ERC20 {
-  return ERC20__factory.connect(address, signer || provider);
-}
-export function getStakingPoolContract(
-  stakingPooladdress: string,
-  signer?: Provider | Signer,
-): StakingPool {
-  return StakingPool__factory.connect(stakingPooladdress, signer || provider);
-}
-
 export default getContract;
