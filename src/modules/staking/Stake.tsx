@@ -2,7 +2,7 @@ import { View, Text, Platform } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants, ContractTransaction } from 'ethers';
+import { utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -12,7 +12,6 @@ import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
-import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import AssetContext from '../../contexts/AssetContext';
@@ -22,25 +21,13 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
-import CryptoType from '../../enums/CryptoType';
-import {
-  provider,
-  getErc20Contract,
-  getStakingPoolContract,
-} from '../../utiles/getContract';
-import {
-  ELFI_ADDRESS,
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
-import { useNavigation } from '@react-navigation/native';
+import { EL_STAKING_POOL_ADDRESS } from 'react-native-dotenv';
 import useTxHandler from '../../hooks/useTxHandler';
-import NetworkType from '../../enums/NetworkType';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import useErcContract from '../../hooks/useErcContract';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -48,32 +35,22 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
   const { afterTxFailed } = useTxHandler();
   const crytoBalance = getBalance(cryptoType);
   const { wallet } = useContext(WalletContext);
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
+  const { estimagedGasPrice } = useEstimateGas(cryptoType, StakingType.Stake);
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
   const [isApprove, setIsApprove] = useState(true);
-  const { ercAddress, stakingAddress, signer } = {
-    ercAddress: cryptoType === CryptoType.EL ? EL_ADDRESS : ELFI_ADDRESS,
-    stakingAddress:
-      cryptoType === CryptoType.EL
-        ? EL_STAKING_POOL_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner(),
-  };
-  const erc20Contract = getErc20Contract(ercAddress, signer);
-  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const erc20Contract = useErcContract(cryptoType);
+  const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-  const { isLoading, stakeByType, setIsLoading } =
-    useStakingByType(stakingPoolContract);
 
   const setAllowance = async () => {
     try {
@@ -130,7 +107,6 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   useEffect(() => {
     if (address) {
       setAllowance();
-      setEstimateGas(stakingPoolContract, StakingType.Stake);
     }
   }, []);
 

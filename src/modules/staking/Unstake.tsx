@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
@@ -15,7 +15,6 @@ import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import { provider, getStakingPoolContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
@@ -24,16 +23,17 @@ import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
 import {
   ELFI_STAKING_POOL_ADDRESS,
-  EL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
-import { useNavigation } from '@react-navigation/native';
-import NetworkType from '../../enums/NetworkType';
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import BackButtonImg from '../../shared/assets/images/backbutton.png';
+import { H3Text, H4Text } from '../../shared/components/Texts';
+import useStakingPool from '../../hooks/useStakingPool';
+// import HelpQuestionImg from '../../shared/assets/images/HelpQuestion.png';
 
 const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
@@ -42,31 +42,20 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
-  const navigation = useNavigation();
+  const { afterTxFailed } = useTxHandler();
   const { wallet } = useContext(WalletContext);
-  const rewardCryptoType =
-    cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
+  const { estimagedGasPrice } = useEstimateGas(
+    cryptoType,
+    StakingType.Unstake,
+    selectedRound,
+  );
   const { t } = useTranslation();
-  const { stakingAddress, signer } = {
-    stakingAddress:
-      cryptoType === CryptoType.EL
-        ? EL_STAKING_POOL_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner(),
-  };
-  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const { principal } = useStakingInfo(cryptoType, selectedRound);
+  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-
-  const { principal, reward } = useStakingInfo(
-    stakingPoolContract,
-    selectedRound,
-    address || '',
-  );
-  const { isLoading, stakeByType } = useStakingByType(stakingPoolContract);
 
   const confirmationList = [
     {
@@ -85,51 +74,6 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     },
     { label: t('staking.gas_price'), value: estimagedGasPrice },
   ];
-  // const confirmationList = earnReward
-  //   ? [
-  //       {
-  //         label: t('staking.unstaking_round'),
-  //         value: t('staking.nth_unstaking', { round: selectedRound }),
-  //       },
-  //       {
-  //         label: t('staking.unstaking_supply'),
-  //         value: `${value} ${cryptoType}`,
-  //         subvalue: `$ ${commaFormatter(
-  //           decimalFormatter(
-  //             parseFloat(value || '0') * getCryptoPrice(cryptoType),
-  //             6,
-  //           ),
-  //         )}`,
-  //       },
-  //       {
-  //         label: t('staking.reward_supply'),
-  //         value: `${reward} ${rewardCryptoType}`,
-  //       },
-  //       { label: t('staking.gas_price'), value: estimagedGasPrice },
-  //     ]
-  //   : [
-  //       {
-  //         label: t('staking.unstaking_round'),
-  //         value: t('staking.nth_unstaking', { round: selectedRound }),
-  //       },
-  //       {
-  //         label: t('staking.unstaking_supply'),
-  //         value: `${value} ${cryptoType}`,
-  //         subvalue: `$ ${commaFormatter(
-  //           decimalFormatter(
-  //             parseFloat(value || '0') * getCryptoPrice(cryptoType),
-  //             6,
-  //           ),
-  //         )}`,
-  //       },
-  //       { label: t('staking.gas_price'), value: estimagedGasPrice },
-  //     ];
-
-  useEffect(() => {
-    if (address) {
-      setEstimateGas(stakingPoolContract, StakingType.Unstake, selectedRound);
-    }
-  }, []);
 
   const onPressUnstaking = async () => {
     try {
