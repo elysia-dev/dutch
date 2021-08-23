@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -11,25 +9,16 @@ import NumberPadShortcut from './components/NumberPadShortcut';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
-import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import { provider, getStakingPoolContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
 import useTxHandler from '../../hooks/useTxHandler';
-import { useNavigation } from '@react-navigation/native';
-import NetworkType from '../../enums/NetworkType';
 import moment from 'moment';
 import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
@@ -38,42 +27,35 @@ import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
+import { useNavigation } from '@react-navigation/native';
+import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
 
 const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound, currentRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
-  const { gasPrice } = useContext(PriceContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [isFinishRound, setIsFinishRound] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const { wallet } = useContext(WalletContext);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
-  const navigation = useNavigation();
+  const { afterTxFailed } = useTxHandler();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
-  const { stakingAddress, signer } = {
-    stakingAddress:
-      cryptoType === CryptoType.EL
-        ? EL_STAKING_POOL_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS,
-    signer: wallet?.getFirstSigner(),
-  };
-  const stakingPoolContract = getStakingPoolContract(stakingAddress, signer);
+  const { principal, reward } = useStakingInfo(cryptoType, selectedRound);
+  const { isLoading, stakeByType } = useStakingByType(cryptoType);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
-
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas();
-  const { principal, reward } = useStakingInfo(
-    stakingPoolContract,
+  const [isGuideModal, setIsGuideModal] = useState(false);
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+    cryptoType,
+    StakingType.Migrate,
     selectedRound,
-    address || '',
   );
-  const { isLoading, stakeByType } = useStakingByType(stakingPoolContract);
   const [confirmationList, setConfirmationList] = useState<
     {
       label: string;
@@ -200,7 +182,8 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   const onPressMigrate = async () => {
     try {
-      if (!isProgressRound()) {
+      if (isProgressRound()) {
+        setEstimateGas(stakingType, selectedRound);
         setStakingType(StakingType.Unstake);
         setModalVisible(false);
         setIsFinishRound(true);
@@ -216,7 +199,6 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   useEffect(() => {
     if (address) {
-      setEstimateGas(stakingPoolContract, stakingType, selectedRound);
       if (stakingType === StakingType.Unstake)
         setConfirmations(estimagedGasPrice);
     }
@@ -230,8 +212,9 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader
+      <HelpQuestionHeader
         title={t('stking.nth_unstaking', { round: selectedRound })}
+        setIsGuideModal={setIsGuideModal}
       />
       <View
         style={{
@@ -333,6 +316,10 @@ const UnstakeAndMigrate: React.FC<{ route: any }> = ({ route }) => {
         setIsFinishRound={setIsFinishRound}
         handler={() => confirmExcludeMigrate()}
         currentRound={currentRound}
+      />
+      <UnstakingGuideModal
+        isGuideModal={isGuideModal}
+        setIsGuideModal={setIsGuideModal}
       />
       {/* <OverlayLoading
         visible={[
