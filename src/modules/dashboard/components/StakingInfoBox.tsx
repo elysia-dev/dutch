@@ -55,7 +55,7 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Medium,
             }}>
             {`${commaFormatter(
-              decimalFormatter(stakingAmount, 5),
+              decimalFormatter(stakingAmount, 2),
             )} ${cryptoType} `}
           </Text>
           <Text
@@ -65,7 +65,7 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Regular,
             }}>
             {`(= $ ${commaFormatter(
-              decimalFormatter(stakingAmount * getCryptoPrice(cryptoType), 5),
+              decimalFormatter(stakingAmount * getCryptoPrice(cryptoType), 2),
             )})`}
           </Text>
         </View>
@@ -92,7 +92,7 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Medium,
             }}>
             {`${commaFormatter(
-              decimalFormatter(rewardAmount, 5),
+              decimalFormatter(rewardAmount, 2),
             )} ${rewardCryptoType} `}
           </Text>
           <Text
@@ -104,7 +104,7 @@ const StakingInfoBox: React.FC<{
             {`(= $ ${commaFormatter(
               decimalFormatter(
                 rewardAmount * getCryptoPrice(rewardCryptoType),
-                5,
+                2,
               ),
             )})`}
           </Text>
