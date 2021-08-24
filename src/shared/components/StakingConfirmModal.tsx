@@ -23,7 +23,7 @@ interface Props {
   isLoading: boolean;
 }
 
-const StakingConfrimModal: React.FC<Props> = ({
+const StakingConfirmModal: React.FC<Props> = ({
   modalVisible,
   setModalVisible,
   title,
@@ -216,4 +216,4 @@ const StakingConfrimModal: React.FC<Props> = ({
   );
 };
 
-export default StakingConfrimModal;
+export default StakingConfirmModal;
