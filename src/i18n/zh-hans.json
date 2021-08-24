@@ -423,7 +423,7 @@
       "remaining mining supply": "剩余挖矿量",
       "reward_price": "{{rewardCrypto}}代币价格",
       "nth_staking": "第$t(numeral_character.{{round}})轮Staking",
-      "comming_soon": "COMING SOON!",
+      "coming_soon": "COMING SOON!",
       "need_wallet": "需要绑定钱包",
       "ended_round_notice": "第$t(numeral_character.{{round}})轮Staking已经结束，本轮服务已经终止。",
       "nth_staking_schedule": "第$t(numeral_character.{{round}})轮Staking时间",
