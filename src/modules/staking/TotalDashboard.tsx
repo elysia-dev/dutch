@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BigNumber } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -25,7 +26,17 @@ import commaFormatter from '../../utiles/commaFormatter';
 import moment from 'moment';
 import useStakingPool from '../../hooks/useStakingPool';
 
-const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
+type ParamList = {
+  TotalDashboard: {
+    cryptoType: CryptoType;
+    round: number;
+    stakingAmount: BigNumber;
+    rewardAmount: BigNumber;
+  };
+};
+
+const TotalDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'TotalDashboard'>>();
   const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
@@ -102,7 +113,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         <DotGraph
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
-          currentRound={currentRound}
         />
         <BoxWithDivider style={{ marginTop: -10 }}>
           <BoxWithDividerContent
@@ -163,7 +173,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                 params: {
                   cryptoType,
                   selectedRound,
-                  currentRound,
                 },
               });
             }}
@@ -200,7 +209,6 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
                   cryptoType,
                   rewardCryptoType,
                   selectedRound,
-                  currentRound,
                 },
               });
             }}

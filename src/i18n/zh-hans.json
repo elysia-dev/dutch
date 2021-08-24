@@ -461,7 +461,7 @@
       "done": "输入完成",
       "gas_price": "gas费用",
       "nth_unstaking": "第$t(numeral_character.{{round}})轮Unstaking",
-      "unstaking_value_excess": ".",
+      "unstaking_value_excess": "超过了可以Unstaking(解除权益质押)的金额。",
       "rewards": "奖励",
       "claim": "领取"
     },

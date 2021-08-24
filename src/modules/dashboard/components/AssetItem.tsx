@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
+import TransactionContext from '../../../contexts/TransactionContext';
 import CryptoType from '../../../enums/CryptoType';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import { P1Text, P2Text } from '../../../shared/components/Texts';
@@ -22,7 +23,8 @@ const AssetItem: React.FC<IAssetItem> = ({
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
-
+  const { transactions } = useContext(TransactionContext);
+  
   return (
     <TouchableOpacity
       onPress={() => onPress(asset)}
@@ -57,20 +59,28 @@ const AssetItem: React.FC<IAssetItem> = ({
       )}
       <View style={{ marginLeft: 15 }}>
         <P1Text label={asset.title} />
-        <P2Text
-          label={`${
-            asset.value >= 0.01
-              ? commaFormatter(Math.floor(asset.value * 100) / 100)
-              : asset.value === 0
-              ? 0
-              : '0.00...'
-          } ${asset.unit}`}
-        />
+        {asset.value > 0 ? (
+          <P2Text
+            label={`${
+              asset.value >= 0.01
+                ? commaFormatter(Math.floor(asset.value * 100) / 100)
+                : asset.value === 0
+                ? 0
+                : '0.00...'
+            } ${asset.unit}`}
+          />
+        ) : (
+          <P2Text label={`0 ${asset.unit}`} />
+        )}
       </View>
-      <P1Text
-        style={{ marginLeft: 'auto' }}
-        label={currencyFormatter(asset.value * getCryptoPrice(asset.type), 2)}
-      />
+      {asset.type === CryptoType.ELA && asset.value <= 0 ? (
+        <P1Text style={{ marginLeft: 'auto' }} label={'거래대기중'} />
+      ) : (
+        <P1Text
+          style={{ marginLeft: 'auto' }}
+          label={currencyFormatter(asset.value * getCryptoPrice(asset.type), 2)}
+        />
+      )}
     </TouchableOpacity>
   );
 };

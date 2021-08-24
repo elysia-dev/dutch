@@ -12,7 +12,7 @@ import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
-import PaymentSelection from './components/PaymentSelection';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
@@ -230,11 +230,14 @@ const Refund: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      valueTo={parseFloat(values.inToken)}
-      productId={productId}
-      type={'refund'}
+      value={parseFloat(values.inToken)}
+      page="asset"
+      assetTxData={{
+        productId,
+        type: 'refund',
+      }}
       contractAddress={contractAddress}
-      espressTxId={state.espressoTxId}
+      espressoTxId={state.espressoTxId}
     />
   );
 };

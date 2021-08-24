@@ -30,6 +30,7 @@ import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
+import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -47,7 +48,7 @@ const Detail: React.FC = () => {
   const [filterDay, setFilterDay] = useState<number>(7);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const { transactions, counter } = useContext(TransactionContext);
+  const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
   const [graphData, setGraphData] = useState<ChartDataPoint[] | undefined>([]);
   const [state, setState] = useState<{
@@ -99,21 +100,20 @@ const Detail: React.FC = () => {
     } finally {
       if (newTxs.length !== 0) {
         if (state.page === 1) {
-          const pendingTxs = transactions.filter(
-            (tx) =>
-              tx.cryptoType === asset.type && tx.status === TxStatus.Pending,
-          );
-
+          const pendingTxs = getPendingTx(transactions, '', asset.type);
+          let isCurrentPendingTx = true;
+          if (pendingTxs.length > 0) {
+            isCurrentPendingTx =
+              newTxs.findIndex((tx) => pendingTxs[0].txHash === tx.txHash) !==
+              -1;
+          }
           setState({
             ...state,
             page: 2,
             lastPage: false,
-            transactions: pendingTxs.concat(
-              newTxs.filter(
-                (tx) =>
-                  tx.txHash && !pendingTxs.find((t) => t.txHash === tx.txHash),
-              ),
-            ),
+            transactions: isCurrentPendingTx
+              ? newTxs
+              : pendingTxs.concat(newTxs),
             loading: false,
           });
         } else {
@@ -135,9 +135,33 @@ const Detail: React.FC = () => {
     }
   };
 
+  const isSuccessTx = (sendingTxStatus?: TxStatus) => {
+    return sendingTxStatus === TxStatus.Success;
+  };
+
+  const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
+    let resentTx = state.transactions.findIndex(
+      (tx) => tx.txHash === sendingTx.txHash,
+    );
+    state.transactions[resentTx] = sendingTx;
+  };
+
   useEffect(() => {
-    loadTxs();
-  }, []);
+    const sendingTx = transactions[0];
+    const notPendingTxs = state.transactions.filter(
+      (tx) => tx.status !== TxStatus.Pending,
+    );
+    if (isSuccessTx(sendingTx?.status)) {
+      changedTxStatusToSuccess(sendingTx);
+    }
+    setState({
+      ...state,
+      transactions:
+        sendingTx?.status === TxStatus.Pending
+          ? [sendingTx, ...notPendingTxs]
+          : [...state.transactions],
+    });
+  }, [transactions]);
 
   useEffect(() => {
     if (address) {
@@ -175,19 +199,8 @@ const Detail: React.FC = () => {
   };
 
   useEffect(() => {
-    const assetTxs = transactions.filter((tx) => tx.cryptoType === asset.type);
-
-    if (assetTxs) {
-      setState({
-        ...state,
-        transactions: assetTxs.concat(
-          state.transactions.filter(
-            (tx) => tx.txHash && !assetTxs.find((t) => t.txHash === tx.txHash),
-          ),
-        ),
-      });
-    }
-  }, [counter]);
+    loadTxs();
+  }, []);
 
   return (
     <>

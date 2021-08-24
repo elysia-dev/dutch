@@ -5,6 +5,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -113,6 +115,7 @@ const TxInput: React.FC<ITxInput> = ({
       (remainingSupplyInCrypto
         ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
         : balanceInCrypto);
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -221,7 +224,6 @@ const TxInput: React.FC<ITxInput> = ({
             if (!isNumericStringAppendable(before, text, 12, maxFraction)) {
               return;
             }
-
             const next = newInputValueFormatter(before, text);
             const removedDotNext =
               next[next.length - 1] === '.' ? next.slice(0, -1) : next;
@@ -289,7 +291,7 @@ const TxInput: React.FC<ITxInput> = ({
         />
       </View>
       <ConfirmationModal
-        modalVisible={modalVisible}
+        modalVisible={isVisible ? false : modalVisible}
         setModalVisible={setModalVisible}
         title={title}
         subtitle={t(`assets.${purpose}_confirm`)}

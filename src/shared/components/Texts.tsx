@@ -119,7 +119,7 @@ export const P2Text: FunctionComponent<{
 };
 
 export const P3Text: FunctionComponent<{
-  label: string;
+  label: string | JSX.Element;
   style?: StyleProp<TextStyle>;
 }> = ({ label, style }) => {
   return (

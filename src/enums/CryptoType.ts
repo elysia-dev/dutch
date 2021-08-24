@@ -3,6 +3,7 @@ enum CryptoType {
   ETH = 'ETH',
   BNB = 'BNB',
   ELA = 'ELA',
+  None = 'NONE',
   ELFI = 'ELFI',
   DAI = 'DAI',
 }

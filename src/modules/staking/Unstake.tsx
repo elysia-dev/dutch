@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -17,6 +18,7 @@ import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
+import PaymentSelection from '../../shared/components/PaymentSelection';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
@@ -28,14 +30,24 @@ import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 
-const Unstake: React.FC<{ route: any }> = ({ route }) => {
-  const { cryptoType, selectedRound, earnReward, userPrincipal } = route.params;
+
+type ParamList = {
+  Unstake: {
+    cryptoType: CryptoType;
+    selectedRound: number;
+  };
+};
+
+const Unstake: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'Unstake'>>();
+  const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice, gasPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
+  const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
   const { estimagedGasPrice } = useEstimateGas(
     cryptoType,
@@ -77,85 +89,107 @@ const Unstake: React.FC<{ route: any }> = ({ route }) => {
     }
   };
 
-  return (
-    <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-      <SheetHeader
-        title={t('staking.nth_unstaking', { round: selectedRound })}
-      />
-      <View
-        style={{
-          marginTop: Platform.OS === 'android' ? 20 : 10,
-          paddingHorizontal: 20,
-          flex: 1,
-        }}>
-        <LargeTextInput
-          placeholder={t('staking.unstaking_placeholder')}
-          value={value}
-          unit={cryptoType}
+  if (!selectionVisible) {
+    return (
+      <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
+        <SheetHeader
+          title={t('staking.nth_unstaking', { round: selectedRound })}
         />
-        <InputInfoBox
-          list={[
-            `${t('staking.unstaking_in_dollars')}: $ ${commaFormatter(
-              decimalFormatter(
-                parseFloat(value || '0') * getCryptoPrice(cryptoType),
-                6,
-              ),
-            )}`,
-            `${t('staking.unstaking_supply_available')}: ${commaFormatter(
-              decimalFormatter(principal, 6),
-            )} ${cryptoType}`,
-            estimagedGasPrice
-              ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
-              : t('staking.cannot_estimate_gas'),
-          ]}
-          isInvalid={parseFloat(value) > principal}
-          invalidText={t('staking.unstaking_value_excess')}
-        />
-        <NumberPadShortcut
-          values={[0.01, 1, 10, 100, 1000]}
-          inputValue={value}
-          setValue={setValue}
-        />
-        <NumberPad
-          addValue={(text) => {
-            if (!isNumericStringAppendable(value, text, 12, 6)) return;
+        <View
+          style={{
+            marginTop: Platform.OS === 'android' ? 20 : 10,
+            paddingHorizontal: 20,
+            flex: 1,
+          }}>
+          <LargeTextInput
+            placeholder={t('staking.unstaking_placeholder')}
+            value={value}
+            unit={cryptoType}
+          />
+          <InputInfoBox
+            list={[
+              `${t('staking.unstaking_in_dollars')}: $ ${commaFormatter(
+                decimalFormatter(
+                  parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                  6,
+                ),
+              )}`,
+              `${t('staking.unstaking_supply_available')}: ${commaFormatter(
+                decimalFormatter(principal, 6),
+              )} ${cryptoType}`,
+              estimagedGasPrice
+                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                : t('staking.cannot_estimate_gas'),
+            ]}
+            isInvalid={parseFloat(value) > principal}
+            invalidText={t('staking.unstaking_value_excess')}
+          />
+          <NumberPadShortcut
+            values={[0.01, 1, 10, 100, 1000]}
+            inputValue={value}
+            setValue={setValue}
+          />
+          <NumberPad
+            addValue={(text) => {
+              if (!isNumericStringAppendable(value, text, 12, 6)) return;
 
-            const next = newInputValueFormatter(value, text);
-            setValue(next);
-          }}
-          removeValue={() => setValue(value.slice(0, -1))}
-        />
+              const next = newInputValueFormatter(value, text);
+              setValue(next);
+            }}
+            removeValue={() => setValue(value.slice(0, -1))}
+          />
+          <View
+            style={{
+              marginBottom: insets.bottom || 10,
+              paddingLeft: '5%',
+              paddingRight: '5%',
+            }}>
+            <NextButton
+              title={t('staking.done')}
+              disabled={!value || parseFloat(value) > principal}
+              handler={() => {
+                if (isWalletUser) {
+                  setModalVisible(true);
+                } else {
+                  setSelectionVisible(true);
+                }
+              }}
+            />
+          </View>
+          <StakingConfrimModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            title={t('staking.staking_by_crypto', { stakingCrypto: cryptoType })}
+            subtitle={t('staking.confirmation_title')}
+            list={confirmationList}
+            isApproved={true}
+            submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
+            handler={() => onPressUnstaking()}
+            isLoading={isLoading}
+           />
+          {/* <OverlayLoading
+            visible={[
+              TxStep.Approving,
+              Platform.OS === 'android' && TxStep.CheckAllowance,
+              TxStep.Creating,
+            ].includes(step)}
+          /> */}
       </View>
-      <View
-        style={{
-          marginBottom: insets.bottom || 10,
-          paddingLeft: '5%',
-          paddingRight: '5%',
-        }}>
-        <NextButton
-          title={t('staking.done')}
-          disabled={!value || parseFloat(value) > principal}
-          handler={() => {
-            if (isWalletUser) {
-              setModalVisible(true);
-            } else {
-              console.log('언스테이킹 해야 함');
-            }
-          }}
-        />
-      </View>
-      <StakingConfrimModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={t('staking.staking_by_crypto', { stakingCrypto: cryptoType })}
-        subtitle={t('staking.confirmation_title')}
-        list={confirmationList}
-        isApproved={true}
-        submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
-        handler={() => onPressUnstaking()}
-        isLoading={isLoading}
-      />
-    </View>
+    );
+  }
+
+  return (
+    <PaymentSelection
+      value={parseFloat(value)}
+      page="staking"
+      stakingTxData={{
+        type: 'unstake',
+        unit: cryptoType,
+        round: selectedRound,
+        rewardValue: earnReward && reward,
+      }}
+      contractAddress={contract?.address}
+    />
   );
 };
 

@@ -1,95 +1,50 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  FunctionComponent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { View, Image, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useState } from 'react';
+import { View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { DAPP_URL } from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SubmitButton } from '../../../shared/components/SubmitButton';
-import useAppState from '../../../hooks/useAppState';
-import WalletType from '../../../enums/WalletType';
-import storeDeeplink from '../../../utiles/storeDeeplink';
-import ProviderType from '../../../enums/ProviderType';
-import { TextField } from '../../../shared/components/TextField';
-import UserContext from '../../../contexts/UserContext';
-import SheetHeader from '../../../shared/components/SheetHeader';
-import AppColors from '../../../enums/AppColors';
+import { SubmitButton } from './SubmitButton';
+import useAppState from '../../hooks/useAppState';
+import WalletType from '../../enums/WalletType';
+import storeDeeplink from '../../utiles/storeDeeplink';
+import ProviderType from '../../enums/ProviderType';
+import { TextField } from './TextField';
+import UserContext from '../../contexts/UserContext';
+import SheetHeader from './SheetHeader';
+import AppColors from '../../enums/AppColors';
+import WalletSelectionButton from './WalletSelectionButton';
+import CryptoType from '../../enums/CryptoType';
 
-type ButtonProps = {
-  title: string;
-  selected: boolean;
-  modeHandler: () => void;
-  type: string;
+type AssetTxData = {
+  productId: number;
+  type: 'buying' | 'refund' | 'interest';
 };
 
-const buttonImage = (type: string, selected: boolean) => {
-  switch (type) {
-    case WalletType.METAMASK_MOBILE:
-      return selected
-        ? require('../images/selected_mobile.png')
-        : require('../images/mobile.png');
-    case WalletType.METAMASK_PC:
-      return selected
-        ? require('../images/selected_desktop.png')
-        : require('../images/desktop.png');
-    case WalletType.IMTOKEN_MOBILE:
-      return selected
-        ? require('../images/selected_imtoken.png')
-        : require('../images/imtoken.png');
-    default:
-  }
-};
-
-const MetaMaskButton: FunctionComponent<ButtonProps> = (props: ButtonProps) => {
-  return (
-    <TouchableOpacity
-      onPress={props.modeHandler}
-      style={{
-        width: '100%',
-        height: 50,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: props.selected ? AppColors.MAIN : AppColors.BLUE_2,
-        padding: 15,
-        flexDirection: 'row',
-        marginBottom: 15,
-      }}>
-      <Image
-        style={{ alignSelf: 'center' }}
-        source={buttonImage(props.type, props.selected)}></Image>
-      <Text
-        style={{
-          flex: 5,
-          fontSize: 14,
-          paddingLeft: 10,
-          fontWeight: props.selected ? 'bold' : 'normal',
-          color: AppColors.BLACK,
-          alignSelf: 'center',
-        }}>
-        {props.title}
-      </Text>
-      {props.selected && (
-        <Image
-          style={{ alignSelf: 'center' }}
-          source={require('../images/bluebuttoncheck.png')}></Image>
-      )}
-    </TouchableOpacity>
-  );
+type StakingTxData = {
+  type: 'stake' | 'unstake' | 'reward';
+  unit: CryptoType;
+  round?: number; // 원래 1~6이지만 지금 테스트 중인 라운드가 7을 넘어서서... // stake는안필요함
+  rewardValue?: number;
+  migrationValue?: number;
 };
 
 const PaymentSelection: React.FC<{
-  espressTxId: string;
-  valueTo: number;
-  productId: number;
-  type: string;
+  value: number;
+  page: 'asset' | 'staking'; // 좋은 이름인지는 모르겠다,,,
   contractAddress: string;
-}> = ({ espressTxId, valueTo, productId, type, contractAddress }) => {
+  assetTxData?: AssetTxData;
+  stakingTxData?: StakingTxData;
+  espressoTxId?: string;
+}> = ({
+  value,
+  page,
+  contractAddress,
+  assetTxData,
+  stakingTxData,
+  espressoTxId,
+}) => {
   useEffect(() => {}, []);
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -104,9 +59,21 @@ const PaymentSelection: React.FC<{
   const appState = useAppState();
   const insets = useSafeAreaInsets();
 
+  let imtokenURL: string;
+  let metamaskURL: string;
+  if (page === 'asset') {
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`;
+  } else {
+    // if page is 'staking'
+    // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
+    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
+    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
+  }
+
   useEffect(() => {
-    if (appState === 'active' && espressTxId) {
-      Server.getTransactionRequest(espressTxId).catch(async () => {
+    if (appState === 'active' && espressoTxId) {
+      Server.getTransactionRequest(espressoTxId).catch(async () => {
         await refreshUser();
         navigation.goBack();
       });
@@ -116,17 +83,13 @@ const PaymentSelection: React.FC<{
   const linkDapp = () => {
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
-        Linking.openURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${productId}/${valueTo}/${type}/${contractAddress}/${user.ethAddresses}/${user.language}`,
-        ).catch((_e) => {
+        Linking.openURL(imtokenURL).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
         navigation.goBack();
         break;
       case WalletType.METAMASK_MOBILE:
-        Linking.openURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${productId}&value=${valueTo}&type=${type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`,
-        ).catch((_e) => {
+        Linking.openURL(metamaskURL).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });
         navigation.goBack();
@@ -139,7 +102,7 @@ const PaymentSelection: React.FC<{
           if (!email) {
             return alert(t('account.check_email'));
           } else {
-            Server.sendEmailForTransaction(espressTxId, email)
+            Server.sendEmailForTransaction(espressoTxId, email)
               .then((_res) => {
                 setState({ ...state, emailRestriction: true });
                 alert(t('product.send_purchase_link'));
@@ -158,7 +121,7 @@ const PaymentSelection: React.FC<{
               });
           }
         } else {
-          Server.sendEmailForTransaction(espressTxId)
+          Server.sendEmailForTransaction(espressoTxId)
             .then((_res) => {
               setState({ ...state, emailRestriction: true });
               alert(t('product.send_purchase_link'));
@@ -197,7 +160,7 @@ const PaymentSelection: React.FC<{
           backgroundColor: AppColors.WHITE,
         }}>
         <View style={{ marginTop: 40 }}>
-          <MetaMaskButton
+          <WalletSelectionButton
             title={t('product.metamask_mobile')}
             type={WalletType.METAMASK_MOBILE}
             selected={wallet === WalletType.METAMASK_MOBILE}
@@ -205,14 +168,16 @@ const PaymentSelection: React.FC<{
               setState({ ...state, wallet: WalletType.METAMASK_MOBILE })
             }
           />
-          <MetaMaskButton
-            title={t('product.metamask_pc')}
-            type={WalletType.METAMASK_PC}
-            selected={wallet === WalletType.METAMASK_PC}
-            modeHandler={() =>
-              setState({ ...state, wallet: WalletType.METAMASK_PC })
-            }
-          />
+          {page === 'asset' && (
+            <WalletSelectionButton
+              title={t('product.metamask_pc')}
+              type={WalletType.METAMASK_PC}
+              selected={wallet === WalletType.METAMASK_PC}
+              modeHandler={() =>
+                setState({ ...state, wallet: WalletType.METAMASK_PC })
+              }
+            />
+          )}
           {wallet === WalletType.METAMASK_PC && (
             <>
               {user.provider === ProviderType.ETH && (
@@ -227,7 +192,7 @@ const PaymentSelection: React.FC<{
               )}
             </>
           )}
-          <MetaMaskButton
+          <WalletSelectionButton
             title={t('product.imtoken_mobile')}
             type={WalletType.IMTOKEN_MOBILE}
             selected={wallet === WalletType.IMTOKEN_MOBILE}

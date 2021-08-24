@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
-
 import { showMessage } from 'react-native-flash-message';
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
@@ -16,35 +15,69 @@ import { bscProvider, provider } from '../utiles/getContract';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
+import { ethers } from 'ethers';
+import moment from 'moment';
 
 const TransactionProvider: React.FC = (props) => {
   const { refreshBalance } = useContext(AssetContext);
+  const [txRe, setTxRe] = useState<ethers.providers.TransactionReceipt>();
   const [state, setState] = useState<TransactionType>(initialTransactions);
   const { t } = useTranslation();
 
-  const addPendingTransaction = async (pendingTx: CryptoTransaction) => {
-    await AsyncStorage.setItem(
-      PENDING_TRANSACTIONS,
-      JSON.stringify([
-        { ...pendingTx, status: TxStatus.Pending },
-        ...state.transactions.filter((tx) => tx.status === TxStatus.Pending),
-      ]),
-    );
+  const addPendingTransaction = async (
+    txRes: ethers.providers.TransactionResponse | undefined,
+    pendingTx: CryptoTransaction,
+  ) => {
+    try {
+      await AsyncStorage.setItem(
+        PENDING_TRANSACTIONS,
+        JSON.stringify([{ ...pendingTx, status: TxStatus.Pending }]),
+      );
+      setState({
+        ...state,
+        transactions: [{ ...pendingTx, status: TxStatus.Pending }],
+      });
 
-    setState({
-      ...state,
-      transactions: [
-        { ...pendingTx, status: TxStatus.Pending },
-        ...state.transactions,
-      ],
-      counter: state.counter + 1,
-    });
+      const txResult = await txRes?.wait();
+      if (txResult) {
+        setTxRe(txResult);
+      }
+    } catch (e) {
+      setState({
+        ...state,
+        transactions: [{ ...pendingTx, status: TxStatus.Fail }],
+      });
+    }
   };
 
   useEffect(() => {
-    async () => {
-      let transactions = [];
+    (async () => {
+      try {
+        if (txRe) {
+          const date = await provider.getBlock(txRe?.blockNumber || '');
+          const txIdx = state.transactions.findIndex((tx) => {
+            return txRe?.transactionHash === tx.txHash;
+          });
+          state.transactions[txIdx] = {
+            ...state.transactions[txIdx],
+            createdAt: moment.unix(date.timestamp).toString(),
+            blockNumber: txRe?.blockNumber,
+            status: TxStatus.Success,
+          };
+          setState({
+            ...state,
+            transactions: [...state.transactions],
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [txRe]);
 
+  useEffect(() => {
+    (async () => {
+      let transactions = [];
       try {
         transactions = JSON.parse(
           (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
@@ -55,7 +88,7 @@ const TransactionProvider: React.FC = (props) => {
           transactions,
         });
       }
-    };
+    })();
   }, []);
 
   useEffect(() => {
@@ -65,7 +98,7 @@ const TransactionProvider: React.FC = (props) => {
     )
       return;
 
-    const timer = setTimeout(async () => {
+    let timer = setTimeout(async () => {
       const txResponses = await Promise.all(
         state.transactions
           .filter((tx) => tx.status === TxStatus.Pending)

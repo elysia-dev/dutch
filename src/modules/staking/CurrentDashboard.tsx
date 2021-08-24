@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import moment from 'moment';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
@@ -29,8 +28,18 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import WalletContext from '../../contexts/WalletContext';
 import useStakingPool from '../../hooks/useStakingPool';
 import { BigNumber, constants } from 'ethers';
+import getStakingStatus from '../../utiles/getStakingStatus';
+import StakingStatus from '../../enums/StakingStatus';
 
-const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
+type ParamList = {
+  CurrentDashboard: {
+    cryptoType: CryptoType;
+    rewardCryptoType: CryptoType;
+  };
+};
+
+const CurrentDashboard: React.FC = () => {
+  const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
@@ -46,28 +55,26 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const stakingStatus = getStakingStatus(currentRound);
 
-  let nextButtonTitle;
-  let nextButtonDisabled;
+  let nextButtonTitle = '';
   if (!(isWalletUser || user.ethAddresses[0])) {
     nextButtonTitle = t('staking.need_wallet');
-    nextButtonDisabled = true;
-  } else if (
-    !currentRound ||
-    (currentRound !== 6 &&
-      moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
-        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
-      ))
-  ) {
-    nextButtonTitle = t('staking.comming_soon');
-    nextButtonDisabled = true;
-  } else if (moment().isAfter(STAKING_POOL_ROUNDS_MOMENT[5].endedAt)) {
-    nextButtonTitle = t('staking.staking_ended');
-    nextButtonDisabled = true;
   } else {
-    nextButtonTitle = t('staking.nth_staking', { round: currentRound });
-    nextButtonDisabled = false;
+    switch (stakingStatus) {
+      case StakingStatus.NOT_YET_STARTED:
+      case StakingStatus.ROUND_NOT_IN_PROGRESS:
+        nextButtonTitle = t('staking.comming_soon');
+        break;
+      case StakingStatus.ROUND_IN_PROGRESS:
+        nextButtonTitle = t('staking.nth_staking', { round: currentRound });
+        break;
+      case StakingStatus.ENDED:
+        nextButtonTitle = t('staking.staking_ended');
+        break;
+      default:
+        break;
+    }
   }
 
   const getPoolData = async () => {
@@ -109,7 +116,6 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             style={{ fontSize: 22 }}
           />
           <DotGraph
-            currentRound={currentRound}
             selectedRound={selectedRound}
             setSelectedRound={setSelectedRound}
           />
@@ -190,7 +196,7 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             params: { cryptoType, selectedRound: currentRound },
           });
         }}
-        disabled={nextButtonDisabled}
+        disabled={stakingStatus !== StakingStatus.ROUND_IN_PROGRESS}
         style={{
           marginBottom: 20,
           marginHorizontal: 16,
@@ -200,4 +206,4 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   );
 };
 
-export default DashBoard;
+export default CurrentDashboard;

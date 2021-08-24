@@ -39,17 +39,45 @@ const calculateAPR = (
 
 export default calculateAPR;
 
+function bigNumberDivisionFormatter(
+  dividend: BigNumber,
+  divisor: number,
+  decimalPlace: number,
+) {
+  return {
+    quotient: parseInt(String(parseFloat(dividend.toString()) / divisor), 10),
+    remainder: (parseFloat(dividend.toString()) % divisor)
+      .toString()
+      .substring(0, decimalPlace),
+  };
+}
+
 export function aprFormatter(apr: BigNumber) {
-  const formattedAPR = commaFormatter(
-    decimalFormatter(parseFloat(utils.formatUnits(apr, 25)), 5),
-  );
-  if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
+  const aprIntegerLength = apr.toString().split('.')[0].length;
+
+  if (aprIntegerLength > 15) {
     return '∞';
+  } else if (aprIntegerLength > 12) {
+    const { quotient, remainder } = bigNumberDivisionFormatter(
+      apr,
+      1000000000000,
+      2,
+    );
+    return `${quotient}.${remainder}T`;
+  } else if (aprIntegerLength > 9) {
+    const { quotient, remainder } = bigNumberDivisionFormatter(
+      apr,
+      1000000000,
+      2,
+    );
+    return `${quotient}.${remainder}B`;
+  } else if (aprIntegerLength > 6) {
+    const { quotient, remainder } = bigNumberDivisionFormatter(apr, 1000000, 2);
+    return `${quotient}.${remainder}M`;
+  } else if (aprIntegerLength > 3) {
+    const { quotient, remainder } = bigNumberDivisionFormatter(apr, 1000, 2);
+    return `${quotient}.${remainder}K`;
   } else {
-    return new Intl.NumberFormat('en-US', {
-      maximumFractionDigits: 2,
-      notation: 'compact',
-      compactDisplay: 'short',
-    }).format(parseFloat(utils.formatUnits(apr, 25)));
+    return commaFormatter(decimalFormatter(parseFloat(apr.toString()), 5));
   }
 }

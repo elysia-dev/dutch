@@ -41,6 +41,7 @@ import PriceContext from '../../contexts/PriceContext';
 import LegacyRefundStatus from '../../enums/LegacyRefundStatus';
 import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
+import TransactionContext from '../../contexts/TransactionContext';
 import StakingListing from './components/StakingListing';
 import { StakingPool } from '@elysia-dev/contract-typechain';
 import {
@@ -67,6 +68,7 @@ export const Main: React.FC = () => {
   const ref = React.useRef(null);
   useScrollToTop(ref);
   const { currencyFormatter } = useContext(PreferenceContext);
+  const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
   const isFocused = useIsFocused();
 
@@ -106,8 +108,8 @@ export const Main: React.FC = () => {
         contract
           .getUserData(round, userAddress || '')
           .then((res: any) => {
-            const stakingAmount = Number(utils.formatEther(res[2])); // principal
-            const rewardAmount = Number(utils.formatEther(res[1]));
+            const stakingAmount = res[2]; // principal
+            const rewardAmount = res[1];
             if (stakingAmount) {
               return (
                 <StakingInfoBox
@@ -166,7 +168,6 @@ export const Main: React.FC = () => {
       }
     }
   }, [isFocused]);
-
   return (
     <>
       <ScrollView
@@ -273,6 +274,12 @@ export const Main: React.FC = () => {
           <AssetListing
             title={t('main.my_assets')}
             assets={assets.filter((item) => {
+              if (
+                transactions[0]?.productId === item.productId &&
+                item.value <= 0
+              ) {
+                return true;
+              }
               return item.type === CryptoType.ELA && item.value > 0;
             })}
             itemPressHandler={(asset) => {

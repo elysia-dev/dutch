@@ -11,7 +11,6 @@ const StakingListing: React.FC<{
   elfiStakingInfoBoxes: React.ReactNode[];
 }> = ({ elStakingInfoBoxes, elfiStakingInfoBoxes }) => {
   const { t } = useTranslation();
-
   return (
     <View
       style={{

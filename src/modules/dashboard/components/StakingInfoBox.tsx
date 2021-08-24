@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BigNumber, utils } from 'ethers';
 import AppColors from '../../../enums/AppColors';
 import { Page, StakingPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
@@ -13,8 +14,8 @@ import decimalFormatter from '../../../utiles/decimalFormatter';
 const StakingInfoBox: React.FC<{
   cryptoType: CryptoType;
   round: number;
-  stakingAmount: number;
-  rewardAmount: number;
+  stakingAmount: BigNumber;
+  rewardAmount: BigNumber;
 }> = ({ cryptoType, round, stakingAmount, rewardAmount }) => {
   const navigation = useNavigation();
   const { getCryptoPrice } = useContext(PriceContext);
@@ -55,7 +56,7 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Medium,
             }}>
             {`${commaFormatter(
-              decimalFormatter(stakingAmount, 2),
+              decimalFormatter(Number(stakingAmount.toString()), 2),
             )} ${cryptoType} `}
           </Text>
           <Text
@@ -65,7 +66,18 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Regular,
             }}>
             {`(= $ ${commaFormatter(
-              decimalFormatter(stakingAmount * getCryptoPrice(cryptoType), 2),
+              decimalFormatter(
+                parseFloat(
+                  utils
+                    .formatEther(
+                      stakingAmount.mul(
+                        utils.parseEther(getCryptoPrice(cryptoType).toString()),
+                      ),
+                    )
+                    .toString(),
+                ),
+                2,
+              ),
             )})`}
           </Text>
         </View>
@@ -92,7 +104,7 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Medium,
             }}>
             {`${commaFormatter(
-              decimalFormatter(rewardAmount, 2),
+              decimalFormatter(Number(rewardAmount.toString()), 2),
             )} ${rewardCryptoType} `}
           </Text>
           <Text
@@ -103,7 +115,15 @@ const StakingInfoBox: React.FC<{
             }}>
             {`(= $ ${commaFormatter(
               decimalFormatter(
-                rewardAmount * getCryptoPrice(rewardCryptoType),
+                parseFloat(
+                  utils.formatEther(
+                    rewardAmount.mul(
+                      utils.parseEther(
+                        getCryptoPrice(rewardCryptoType).toString(),
+                      ),
+                    ),
+                  ),
+                ),
                 2,
               ),
             )})`}
