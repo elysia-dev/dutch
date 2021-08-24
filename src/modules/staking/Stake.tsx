@@ -87,6 +87,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
         EL_STAKING_POOL_ADDRESS,
         '1' + '0'.repeat(30),
       );
+      setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
     } catch (error) {
       console.log(error);
     }
