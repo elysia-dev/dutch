@@ -59,11 +59,8 @@ const Unstake: React.FC = () => {
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
   const { isLoading, stakeByType } = useStakingByType(cryptoType);
-<<<<<<< HEAD
   const contract = useStakingPool(cryptoType);
 
-=======
->>>>>>> 42d4855d5bafd976fd6dfc943899c18531215414
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -187,24 +184,7 @@ const Unstake: React.FC = () => {
         </View>
       </View>
     );
-  } else {
-    return (
-      <PaymentSelection
-        value={parseFloat(value)}
-        page="staking"
-        stakingTxData={{
-          type: 'unstake',
-          unit: cryptoType,
-          round: selectedRound,
-          rewardValue: 0,
-        }}
-        contractAddress={EL_STAKING_POOL_ADDRESS}
-      />
-    );
   }
-<<<<<<< HEAD
-=======
-
   return (
     <PaymentSelection
       value={parseFloat(value)}
@@ -217,7 +197,6 @@ const Unstake: React.FC = () => {
       contractAddress={contract?.address}
     />
   );
->>>>>>> 42d4855d5bafd976fd6dfc943899c18531215414
 };
 
 export default Unstake;
