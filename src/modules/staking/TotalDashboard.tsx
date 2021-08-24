@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BigNumber } from 'ethers';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';

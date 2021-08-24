@@ -29,18 +29,20 @@ import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-
+import useStakingPool from '../../hooks/useStakingPool';
+import { EL_STAKING_POOL_ADDRESS } from 'react-native-dotenv';
 
 type ParamList = {
   Unstake: {
     cryptoType: CryptoType;
     selectedRound: number;
+    earnReward: boolean;
   };
 };
 
 const Unstake: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Unstake'>>();
-  const { cryptoType, selectedRound } = route.params;
+  const { cryptoType, selectedRound, earnReward } = route.params;
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -57,6 +59,7 @@ const Unstake: React.FC = () => {
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
   const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const contract = useStakingPool(cryptoType);
 
   const address = isWalletUser
     ? wallet?.getFirstAddress()
@@ -159,14 +162,18 @@ const Unstake: React.FC = () => {
           <StakingConfrimModal
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
-            title={t('staking.staking_by_crypto', { stakingCrypto: cryptoType })}
+            title={t('staking.staking_by_crypto', {
+              stakingCrypto: cryptoType,
+            })}
             subtitle={t('staking.confirmation_title')}
             list={confirmationList}
             isApproved={true}
-            submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
+            submitButtonText={t('staking.nth_unstaking', {
+              round: selectedRound,
+            })}
             handler={() => onPressUnstaking()}
             isLoading={isLoading}
-           />
+          />
           {/* <OverlayLoading
             visible={[
               TxStep.Approving,
@@ -174,23 +181,24 @@ const Unstake: React.FC = () => {
               TxStep.Creating,
             ].includes(step)}
           /> */}
+        </View>
       </View>
     );
+  } else {
+    return (
+      <PaymentSelection
+        value={parseFloat(value)}
+        page="staking"
+        stakingTxData={{
+          type: 'unstake',
+          unit: cryptoType,
+          round: selectedRound,
+          rewardValue: 0,
+        }}
+        contractAddress={EL_STAKING_POOL_ADDRESS}
+      />
+    );
   }
-
-  return (
-    <PaymentSelection
-      value={parseFloat(value)}
-      page="staking"
-      stakingTxData={{
-        type: 'unstake',
-        unit: cryptoType,
-        round: selectedRound,
-        rewardValue: earnReward && reward,
-      }}
-      contractAddress={contract?.address}
-    />
-  );
 };
 
 export default Unstake;

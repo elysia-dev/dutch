@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,8 @@ type ParamList = {
 
 const Reward: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Reward'>>();
-  const { rewardCryptoType, selectedRound, cryptoType, currentRound } = route.params;
+  const { rewardCryptoType, selectedRound, cryptoType, currentRound } =
+    route.params;
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
@@ -100,18 +101,18 @@ const Reward: React.FC = () => {
               width: '100%',
               bottom: insets.bottom || 10,
             }}>
-           <NextButton
-            title={t('staking.claim')}
-            disabled={false}
-            handler={() => {
-              if (isWalletUser) {
-                onPressClaim();
-              } else {
-                setSelectionVisible(true);
-              }
-            }}
-            isLoading={isLoading}
-           />
+            <NextButton
+              title={t('staking.claim')}
+              disabled={false}
+              handler={() => {
+                if (isWalletUser) {
+                  onPressClaim();
+                } else {
+                  setSelectionVisible(true);
+                }
+              }}
+              isLoading={isLoading}
+            />
           </View>
         </View>
       </View>
