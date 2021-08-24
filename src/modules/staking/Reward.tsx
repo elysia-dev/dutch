@@ -19,7 +19,6 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
-import useStakingPool from '../../hooks/useStakingPool';
 
 const Reward: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType, selectedRound, currentRound } =
@@ -62,7 +61,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
         }}>
         <CryptoInput
           title={t('staking.rewards')}
-          value={commaFormatter(decimalFormatter(reward, 5))}
+          value={commaFormatter(reward)}
           subValue={`$ ${commaFormatter(
             decimalFormatter(reward * getCryptoPrice(rewardCryptoType), 5),
           )}`}
