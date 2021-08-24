@@ -21,6 +21,7 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
+import commaFormatter from '../../utiles/commaFormatter';
 
 type ParamList = {
   TotalDashboard: {
@@ -110,14 +111,22 @@ const TotalDashboard: React.FC = () => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_principal', { round: selectedRound })}
-              value={stakingAmount.isZero() ? '-' : stakingAmount.toString()}
+              value={
+                stakingAmount.isZero()
+                  ? '-'
+                  : commaFormatter(stakingAmount.toString())
+              }
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_reward', { round: selectedRound })}
-              value={rewardAmount.isZero() ? '-' : rewardAmount.toString()}
+              value={
+                rewardAmount.isZero()
+                  ? '-'
+                  : commaFormatter(rewardAmount.toString())
+              }
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />
