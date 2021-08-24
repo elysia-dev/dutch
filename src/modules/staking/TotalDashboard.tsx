@@ -52,10 +52,10 @@ const TotalDashboard: React.FC = () => {
   const stakingPoolContract = useStakingPool(cryptoType);
   const [currentRound, setCurrentRound] = useState(0);
   const [isProgressRound, setIsProgressRound] = useState(false);
+  const [isCurrentRound, setIsCurrentRound] = useState(false);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
-
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -89,6 +89,12 @@ const TotalDashboard: React.FC = () => {
       !moment().isBetween(
         STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].startedAt,
         STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
+      ),
+    );
+    setIsCurrentRound(
+      moment().isBetween(
+        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].startedAt,
+        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
       ),
     );
     getPoolData();
@@ -183,7 +189,7 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  selectedRound !== currentRound
+                  selectedRound !== currentRound && isCurrentRound
                     ? StakingPage.SelectUnstakingType
                     : StakingPage.Unstake,
                 params: {
