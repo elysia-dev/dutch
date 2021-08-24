@@ -26,12 +26,9 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
 import WalletContext from '../../contexts/WalletContext';
 import useStakingPool from '../../hooks/useStakingPool';
+import { BigNumber, constants } from 'ethers';
 
 const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
   const { cryptoType, rewardCryptoType } = route.params;
@@ -46,6 +43,9 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
+  const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
+    constants.Zero,
+  );
 
   let nextButtonTitle;
   let nextButtonDisabled;
@@ -70,10 +70,16 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
     nextButtonDisabled = false;
   }
 
+  const getPoolData = async () => {
+    const poolData = await stakingPoolContract.getPoolData(currentRound);
+    setTotalPrincipal(poolData[4]);
+  };
+
   useEffect(() => {
     stakingPoolContract?.currentRound().then((res: any) => {
       setCurrentRound(res);
     });
+    getPoolData();
   }, []);
 
   return (
@@ -125,11 +131,15 @@ const DashBoard: React.FC<{ route: any; navigation: any }> = ({ route }) => {
             />
             <BoxWithDividerContent
               label={t('staking.apr')}
-              value={`${aprFormatter(calculateAPR(cryptoType, currentRound))}%`}
+              value={`${aprFormatter(
+                calculateAPR(cryptoType, totalPrincipal),
+              )}%`}
             />
           </BoxWithDivider>
           <TitleText
-            label={t('staking.mining_plan', { rewardCrypto: rewardCryptoType })}
+            label={t('staking.mining_plan', {
+              rewardCrypto: rewardCryptoType,
+            })}
             style={{ fontSize: 22 }}
           />
           <BarGraph currentRound={currentRound} cryptoType={cryptoType} />

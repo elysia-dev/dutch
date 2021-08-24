@@ -2,7 +2,7 @@ import { View, Text, Platform } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
-import { utils } from 'ethers';
+import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -28,6 +28,7 @@ import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import useErcContract from '../../hooks/useErcContract';
+import useStakingPool from '../../hooks/useStakingPool';
 
 const Stake: React.FC<{ route: any }> = ({ route }) => {
   const { cryptoType, selectedRound } = route.params;
@@ -48,9 +49,18 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   const [isApprove, setIsApprove] = useState(true);
   const erc20Contract = useErcContract(cryptoType);
   const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
+  const stakingPoolContract = useStakingPool(cryptoType);
+  const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
+    constants.Zero,
+  );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+
+  const getPoolData = async () => {
+    const poolData = await stakingPoolContract.getPoolData(selectedRound);
+    setTotalPrincipal(poolData[4]);
+  };
 
   const setAllowance = async () => {
     try {
@@ -109,6 +119,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
   useEffect(() => {
     if (address) {
       setAllowance();
+      getPoolData();
     }
   }, []);
 
@@ -144,7 +155,7 @@ const Stake: React.FC<{ route: any }> = ({ route }) => {
             fontFamily: AppFonts.Bold,
             fontSize: 14,
           }}>
-          {`${aprFormatter(calculateAPR(cryptoType, selectedRound))} %`}
+          {`${aprFormatter(calculateAPR(cryptoType, totalPrincipal))} %`}
         </Text>
       </View>
       <View

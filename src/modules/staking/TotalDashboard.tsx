@@ -19,7 +19,7 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, constants, utils } from 'ethers';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import moment from 'moment';
@@ -42,6 +42,9 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
   const stakingPoolContract = useStakingPool(cryptoType);
   const [currentRound, setCurrentRound] = useState(0);
   const [isProgressRound, setIsProgressRound] = useState(false);
+  const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
+    constants.Zero,
+  );
 
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
@@ -55,6 +58,11 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
 
   const indicateAmount = (amount: BigNumber) => {
     return amount.toHexString() !== '0x00' ? formatAmount(amount) : '-';
+  };
+
+  const getPoolData = async () => {
+    const poolData = await stakingPoolContract.getPoolData(selectedRound);
+    setTotalPrincipal(poolData[4]);
   };
 
   useEffect(() => {
@@ -73,6 +81,7 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
         STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
       ),
     );
+    getPoolData();
   }, [selectedRound]);
 
   return (
@@ -118,8 +127,8 @@ const TotalDashboard: React.FC<{ route: any }> = ({ route }) => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_apr', { round: selectedRound })}
-              value={aprFormatter(calculateAPR(cryptoType, selectedRound))}
-              unit="EL"
+              value={aprFormatter(calculateAPR(cryptoType, totalPrincipal))}
+              unit="%"
             />
             <StakingInfoCard
               roundEnded={false}
