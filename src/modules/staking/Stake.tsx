@@ -280,6 +280,7 @@ const Stake: React.FC = () => {
       stakingTxData={{
         type: 'stake',
         unit: cryptoType,
+        round: selectedRound,
       }}
       contractAddress={contract?.address}
     />

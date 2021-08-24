@@ -223,7 +223,6 @@ const UnstakeAndMigrate: React.FC = () => {
     }
   }, [modalVisible, isFinishRound]);
 
-
   if (!selectionVisible) {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -354,7 +353,7 @@ const UnstakeAndMigrate: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward && reward,
+        rewardValue: reward,
         migrationValue: principal - parseFloat(value),
       }}
       contractAddress={contract?.address}

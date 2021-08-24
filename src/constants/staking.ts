@@ -19,18 +19,6 @@ export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
 
 export const STAKING_POOL_ROUNDS = [
   {
-    startedAt: '2021.08.17 00:00:00',
-    endedAt: '2021.08.17 23:59:59',
-  },
-  {
-    startedAt: '2021.08.18 00:00:00',
-    endedAt: '2021.08.18 23:59:59',
-  },
-  {
-    startedAt: '2021.08.19 00:00:00',
-    endedAt: '2021.08.19 23:59:59',
-  },
-  {
     startedAt: '2021.08.20 00:00:00',
     endedAt: '2021.08.20 23:59:59',
   },
@@ -42,6 +30,18 @@ export const STAKING_POOL_ROUNDS = [
     startedAt: '2021.08.24 00:00:00',
     endedAt: '2021.08.24 23:59:59',
   },
+  {
+    startedAt: '2021.08.24 00:00:00',
+    endedAt: '2021.08.24 23:59:59',
+  },
+  {
+    startedAt: '2021.08.26 00:00:00',
+    endedAt: '2021.08.26 23:59:59',
+  },
+  {
+    startedAt: '2021.08.27 00:00:00',
+    endedAt: '2021.08.27 23:59:59',
+  },
 ];
 
 import moment from 'moment';
@@ -51,18 +51,6 @@ const outputFormat = 'YYYY.MM.DD hh:mm:ss'; // for ko and zh-hans
 // 'MM.DD.YYYY hh:mm:ss' for en
 
 export const STAKING_POOL_ROUNDS_MOMENT = [
-  {
-    startedAt: moment('2021.08.17 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.17 23:59:59 +9:00', inputFormat),
-  },
-  {
-    startedAt: moment('2021.08.18 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.18 23:59:59 +9:00', inputFormat),
-  },
-  {
-    startedAt: moment('2021.08.19 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.19 23:59:59 +9:00', inputFormat),
-  },
   {
     startedAt: moment('2021.08.20 00:00:00 +9:00', inputFormat),
     endedAt: moment('2021.08.20 23:59:59 +9:00', inputFormat),
@@ -74,5 +62,17 @@ export const STAKING_POOL_ROUNDS_MOMENT = [
   {
     startedAt: moment('2021.08.24 00:00:00 +9:00', inputFormat),
     endedAt: moment('2021.08.24 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.25 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.25 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.26 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.26 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.27 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.27 23:59:59 +9:00', inputFormat),
   },
 ];

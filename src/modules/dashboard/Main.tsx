@@ -275,6 +275,7 @@ export const Main: React.FC = () => {
             title={t('main.my_assets')}
             assets={assets.filter((item) => {
               if (
+                item.productId &&
                 transactions[0]?.productId === item.productId &&
                 item.value <= 0
               ) {

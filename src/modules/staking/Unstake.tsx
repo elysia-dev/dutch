@@ -57,7 +57,6 @@ const Unstake: React.FC = () => {
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
   const { isLoading, stakeByType } = useStakingByType(cryptoType);
-
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -186,7 +185,6 @@ const Unstake: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward && reward,
       }}
       contractAddress={contract?.address}
     />
