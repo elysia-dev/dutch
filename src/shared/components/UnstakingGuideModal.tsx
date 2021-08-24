@@ -87,7 +87,7 @@ const UnstakingGuideModal: React.FC<Props> = ({
                 marginBottom: 10,
               }}>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Bold }}>
-                {t('staking.migration _help')}
+                {t('staking.migration_help')}
               </Text>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Regular }}>
                 {/* 이란? */}
