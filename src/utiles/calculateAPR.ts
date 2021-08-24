@@ -46,6 +46,10 @@ export function aprFormatter(apr: BigNumber) {
   if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
     return '∞';
   } else {
-    return formattedAPR;
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 2,
+      notation: 'compact',
+      compactDisplay: 'short',
+    }).format(parseFloat(utils.formatUnits(apr, 25)));
   }
 }
