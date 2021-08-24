@@ -31,16 +31,16 @@ export const STAKING_POOL_ROUNDS = [
     endedAt: '2021.08.24 23:59:59',
   },
   {
-    startedAt: '2021.08.24 00:00:00',
-    endedAt: '2021.08.24 23:59:59',
-  },
-  {
     startedAt: '2021.08.26 00:00:00',
     endedAt: '2021.08.26 23:59:59',
   },
   {
     startedAt: '2021.08.27 00:00:00',
     endedAt: '2021.08.27 23:59:59',
+  },
+  {
+    startedAt: '2021.08.28 00:00:00',
+    endedAt: '2021.08.28 23:59:59',
   },
 ];
 
@@ -64,15 +64,15 @@ export const STAKING_POOL_ROUNDS_MOMENT = [
     endedAt: moment('2021.08.24 23:59:59 +9:00', inputFormat),
   },
   {
-    startedAt: moment('2021.08.25 00:00:00 +9:00', inputFormat),
-    endedAt: moment('2021.08.25 23:59:59 +9:00', inputFormat),
-  },
-  {
     startedAt: moment('2021.08.26 00:00:00 +9:00', inputFormat),
     endedAt: moment('2021.08.26 23:59:59 +9:00', inputFormat),
   },
   {
     startedAt: moment('2021.08.27 00:00:00 +9:00', inputFormat),
     endedAt: moment('2021.08.27 23:59:59 +9:00', inputFormat),
+  },
+  {
+    startedAt: moment('2021.08.28 00:00:00 +9:00', inputFormat),
+    endedAt: moment('2021.08.28 23:59:59 +9:00', inputFormat),
   },
 ];
