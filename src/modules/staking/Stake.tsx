@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, Platform } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
+import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
@@ -13,7 +13,6 @@ import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
 import AppFonts from '../../enums/AppFonts';
-import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import AssetContext from '../../contexts/AssetContext';
@@ -24,11 +23,14 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
-import CryptoType from '../../enums/CryptoType';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../utiles/getContract';
+import { EL_STAKING_POOL_ADDRESS } from 'react-native-dotenv';
+import useTxHandler from '../../hooks/useTxHandler';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
+import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
+import useStakingByType from '../../hooks/useStakingByType';
+import useErcContract from '../../hooks/useErcContract';
+import useStakingPool from '../../hooks/useStakingPool';
 
 type ParamList = {
   Stake: {
@@ -44,41 +46,91 @@ const Stake: React.FC = () => {
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
+  const { afterTxFailed } = useTxHandler();
+  const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
+  const { estimagedGasPrice } = useEstimateGas(cryptoType, StakingType.Stake);
   const { t } = useTranslation();
+  const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
+    value: '0',
+  });
+  const [isApprove, setIsApprove] = useState(true);
+  const erc20Contract = useErcContract(cryptoType);
+  const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
+  const stakingPoolContract = useStakingPool(cryptoType);
+  const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
+    constants.Zero,
+  );
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
-  const estimateGas = async (address: string) => {
-    let estimateGas: BigNumber | undefined;
+  const getPoolData = async () => {
+    const poolData = await stakingPoolContract.getPoolData(selectedRound);
+    setTotalPrincipal(poolData[4]);
+  };
 
+  const setAllowance = async () => {
     try {
-      estimateGas = await contract?.estimateGas.stake(
-        utils.parseEther('0.01'),
-        { from: address },
+      const allowance: BigNumber = await erc20Contract.allowance(
+        wallet?.getFirstNode()?.address || '',
+        EL_STAKING_POOL_ADDRESS,
       );
+      setAllowanceInfo({
+        ...allowanceInfo,
+        value: utils.formatEther(allowance),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
+  const isAllowanceForApprove = (): boolean => {
+    return Number(allowanceInfo.value) > crytoBalance;
+  };
+
+  const setApporve = async () => {
+    try {
+      await approve();
+      setIsApprove(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const approve = async () => {
+    try {
+      await erc20Contract.approve(
+        EL_STAKING_POOL_ADDRESS,
+        '1' + '0'.repeat(30),
+      );
+      setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onPressStaking = async () => {
+    try {
+      if (!isApprove) {
+        setIsLoading(true);
+        setApporve();
+        return;
       }
-    } catch (e) {
-      setEstimatedGasPrice('');
+      stakeByType(value, selectedRound, StakingType.Stake);
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
-
     if (address) {
-      estimateGas(address);
+      setAllowance();
+      getPoolData();
     }
   }, []);
 
@@ -115,7 +167,7 @@ const Stake: React.FC = () => {
               fontFamily: AppFonts.Bold,
               fontSize: 14,
             }}>
-            {`${aprFormatter(calculateAPR(cryptoType, selectedRound))} %`}
+            {`${aprFormatter(calculateAPR(cryptoType, totalPrincipal))} %`}
           </Text>
         </View>
         <View
@@ -175,6 +227,7 @@ const Stake: React.FC = () => {
             disabled={!value || parseFloat(value) > getBalance(cryptoType)}
             handler={() => {
               if (isWalletUser) {
+                setIsApprove(isAllowanceForApprove);
                 setModalVisible(true);
               } else {
                 setSelectionVisible(true);
@@ -182,40 +235,41 @@ const Stake: React.FC = () => {
             }}
           />
         </View>
-        <ConfirmationModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
-          subtitle={t('staking.confirmation_title')}
-          list={[
-            {
-              label: t('staking.staking_round'),
-              value: t('staking.nth_staking', { round: selectedRound }),
-            },
-            {
-              label: t('staking.staking_supply'),
-              value: `${value} ${cryptoType}`,
-              subvalue: `$ ${commaFormatter(
-                decimalFormatter(
-                  parseFloat(value || '0') * getCryptoPrice(cryptoType),
-                  6,
-                ),
-              )}`,
-            },
-            { label: t('staking.gas_price'), value: '(모름)' },
-          ]}
-          isApproved={true}
-          submitButtonText={t('staking.nth_staking', { round: selectedRound })}
-          handler={() => console.log('내부 지갑 계정 트랜잭션')}
-        />
-        {/* <OverlayLoading
-          visible={[
-            TxStep.Approving,
-            Platform.OS === 'android' && TxStep.CheckAllowance,
-            TxStep.Creating,
-          ].includes(step)}
-        /> */}
-      </View>
+      <StakingConfrimModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
+        subtitle={t('staking.confirmation_title')}
+        list={[
+          {
+            label: t('staking.staking_round'),
+            value: t('staking.nth_staking', { round: selectedRound }),
+          },
+          {
+            label: t('staking.staking_supply'),
+            value: `${value} ${cryptoType}`,
+            subvalue: `$ ${commaFormatter(
+              decimalFormatter(
+                parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                6,
+              ),
+            )}`,
+          },
+          { label: t('staking.gas_price'), value: estimagedGasPrice },
+        ]}
+        isApproved={isApprove}
+        submitButtonText={t('staking.nth_staking', { round: selectedRound })}
+        handler={() => onPressStaking()}
+        isLoading={isLoading}
+      />
+      {/* <OverlayLoading
+        visible={[
+          TxStep.Approving,
+          Platform.OS === 'android' && TxStep.CheckAllowance,
+          TxStep.Creating,
+        ].includes(step)}
+      /> */}
+    </View>
     );
   }
 

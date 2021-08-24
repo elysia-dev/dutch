@@ -1,84 +1,16 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Contract } from '@ethersproject/contracts';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import { H3Text, P1Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
-import StakingInfoBox from './StakingInfoBox';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../../utiles/getContract';
-import WalletContext from '../../../contexts/WalletContext';
-import UserContext from '../../../contexts/UserContext';
 
-const StakingListing: React.FC<{}> = () => {
-  const { wallet } = useContext(WalletContext);
-  const { user, isWalletUser } = useContext(UserContext);
-  const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
-  const elStakingPoolContract = getElStakingPoolContract();
-  const elfiStakingPoolContract = getElfiStakingPoolContract();
-  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
-  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
+const StakingListing: React.FC<{
+  elStakingInfoBoxes: React.ReactNode[];
+  elfiStakingInfoBoxes: React.ReactNode[];
+}> = ({ elStakingInfoBoxes, elfiStakingInfoBoxes }) => {
   const { t } = useTranslation();
-
-  async function getRoundData(type: CryptoType): Promise<void> {
-    let contract: Contract | null;
-    let infoBoxes: React.ReactNode[];
-    let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
-    if (type === CryptoType.EL) {
-      contract = elStakingPoolContract;
-      infoBoxes = elStakingInfoBoxes;
-      setInfoBoxes = setElStakingInfoBoxes;
-    } else {
-      contract = elfiStakingPoolContract;
-      infoBoxes = elfiStakingInfoBoxes;
-      setInfoBoxes = setElfiStakingInfoBoxes;
-    }
-
-    const tempBoxes = [] as React.ReactNode[];
-    for (let round = 1; round <= 6; round++) {
-      tempBoxes.push(
-        contract?.getUserData(round, userAddress).then((res: any) => {
-          const stakingAmount = res[2]; // principal
-          const rewardAmount = res[1];
-          if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
-            return (
-              <StakingInfoBox
-                key={round}
-                cryptoType={type}
-                round={round}
-                stakingAmount={stakingAmount}
-                rewardAmount={rewardAmount}
-              />
-            );
-          }
-        }),
-      );
-    }
-
-    setInfoBoxes(await Promise.all(tempBoxes));
-  }
-
-  useEffect(() => {
-    getRoundData(CryptoType.EL);
-    getRoundData(CryptoType.ELFI);
-  }, []);
-
   return (
     <View
       style={{

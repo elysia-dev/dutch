@@ -11,10 +11,6 @@ import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
 import MiningPlan from './components/MiningPlan';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../utiles/getContract';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import {
@@ -29,6 +25,9 @@ import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
+import WalletContext from '../../contexts/WalletContext';
+import useStakingPool from '../../hooks/useStakingPool';
+import { BigNumber, constants } from 'ethers';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 
@@ -43,18 +42,19 @@ const CurrentDashboard: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const [currentRound, setCurrentRound] = useState(1);
   const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
+  const { wallet } = useContext(WalletContext);
   const totalAmountOfReward =
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
       : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
   const { t } = useTranslation();
+  const stakingPoolContract = useStakingPool(cryptoType);
+  const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
+    constants.Zero,
+  );
   const stakingStatus = getStakingStatus(currentRound);
 
   let nextButtonTitle = '';
@@ -77,10 +77,16 @@ const CurrentDashboard: React.FC = () => {
     }
   }
 
+  const getPoolData = async () => {
+    const poolData = await stakingPoolContract.getPoolData(currentRound);
+    setTotalPrincipal(poolData[4]);
+  };
+
   useEffect(() => {
-    contract?.currentRound().then((res: any) => {
+    stakingPoolContract?.currentRound().then((res: any) => {
       setCurrentRound(res);
     });
+    getPoolData();
   }, []);
 
   return (
@@ -131,11 +137,15 @@ const CurrentDashboard: React.FC = () => {
             />
             <BoxWithDividerContent
               label={t('staking.apr')}
-              value={`${aprFormatter(calculateAPR(cryptoType, currentRound))}%`}
+              value={`${aprFormatter(
+                calculateAPR(cryptoType, totalPrincipal),
+              )}%`}
             />
           </BoxWithDivider>
           <TitleText
-            label={t('staking.mining_plan', { rewardCrypto: rewardCryptoType })}
+            label={t('staking.mining_plan', {
+              rewardCrypto: rewardCryptoType,
+            })}
             style={{ fontSize: 22 }}
           />
           <BarGraph currentRound={currentRound} cryptoType={cryptoType} />

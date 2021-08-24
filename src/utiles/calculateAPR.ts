@@ -2,28 +2,20 @@ import { BigNumber, constants, utils } from 'ethers';
 import { useContext } from 'react';
 import CryptoType from '../enums/CryptoType';
 import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from './getContract';
-import {
   ELFI_PER_DAY_ON_EL_STAKING_POOL,
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
 } from '../constants/staking';
 import PriceContext from '../contexts/PriceContext';
 import decimalFormatter from './decimalFormatter';
 import commaFormatter from './commaFormatter';
+import useStakingPool from '../hooks/useStakingPool';
 
-const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
+const calculateAPR = (
+  cryptoType: CryptoType,
+  principal: BigNumber,
+): BigNumber => {
   const { getCryptoPrice } = useContext(PriceContext);
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
 
-  let principal = BigNumber.from(0);
-  contract?.getPoolData(round).then((res: any) => {
-    principal = BigNumber.from(res[4]); // totalPrincipal
-  });
   const principalPrice = getCryptoPrice(cryptoType);
   const rewardPerDay = BigNumber.from(
     cryptoType === CryptoType.EL
