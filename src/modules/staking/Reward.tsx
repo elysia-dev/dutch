@@ -92,7 +92,7 @@ const Reward: React.FC<{ route: any }> = ({ route }) => {
               if (isWalletUser) {
                 onPressClaim();
               } else {
-                console.log('보상 수령 해야 함 (외부 지갑 유저)');
+                //메타마스크 / 아임토큰 들어가는 부분
               }
             }}
             isLoading={isLoading}
