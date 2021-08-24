@@ -31,8 +31,8 @@ export const STAKING_POOL_ROUNDS = [
     endedAt: '2021.08.24 23:59:59',
   },
   {
-    startedAt: '2021.08.24 00:00:00',
-    endedAt: '2021.08.24 23:59:59',
+    startedAt: '2021.08.25 00:00:00',
+    endedAt: '2021.08.25 23:59:59',
   },
   {
     startedAt: '2021.08.26 00:00:00',
