@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import {
+  EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import CryptoInput from '../asset/components/CryptoInput';
@@ -15,7 +17,6 @@ import CryptoType from '../../enums/CryptoType';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import UserContext from '../../contexts/UserContext';
-import WalletContext from '../../contexts/WalletContext';
 import PaymentSelection from '../../shared/components/PaymentSelection';
 import AssetContext from '../../contexts/AssetContext';
 import useTxHandler from '../../hooks/useTxHandler';
@@ -29,18 +30,15 @@ type ParamList = {
     cryptoType: CryptoType;
     rewardCryptoType: CryptoType;
     selectedRound: number;
-    currentRound: number;
   };
 };
 
 const Reward: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Reward'>>();
-  const { rewardCryptoType, selectedRound, cryptoType, currentRound } =
-    route.params;
+  const { rewardCryptoType, selectedRound, cryptoType } = route.params;
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const { isWalletUser, user } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
+  const { isWalletUser } = useContext(UserContext);
   const { afterTxFailed } = useTxHandler();
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
@@ -51,10 +49,11 @@ const Reward: React.FC = () => {
     selectedRound,
   );
   const { isLoading, stakeByType } = useStakingByType(cryptoType);
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
   const { reward } = useStakingInfo(cryptoType, selectedRound);
+  const stakingPoolAddress =
+    cryptoType === CryptoType.EL
+      ? EL_STAKING_POOL_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS;
 
   const onPressClaim = async () => {
     try {
@@ -127,9 +126,9 @@ const Reward: React.FC = () => {
         type: 'reward',
         unit: rewardCryptoType,
         round: selectedRound,
-        rewardValue: value,
+        rewardValue: reward,
       }}
-      contractAddress={contract?.address}
+      contractAddress={stakingPoolAddress}
     />
   );
 };
