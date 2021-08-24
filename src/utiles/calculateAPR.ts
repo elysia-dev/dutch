@@ -10,14 +10,12 @@ import decimalFormatter from './decimalFormatter';
 import commaFormatter from './commaFormatter';
 import useStakingPool from '../hooks/useStakingPool';
 
-const calculateAPR = (cryptoType: CryptoType, round: number): BigNumber => {
+const calculateAPR = (
+  cryptoType: CryptoType,
+  principal: BigNumber,
+): BigNumber => {
   const { getCryptoPrice } = useContext(PriceContext);
-  const contract = useStakingPool(cryptoType);
 
-  let principal = BigNumber.from(0);
-  contract?.getPoolData(round).then((res: any) => {
-    principal = BigNumber.from(res[4]); // totalPrincipal
-  });
   const principalPrice = getCryptoPrice(cryptoType);
   const rewardPerDay = BigNumber.from(
     cryptoType === CryptoType.EL
@@ -43,7 +41,7 @@ export default calculateAPR;
 
 export function aprFormatter(apr: BigNumber) {
   const formattedAPR = commaFormatter(
-    decimalFormatter(parseFloat(apr.toString()), 5),
+    decimalFormatter(parseFloat(utils.formatUnits(apr, 25)), 5),
   );
   if (apr === constants.MaxUint256 || formattedAPR.length > 20) {
     return '∞';
