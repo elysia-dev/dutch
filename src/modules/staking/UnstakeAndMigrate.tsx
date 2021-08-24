@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import AppColors from '../../enums/AppColors';
@@ -12,14 +10,9 @@ import NumberPadShortcut from './components/NumberPadShortcut';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
-import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import {
-  getElStakingPoolContract,
-  getElfiStakingPoolContract,
-} from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import AppFonts from '../../enums/AppFonts';
@@ -27,6 +20,18 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
+import useTxHandler from '../../hooks/useTxHandler';
+import moment from 'moment';
+import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
+import FinishedRoundModal from './components/FinishedRoundModal';
+import useStakingInfo from '../../hooks/useStakingInfo';
+import useEstimateGas from '../../hooks/useEstimateGas';
+import StakingType from '../../enums/StakingType';
+import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
+import useStakingByType from '../../hooks/useStakingByType';
+import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
+import { useNavigation } from '@react-navigation/native';
+import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -43,140 +48,187 @@ const UnstakeAndMigrate: React.FC = () => {
   const [value, setValue] = useState('');
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isFinishRound, setIsFinishRound] = useState(false);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const contract =
-    cryptoType === CryptoType.EL
-      ? getElStakingPoolContract()
-      : getElfiStakingPoolContract();
   const { wallet } = useContext(WalletContext);
+  const { afterTxFailed } = useTxHandler();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
-  const [estimagedGasPrice, setEstimatedGasPrice] = useState('');
   const { t } = useTranslation();
-  const [principal, setPrincipal] = useState(0);
-  const [reward, setReward] = useState(0);
+  const { principal, reward } = useStakingInfo(cryptoType, selectedRound);
+  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
+  const [stakingType, setStakingType] = useState(StakingType.Migrate);
+  const [isGuideModal, setIsGuideModal] = useState(false);
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+    cryptoType,
+    StakingType.Migrate,
+    selectedRound,
+  );
+  const [confirmationList, setConfirmationList] = useState<
+    {
+      label: string;
+      value: string;
+      subvalue?: string;
+    }[]
+  >([
+    {
+      label: '',
+      value: '',
+    },
+  ]);
 
-  let confirmationList;
-  if (earnReward) {
-    confirmationList = [
-      {
-        label: t('staking.unstaking_round'),
-        value: t('staking.nth_unstaking', { round: selectedRound }),
-      },
-      {
-        label: t('staking.unstaking_supply'),
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${commaFormatter(
-          decimalFormatter(
-            parseFloat(value || '0') * getCryptoPrice(cryptoType),
-            6,
-          ),
-        )}`,
-      },
-      {
-        label: t('staking.migration_supply'),
-        value: `${principal - parseFloat(value)} ${cryptoType}`,
-        subvalue: `$ ${commaFormatter(
-          decimalFormatter(
-            (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
-            6,
-          ),
-        )}`,
-      },
-      {
-        label: t('staking.migration_destination'),
-        value: `${t('staking.round_with_affix', {
-          round: selectedRound,
-        })} → ${t('staking.round_with_affix', { round: currentRound })}`,
-      },
-      {
-        label: t('staking.reward_supply'),
-        value: `${reward} ${rewardCryptoType}`,
-      },
-      { label: t('staking.gas_price'), value: '(모름)' },
-    ];
-  } else {
-    confirmationList = [
-      {
-        label: t('staking.unstaking_round'),
-        value: t('staking.nth_unstaking', { round: selectedRound }),
-      },
-      {
-        label: t('staking.unstaking_supply'),
-        value: `${value} ${cryptoType}`,
-        subvalue: `$ ${commaFormatter(
-          decimalFormatter(
-            parseFloat(value || '0') * getCryptoPrice(cryptoType),
-            6,
-          ),
-        )}`,
-      },
-      {
-        label: t('staking.migration_supply'),
-        value: `${principal - parseFloat(value)} ${cryptoType}`,
-        subvalue: `$ ${commaFormatter(
-          decimalFormatter(
-            (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
-            6,
-          ),
-        )}`,
-      },
-      {
-        label: t('staking.migration_destination'),
-        value: `${t('staking.round_with_affix', {
-          round: selectedRound,
-        })} → ${t('staking.round_with_affix', { round: currentRound })}`,
-      },
-      { label: t('staking.gas_price'), value: '(모름)' },
-    ];
-  }
+  const setConfirmations = (gasFee?: string) => {
+    if (earnReward) {
+      setConfirmationList([
+        {
+          label: t('staking.unstaking_round'),
+          value: t('staking.nth_unstaking', { round: selectedRound }),
+        },
+        {
+          label: t('staking.unstaking_supply'),
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        {
+          label: t('staking.migration_supply'),
+          value: `${principal - parseFloat(value)} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        {
+          label: t('staking.migration_destination'),
+          value: `${t('staking.round_with_affix', {
+            round: selectedRound,
+          })} → ${t('staking.round_with_affix', { round: currentRound })}`,
+        },
+        {
+          label: t('staking.reward_supply'),
+          value: `${reward} ${rewardCryptoType}`,
+        },
+        {
+          label: t('staking.gas_price'),
+          value: estimagedGasPrice || gasFee || '',
+        },
+      ]);
+    } else {
+      setConfirmationList([
+        {
+          label: t('staking.unstaking_round'),
+          value: t('staking.nth_unstaking', { round: selectedRound }),
+        },
+        {
+          label: t('staking.unstaking_supply'),
+          value: `${value} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              parseFloat(value || '0') * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        {
+          label: t('staking.migration_supply'),
+          value: `${principal - parseFloat(value)} ${cryptoType}`,
+          subvalue: `$ ${commaFormatter(
+            decimalFormatter(
+              (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+              6,
+            ),
+          )}`,
+        },
+        {
+          label: t('staking.migration_destination'),
+          value: `${t('staking.round_with_affix', {
+            round: selectedRound,
+          })} → ${t('staking.round_with_affix', { round: currentRound })}`,
+        },
+        {
+          label: t('staking.gas_price'),
+          value: estimagedGasPrice || gasFee || '',
+        },
+      ]);
+    }
+  };
 
-  const estimateGas = async (address: string) => {
-    let estimateGas: BigNumber | undefined;
+  const isProgressRound = () => {
+    return moment().isBetween(
+      STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+      STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+    );
+  };
 
+  const confirmExcludeMigrate = async () => {
+    setConfirmationList([
+      ...confirmationList.filter((text) => {
+        return !(
+          text.label === t('staking.migration_supply') ||
+          text.label === t('staking.migration_destination') ||
+          text.label === t('staking.reward_supply')
+        );
+      }),
+    ]);
+    setModalVisible(true);
+  };
+
+  const onPressUnstaking = async () => {
     try {
-      estimateGas = await contract?.estimateGas.withdraw(
-        utils.parseEther('0.01'),
-        { from: address },
-      );
+      stakeByType(value, selectedRound, StakingType.Unstake);
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
+    }
+  };
 
-      if (estimateGas) {
-        setEstimatedGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
+  const onPressMigrate = async () => {
+    try {
+      if (isProgressRound()) {
+        setEstimateGas(stakingType, selectedRound);
+        setStakingType(StakingType.Unstake);
+        setModalVisible(false);
+        setIsFinishRound(true);
+        return;
       }
-    } catch (e) {
-      setEstimatedGasPrice('');
+      const migrateAmount = String(principal - parseFloat(value));
+      stakeByType(migrateAmount, selectedRound, StakingType.Migrate);
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
     }
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
-
     if (address) {
-      estimateGas(address);
+      if (stakingType === StakingType.Unstake)
+        setConfirmations(estimagedGasPrice);
     }
+  }, [stakingType, estimagedGasPrice]);
 
-    contract
-      ?.getUserData(
-        selectedRound,
-        isWalletUser ? wallet?.getFirstAddress() : user.ethAddresses[0],
-      )
-      .then((res: any) => {
-        setPrincipal(res[2]); // userPrincipal
-        setReward(res[1]); // userReward
-      });
-  }, []);
+  useEffect(() => {
+    if (!modalVisible && !isFinishRound) {
+      setStakingType(StakingType.Migrate);
+    }
+  }, [modalVisible, isFinishRound]);
 
   if (!selectionVisible) {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
-        <SheetHeader
-          title={t('staking.unstaking_with_type', {
-            stakingCrypto: cryptoType,
-          })}
+        <HelpQuestionHeader
+          title={t('stking.nth_unstaking', { round: selectedRound })}
+          setIsGuideModal={setIsGuideModal}
         />
         <View
           style={{
@@ -184,7 +236,7 @@ const UnstakeAndMigrate: React.FC = () => {
             paddingHorizontal: 20,
             flex: 1,
           }}>
-          <LargeTextInput
+           <LargeTextInput
             placeholder={t('staking.unstaking_placeholder')}
             value={value}
             unit={cryptoType}
@@ -200,12 +252,12 @@ const UnstakeAndMigrate: React.FC = () => {
             }}>
             ↕
           </Text>
-          <LargeTextInput
-            placeholder={t('staking.migration_placeholder')}
-            value={principal - parseFloat(value)}
-            unit={cryptoType}
-            style={{ marginTop: 0 }}
-          />
+        <LargeTextInput
+          placeholder={t('staking.migration_placeholder')}
+          value={value ? String(principal - parseFloat(value)) : ''}
+          unit={cryptoType}
+          style={{ marginTop: 0 }}
+        />
           <InputInfoBox
             list={[
               `입력 가능 수량: ${commaFormatter(
@@ -257,20 +309,31 @@ const UnstakeAndMigrate: React.FC = () => {
             }}
           />
         </View>
-        <ConfirmationModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          title={t('staking.unstaking_with_type', {
-            stakingCrypto: cryptoType,
-          })}
-          subtitle={t('staking.confirmation_title')}
-          list={confirmationList}
-          isApproved={true}
-          submitButtonText={t('staking.nth_unstaking', {
-            round: selectedRound,
-          })}
-          handler={() => console.log('내부 지갑 계정 트랜잭션')}
-        />
+         <StakingConfrimModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        title={t('staking.unstaking_with_type', { stakingCrypto: cryptoType })}
+        subtitle={t('staking.confirmation_title')}
+        list={confirmationList}
+        isApproved={true}
+        submitButtonText={t('staking.nth_unstaking', { round: selectedRound })}
+        handler={() =>
+          stakingType === StakingType.Migrate
+            ? onPressMigrate()
+            : onPressUnstaking()
+        }
+        isLoading={isLoading}
+      />
+      <FinishedRoundModal
+        isFinishRound={isFinishRound}
+        setIsFinishRound={setIsFinishRound}
+        handler={() => confirmExcludeMigrate()}
+        currentRound={currentRound}
+      />
+      <UnstakingGuideModal
+        isGuideModal={isGuideModal}
+        setIsGuideModal={setIsGuideModal}
+      />
         {/* <OverlayLoading
           visible={[
             TxStep.Approving,
@@ -290,7 +353,7 @@ const UnstakeAndMigrate: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward ? reward : 0,
+        rewardValue: reward,
         migrationValue: principal - parseFloat(value),
       }}
       contractAddress={contract?.address}

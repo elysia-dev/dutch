@@ -19,6 +19,7 @@ declare module 'react-native-dotenv' {
   export const BSCSCAN_API_URL: string;
   export const ETH_NETWORK: string;
   export const EL_ADDRESS: string;
+  export const ELFI_ADDRESS: string;
   export const ETHERSCAN_API: string;
   export const BSCSCAN_API: string;
   export const INFURA_PROJECT_ID: string;

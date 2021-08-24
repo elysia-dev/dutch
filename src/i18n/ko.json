@@ -396,6 +396,7 @@
       "yield": "이자",
       "yield_reward": "이자 분배",
       "cancel": "취소",
+      "confirm": "확인",
       "transaction_fee": "네트워크 수수료",
       "insufficient_eth": "{{crypto}}가 부족합니다.",
       "insufficient_gas": "가스비가 부족합니다.",
@@ -468,13 +469,18 @@
       "migration_destination": "마이그레이션 위치",
       "migration_supply": "마이그레이션 수량",
       "reward_supply": "보상 수량",
-      "ended_round_migration_notice": "{{round}}차 스테이킹 기간이 종료되어, 마이그레이션이 불가능합니다. 마이그레이션을 제외하고 계속 진행하시겠습니까?",
+      "ended_round_migration_notice": "{{round}}차 스테이킹 기간이 종료되어, \n 마이그레이션이 불가능합니다. \n 마이그레이션을 제외하고 계속 진행하시겠습니까?",
       "done": "입력 완료",
       "nth_unstaking": "{{round}}차 언스테이킹",
       "gas_price": "가스비",
       "unstaking_value_excess": "언스테이킹 가능 수량을 초과했습니다.",
       "rewards": "보상",
-      "claim": "수령하기"
+      "claim": "수령하기",
+      "migration_help": "[마이그레이션]이란?",
+      "unstaking_help": "[언스테이킹]이란?",
+      "unstaking_help_description": "언스테이킹은 해당 회차에 스테이킹한 토큰을 원하는 외부 지갑으로 전송하는 기능입니다. 스테이킹한 토큰 중 일부만 입력할 경우, 나머지 토큰들은 현재 진행중인 회차의 풀로 마이그레이션 됩니다.",
+      "migration_help_description": "마이그레이션은 스테이킹 수량 중 언스테이킹한 수량을 제외한 수량만큼 현재 진행중인 스테이킹 풀에 전송하여 자동으로 스테이킹하는 기능입니다. 언스테이킹과 마이그레이션을 동 시에 진행하기때문에 이더리움 네트워크 이용수수료(가스비) 를 아낄 수 있습니다.",
+      "transmission_method": "전송 방법"
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

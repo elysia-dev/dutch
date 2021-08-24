@@ -464,7 +464,7 @@
       "migration_destination": "Destination",
       "migration_supply": "Supply",
       "reward_supply": "Reward supply",
-      "ended_round_migration_notice": "{{round}}$t(ordinal_suffix.{{round}}) round staking has been updated. You are unable to migrate this round. Continue?",
+      "ended_round_migration_notice": "{{round}}$t(ordinal_suffix.{{round}}) round staking has been updated. \n You are unable to migrate this round.\n Continue?",
       "done": "Input complete",
       "gas_price": "Gas Fees",
       "nth_unstaking": "{{round}}$t(ordinal_suffix.{{round}}) round unstaking",

@@ -14,7 +14,9 @@ const decimalFormatter = (num: number, place: number) => {
       }
     }
   }
-
+  if (str[str.length - 1] === '.') {
+    str = str + '0'.repeat(place) + '...';
+  }
   return str;
 };
 

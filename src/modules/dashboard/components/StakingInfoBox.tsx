@@ -55,7 +55,9 @@ const StakingInfoBox: React.FC<{
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            {`${commaFormatter(stakingAmount.toString())} ${cryptoType} `}
+            {`${commaFormatter(
+              decimalFormatter(Number(stakingAmount.toString()), 2),
+            )} ${cryptoType} `}
           </Text>
           <Text
             style={{
@@ -101,7 +103,9 @@ const StakingInfoBox: React.FC<{
               color: AppColors.BLACK,
               fontFamily: AppFonts.Medium,
             }}>
-            {`${commaFormatter(rewardAmount.toString())} ${rewardCryptoType} `}
+            {`${commaFormatter(
+              decimalFormatter(Number(rewardAmount.toString()), 2),
+            )} ${rewardCryptoType} `}
           </Text>
           <Text
             style={{
