@@ -50,7 +50,7 @@ const TotalDashboard: React.FC = () => {
     : user.ethAddresses[0];
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
-  const [currentRound, setCurrentRound] = useState(0);
+  const [currentRound, setCurrentRound] = useState(1);
   const [isProgressRound, setIsProgressRound] = useState(false);
   const [isCurrentRound, setIsCurrentRound] = useState(false);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -189,8 +189,8 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  selectedRound !== currentRound && isCurrentRound
-                    ? StakingPage.SelectUnstakingType
+                  selectedRound < currentRound && isCurrentRound
+                    ? StakingPage.UnstakeAndMigrate
                     : StakingPage.Unstake,
                 params: {
                   cryptoType,
