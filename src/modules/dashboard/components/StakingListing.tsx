@@ -9,8 +9,10 @@ import CryptoType from '../../../enums/CryptoType';
 const StakingListing: React.FC<{
   elStakingInfoBoxes: React.ReactNode[];
   elfiStakingInfoBoxes: React.ReactNode[];
-}> = ({ elStakingInfoBoxes, elfiStakingInfoBoxes }) => {
+  hasAnyInfoBoxes: { EL: boolean; ELFI: boolean };
+}> = ({ elStakingInfoBoxes, elfiStakingInfoBoxes, hasAnyInfoBoxes }) => {
   const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -29,66 +31,74 @@ const StakingListing: React.FC<{
           borderBottomColor: AppColors.GREY,
         }}
       />
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          height: 60,
-          paddingTop: 5,
-          paddingBottom: 5,
-          alignItems: 'center',
-        }}>
-        <CryptoImage type={CryptoType.EL} />
-        <CryptoImage
-          type={CryptoType.ELFI}
-          style={{
-            width: 25,
-            height: 25,
-            position: 'absolute',
-            bottom: 5,
-            left: 20,
-            backgroundColor: 'lime',
-          }}
-        />
-        <P1Text
-          label={t('main.staking_by_crypto', {
-            stakingCrypto: CryptoType.EL,
-            rewardCrypto: CryptoType.ELFI,
-          })}
-          style={{ marginLeft: 15 }}
-        />
-      </View>
-      <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          height: 60,
-          paddingTop: 5,
-          paddingBottom: 5,
-          alignItems: 'center',
-        }}>
-        <CryptoImage type={CryptoType.ELFI} />
-        <CryptoImage
-          type={CryptoType.DAI}
-          style={{
-            width: 25,
-            height: 25,
-            position: 'absolute',
-            bottom: 5,
-            left: 20,
-            backgroundColor: 'lime',
-          }}
-        />
-        <P1Text
-          label={t('main.staking_by_crypto', {
-            stakingCrypto: CryptoType.ELFI,
-            rewardCrypto: CryptoType.DAI,
-          })}
-          style={{ marginLeft: 15 }}
-        />
-      </View>
-      <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>
+      {hasAnyInfoBoxes.EL && (
+        <>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              height: 60,
+              paddingTop: 5,
+              paddingBottom: 5,
+              alignItems: 'center',
+            }}>
+            <CryptoImage type={CryptoType.EL} />
+            <CryptoImage
+              type={CryptoType.ELFI}
+              style={{
+                width: 25,
+                height: 25,
+                position: 'absolute',
+                bottom: 5,
+                left: 20,
+                backgroundColor: 'lime',
+              }}
+            />
+            <P1Text
+              label={t('main.staking_by_crypto', {
+                stakingCrypto: CryptoType.EL,
+                rewardCrypto: CryptoType.ELFI,
+              })}
+              style={{ marginLeft: 15 }}
+            />
+          </View>
+          <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
+        </>
+      )}
+      {hasAnyInfoBoxes.ELFI && (
+        <>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              height: 60,
+              paddingTop: 5,
+              paddingBottom: 5,
+              alignItems: 'center',
+            }}>
+            <CryptoImage type={CryptoType.ELFI} />
+            <CryptoImage
+              type={CryptoType.DAI}
+              style={{
+                width: 25,
+                height: 25,
+                position: 'absolute',
+                bottom: 5,
+                left: 20,
+                backgroundColor: 'lime',
+              }}
+            />
+            <P1Text
+              label={t('main.staking_by_crypto', {
+                stakingCrypto: CryptoType.ELFI,
+                rewardCrypto: CryptoType.DAI,
+              })}
+              style={{ marginLeft: 15 }}
+            />
+          </View>
+          <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>
+        </>
+      )}
     </View>
   );
 };
