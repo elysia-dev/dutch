@@ -1,10 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Platform, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BigNumber } from '@ethersproject/bignumber';
-import { ethers, utils, constants } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import {
+  EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -12,45 +14,38 @@ import NumberPadShortcut from './components/NumberPadShortcut';
 import NumberPad from '../../shared/components/NumberPad';
 import NextButton from '../../shared/components/NextButton';
 import UserContext from '../../contexts/UserContext';
-import ConfirmationModal from '../../shared/components/ConfirmationModal';
 import InputInfoBox from './components/InputInfoBox';
 import PriceContext from '../../contexts/PriceContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
-import WalletContext from '../../contexts/WalletContext';
 import CryptoType from '../../enums/CryptoType';
 import PaymentSelection from '../../shared/components/PaymentSelection';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
-
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-import useStakingPool from '../../hooks/useStakingPool';
-import { EL_STAKING_POOL_ADDRESS } from 'react-native-dotenv';
 
 type ParamList = {
   Unstake: {
     cryptoType: CryptoType;
     selectedRound: number;
-    earnReward: boolean;
   };
 };
 
 const Unstake: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Unstake'>>();
-  const { cryptoType, selectedRound, earnReward } = route.params;
+  const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
-  const { isWalletUser, user } = useContext(UserContext);
+  const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const { getCryptoPrice, gasPrice } = useContext(PriceContext);
+  const { getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
   const [selectionVisible, setSelectionVisible] = useState(false);
-  const { wallet } = useContext(WalletContext);
   const { estimagedGasPrice } = useEstimateGas(
     cryptoType,
     StakingType.Unstake,
@@ -59,11 +54,10 @@ const Unstake: React.FC = () => {
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
   const { isLoading, stakeByType } = useStakingByType(cryptoType);
-  const contract = useStakingPool(cryptoType);
-
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const stakingPoolAddress =
+    cryptoType === CryptoType.EL
+      ? EL_STAKING_POOL_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS;
 
   const confirmationList = [
     {
@@ -185,6 +179,7 @@ const Unstake: React.FC = () => {
       </View>
     );
   }
+
   return (
     <PaymentSelection
       value={parseFloat(value)}
@@ -193,8 +188,9 @@ const Unstake: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
+        rewardValue: 0,
       }}
-      contractAddress={contract?.address}
+      contractAddress={stakingPoolAddress}
     />
   );
 };

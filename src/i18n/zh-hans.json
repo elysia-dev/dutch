@@ -392,6 +392,7 @@
       "yield": "利息",
       "yield_reward": "利息分配",
       "cancel": "取消",
+      "confirm": "确认",
       "transaction_fee": "手续费",
       "insufficient_eth": "{{crypto}} 余额不足。",
       "insufficient_gas": "gas费用不足。",
@@ -400,7 +401,15 @@
       "gas_price": "gas费用",
       "confirm_gas": "因为使用以太坊网络，所以会产生gas费用（类似于手续费）。",
       "check_allowance_guide": "分红指南",
-      "check_allowance": "分红"
+      "check_allowance": "分红",
+      "transaction_delay_guide": "* 由于您输入的GAS费过低，您操作的交易被延迟，请调整GAS费以加快交易速度。",
+      "transaction_first_time _purchase": "待处理交易",
+      "accelerate": "加速",
+      "accelerate_gas_price": "GAS费(Gwei)",
+      "accelerate_gas_fee": "加速手续费",
+      "accelerate_gas_fee_guide": "请输入Gwei金额。",
+      "accelerate_insufficient": "资金不足。",
+      "accelerate_send": "保存"
     },
     "staking": {
       "staking": "Staking(权益质押)",
@@ -423,7 +432,7 @@
       "remaining mining supply": "剩余挖矿量",
       "reward_price": "{{rewardCrypto}}代币价格",
       "nth_staking": "第$t(numeral_character.{{round}})轮Staking",
-      "comming_soon": "COMING SOON!",
+      "coming_soon": "COMING SOON!",
       "need_wallet": "需要绑定钱包",
       "ended_round_notice": "第$t(numeral_character.{{round}})轮Staking已经结束，本轮服务已经终止。",
       "nth_staking_schedule": "第$t(numeral_character.{{round}})轮Staking时间",
@@ -463,7 +472,12 @@
       "nth_unstaking": "第$t(numeral_character.{{round}})轮Unstaking",
       "unstaking_value_excess": "超过了可以Unstaking(解除权益质押)的金额。",
       "rewards": "奖励",
-      "claim": "领取"
+      "claim": "领取",
+      "migration_help": "[转移]是什么？",
+      "unstaking_help": "[Unstaking(解除权益质押)]是什么？",
+      "unstaking_help_description": "Unstaking(解除权益质押)是将相应轮次的代币转移到钱包中的功能。 如果只解除了部分代币的质押，剩余的代币将转移到现在进行轮次的资金池中。",
+      "migration_help_description": "转移是一种将上一轮次质押的代币传送到当前轮次资金池中自动质押的功能。Unstaking(解除权益质押)和转移同时进行时，可以节省以太坊网络Gas费(手续费)。",
+      "transmission_method": "传送方法"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"

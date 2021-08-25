@@ -430,7 +430,7 @@
       "remaining mining supply": "remaining mining supply",
       "reward_price": "{{rewardCrypto}} price",
       "nth_staking": "{{round}}$t(ordinal_suffix.{{round}}) round staking",
-      "comming_soon": "COMING SOON!",
+      "coming_soon": "COMING SOON!",
       "need_wallet": "Connect wallet",
       "ended_round_notice": "{{round}}$t(ordinal_suffix.{{round}}) round staking has been updated. You are unable to participate this round",
       "nth_staking_schedule": "{{round}}$t(ordinal_suffix.{{round}}) round staking schedule",

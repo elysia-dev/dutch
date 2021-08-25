@@ -64,7 +64,7 @@ const CurrentDashboard: React.FC = () => {
     switch (stakingStatus) {
       case StakingStatus.NOT_YET_STARTED:
       case StakingStatus.ROUND_NOT_IN_PROGRESS:
-        nextButtonTitle = t('staking.comming_soon');
+        nextButtonTitle = t('staking.coming_soon');
         break;
       case StakingStatus.ROUND_IN_PROGRESS:
         nextButtonTitle = t('staking.nth_staking', { round: currentRound });

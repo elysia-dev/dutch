@@ -21,6 +21,7 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { StakingPool } from '@elysia-dev/contract-typechain';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
@@ -43,15 +44,10 @@ import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 import TransactionContext from '../../contexts/TransactionContext';
 import StakingListing from './components/StakingListing';
-import { StakingPool } from '@elysia-dev/contract-typechain';
-import {
-  ELFI_STAKING_POOL_ADDRESS,
-  EL_STAKING_POOL_ADDRESS,
-} from 'react-native-dotenv';
 import WalletContext from '../../contexts/WalletContext';
-import { BigNumber, utils } from 'ethers';
 import StakingInfoBox from './components/StakingInfoBox';
 import useStakingPool from '../../hooks/useStakingPool';
+import TxStatus from '../../enums/TxStatus';
 
 type ParamList = {
   Main: {
@@ -79,7 +75,7 @@ export const Main: React.FC = () => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const elContract = useStakingPool(CryptoType.EL);
-  // const elfiContract = useStakingPool(CryptoType.ELFI);
+  const elfiContract = useStakingPool(CryptoType.ELFI);
 
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
@@ -97,8 +93,7 @@ export const Main: React.FC = () => {
       infoBoxes = elStakingInfoBoxes;
       setInfoBoxes = setElStakingInfoBoxes;
     } else {
-      // contract = elfiContract;
-      contract = elContract;
+      contract = elfiContract;
       infoBoxes = elfiStakingInfoBoxes;
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
@@ -152,7 +147,7 @@ export const Main: React.FC = () => {
     setBtnRefreshing(true);
     try {
       getRoundData(CryptoType.EL);
-      // getRoundData(CryptoType.ELFI)
+      getRoundData(CryptoType.ELFI);
       await loadBalances();
     } finally {
       setBtnRefreshing(false);
@@ -162,7 +157,7 @@ export const Main: React.FC = () => {
   useEffect(() => {
     if (isFocused) {
       getRoundData(CryptoType.EL);
-      // getRoundData(CryptoType.ELFI);
+      getRoundData(CryptoType.ELFI);
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });
         onRefresh();
@@ -278,6 +273,7 @@ export const Main: React.FC = () => {
               if (
                 item.productId &&
                 transactions[0]?.productId === item.productId &&
+                transactions[0].status === TxStatus.Pending &&
                 item.value <= 0
               ) {
                 return true;
