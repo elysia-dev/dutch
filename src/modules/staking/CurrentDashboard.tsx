@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -30,6 +30,7 @@ import useStakingPool from '../../hooks/useStakingPool';
 import { BigNumber, constants } from 'ethers';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
+import { useRef } from 'react';
 
 type ParamList = {
   CurrentDashboard: {
@@ -41,6 +42,7 @@ type ParamList = {
 const CurrentDashboard: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
   const { cryptoType, rewardCryptoType } = route.params;
+  const miningPlanRef = useRef<ScrollView | null>();
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
   const [selectedRound, setSelectedRound] = useState(currentRound);
@@ -87,6 +89,9 @@ const CurrentDashboard: React.FC = () => {
       setCurrentRound(res);
     });
     getPoolData();
+    miningPlanRef.current?.scrollTo({
+      x: 336 * (currentRound - 1),
+    });
   }, [currentRound]);
 
   return (
@@ -174,7 +179,12 @@ const CurrentDashboard: React.FC = () => {
               style={{ paddingVertical: 16 }}
             />
           </BoxWithDivider>
-          <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
+          <ScrollView
+            ref={(ref) => {
+              miningPlanRef.current = ref;
+            }}
+            horizontal={true}
+            style={{ marginBottom: 100 }}>
             {[1, 2, 3, 4, 5, 6].map((i) => {
               return (
                 <MiningPlan
