@@ -37,10 +37,11 @@ export default class EthersacnClient {
    */
   static getErc20Transaction = async (
     address: string,
+    erc20Address: string,
     page: number,
   ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
     return await api.get(
-      `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${EL_ADDRESS}&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${ETHERSCAN_API}`,
+      `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${erc20Address}&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${ETHERSCAN_API}`,
     );
   };
 
