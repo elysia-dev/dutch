@@ -87,7 +87,7 @@ const CurrentDashboard: React.FC = () => {
       setCurrentRound(res);
     });
     getPoolData();
-  }, []);
+  }, [currentRound]);
 
   return (
     <View
