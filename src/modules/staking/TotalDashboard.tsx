@@ -61,9 +61,7 @@ const TotalDashboard: React.FC = () => {
   });
 
   const formatAmount = (amount: BigNumber) => {
-    return commaFormatter(
-      decimalFormatter(Number(utils.formatEther(amount)), 5),
-    );
+    return commaFormatter(decimalFormatter(parseFloat(amount.toString()), 5));
   };
 
   const indicateAmount = (amount: BigNumber) => {
