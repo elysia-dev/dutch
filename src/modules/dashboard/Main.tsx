@@ -71,6 +71,13 @@ export const Main: React.FC = () => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [btnRefreshing, setBtnRefreshing] = React.useState(false);
   const { wallet } = useContext(WalletContext);
+  const crytoTypes = [
+    CryptoType.EL,
+    CryptoType.ETH,
+    CryptoType.BNB,
+    CryptoType.ELFI,
+    CryptoType.DAI,
+  ];
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -297,11 +304,9 @@ export const Main: React.FC = () => {
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
-            assets={assets.filter((item) =>
-              [CryptoType.EL, CryptoType.ETH, CryptoType.BNB].includes(
-                item.type,
-              ),
-            )}
+            assets={assets.filter((item) => {
+              return crytoTypes.includes(item.type);
+            })}
             itemPressHandler={(asset) => {
               navigation.navigate(Page.Crypto, {
                 screen: CryptoPage.Detail,
