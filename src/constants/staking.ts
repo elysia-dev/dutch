@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const ROUND_DURATION = 20;
 export const NUMBER_OF_ROUNDS = 6;
 
@@ -14,43 +16,8 @@ export const TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL =
 export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL * NUMBER_OF_ROUNDS;
 
-// YYYY.MM.DD hh:mm:ss
-// MM.DD.YYYY hh:mm:ss
-
-export const STAKING_POOL_ROUNDS = [
-  {
-    startedAt: '2021.08.20 09:00:00', // 이거 한국 시간으로 바꿔야 함...
-    endedAt: '2021.08.21 09:00:00',
-  },
-  {
-    startedAt: '2021.08.23 02:00:00',
-    endedAt: '2021.08.24 02:00:00',
-  },
-  {
-    startedAt: '2021.08.22 17:00:00', // 잘못 입력한 라운드인 듯...
-    endedAt: '2021.08.23 17:00:00',
-  },
-  {
-    startedAt: '2021.08.23 16:00:00',
-    endedAt: '2021.08.24 16:00:00',
-  },
-  {
-    startedAt: '2021.08.25 09:00:00',
-    endedAt: '2021.08.25 13:00:00',
-  },
-  {
-    startedAt: '2021.08.25 14:00:00',
-    endedAt: '2021.08.26 14:00:00',
-  },
-];
-
-import moment from 'moment';
-
 const inputFormat = 'YYYY.MM.DD hh:mm:ss Z';
-const outputFormat = 'YYYY.MM.DD hh:mm:ss'; // for ko and zh-hans
-// 'MM.DD.YYYY hh:mm:ss' for en
-
-export const STAKING_POOL_ROUNDS_MOMENT = [
+export const STAKING_POOL_ROUNDS = [
   {
     startedAt: moment('2021.08.20 09:00:00 +9:00', inputFormat),
     endedAt: moment('2021.08.21 09:00:00 +9:00', inputFormat),

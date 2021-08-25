@@ -18,7 +18,7 @@ import {
   ROUND_DURATION,
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
-  STAKING_POOL_ROUNDS_MOMENT,
+  STAKING_POOL_ROUNDS,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -118,13 +118,11 @@ const CurrentDashboard: React.FC = () => {
             <BoxWithDividerContent
               isFirst={true}
               label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS_MOMENT[
-                currentRound - 1
-              ].startedAt.format(
+              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt.format(
                 t('datetime_format'),
-              )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[
-                currentRound - 1
-              ].endedAt.format(t('datetime_format'))} (KST)`}
+              )}\n~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
+                t('datetime_format'),
+              )} (KST)`}
             />
             <BoxWithDividerContent
               label={t('staking.current_round')}

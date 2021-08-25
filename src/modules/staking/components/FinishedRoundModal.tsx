@@ -3,7 +3,7 @@ import { Modal, View, TouchableOpacity, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
 import AppColors from '../../../enums/AppColors';
-import { STAKING_POOL_ROUNDS_MOMENT } from '../../../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../../../constants/staking';
 
 interface Props {
   isFinishRound: boolean;
@@ -86,13 +86,11 @@ const FinishedRoundModal: React.FC<Props> = ({
                     fontSize: 12,
                     color: AppColors.BLACK,
                   }}>
-                  {`${STAKING_POOL_ROUNDS_MOMENT[
-                    currentRound - 1
-                  ].startedAt.format(
+                  {`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt.format(
                     t('datetime_format'),
-                  )} ~ ${STAKING_POOL_ROUNDS_MOMENT[
-                    currentRound - 1
-                  ].endedAt.format(t('datetime_format'))}`}
+                  )} ~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
+                    t('datetime_format'),
+                  )}`}
                 </Text>
               </View>
             </View>

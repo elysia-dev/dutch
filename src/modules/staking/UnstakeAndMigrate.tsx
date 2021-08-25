@@ -25,7 +25,7 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
-import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
 import useEstimateGas from '../../hooks/useEstimateGas';
@@ -133,8 +133,8 @@ const UnstakeAndMigrate: React.FC = () => {
 
   const isProgressRound = () => {
     return moment().isBetween(
-      STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
-      STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+      STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
+      STAKING_POOL_ROUNDS[currentRound].startedAt,
     );
   };
 

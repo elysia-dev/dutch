@@ -13,7 +13,7 @@ import CircularButtonWithLabel from '../../shared/components/CircularButtonWithL
 import StakingInfoCard from './components/StakingInfoCard';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
-import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
@@ -87,8 +87,8 @@ const TotalDashboard: React.FC = () => {
       });
     setIsProgressRound(
       !moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].startedAt,
-        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[selectedRound - 1].startedAt,
+        STAKING_POOL_ROUNDS[selectedRound - 1].endedAt,
       ),
     );
     getPoolData();
@@ -97,8 +97,8 @@ const TotalDashboard: React.FC = () => {
   useEffect(() => {
     setIsCurrentRound(
       moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].startedAt,
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[currentRound - 1].startedAt,
+        STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
       ),
     );
   }, [currentRound]);
@@ -127,13 +127,11 @@ const TotalDashboard: React.FC = () => {
           <BoxWithDividerContent
             isFirst={true}
             label={t('staking.schedule')}
-            value={`${STAKING_POOL_ROUNDS_MOMENT[
-              selectedRound - 1
-            ].startedAt.format(
+            value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt.format(
               t('datetime_format'),
-            )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[
-              selectedRound - 1
-            ].endedAt.format(t('datetime_format'))} (KST)`}
+            )}\n~ ${STAKING_POOL_ROUNDS[selectedRound - 1].endedAt.format(
+              t('datetime_format'),
+            )} (KST)`}
             style={{
               paddingVertical: 25,
               paddingHorizontal: 19,
