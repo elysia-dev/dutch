@@ -23,9 +23,9 @@ export const Main: React.FC = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const totalStakingPeriod = `${STAKING_POOL_ROUNDS_MOMENT[0].startedAt.format(
-    t('staking.datetime_format'),
+    t('datetime_format'),
   )} ~ ${STAKING_POOL_ROUNDS_MOMENT[5].endedAt.format(
-    t('staking.datetime_format'),
+    t('datetime_format'),
   )} (KST)`;
 
   return (

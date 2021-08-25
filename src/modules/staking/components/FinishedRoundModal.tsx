@@ -89,10 +89,10 @@ const FinishedRoundModal: React.FC<Props> = ({
                   {`${STAKING_POOL_ROUNDS_MOMENT[
                     currentRound - 1
                   ].startedAt.format(
-                    t('staking.datetime_format'),
+                    t('datetime_format'),
                   )} ~ ${STAKING_POOL_ROUNDS_MOMENT[
                     currentRound - 1
-                  ].endedAt.format(t('staking.datetime_format'))}`}
+                  ].endedAt.format(t('datetime_format'))}`}
                 </Text>
               </View>
             </View>

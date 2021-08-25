@@ -57,9 +57,9 @@ const MiningPlan: React.FC<{
           isFirst={true}
           label={t('staking.schedule')}
           value={`${STAKING_POOL_ROUNDS_MOMENT[round - 1].startedAt.format(
-            t('staking.datetime_format'),
+            t('datetime_format'),
           )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[round - 1].endedAt.format(
-            t('staking.datetime_format'),
+            t('datetime_format'),
           )} (KST)`}
           style={{
             paddingVertical: 12,

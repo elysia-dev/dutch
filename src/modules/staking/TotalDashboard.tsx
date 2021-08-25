@@ -130,10 +130,10 @@ const TotalDashboard: React.FC = () => {
             value={`${STAKING_POOL_ROUNDS_MOMENT[
               selectedRound - 1
             ].startedAt.format(
-              t('staking.datetime_format'),
+              t('datetime_format'),
             )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[
               selectedRound - 1
-            ].endedAt.format(t('staking.datetime_format'))} (KST)`}
+            ].endedAt.format(t('datetime_format'))} (KST)`}
             style={{
               paddingVertical: 25,
               paddingHorizontal: 19,

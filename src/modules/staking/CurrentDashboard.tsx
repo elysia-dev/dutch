@@ -121,10 +121,10 @@ const CurrentDashboard: React.FC = () => {
               value={`${STAKING_POOL_ROUNDS_MOMENT[
                 currentRound - 1
               ].startedAt.format(
-                t('staking.datetime_format'),
+                t('datetime_format'),
               )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[
                 currentRound - 1
-              ].endedAt.format(t('staking.datetime_format'))} (KST)`}
+              ].endedAt.format(t('datetime_format'))} (KST)`}
             />
             <BoxWithDividerContent
               label={t('staking.current_round')}
