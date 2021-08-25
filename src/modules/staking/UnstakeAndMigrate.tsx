@@ -1,10 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Platform, TouchableOpacity, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import moment from 'moment';
+import {
+  EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
-import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
 import NumberPadShortcut from './components/NumberPadShortcut';
 import NumberPad from '../../shared/components/NumberPad';
@@ -21,7 +25,6 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
-import moment from 'moment';
 import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
@@ -30,7 +33,6 @@ import StakingType from '../../enums/StakingType';
 import StakingConfirmModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
-import { useNavigation } from '@react-navigation/native';
 import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
 
 type ParamList = {
@@ -81,6 +83,10 @@ const UnstakeAndMigrate: React.FC = () => {
       value: '',
     },
   ]);
+  const stakingPoolAddress =
+    cryptoType === CryptoType.EL
+      ? EL_STAKING_POOL_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS;
 
   const setConfirmations = (gasFee?: string) => {
     setConfirmationList([
@@ -320,10 +326,10 @@ const UnstakeAndMigrate: React.FC = () => {
         type: 'unstake',
         unit: cryptoType,
         round: selectedRound,
-        rewardValue: earnReward && reward,
+        rewardValue: reward,
         migrationValue: principal - parseFloat(value),
       }}
-      contractAddress={contract?.address}
+      contractAddress={stakingPoolAddress}
     />
   );
 };

@@ -5,6 +5,10 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { useRoute, RouteProp } from '@react-navigation/native';
+import {
+  EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_ADDRESS,
+} from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import LargeTextInput from './components/LargeTextInput';
@@ -23,7 +27,6 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
-import { EL_STAKING_POOL_ADDRESS } from 'react-native-dotenv';
 import useTxHandler from '../../hooks/useTxHandler';
 import useEstimateGas from '../../hooks/useEstimateGas';
 import StakingType from '../../enums/StakingType';
@@ -68,6 +71,10 @@ const Stake: React.FC = () => {
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const stakingPoolAddress =
+    cryptoType === CryptoType.EL
+      ? EL_STAKING_POOL_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS;
 
   const getPoolData = async () => {
     const poolData = await stakingPoolContract.getPoolData(selectedRound);
@@ -283,7 +290,7 @@ const Stake: React.FC = () => {
         unit: cryptoType,
         round: selectedRound,
       }}
-      contractAddress={contract?.address}
+      contractAddress={stakingPoolAddress}
     />
   );
 };
