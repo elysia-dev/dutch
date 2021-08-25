@@ -52,7 +52,7 @@ const MiningPlan: React.FC<{
         label={t('staking.nth_mining_plan', { round })}
         style={{ textAlign: 'center', marginBottom: 10 }}
       />
-      <BoxWithDivider style={{ width: 300 }}>
+      <BoxWithDivider>
         <BoxWithDividerContent
           isFirst={true}
           label={t('staking.schedule')}
@@ -63,7 +63,7 @@ const MiningPlan: React.FC<{
             paddingVertical: 12,
             paddingHorizontal: 15,
           }}
-          labelStyle={{ fontSize: 12 }}
+          labelStyle={{ fontSize: 12, width: 88 }}
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
