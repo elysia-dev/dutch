@@ -43,7 +43,6 @@ const CurrentDashboard: React.FC = () => {
   const { cryptoType, rewardCryptoType } = route.params;
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
-  const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const totalAmountOfReward =
@@ -115,10 +114,7 @@ const CurrentDashboard: React.FC = () => {
             })}
             style={{ fontSize: 22 }}
           />
-          <DotGraph
-            selectedRound={selectedRound}
-            setSelectedRound={setSelectedRound}
-          />
+          <DotGraph selectedRound={currentRound} currentRound={currentRound} />
           <BoxWithDivider style={{ marginBottom: 60 }}>
             <BoxWithDividerContent
               isFirst={true}

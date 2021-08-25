@@ -121,6 +121,7 @@ const TotalDashboard: React.FC = () => {
         <DotGraph
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
+          currentRound={currentRound}
         />
         <BoxWithDivider style={{ marginTop: -10 }}>
           <BoxWithDividerContent

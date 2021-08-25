@@ -6,8 +6,9 @@ import getRoundStatus from '../../../utiles/geRoundStatus';
 
 const DotGraph: React.FC<{
   selectedRound: number;
-  setSelectedRound: Dispatch<SetStateAction<number>>;
-}> = ({ selectedRound, setSelectedRound }) => {
+  setSelectedRound?: Dispatch<SetStateAction<number>>;
+  currentRound: number;
+}> = ({ selectedRound, setSelectedRound, currentRound }) => {
   return (
     <View>
       <View
@@ -19,8 +20,17 @@ const DotGraph: React.FC<{
         }}>
         <View
           style={{
-            width: '99%',
+            width: '98%',
             borderColor: AppColors.GREY,
+            borderWidth: 1,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            left: 7.5,
+            width: `${currentRound === 1 ? 0 : (97 / 5) * (currentRound - 1)}%`,
+            borderColor: AppColors.MAIN,
             borderWidth: 1,
           }}
         />
@@ -40,7 +50,7 @@ const DotGraph: React.FC<{
               round={i}
               status={getRoundStatus(i)}
               selected={selectedRound === i ? true : false}
-              setSelectedRound={setSelectedRound}
+              setSelectedRound={setSelectedRound} // 이거를 선택으로 해야 할 듯...?
             />
           );
         })}
