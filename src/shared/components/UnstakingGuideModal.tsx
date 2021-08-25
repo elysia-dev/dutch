@@ -30,23 +30,9 @@ const UnstakingGuideModal: React.FC<Props> = ({
             width: 343,
             backgroundColor: AppColors.WHITE,
             borderRadius: 10,
+            paddingTop: 10,
+            paddingBottom: 20,
           }}>
-          <View
-            style={{
-              borderRadius: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 50,
-              backgroundColor: AppColors.GREY3,
-            }}>
-            <Text
-              style={{
-                fontSize: 17,
-                fontWeight: 'bold',
-              }}>
-              {t('staking.transmission_method')}
-            </Text>
-          </View>
           <View
             style={{
               paddingTop: 37,
@@ -87,7 +73,7 @@ const UnstakingGuideModal: React.FC<Props> = ({
                 marginBottom: 10,
               }}>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Bold }}>
-                {t('staking.migration _help')}
+                {t('staking.migration_help')}
               </Text>
               <Text style={{ fontSize: 17, fontFamily: AppFonts.Regular }}>
                 {/* 이란? */}
@@ -111,7 +97,6 @@ const UnstakingGuideModal: React.FC<Props> = ({
             <View
               style={{
                 width: '100%',
-                marginBottom: 20,
               }}>
               <TouchableOpacity
                 style={{
