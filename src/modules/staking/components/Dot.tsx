@@ -36,6 +36,13 @@ const Dot: React.FC<{
       break;
   }
 
+  if (!setSelectedRound) {
+    backgroundColor = AppColors.DEACTIVATED;
+    borderColor = AppColors.DEACTIVATED;
+    shadowOpacity = 0;
+    elevation = 0;
+  }
+
   return (
     <TouchableOpacity
       style={{ alignItems: 'center' }}

@@ -25,15 +25,19 @@ const DotGraph: React.FC<{
             borderWidth: 1,
           }}
         />
-        <View
-          style={{
-            position: 'absolute',
-            left: 7.5,
-            width: `${currentRound === 1 ? 0 : (97 / 5) * (currentRound - 1)}%`,
-            borderColor: AppColors.MAIN,
-            borderWidth: 1,
-          }}
-        />
+        {setSelectedRound && (
+          <View
+            style={{
+              position: 'absolute',
+              left: 7.5,
+              width: `${
+                currentRound === 1 ? 0 : (97 / 5) * (currentRound - 1)
+              }%`,
+              borderColor: AppColors.MAIN,
+              borderWidth: 1,
+            }}
+          />
+        )}
       </View>
       <View
         style={{
