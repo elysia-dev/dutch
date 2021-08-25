@@ -13,7 +13,7 @@ import {
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
   ELFI_PER_ROUND_ON_EL_STAKING_POOL,
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
-  STAKING_POOL_ROUNDS,
+  STAKING_POOL_ROUNDS_MOMENT,
 } from '../../../constants/staking';
 import calculateMined from '../../../utiles/calculateMined';
 import decimalFormatter from '../../../utiles/decimalFormatter';
@@ -56,9 +56,11 @@ const MiningPlan: React.FC<{
         <BoxWithDividerContent
           isFirst={true}
           label={t('staking.schedule')}
-          value={`${STAKING_POOL_ROUNDS[round - 1].startedAt}\n~ ${
-            STAKING_POOL_ROUNDS[round - 1].endedAt
-          } (KST)`}
+          value={`${STAKING_POOL_ROUNDS_MOMENT[round - 1].startedAt.format(
+            t('staking.datetime_format'),
+          )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[round - 1].endedAt.format(
+            t('staking.datetime_format'),
+          )} (KST)`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,

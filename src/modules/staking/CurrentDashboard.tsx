@@ -18,14 +18,13 @@ import {
   ROUND_DURATION,
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
-  STAKING_POOL_ROUNDS,
+  STAKING_POOL_ROUNDS_MOMENT,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
-import WalletContext from '../../contexts/WalletContext';
 import useStakingPool from '../../hooks/useStakingPool';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
@@ -119,9 +118,13 @@ const CurrentDashboard: React.FC = () => {
             <BoxWithDividerContent
               isFirst={true}
               label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
-                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
-              } (KST)`}
+              value={`${STAKING_POOL_ROUNDS_MOMENT[
+                currentRound - 1
+              ].startedAt.format(
+                t('staking.datetime_format'),
+              )}\n~ ${STAKING_POOL_ROUNDS_MOMENT[
+                currentRound - 1
+              ].endedAt.format(t('staking.datetime_format'))} (KST)`}
             />
             <BoxWithDividerContent
               label={t('staking.current_round')}
