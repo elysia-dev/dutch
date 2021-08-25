@@ -105,7 +105,6 @@ export enum StakingPage {
   CurrentDashboard = 'CurrentDashboard',
   TotalDashboard = 'TotalDashboard',
   Stake = 'Stake',
-  SelectUnstakingType = 'SelectUnstakingType',
   Unstake = 'Unstake',
   UnstakeAndMigrate = 'UnstakeAndMigrate',
   Reward = 'Reward',
