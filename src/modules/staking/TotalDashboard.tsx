@@ -91,14 +91,17 @@ const TotalDashboard: React.FC = () => {
         STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
       ),
     );
+    getPoolData();
+  }, [selectedRound]);
+
+  useEffect(() => {
     setIsCurrentRound(
       moment().isBetween(
         STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].startedAt,
         STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
       ),
     );
-    getPoolData();
-  }, [selectedRound]);
+  }, [currentRound]);
 
   return (
     <ScrollView
