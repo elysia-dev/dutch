@@ -43,6 +43,7 @@ const TotalDashboard: React.FC = () => {
   const navigation = useNavigation();
   const [userReward, setUserReward] = useState('-');
   const [userPrincipal, setUserPrincipal] = useState('-');
+  const [currentRoundReward, setCurrentRoundReward] = useState('-');
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
@@ -56,6 +57,7 @@ const TotalDashboard: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const [count, setCount] = useState(0);
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -76,9 +78,11 @@ const TotalDashboard: React.FC = () => {
   };
 
   useEffect(() => {
+    // if (selectedRound === currentRound) clearTimeout();
     stakingPoolContract
       .getUserData(selectedRound, address || '')
       .then((res: BigNumber[]) => {
+        setCurrentRoundReward(indicateAmount(res[1]));
         setUserReward(indicateAmount(res[1]));
         setUserPrincipal(indicateAmount(res[2]));
       })
@@ -102,6 +106,19 @@ const TotalDashboard: React.FC = () => {
       ),
     );
   }, [currentRound]);
+
+  useEffect(() => {
+    if (isCurrentRound && selectedRound === currentRound) {
+      setTimeout(() => {
+        stakingPoolContract
+          .getUserData(currentRound, address || '')
+          .then((res: BigNumber[]) => {
+            setCurrentRoundReward(indicateAmount(res[1]));
+          });
+        setCount(count + 1);
+      }, 5000);
+    }
+  }, [count, isCurrentRound, selectedRound]);
 
   return (
     <ScrollView
@@ -158,7 +175,9 @@ const TotalDashboard: React.FC = () => {
             <StakingInfoCard
               roundEnded={false}
               label={t('staking.nth_reward', { round: selectedRound })}
-              value={userReward}
+              value={
+                selectedRound === currentRound ? currentRoundReward : userReward
+              }
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
             />
@@ -192,7 +211,7 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  selectedRound < currentRound && isCurrentRound
+                  selectedRound === currentRound && !isCurrentRound
                     ? StakingPage.UnstakeAndMigrate
                     : StakingPage.Unstake,
                 params: {
@@ -205,7 +224,11 @@ const TotalDashboard: React.FC = () => {
           />
           <CircularButtonWithLabel
             icon="⤴"
-            disabled={userReward === '-'}
+            disabled={
+              selectedRound === currentRound
+                ? currentRoundReward === '-'
+                : userReward === '-'
+            }
             label={t('staking.claim_rewards')}
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
