@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BigNumber, constants, utils } from 'ethers';
+import moment from 'moment';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { TitleText } from '../../shared/components/Texts';
@@ -19,10 +21,8 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
 import WalletContext from '../../contexts/WalletContext';
-import { BigNumber, constants, utils } from 'ethers';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
-import moment from 'moment';
 import useStakingPool from '../../hooks/useStakingPool';
 
 type ParamList = {
@@ -61,9 +61,7 @@ const TotalDashboard: React.FC = () => {
   });
 
   const formatAmount = (amount: BigNumber) => {
-    return commaFormatter(
-      decimalFormatter(Number(utils.formatEther(amount)), 5),
-    );
+    return commaFormatter(decimalFormatter(parseFloat(amount.toString()), 5));
   };
 
   const indicateAmount = (amount: BigNumber) => {
@@ -196,9 +194,6 @@ const TotalDashboard: React.FC = () => {
                   cryptoType,
                   selectedRound,
                   currentRound,
-                  pageAfterSelection:
-                    selectedRound < currentRound &&
-                    StakingPage.UnstakeAndMigrate,
                 },
               });
             }}

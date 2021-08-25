@@ -6,7 +6,6 @@ import { Main as StakingMain } from './Main';
 import CurrentDashboard from './CurrentDashboard';
 import TotalDashboard from './TotalDashboard';
 import Stake from './Stake';
-import SelectUnstakingType from './SelectUnstakingType';
 import Unstake from './Unstake';
 import UnstakeAndMigrate from './UnstakeAndMigrate';
 import Reward from './Reward';
@@ -32,10 +31,6 @@ export const Main = () => {
         component={TotalDashboard}
       />
       <RootStack.Screen name={StakingPage.Stake} component={Stake} />
-      <RootStack.Screen
-        name={StakingPage.SelectUnstakingType}
-        component={SelectUnstakingType}
-      />
       <RootStack.Screen name={StakingPage.Unstake} component={Unstake} />
       <RootStack.Screen
         name={StakingPage.UnstakeAndMigrate}
