@@ -47,6 +47,7 @@ import StakingListing from './components/StakingListing';
 import WalletContext from '../../contexts/WalletContext';
 import StakingInfoBox from './components/StakingInfoBox';
 import useStakingPool from '../../hooks/useStakingPool';
+import TxStatus from '../../enums/TxStatus';
 
 type ParamList = {
   Main: {
@@ -272,6 +273,7 @@ export const Main: React.FC = () => {
               if (
                 item.productId &&
                 transactions[0]?.productId === item.productId &&
+                transactions[0].status === TxStatus.Pending &&
                 item.value <= 0
               ) {
                 return true;
