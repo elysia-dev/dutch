@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { BigNumber, constants } from 'ethers';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
@@ -18,7 +19,6 @@ import {
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
-  STAKING_POOL_ROUNDS_MOMENT,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -27,9 +27,9 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import WalletContext from '../../contexts/WalletContext';
 import useStakingPool from '../../hooks/useStakingPool';
-import { BigNumber, constants } from 'ethers';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
+import useAppState from '../../hooks/useAppState';
 
 type ParamList = {
   CurrentDashboard: {
@@ -44,7 +44,6 @@ const CurrentDashboard: React.FC = () => {
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
   const { isWalletUser, user } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
   const totalAmountOfReward =
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
@@ -55,6 +54,7 @@ const CurrentDashboard: React.FC = () => {
     constants.Zero,
   );
   const stakingStatus = getStakingStatus(currentRound);
+  const appState = useAppState();
 
   let nextButtonTitle = '';
   if (!(isWalletUser || user.ethAddresses[0])) {
@@ -86,7 +86,7 @@ const CurrentDashboard: React.FC = () => {
       setCurrentRound(res);
     });
     getPoolData();
-  }, [currentRound]);
+  }, [currentRound, appState]);
 
   return (
     <View

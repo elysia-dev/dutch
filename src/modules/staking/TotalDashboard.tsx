@@ -24,6 +24,7 @@ import WalletContext from '../../contexts/WalletContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
+import useAppState from '../../hooks/useAppState';
 
 type ParamList = {
   TotalDashboard: {
@@ -56,6 +57,8 @@ const TotalDashboard: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const appState = useAppState();
+
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -92,7 +95,7 @@ const TotalDashboard: React.FC = () => {
       ),
     );
     getPoolData();
-  }, [selectedRound]);
+  }, [selectedRound, appState]);
 
   useEffect(() => {
     setIsCurrentRound(
