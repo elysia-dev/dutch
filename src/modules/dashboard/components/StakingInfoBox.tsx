@@ -56,7 +56,6 @@ const StakingInfoBox: React.FC<{
               fontFamily: AppFonts.Medium,
             }}>
             {`${commaFormatter(
-              // decimalFormatter(parseFloat(stakingAmount.toString()), 2),
               decimalFormatter(Number(utils.formatEther(stakingAmount)), 2),
             )} ${cryptoType} `}
           </Text>
@@ -68,15 +67,8 @@ const StakingInfoBox: React.FC<{
             }}>
             {`(= $ ${commaFormatter(
               decimalFormatter(
-                parseFloat(
-                  utils
-                    .formatEther(
-                      stakingAmount.mul(
-                        utils.parseEther(getCryptoPrice(cryptoType).toString()),
-                      ),
-                    )
-                    .toString(),
-                ),
+                Number(utils.formatEther(stakingAmount)) *
+                  getCryptoPrice(cryptoType),
                 2,
               ),
             )})`}
@@ -116,15 +108,8 @@ const StakingInfoBox: React.FC<{
             }}>
             {`(= $ ${commaFormatter(
               decimalFormatter(
-                parseFloat(
-                  utils.formatEther(
-                    rewardAmount.mul(
-                      utils.parseEther(
-                        getCryptoPrice(rewardCryptoType).toString(),
-                      ),
-                    ),
-                  ),
-                ),
+                Number(utils.formatEther(rewardAmount)) *
+                  getCryptoPrice(cryptoType),
                 2,
               ),
             )})`}
