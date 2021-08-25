@@ -16,13 +16,17 @@ import AppFonts from '../../enums/AppFonts';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import CryptoType from '../../enums/CryptoType';
 import TouchableCardWithShadow from './components/TouchableCardWithShadow';
-import { STAKING_POOL_ROUNDS } from '../../constants/staking';
+import { STAKING_POOL_ROUNDS_MOMENT } from '../../constants/staking';
 
 export const Main: React.FC = () => {
   const [scrollY] = useState(new Animated.Value(0));
   const navigation = useNavigation();
-  const totalStakingPeriod = `${STAKING_POOL_ROUNDS[0].startedAt} ~ ${STAKING_POOL_ROUNDS[5].endedAt} (KST)`;
   const { t } = useTranslation();
+  const totalStakingPeriod = `${STAKING_POOL_ROUNDS_MOMENT[0].startedAt.format(
+    t('staking.datetime_format'),
+  )} ~ ${STAKING_POOL_ROUNDS_MOMENT[5].endedAt.format(
+    t('staking.datetime_format'),
+  )} (KST)`;
 
   return (
     <SafeAreaView
