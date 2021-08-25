@@ -120,13 +120,13 @@ const Reward: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={0}
+      value={reward}
       page="staking"
       stakingTxData={{
         type: 'reward',
         unit: rewardCryptoType,
         round: selectedRound,
-        rewardValue: reward,
+        rewardValue: 0,
       }}
       contractAddress={stakingPoolAddress}
     />
