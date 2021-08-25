@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import { Page, StakingPage } from '../../enums/pageEnum';
-import { TitleText, SubTitleText } from '../../shared/components/Texts';
+import { TitleText, SubTitleText, P3Text } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
@@ -31,6 +31,7 @@ import { BigNumber, constants } from 'ethers';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 import { useRef } from 'react';
+import StakingDescription from './components/StakingDescription';
 
 type ParamList = {
   CurrentDashboard: {
@@ -124,7 +125,7 @@ const CurrentDashboard: React.FC = () => {
             selectedRound={selectedRound}
             setSelectedRound={setSelectedRound}
           />
-          <BoxWithDivider style={{ marginBottom: 60 }}>
+          <BoxWithDivider style={{ marginBottom: 55 }}>
             <BoxWithDividerContent
               isFirst={true}
               label={t('staking.schedule')}
@@ -147,6 +148,10 @@ const CurrentDashboard: React.FC = () => {
               )}%`}
             />
           </BoxWithDivider>
+          <StakingDescription
+            stakingCrypto={cryptoType}
+            rewardCrypto={rewardCryptoType}
+          />
           <TitleText
             label={t('staking.mining_plan', {
               rewardCrypto: rewardCryptoType,
