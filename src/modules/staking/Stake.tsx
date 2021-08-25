@@ -31,6 +31,7 @@ import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
+import CryptoType from '../../enums/CryptoType';
 
 type ParamList = {
   Stake: {
@@ -235,41 +236,41 @@ const Stake: React.FC = () => {
             }}
           />
         </View>
-      <StakingConfrimModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
-        subtitle={t('staking.confirmation_title')}
-        list={[
-          {
-            label: t('staking.staking_round'),
-            value: t('staking.nth_staking', { round: selectedRound }),
-          },
-          {
-            label: t('staking.staking_supply'),
-            value: `${value} ${cryptoType}`,
-            subvalue: `$ ${commaFormatter(
-              decimalFormatter(
-                parseFloat(value || '0') * getCryptoPrice(cryptoType),
-                6,
-              ),
-            )}`,
-          },
-          { label: t('staking.gas_price'), value: estimagedGasPrice },
-        ]}
-        isApproved={isApprove}
-        submitButtonText={t('staking.nth_staking', { round: selectedRound })}
-        handler={() => onPressStaking()}
-        isLoading={isLoading}
-      />
-      {/* <OverlayLoading
+        <StakingConfrimModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          title={t('staking.staking_with_type', { stakingCrypto: cryptoType })}
+          subtitle={t('staking.confirmation_title')}
+          list={[
+            {
+              label: t('staking.staking_round'),
+              value: t('staking.nth_staking', { round: selectedRound }),
+            },
+            {
+              label: t('staking.staking_supply'),
+              value: `${value} ${cryptoType}`,
+              subvalue: `$ ${commaFormatter(
+                decimalFormatter(
+                  parseFloat(value || '0') * getCryptoPrice(cryptoType),
+                  6,
+                ),
+              )}`,
+            },
+            { label: t('staking.gas_price'), value: estimagedGasPrice },
+          ]}
+          isApproved={isApprove}
+          submitButtonText={t('staking.nth_staking', { round: selectedRound })}
+          handler={() => onPressStaking()}
+          isLoading={isLoading}
+        />
+        {/* <OverlayLoading
         visible={[
           TxStep.Approving,
           Platform.OS === 'android' && TxStep.CheckAllowance,
           TxStep.Creating,
         ].includes(step)}
       /> */}
-    </View>
+      </View>
     );
   }
 
