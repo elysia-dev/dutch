@@ -32,6 +32,7 @@ import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 import { useRef } from 'react';
 import StakingDescription from './components/StakingDescription';
+import moment from 'moment';
 
 type ParamList = {
   CurrentDashboard: {
@@ -89,9 +90,16 @@ const CurrentDashboard: React.FC = () => {
     stakingPoolContract?.currentRound().then((res: any) => {
       setCurrentRound(res);
     });
+    let isBetween = false;
+    if (currentRound !== 6) {
+      isBetween = moment().isBetween(
+        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+      );
+    }
     getPoolData();
     miningPlanRef.current?.scrollTo({
-      x: 336 * (currentRound - 1),
+      x: 336 * (isBetween ? currentRound : currentRound === 0 ? 1 : -1),
     });
   }, [currentRound]);
 
