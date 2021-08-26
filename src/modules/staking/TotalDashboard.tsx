@@ -211,7 +211,7 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               navigation.navigate(Page.Staking, {
                 screen:
-                  selectedRound === currentRound && !isCurrentRound
+                  selectedRound < currentRound && isCurrentRound
                     ? StakingPage.UnstakeAndMigrate
                     : StakingPage.Unstake,
                 params: {
