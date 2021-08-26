@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
 import getRoundStatus from '../../../utiles/geRoundStatus';
@@ -9,6 +10,9 @@ const DotGraph: React.FC<{
   setSelectedRound?: Dispatch<SetStateAction<number>>;
   currentRound: number;
 }> = ({ selectedRound, setSelectedRound, currentRound }) => {
+  const { i18n } = useTranslation();
+  const lineLength = i18n.language === 'zhHans' ? 93 : 97;
+
   return (
     <View>
       <View
@@ -20,7 +24,7 @@ const DotGraph: React.FC<{
         }}>
         <View
           style={{
-            width: '98%',
+            width: `${lineLength}%`,
             borderColor: AppColors.GREY,
             borderWidth: 1,
           }}
@@ -29,9 +33,9 @@ const DotGraph: React.FC<{
           <View
             style={{
               position: 'absolute',
-              left: 7.5,
+              left: `${(100 - lineLength) / 2}%`,
               width: `${
-                currentRound === 1 ? 0 : (97 / 5) * (currentRound - 1)
+                currentRound === 1 ? 0 : (lineLength / 5) * (currentRound - 1)
               }%`,
               borderColor: AppColors.MAIN,
               borderWidth: 1,
