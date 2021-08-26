@@ -19,8 +19,6 @@ import {
   provider,
   getAssetTokenContract,
   getBscAssetTokenContract,
-  getElfiContract,
-  getDaiContract,
 } from '../utiles/getContract';
 import PreferenceContext from '../contexts/PreferenceContext';
 import LocaleType from '../enums/LocaleType';
