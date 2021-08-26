@@ -126,11 +126,11 @@ const CurrentDashboard: React.FC = () => {
             />
             <BoxWithDividerContent
               label={t('staking.current_round')}
-              value={`${currentRound}차`}
+              value={t('staking.round_with_affix', { round: currentRound })}
             />
             <BoxWithDividerContent
               label={t('staking.staking_days')}
-              value={`${ROUND_DURATION}일`}
+              value={t('staking.duration_day', { duration: ROUND_DURATION })}
             />
             <BoxWithDividerContent
               label={t('staking.apr')}
