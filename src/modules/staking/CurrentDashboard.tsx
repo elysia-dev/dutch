@@ -7,7 +7,12 @@ import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import { Page, StakingPage } from '../../enums/pageEnum';
-import { TitleText, SubTitleText } from '../../shared/components/Texts';
+import {
+  TitleText,
+  SubTitleText,
+  H1Text,
+  H2Text,
+} from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
@@ -114,75 +119,113 @@ const CurrentDashboard: React.FC = () => {
             style={{ fontSize: 22 }}
           />
           <DotGraph selectedRound={currentRound} currentRound={currentRound} />
-          <BoxWithDivider style={{ marginBottom: 60 }}>
-            <BoxWithDividerContent
-              isFirst={true}
-              label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt.format(
-                t('datetime_format'),
-              )}\n~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
-                t('datetime_format'),
-              )} (KST)`}
-            />
-            <BoxWithDividerContent
-              label={t('staking.current_round')}
-              value={t('staking.round_with_affix', { round: currentRound })}
-            />
-            <BoxWithDividerContent
-              label={t('staking.staking_days')}
-              value={t('staking.duration_day', { duration: ROUND_DURATION })}
-            />
-            <BoxWithDividerContent
-              label={t('staking.apr')}
-              value={`${aprFormatter(
-                calculateAPR(cryptoType, totalPrincipal),
-              )}%`}
-            />
-          </BoxWithDivider>
-          <TitleText
-            label={t('staking.mining_plan', {
-              rewardCrypto: rewardCryptoType,
-            })}
-            style={{ fontSize: 22 }}
-          />
-          <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
-          <BoxWithDivider style={{ marginBottom: 27 }}>
-            <BoxWithDividerContent
-              isFirst={true}
-              label={t('staking.current_mined')}
-              value={`${commaFormatter(
-                decimalFormatter(
-                  [1, 2, 3, 4, 5, 6].reduce(
-                    (totalMined, round) =>
-                      totalMined +
-                      calculateMined(cryptoType, round, currentRound),
-                    0,
-                  ),
-                  5,
-                ),
-              )} ${rewardCryptoType}`}
-              style={{ paddingVertical: 16 }}
-            />
-            <BoxWithDividerContent
-              label={t('staking.total_mining_supply')}
-              value={`${commaFormatter(
-                totalAmountOfReward,
-              )} ${rewardCryptoType}`}
-              style={{ paddingVertical: 16 }}
-            />
-          </BoxWithDivider>
-          <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
-            {[1, 2, 3, 4, 5, 6].map((i) => {
-              return (
-                <MiningPlan
-                  key={i}
-                  round={i}
-                  cryptoType={cryptoType}
-                  currentRound={currentRound}
+          {stakingStatus === StakingStatus.ENDED ? (
+            <BoxWithDivider
+              style={{
+                borderColor: AppColors.GREY,
+                paddingVertical: 14,
+                paddingHorizontal: 17,
+              }}>
+              <SubTitleText
+                label={t('staking.total_mining_supply_with_reward_type', {
+                  rewardCrypto: rewardCryptoType,
+                })}
+                style={{ fontSize: 14 }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginTop: 16,
+                  marginBottom: 23,
+                }}>
+                <H1Text
+                  label={commaFormatter(totalAmountOfReward)}
+                  style={{ fontSize: 30, marginRight: 6 }}
                 />
-              );
-            })}
-          </ScrollView>
+                <H2Text
+                  label={rewardCryptoType}
+                  style={{ color: AppColors.BLACK2, marginTop: 4.5 }}
+                />
+              </View>
+            </BoxWithDivider>
+          ) : (
+            <>
+              <BoxWithDivider style={{ marginBottom: 60 }}>
+                <BoxWithDividerContent
+                  isFirst={true}
+                  label={t('staking.schedule')}
+                  value={`${STAKING_POOL_ROUNDS[
+                    currentRound - 1
+                  ].startedAt.format(
+                    t('datetime_format'),
+                  )}\n~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
+                    t('datetime_format'),
+                  )} (KST)`}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.current_round')}
+                  value={t('staking.round_with_affix', { round: currentRound })}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.staking_days')}
+                  value={t('staking.duration_day', {
+                    duration: ROUND_DURATION,
+                  })}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.apr')}
+                  value={`${aprFormatter(
+                    calculateAPR(cryptoType, totalPrincipal),
+                  )}%`}
+                />
+              </BoxWithDivider>
+              <TitleText
+                label={t('staking.mining_plan', {
+                  rewardCrypto: rewardCryptoType,
+                })}
+                style={{ fontSize: 22 }}
+              />
+              <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
+              <BoxWithDivider style={{ marginBottom: 27 }}>
+                <BoxWithDividerContent
+                  isFirst={true}
+                  label={t('staking.current_mined')}
+                  value={`${commaFormatter(
+                    decimalFormatter(
+                      [1, 2, 3, 4, 5, 6].reduce(
+                        (totalMined, round) =>
+                          totalMined +
+                          calculateMined(cryptoType, round, currentRound),
+                        0,
+                      ),
+                      5,
+                    ),
+                  )} ${rewardCryptoType}`}
+                  style={{ paddingVertical: 16 }}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.total_mining_supply')}
+                  value={`${commaFormatter(
+                    totalAmountOfReward,
+                  )} ${rewardCryptoType}`}
+                  style={{ paddingVertical: 16 }}
+                />
+              </BoxWithDivider>
+              <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
+                {[1, 2, 3, 4, 5, 6].map((i) => {
+                  return (
+                    <MiningPlan
+                      key={i}
+                      round={i}
+                      cryptoType={cryptoType}
+                      currentRound={currentRound}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </>
+          )}
         </View>
       </ScrollView>
       <NextButton
