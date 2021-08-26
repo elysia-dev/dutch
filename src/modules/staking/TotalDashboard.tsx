@@ -27,14 +27,12 @@ type ParamList = {
   TotalDashboard: {
     cryptoType: CryptoType;
     round: number;
-    stakingAmount: BigNumber;
-    rewardAmount: BigNumber;
   };
 };
 
 const TotalDashboard: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'TotalDashboard'>>();
-  const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
+  const { cryptoType, round } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
@@ -146,20 +144,20 @@ const TotalDashboard: React.FC = () => {
               paddingHorizontal: 19,
             }}>
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_apr', { round: selectedRound })}
               value={aprFormatter(calculateAPR(cryptoType, totalPrincipal))}
               unit="%"
             />
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_principal', { round: selectedRound })}
               value={userPrincipal}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_reward', { round: selectedRound })}
               value={userReward}
               unit={rewardCryptoType}

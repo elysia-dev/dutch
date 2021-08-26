@@ -26,7 +26,7 @@ const StakingInfoCard: React.FC<{
       <View
         style={{
           flexDirection: 'row',
-          padding: 15,
+          padding: roundEnded ? 14 : 15,
           justifyContent: 'flex-end',
           borderTopColor: AppColors.SUB_GREY,
           borderTopWidth: 1,
