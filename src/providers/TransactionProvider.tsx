@@ -77,6 +77,7 @@ const TransactionProvider: React.FC = (props) => {
 
   useEffect(() => {
     (async () => {
+      AsyncStorage.removeItem(PENDING_TRANSACTIONS);
       let transactions = [];
       try {
         transactions = JSON.parse(
