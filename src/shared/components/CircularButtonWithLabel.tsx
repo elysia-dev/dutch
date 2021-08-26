@@ -37,7 +37,7 @@ const CircularButtonWithLabel: React.FC<{
   }
 
   return (
-    <View>
+    <View style={{ alignItems: 'center', flex: 1 }}>
       <TouchableOpacity disabled={disabled} onPress={pressHandler}>
         <Image
           source={source}
