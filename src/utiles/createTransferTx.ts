@@ -35,7 +35,7 @@ export default function createTransferTx(
   // const { addPendingTransaction } = useContext(TransactionContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const { afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const navigation = useNavigation();
   const { elContract, elfiContract, daiContract } = useErcContract();
 
@@ -48,6 +48,20 @@ export default function createTransferTx(
       return elContract;
     }
   };
+  const notifyFail = () => {
+    navigation.goBack();
+    afterTxFailed('Transaction failed');
+  };
+
+  const noticeWait = () => {
+    afterTxHashCreated(
+      resTx?.from || '',
+      resTx?.to || '',
+      resTx?.hash || '',
+      NetworkType.ETH,
+    );
+  };
+
   const transferValue = async (
     valuesFrom: string,
     valuesTo: string,
@@ -98,7 +112,7 @@ export default function createTransferTx(
       //   valueFrom: isTransferTypePurchase ? valuesFrom : '',
       // });
     } catch (e) {
-      console.log(e);
+      notifyFail();
     }
   };
 
@@ -107,24 +121,15 @@ export default function createTransferTx(
       await resTx?.wait();
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
-      console.log(error);
+      notifyFail();
     }
-  };
-
-  const noticeTxStatus = () => {
-    afterTxHashCreated(
-      resTx?.from || '',
-      resTx?.to || '',
-      resTx?.hash || '',
-      NetworkType.ETH,
-    );
   };
 
   useEffect(() => {
     if (resTx) {
       setIsLoading(false);
       navigation.goBack();
-      noticeTxStatus();
+      noticeWait();
       waitTx();
     }
   }, [resTx]);
