@@ -51,7 +51,6 @@ const StakingListing: React.FC<{
                 position: 'absolute',
                 bottom: 5,
                 left: 20,
-                backgroundColor: 'lime',
               }}
             />
             <P1Text
@@ -85,7 +84,6 @@ const StakingListing: React.FC<{
                 position: 'absolute',
                 bottom: 5,
                 left: 20,
-                backgroundColor: 'lime',
               }}
             />
             <P1Text
