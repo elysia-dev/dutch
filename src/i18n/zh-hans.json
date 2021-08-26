@@ -478,7 +478,7 @@
       "unstaking_help_description": "Unstaking(解除权益质押)是将相应轮次的代币转移到钱包中的功能。 如果只解除了部分代币的质押，剩余的代币将转移到现在进行轮次的资金池中。",
       "migration_help_description": "转移是一种将上一轮次质押的代币传送到当前轮次资金池中自动质押的功能。Unstaking(解除权益质押)和转移同时进行时，可以节省以太坊网络Gas费(手续费)。",
       "transmission_method": "传送方法",
-      "full_amount": "전액",
+      "full_amount": "全额",
       "duration_day": "{{duration}}天"
     },
     "legacy": {
