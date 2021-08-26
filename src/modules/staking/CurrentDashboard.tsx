@@ -99,7 +99,9 @@ const CurrentDashboard: React.FC = () => {
     }
     getPoolData();
     miningPlanRef.current?.scrollTo({
-      x: 336 * (isBetween ? currentRound : currentRound === 0 ? 1 : -1),
+      x:
+        336 *
+        (isBetween ? currentRound : currentRound === 0 ? 0 : currentRound - 1),
     });
   }, [currentRound]);
 
