@@ -86,9 +86,11 @@ const FinishedRoundModal: React.FC<Props> = ({
                     fontSize: 12,
                     color: AppColors.BLACK,
                   }}>
-                  {`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt} ~ ${
-                    STAKING_POOL_ROUNDS[currentRound - 1].endedAt
-                  }`}
+                  {`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt.format(
+                    t('datetime_format'),
+                  )} ~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
+                    t('datetime_format'),
+                  )}`}
                 </Text>
               </View>
             </View>

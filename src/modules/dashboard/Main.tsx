@@ -83,6 +83,10 @@ export const Main: React.FC = () => {
   const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
   );
+  const [hasAnyInfoBoxes, setHasAnyInfoBoxes] = useState({
+    EL: false,
+    ELFI: false,
+  });
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
@@ -164,6 +168,14 @@ export const Main: React.FC = () => {
       }
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    setHasAnyInfoBoxes({
+      EL: elStakingInfoBoxes.some((box) => Boolean(box)),
+      ELFI: elfiStakingInfoBoxes.some((box) => Boolean(box)),
+    });
+  }, [elStakingInfoBoxes, elfiStakingInfoBoxes]);
+
   return (
     <>
       <ScrollView
@@ -290,10 +302,13 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          <StakingListing
-            elStakingInfoBoxes={elStakingInfoBoxes}
-            elfiStakingInfoBoxes={elfiStakingInfoBoxes}
-          />
+          {hasAnyInfoBoxes.EL && hasAnyInfoBoxes.ELFI && (
+            <StakingListing
+              elStakingInfoBoxes={elStakingInfoBoxes}
+              elfiStakingInfoBoxes={elfiStakingInfoBoxes}
+              hasAnyInfoBoxes={hasAnyInfoBoxes}
+            />
+          )}
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}

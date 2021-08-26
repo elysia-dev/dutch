@@ -439,8 +439,8 @@
       "nth_apr": "第$t(numeral_character.{{round}})轮Staking的APR",
       "nth_principal": "第$t(numeral_character.{{round}})轮Staking的数量",
       "nth_reward": "第$t(numeral_character.{{round}})轮奖励数量",
-      "stake": "Staking(权益质押)",
-      "unstake": "Unstaking(解除权益质押)",
+      "stake": "Staking\n(权益质押)",
+      "unstake": "Unstaking\n(解除权益质押)",
       "claim_rewards": "领取奖励",
       "staking_placeholder": "您要Staking多少呢？",
       "staking_in_dollars": "Staking的美元价值",
@@ -452,11 +452,11 @@
       "staking_round": "Staking轮数",
       "staking_supply": "Staking数量",
       "unstaking_with_type": "{{stakingCrypto}}代币Unstaking(解除权益质押)",
-      "unstaking_placeholder": "请问您要Unstaking(解除权益质押)多少呢？",
-      "unstaking_in_dollars": "Unstaking(解除权益质押)的美元价值",
-      "unstaking_supply_available": "可以Unstaking(解除权益质押)的代币数量",
-      "unstaking_round": "Unstaking(解除权益质押)轮数",
-      "unstaking_supply": "Unstaking(解除权益质押)数量",
+      "unstaking_placeholder": "请问您要Unstaking多少呢？",
+      "unstaking_in_dollars": "Unstaking的美元价值",
+      "unstaking_supply_available": "可以Unstaking的代币数量",
+      "unstaking_round": "Unstaking轮数",
+      "unstaking_supply": "Unstaking数量",
       "unstake_with_reward_subtitle": "为了减少手续费(gas费用)",
       "unstake_with_reward": "和{{rewardCrypto}}代币一起体现",
       "unstake_only_subtitle": "{{rewardCrypto}}代币暂不提鲜",
@@ -470,18 +470,22 @@
       "done": "输入完成",
       "gas_price": "gas费用",
       "nth_unstaking": "第$t(numeral_character.{{round}})轮Unstaking",
-      "unstaking_value_excess": "超过了可以Unstaking(解除权益质押)的金额。",
+      "unstaking_value_excess": "超过了可以Unstaking的金额。",
       "rewards": "奖励",
       "claim": "领取",
       "migration_help": "[转移]是什么？",
       "unstaking_help": "[Unstaking(解除权益质押)]是什么？",
       "unstaking_help_description": "Unstaking(解除权益质押)是将相应轮次的代币转移到钱包中的功能。 如果只解除了部分代币的质押，剩余的代币将转移到现在进行轮次的资金池中。",
       "migration_help_description": "转移是一种将上一轮次质押的代币传送到当前轮次资金池中自动质押的功能。Unstaking(解除权益质押)和转移同时进行时，可以节省以太坊网络Gas费(手续费)。",
-      "transmission_method": "传送方法"
+      "transmission_method": "传送方法",
+      "full_amount": "全额",
+      "duration_day": "{{duration}}天",
+      "no_history": "没有Staking历史。"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
     },
-    "numeral_character": ["", "一", "二", "三", "四", "五", "六"]
+    "numeral_character": ["", "一", "二", "三", "四", "五", "六"],
+    "datetime_format": "YYYY.MM.DD hh:mm:ss"
   }
 }

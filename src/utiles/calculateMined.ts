@@ -1,7 +1,7 @@
 import moment from 'moment';
 import CryptoType from '../enums/CryptoType';
 import {
-  STAKING_POOL_ROUNDS_MOMENT,
+  STAKING_POOL_ROUNDS,
   ELFI_PER_DAY_ON_EL_STAKING_POOL,
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
   ELFI_PER_ROUND_ON_EL_STAKING_POOL,
@@ -14,8 +14,8 @@ const calculateMined = (
   currentRound: number,
 ): number => {
   // getDotStatus랑 비슷하군..
-  const roundStartDate = STAKING_POOL_ROUNDS_MOMENT[round - 1].startedAt;
-  const roundEndDate = STAKING_POOL_ROUNDS_MOMENT[round - 1].endedAt;
+  const roundStartDate = STAKING_POOL_ROUNDS[round - 1].startedAt;
+  const roundEndDate = STAKING_POOL_ROUNDS[round - 1].endedAt;
   const minedPerDay =
     cryptoType === CryptoType.EL
       ? ELFI_PER_DAY_ON_EL_STAKING_POOL

@@ -13,10 +13,7 @@ import CircularButtonWithLabel from '../../shared/components/CircularButtonWithL
 import StakingInfoCard from './components/StakingInfoCard';
 import CryptoType from '../../enums/CryptoType';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
-import {
-  STAKING_POOL_ROUNDS,
-  STAKING_POOL_ROUNDS_MOMENT,
-} from '../../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
 import { Page, StakingPage } from '../../enums/pageEnum';
 import UserContext from '../../contexts/UserContext';
@@ -24,19 +21,18 @@ import WalletContext from '../../contexts/WalletContext';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
+import useAppState from '../../hooks/useAppState';
 
 type ParamList = {
   TotalDashboard: {
     cryptoType: CryptoType;
     round: number;
-    stakingAmount: BigNumber;
-    rewardAmount: BigNumber;
   };
 };
 
 const TotalDashboard: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'TotalDashboard'>>();
-  const { cryptoType, round, stakingAmount, rewardAmount } = route.params;
+  const { cryptoType, round } = route.params;
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const [selectedRound, setSelectedRound] = useState(round);
@@ -56,6 +52,8 @@ const TotalDashboard: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const appState = useAppState();
+
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -87,18 +85,18 @@ const TotalDashboard: React.FC = () => {
       });
     setIsProgressRound(
       !moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].startedAt,
-        STAKING_POOL_ROUNDS_MOMENT[selectedRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[selectedRound - 1].startedAt,
+        STAKING_POOL_ROUNDS[selectedRound - 1].endedAt,
       ),
     );
     getPoolData();
-  }, [selectedRound]);
+  }, [selectedRound, appState]);
 
   useEffect(() => {
     setIsCurrentRound(
       moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].startedAt,
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[currentRound - 1].startedAt,
+        STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
       ),
     );
   }, [currentRound]);
@@ -121,14 +119,17 @@ const TotalDashboard: React.FC = () => {
         <DotGraph
           selectedRound={selectedRound}
           setSelectedRound={setSelectedRound}
+          currentRound={currentRound}
         />
         <BoxWithDivider style={{ marginTop: -10 }}>
           <BoxWithDividerContent
             isFirst={true}
             label={t('staking.schedule')}
-            value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt}\n~ ${
-              STAKING_POOL_ROUNDS[selectedRound - 1].endedAt
-            } (KST)`}
+            value={`${STAKING_POOL_ROUNDS[selectedRound - 1].startedAt.format(
+              t('datetime_format'),
+            )}\n~ ${STAKING_POOL_ROUNDS[selectedRound - 1].endedAt.format(
+              t('datetime_format'),
+            )} (KST)`}
             style={{
               paddingVertical: 25,
               paddingHorizontal: 19,
@@ -143,20 +144,20 @@ const TotalDashboard: React.FC = () => {
               paddingHorizontal: 19,
             }}>
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_apr', { round: selectedRound })}
               value={aprFormatter(calculateAPR(cryptoType, totalPrincipal))}
               unit="%"
             />
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_principal', { round: selectedRound })}
               value={userPrincipal}
               unit={cryptoType}
               style={{ marginTop: 15 }}
             />
             <StakingInfoCard
-              roundEnded={false}
+              roundEnded={!(isCurrentRound && selectedRound === currentRound)}
               label={t('staking.nth_reward', { round: selectedRound })}
               value={userReward}
               unit={rewardCryptoType}

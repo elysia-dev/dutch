@@ -440,7 +440,7 @@
       "stake": "stake",
       "unstake": "unstake",
       "claim_rewards": "claim rewards",
-      "staking_placeholder": "How many would you like to stake?",
+      "staking_placeholder": "Staking quantity",
       "staking_in_dollars": "Value in US dollars",
       "staking_supply_available": "supply available for staking",
       "estimated_gas": "estimated transaction fee",
@@ -450,7 +450,7 @@
       "staking_round": "staking round",
       "staking_supply": "staking supply",
       "unstaking_with_type": "Unstake {{stakingCrypto}}",
-      "unstaking_placeholder": "How many would you like to unstake?",
+      "unstaking_placeholder": "Unstaking quantity",
       "unstaking_in_dollars": "Value in US dollars",
       "unstaking_supply_available": "supply available for unstaking",
       "unstaking_round": "unstaking round",
@@ -459,7 +459,7 @@
       "unstake_with_reward": "Withdraw {{stakingCrypto}} & {{rewardCrypto}} tokens",
       "unstake_only_subtitle": "Receive {{rewardCrypto}} tokens later",
       "unstake_only": "Send {{stakingCrypto}} tokens only",
-      "migration_placeholder": "How many would you like to migrate?",
+      "migration_placeholder": "Migration quantity",
       "max_supply_available": "Max supply",
       "migration_destination": "Destination",
       "migration_supply": "Supply",
@@ -474,11 +474,15 @@
       "migration_help": "What is 'Migration'?",
       "unstaking_help": "What is 'Unstaking'?",
       "unstaking_help_description": "Unstaking refers to transferring staked tokens to your connected wallet. Any unclaimed tokens will remain in the money pool for the current round",
-      "migration_help_description": "Migration is a function that will transfer your staked tokens to the next round. It will help you save transaction fees since unstaking and transferring tokens to another pool will be executed at the same time"
+      "migration_help_description": "Migration is a function that will transfer your staked tokens to the next round. It will help you save transaction fees since unstaking and transferring tokens to another pool will be executed at the same time",
+      "full_amount": "Max",
+      "duration_day": "{{duration}} days",
+      "no_history": "There is no staking history."
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."
     },
-    "ordinal_suffix": ["", "st", "nd", "rd", "th", "th", "th"]
+    "ordinal_suffix": ["", "st", "nd", "rd", "th", "th", "th"],
+    "datetime_format": "MM.DD.YYYY hh:mm:ss"
   }
 }
