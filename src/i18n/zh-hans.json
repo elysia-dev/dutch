@@ -477,7 +477,11 @@
       "unstaking_help": "[Unstaking(解除权益质押)]是什么？",
       "unstaking_help_description": "Unstaking(解除权益质押)是将相应轮次的代币转移到钱包中的功能。 如果只解除了部分代币的质押，剩余的代币将转移到现在进行轮次的资金池中。",
       "migration_help_description": "转移是一种将上一轮次质押的代币传送到当前轮次资金池中自动质押的功能。Unstaking(解除权益质押)和转移同时进行时，可以节省以太坊网络Gas费(手续费)。",
-      "transmission_method": "传送方法"
+      "staking_description": "了解{{stakingCrypto}}代币Staking",
+      "staking_description_first": "根据{{rewardCrypto}}挖矿计划，{{rewardCrypto}}的V2期间{{stakingCrypto}}代币Staking将分为6轮。",
+      "staking_description_second": "质押{{stakingCrypto}}代币将奖励{{rewardCrypto}} 代币。",
+      "staking_description_third": "您可以随时取消质押，并提现代币。",
+      "staking_description_fourth": "被质押的{{stakingCrypto}}代币和作为奖励收到的{{rewardCrypto}} 代币不会自动转移到下一轮的资金池或提现到钱包中。"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
