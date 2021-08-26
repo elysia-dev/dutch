@@ -5,6 +5,7 @@ import AppColors from '../../../enums/AppColors';
 import CryptoType from '../../../enums/CryptoType';
 import { P3Text, TitleText } from '../../../shared/components/Texts';
 import el_staking_visualization from '../images/el_staking_visualization.png';
+import elfi_staking_visualization from '../images/elfi_staking_visualization.png';
 
 type props = {
   stakingCrypto: CryptoType;
@@ -36,7 +37,12 @@ const StakingDescription: React.FC<props> = ({
           borderColor: AppColors.SUB_GREY,
           borderWidth: 1,
         }}>
-        <Image source={el_staking_visualization} width={294} height={84} />
+        {stakingCrypto === CryptoType.EL ? (
+          <Image source={el_staking_visualization} width={294} height={84} />
+        ) : (
+          <Image source={elfi_staking_visualization} width={294} height={84} />
+        )}
+
         <View
           style={{
             flexDirection: 'row',
