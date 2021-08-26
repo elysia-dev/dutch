@@ -195,7 +195,7 @@ const UnstakeAndMigrate: React.FC = () => {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
         <HelpQuestionHeader
-          title={t('stking.nth_unstaking', { round: selectedRound })}
+          title={t('staking.nth_unstaking', { round: selectedRound })}
           setIsGuideModal={setIsGuideModal}
         />
         <View
@@ -228,7 +228,7 @@ const UnstakeAndMigrate: React.FC = () => {
           />
           <InputInfoBox
             list={[
-              `입력 가능 수량: ${commaFormatter(
+              `${t('staking.max_supply_available')}: ${commaFormatter(
                 decimalFormatter(principal, 6),
               )} ${cryptoType}`,
               `${t('staking.migration_destination')}: ${t(
