@@ -479,7 +479,8 @@
       "migration_help_description": "转移是一种将上一轮次质押的代币传送到当前轮次资金池中自动质押的功能。Unstaking(解除权益质押)和转移同时进行时，可以节省以太坊网络Gas费(手续费)。",
       "transmission_method": "传送方法",
       "full_amount": "全额",
-      "duration_day": "{{duration}}天"
+      "duration_day": "{{duration}}天",
+      "no_history": "没有Staking历史。"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"

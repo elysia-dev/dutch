@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
-import { H3Text, P1Text } from '../../../shared/components/Texts';
+import { H3Text, P1Text, P2Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 
@@ -98,6 +98,17 @@ const StakingListing: React.FC<{
           </View>
           <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>
         </>
+      )}
+      {!hasAnyInfoBoxes.EL && !hasAnyInfoBoxes.ELFI && (
+        <View
+          style={{
+            height: 100,
+          }}>
+          <P2Text
+            style={{ textAlign: 'center', marginTop: 40 }}
+            label={t('staking.no_history')}
+          />
+        </View>
       )}
     </View>
   );
