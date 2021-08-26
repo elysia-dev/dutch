@@ -32,7 +32,7 @@ const StakingInfoCard: React.FC<{
           borderTopWidth: 1,
         }}>
         <H4Text
-          label={roundEnded ? '-' : value}
+          label={value}
           style={{
             fontSize: 18,
             color:
