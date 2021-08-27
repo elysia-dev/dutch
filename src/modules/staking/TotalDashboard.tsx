@@ -111,7 +111,7 @@ const TotalDashboard: React.FC = () => {
   }, [currentRound]);
 
   useEffect(() => {
-    if (isSuccessTx && selectedRound === currentRound) {
+    if (isSuccessTx) {
       getUserData();
     }
   }, [isSuccessTx]);
