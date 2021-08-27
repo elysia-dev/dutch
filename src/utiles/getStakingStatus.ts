@@ -6,8 +6,8 @@ function getStakingStatus(round: number) {
   const now = moment();
   const firstRoundStartDate = STAKING_POOL_ROUNDS[0].startedAt;
   const lastRoundEndDate = STAKING_POOL_ROUNDS[5].endedAt;
-  const roundStartDate = STAKING_POOL_ROUNDS[round - 1].startedAt;
-  const roundEndDate = STAKING_POOL_ROUNDS[round - 1].endedAt;
+  const roundStartDate = STAKING_POOL_ROUNDS[round ? round - 1 : 0].startedAt;
+  const roundEndDate = STAKING_POOL_ROUNDS[round ? round - 1 : 0].endedAt;
 
   if (now.isBefore(firstRoundStartDate)) {
     return StakingStatus.NOT_YET_STARTED;
