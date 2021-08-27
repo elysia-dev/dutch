@@ -36,13 +36,13 @@ export const STAKING_POOL_ROUNDS = [
       timezone,
       true,
     ),
-    endedAt: moment('2021.08.28 00:00:00 +9:00', inputFormat).tz(
+    endedAt: moment('2021.08.27 15:48:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
   },
   {
-    startedAt: moment('2021.08.28 00:00:00 +9:00', inputFormat).tz(
+    startedAt: moment('2021.08.27 15:48:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
