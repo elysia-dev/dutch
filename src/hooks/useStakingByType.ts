@@ -1,7 +1,8 @@
 import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 import { TransactionResponse } from '@ethersproject/providers';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import TransactionContext from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
 import NetworkType from '../enums/NetworkType';
 import StakingType from '../enums/StakingType';
@@ -9,6 +10,7 @@ import useStakingPool from './useStakingPool';
 import useTxHandler from './useTxHandler';
 
 const useStakingByType = (crytoType: CryptoType) => {
+  const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
@@ -23,6 +25,7 @@ const useStakingByType = (crytoType: CryptoType) => {
   const waitTx = async () => {
     try {
       await resTx?.wait();
+      setIsSuccessTx(true);
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
       notifyFail();
@@ -36,6 +39,7 @@ const useStakingByType = (crytoType: CryptoType) => {
     type: StakingType,
   ) => {
     setIsLoading(true);
+    setIsSuccessTx(false);
     try {
       switch (type) {
         case StakingType.Stake:
