@@ -23,7 +23,7 @@ type AssetTxData = {
 };
 
 type StakingTxData = {
-  type: 'stake' | 'unstake' | 'reward';
+  type: 'stake' | 'unstake' | 'unstakeAndMigrate' | 'reward';
   unit: CryptoType;
   round?: number; // 원래 1~6이지만 지금 테스트 중인 라운드가 7을 넘어서서... // stake는안필요함
   rewardValue?: number;
