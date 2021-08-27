@@ -13,7 +13,7 @@ import {
   SubTitleText,
   H1Text,
   H2Text,
-  P3Text
+  P3Text,
 } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
@@ -94,10 +94,10 @@ const CurrentDashboard: React.FC = () => {
       setCurrentRound(res);
     });
     let isBetween = false;
-    if (currentRound !== 6) {
+    if (currentRound < 6 && currentRound > 0) {
       isBetween = moment().isBetween(
-        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
-        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+        STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[currentRound].startedAt,
       );
     }
     getPoolData();

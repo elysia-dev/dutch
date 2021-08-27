@@ -134,10 +134,14 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const isProgressRound = () => {
-    return moment().isBetween(
-      STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
-      STAKING_POOL_ROUNDS[currentRound].startedAt,
-    );
+    if (currentRound !== 6) {
+      return moment().isBetween(
+        STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS[currentRound].startedAt,
+      );
+    } else {
+      return moment().isAfter(STAKING_POOL_ROUNDS[currentRound - 1].endedAt);
+    }
   };
 
   const confirmExcludeMigrate = async () => {
