@@ -1,12 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+import { BigNumber, constants } from 'ethers';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
 import NextButton from '../../shared/components/NextButton';
 import { Page, StakingPage } from '../../enums/pageEnum';
-import { TitleText, SubTitleText, P3Text } from '../../shared/components/Texts';
+import {
+  TitleText,
+  SubTitleText,
+  H1Text,
+  H2Text,
+  P3Text
+} from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
 import BoxWithDivider from './components/BoxWithDivider';
@@ -18,21 +26,17 @@ import {
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
-  STAKING_POOL_ROUNDS_MOMENT,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
 import calculateMined from '../../utiles/calculateMined';
 import decimalFormatter from '../../utiles/decimalFormatter';
 import BoxWithDividerContent from './components/BoxWithDividerContent';
-import WalletContext from '../../contexts/WalletContext';
 import useStakingPool from '../../hooks/useStakingPool';
-import { BigNumber, constants } from 'ethers';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
-import { useRef } from 'react';
 import StakingDescription from './components/StakingDescription';
-import moment from 'moment';
+import useAppState from '../../hooks/useAppState';
 
 type ParamList = {
   CurrentDashboard: {
@@ -47,9 +51,7 @@ const CurrentDashboard: React.FC = () => {
   const miningPlanRef = useRef<ScrollView | null>();
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
-  const [selectedRound, setSelectedRound] = useState(currentRound);
   const { isWalletUser, user } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
   const totalAmountOfReward =
     cryptoType === CryptoType.EL
       ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
@@ -60,6 +62,7 @@ const CurrentDashboard: React.FC = () => {
     constants.Zero,
   );
   const stakingStatus = getStakingStatus(currentRound);
+  const appState = useAppState();
 
   let nextButtonTitle = '';
   if (!(isWalletUser || user.ethAddresses[0])) {
@@ -103,7 +106,7 @@ const CurrentDashboard: React.FC = () => {
         310 *
         (isBetween ? currentRound : currentRound === 0 ? 0 : currentRound - 1),
     });
-  }, [currentRound]);
+  }, [currentRound, appState]);
 
   return (
     <View
@@ -131,86 +134,118 @@ const CurrentDashboard: React.FC = () => {
             })}
             style={{ fontSize: 22 }}
           />
-          <DotGraph
-            selectedRound={selectedRound}
-            setSelectedRound={setSelectedRound}
-          />
-          <BoxWithDivider style={{ marginBottom: 55 }}>
-            <BoxWithDividerContent
-              isFirst={true}
-              label={t('staking.schedule')}
-              value={`${STAKING_POOL_ROUNDS[currentRound - 1].startedAt}\n~ ${
-                STAKING_POOL_ROUNDS[currentRound - 1].endedAt
-              } (KST)`}
-            />
-            <BoxWithDividerContent
-              label={t('staking.current_round')}
-              value={`${currentRound}차`}
-            />
-            <BoxWithDividerContent
-              label={t('staking.staking_days')}
-              value={`${ROUND_DURATION}일`}
-            />
-            <BoxWithDividerContent
-              label={t('staking.apr')}
-              value={`${aprFormatter(
-                calculateAPR(cryptoType, totalPrincipal),
-              )}%`}
-            />
-          </BoxWithDivider>
-          <StakingDescription
-            stakingCrypto={cryptoType}
-            rewardCrypto={rewardCryptoType}
-          />
-          <TitleText
-            label={t('staking.mining_plan', {
-              rewardCrypto: rewardCryptoType,
-            })}
-            style={{ fontSize: 22 }}
-          />
-          <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
-          <BoxWithDivider style={{ marginBottom: 27 }}>
-            <BoxWithDividerContent
-              isFirst={true}
-              label={t('staking.current_mined')}
-              value={`${commaFormatter(
-                decimalFormatter(
-                  [1, 2, 3, 4, 5, 6].reduce(
-                    (totalMined, round) =>
-                      totalMined +
-                      calculateMined(cryptoType, round, currentRound),
-                    0,
-                  ),
-                  5,
-                ),
-              )} ${rewardCryptoType}`}
-              style={{ paddingVertical: 16 }}
-            />
-            <BoxWithDividerContent
-              label={t('staking.total_mining_supply')}
-              value={`${commaFormatter(
-                totalAmountOfReward,
-              )} ${rewardCryptoType}`}
-              style={{ paddingVertical: 16 }}
-            />
-          </BoxWithDivider>
-          <ScrollView
-            ref={(ref) => {
-              miningPlanRef.current = ref;
-            }}
-            horizontal={true}
-            style={{ marginBottom: 100 }}>
-            {[1, 2, 3, 4, 5, 6].map((i) => {
-              return (
-                <MiningPlan
-                  key={i}
-                  round={i}
-                  cryptoType={cryptoType}
-                  currentRound={currentRound}
+          <DotGraph selectedRound={currentRound} currentRound={currentRound} />
+          {stakingStatus === StakingStatus.ENDED ? (
+            <BoxWithDivider
+              style={{
+                borderColor: AppColors.GREY,
+                paddingVertical: 14,
+                paddingHorizontal: 17,
+              }}>
+              <SubTitleText
+                label={t('staking.total_mining_supply_with_reward_type', {
+                  rewardCrypto: rewardCryptoType,
+                })}
+                style={{ fontSize: 14 }}
+              />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginTop: 16,
+                  marginBottom: 23,
+                }}>
+                <H1Text
+                  label={commaFormatter(totalAmountOfReward)}
+                  style={{ fontSize: 30, marginRight: 6 }}
                 />
-              );
-            })}
-          </ScrollView>
+                <H2Text
+                  label={rewardCryptoType}
+                  style={{ color: AppColors.BLACK2, marginTop: 4.5 }}
+                />
+              </View>
+            </BoxWithDivider>
+          ) : (
+            <>
+              <BoxWithDivider style={{ marginBottom: 60 }}>
+                <BoxWithDividerContent
+                  isFirst={true}
+                  label={t('staking.schedule')}
+                  value={`${STAKING_POOL_ROUNDS[
+                    currentRound - 1
+                  ].startedAt.format(
+                    t('datetime_format'),
+                  )}\n~ ${STAKING_POOL_ROUNDS[currentRound - 1].endedAt.format(
+                    t('datetime_format'),
+                  )} (KST)`}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.current_round')}
+                  value={t('staking.round_with_affix', { round: currentRound })}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.staking_days')}
+                  value={t('staking.duration_day', {
+                    duration: ROUND_DURATION,
+                  })}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.apr')}
+                  value={`${aprFormatter(
+                    calculateAPR(cryptoType, totalPrincipal),
+                  )}%`}
+                />
+              </BoxWithDivider>
+              <StakingDescription
+                stakingCrypto={cryptoType}
+                rewardCrypto={rewardCryptoType}
+              />
+              <TitleText
+                label={t('staking.mining_plan', {
+                  rewardCrypto: rewardCryptoType,
+                })}
+                style={{ fontSize: 22 }}
+              />
+              <BarGraph currentRound={currentRound} cryptoType={cryptoType} />
+              <BoxWithDivider style={{ marginBottom: 27 }}>
+                <BoxWithDividerContent
+                  isFirst={true}
+                  label={t('staking.current_mined')}
+                  value={`${commaFormatter(
+                    decimalFormatter(
+                      [1, 2, 3, 4, 5, 6].reduce(
+                        (totalMined, round) =>
+                          totalMined +
+                          calculateMined(cryptoType, round, currentRound),
+                        0,
+                      ),
+                      5,
+                    ),
+                  )} ${rewardCryptoType}`}
+                  style={{ paddingVertical: 16 }}
+                />
+                <BoxWithDividerContent
+                  label={t('staking.total_mining_supply')}
+                  value={`${commaFormatter(
+                    totalAmountOfReward,
+                  )} ${rewardCryptoType}`}
+                  style={{ paddingVertical: 16 }}
+                />
+              </BoxWithDivider>
+              <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
+                {[1, 2, 3, 4, 5, 6].map((i) => {
+                  return (
+                    <MiningPlan
+                      key={i}
+                      round={i}
+                      cryptoType={cryptoType}
+                      currentRound={currentRound}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </>
+          )}
         </View>
       </ScrollView>
       <NextButton

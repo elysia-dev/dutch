@@ -1,13 +1,18 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
 import getRoundStatus from '../../../utiles/geRoundStatus';
 
 const DotGraph: React.FC<{
   selectedRound: number;
-  setSelectedRound: Dispatch<SetStateAction<number>>;
-}> = ({ selectedRound, setSelectedRound }) => {
+  setSelectedRound?: Dispatch<SetStateAction<number>>;
+  currentRound: number;
+}> = ({ selectedRound, setSelectedRound, currentRound }) => {
+  const { i18n } = useTranslation();
+  const lineLength = i18n.language === 'zhHans' ? 93 : 97;
+
   return (
     <View>
       <View
@@ -19,11 +24,24 @@ const DotGraph: React.FC<{
         }}>
         <View
           style={{
-            width: '99%',
+            width: `${lineLength}%`,
             borderColor: AppColors.GREY,
             borderWidth: 1,
           }}
         />
+        {setSelectedRound && (
+          <View
+            style={{
+              position: 'absolute',
+              left: `${(100 - lineLength) / 2}%`,
+              width: `${
+                currentRound === 1 ? 0 : (lineLength / 5) * (currentRound - 1)
+              }%`,
+              borderColor: AppColors.MAIN,
+              borderWidth: 1,
+            }}
+          />
+        )}
       </View>
       <View
         style={{
@@ -40,7 +58,7 @@ const DotGraph: React.FC<{
               round={i}
               status={getRoundStatus(i)}
               selected={selectedRound === i ? true : false}
-              setSelectedRound={setSelectedRound}
+              setSelectedRound={setSelectedRound} // 이거를 선택으로 해야 할 듯...?
             />
           );
         })}

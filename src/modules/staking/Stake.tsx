@@ -207,9 +207,10 @@ const Stake: React.FC = () => {
             })}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 1000]}
+            values={[0.01, 1, 10, 100, 'all']}
             inputValue={value}
             setValue={setValue}
+            maxValue={crytoBalance}
           />
           <NumberPad
             addValue={(text) => {

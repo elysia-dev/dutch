@@ -52,18 +52,20 @@ const MiningPlan: React.FC<{
         label={t('staking.nth_mining_plan', { round })}
         style={{ textAlign: 'center', marginBottom: 10 }}
       />
-      <BoxWithDivider style={{ width: 300 }}>
+      <BoxWithDivider>
         <BoxWithDividerContent
           isFirst={true}
           label={t('staking.schedule')}
-          value={`${STAKING_POOL_ROUNDS[round - 1].startedAt}\n~ ${
-            STAKING_POOL_ROUNDS[round - 1].endedAt
-          } (KST)`}
+          value={`${STAKING_POOL_ROUNDS[round - 1].startedAt.format(
+            t('datetime_format'),
+          )}\n~ ${STAKING_POOL_ROUNDS[round - 1].endedAt.format(
+            t('datetime_format'),
+          )} (KST)`}
           style={{
             paddingVertical: 12,
             paddingHorizontal: 15,
           }}
-          labelStyle={{ fontSize: 12 }}
+          labelStyle={{ fontSize: 12, width: 88 }}
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent

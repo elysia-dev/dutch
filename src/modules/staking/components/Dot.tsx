@@ -9,20 +9,24 @@ const Dot: React.FC<{
   round: 1 | 2 | 3 | 4 | 5 | 6;
   status: RoundStatus;
   selected: boolean;
-  setSelectedRound: Dispatch<SetStateAction<number>>;
+  setSelectedRound?: Dispatch<SetStateAction<number>>;
 }> = ({ round, status, selected, setSelectedRound }) => {
   const { t } = useTranslation();
 
   let backgroundColor;
   let borderColor;
+  let shadowOpacity = 0;
+  let elevation = 0;
   switch (status) {
     case RoundStatus.ENDED:
-      backgroundColor = AppColors.MAIN;
+      backgroundColor = AppColors.WHITE;
       borderColor = AppColors.MAIN;
       break;
     case RoundStatus.IN_PROGRESS:
       backgroundColor = AppColors.WHITE;
       borderColor = AppColors.MAIN;
+      shadowOpacity = 1;
+      elevation = 6;
       break;
     case RoundStatus.SCHEDULED:
       backgroundColor = AppColors.DEACTIVATED;
@@ -32,26 +36,33 @@ const Dot: React.FC<{
       break;
   }
 
+  if (!setSelectedRound) {
+    backgroundColor = AppColors.DEACTIVATED;
+    borderColor = AppColors.DEACTIVATED;
+    shadowOpacity = 0;
+    elevation = 0;
+  }
+
   return (
     <TouchableOpacity
       style={{ alignItems: 'center' }}
       onPress={() => {
-        setSelectedRound(round);
+        if (setSelectedRound) setSelectedRound(round);
       }}
       activeOpacity={1}>
       <View
         style={{
-          backgroundColor,
+          backgroundColor: selected ? AppColors.MAIN : backgroundColor,
           width: 15,
           height: 15,
           borderWidth: 1,
-          borderColor,
+          borderColor: selected ? AppColors.MAIN : borderColor,
           borderRadius: 7.5,
           shadowColor: AppColors.SHADOW_BLACK,
           shadowRadius: 6,
           shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: selected ? 1 : 0,
-          elevation: selected ? 6 : 0,
+          shadowOpacity,
+          elevation,
         }}
       />
       <Text

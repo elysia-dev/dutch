@@ -485,10 +485,15 @@
       "staking_description_first": "{{stakingCrypto}} 스테이킹은 {{rewardCrypto}} 채굴 플랜에 따라 {{rewardCrypto}} V2 기간동안 6차례로 나눠서 진행됩니다.",
       "staking_description_second": "{{stakingCrypto}} 토큰을 스테이킹하면 {{rewardCrypto}} 토큰을 리워드 받게됩니다.",
       "staking_description_third": "스테이킹한 토큰을 언제든지 언스테이킹이 가능합니다.",
-      "staking_description_fourth": "종료된 회차에 스테이킹한 {{stakingCrypto}} 토큰과 보상으로 받은 {{rewardCrypto}} 토큰은 다음 회차의 스테이킹 풀에 자동으로 전송되거나 지갑으로 출금되지 않습니다."
+      "staking_description_fourth": "종료된 회차에 스테이킹한 {{stakingCrypto}} 토큰과 보상으로 받은 {{rewardCrypto}} 토큰은 다음 회차의 스테이킹 풀에 자동으로 전송되거나 지갑으로 출금되지 않습니다.",
+      "transmission_method": "전송 방법",
+      "full_amount": "전액",
+      "duration_day": "{{duration}}일",
+      "no_history": "스테이킹 내역이 없습니다."
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."
-    }
+    },
+    "datetime_format": "YYYY.MM.DD hh:mm:ss"
   }
 }

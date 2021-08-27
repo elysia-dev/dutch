@@ -26,13 +26,13 @@ const StakingInfoCard: React.FC<{
       <View
         style={{
           flexDirection: 'row',
-          padding: 15,
+          padding: roundEnded ? 14 : 15,
           justifyContent: 'flex-end',
           borderTopColor: AppColors.SUB_GREY,
           borderTopWidth: 1,
         }}>
         <H4Text
-          label={roundEnded ? '-' : value}
+          label={value}
           style={{
             fontSize: 18,
             color:

@@ -1,11 +1,11 @@
 import moment from 'moment';
-import { STAKING_POOL_ROUNDS_MOMENT } from '../constants/staking';
+import { STAKING_POOL_ROUNDS } from '../constants/staking';
 import RoundStatus from '../enums/RoundStatus';
 
 function getRoundStatus(round: number) {
   const now = moment();
-  const roundStartDate = STAKING_POOL_ROUNDS_MOMENT[round - 1].startedAt;
-  const roundEndDate = STAKING_POOL_ROUNDS_MOMENT[round - 1].endedAt;
+  const roundStartDate = STAKING_POOL_ROUNDS[round - 1].startedAt;
+  const roundEndDate = STAKING_POOL_ROUNDS[round - 1].endedAt;
 
   if (now.isBefore(roundStartDate)) {
     return RoundStatus.SCHEDULED;

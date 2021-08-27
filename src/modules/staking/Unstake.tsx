@@ -127,9 +127,10 @@ const Unstake: React.FC = () => {
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 1000]}
+            values={[0.01, 1, 10, 100, 'all']}
             inputValue={value}
             setValue={setValue}
+            maxValue={principal}
           />
           <NumberPad
             addValue={(text) => {
