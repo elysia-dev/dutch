@@ -1,3 +1,5 @@
+import { ERC20 } from '@elysia-dev/contract-typechain';
+import { Contract } from '@ethersproject/contracts';
 import { BigNumber, constants, ethers, utils } from 'ethers';
 import Wallet from '../core/Wallet';
 import Accelerate from '../enums/Accelerate';
@@ -8,7 +10,7 @@ export const purchaseProduct = async (
   gasPrice: string,
   bscGasPrice: string,
   fromType: CryptoType,
-  contract: ethers.Contract | null,
+  contract: Contract | null,
   valuesFrom: string,
   wallet: Wallet | undefined,
   getCryptoPrice: (cryptoType: CryptoType) => number,
@@ -61,38 +63,33 @@ export const purchaseProduct = async (
 export const sendCryptoAsset = async (
   gasPrice: string,
   bscGasPrice: string,
-  assetType?: CryptoType,
+  assetType: CryptoType,
   address?: string,
   value?: string,
   wallet?: Wallet,
+  contract?: ERC20,
   changedGasPrice?: string,
   accelerate?: Accelerate,
 ) => {
   const isAccelerate = accelerate === Accelerate.Accelerate;
-  if (assetType === CryptoType.EL) {
-    const elContract = getElysiaContract();
-    const populatedTransaction = await elContract?.populateTransaction.transfer(
-      address,
-      utils.parseEther(value || ''),
-    );
-
-    if (!populatedTransaction) return;
-    return await wallet?.getFirstSigner().sendTransaction({
-      to: populatedTransaction.to,
-      data: populatedTransaction.data,
-      gasPrice: isAccelerate
-        ? utils.parseUnits(changedGasPrice || '', 'gwei')
-        : BigNumber.from(gasPrice),
-    });
-  } else {
-    return await wallet?.getFirstSigner(assetType).sendTransaction({
-      to: address,
-      value: utils.parseEther(value || '').toHexString(),
-      gasPrice: isAccelerate
-        ? utils.parseUnits(changedGasPrice || '', 'gwei')
-        : assetType === CryptoType.BNB
-        ? BigNumber.from(bscGasPrice)
-        : BigNumber.from(gasPrice),
-    });
+  try {
+    if ([CryptoType.EL, CryptoType.ELFI, CryptoType.DAI].includes(assetType)) {
+      return await contract?.transfer(
+        address || '',
+        utils.parseEther(value || ''),
+      );
+    } else {
+      return await wallet?.getFirstSigner(assetType).sendTransaction({
+        to: address,
+        value: utils.parseEther(value || '').toHexString(),
+        gasPrice: isAccelerate
+          ? utils.parseUnits(changedGasPrice || '', 'gwei')
+          : assetType === CryptoType.BNB
+          ? BigNumber.from(bscGasPrice)
+          : BigNumber.from(gasPrice),
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

@@ -126,7 +126,9 @@ const UnstakeAndMigrate: React.FC = () => {
       },
       {
         label: t('staking.gas_price'),
-        value: estimagedGasPrice || gasFee || '',
+        value: estimagedGasPrice
+          ? `${estimagedGasPrice} ETH`
+          : t('staking.cannot_estimate_gas'),
       },
     ]);
   };
@@ -195,7 +197,9 @@ const UnstakeAndMigrate: React.FC = () => {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
         <HelpQuestionHeader
-          title={t('staking.nth_unstaking', { round: selectedRound })}
+          title={t('staking.unstaking_with_type', {
+            stakingCrypto: cryptoType,
+          })}
           setIsGuideModal={setIsGuideModal}
         />
         <View

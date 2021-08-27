@@ -62,7 +62,7 @@ const Stake: React.FC = () => {
     value: '0',
   });
   const [isApprove, setIsApprove] = useState(true);
-  const erc20Contract = useErcContract(cryptoType);
+  const { elContract } = useErcContract();
   const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -83,7 +83,7 @@ const Stake: React.FC = () => {
 
   const setAllowance = async () => {
     try {
-      const allowance: BigNumber = await erc20Contract.allowance(
+      const allowance: BigNumber = await elContract.allowance(
         wallet?.getFirstNode()?.address || '',
         EL_STAKING_POOL_ADDRESS,
       );
@@ -112,10 +112,7 @@ const Stake: React.FC = () => {
 
   const approve = async () => {
     try {
-      await erc20Contract.approve(
-        EL_STAKING_POOL_ADDRESS,
-        '1' + '0'.repeat(30),
-      );
+      await elContract.approve(EL_STAKING_POOL_ADDRESS, '1' + '0'.repeat(30));
       setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
     } catch (error) {
       console.log(error);
@@ -264,7 +261,12 @@ const Stake: React.FC = () => {
                 ),
               )}`,
             },
-            { label: t('staking.gas_price'), value: estimagedGasPrice },
+            {
+              label: t('staking.gas_price'),
+              value: estimagedGasPrice
+                ? `${estimagedGasPrice} ETH`
+                : t('staking.cannot_estimate_gas'),
+            },
           ]}
           isApproved={isApprove}
           submitButtonText={t('staking.nth_staking', { round: selectedRound })}

@@ -11,15 +11,21 @@ import useTxHandler from './useTxHandler';
 const useStakingByType = (crytoType: CryptoType) => {
   const [resTx, setResTx] = useState<TransactionResponse>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { afterTxHashCreated, afterTxCreated } = useTxHandler();
+  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const stakingPoolContract = useStakingPool(crytoType);
   const navigation = useNavigation();
+
+  const notifyFail = () => {
+    navigation.goBack();
+    afterTxFailed('Transaction failed');
+  };
 
   const waitTx = async () => {
     try {
       await resTx?.wait();
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
+      notifyFail();
       console.log(error);
     }
   };
@@ -30,23 +36,27 @@ const useStakingByType = (crytoType: CryptoType) => {
     type: StakingType,
   ) => {
     setIsLoading(true);
-    switch (type) {
-      case StakingType.Stake:
-        setResTx(await stakingPoolContract.stake(utils.parseUnits(value)));
-        break;
-      case StakingType.Unstake:
-        setResTx(
-          await stakingPoolContract.withdraw(utils.parseUnits(value), round),
-        );
-        break;
-      case StakingType.Migrate:
-        setResTx(
-          await stakingPoolContract.migrate(utils.parseUnits(value), round),
-        );
-        break;
-      default:
-        setResTx(await stakingPoolContract.claim(round));
-        break;
+    try {
+      switch (type) {
+        case StakingType.Stake:
+          setResTx(await stakingPoolContract.stake(utils.parseUnits(value)));
+          break;
+        case StakingType.Unstake:
+          setResTx(
+            await stakingPoolContract.withdraw(utils.parseUnits(value), round),
+          );
+          break;
+        case StakingType.Migrate:
+          setResTx(
+            await stakingPoolContract.migrate(utils.parseUnits(value), round),
+          );
+          break;
+        default:
+          setResTx(await stakingPoolContract.claim(round));
+          break;
+      }
+    } catch (error) {
+      notifyFail();
     }
   };
 

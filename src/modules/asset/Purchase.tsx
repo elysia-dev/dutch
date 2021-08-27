@@ -26,7 +26,6 @@ import {
 } from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
-import TransactionContext from '../../contexts/TransactionContext';
 import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 
@@ -78,8 +77,11 @@ const Purchase: FunctionComponent = () => {
     contractAddress,
   );
   const { getBalance, assets } = useContext(AssetContext);
-  const { addPendingTransaction } = useContext(TransactionContext);
-
+  const { transferValue } = createTransferTx(
+    assetInCrypto.type,
+    TransferType.Purchase,
+    contract,
+  );
   const remainingSupplyInCrypto =
     ((remainingSupplyInToken || 0) * 5) / getCryptoPrice(assetInCrypto.type);
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
@@ -133,23 +135,15 @@ const Purchase: FunctionComponent = () => {
     }
   }, []);
 
-  const createTx = () => {
-    navigation.goBack();
-    createTransferTx(
-      gasPrice,
-      bscGasPrice,
-      getCryptoPrice,
-      wallet,
-      addPendingTransaction,
-      assetInCrypto.type,
-      TransferType.Purchase,
-      productId,
-      contract,
-      values.inFiat,
-      values.inToken,
-    );
+  const createTx = async () => {
+    try {
+      await transferValue(values.inFiat, values.inToken);
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
+    }
   };
-  
+
   useEffect(() => {
     switch (state.step) {
       case TxStep.CheckAllowance:
