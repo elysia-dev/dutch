@@ -22,6 +22,7 @@ import decimalFormatter from '../../utiles/decimalFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
 import useAppState from '../../hooks/useAppState';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type ParamList = {
   TotalDashboard: {
@@ -41,6 +42,7 @@ const TotalDashboard: React.FC = () => {
   const [userPrincipal, setUserPrincipal] = useState('-');
   const [currentRoundReward, setCurrentRoundReward] = useState('-');
   const { isWalletUser, user } = useContext(UserContext);
+  const { isSuccessTx } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
     ? wallet?.getFirstAddress()
@@ -55,7 +57,7 @@ const TotalDashboard: React.FC = () => {
   );
   const [count, setCount] = useState(0);
   const appState = useAppState();
-  
+
   stakingPoolContract.currentRound().then((res: any) => {
     setCurrentRound(res);
   });
@@ -75,8 +77,7 @@ const TotalDashboard: React.FC = () => {
     setTotalPrincipal(poolData[4]);
   };
 
-  useEffect(() => {
-    // if (selectedRound === currentRound) clearTimeout();
+  const getUserData = () => {
     stakingPoolContract
       .getUserData(selectedRound, address || '')
       .then((res: BigNumber[]) => {
@@ -87,6 +88,10 @@ const TotalDashboard: React.FC = () => {
       .catch((e) => {
         console.log(e);
       });
+  };
+
+  useEffect(() => {
+    getUserData();
     setIsProgressRound(
       !moment().isBetween(
         STAKING_POOL_ROUNDS[selectedRound - 1].startedAt,
@@ -104,6 +109,12 @@ const TotalDashboard: React.FC = () => {
       ),
     );
   }, [currentRound]);
+
+  useEffect(() => {
+    if (isSuccessTx && selectedRound === currentRound) {
+      getUserData();
+    }
+  }, [isSuccessTx]);
 
   useEffect(() => {
     if (isCurrentRound && selectedRound === currentRound) {
