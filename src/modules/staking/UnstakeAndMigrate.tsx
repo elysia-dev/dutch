@@ -263,9 +263,16 @@ const UnstakeAndMigrate: React.FC = () => {
           />
           <NumberPad
             addValue={(text) => {
-              if (!isNumericStringAppendable(value, text, 12, 6)) return;
+              if (
+                !isNumericStringAppendable(value, text, 12, 6) &&
+                value !== ''
+              )
+                return;
 
-              const next = newInputValueFormatter(value, text);
+              const next = newInputValueFormatter(
+                value === '0' ? '' : value,
+                text,
+              );
               setValue(next);
             }}
             removeValue={() => setValue(value.slice(0, -1))}
