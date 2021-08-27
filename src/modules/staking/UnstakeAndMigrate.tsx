@@ -126,7 +126,7 @@ const UnstakeAndMigrate: React.FC = () => {
       },
       {
         label: t('staking.reward_supply'),
-        value: `${reward} ${rewardCryptoType}`,
+        value: `${commaFormatter(reward)} ${rewardCryptoType}`,
       },
       {
         label: t('staking.gas_price'),
