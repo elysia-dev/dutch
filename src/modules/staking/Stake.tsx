@@ -56,7 +56,10 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
-  const { estimagedGasPrice } = useEstimateGas(cryptoType, StakingType.Stake);
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+    cryptoType,
+    StakingType.Stake,
+  );
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
@@ -103,8 +106,11 @@ const Stake: React.FC = () => {
   const setApporve = async () => {
     try {
       await approve();
-      setIsApprove(true);
-      setIsLoading(false);
+      setTimeout(async () => {
+        await setEstimateGas(StakingType.Stake);
+        setIsApprove(true);
+        setIsLoading(false);
+      }, 3000); // approve 하고 난 후 바로 가스조회를 하면 에러가 발생하여서 3초 간격을 주고 실행
     } catch (error) {
       console.log(error);
     }
