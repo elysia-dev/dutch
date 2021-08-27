@@ -96,7 +96,9 @@ const UnstakeAndMigrate: React.FC = () => {
       },
       {
         label: t('staking.unstaking_supply'),
-        value: `${value} ${cryptoType}`,
+        value: `${commaFormatter(
+          decimalFormatter(parseFloat(value), 6),
+        )} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
             parseFloat(value || '0') * getCryptoPrice(cryptoType),
@@ -106,7 +108,9 @@ const UnstakeAndMigrate: React.FC = () => {
       },
       {
         label: t('staking.migration_supply'),
-        value: `${principal - parseFloat(value)} ${cryptoType}`,
+        value: `${commaFormatter(
+          decimalFormatter(principal - parseFloat(value), 6),
+        )} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
             (principal - parseFloat(value)) * getCryptoPrice(cryptoType),

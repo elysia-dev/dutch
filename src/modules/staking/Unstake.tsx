@@ -66,7 +66,9 @@ const Unstake: React.FC = () => {
     },
     {
       label: t('staking.unstaking_supply'),
-      value: `${value} ${cryptoType}`,
+      value: `${commaFormatter(
+        decimalFormatter(parseFloat(value), 6),
+      )} ${cryptoType}`,
       subvalue: `$ ${commaFormatter(
         decimalFormatter(
           parseFloat(value || '0') * getCryptoPrice(cryptoType),
