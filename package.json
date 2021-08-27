@@ -58,6 +58,7 @@
     "expo-updates": "~0.5.4",
     "i18next": "^20.0.0",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-i18next": "^11.8.10",
