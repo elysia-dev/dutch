@@ -462,7 +462,7 @@
       "migration_placeholder": "Migration quantity",
       "max_supply_available": "Max supply",
       "migration_destination": "Destination",
-      "migration_supply": "Supply",
+      "migration_supply": "Migration supply",
       "reward_supply": "Reward supply",
       "ended_round_migration_notice": "{{round}}$t(ordinal_suffix.{{round}}) round staking has been updated. \n You are unable to migrate this round.\n Continue?",
       "done": "Input complete",
