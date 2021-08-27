@@ -23,6 +23,7 @@ import {
 import PreferenceContext from '../contexts/PreferenceContext';
 import LocaleType from '../enums/LocaleType';
 import PaymentCryptoType from '../enums/PaymentCryptoType';
+import useErcContract from '../hooks/useErcContract';
 
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
@@ -30,7 +31,7 @@ const AssetProvider: React.FC = (props) => {
   const { priceLoaded } = useContext(PriceContext);
   const { language } = useContext(PreferenceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState);
-
+  const { elContract, elfiContract, daiContract } = useErcContract();
   const address = wallet?.getFirstNode()?.address || user.ethAddresses[0];
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -95,9 +96,7 @@ const AssetProvider: React.FC = (props) => {
           title: 'ELYSIA',
           value: parseFloat(
             utils.formatEther(
-              await getElysiaContract()?.balanceOf(
-                wallet?.getFirstAddress() || address,
-              ),
+              await elContract?.balanceOf(wallet?.getFirstAddress() || address),
             ),
           ),
           type: CryptoType.EL,
@@ -124,6 +123,30 @@ const AssetProvider: React.FC = (props) => {
           ),
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
+        },
+        {
+          title: 'ELFI',
+          value: parseFloat(
+            utils.formatEther(
+              await elfiContract?.balanceOf(
+                wallet?.getFirstAddress() || address,
+              ),
+            ),
+          ),
+          type: CryptoType.ELFI,
+          unit: CryptoType.ELFI,
+        },
+        {
+          title: 'DAI',
+          value: parseFloat(
+            utils.formatEther(
+              await daiContract?.balanceOf(
+                wallet?.getFirstAddress() || address,
+              ),
+            ),
+          ),
+          type: CryptoType.DAI,
+          unit: CryptoType.DAI,
         },
       );
       setState({
@@ -207,9 +230,7 @@ const AssetProvider: React.FC = (props) => {
         {
           title: 'ELYSIA',
           value: parseFloat(
-            utils.formatEther(
-              await getElysiaContract()?.balanceOf(address || ''),
-            ),
+            utils.formatEther(await elContract?.balanceOf(address || '')),
           ),
           type: CryptoType.EL,
           unit: CryptoType.EL,
@@ -229,6 +250,22 @@ const AssetProvider: React.FC = (props) => {
           ),
           type: CryptoType.BNB,
           unit: CryptoType.BNB,
+        },
+        {
+          title: 'ELFI',
+          value: parseFloat(
+            utils.formatEther(await elfiContract?.balanceOf(address || '')),
+          ),
+          type: CryptoType.ELFI,
+          unit: CryptoType.ELFI,
+        },
+        {
+          title: 'DAI',
+          value: parseFloat(
+            utils.formatEther(await daiContract.balanceOf(address || '')),
+          ),
+          type: CryptoType.DAI,
+          unit: CryptoType.DAI,
         },
       );
     } finally {

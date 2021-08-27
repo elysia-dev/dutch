@@ -21,6 +21,10 @@ In `./.env.development`, below environment variables shoud be declared.
 | BSC_RPC_ENDPOINT           | Binance Smarc Chain RPC endpoint       | https://data-seed-prebsc-1-s1.binance.org:8545/ |
 | ETH_NETWORK                | Ethereum network (mainnet, kovan, etc) | kovan                                           |
 | EL_ADDRESS                 | Deployed EL token contract address     | 0xea26b65ed9571832a7f056ab7e6b7e755bb1d7be      |
+| ELFI_ADDRESS               | Deployed ELFI token contract address   | 0x90104f13a17694cda413220ec09220eca8f8efac      |
+| DAI_ADDRESS                | Deployed DAI token contract address    | 0xc4375b7de8af5a38a93548eb8453a498222c4ff2      |
+| EL_STAKING_POOL_ADDRESS    | Deployed EL token staking address      | 0x045E0Dc1d47F57418bd7c99c7ba1D01D49d03198      |
+| ELFI_STAKING_POOL_ADDRESS  | Deployed ELFI token staking address    | \*\*\*                                          |
 | INFURA_PROJECT_ID          | Infura project id                      | \*\*\*                                          |
 | APP_GOOGLE_MAP_API_IOS     | Google map API key for ios             | \*\*\*                                          |
 | APP_GOOGLE_MAP_API_ANDROID | Google map API key for android         | \*\*\*                                          |

@@ -74,7 +74,12 @@ const Unstake: React.FC = () => {
         ),
       )}`,
     },
-    { label: t('staking.gas_price'), value: estimagedGasPrice },
+    {
+      label: t('staking.gas_price'),
+      value: estimagedGasPrice
+        ? `${estimagedGasPrice} ETH`
+        : t('staking.cannot_estimate_gas'),
+    },
   ];
 
   const onPressUnstaking = async () => {
@@ -157,7 +162,7 @@ const Unstake: React.FC = () => {
           <StakingConfrimModal
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
-            title={t('staking.staking_by_crypto', {
+            title={t('staking.unstaking_with_type', {
               stakingCrypto: cryptoType,
             })}
             subtitle={t('staking.confirmation_title')}

@@ -25,7 +25,7 @@ const calculateMined = (
       ? ELFI_PER_ROUND_ON_EL_STAKING_POOL
       : DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
 
-  if (currentRound && round < currentRound) {
+  if (currentRound && moment().isAfter(roundEndDate)) {
     return minedPerRound;
   } else if (
     currentRound &&

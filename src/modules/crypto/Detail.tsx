@@ -31,6 +31,7 @@ import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
 import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
+import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 
 type ParamList = {
   CryptoDetail: {
@@ -82,8 +83,24 @@ const Detail: React.FC = () => {
         res = await EthersacnClient.getEthTransaction(address, state.page);
       } else if (asset.type === CryptoType.BNB) {
         res = await EthersacnClient.getBnbTransaction(address, state.page);
+      } else if (asset.type === CryptoType.ELFI) {
+        res = await EthersacnClient.getErc20Transaction(
+          address,
+          ELFI_ADDRESS,
+          state.page,
+        );
+      } else if (asset.type === CryptoType.DAI) {
+        res = await EthersacnClient.getErc20Transaction(
+          address,
+          DAI_ADDRESS,
+          state.page,
+        );
       } else {
-        res = await EthersacnClient.getErc20Transaction(address, state.page);
+        res = await EthersacnClient.getErc20Transaction(
+          address,
+          EL_ADDRESS,
+          state.page,
+        );
       }
 
       if (res.data.result.length === 0 && state.page >= 2) {

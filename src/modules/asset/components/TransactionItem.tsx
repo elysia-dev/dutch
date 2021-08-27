@@ -47,119 +47,119 @@ const TransactionItem: React.FC<ITransactionItem> = ({
   paymentMethod,
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
-  const { assets } = useContext(AssetContext);
-  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { wallet } = useContext(WalletContext);
-  const [crytoValue, setCrytoValue] = useState<Asset>();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [changedGasPrice, setChangedGasPrice] = useState('1');
-  const [contract, setContract] = useState<Contract | null>();
-  const [gasFee, setGasFee] = useState('0');
-  const [valueInCryto, setValueInCryto] = useState(0);
-  const elContract = getElysiaContract();
   const { t } = useTranslation();
+  // const { assets } = useContext(AssetContext);
+  // const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
+  // const { wallet } = useContext(WalletContext);
+  // const [crytoValue, setCrytoValue] = useState<Asset>();
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [changedGasPrice, setChangedGasPrice] = useState('1');
+  // const [contract, setContract] = useState<Contract | null>();
+  // const [gasFee, setGasFee] = useState('0');
+  // const [valueInCryto, setValueInCryto] = useState(0);
+  // const elContract = getElysiaContract();
 
-  const estimateElGas = async (): Promise<BigNumber | undefined> => {
-    if (paymentMethod === CryptoType.None) {
-      return await elContract?.estimateGas.transfer(
-        transaction.toAddress,
-        utils.parseEther(transaction.value || '0.1'),
-        {
-          from: wallet?.getFirstAddress(),
-        },
-      );
-    } else {
-      return await contract?.estimateGas.purchase(utils.parseEther('100'), {
-        from: wallet?.getFirstAddress() || '',
-      });
-    }
-  };
+  // const estimateElGas = async (): Promise<BigNumber | undefined> => {
+  //   if (paymentMethod === CryptoType.None) {
+  //     return await elContract?.estimateGas.transfer(
+  //       transaction.toAddress,
+  //       utils.parseEther(transaction.value || '0.1'),
+  //       {
+  //         from: wallet?.getFirstAddress(),
+  //       },
+  //     );
+  //   } else {
+  //     return await contract?.estimateGas.purchase(utils.parseEther('100'), {
+  //       from: wallet?.getFirstAddress() || '',
+  //     });
+  //   }
+  // };
 
-  const estimateEthOrBscGas = async (): Promise<BigNumber | undefined> => {
-    if (paymentMethod === CryptoType.None) {
-      return await wallet?.getFirstSigner(transaction.cryptoType)?.estimateGas({
-        to: transaction.toAddress,
-        value: utils.parseEther(transaction.value || '0').toHexString(),
-      });
-    } else {
-      return await contract?.estimateGas.purchase({
-        from: wallet?.getFirstAddress() || '',
-        value: utils.parseEther('0.1'),
-      });
-    }
-  };
+  // const estimateEthOrBscGas = async (): Promise<BigNumber | undefined> => {
+  //   if (paymentMethod === CryptoType.None) {
+  //     return await wallet?.getFirstSigner(transaction.cryptoType)?.estimateGas({
+  //       to: transaction.toAddress,
+  //       value: utils.parseEther(transaction.value || '0').toHexString(),
+  //     });
+  //   } else {
+  //     return await contract?.estimateGas.purchase({
+  //       from: wallet?.getFirstAddress() || '',
+  //       value: utils.parseEther('0.1'),
+  //     });
+  //   }
+  // };
 
-  const setEstimateGas = async (inputGasPrice: string) => {
-    let estimateGas: BigNumber | undefined;
-    const currentCryptoType =
-      (transaction.cryptoType === CryptoType.EL ||
-        paymentMethod === CryptoType.EL) &&
-      CryptoType.EL;
+  // const setEstimateGas = async (inputGasPrice: string) => {
+  //   let estimateGas: BigNumber | undefined;
+  //   const currentCryptoType =
+  //     (transaction.cryptoType === CryptoType.EL ||
+  //       paymentMethod === CryptoType.EL) &&
+  //     CryptoType.EL;
 
-    try {
-      switch (currentCryptoType) {
-        case CryptoType.EL:
-          estimateGas = await estimateElGas();
-          break;
-        default:
-          estimateGas = await estimateEthOrBscGas();
-          break;
-      }
-      if (estimateGas) {
-        setGasFee(
-          utils.formatEther(
-            estimateGas.mul(utils.parseUnits(inputGasPrice, 'gwei')),
-          ),
-        );
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //   try {
+  //     switch (currentCryptoType) {
+  //       case CryptoType.EL:
+  //         estimateGas = await estimateElGas();
+  //         break;
+  //       default:
+  //         estimateGas = await estimateEthOrBscGas();
+  //         break;
+  //     }
+  //     if (estimateGas) {
+  //       setGasFee(
+  //         utils.formatEther(
+  //           estimateGas.mul(utils.parseUnits(inputGasPrice, 'gwei')),
+  //         ),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  const onChangeGasPrice = (inputGasPrice: string) => {
-    setChangedGasPrice(inputGasPrice);
-    setEstimateGas(inputGasPrice);
-  };
+  // const onChangeGasPrice = (inputGasPrice: string) => {
+  //   setChangedGasPrice(inputGasPrice);
+  //   setEstimateGas(inputGasPrice);
+  // };
 
-  useEffect(() => {
-    if (!isModalVisible) return;
-    setChangedGasPrice(
-      parseInt(
-        utils.formatUnits(
-          paymentMethod === CryptoType.BNB
-            ? bscGasPrice
-            : transaction.cryptoType === CryptoType.BNB
-            ? bscGasPrice
-            : gasPrice,
-          9,
-        ),
-      ).toFixed(0),
-    );
-    setEstimateGas(
-      parseInt(
-        utils.formatUnits(
-          paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
-          9,
-        ),
-      ).toFixed(0),
-    );
-    setValueInCryto(
-      parseFloat(transaction.valueFrom || '') / getCryptoPrice(paymentMethod),
-    );
-    setCrytoValue(
-      assets.find((asset) => {
-        if (paymentMethod !== CryptoType.BNB) {
-          return asset.type === CryptoType.ETH && asset.unit === CryptoType.ETH;
-        }
-        return asset.type === CryptoType.BNB && asset.unit === CryptoType.BNB;
-      }),
-    );
-    if (paymentMethod === CryptoType.None) return;
-    setContract(
-      getAssetTokenFromCryptoType(paymentMethod, contractAddress || ''),
-    );
-  }, [isModalVisible, valueInCryto]);
+  // useEffect(() => {
+  //   if (!isModalVisible) return;
+  //   setChangedGasPrice(
+  //     parseInt(
+  //       utils.formatUnits(
+  //         paymentMethod === CryptoType.BNB
+  //           ? bscGasPrice
+  //           : transaction.cryptoType === CryptoType.BNB
+  //           ? bscGasPrice
+  //           : gasPrice,
+  //         9,
+  //       ),
+  //     ).toFixed(0),
+  //   );
+  //   setEstimateGas(
+  //     parseInt(
+  //       utils.formatUnits(
+  //         paymentMethod === CryptoType.BNB ? bscGasPrice : gasPrice,
+  //         9,
+  //       ),
+  //     ).toFixed(0),
+  //   );
+  //   setValueInCryto(
+  //     parseFloat(transaction.valueFrom || '') / getCryptoPrice(paymentMethod),
+  //   );
+  //   setCrytoValue(
+  //     assets.find((asset) => {
+  //       if (paymentMethod !== CryptoType.BNB) {
+  //         return asset.type === CryptoType.ETH && asset.unit === CryptoType.ETH;
+  //       }
+  //       return asset.type === CryptoType.BNB && asset.unit === CryptoType.BNB;
+  //     }),
+  //   );
+  //   if (paymentMethod === CryptoType.None) return;
+  // setContract(
+  //   getAssetTokenFromCryptoType(paymentMethod, contractAddress || ''),
+  // );
+  // }, [isModalVisible, valueInCryto]);
   return (
     <View
       style={{
@@ -207,32 +207,35 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         )}
         <P3Text
           label={
-            transaction.status !== TxStatus.Pending ? (
-              moment(transaction.createdAt).format('YYYY-MM-DD | HH:mm:ss')
-            ) : (
-              <TouchableOpacity
-                onPress={() => setIsModalVisible((prev) => !prev)}>
-                <View
-                  style={{
-                    width: 50,
-                    height: 17,
-                    backgroundColor: '#3679B5',
-                    borderRadius: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: 5,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: AppColors.WHITE,
-                      fontWeight: '700',
-                    }}>
-                    가속화
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            )
+            transaction.createdAt === ''
+              ? t('notification_label.pendingTransaction')
+              : moment(transaction.createdAt).format('YYYY-MM-DD | HH:mm:ss')
+            // transaction.status !== TxStatus.Pending
+            // : ''
+            // (
+            //   <TouchableOpacity
+            //     onPress={() => setIsModalVisible((prev) => !prev)}>
+            //     <View
+            //       style={{
+            //         width: 50,
+            //         height: 17,
+            //         backgroundColor: '#3679B5',
+            //         borderRadius: 5,
+            //         alignItems: 'center',
+            //         justifyContent: 'center',
+            //         marginTop: 5,
+            //       }}>
+            //       <Text
+            //         style={{
+            //           fontSize: 10,
+            //           color: AppColors.WHITE,
+            //           fontWeight: '700',
+            //         }}>
+            //         가속화
+            //       </Text>
+            //     </View>
+            //   </TouchableOpacity>
+            // )
           }
         />
       </View>
@@ -253,7 +256,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           }
         />
       </View>
-      <View>
+      {/* <View>
         <AccelerateModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
@@ -274,7 +277,7 @@ const TransactionItem: React.FC<ITransactionItem> = ({
           value={transaction.value}
           address={transaction.toAddress}
         />
-      </View>
+      </View> */}
     </View>
   );
 };

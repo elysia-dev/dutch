@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import { BigNumber, constants } from 'ethers';
 import SheetHeader from '../../shared/components/SheetHeader';
 import AppColors from '../../enums/AppColors';
@@ -12,6 +13,7 @@ import {
   SubTitleText,
   H1Text,
   H2Text,
+  P3Text
 } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
@@ -33,6 +35,7 @@ import BoxWithDividerContent from './components/BoxWithDividerContent';
 import useStakingPool from '../../hooks/useStakingPool';
 import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
+import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
 
 type ParamList = {
@@ -45,6 +48,7 @@ type ParamList = {
 const CurrentDashboard: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'CurrentDashboard'>>();
   const { cryptoType, rewardCryptoType } = route.params;
+  const miningPlanRef = useRef<ScrollView | null>();
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
   const { isWalletUser, user } = useContext(UserContext);
@@ -89,7 +93,19 @@ const CurrentDashboard: React.FC = () => {
     stakingPoolContract?.currentRound().then((res: any) => {
       setCurrentRound(res);
     });
+    let isBetween = false;
+    if (currentRound !== 6) {
+      isBetween = moment().isBetween(
+        STAKING_POOL_ROUNDS_MOMENT[currentRound - 1].endedAt,
+        STAKING_POOL_ROUNDS_MOMENT[currentRound].startedAt,
+      );
+    }
     getPoolData();
+    miningPlanRef.current?.scrollTo({
+      x:
+        310 *
+        (isBetween ? currentRound : currentRound === 0 ? 0 : currentRound - 1),
+    });
   }, [currentRound, appState]);
 
   return (
@@ -180,6 +196,10 @@ const CurrentDashboard: React.FC = () => {
                   )}%`}
                 />
               </BoxWithDivider>
+              <StakingDescription
+                stakingCrypto={cryptoType}
+                rewardCrypto={rewardCryptoType}
+              />
               <TitleText
                 label={t('staking.mining_plan', {
                   rewardCrypto: rewardCryptoType,

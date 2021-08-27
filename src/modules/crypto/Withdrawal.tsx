@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -35,6 +36,7 @@ import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
+import useTxHandler from '../../hooks/useTxHandler';
 
 type ParamList = {
   Withdrawal: {
@@ -48,7 +50,6 @@ type ParamList = {
 const Withdrawal: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Withdrawal'>>();
   const { asset } = route.params;
-  const { addPendingTransaction } = useContext(TransactionContext);
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
@@ -56,14 +57,19 @@ const Withdrawal: React.FC = () => {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [estimatedGas, setEstimatedGas] = useState('');
+  const { afterTxFailed } = useTxHandler();
   const gasCrypto =
     asset.type === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(asset.type)
     ? getBalance(gasCrypto) < parseFloat(estimatedGas) + parseFloat(value)
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { isLoading, transferValue } = createTransferTx(
+    asset.type,
+    TransferType.Send,
+    null,
+  );
 
   const estimateGas = async () => {
     let estimatedGas: BigNumber | undefined;
@@ -99,22 +105,12 @@ const Withdrawal: React.FC = () => {
   };
 
   const sendTx = async () => {
-    navigation.goBack();
-    createTransferTx(
-      gasPrice,
-      bscGasPrice,
-      getCryptoPrice,
-      wallet,
-      addPendingTransaction,
-      asset.type,
-      TransferType.Send,
-      0,
-      null,
-      '',
-      value,
-      undefined,
-      state.address,
-    );
+    try {
+      transferValue('0', value, state.address);
+    } catch (error) {
+      afterTxFailed('Transaction failed');
+      console.log(error);
+    }
   };
 
   const openBarcodeScanner = async () => {
@@ -282,7 +278,7 @@ const Withdrawal: React.FC = () => {
           <NumberPad
             addValue={(text) => {
               if (!isNumericStringAppendable(value, text, 12, 6)) return;
-              
+
               const next = newInputValueFormatter(value, text);
               if (parseFloat(next) < getBalance(asset.type)) {
                 setValue(next);
@@ -319,6 +315,7 @@ const Withdrawal: React.FC = () => {
           handler={() => {
             sendTx();
           }}
+          isLoading={isLoading}
         />
       </View>
       {!state.scanned && (
