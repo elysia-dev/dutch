@@ -53,7 +53,7 @@ const useEstimateGas = (
 
       return utils.formatEther(estimateGas.mul(gasPrice));
     } catch (error) {
-      console.log(error);
+      throw Error;
       return '';
     }
   };
