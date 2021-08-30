@@ -64,6 +64,7 @@ const Stake: React.FC = () => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
+  const [estimateGasCount, setEstimateGasCount] = useState(0);
   const [isApprove, setIsApprove] = useState(true);
   const { elContract } = useErcContract();
   const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
@@ -106,12 +107,9 @@ const Stake: React.FC = () => {
   const setApporve = async () => {
     try {
       await approve();
-      setTimeout(async () => {
-        await setEstimateGas(StakingType.Stake);
-        setIsApprove(true);
-        setIsLoading(false);
-      }, 3000); // approve 하고 난 후 바로 가스조회를 하면 에러가 발생하여서 3초 간격을 주고 실행
+      await setEstimateGas(StakingType.Stake);
     } catch (error) {
+      setEstimateGasCount((prev) => prev + 1);
       console.log(error);
     }
   };
@@ -144,6 +142,19 @@ const Stake: React.FC = () => {
       getPoolData();
     }
   }, []);
+
+  useEffect(() => {
+    if (estimateGasCount === 0) return;
+    setTimeout(async () => {
+      try {
+        await setEstimateGas(StakingType.Stake);
+        setIsApprove(true);
+        setIsLoading(false);
+      } catch (error) {
+        setEstimateGasCount((prev) => prev + 1);
+      }
+    }, 1000);
+  }, [estimateGasCount]);
 
   if (!selectionVisible) {
     return (
