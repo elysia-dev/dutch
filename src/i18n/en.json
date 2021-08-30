@@ -475,6 +475,11 @@
       "unstaking_help": "What is 'Unstaking'?",
       "unstaking_help_description": "Unstaking refers to transferring staked tokens to your connected wallet. Any unclaimed tokens will remain in the money pool for the current round",
       "migration_help_description": "Migration is a function that will transfer your staked tokens to the next round. It will help you save transaction fees since unstaking and transferring tokens to another pool will be executed at the same time",
+      "staking_description": "Understanding the {{stakingCrypto}} staking program",
+      "staking_description_first": "There will be 6 separate rounds to stake your {{stakingCrypto}} tokens in accordance with the {{rewardCrypto}} mining plan on {{rewardCrypto}} V2",
+      "staking_description_second": "By staking {{stakingCrypto}} tokens using your Ethereum wallet, you will receive {{rewardCrypto}} tokens as participation reward",
+      "staking_description_third": "You can always ‘unstake’ your tokens at all times",
+      "staking_description_fourth": "Please be advised that after the round is over your {{stakingCrypto}} and {{rewardCrypto}} rewards will NOT be transferred to your wallet automatically, and requires further action from the wallet owner",
       "full_amount": "Max",
       "duration_day": "{{duration}} days",
       "no_history": "There is no staking history."
