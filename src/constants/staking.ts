@@ -22,63 +22,60 @@ const timezone = 'Asia/Seoul';
 
 export const STAKING_POOL_ROUNDS = [
   {
-    startedAt: moment('2021.08.27 00:00:00 +9:00', inputFormat).tz(
+    startedAt: moment('2021.07.27 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
-    endedAt: moment('2021.08.27 15:40:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-  },
-  {
-    startedAt: moment('2021.08.27 15:40:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-    endedAt: moment('2021.08.28 00:00:00 +9:00', inputFormat).tz(
+    endedAt: moment('2021.08.16 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
   },
   {
-    startedAt: moment('2021.08.28 00:00:00 +9:00', inputFormat).tz(
+    startedAt: moment('2021.08.26 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
-    endedAt: moment('2021.08.29 00:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-  },
-  {
-    startedAt: moment('2021.08.29 00:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-    endedAt: moment('2021.08.30 00:00:00 +9:00', inputFormat).tz(
+    endedAt: moment('2021.09.15 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
   },
   {
-    startedAt: moment('2021.08.30 00:00:00 +9:00', inputFormat).tz(
+    startedAt: moment('2021.09.25 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
-    endedAt: moment('2021.08.31 00:00:00 +9:00', inputFormat).tz(
+    endedAt: moment('2021.10.15 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
   },
   {
-    startedAt: moment('2021.08.31 00:00:00 +9:00', inputFormat).tz(
+    startedAt: moment('2021.10.25 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
-    endedAt: moment('2021.09.01 00:00:00 +9:00', inputFormat).tz(
+    endedAt: moment('2021.11.14 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),
+  },
+  {
+    startedAt: moment('2021.11.24 19:00:00 +9:00', inputFormat).tz(
+      timezone,
+      true,
+    ),
+    endedAt: moment('2021.12.14 19:00:00 +9:00', inputFormat).tz(
+      timezone,
+      true,
+    ),
+  },
+  {
+    startedAt: moment('2021.12.24 19:00:00 +9:00', inputFormat).tz(
+      timezone,
+      true,
+    ),
+    endedAt: moment('2022.1.13 19:00:00 +9:00', inputFormat).tz(timezone, true),
   },
 ];
