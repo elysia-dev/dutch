@@ -342,7 +342,7 @@ const UnstakeAndMigrate: React.FC = () => {
       value={parseFloat(value)}
       page="staking"
       stakingTxData={{
-        type: 'unstake',
+        type: 'unstakeAndMigrate',
         unit: cryptoType,
         round: selectedRound,
         rewardValue: reward,

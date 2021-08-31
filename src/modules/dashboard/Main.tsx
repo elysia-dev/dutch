@@ -309,7 +309,7 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          {hasAnyInfoBoxes.EL && hasAnyInfoBoxes.ELFI && (
+          {(hasAnyInfoBoxes.EL || hasAnyInfoBoxes.ELFI) && (
             <StakingListing
               elStakingInfoBoxes={elStakingInfoBoxes}
               elfiStakingInfoBoxes={elfiStakingInfoBoxes}

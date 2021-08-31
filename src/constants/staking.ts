@@ -17,7 +17,7 @@ export const TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL =
 export const TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL =
   DAI_PER_ROUND_ON_ELFI_STAKING_POOL * NUMBER_OF_ROUNDS;
 
-const inputFormat = 'YYYY.MM.DD hh:mm:ss Z';
+const inputFormat = 'YYYY.MM.DD HH:mm:ss Z';
 const timezone = 'Asia/Seoul';
 
 export const STAKING_POOL_ROUNDS = [
