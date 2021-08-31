@@ -28,6 +28,7 @@ import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
 import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
+import useErcContract from '../../hooks/useErcContract';
 
 type ParamList = {
   Purchase: {
@@ -88,6 +89,8 @@ const Purchase: FunctionComponent = () => {
   const tokenPrice = getCryptoPrice(CryptoType.ELA);
   const balanceInCrypto = getBalance(assetInCrypto.type);
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
+  const { elContract } = useErcContract();
+  const [isLoading, setIsLoading] = useState(false);
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -137,10 +140,32 @@ const Purchase: FunctionComponent = () => {
 
   const createTx = async () => {
     try {
+      setIsLoading(true);
       await transferValue(values.inFiat, values.inToken);
+      setIsLoading(false);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
+    }
+  };
+
+  const approve = async () => {
+    try {
+      setIsLoading(true);
+      await elContract.approve(contractAddress, '1' + '0'.repeat(30));
+      setState({
+        ...state,
+        isApproved: true,
+        step: TxStep.None,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        isApproved: false,
+        step: TxStep.None,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -156,53 +181,20 @@ const Purchase: FunctionComponent = () => {
         }
 
         if (isWalletUser) {
-          getElysiaContract()
-            ?.allowance(wallet?.getFirstNode()?.address, contractAddress)
+          elContract
+            .allowance(wallet?.getFirstNode()?.address || '', contractAddress)
             .then((res: BigNumber) => {
-              if (!res.isZero()) {
-                setState({
-                  ...state,
-                  isApproved: true,
-                  step: TxStep.None,
-                });
-              } else {
-                setState({
-                  ...state,
-                  isApproved: false,
-                  step: TxStep.None,
-                });
-              }
+              setState({
+                ...state,
+                isApproved: Number(utils.formatEther(res)) > balanceInCrypto,
+                step: TxStep.None,
+              });
             })
             .catch((e: any) => {
               afterTxFailed(e.message);
               navigation.goBack();
             });
         }
-        break;
-
-      case TxStep.Approving:
-        getElysiaContract()
-          ?.populateTransaction.approve(contractAddress, '1' + '0'.repeat(30))
-          .then((populatedTransaction) => {
-            wallet
-              ?.getFirstSigner()
-              .sendTransaction({
-                to: populatedTransaction.to,
-                data: populatedTransaction.data,
-              })
-              .then((tx: any) => {
-                setState({
-                  ...state,
-                  isApproved: true,
-                  txHash: tx,
-                  step: TxStep.None,
-                });
-              })
-              .catch((e) => {
-                afterTxFailed(e.message);
-                navigation.goBack();
-              });
-          });
         break;
       case TxStep.Creating:
         createTx();
@@ -220,33 +212,6 @@ const Purchase: FunctionComponent = () => {
         break;
     }
   }, [state.step]);
-
-  useEffect(() => {
-    if (![TxStatus.Success, TxStatus.Fail].includes(txResult.status)) return;
-
-    switch (state.step) {
-      case TxStep.Approving:
-        setState({
-          ...state,
-          step:
-            txResult.status === TxStatus.Success
-              ? TxStep.Creating
-              : TxStep.Failed,
-        });
-        break;
-      case TxStep.Creating:
-        setState({
-          ...state,
-          step:
-            txResult.status === TxStatus.Success
-              ? TxStep.Created
-              : TxStep.Failed,
-        });
-        break;
-      default:
-        break;
-    }
-  }, [txResult.status]);
 
   if (state.stage === 0) {
     return (
@@ -271,6 +236,8 @@ const Purchase: FunctionComponent = () => {
         disabled={parseInt(values.inToken || '0', 10) < 1}
         estimateGas={state.estimateGas}
         isApproved={state.isApproved}
+        approve={approve}
+        isLoading={isLoading}
         createTx={() => {
           if (isWalletUser) {
             if (state.isApproved) {
