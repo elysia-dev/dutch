@@ -491,6 +491,6 @@
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
     },
     "numeral_character": ["", "一", "二", "三", "四", "五", "六"],
-    "datetime_format": "YYYY.MM.DD hh:mm:ss"
+    "datetime_format": "YYYY.MM.DD HH:mm:ss"
   }
 }
