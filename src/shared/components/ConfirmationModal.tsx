@@ -1,9 +1,17 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Modal, View, TouchableOpacity, Text } from 'react-native';
+import {
+  Modal,
+  View,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppFonts from '../../enums/AppFonts';
 import AppColors from '../../enums/AppColors';
-import { H3Text, H4Text } from './Texts';
+import { H3Text, H4Text, P3Text } from './Texts';
+import ApproveDescription from './ApproveDescription';
+import ConfirmBox from './ConfirmBox';
 
 interface Props {
   modalVisible: boolean;
@@ -12,6 +20,7 @@ interface Props {
   subtitle: string;
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
+  isLoading?: boolean;
   submitButtonText: string;
   handler: () => void;
 }
@@ -23,6 +32,7 @@ const ConfirmationModal: React.FC<Props> = ({
   subtitle,
   list,
   isApproved,
+  isLoading,
   submitButtonText,
   handler,
 }) => {
@@ -81,80 +91,103 @@ const ConfirmationModal: React.FC<Props> = ({
               backgroundColor: AppColors.WHITE,
             }}>
             <View>
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: AppColors.BLACK,
-                  textAlign: 'center',
-                  lineHeight: 32,
-                  fontWeight: 'bold',
-                  borderBottomWidth: 1,
-                  borderBottomColor: AppColors.GREY,
-                  alignItems: 'center',
-                  marginTop: 20,
-                  height: 50,
-                  fontFamily: AppFonts.Bold,
-                }}>
-                {subtitle}
-              </Text>
-              {list.map((item) => {
-                return (
-                  <View
-                    key={item.label}
+              <ConfirmBox isApprove={isApproved} />
+              {isApproved ? (
+                <>
+                  <Text
                     style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      fontSize: 18,
+                      color: AppColors.BLACK,
+                      textAlign: 'center',
+                      lineHeight: 32,
+                      fontWeight: 'bold',
                       borderBottomWidth: 1,
                       borderBottomColor: AppColors.GREY,
                       alignItems: 'center',
-                      height: item.subvalue ? 64 : 50,
-                      paddingHorizontal: 5,
+                      marginTop: 20,
+                      height: 50,
+                      fontFamily: AppFonts.Bold,
                     }}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: AppColors.BLACK2,
-                        fontFamily: AppFonts.Regular,
-                      }}>
-                      {item.label}
-                    </Text>
-                    <View>
-                      <Text
+                    {subtitle}
+                  </Text>
+                  {list.map((item) => {
+                    return (
+                      <View
+                        key={item.label}
                         style={{
-                          fontSize: 14,
-                          color: AppColors.BLACK,
-                          textAlign: 'right',
-                          fontFamily: AppFonts.Bold,
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderBottomWidth: 1,
+                          borderBottomColor: AppColors.GREY,
+                          alignItems: 'center',
+                          height: item.subvalue ? 64 : 50,
+                          paddingHorizontal: 5,
                         }}>
-                        {item.value}
-                      </Text>
-                      {item.subvalue && (
                         <Text
                           style={{
-                            fontSize: 12,
-                            color: AppColors.SUB_BLACK,
-                            textAlign: 'right',
+                            fontSize: 14,
+                            color: AppColors.BLACK2,
                             fontFamily: AppFonts.Regular,
                           }}>
-                          {item.subvalue}
+                          {item.label}
                         </Text>
-                      )}
-                    </View>
-                  </View>
-                );
-              })}
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: AppColors.BLACK,
-                  marginHorizontal: 5,
-                  marginTop: 12,
-                  lineHeight: 20,
-                  fontFamily: AppFonts.Regular,
-                }}>
-                {`* ${t('assets.confirm_gas')}`}
-              </Text>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: AppColors.BLACK,
+                              textAlign: 'right',
+                              fontFamily: AppFonts.Bold,
+                            }}>
+                            {item.value}
+                          </Text>
+                          {item.subvalue && (
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: AppColors.SUB_BLACK,
+                                textAlign: 'right',
+                                fontFamily: AppFonts.Regular,
+                              }}>
+                              {item.subvalue}
+                            </Text>
+                          )}
+                        </View>
+                      </View>
+                    );
+                  })}
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: AppColors.BLACK,
+                      marginHorizontal: 5,
+                      marginTop: 12,
+                      lineHeight: 20,
+                      fontFamily: AppFonts.Regular,
+                    }}>
+                    {`* ${t('assets.confirm_gas')}`}
+                  </Text>
+                </>
+              ) : !isLoading ? (
+                <ApproveDescription gasPrice={'1'} />
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 131,
+                  }}>
+                  <ActivityIndicator size="large" color={AppColors.GREY2} />
+                  <H3Text
+                    label={'트랜잭션 처리중'}
+                    style={{
+                      fontSize: 18,
+                      marginTop: 19,
+                    }}
+                  />
+                </View>
+              )}
             </View>
             <View>
               {!isApproved && (
@@ -175,9 +208,9 @@ const ConfirmationModal: React.FC<Props> = ({
                   setDisabled(true);
                   handler();
                 }}
-                disabled={disabled}
+                disabled={isLoading}
                 style={{
-                  backgroundColor: disabled ? AppColors.GREY : AppColors.MAIN,
+                  backgroundColor: isLoading ? AppColors.GREY : AppColors.MAIN,
                   borderRadius: 5,
                   justifyContent: 'center',
                   alignContent: 'center',
