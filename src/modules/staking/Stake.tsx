@@ -144,18 +144,19 @@ const Stake: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (estimateGasCount === 0 || estimateGasCount === 4) return;
+    if (estimateGasCount === 0 || estimateGasCount >= 4) return;
     setTimeout(async () => {
       try {
         await setEstimateGas(StakingType.Stake);
         setIsApprove(true);
         setIsLoading(false);
       } catch (error) {
+        setEstimateGasCount((prev) => prev + 1);
+      } finally {
         if (estimateGasCount === 3) {
           setIsApprove(true);
           setIsLoading(false);
         }
-        setEstimateGasCount((prev) => prev + 1);
       }
     }, 2000);
   }, [estimateGasCount]);
