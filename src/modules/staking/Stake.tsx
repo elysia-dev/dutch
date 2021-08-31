@@ -66,7 +66,7 @@ const Stake: React.FC = () => {
   });
   const [estimateGasCount, setEstimateGasCount] = useState(0);
   const [isApprove, setIsApprove] = useState(true);
-  const { elContract } = useErcContract();
+  const { elContract, elfiContract } = useErcContract();
   const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -87,10 +87,17 @@ const Stake: React.FC = () => {
 
   const setAllowance = async () => {
     try {
-      const allowance: BigNumber = await elContract.allowance(
-        wallet?.getFirstNode()?.address || '',
-        EL_STAKING_POOL_ADDRESS,
-      );
+      const allowance: BigNumber =
+        cryptoType === CryptoType.EL
+          ? await elContract.allowance(
+              wallet?.getFirstNode()?.address || '',
+              EL_STAKING_POOL_ADDRESS,
+            )
+          : await elfiContract.allowance(
+              wallet?.getFirstNode()?.address || '',
+              ELFI_STAKING_POOL_ADDRESS,
+            );
+      console.log(utils.formatEther(allowance));
       setAllowanceInfo({
         ...allowanceInfo,
         value: utils.formatEther(allowance),
@@ -101,7 +108,9 @@ const Stake: React.FC = () => {
   };
 
   const isAllowanceForApprove = (): boolean => {
-    return Number(allowanceInfo.value) > crytoBalance;
+    return cryptoType === CryptoType.EL
+      ? Number(allowanceInfo.value) > crytoBalance
+      : Number(allowanceInfo.value) > getBalance(CryptoType.ELFI);
   };
 
   const setApporve = async () => {
@@ -116,12 +125,21 @@ const Stake: React.FC = () => {
 
   const approve = async () => {
     try {
-      await elContract.approve(EL_STAKING_POOL_ADDRESS, '1' + '0'.repeat(30));
+      cryptoType === CryptoType.EL
+        ? await elContract.approve(
+            EL_STAKING_POOL_ADDRESS,
+            '1' + '0'.repeat(30),
+          )
+        : await elfiContract.approve(
+            ELFI_STAKING_POOL_ADDRESS,
+            '1' + '0'.repeat(30),
+          );
       setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
     } catch (error) {
       console.log(error);
     }
   };
+
   const onPressStaking = async () => {
     try {
       if (!isApprove) {
