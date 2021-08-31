@@ -24,6 +24,13 @@ const TransactionProvider: React.FC = (props) => {
   const [state, setState] = useState<TransactionType>(initialTransactions);
   const { t } = useTranslation();
 
+  const setIsSuccessTx = (isSuccessTx: boolean) => {
+    setState({
+      ...state,
+      isSuccessTx,
+    });
+  };
+
   const addPendingTransaction = async (
     txRes: ethers.providers.TransactionResponse | undefined,
     pendingTx: CryptoTransaction,
@@ -194,6 +201,7 @@ const TransactionProvider: React.FC = (props) => {
       value={{
         ...state,
         addPendingTransaction,
+        setIsSuccessTx,
       }}>
       {props.children}
     </TransactionContext.Provider>

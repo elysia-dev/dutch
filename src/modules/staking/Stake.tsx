@@ -56,11 +56,15 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
-  const { estimagedGasPrice } = useEstimateGas(cryptoType, StakingType.Stake);
+  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+    cryptoType,
+    StakingType.Stake,
+  );
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
+  const [estimateGasCount, setEstimateGasCount] = useState(0);
   const [isApprove, setIsApprove] = useState(true);
   const { elContract } = useErcContract();
   const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
@@ -103,9 +107,9 @@ const Stake: React.FC = () => {
   const setApporve = async () => {
     try {
       await approve();
-      setIsApprove(true);
-      setIsLoading(false);
+      await setEstimateGas(StakingType.Stake);
     } catch (error) {
+      setEstimateGasCount((prev) => prev + 1);
       console.log(error);
     }
   };
@@ -138,6 +142,24 @@ const Stake: React.FC = () => {
       getPoolData();
     }
   }, []);
+
+  useEffect(() => {
+    if (estimateGasCount === 0 || estimateGasCount >= 4) return;
+    setTimeout(async () => {
+      try {
+        await setEstimateGas(StakingType.Stake);
+        setIsApprove(true);
+        setIsLoading(false);
+      } catch (error) {
+        setEstimateGasCount((prev) => prev + 1);
+      } finally {
+        if (estimateGasCount === 3) {
+          setIsApprove(true);
+          setIsLoading(false);
+        }
+      }
+    }, 2000);
+  }, [estimateGasCount]);
 
   if (!selectionVisible) {
     return (
@@ -253,7 +275,9 @@ const Stake: React.FC = () => {
             },
             {
               label: t('staking.staking_supply'),
-              value: `${value} ${cryptoType}`,
+              value: `${commaFormatter(
+                decimalFormatter(parseFloat(value), 6),
+              )} ${cryptoType}`,
               subvalue: `$ ${commaFormatter(
                 decimalFormatter(
                   parseFloat(value || '0') * getCryptoPrice(cryptoType),

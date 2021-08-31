@@ -232,7 +232,12 @@ const CurrentDashboard: React.FC = () => {
                   style={{ paddingVertical: 16 }}
                 />
               </BoxWithDivider>
-              <ScrollView horizontal={true} style={{ marginBottom: 100 }}>
+              <ScrollView
+                ref={(ref) => {
+                  miningPlanRef.current = ref;
+                }}
+                horizontal={true}
+                style={{ marginBottom: 100 }}>
                 {[1, 2, 3, 4, 5, 6].map((i) => {
                   return (
                     <MiningPlan
