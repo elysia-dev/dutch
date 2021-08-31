@@ -117,7 +117,7 @@ export const Main: React.FC = () => {
           .then((res: any) => {
             const stakingAmount = res[2]; // principal
             const rewardAmount = res[1];
-            if (!stakingAmount.isZero()) {
+            if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
               return (
                 <StakingInfoBox
                   key={round}
@@ -309,7 +309,7 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          {hasAnyInfoBoxes.EL && hasAnyInfoBoxes.ELFI && (
+          {(hasAnyInfoBoxes.EL || hasAnyInfoBoxes.ELFI) && (
             <StakingListing
               elStakingInfoBoxes={elStakingInfoBoxes}
               elfiStakingInfoBoxes={elfiStakingInfoBoxes}
