@@ -91,6 +91,20 @@ const Purchase: FunctionComponent = () => {
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
   const { elContract } = useErcContract();
   const [isLoading, setIsLoading] = useState(false);
+  const [approveGasPrice, setApproveGasPrice] = useState('');
+
+  const getApproveGasPrice = async () => {
+    try {
+      const estimateGas = await elContract.estimateGas.approve(
+        contractAddress,
+        '1' + '0'.repeat(30),
+      );
+      console.log('gas', utils.formatEther(estimateGas.mul(gasPrice)));
+      setApproveGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -142,10 +156,11 @@ const Purchase: FunctionComponent = () => {
     try {
       setIsLoading(true);
       await transferValue(values.inFiat, values.inToken);
-      setIsLoading(false);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -186,7 +201,8 @@ const Purchase: FunctionComponent = () => {
             .then((res: BigNumber) => {
               setState({
                 ...state,
-                isApproved: Number(utils.formatEther(res)) > balanceInCrypto,
+                // isApproved: Number(utils.formatEther(res)) > balanceInCrypto,
+                isApproved: 1 > balanceInCrypto,
                 step: TxStep.None,
               });
             })
@@ -213,6 +229,11 @@ const Purchase: FunctionComponent = () => {
     }
   }, [state.step]);
 
+  useEffect(() => {
+    if (state.isApproved) return;
+    getApproveGasPrice();
+  }, []);
+
   if (state.stage === 0) {
     return (
       <TxInput
@@ -238,6 +259,7 @@ const Purchase: FunctionComponent = () => {
         isApproved={state.isApproved}
         approve={approve}
         isLoading={isLoading}
+        approveGasPrice={approveGasPrice}
         createTx={() => {
           if (isWalletUser) {
             if (state.isApproved) {
