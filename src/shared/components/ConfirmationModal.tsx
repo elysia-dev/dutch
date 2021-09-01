@@ -12,6 +12,7 @@ import AppColors from '../../enums/AppColors';
 import { H3Text, H4Text, P3Text } from './Texts';
 import ApproveDescription from './ApproveDescription';
 import ConfirmBox from './ConfirmBox';
+import CryptoType from '../../enums/CryptoType';
 
 interface Props {
   modalVisible: boolean;
@@ -21,6 +22,8 @@ interface Props {
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
   isLoading?: boolean;
+  approveGasPrice?: string;
+  assetInCrypto?: CryptoType;
   submitButtonText: string;
   handler: () => void;
 }
@@ -33,6 +36,8 @@ const ConfirmationModal: React.FC<Props> = ({
   list,
   isApproved,
   isLoading,
+  approveGasPrice,
+  assetInCrypto,
   submitButtonText,
   handler,
 }) => {
@@ -91,7 +96,9 @@ const ConfirmationModal: React.FC<Props> = ({
               backgroundColor: AppColors.WHITE,
             }}>
             <View>
-              <ConfirmBox isApprove={isApproved} />
+              {assetInCrypto === CryptoType.EL && (
+                <ConfirmBox isApprove={isApproved} />
+              )}
               {isApproved ? (
                 <>
                   <Text
@@ -170,7 +177,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   </Text>
                 </>
               ) : !isLoading ? (
-                <ApproveDescription gasPrice={'1'} />
+                <ApproveDescription approveGasPrice={approveGasPrice} />
               ) : (
                 <View
                   style={{
