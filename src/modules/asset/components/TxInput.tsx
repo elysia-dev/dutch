@@ -53,6 +53,7 @@ interface ITxInput {
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   approve: () => void;
   isLoading: boolean;
+  approveGasPrice: string;
   createTx: () => void;
 }
 
@@ -88,6 +89,7 @@ const TxInput: React.FC<ITxInput> = ({
   setValues,
   approve,
   isLoading,
+  approveGasPrice,
   createTx,
 }) => {
   const { isWalletUser } = useContext(UserContext);
@@ -322,15 +324,10 @@ const TxInput: React.FC<ITxInput> = ({
         ]}
         isApproved={isApproved}
         isLoading={isLoading}
+        approveGasPrice={approveGasPrice}
+        assetInCrypto={assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
         handler={isApproved ? createTx : approve}
-      />
-      <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
       />
     </View>
   );
