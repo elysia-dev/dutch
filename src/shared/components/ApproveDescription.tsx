@@ -1,17 +1,15 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
+import useErcContract from '../../hooks/useErcContract';
 import { H3Text, P3Text } from './Texts';
 
 type Props = {
-  gasPrice: string;
+  approveGasPrice?: string;
 };
 
-const ApproveDescription: React.FC<Props> = (
-  {
-    // gasPrice
-  },
-) => {
+const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
   return (
     <View
       style={{
@@ -77,9 +75,7 @@ const ApproveDescription: React.FC<Props> = (
           }}
         />
         <P3Text
-          label={
-            '접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 {가스비} ETH 입니다.'
-          }
+          label={`접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 ${approveGasPrice} ETH 입니다.`}
           style={{
             lineHeight: 20,
             fontSize: 12,
