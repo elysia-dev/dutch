@@ -22,7 +22,7 @@ interface Props {
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
   isLoading?: boolean;
-  approveGasPrice?: string;
+  approveGasPrice: string;
   assetInCrypto?: CryptoType;
   submitButtonText: string;
   handler: () => void;
