@@ -99,7 +99,6 @@ const Purchase: FunctionComponent = () => {
         contractAddress,
         '1' + '0'.repeat(30),
       );
-      console.log('gas', utils.formatEther(estimateGas.mul(gasPrice)));
       setApproveGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
     } catch (error) {
       console.log(error);
