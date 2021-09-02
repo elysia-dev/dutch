@@ -65,7 +65,7 @@ export class ChartTransactions {
         xyDayValue = [
           ...xyDayValue,
           {
-            x: array.length - idx,
+            x: txs.length === 1 ? 2 : array.length - idx,
             y:
               idx === 0
                 ? prevValue
