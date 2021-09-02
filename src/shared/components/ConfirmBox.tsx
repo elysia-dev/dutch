@@ -17,7 +17,7 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
         style={{
           height: 37,
           width: '50%',
-          backgroundColor: isApprove ? AppColors.SUB_GREY : AppColors.SUB_BLACK,
+          backgroundColor: isApprove ? AppColors.SUB_GREY : AppColors.BLACK2,
           borderTopLeftRadius: 5,
           borderBottomLeftRadius: 5,
           justifyContent: 'center',
@@ -35,9 +35,7 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
         style={{
           height: 37,
           width: '50%',
-          backgroundColor: !isApprove
-            ? AppColors.SUB_GREY
-            : AppColors.SUB_BLACK,
+          backgroundColor: !isApprove ? AppColors.SUB_GREY : AppColors.BLACK2,
           borderTopRightRadius: 5,
           borderBottomRightRadius: 5,
           justifyContent: 'center',
@@ -61,7 +59,7 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
           borderLeftWidth: 19,
           borderTopColor: 'rgba(0,0,0,0)',
           borderBottomColor: 'rgba(0,0,0,0)',
-          borderLeftColor: isApprove ? AppColors.SUB_GREY : AppColors.SUB_BLACK,
+          borderLeftColor: isApprove ? AppColors.SUB_GREY : AppColors.BLACK2,
         }}
       />
     </View>
