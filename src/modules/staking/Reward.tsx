@@ -57,10 +57,10 @@ const Reward: React.FC = () => {
 
   const onPressClaim = async () => {
     try {
-      stakeByType('', selectedRound, StakingType.Reward);
+      await stakeByType('', selectedRound, StakingType.Reward);
     } catch (error) {
-      afterTxFailed('Transaction failed');
       console.log(error);
+      afterTxFailed('Transaction failed');
     }
   };
 
