@@ -92,6 +92,10 @@ const Purchase: FunctionComponent = () => {
   const { elContract } = useErcContract();
   const [isLoading, setIsLoading] = useState(false);
   const [approveGasPrice, setApproveGasPrice] = useState('');
+  const [estimateGasCount, setEstimateGasCount] = useState(0);
+  const address = isWalletUser
+    ? wallet?.getFirstAddress()
+    : user.ethAddresses[0];
 
   const getApproveGasPrice = async () => {
     try {
@@ -133,19 +137,14 @@ const Purchase: FunctionComponent = () => {
             ),
           ),
         });
+        setIsLoading(false);
       }
     } catch (e) {
-      setState({
-        ...state,
-        estimateGas: '',
-      });
+      throw Error;
     }
   };
-  useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
 
+  useEffect(() => {
     if (address) {
       estimateGas(address);
     }
@@ -167,21 +166,45 @@ const Purchase: FunctionComponent = () => {
     try {
       setIsLoading(true);
       await elContract.approve(contractAddress, '1' + '0'.repeat(30));
+      await estimateGas(address || '');
       setState({
         ...state,
         isApproved: true,
         step: TxStep.None,
       });
     } catch (error) {
+      setEstimateGasCount((prev) => prev + 1);
       setState({
         ...state,
         isApproved: false,
         step: TxStep.None,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (estimateGasCount === 0 || estimateGasCount >= 4) return;
+    setTimeout(async () => {
+      try {
+        await estimateGas(address || '');
+        setState({
+          ...state,
+          isApproved: true,
+        });
+        setIsLoading(false);
+      } catch (error) {
+        setEstimateGasCount((prev) => prev + 1);
+      } finally {
+        if (estimateGasCount >= 3) {
+          setState({
+            ...state,
+            isApproved: true,
+          });
+          setIsLoading(false);
+        }
+      }
+    }, 2000);
+  }, [estimateGasCount]);
 
   useEffect(() => {
     switch (state.step) {
@@ -200,8 +223,7 @@ const Purchase: FunctionComponent = () => {
             .then((res: BigNumber) => {
               setState({
                 ...state,
-                // isApproved: Number(utils.formatEther(res)) > balanceInCrypto,
-                isApproved: 1 > balanceInCrypto,
+                isApproved: Number(utils.formatEther(res)) > balanceInCrypto,
                 step: TxStep.None,
               });
             })
@@ -254,7 +276,7 @@ const Purchase: FunctionComponent = () => {
         setCurrent={setCurrent}
         setValues={setValues}
         disabled={parseInt(values.inToken || '0', 10) < 1}
-        estimateGas={state.estimateGas}
+        estimatedGas={state.estimateGas}
         isApproved={state.isApproved}
         approve={approve}
         isLoading={isLoading}
@@ -262,7 +284,7 @@ const Purchase: FunctionComponent = () => {
         createTx={() => {
           if (isWalletUser) {
             if (state.isApproved) {
-              setState({ ...state, step: TxStep.Creating });
+              createTx();
             } else {
               setState({ ...state, step: TxStep.Approving });
             }
