@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import useErcContract from '../../hooks/useErcContract';
@@ -11,6 +12,7 @@ type Props = {
 };
 
 const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
+  const { t } = useTranslation();
   return (
     <View
       style={{
@@ -18,7 +20,7 @@ const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
         marginTop: 57,
       }}>
       <H3Text
-        label={'접근 권한을 승인해주세요!'}
+        label={t('assets.approve_guide')}
         style={{
           fontSize: 18,
         }}
@@ -33,9 +35,7 @@ const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
         }}
       />
       <P3Text
-        label={
-          '부동산 토큰을 구매하기 위해서는 연결된 지갑에\n해당 앱이 접근할 수 있도록 접근 권한을 승인해야 합니다.'
-        }
+        label={t('assets.approve_guide_first')}
         style={{
           fontSize: 14,
           color: AppColors.BLACK,
@@ -44,9 +44,7 @@ const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
         }}
       />
       <P3Text
-        label={
-          '최초 구매 시에만 승인이 필요하며, 승인이 성공적으로\n완료될 경우, 이후의 거래에는 권한 승인 없이 부동산\n토큰을 구매하실 수 있습니다.'
-        }
+        label={t('assets.approve_guide_second')}
         style={{
           fontSize: 14,
           color: AppColors.BLACK,
@@ -76,10 +74,9 @@ const ApproveDescription: React.FC<Props> = ({ approveGasPrice }) => {
           }}
         />
         <P3Text
-          label={`접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 ${decimalFormatter(
-            parseFloat(approveGasPrice),
-            6,
-          )} ETH 입니다.`}
+          label={t('assets.approve_guide_gasprice', {
+            gasPrice: decimalFormatter(parseFloat(approveGasPrice), 6),
+          })}
           style={{
             lineHeight: 20,
             fontSize: 12,
