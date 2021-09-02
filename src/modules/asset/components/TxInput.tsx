@@ -29,6 +29,7 @@ import PurposeType from '../../../enums/PurposeType';
 import commaFormatter from '../../../utiles/commaFormatter';
 import isNumericStringAppendable from '../../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../../utiles/newInputValueFormatter';
+import { useEffect } from 'react';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -46,15 +47,16 @@ interface ITxInput {
   values: { inFiat: string; inToken: string };
   current: string;
   step: TxStep;
-  estimateGas?: string;
+  estimatedGas: string;
   disabled: boolean;
   isApproved: boolean;
   setCurrent: Dispatch<SetStateAction<'token' | 'fiat'>>;
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   approve: () => void;
   isLoading: boolean;
-  approveGasPrice: string;
+  approveGasPrice?: string;
   createTx: () => void;
+  productRefund?: PurposeType;
 }
 
 // * Info
@@ -82,7 +84,7 @@ const TxInput: React.FC<ITxInput> = ({
   values,
   current,
   step,
-  estimateGas = '0',
+  estimatedGas = '0',
   disabled,
   isApproved,
   setCurrent,
@@ -91,6 +93,7 @@ const TxInput: React.FC<ITxInput> = ({
   isLoading,
   approveGasPrice,
   createTx,
+  productRefund,
 }) => {
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -107,13 +110,13 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
-    ? balanceInCrypto < parseFloat(estimateGas) + valueInCrypto
-    : balanceInCrypto < parseFloat(estimateGas);
+    ? balanceInCrypto < parseFloat(estimatedGas) + valueInCrypto
+    : balanceInCrypto < parseFloat(estimatedGas);
 
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
-    ? valueInCrypto + parseFloat(estimateGas) >
+    ? valueInCrypto + parseFloat(estimatedGas) >
       (remainingSupplyInCrypto
         ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
         : balanceInCrypto)
@@ -122,6 +125,12 @@ const TxInput: React.FC<ITxInput> = ({
         ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
         : balanceInCrypto);
   const [isVisible, setIsVisible] = useState(false);
+  const [estimateGas, setEstimateGas] = useState('');
+
+  useEffect(() => {
+    if (estimateGas) return;
+    setEstimateGas(estimatedGas);
+  }, [estimatedGas]);
 
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -319,13 +328,15 @@ const TxInput: React.FC<ITxInput> = ({
           },
           {
             label: t('assets.gas_price'),
-            value: `${commaFormatter(estimateGas)} ${gasCrypto}`,
+            value: estimateGas
+              ? `${commaFormatter(estimateGas)} ${gasCrypto}`
+              : t('assets.cannot_estimate_gas'),
           },
         ]}
         isApproved={isApproved}
         isLoading={isLoading}
-        approveGasPrice={approveGasPrice}
-        assetInCrypto={assetInCrypto.type}
+        approveGasPrice={approveGasPrice || ''}
+        assetInCrypto={productRefund || assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
         handler={isApproved ? createTx : approve}
       />
