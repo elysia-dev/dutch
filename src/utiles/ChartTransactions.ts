@@ -49,6 +49,15 @@ export class ChartTransactions {
   getTransactionChart(txs: CryptoTransaction[]) {
     let xyDayValue: ChartDataPoint[] = [];
     let prevValue: number = this.currentAssetValue;
+
+    if (txs.length === 1) {
+      xyDayValue.push({
+        x: 1,
+        y: 0,
+        dateTime: new Date(txs[0].createdAt).getTime() / 1000,
+      });
+    }
+
     Array(txs.length >= 50 ? 50 : txs.length)
       .fill(0)
       .forEach((v, idx, array) => {
