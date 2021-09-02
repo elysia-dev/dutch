@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import AppColors from '../../enums/AppColors';
 import { H3Text } from './Texts';
@@ -8,6 +9,8 @@ type Props = {
 };
 
 const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
+  const { t } = useTranslation();
+
   return (
     <View
       style={{
@@ -23,7 +26,9 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
           justifyContent: 'center',
         }}>
         <H3Text
-          label={'1단계\n권한승인'}
+          label={`${t('assets.approve_step', { step: 1 })}\n${t(
+            'assets.approve_step_authorization',
+          )}`}
           style={{
             fontSize: 10,
             color: AppColors.WHITE,
@@ -41,7 +46,9 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
           justifyContent: 'center',
         }}>
         <H3Text
-          label={'2단계\n최종확인'}
+          label={`${t('assets.approve_step', { step: 2 })}\n${t(
+            'assets.approve_step_confirm',
+          )}`}
           style={{
             fontSize: 10,
             color: AppColors.WHITE,

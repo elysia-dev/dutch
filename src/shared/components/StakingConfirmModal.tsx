@@ -187,7 +187,7 @@ const StakingConfirmModal: React.FC<Props> = ({
                   }}>
                   <ActivityIndicator size="large" color={AppColors.GREY2} />
                   <H3Text
-                    label={'트랜잭션 처리중'}
+                    label={t('assets.approve_pending_transaction')}
                     style={{
                       fontSize: 18,
                       marginTop: 19,

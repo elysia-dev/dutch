@@ -23,7 +23,7 @@ interface Props {
   isApproved: boolean;
   isLoading?: boolean;
   approveGasPrice: string;
-  assetInCrypto?: CryptoType;
+  assetInCrypto?: CryptoType | string;
   submitButtonText: string;
   handler: () => void;
 }
@@ -187,7 +187,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   }}>
                   <ActivityIndicator size="large" color={AppColors.GREY2} />
                   <H3Text
-                    label={'트랜잭션 처리중'}
+                    label={t('assets.approve_pending_transaction')}
                     style={{
                       fontSize: 18,
                       marginTop: 19,
@@ -197,22 +197,8 @@ const ConfirmationModal: React.FC<Props> = ({
               )}
             </View>
             <View>
-              {!isApproved && (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: AppColors.BLACK,
-                    marginHorizontal: 5,
-                    marginBottom: 12,
-                    lineHeight: 20,
-                    fontFamily: AppFonts.Bold,
-                  }}>
-                  {`* ${t('assets.check_allowance_guide')}`}
-                </Text>
-              )}
               <TouchableOpacity
                 onPress={() => {
-                  setDisabled(true);
                   handler();
                 }}
                 disabled={isLoading}
@@ -223,16 +209,22 @@ const ConfirmationModal: React.FC<Props> = ({
                   alignContent: 'center',
                   height: 50,
                 }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    textAlign: 'center',
-                    fontFamily: AppFonts.Bold,
-                    color: AppColors.WHITE,
-                  }}
-                  allowFontScaling={false}>
-                  {isApproved ? submitButtonText : t('assets.check_allowance')}
-                </Text>
+                {isApproved && isLoading ? (
+                  <ActivityIndicator size="small" color={AppColors.GREY2} />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textAlign: 'center',
+                      fontFamily: AppFonts.Bold,
+                      color: AppColors.WHITE,
+                    }}
+                    allowFontScaling={false}>
+                    {isApproved
+                      ? submitButtonText
+                      : t('assets.check_allowance')}
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
