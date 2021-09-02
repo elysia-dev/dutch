@@ -204,7 +204,7 @@ const Detail: React.FC = () => {
   const getChart = async () => {
     try {
       setGraphData(
-        await chartTransactions.getTransactionChart(
+        await chartTransactions.getResentTransactionChart(
           filterDay,
           state.transactions,
         ),

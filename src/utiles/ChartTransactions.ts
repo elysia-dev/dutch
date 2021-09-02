@@ -46,7 +46,7 @@ export class ChartTransactions {
     return parseFloat((prevAssetValue + parseFloat(value)).toFixed(2));
   }
 
-  getTransaction(txs: CryptoTransaction[]) {
+  getTransactionChart(txs: CryptoTransaction[]) {
     let xyDayValue: ChartDataPoint[] = [];
     let prevValue: number = this.currentAssetValue;
     Array(txs.length >= 50 ? 50 : txs.length)
@@ -74,7 +74,7 @@ export class ChartTransactions {
   /**
    * chart에 들어갈 데이터를 날짜 별로 분리하여 리턴
    */
-  async getTransactionChart(
+  async getResentTransactionChart(
     day: number,
     txs: CryptoTransaction[],
   ): Promise<ChartDataPoint[] | undefined> {
@@ -119,7 +119,7 @@ export class ChartTransactions {
           ];
         });
       if (xyDayValue.length === 1) {
-        return this.getTransaction(txs);
+        return this.getTransactionChart(txs);
       }
       return xyDayValue.reverse();
     } catch (error) {
