@@ -46,6 +46,31 @@ export class ChartTransactions {
     return parseFloat((prevAssetValue + parseFloat(value)).toFixed(2));
   }
 
+  getTransaction(txs: CryptoTransaction[]) {
+    let xyDayValue: ChartDataPoint[] = [];
+    let prevValue: number = this.currentAssetValue;
+    Array(txs.length >= 50 ? 50 : txs.length)
+      .fill(0)
+      .forEach((v, idx, array) => {
+        const value: string = txs[idx - 1]?.value;
+        xyDayValue = [
+          ...xyDayValue,
+          {
+            x: array.length - idx,
+            y:
+              idx === 0
+                ? prevValue
+                : txs[idx - 1].type === 'in'
+                ? (prevValue = this.subAssetValue(prevValue, value))
+                : (prevValue = this.addAssetValue(prevValue, value)),
+            dateTime: new Date(txs[idx].createdAt).getTime() / 1000,
+          },
+        ];
+      });
+
+    return xyDayValue.reverse();
+  }
+
   /**
    * chart에 들어갈 데이터를 날짜 별로 분리하여 리턴
    */
@@ -65,6 +90,7 @@ export class ChartTransactions {
       } else {
         weeks = moment(currentTime).subtract(day, 'days').format('YYYY-MM-DD');
       }
+
       txs
         .filter((tx, idx) => {
           const txTime = moment(tx.createdAt).format('YYYY-MM-DD');
@@ -92,6 +118,9 @@ export class ChartTransactions {
             },
           ];
         });
+      if (xyDayValue.length === 1) {
+        return this.getTransaction(txs);
+      }
       return xyDayValue.reverse();
     } catch (error) {
       console.error(error);
