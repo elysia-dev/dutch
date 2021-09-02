@@ -55,7 +55,7 @@ export function aprFormatter(apr: BigNumber) {
     parseFloat(utils.formatUnits(apr, 25)) * Number('1' + '0'.repeat(18));
   const aprIntegerLength = aprResult.toString().split('.')[0].length;
 
-  if (aprIntegerLength > 15) {
+  if (aprIntegerLength > 15 || apr.eq(constants.MaxUint256)) {
     return '∞';
   } else if (aprIntegerLength > 12) {
     const { quotient, remainder } = bigNumberDivisionFormatter(
