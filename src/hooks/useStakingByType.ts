@@ -28,8 +28,7 @@ const useStakingByType = (crytoType: CryptoType) => {
       setIsSuccessTx(true);
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
-      notifyFail();
-      console.log(error);
+      throw Error;
     }
   };
 
@@ -60,7 +59,8 @@ const useStakingByType = (crytoType: CryptoType) => {
           break;
       }
     } catch (error) {
-      notifyFail();
+      console.log(error);
+      throw Error;
     }
   };
 
