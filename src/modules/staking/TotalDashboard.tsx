@@ -77,17 +77,20 @@ const TotalDashboard: React.FC = () => {
     setTotalPrincipal(poolData[4]);
   };
 
-  const getUserData = () => {
-    stakingPoolContract
-      .getUserData(selectedRound, address || '')
-      .then((res: BigNumber[]) => {
-        setCurrentRoundReward(indicateAmount(res[1]));
-        setUserReward(indicateAmount(res[1]));
-        setUserPrincipal(indicateAmount(res[2]));
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const getUserData = async () => {
+    const userData = await stakingPoolContract.getUserData(
+      selectedRound,
+      address || '',
+    );
+    const userPrincipal = userData.userPrincipal;
+    const userReward = await stakingPoolContract.getUserReward(
+      address || '',
+      selectedRound,
+    );
+
+    setCurrentRoundReward(indicateAmount(userReward));
+    setUserReward(indicateAmount(userReward));
+    setUserPrincipal(indicateAmount(userPrincipal));
   };
 
   useEffect(() => {
@@ -120,9 +123,9 @@ const TotalDashboard: React.FC = () => {
     if (isCurrentRound && selectedRound === currentRound) {
       setTimeout(() => {
         stakingPoolContract
-          .getUserData(currentRound, address || '')
-          .then((res: BigNumber[]) => {
-            setCurrentRoundReward(indicateAmount(res[1]));
+          .getUserReward(address || '', currentRound)
+          .then((res: BigNumber) => {
+            setCurrentRoundReward(indicateAmount(res));
           });
         setCount(count + 1);
       }, 5000);
