@@ -115,8 +115,8 @@ export const Main: React.FC = () => {
         contract
           .getUserData(round, userAddress || '')
           .then((res: any) => {
-            const stakingAmount = res[2]; // principal
-            const rewardAmount = res[1];
+            const stakingAmount = res.userPrincipal;
+            const rewardAmount = res.userReward;
             if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
               return (
                 <StakingInfoBox
