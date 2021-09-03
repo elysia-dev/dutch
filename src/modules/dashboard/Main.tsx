@@ -109,31 +109,26 @@ export const Main: React.FC = () => {
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
 
-    const tempBoxes = [] as React.ReactNode[];
-    for (let round = 1; round <= 6; round++) {
-      tempBoxes.push(
-        contract
-          .getUserData(round, userAddress || '')
-          .then((res: any) => {
-            const stakingAmount = res[2]; // principal
-            const rewardAmount = res[1];
-            if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
-              return (
-                <StakingInfoBox
-                  key={round}
-                  cryptoType={type}
-                  round={round}
-                  stakingAmount={stakingAmount}
-                  rewardAmount={rewardAmount}
-                />
-              );
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          }),
+    const tempBoxes = [1, 2, 3, 4, 5, 6].map(async (round) => {
+      const userData = await contract.getUserData(round, userAddress || '');
+      const stakingAmount = userData.userPrincipal;
+      const rewardAmount = await contract.getUserReward(
+        userAddress || '',
+        round,
       );
-    }
+
+      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+        return (
+          <StakingInfoBox
+            key={round}
+            cryptoType={type}
+            round={round}
+            stakingAmount={stakingAmount}
+            rewardAmount={rewardAmount}
+          />
+        );
+      }
+    });
 
     setInfoBoxes(await Promise.all(tempBoxes));
   }
