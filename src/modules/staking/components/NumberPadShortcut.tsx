@@ -7,7 +7,7 @@ import AppColors from '../../../enums/AppColors';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
-  values: (number | 'all')[];
+  values: (number | 'max')[];
   inputValue: string;
   setValue: Dispatch<SetStateAction<string>>;
   maxValue?: number;
@@ -41,7 +41,7 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontSize: 12,
             fontFamily: AppFonts.Medium,
           }}>
-          {value === 'all'
+          {value === 'max'
             ? t('staking.full_amount')
             : `+${commaFormatter(value)}`}
         </Text>
@@ -49,8 +49,8 @@ const NumberPadShortcut: React.FC<Props> = ({
     );
   });
 
-  function addValue(value: number | 'all') {
-    if (value === 'all') {
+  function addValue(value: number | 'max') {
+    if (value === 'max') {
       setValue(String(maxValue));
     } else {
       const newValue = parseFloat(inputValue || '0') + value;
