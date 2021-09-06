@@ -48,6 +48,7 @@ import WalletContext from '../../contexts/WalletContext';
 import StakingInfoBox from './components/StakingInfoBox';
 import useStakingPool from '../../hooks/useStakingPool';
 import TxStatus from '../../enums/TxStatus';
+import Skeleton from '../../shared/components/Skeleton';
 
 type ParamList = {
   Main: {
@@ -208,15 +209,20 @@ export const Main: React.FC = () => {
                   flexDirection: 'row',
                   justifyContent: 'center',
                 }}>
-                <TitleText
-                  label={currencyFormatter(
-                    assets.reduce(
-                      (res, cur) => res + cur.value * getCryptoPrice(cur.type),
-                      0,
-                    ),
-                    2,
-                  )}
-                />
+                {assetLoaded ? (
+                  <TitleText
+                    label={currencyFormatter(
+                      assets.reduce(
+                        (res, cur) =>
+                          res + cur.value * getCryptoPrice(cur.type),
+                        0,
+                      ),
+                      2,
+                    )}
+                  />
+                ) : (
+                  <Skeleton width={128} height={28} radius={5} />
+                )}
                 <TouchableOpacity
                   style={{ marginLeft: 'auto' }}
                   disabled={btnRefreshing}
@@ -304,13 +310,11 @@ export const Main: React.FC = () => {
             }}
           />
           <View style={{ height: 25 }} />
-          {(hasAnyInfoBoxes.EL || hasAnyInfoBoxes.ELFI) && (
-            <StakingListing
-              elStakingInfoBoxes={elStakingInfoBoxes}
-              elfiStakingInfoBoxes={elfiStakingInfoBoxes}
-              hasAnyInfoBoxes={hasAnyInfoBoxes}
-            />
-          )}
+          <StakingListing
+            elStakingInfoBoxes={elStakingInfoBoxes}
+            elfiStakingInfoBoxes={elfiStakingInfoBoxes}
+            hasAnyInfoBoxes={hasAnyInfoBoxes}
+          />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
