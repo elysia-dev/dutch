@@ -5,8 +5,6 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  ActivityIndicator,
-  Modal,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -104,17 +102,22 @@ const TxInput: React.FC<ITxInput> = ({
     ? balanceInCrypto < parseFloat(estimateGas) + valueInCrypto
     : balanceInCrypto < parseFloat(estimateGas);
 
+  const maxValueInToken = remainingSupplyInToken
+    ? Math.min(remainingSupplyInToken, balanceInToken)
+    : balanceInToken;
+  const maxValueInCrypto = remainingSupplyInCrypto
+    ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
+    : balanceInCrypto;
+  const maxValueInFiat = remainingSupplyInCrypto
+    ? Math.min(remainingSupplyInCrypto, balanceInCrypto) *
+      getCryptoPrice(assetInCrypto.type)
+    : balanceInCrypto * getCryptoPrice(assetInCrypto.type);
+
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
-    ? valueInCrypto + parseFloat(estimateGas) >
-      (remainingSupplyInCrypto
-        ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
-        : balanceInCrypto)
-    : valueInCrypto >
-      (remainingSupplyInCrypto
-        ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
-        : balanceInCrypto);
+    ? valueInCrypto + parseFloat(estimateGas) > maxValueInCrypto
+    : valueInCrypto > maxValueInCrypto;
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -189,17 +192,13 @@ const TxInput: React.FC<ITxInput> = ({
             value: values.inToken,
             type: assetInToken.unit,
             price: tokenPrice,
-            max: remainingSupplyInToken
-              ? Math.min(remainingSupplyInToken, balanceInToken)
-              : balanceInToken,
+            max: maxValueInToken,
           }}
           dataInFiat={{
             value: values.inFiat,
             type: assetInCrypto.type,
             price: cryptoPrice,
-            max: remainingSupplyInCrypto
-              ? Math.min(remainingSupplyInCrypto, balanceInCrypto)
-              : balanceInCrypto,
+            max: maxValueInFiat,
           }}
           isOverMax={isOverMax}
           estimatedGas={estimateGas}
@@ -210,12 +209,14 @@ const TxInput: React.FC<ITxInput> = ({
           current={current}
           values={
             current === 'token'
-              ? [0.01, 1, 10, 100, 1000]
-              : [10, 50, 100, 500, 1000]
+              ? [0.01, 1, 10, 100, 'max']
+              : [10, 50, 100, 500, 'max']
           }
           inputValue={current === 'token' ? values.inToken : values.inFiat}
           setValues={setValues}
           ELAPrice={tokenPrice}
+          maxValueInToken={maxValueInToken}
+          maxValueInFiat={maxValueInFiat}
         />
         <NumberPad
           addValue={(text) => {

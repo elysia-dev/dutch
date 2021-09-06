@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import AppFonts from '../../../enums/AppFonts';
 import commaFormatter from '../../../utiles/commaFormatter';
 import AppColors from '../../../enums/AppColors';
@@ -7,10 +8,12 @@ import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
   current: string;
-  values: number[];
+  values: (number | 'max')[];
   inputValue: string;
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   ELAPrice: number;
+  maxValueInToken: number;
+  maxValueInFiat: number;
 }
 
 const NumberPadShortcut: React.FC<Props> = ({
@@ -19,7 +22,10 @@ const NumberPadShortcut: React.FC<Props> = ({
   inputValue,
   setValues,
   ELAPrice,
+  maxValueInToken,
+  maxValueInFiat,
 }) => {
+  const { t } = useTranslation();
   const buttons = values.map((value) => {
     return (
       <TouchableOpacity
@@ -41,25 +47,36 @@ const NumberPadShortcut: React.FC<Props> = ({
             fontSize: 12,
             fontFamily: AppFonts.Medium,
           }}>
-          {`${current === 'token' ? '+' : '$'}${commaFormatter(value)}`}
+          {value === 'max'
+            ? t('staking.full_amount')
+            : current === 'token'
+            ? `+${commaFormatter(value)}`
+            : `$${commaFormatter(value)}`}
         </Text>
       </TouchableOpacity>
     );
   });
 
-  function addValue(value: number) {
-    const newInputValue = parseFloat(inputValue || '0') + value;
-
-    if (current === 'fiat') {
+  function addValue(value: number | 'max') {
+    if (value === 'max') {
       setValues({
-        inFiat: decimalFormatter(newInputValue, 2),
-        inToken: decimalFormatter(newInputValue / ELAPrice, 6),
+        inFiat: String(maxValueInFiat),
+        inToken: String(maxValueInToken),
       });
     } else {
-      setValues({
-        inFiat: decimalFormatter(newInputValue * ELAPrice, 2),
-        inToken: decimalFormatter(newInputValue, 6),
-      });
+      const newInputValue = parseFloat(inputValue || '0') + value;
+
+      if (current === 'fiat') {
+        setValues({
+          inFiat: decimalFormatter(newInputValue, 2),
+          inToken: decimalFormatter(newInputValue / ELAPrice, 6),
+        });
+      } else {
+        setValues({
+          inFiat: decimalFormatter(newInputValue * ELAPrice, 2),
+          inToken: decimalFormatter(newInputValue, 6),
+        });
+      }
     }
   }
 

@@ -46,7 +46,10 @@ const TxInputViewer: React.FC<Props> = ({
     current === 'token'
       ? t(`assets.${purpose}_stake_available`)
       : t(`assets.${purpose}_value_available`);
-  const maxValue = currentTab.max.toFixed(current === 'token' ? 4 : 2);
+  const maxValue =
+    current === 'token'
+      ? currentTab.max.toFixed(4)
+      : (currentTab.max / currentTab.price).toFixed(2);
 
   return (
     <View
