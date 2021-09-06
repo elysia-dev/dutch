@@ -35,6 +35,7 @@ import useStakingByType from '../../hooks/useStakingByType';
 import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
+import useCount from '../../hooks/useCount';
 
 type ParamList = {
   Stake: {
@@ -74,6 +75,12 @@ const Stake: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const { setAddCount } = useCount(
+    setEstimateGas,
+    setIsApprove,
+    setIsLoading,
+    StakingType.Stake,
+  );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -94,11 +101,11 @@ const Stake: React.FC = () => {
           cryptoType === CryptoType.EL
             ? await elContract.estimateGas.approve(
                 stakingPoolAddress,
-                '1' + '0'.repeat(30),
+                constants.MaxUint256,
               )
             : await elfiContract.estimateGas.approve(
                 stakingPoolAddress,
-                '1' + '0'.repeat(30),
+                constants.MaxUint256,
               );
         setApproveGasPrice(utils.formatEther(approveEstimateGas.mul(gasPrice)));
       }
@@ -139,7 +146,7 @@ const Stake: React.FC = () => {
       await approve();
       await setEstimateGas(StakingType.Stake);
     } catch (error) {
-      setEstimateGasCount((prev) => prev + 1);
+      setAddCount();
       console.log(error);
     }
   };
@@ -149,13 +156,13 @@ const Stake: React.FC = () => {
       cryptoType === CryptoType.EL
         ? await elContract.approve(
             EL_STAKING_POOL_ADDRESS,
-            '1' + '0'.repeat(30),
+            constants.MaxUint256,
           )
         : await elfiContract.approve(
             ELFI_STAKING_POOL_ADDRESS,
-            '1' + '0'.repeat(30),
+            constants.MaxUint256,
           );
-      setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
+      setAllowanceInfo({ value: utils.formatEther(constants.MaxUint256) });
     } catch (error) {
       console.log(error);
     }
@@ -182,23 +189,23 @@ const Stake: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (estimateGasCount === 0 || estimateGasCount >= 4) return;
-    setTimeout(async () => {
-      try {
-        await setEstimateGas(StakingType.Stake);
-        setIsApprove(true);
-        setIsLoading(false);
-      } catch (error) {
-        setEstimateGasCount((prev) => prev + 1);
-      } finally {
-        if (estimateGasCount >= 3) {
-          setIsApprove(true);
-          setIsLoading(false);
-        }
-      }
-    }, 2000);
-  }, [estimateGasCount]);
+  // useEffect(() => {
+  //   if (estimateGasCount === 0 || estimateGasCount >= 4) return;
+  //   setTimeout(async () => {
+  //     try {
+  //       await setEstimateGas(StakingType.Stake);
+  //       setIsApprove(true);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       setEstimateGasCount((prev) => prev + 1);
+  //     } finally {
+  //       if (estimateGasCount >= 3) {
+  //         setIsApprove(true);
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   }, 2000);
+  // }, [estimateGasCount]);
 
   if (!selectionVisible) {
     return (
