@@ -25,8 +25,19 @@ const useStakingInfo = (crytoType: CryptoType, selectedRound: number) => {
       ?.getUserData(selectedRound, userAddress || '')
       .then((res: any) => {
         setUserStakedData({
+          ...userStakedData,
           principal: Number(utils.formatEther(res[2])),
-          reward: Number(utils.formatEther(res[1])),
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    stakingPoolContract
+      .getUserReward(userAddress || '', selectedRound)
+      .then((res) => {
+        setUserStakedData({
+          ...userStakedData,
+          reward: Number(utils.formatEther(res)),
         });
       })
       .catch((e) => {
