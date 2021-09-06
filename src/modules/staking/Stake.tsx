@@ -185,7 +185,6 @@ const Stake: React.FC = () => {
   useEffect(() => {
     if (estimateGasCount === 0 || estimateGasCount >= 4) return;
     setTimeout(async () => {
-      console.log('실행');
       try {
         await setEstimateGas(StakingType.Stake);
         setIsApprove(true);
