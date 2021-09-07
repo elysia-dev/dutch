@@ -11,7 +11,6 @@ const TransactionItemSkeleton: React.FC = () => {
         borderBottomColor: AppColors.GREY,
         borderBottomWidth: 1,
         paddingVertical: 20,
-        paddingHorizontal: 25,
         alignItems: 'center',
       }}>
       <View style={{ width: 10 }} />

@@ -267,20 +267,18 @@ const Detail: FunctionComponent = () => {
                   height: 200,
                   alignItems: 'center',
                 }}>
-                {
-                  <P2Text
-                    label={t('assets.null_transaction')}
-                    style={{ textAlign: 'center', width: '100%' }}
-                  />
-                }
+                <P2Text
+                  label={t('assets.null_transaction')}
+                  style={{ textAlign: 'center', width: '100%' }}
+                />
               </View>
             );
           } else {
             return (
-              <>
+              <View style={{ marginLeft: '5%', marginRight: '5%' }}>
                 <TransactionItemSkeleton />
                 <TransactionItemSkeleton />
-              </>
+              </View>
             );
           }
         }}
