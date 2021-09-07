@@ -239,7 +239,7 @@ const Detail: React.FC = () => {
             <View style={{ height: 50 }} />
             <AssetGraph
               data={graphData}
-              lineColor={toAppColor.toString(asset.type)}
+              lineColor={toAppColor(asset.type)}
               chartLoading={chartLoading}
               setIsChartLine={setIsChartLine}
               isChartLine={isChartLine}

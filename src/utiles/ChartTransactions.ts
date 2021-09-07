@@ -15,16 +15,23 @@ const provider = new ethers.providers.EtherscanProvider(
 /**
  * 차트색을 assetType 따라서 변경해주는 함수
  */
-export namespace toAppColor {
-  export function toString(assetType: string): AppColors {
-    if (assetType === CryptoType.ETH) {
+export function toAppColor(assetType: string): AppColors {
+  switch (assetType) {
+    case CryptoType.ETH:
       return AppColors.ETH_BLUE;
-    } else if (assetType === CryptoType.BNB) {
+    case CryptoType.BNB:
       return AppColors.BNB_YELLOW;
-    }
-    return AppColors.EL_BLUE;
+    case CryptoType.EL:
+      return AppColors.EL_BLUE;
+    case CryptoType.ELFI:
+      return AppColors.ELFI_BLUE;
+    case CryptoType.DAI:
+      return AppColors.DAI_YELLOW;
+    default:
+      return AppColors.MAIN;
   }
 }
+
 export class ChartTransactions {
   private currentAssetValue: number;
 
