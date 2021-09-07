@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -296,7 +296,20 @@ const Detail: FunctionComponent = () => {
                   borderBottomLeftRadius: 10,
                   borderBottomRightRadius: 10,
                 }}>
-                <ProductImageCarousel images={state.images} />
+                {state.loaded ? (
+                  <ProductImageCarousel images={state.images} />
+                ) : (
+                  <View
+                    style={{
+                      height: 293,
+                      justifyContent: 'center',
+                    }}>
+                    <ActivityIndicator
+                      size="large"
+                      color={AppColors.DEACTIVATED}
+                    />
+                  </View>
+                )}
                 <View style={{ position: 'absolute', padding: 20 }}>
                   <View
                     style={{
