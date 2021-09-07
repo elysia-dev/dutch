@@ -184,11 +184,9 @@ const Detail: React.FC = () => {
     if (address) {
       setGraphData([]);
       setIsChartLine(false);
-      if (state.transactions.length && state.page >= 2) {
+      if (!state.loading) {
         setChartLoading(true);
         getChart();
-      } else if (state.loading === false) {
-        setChartLoading(false);
       }
     } else {
       setChartLoading(false);
