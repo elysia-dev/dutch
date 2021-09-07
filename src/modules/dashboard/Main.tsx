@@ -35,7 +35,6 @@ import {
   MorePage,
   Page,
 } from '../../enums/pageEnum';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import PriceContext from '../../contexts/PriceContext';
@@ -350,7 +349,6 @@ export const Main: React.FC = () => {
             )}
         </BasicLayout>
       </ScrollView>
-      <OverlayLoading visible={!assetLoaded} />
     </>
   );
 };
