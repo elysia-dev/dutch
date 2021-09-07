@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-const DesView: React.FC<{}> = () => {
+const DesView: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <View
       style={{
@@ -9,8 +9,9 @@ const DesView: React.FC<{}> = () => {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-      }}
-    />
+      }}>
+      {children}
+    </View>
   );
 };
 
