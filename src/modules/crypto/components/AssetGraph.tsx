@@ -46,13 +46,10 @@ const AssetGraph: React.FC<IAssetGraph> = ({
         <View
           style={{
             flex: 1,
-            // justifyContent: 'center',
             flexDirection: 'row',
             justifyContent: 'space-around',
             padding: 10,
-          }}>
-          <ActivityIndicator size="large" color={lineColor} />
-        </View>
+          }}></View>
       ) : (
         <>
           {data.length === 0 && (
