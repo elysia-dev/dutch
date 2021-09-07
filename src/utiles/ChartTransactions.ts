@@ -19,7 +19,7 @@ export namespace toAppColor {
   export function toString(assetType: string): AppColors {
     if (assetType === CryptoType.ETH) {
       return AppColors.ETH_BLUE;
-    } else if (assetType === CryptoType.BNB) {
+    } else if (assetType === CryptoType.BNB || assetType === CryptoType.DAI) {
       return AppColors.BNB_YELLOW;
     }
     return AppColors.EL_BLUE;
@@ -27,9 +27,67 @@ export namespace toAppColor {
 }
 export class ChartTransactions {
   private currentAssetValue: number;
+  private xyDayValue: ChartDataPoint[] = [];
 
   constructor(currentAssetValue: number) {
     this.currentAssetValue = currentAssetValue;
+  }
+
+  addBeforeDate(
+    txs: CryptoTransaction[],
+    weeks: string,
+    month: string,
+    peroidLastDate: string,
+    subLastDay: number,
+  ) {
+    const lastTxDate = moment(txs[txs.length - 1].createdAt).format(
+      'YYYY-MM-DD',
+    );
+    for (let i = 1; i <= subLastDay; i++) {
+      this.xyDayValue = [
+        {
+          x: this.xyDayValue[0].x - 1,
+          y: moment(lastTxDate).isSameOrAfter(weeks || month)
+            ? 0
+            : this.xyDayValue[0].y,
+          dateTime: moment(peroidLastDate).subtract(i, 'days').unix(),
+        },
+        ...this.xyDayValue,
+      ];
+    }
+    return this.xyDayValue;
+  }
+
+  addAfterDate(resentDate: string, subRecentDay: number) {
+    let xyDayValue = this.xyDayValue;
+    for (let i = 1; i <= subRecentDay; i++) {
+      xyDayValue = [
+        ...xyDayValue,
+        {
+          x: xyDayValue[xyDayValue.length - 1].x + 1,
+          y: xyDayValue[xyDayValue.length - 1].y,
+          dateTime: moment(resentDate).add(i, 'days').unix(),
+        },
+      ];
+    }
+    return xyDayValue;
+  }
+
+  addNoTxDate(subDate: number, currentTime: Date) {
+    let xyDayValue = this.xyDayValue;
+    for (let i = subDate; i >= 0; i--) {
+      xyDayValue = [
+        {
+          x: i + 1,
+          y: 0,
+          dateTime: moment(currentTime)
+            .subtract(subDate - i, 'days')
+            .unix(),
+        },
+        ...xyDayValue,
+      ];
+    }
+    return xyDayValue;
   }
 
   /**
@@ -46,40 +104,6 @@ export class ChartTransactions {
     return parseFloat((prevAssetValue + parseFloat(value)).toFixed(2));
   }
 
-  getTransactionChart(txs: CryptoTransaction[]) {
-    let xyDayValue: ChartDataPoint[] = [];
-    let prevValue: number = this.currentAssetValue;
-
-    if (txs.length === 1) {
-      xyDayValue.push({
-        x: 1,
-        y: 0,
-        dateTime: new Date(txs[0].createdAt).getTime() / 1000,
-      });
-    }
-
-    Array(txs.length >= 50 ? 50 : txs.length)
-      .fill(0)
-      .forEach((v, idx, array) => {
-        const value: string = txs[idx - 1]?.value;
-        xyDayValue = [
-          ...xyDayValue,
-          {
-            x: txs.length === 1 ? 2 : array.length - idx,
-            y:
-              idx === 0
-                ? prevValue
-                : txs[idx - 1].type === 'in'
-                ? (prevValue = this.subAssetValue(prevValue, value))
-                : (prevValue = this.addAssetValue(prevValue, value)),
-            dateTime: new Date(txs[idx].createdAt).getTime() / 1000,
-          },
-        ];
-      });
-
-    return xyDayValue.reverse();
-  }
-
   /**
    * chart에 들어갈 데이터를 날짜 별로 분리하여 리턴
    */
@@ -88,49 +112,58 @@ export class ChartTransactions {
     txs: CryptoTransaction[],
   ): Promise<ChartDataPoint[] | undefined> {
     try {
-      let xyDayValue: ChartDataPoint[] = [];
       let prevValue: number = this.currentAssetValue;
       const currentTime = new Date();
-      const fotmatCurTime = moment(currentTime).format('YYYY-MM-DD');
-      let weeks: string;
-      let month: string;
+      let weeks: string = '';
+      let month: string = '';
+
       if (day === ChartTabDays.OneMonth) {
         month = moment(currentTime).subtract(1, 'M').format('YYYY-MM-DD');
       } else {
         weeks = moment(currentTime).subtract(day, 'days').format('YYYY-MM-DD');
       }
 
-      txs
-        .filter((tx, idx) => {
-          const txTime = moment(tx.createdAt).format('YYYY-MM-DD');
-          if (day === ChartTabDays.OneWeek) {
-            return weeks <= txTime && fotmatCurTime >= txTime;
-          } else if (day === ChartTabDays.TwoWeeks) {
-            return weeks <= txTime && fotmatCurTime >= txTime;
-          } else if (day === ChartTabDays.OneMonth) {
-            return month <= txTime && fotmatCurTime >= txTime;
-          }
-        })
-        .forEach((tx, idx, crypTotxs) => {
-          const value: string = crypTotxs[idx - 1]?.value;
-          xyDayValue = [
-            ...xyDayValue,
-            {
-              x: crypTotxs.length - idx,
-              y:
-                idx === 0
-                  ? prevValue
-                  : crypTotxs[idx - 1].type === 'in'
-                  ? (prevValue = this.subAssetValue(prevValue, value))
-                  : (prevValue = this.addAssetValue(prevValue, value)),
-              dateTime: new Date(tx.createdAt).getTime() / 1000,
-            },
-          ];
-        });
-      if (xyDayValue.length === 1) {
-        return this.getTransactionChart(txs);
+      if (txs.length === 0) {
+        const subDate = Math.abs(
+          moment(weeks || month).diff(currentTime, 'days'),
+        );
+        return this.addNoTxDate(subDate, currentTime);
       }
-      return xyDayValue.reverse();
+
+      const txsChartDate = txs.filter((tx) => {
+        const txDay = moment(tx.createdAt).format('YYYY-MM-DD');
+        return moment(txDay).isSameOrAfter(weeks || month);
+      });
+
+      const resentDate = moment(txsChartDate[0].createdAt).format('YYYY-MM-DD');
+      const peroidLastDate = moment(
+        txsChartDate[txsChartDate.length - 1].createdAt,
+      ).format('YYYY-MM-DD');
+      const subLastDay = moment(peroidLastDate).diff(weeks || month, 'days');
+      const subRecentDay = Math.abs(
+        moment(currentTime).diff(resentDate, 'days'),
+      );
+
+      txsChartDate.forEach((tx, idx, crypTotxs) => {
+        const value: string = crypTotxs[idx - 1]?.value;
+        this.xyDayValue = [
+          {
+            x: crypTotxs.length - idx + subLastDay,
+            y:
+              idx === 0
+                ? prevValue
+                : crypTotxs[idx - 1].type === 'in'
+                ? (prevValue = this.subAssetValue(prevValue, value))
+                : (prevValue = this.addAssetValue(prevValue, value)),
+            dateTime: new Date(tx.createdAt).getTime() / 1000,
+          },
+          ...this.xyDayValue,
+        ];
+      });
+
+      this.addBeforeDate(txs, weeks, month, peroidLastDate, subLastDay);
+
+      return this.addAfterDate(resentDate, subRecentDay);
     } catch (error) {
       console.error(error);
     }
