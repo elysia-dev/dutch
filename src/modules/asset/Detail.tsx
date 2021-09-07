@@ -41,6 +41,7 @@ import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
 import { getPendingTx } from '../../utiles/pendingTransaction';
 import TransactionItemSkeleton from './components/TransactionItemSkeleton';
+import Skeleton from '../../shared/components/Skeleton';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -358,10 +359,14 @@ const Detail: FunctionComponent = () => {
                         style={{ color: AppColors.BLACK2 }}
                         label={data.left}
                       />
-                      <H4Text
-                        style={{ color: AppColors.BLACK }}
-                        label={data.right}
-                      />
+                      {state.loaded ? (
+                        <H4Text
+                          style={{ color: AppColors.BLACK }}
+                          label={data.right}
+                        />
+                      ) : (
+                        <Skeleton width={70} height={17} radius={2} />
+                      )}
                     </View>
                   );
                 })}
@@ -378,20 +383,30 @@ const Detail: FunctionComponent = () => {
                     style={{ color: AppColors.BLACK }}
                     label={t('main.total_assets_yield')}
                   />
-                  <View>
-                    <H4Text
-                      style={{ color: AppColors.MAIN, textAlign: 'right' }}
-                      label={currencyFormatter(state.reward, 2)}
-                    />
-                    {state.paymentMethod !== CryptoType.None && (
+                  {state.loaded ? (
+                    <View>
                       <H4Text
-                        style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                        label={`${(
-                          state.reward / getCryptoPrice(state.paymentMethod)
-                        ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                        style={{ color: AppColors.MAIN, textAlign: 'right' }}
+                        label={currencyFormatter(state.reward, 2)}
                       />
-                    )}
-                  </View>
+                      {state.paymentMethod !== CryptoType.None && (
+                        <H4Text
+                          style={{
+                            color: AppColors.BLACK2,
+                            textAlign: 'right',
+                          }}
+                          label={`${(
+                            state.reward / getCryptoPrice(state.paymentMethod)
+                          ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                        />
+                      )}
+                    </View>
+                  ) : (
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Skeleton width={50} height={17} radius={2} />
+                      <Skeleton width={85} height={16} radius={2} />
+                    </View>
+                  )}
                 </View>
                 <View
                   style={{
@@ -405,7 +420,10 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.ownership')}
                         icon={'+'}
-                        disabled={state.productStatus !== ProductStatus.SALE}
+                        disabled={
+                          !state.loaded ||
+                          state.productStatus !== ProductStatus.SALE
+                        }
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Purchase, {
                             assetInCrypto: {
@@ -423,6 +441,7 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.refund')}
                         icon={'-'}
+                        disabled={!state.loaded}
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Refund, {
                             assetInCrypto: {
@@ -439,6 +458,7 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.return')}
                         icon={'⤴'}
+                        disabled={!state.loaded}
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Reward, {
                             toCrypto: state.paymentMethod,
@@ -491,37 +511,41 @@ const Detail: FunctionComponent = () => {
           );
         }}
         ListFooterComponent={() => {
-          return (
-            <TouchableOpacity
-              style={{
-                height: 50,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: AppColors.MAIN,
-                justifyContent: 'center',
-                alignContent: 'center',
-                marginTop: 15,
-                marginBottom: 15,
-                marginLeft: '5%',
-                marginRight: '5%',
-              }}
-              onPress={() => {
-                if (asset.ownershipId) {
-                  loadV1TxsMore();
-                } else {
-                  loadV2More();
-                }
-              }}>
-              <P1Text
+          if (state.loaded) {
+            return (
+              <TouchableOpacity
                 style={{
-                  color: AppColors.MAIN,
-                  fontSize: 17,
-                  textAlign: 'center',
+                  height: 50,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: AppColors.MAIN,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginTop: 15,
+                  marginBottom: 15,
+                  marginLeft: '5%',
+                  marginRight: '5%',
                 }}
-                label={t('dashboard_label.more_transactions')}
-              />
-            </TouchableOpacity>
-          );
+                onPress={() => {
+                  if (asset.ownershipId) {
+                    loadV1TxsMore();
+                  } else {
+                    loadV2More();
+                  }
+                }}>
+                <P1Text
+                  style={{
+                    color: AppColors.MAIN,
+                    fontSize: 17,
+                    textAlign: 'center',
+                  }}
+                  label={t('dashboard_label.more_transactions')}
+                />
+              </TouchableOpacity>
+            );
+          } else {
+            return null;
+          }
         }}
       />
     </>
