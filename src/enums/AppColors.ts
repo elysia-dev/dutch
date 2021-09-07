@@ -13,6 +13,8 @@ enum AppColors {
   ETH_BLUE = '#6C85FF',
   EL_BLUE = '#008DED',
   BNB_YELLOW = '#FFC434',
+  ELFI_BLUE = '#00BFFF',
+  DAI_YELLOW = '#FABB33',
   WHITE = '#FFF',
   ERROR_RED = '#E53935',
   BLUE_2 = '#D0D8DF',
