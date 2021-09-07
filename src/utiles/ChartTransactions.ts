@@ -37,7 +37,7 @@ export class ChartTransactions {
     txs: CryptoTransaction[],
     weeks: string,
     month: string,
-    peroidLastDate: string,
+    periodLastDate: string,
     subLastDay: number,
   ) {
     const lastTxDate = moment(txs[txs.length - 1].createdAt).format(
@@ -50,7 +50,7 @@ export class ChartTransactions {
           y: moment(lastTxDate).isSameOrAfter(weeks || month)
             ? 0
             : this.xyDayValue[0].y,
-          dateTime: moment(peroidLastDate).subtract(i, 'days').unix(),
+          dateTime: moment(periodLastDate).subtract(i, 'days').unix(),
         },
         ...this.xyDayValue,
       ];
@@ -58,7 +58,7 @@ export class ChartTransactions {
     return this.xyDayValue;
   }
 
-  addAfterDate(resentDate: string, subRecentDay: number) {
+  addAfterDate(periodResentDate: string, subRecentDay: number) {
     let xyDayValue = this.xyDayValue;
     for (let i = 1; i <= subRecentDay; i++) {
       xyDayValue = [
@@ -66,7 +66,7 @@ export class ChartTransactions {
         {
           x: xyDayValue[xyDayValue.length - 1].x + 1,
           y: xyDayValue[xyDayValue.length - 1].y,
-          dateTime: moment(resentDate).add(i, 'days').unix(),
+          dateTime: moment(periodResentDate).add(i, 'days').unix(),
         },
       ];
     }
@@ -135,13 +135,15 @@ export class ChartTransactions {
         return moment(txDay).isSameOrAfter(weeks || month);
       });
 
-      const resentDate = moment(txsChartDate[0].createdAt).format('YYYY-MM-DD');
-      const peroidLastDate = moment(
+      const periodResentDate = moment(txsChartDate[0].createdAt).format(
+        'YYYY-MM-DD',
+      );
+      const periodLastDate = moment(
         txsChartDate[txsChartDate.length - 1].createdAt,
       ).format('YYYY-MM-DD');
-      const subLastDay = moment(peroidLastDate).diff(weeks || month, 'days');
+      const subLastDay = moment(periodLastDate).diff(weeks || month, 'days'); //
       const subRecentDay = Math.abs(
-        moment(currentTime).diff(resentDate, 'days'),
+        moment(currentTime).diff(periodResentDate, 'days'),
       );
 
       txsChartDate.forEach((tx, idx, crypTotxs) => {
@@ -161,9 +163,9 @@ export class ChartTransactions {
         ];
       });
 
-      this.addBeforeDate(txs, weeks, month, peroidLastDate, subLastDay);
+      this.addBeforeDate(txs, weeks, month, periodLastDate, subLastDay);
 
-      return this.addAfterDate(resentDate, subRecentDay);
+      return this.addAfterDate(periodResentDate, subRecentDay);
     } catch (error) {
       console.error(error);
     }
