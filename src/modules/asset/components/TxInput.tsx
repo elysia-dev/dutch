@@ -120,6 +120,10 @@ const TxInput: React.FC<ITxInput> = ({
     : valueInCrypto > maxValueInCrypto;
   const [isVisible, setIsVisible] = useState(false);
 
+  const isEthOrBnb = [CryptoType.ETH, CryptoType.BNB].includes(
+    assetInCrypto.type,
+  );
+
   return (
     <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
       <SheetHeader title={title} />
@@ -209,8 +213,8 @@ const TxInput: React.FC<ITxInput> = ({
           current={current}
           values={
             current === 'token'
-              ? [0.01, 1, 10, 100, 'max']
-              : [10, 50, 100, 500, 'max']
+              ? [0.01, 1, 10, 100, isEthOrBnb ? 1000 : 'max']
+              : [10, 50, 100, 500, isEthOrBnb ? 1000 : 'max']
           }
           inputValue={current === 'token' ? values.inToken : values.inFiat}
           setValues={setValues}
