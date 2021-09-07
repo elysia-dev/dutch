@@ -95,6 +95,7 @@ export const Main: React.FC = () => {
     EL: false,
     ELFI: false,
   });
+  const [stakingLoaded, setStakingLoaded] = useState(false); // 이것도 컨텍스트로 빼야 하나...?
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
@@ -132,6 +133,7 @@ export const Main: React.FC = () => {
     });
 
     setInfoBoxes(await Promise.all(tempBoxes));
+    setStakingLoaded(true);
   }
 
   const loadBalances = async () => {
@@ -315,6 +317,7 @@ export const Main: React.FC = () => {
             elStakingInfoBoxes={elStakingInfoBoxes}
             elfiStakingInfoBoxes={elfiStakingInfoBoxes}
             hasAnyInfoBoxes={hasAnyInfoBoxes}
+            stakingLoaded={stakingLoaded}
           />
           <View style={{ height: 25 }} />
           <AssetListing
