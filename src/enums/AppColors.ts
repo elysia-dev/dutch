@@ -11,7 +11,7 @@ enum AppColors {
   BLACK2 = '#666666',
   SUB_BLACK = '#848484',
   ETH_BLUE = '#6C85FF',
-  EL_BLUE = '#008DED',
+  EL_BLUE = '#3679B5',
   BNB_YELLOW = '#FFC434',
   ELFI_BLUE = '#00BFFF',
   DAI_YELLOW = '#FABB33',
