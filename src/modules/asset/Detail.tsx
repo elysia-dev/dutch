@@ -40,8 +40,8 @@ import AssetDetail from '../../types/AssetDetail';
 import TransactionItem from './components/TransactionItem';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
-import { provider } from '../../utiles/getContract';
 import { getPendingTx } from '../../utiles/pendingTransaction';
+import TransactionItemSkeleton from './components/TransactionItemSkeleton';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -205,7 +205,7 @@ const Detail: FunctionComponent = () => {
   };
 
   const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
-    let resentTx = state.transactions.findIndex(
+    const resentTx = state.transactions.findIndex(
       (tx) => tx.txHash === sendingTx?.txHash,
     );
     state.transactions[resentTx] = sendingTx;
@@ -259,21 +259,30 @@ const Detail: FunctionComponent = () => {
           );
         }}
         ListEmptyComponent={() => {
-          return (
-            <View
-              style={{
-                flexDirection: 'row',
-                height: 200,
-                alignItems: 'center',
-              }}>
-              {
-                <P2Text
-                  label={t('assets.null_transaction')}
-                  style={{ textAlign: 'center', width: '100%' }}
-                />
-              }
-            </View>
-          );
+          if (state.loaded) {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  height: 200,
+                  alignItems: 'center',
+                }}>
+                {
+                  <P2Text
+                    label={t('assets.null_transaction')}
+                    style={{ textAlign: 'center', width: '100%' }}
+                  />
+                }
+              </View>
+            );
+          } else {
+            return (
+              <>
+                <TransactionItemSkeleton />
+                <TransactionItemSkeleton />
+              </>
+            );
+          }
         }}
         horizontal={false}
         keyExtractor={(item, index) => String(index)}
