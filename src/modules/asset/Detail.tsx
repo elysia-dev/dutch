@@ -32,7 +32,6 @@ import txResponseToTx from '../../utiles/txResponseToTx';
 import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
 import { Transaction as TransactionType } from '../../types/Transaction';
 import LoadDetail from '../../utiles/LoadLagacyDetail';
@@ -525,7 +524,6 @@ const Detail: FunctionComponent = () => {
           );
         }}
       />
-      <OverlayLoading visible={!state.loaded} />
     </>
   );
 };

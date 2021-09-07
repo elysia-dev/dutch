@@ -23,7 +23,6 @@ import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
@@ -338,7 +337,6 @@ const Detail: React.FC = () => {
           )}
         </View>
       )}
-      <OverlayLoading visible={state.loading} />
     </>
   );
 };
