@@ -114,7 +114,7 @@ const Stake: React.FC = () => {
       : Number(allowanceInfo.value) > getBalance(CryptoType.ELFI);
   };
 
-  const setApporve = async () => {
+  const setApprove = async () => {
     try {
       await approve();
       await setEstimateGas(StakingType.Stake);
@@ -145,7 +145,7 @@ const Stake: React.FC = () => {
     try {
       if (!isApprove) {
         setIsLoading(true);
-        setApporve();
+        setApprove();
         return;
       }
       stakeByType(
