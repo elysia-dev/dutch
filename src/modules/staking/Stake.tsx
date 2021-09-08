@@ -47,6 +47,7 @@ const Stake: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Stake'>>();
   const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
+  const [isMax, setIsMax] = useState(false); // 보여주는건반올림이더라도 최대인지아닌지표시
   const { isWalletUser, user } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
@@ -147,7 +148,11 @@ const Stake: React.FC = () => {
         setApporve();
         return;
       }
-      stakeByType(value, selectedRound, StakingType.Stake);
+      stakeByType(
+        isMax ? String(crytoBalance) : value,
+        selectedRound,
+        StakingType.Stake,
+      );
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -241,7 +246,7 @@ const Stake: React.FC = () => {
                 ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={parseFloat(value) > getBalance(cryptoType)}
+            isInvalid={!isMax && parseFloat(value) > getBalance(cryptoType)}
             invalidText={t('staking.insufficient_crypto', {
               stakingCrypto: cryptoType,
             })}
@@ -251,6 +256,7 @@ const Stake: React.FC = () => {
             inputValue={value}
             setValue={setValue}
             maxValue={crytoBalance}
+            setIsMax={setIsMax}
           />
           <NumberPad
             addValue={(text) => {
@@ -259,7 +265,10 @@ const Stake: React.FC = () => {
               const next = newInputValueFormatter(value, text);
               setValue(next);
             }}
-            removeValue={() => setValue(value.slice(0, -1))}
+            removeValue={() => {
+              setValue(value.slice(0, -1));
+              setIsMax(false);
+            }}
           />
         </View>
         <View
@@ -270,7 +279,9 @@ const Stake: React.FC = () => {
           }}>
           <NextButton
             title={t('staking.done')}
-            disabled={!value || parseFloat(value) > getBalance(cryptoType)}
+            disabled={
+              !value || (!isMax && parseFloat(value) > getBalance(cryptoType))
+            }
             handler={() => {
               if (isWalletUser) {
                 setIsApprove(isAllowanceForApprove);
@@ -328,7 +339,7 @@ const Stake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={parseFloat(value)}
+      value={isMax ? crytoBalance : parseFloat(value)}
       page="staking"
       stakingTxData={{
         type: 'stake',
