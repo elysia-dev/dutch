@@ -42,6 +42,8 @@ interface ITxInput {
   balanceInCrypto: number;
   balanceInToken: number;
   values: { inFiat: string; inToken: string };
+  isMax: boolean;
+  setIsMax: Dispatch<SetStateAction<boolean>>;
   current: string;
   step: TxStep;
   estimateGas?: string;
@@ -75,6 +77,8 @@ const TxInput: React.FC<ITxInput> = ({
   balanceInCrypto,
   balanceInToken,
   values,
+  isMax,
+  setIsMax,
   current,
   step,
   estimateGas = '0',
@@ -117,6 +121,8 @@ const TxInput: React.FC<ITxInput> = ({
     assetInCrypto.type,
   )
     ? valueInCrypto + parseFloat(estimateGas) > maxValueInCrypto
+    : isMax
+    ? false
     : valueInCrypto > maxValueInCrypto;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -221,6 +227,7 @@ const TxInput: React.FC<ITxInput> = ({
           ELAPrice={tokenPrice}
           maxValueInToken={maxValueInToken}
           maxValueInFiat={maxValueInFiat}
+          setIsMax={setIsMax}
         />
         <NumberPad
           addValue={(text) => {
@@ -250,6 +257,7 @@ const TxInput: React.FC<ITxInput> = ({
                 inToken: next,
               });
             }
+            setIsMax(false);
           }}
           removeValue={() => {
             const before = current === 'fiat' ? values.inFiat : values.inToken;
@@ -273,6 +281,7 @@ const TxInput: React.FC<ITxInput> = ({
                 inToken: next,
               });
             }
+            setIsMax(false);
           }}
           height={Dimensions.get('window').height - 440}
         />

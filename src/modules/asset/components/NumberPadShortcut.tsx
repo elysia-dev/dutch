@@ -14,6 +14,7 @@ interface Props {
   ELAPrice: number;
   maxValueInToken: number;
   maxValueInFiat: number;
+  setIsMax: Dispatch<SetStateAction<boolean>>;
 }
 
 const NumberPadShortcut: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   ELAPrice,
   maxValueInToken,
   maxValueInFiat,
+  setIsMax,
 }) => {
   const { t } = useTranslation();
   const buttons = values.map((value) => {
@@ -60,9 +62,10 @@ const NumberPadShortcut: React.FC<Props> = ({
   function addValue(value: number | 'max') {
     if (value === 'max') {
       setValues({
-        inFiat: String(maxValueInFiat),
-        inToken: String(maxValueInToken),
+        inFiat: String(decimalFormatter(maxValueInFiat, 2)),
+        inToken: String(decimalFormatter(maxValueInToken, 4)),
       });
+      setIsMax(true);
     } else {
       const newInputValue = parseFloat(inputValue || '0') + value;
 
@@ -77,6 +80,7 @@ const NumberPadShortcut: React.FC<Props> = ({
           inToken: decimalFormatter(newInputValue, 6),
         });
       }
+      setIsMax(false);
     }
   }
 
