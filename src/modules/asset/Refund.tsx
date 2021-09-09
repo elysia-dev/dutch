@@ -112,7 +112,7 @@ const Refund: FunctionComponent = () => {
 
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(isMax ? String(balanceInToken) : values.inToken),
+        utils.parseEther(isMax ? balanceInToken.toFixed(18) : values.inToken),
       );
 
       if (!populatedTransaction) return;
@@ -197,7 +197,7 @@ const Refund: FunctionComponent = () => {
         balanceInToken={balanceInToken}
         current={current}
         step={state.step}
-        disabled={parseInt(values.inToken || '0', 10) < 0.01}
+        disabled={!isMax && parseInt(values.inToken || '0', 10) < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
         estimateGas={state.estimateGas}

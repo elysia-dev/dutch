@@ -146,11 +146,13 @@ const Purchase: FunctionComponent = () => {
   const createTx = async () => {
     try {
       if (isMax) {
-        await transferValue(String(maxValueInFiat), String(maxValueInToken)); // 이게 맞나..??
+        await transferValue(
+          maxValueInFiat.toFixed(18),
+          maxValueInToken.toFixed(18),
+        );
       } else {
         await transferValue(values.inFiat, values.inToken);
       }
-      // await transferValue(values.inFiat, values.inToken);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
