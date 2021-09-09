@@ -264,6 +264,7 @@ const Stake: React.FC = () => {
 
               const next = newInputValueFormatter(value, text);
               setValue(next);
+              setIsMax(false);
             }}
             removeValue={() => {
               setValue(value.slice(0, -1));
