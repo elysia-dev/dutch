@@ -214,6 +214,7 @@ const TxInput: React.FC<ITxInput> = ({
           estimatedGas={estimateGas}
           gasCrypto={gasCrypto}
           insufficientGas={insufficientGas}
+          isMax={isMax}
         />
         <NumberPadShortcut
           current={current}
