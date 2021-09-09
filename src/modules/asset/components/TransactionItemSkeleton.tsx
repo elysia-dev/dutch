@@ -16,8 +16,9 @@ const TransactionItemSkeleton: React.FC = () => {
       <View style={{ width: 10 }} />
       <Skeleton width={20} height={20} radius={10} />
       <View style={{ marginLeft: 10 }}>
-        <Skeleton width={70} height={15} radius={2} />
-        <Skeleton width={110} height={13} radius={2} />
+        <Skeleton width={70} height={14} radius={2} />
+        <View style={{ height: 2 }} />
+        <Skeleton width={110} height={12} radius={2} />
       </View>
       <View style={{ marginLeft: 'auto' }} />
       <Skeleton width={50} height={18} radius={2} />

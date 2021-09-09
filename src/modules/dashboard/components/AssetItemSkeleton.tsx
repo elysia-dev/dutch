@@ -15,8 +15,9 @@ const AssetItemSkeleton: React.FC = () => {
       }}>
       <Skeleton width={40} height={40} radius={20} />
       <View style={{ marginLeft: 15 }}>
-        <Skeleton width={102} height={17} radius={2} />
-        <Skeleton width={45} height={15} radius={2} />
+        <Skeleton width={102} height={15} radius={2} />
+        <View style={{ height: 4 }} />
+        <Skeleton width={45} height={13} radius={2} />
       </View>
       <View style={{ marginLeft: 'auto' }} />
       <Skeleton width={88} height={19} radius={2} />

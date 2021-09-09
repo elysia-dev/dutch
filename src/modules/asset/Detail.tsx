@@ -416,8 +416,9 @@ const Detail: FunctionComponent = () => {
                     </View>
                   ) : (
                     <View style={{ alignItems: 'flex-end' }}>
-                      <Skeleton width={50} height={17} radius={2} />
-                      <Skeleton width={85} height={16} radius={2} />
+                      <Skeleton width={50} height={16} radius={2} />
+                      <View style={{ height: 2 }} />
+                      <Skeleton width={85} height={15} radius={2} />
                     </View>
                   )}
                 </View>
