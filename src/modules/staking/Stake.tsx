@@ -340,7 +340,7 @@ const Stake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? crytoBalance : parseFloat(value)}
+      value={isMax ? crytoBalance.toFixed(18) : value}
       page="staking"
       stakingTxData={{
         type: 'stake',

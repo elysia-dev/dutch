@@ -200,7 +200,7 @@ const Unstake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? principal : parseFloat(value)}
+      value={isMax ? principal.toFixed(18) : value}
       page="staking"
       stakingTxData={{
         type: 'unstake',

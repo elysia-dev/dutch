@@ -323,7 +323,7 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? maxValueInToken : parseFloat(values.inToken)}
+      value={isMax ? maxValueInToken.toFixed(18) : values.inToken}
       page="asset"
       assetTxData={{
         productId,

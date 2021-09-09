@@ -233,7 +233,7 @@ const Refund: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? balanceInToken : parseFloat(values.inToken)}
+      value={isMax ? balanceInToken.toFixed(18) : values.inToken}
       page="asset"
       assetTxData={{
         productId,
