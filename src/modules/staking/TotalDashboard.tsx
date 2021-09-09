@@ -195,6 +195,7 @@ const TotalDashboard: React.FC = () => {
               }
               unit={rewardCryptoType}
               style={{ marginTop: 15 }}
+              isReward={true}
             />
           </View>
         </BoxWithDivider>
