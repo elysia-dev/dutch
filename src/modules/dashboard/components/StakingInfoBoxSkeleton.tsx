@@ -15,8 +15,8 @@ const StakingInfoBoxSkeleton: React.FC = () => {
         marginBottom: 10,
       }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Skeleton width={65} height={15} />
-        <Skeleton width={138} height={15} />
+        <Skeleton width={65} height={15} radius={2} />
+        <Skeleton width={138} height={15} radius={2} />
       </View>
       <View
         style={{
@@ -24,8 +24,8 @@ const StakingInfoBoxSkeleton: React.FC = () => {
           justifyContent: 'space-between',
           marginTop: 8,
         }}>
-        <Skeleton width={65} height={15} />
-        <Skeleton width={138} height={15} />
+        <Skeleton width={65} height={15} radius={2} />
+        <Skeleton width={138} height={15} radius={2} />
       </View>
     </View>
   );

@@ -38,7 +38,7 @@ const StakingListingSkeleton: React.FC = () => {
         }}>
         <Skeleton width={40} height={40} radius={20} />
         <View style={{ width: 16 }} />
-        <Skeleton width={160} height={17} />
+        <Skeleton width={160} height={17} radius={2} />
       </View>
       <View style={{ marginTop: 8 }} />
       <StakingInfoBoxSkeleton />
