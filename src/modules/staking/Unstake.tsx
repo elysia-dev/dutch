@@ -24,10 +24,11 @@ import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
 import useStakingInfo from '../../hooks/useStakingInfo';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import useBoolean from '../../hooks/useBoolean';
 
 type ParamList = {
   Unstake: {
@@ -46,14 +47,15 @@ const Unstake: React.FC = () => {
   const { getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
   const [selectionVisible, setSelectionVisible] = useState(false);
-  const { estimagedGasPrice } = useEstimateGas(
+  const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
     selectedRound,
   );
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
-  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const [isLoading, setIsLoading] = useBoolean();
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
