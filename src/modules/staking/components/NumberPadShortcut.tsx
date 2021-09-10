@@ -11,6 +11,7 @@ interface Props {
   inputValue: string;
   setValue: Dispatch<SetStateAction<string>>;
   maxValue?: number;
+  setIsMax: Dispatch<SetStateAction<boolean>>;
 }
 
 const NumberPadShortcut: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const NumberPadShortcut: React.FC<Props> = ({
   inputValue,
   setValue,
   maxValue,
+  setIsMax,
 }) => {
   const { t } = useTranslation();
   const buttons = values.map((value) => {
@@ -51,10 +53,12 @@ const NumberPadShortcut: React.FC<Props> = ({
 
   function addValue(value: number | 'max') {
     if (value === 'max') {
-      setValue(String(maxValue));
+      setValue(decimalFormatter(parseFloat(maxValue), 6));
+      setIsMax(true);
     } else {
       const newValue = parseFloat(inputValue || '0') + value;
       setValue(decimalFormatter(newValue, 6));
+      setIsMax(false);
     }
   }
 

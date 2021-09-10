@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  View,
-  VirtualizedList,
-  SafeAreaView,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import { View, SafeAreaView, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { P2Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
 import TransactionItem from './TransactionItem';
 import NetworkType from '../../../enums/NetworkType';
-import { Item } from '../../products/components/Item';
 import CryptoType from '../../../enums/CryptoType';
+import TransactionItemSkeleton from './TransactionItemSkeleton';
 
 interface ITransactionList {
   data: CryptoTransaction[];
@@ -28,28 +22,31 @@ const TransactionList: React.FC<ITransactionList> = ({
   loading,
 }) => {
   const { t } = useTranslation();
-  const crypto: CryptoTransaction[] = [];
 
   return (
     <SafeAreaView
       style={{
         minHeight: 200,
       }}>
-      {data.length === 0 && (
-        <View
-          style={{
-            flexDirection: 'row',
-            height: 200,
-            alignItems: 'center',
-          }}>
-          {!loading && (
+      {data.length === 0 &&
+        (loading ? (
+          <>
+            <TransactionItemSkeleton />
+            <TransactionItemSkeleton />
+          </>
+        ) : (
+          <View
+            style={{
+              flexDirection: 'row',
+              height: 200,
+              alignItems: 'center',
+            }}>
             <P2Text
               label={t('assets.null_transaction')}
               style={{ textAlign: 'center', width: '100%' }}
             />
-          )}
-        </View>
-      )}
+          </View>
+        ))}
 
       <FlatList
         data={data}

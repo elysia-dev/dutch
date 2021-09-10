@@ -40,6 +40,7 @@ const Unstake: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Unstake'>>();
   const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
+  const [isMax, setIsMax] = useState(false);
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
@@ -86,7 +87,11 @@ const Unstake: React.FC = () => {
 
   const onPressUnstaking = async () => {
     try {
-      await stakeByType(value, selectedRound, StakingType.Unstake);
+      await stakeByType(
+        isMax ? String(principal) : value,
+        selectedRound,
+        StakingType.Unstake,
+      );
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -125,7 +130,7 @@ const Unstake: React.FC = () => {
                 ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={parseFloat(value) > principal}
+            isInvalid={!isMax && parseFloat(value) > principal}
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
@@ -133,6 +138,7 @@ const Unstake: React.FC = () => {
             inputValue={value}
             setValue={setValue}
             maxValue={principal}
+            setIsMax={setIsMax}
           />
           <NumberPad
             addValue={(text) => {
@@ -140,8 +146,12 @@ const Unstake: React.FC = () => {
 
               const next = newInputValueFormatter(value, text);
               setValue(next);
+              setIsMax(false);
             }}
-            removeValue={() => setValue(value.slice(0, -1))}
+            removeValue={() => {
+              setValue(value.slice(0, -1));
+              setIsMax(false);
+            }}
           />
           <View
             style={{
@@ -151,7 +161,7 @@ const Unstake: React.FC = () => {
             }}>
             <NextButton
               title={t('staking.done')}
-              disabled={!value || parseFloat(value) > principal}
+              disabled={!value || (!isMax && parseFloat(value) > principal)}
               handler={() => {
                 if (isWalletUser) {
                   setModalVisible(true);
@@ -190,7 +200,7 @@ const Unstake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={parseFloat(value)}
+      value={isMax ? principal.toFixed(18) : value}
       page="staking"
       stakingTxData={{
         type: 'unstake',

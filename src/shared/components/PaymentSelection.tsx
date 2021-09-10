@@ -31,7 +31,7 @@ type StakingTxData = {
 };
 
 const PaymentSelection: React.FC<{
-  value: number;
+  value: number | string;
   page: 'asset' | 'staking'; // 좋은 이름인지는 모르겠다,,,
   contractAddress: string;
   assetTxData?: AssetTxData;

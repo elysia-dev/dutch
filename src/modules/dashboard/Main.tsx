@@ -35,7 +35,6 @@ import {
   MorePage,
   Page,
 } from '../../enums/pageEnum';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProviderType from '../../enums/ProviderType';
 import PreferenceContext from '../../contexts/PreferenceContext';
 import PriceContext from '../../contexts/PriceContext';
@@ -48,6 +47,7 @@ import WalletContext from '../../contexts/WalletContext';
 import StakingInfoBox from './components/StakingInfoBox';
 import useStakingPool from '../../hooks/useStakingPool';
 import TxStatus from '../../enums/TxStatus';
+import Skeleton from '../../shared/components/Skeleton';
 
 type ParamList = {
   Main: {
@@ -94,6 +94,7 @@ export const Main: React.FC = () => {
     EL: false,
     ELFI: false,
   });
+  const [stakingLoaded, setStakingLoaded] = useState(false); // 이것도 컨텍스트로 빼야 하나...?
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
@@ -110,12 +111,11 @@ export const Main: React.FC = () => {
     }
 
     const tempBoxes = [1, 2, 3, 4, 5, 6].map(async (round) => {
-      const userData = await contract.getUserData(round, userAddress || '');
+      if (!userAddress) return;
+
+      const userData = await contract.getUserData(round, userAddress);
       const stakingAmount = userData.userPrincipal;
-      const rewardAmount = await contract.getUserReward(
-        userAddress || '',
-        round,
-      );
+      const rewardAmount = await contract.getUserReward(userAddress, round);
 
       if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
         return (
@@ -131,6 +131,7 @@ export const Main: React.FC = () => {
     });
 
     setInfoBoxes(await Promise.all(tempBoxes));
+    setStakingLoaded(true);
   }
 
   const loadBalances = async () => {
@@ -208,15 +209,20 @@ export const Main: React.FC = () => {
                   flexDirection: 'row',
                   justifyContent: 'center',
                 }}>
-                <TitleText
-                  label={currencyFormatter(
-                    assets.reduce(
-                      (res, cur) => res + cur.value * getCryptoPrice(cur.type),
-                      0,
-                    ),
-                    2,
-                  )}
-                />
+                {assetLoaded ? (
+                  <TitleText
+                    label={currencyFormatter(
+                      assets.reduce(
+                        (res, cur) =>
+                          res + cur.value * getCryptoPrice(cur.type),
+                        0,
+                      ),
+                      2,
+                    )}
+                  />
+                ) : (
+                  <Skeleton width={128} height={28} radius={5} />
+                )}
                 <TouchableOpacity
                   style={{ marginLeft: 'auto' }}
                   disabled={btnRefreshing}
@@ -302,15 +308,15 @@ export const Main: React.FC = () => {
                 },
               });
             }}
+            assetLoaded={assetLoaded}
           />
           <View style={{ height: 25 }} />
-          {(hasAnyInfoBoxes.EL || hasAnyInfoBoxes.ELFI) && (
-            <StakingListing
-              elStakingInfoBoxes={elStakingInfoBoxes}
-              elfiStakingInfoBoxes={elfiStakingInfoBoxes}
-              hasAnyInfoBoxes={hasAnyInfoBoxes}
-            />
-          )}
+          <StakingListing
+            elStakingInfoBoxes={elStakingInfoBoxes}
+            elfiStakingInfoBoxes={elfiStakingInfoBoxes}
+            hasAnyInfoBoxes={hasAnyInfoBoxes}
+            stakingLoaded={stakingLoaded}
+          />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
@@ -325,6 +331,7 @@ export const Main: React.FC = () => {
                 },
               });
             }}
+            assetLoaded={assetLoaded}
           />
           {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
             [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(
@@ -341,7 +348,6 @@ export const Main: React.FC = () => {
             )}
         </BasicLayout>
       </ScrollView>
-      <OverlayLoading visible={!assetLoaded} />
     </>
   );
 };
