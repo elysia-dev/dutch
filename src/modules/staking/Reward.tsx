@@ -21,9 +21,10 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import AssetContext from '../../contexts/AssetContext';
 import useTxHandler from '../../hooks/useTxHandler';
 import useStakingInfo from '../../hooks/useStakingInfo';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
+import useBoolean from '../../hooks/useBoolean';
 
 type ParamList = {
   Reward: {
@@ -43,12 +44,13 @@ const Reward: React.FC = () => {
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { getBalance } = useContext(AssetContext);
-  const { estimagedGasPrice } = useEstimateGas(
+  const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
     selectedRound,
   );
-  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const [isLoading, setIsLoading] = useBoolean();
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const { reward } = useStakingInfo(cryptoType, selectedRound);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
