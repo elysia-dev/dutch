@@ -28,14 +28,14 @@ import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
 import useTxHandler from '../../hooks/useTxHandler';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
-import useCount from '../../hooks/useCount';
+import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 
 type ParamList = {
   Stake: {
@@ -58,7 +58,7 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Stake,
   );
@@ -66,21 +66,15 @@ const Stake: React.FC = () => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
-  const [estimateGasCount, setEstimateGasCount] = useState(0);
   const [approveGasPrice, setApproveGasPrice] = useState('');
-  const [isApprove, setIsApprove] = useState(true);
   const { elContract, elfiContract } = useErcContract();
-  const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
-  const { setAddCount } = useCount(
-    setEstimateGas,
-    setIsApprove,
-    setIsLoading,
-    StakingType.Stake,
-  );
+  const { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading } =
+    useCountingEstimatedGas(setEstimatedGas, '', StakingType.Stake);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -144,7 +138,7 @@ const Stake: React.FC = () => {
   const setApporve = async () => {
     try {
       await approve();
-      await setEstimateGas(StakingType.Stake);
+      await setEstimatedGas(StakingType.Stake);
     } catch (error) {
       setAddCount();
       console.log(error);
@@ -170,7 +164,7 @@ const Stake: React.FC = () => {
 
   const onPressStaking = async () => {
     try {
-      if (!isApprove) {
+      if (!isApproved) {
         setIsLoading(true);
         setApporve();
         return;
@@ -188,24 +182,6 @@ const Stake: React.FC = () => {
       getPoolData();
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (estimateGasCount === 0 || estimateGasCount >= 4) return;
-  //   setTimeout(async () => {
-  //     try {
-  //       await setEstimateGas(StakingType.Stake);
-  //       setIsApprove(true);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       setEstimateGasCount((prev) => prev + 1);
-  //     } finally {
-  //       if (estimateGasCount >= 3) {
-  //         setIsApprove(true);
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   }, 2000);
-  // }, [estimateGasCount]);
 
   if (!selectionVisible) {
     return (
@@ -302,7 +278,7 @@ const Stake: React.FC = () => {
             handler={() => {
               if (isWalletUser) {
                 getApproveGasPrice();
-                setIsApprove(isAllowanceForApprove);
+                setIsApproved(isAllowanceForApprove());
                 setModalVisible(true);
               } else {
                 setSelectionVisible(true);
@@ -339,7 +315,7 @@ const Stake: React.FC = () => {
                 : t('staking.cannot_estimate_gas'),
             },
           ]}
-          isApproved={isApprove}
+          isApproved={isApproved}
           submitButtonText={t('staking.nth_staking', { round: selectedRound })}
           handler={() => onPressStaking()}
           isLoading={isLoading}
