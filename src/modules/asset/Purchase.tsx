@@ -29,7 +29,7 @@ import AssetContext from '../../contexts/AssetContext';
 import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 import useErcContract from '../../hooks/useErcContract';
-import useCount from '../../hooks/useCount';
+import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import usePurchaseGas from '../../hooks/usePurchaseGas';
 
 type ParamList = {
@@ -63,9 +63,6 @@ const Purchase: FunctionComponent = () => {
     stage: 0,
   });
 
-  const [isApproved, setIsApproved] = useState(
-    !![CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type),
-  );
   const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const navigation = useNavigation();
   const { isWalletUser, Server, user } = useContext(UserContext);
@@ -99,13 +96,9 @@ const Purchase: FunctionComponent = () => {
   const balanceInCrypto = getBalance(assetInCrypto.type);
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
   const { elContract } = useErcContract();
-  const [isLoading, setIsLoading] = useState(false);
   const [approveGasPrice, setApproveGasPrice] = useState('');
-  const { setAddCount } = useCount(
-    setEstimatedGas,
-    setIsApproved,
-    setIsLoading,
-  );
+  const { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading } =
+    useCountingEstimatedGas(setEstimatedGas);
 
   const getApproveGasPrice = async () => {
     try {
