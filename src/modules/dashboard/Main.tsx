@@ -110,7 +110,7 @@ export const Main: React.FC = () => {
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
 
-    const tempBoxes = [1, 2, 3, 4, 5, 6].map(async (round) => {
+    const tempBoxes = [1, 2, 3, 4].map(async (round) => {
       if (!userAddress) return;
 
       const userData = await contract.getUserData(round, userAddress);

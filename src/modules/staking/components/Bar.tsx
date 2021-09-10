@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
+const Bar: React.FC<{ round: 1 | 2 | 3 | 4; percent: number }> = ({
   round,
   percent,
 }) => {
@@ -18,8 +18,8 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
           backgroundColor: AppColors.SUB_GREY,
           borderTopLeftRadius: round === 1 ? 4 : 0,
           borderBottomLeftRadius: round === 1 ? 4 : 0,
-          borderTopRightRadius: round === 6 ? 4 : 0,
-          borderBottomRightRadius: round === 6 ? 4 : 0,
+          borderTopRightRadius: round === 4 ? 4 : 0,
+          borderBottomRightRadius: round === 4 ? 4 : 0,
         }}
       />
       <View
@@ -34,8 +34,8 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4 | 5 | 6; percent: number }> = ({
             backgroundColor: '#3ECFFF',
             borderTopLeftRadius: round === 1 ? 4 : 0,
             borderBottomLeftRadius: round === 1 ? 4 : 0,
-            borderTopRightRadius: round === 6 || percent < 100 ? 4 : 0,
-            borderBottomRightRadius: round === 6 || percent < 100 ? 4 : 0,
+            borderTopRightRadius: round === 4 || percent < 100 ? 4 : 0,
+            borderBottomRightRadius: round === 4 || percent < 100 ? 4 : 0,
             width: `${percent}%`,
           }}
         />

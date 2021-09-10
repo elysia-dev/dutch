@@ -1,8 +1,8 @@
 import moment from 'moment';
 import 'moment-timezone';
 
-export const ROUND_DURATION = 20;
-export const NUMBER_OF_ROUNDS = 6;
+export const ROUND_DURATION = 20; // 이것도 바꿔야 함....!
+export const NUMBER_OF_ROUNDS = 4;
 
 export const ELFI_PER_DAY_ON_EL_STAKING_POOL = 25000;
 export const DAI_PER_DAY_ON_ELFI_STAKING_POOL = 1250;
@@ -46,16 +46,6 @@ export const STAKING_POOL_ROUNDS = [
       timezone,
       true,
     ),
-    endedAt: moment('2021.10.15 19:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-  },
-  {
-    startedAt: moment('2021.10.25 19:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
     endedAt: moment('2021.11.14 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
@@ -63,16 +53,6 @@ export const STAKING_POOL_ROUNDS = [
   },
   {
     startedAt: moment('2021.11.24 19:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-    endedAt: moment('2021.12.14 19:00:00 +9:00', inputFormat).tz(
-      timezone,
-      true,
-    ),
-  },
-  {
-    startedAt: moment('2021.12.24 19:00:00 +9:00', inputFormat).tz(
       timezone,
       true,
     ),

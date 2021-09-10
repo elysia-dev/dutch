@@ -26,7 +26,7 @@ const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
         alignItems: 'center',
         marginBottom: 30,
       }}>
-      {[1, 2, 3, 4, 5, 6].map((i) => {
+      {[1, 2, 3, 4].map((i) => {
         return (
           <Bar
             key={i}

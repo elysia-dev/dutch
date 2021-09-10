@@ -26,6 +26,7 @@ import {
   TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
   TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
+  NUMBER_OF_ROUNDS,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -94,7 +95,7 @@ const CurrentDashboard: React.FC = () => {
       setCurrentRound(res);
     });
     let isBetween = false;
-    if (currentRound < 6 && currentRound > 0) {
+    if (currentRound < NUMBER_OF_ROUNDS && currentRound > 0) {
       isBetween = moment().isBetween(
         STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
         STAKING_POOL_ROUNDS[currentRound].startedAt,
@@ -213,7 +214,7 @@ const CurrentDashboard: React.FC = () => {
                   label={t('staking.current_mined')}
                   value={`${commaFormatter(
                     decimalFormatter(
-                      [1, 2, 3, 4, 5, 6].reduce(
+                      [1, 2, 3, 4].reduce(
                         (totalMined, round) =>
                           totalMined +
                           calculateMined(cryptoType, round, currentRound),
@@ -238,7 +239,7 @@ const CurrentDashboard: React.FC = () => {
                 }}
                 horizontal={true}
                 style={{ marginBottom: 100 }}>
-                {[1, 2, 3, 4, 5, 6].map((i) => {
+                {[1, 2, 3, 4].map((i) => {
                   return (
                     <MiningPlan
                       key={i}
