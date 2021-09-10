@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -13,7 +13,6 @@ import {
   SubTitleText,
   H1Text,
   H2Text,
-  P3Text,
 } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
@@ -64,10 +63,11 @@ const CurrentDashboard: React.FC = () => {
   );
   const stakingStatus = getStakingStatus(currentRound);
   const appState = useAppState();
+  const hasWallet = isWalletUser || user.ethAddresses[0];
 
   let nextButtonTitle = '';
-  if (!(isWalletUser || user.ethAddresses[0])) {
-    nextButtonTitle = t('staking.need_wallet');
+  if (!hasWallet) {
+    nextButtonTitle = t('staking.need_wallet'); //
   } else {
     switch (stakingStatus) {
       case StakingStatus.NOT_YET_STARTED:
@@ -262,7 +262,9 @@ const CurrentDashboard: React.FC = () => {
             params: { cryptoType, selectedRound: currentRound },
           });
         }}
-        disabled={stakingStatus !== StakingStatus.ROUND_IN_PROGRESS}
+        disabled={
+          !hasWallet || stakingStatus !== StakingStatus.ROUND_IN_PROGRESS
+        }
         style={{
           marginBottom: 20,
           marginHorizontal: 16,
