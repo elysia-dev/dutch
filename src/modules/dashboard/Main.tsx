@@ -111,12 +111,11 @@ export const Main: React.FC = () => {
     }
 
     const tempBoxes = [1, 2, 3, 4, 5, 6].map(async (round) => {
-      const userData = await contract.getUserData(round, userAddress || '');
+      if (!userAddress) return;
+
+      const userData = await contract.getUserData(round, userAddress);
       const stakingAmount = userData.userPrincipal;
-      const rewardAmount = await contract.getUserReward(
-        userAddress || '',
-        round,
-      );
+      const rewardAmount = await contract.getUserReward(userAddress, round);
 
       if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
         return (
