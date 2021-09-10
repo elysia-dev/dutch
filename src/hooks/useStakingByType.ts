@@ -9,10 +9,12 @@ import StakingType from '../enums/StakingType';
 import useStakingPool from './useStakingPool';
 import useTxHandler from './useTxHandler';
 
-const useStakingByType = (crytoType: CryptoType) => {
+const useStakingByType = (
+  crytoType: CryptoType,
+  setIsLoading: (isBoolean: boolean) => void,
+) => {
   const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const stakingPoolContract = useStakingPool(crytoType);
   const navigation = useNavigation();
@@ -82,7 +84,7 @@ const useStakingByType = (crytoType: CryptoType) => {
     }
   }, [resTx]);
 
-  return { isLoading, stakeByType, setIsLoading };
+  return { stakeByType };
 };
 
 export default useStakingByType;
