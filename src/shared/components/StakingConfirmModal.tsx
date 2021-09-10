@@ -25,7 +25,7 @@ interface Props {
   handler: () => void;
   isLoading: boolean;
   stakingType?: StakingType;
-  approveGasPrice?: string;
+  approvalGasPrice?: string;
 }
 
 const StakingConfirmModal: React.FC<Props> = ({
@@ -39,7 +39,7 @@ const StakingConfirmModal: React.FC<Props> = ({
   handler,
   isLoading,
   stakingType,
-  approveGasPrice,
+  approvalGasPrice,
 }) => {
   const { t } = useTranslation();
   const [disabled, setDisabled] = useState(false);
@@ -177,7 +177,7 @@ const StakingConfirmModal: React.FC<Props> = ({
                   </Text>
                 </>
               ) : !isLoading ? (
-                <ApproveDescription approveGasPrice={approveGasPrice || ''} />
+                <ApproveDescription approveGasPrice={approvalGasPrice || ''} />
               ) : (
                 <View
                   style={{

@@ -66,7 +66,7 @@ const Stake: React.FC = () => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
-  const [approveGasPrice, setApproveGasPrice] = useState('');
+  const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -101,7 +101,9 @@ const Stake: React.FC = () => {
                 stakingPoolAddress,
                 constants.MaxUint256,
               );
-        setApproveGasPrice(utils.formatEther(approveEstimateGas.mul(gasPrice)));
+        setApprovalGasPrice(
+          utils.formatEther(approveEstimateGas.mul(gasPrice)),
+        );
       }
     } catch (error) {
       console.log(error);
@@ -320,7 +322,7 @@ const Stake: React.FC = () => {
           handler={() => onPressStaking()}
           isLoading={isLoading}
           stakingType={StakingType.Stake}
-          approveGasPrice={approveGasPrice}
+          approvalGasPrice={approvalGasPrice}
         />
       </View>
     );

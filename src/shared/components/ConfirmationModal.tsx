@@ -22,7 +22,7 @@ interface Props {
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
   isLoading?: boolean;
-  approveGasPrice: string;
+  approvalGasPrice: string;
   assetInCrypto?: CryptoType | string;
   submitButtonText: string;
   handler: () => void;
@@ -36,7 +36,7 @@ const ConfirmationModal: React.FC<Props> = ({
   list,
   isApproved,
   isLoading,
-  approveGasPrice,
+  approvalGasPrice,
   assetInCrypto,
   submitButtonText,
   handler,
@@ -177,7 +177,7 @@ const ConfirmationModal: React.FC<Props> = ({
                   </Text>
                 </>
               ) : !isLoading ? (
-                <ApproveDescription approveGasPrice={approveGasPrice} />
+                <ApproveDescription approveGasPrice={approvalGasPrice} />
               ) : (
                 <View
                   style={{

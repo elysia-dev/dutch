@@ -1,19 +1,16 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import {
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-  ActivityIndicator,
-  Modal,
-} from 'react-native';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
+import { Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
 import TxStep from '../../../enums/TxStep';
-import OverlayLoading from '../../../shared/components/OverlayLoading';
 import Asset from '../../../types/Asset';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
@@ -29,7 +26,6 @@ import PurposeType from '../../../enums/PurposeType';
 import commaFormatter from '../../../utiles/commaFormatter';
 import isNumericStringAppendable from '../../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../../utiles/newInputValueFormatter';
-import { useEffect } from 'react';
 
 interface ITxInput {
   purpose: PurposeType;
@@ -54,7 +50,7 @@ interface ITxInput {
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   approve: () => void;
   isLoading: boolean;
-  approveGasPrice?: string;
+  approvalGasPrice?: string;
   createTx: () => void;
   productRefund?: PurposeType;
 }
@@ -91,7 +87,7 @@ const TxInput: React.FC<ITxInput> = ({
   setValues,
   approve,
   isLoading,
-  approveGasPrice,
+  approvalGasPrice,
   createTx,
   productRefund,
 }) => {
@@ -335,7 +331,7 @@ const TxInput: React.FC<ITxInput> = ({
         ]}
         isApproved={isApproved}
         isLoading={isLoading}
-        approveGasPrice={approveGasPrice || ''}
+        approvalGasPrice={approvalGasPrice || ''}
         assetInCrypto={productRefund || assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
         handler={isApproved ? createTx : approve}

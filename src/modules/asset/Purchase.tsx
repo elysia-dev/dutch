@@ -96,7 +96,7 @@ const Purchase: FunctionComponent = () => {
   const balanceInCrypto = getBalance(assetInCrypto.type);
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
   const { elContract } = useErcContract();
-  const [approveGasPrice, setApproveGasPrice] = useState('');
+  const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas);
 
@@ -106,7 +106,7 @@ const Purchase: FunctionComponent = () => {
         contractAddress,
         constants.MaxUint256,
       );
-      setApproveGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
+      setApprovalGasPrice(utils.formatEther(estimateGas.mul(gasPrice)));
     } catch (error) {
       console.log(error);
     }
@@ -218,7 +218,7 @@ const Purchase: FunctionComponent = () => {
         isApproved={isApproved}
         approve={approve}
         isLoading={isLoading}
-        approveGasPrice={approveGasPrice}
+        approvalGasPrice={approvalGasPrice}
         createTx={() => {
           if (isWalletUser) {
             if (isApproved) {
