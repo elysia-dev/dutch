@@ -28,12 +28,13 @@ import useTxHandler from '../../hooks/useTxHandler';
 import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfirmModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
 import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
+import useBoolean from '../../hooks/useBoolean';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -60,13 +61,14 @@ const UnstakeAndMigrate: React.FC = () => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
   const { principal, reward } = useStakingInfo(cryptoType, selectedRound);
-  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const [isLoading, setIsLoading] = useBoolean();
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
   const [isGuideModal, setIsGuideModal] = useState(false);
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
     selectedRound,
@@ -173,7 +175,7 @@ const UnstakeAndMigrate: React.FC = () => {
   const onPressMigrate = async () => {
     try {
       if (isProgressRound()) {
-        setEstimateGas(StakingType.Unstake, selectedRound);
+        setEstimatedGas(StakingType.Unstake, selectedRound);
         setStakingType(StakingType.Unstake);
         setModalVisible(false);
         setIsFinishRound(true);
