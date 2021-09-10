@@ -8,7 +8,7 @@ import CryptoType from '../enums/CryptoType';
 
 type info = {
   estimagedGasPrice: string;
-  setEstimateGas: () => Promise<void>;
+  setEstimatedGas: () => Promise<void>;
 };
 
 const usePurchaseGas = (
@@ -23,7 +23,7 @@ const usePurchaseGas = (
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
 
-  const setEstimateGas = async () => {
+  const setEstimatedGas = async () => {
     setEstimatedGasPrice((await estimateGasByType()) || '');
   };
 
@@ -60,10 +60,10 @@ const usePurchaseGas = (
   };
 
   useEffect(() => {
-    setEstimateGas();
+    setEstimatedGas();
   }, []);
 
-  return { estimagedGasPrice, setEstimateGas };
+  return { estimagedGasPrice, setEstimatedGas };
 };
 
 export default usePurchaseGas;

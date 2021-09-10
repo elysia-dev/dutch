@@ -83,7 +83,7 @@ const Purchase: FunctionComponent = () => {
     contractAddress,
   );
   const { getBalance, assets } = useContext(AssetContext);
-  const { estimagedGasPrice, setEstimateGas } = usePurchaseGas(
+  const { estimagedGasPrice, setEstimatedGas } = usePurchaseGas(
     contract,
     assetInCrypto.type,
   );
@@ -101,7 +101,11 @@ const Purchase: FunctionComponent = () => {
   const { elContract } = useErcContract();
   const [isLoading, setIsLoading] = useState(false);
   const [approveGasPrice, setApproveGasPrice] = useState('');
-  const { setAddCount } = useCount(setEstimateGas, setIsApproved, setIsLoading);
+  const { setAddCount } = useCount(
+    setEstimatedGas,
+    setIsApproved,
+    setIsLoading,
+  );
 
   const getApproveGasPrice = async () => {
     try {
@@ -131,7 +135,7 @@ const Purchase: FunctionComponent = () => {
     try {
       setIsLoading(true);
       await elContract.approve(contractAddress, constants.MaxUint256);
-      await setEstimateGas();
+      await setEstimatedGas();
       setState({
         ...state,
         step: TxStep.None,
