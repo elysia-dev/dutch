@@ -7,12 +7,11 @@ import useBoolean from './useBoolean';
 
 const useCountingEstimatedGas = (
   setEstimateGas: (stakingType?: StakingType, round?: number) => Promise<void>,
-  assetType?: CryptoType | '',
   stakingType?: StakingType,
 ) => {
   const [count, setCount] = useState(0);
-  const [isApproved, setIsApproved] = useBoolean(assetType);
-  const [isLoading, setIsLoading] = useBoolean();
+  const [isApproved, setIsApproved] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const approveTxSucOrTimeOut = () => {
     setIsApproved(true);
