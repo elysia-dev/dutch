@@ -97,7 +97,7 @@ const Purchase: FunctionComponent = () => {
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
   const { elContract } = useErcContract();
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
-  const { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading } =
+  const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas);
 
   const getApproveGasPrice = async () => {
@@ -135,7 +135,7 @@ const Purchase: FunctionComponent = () => {
       });
       setIsApproved(true);
     } catch (error) {
-      setAddCount();
+      addCount();
       setState({
         ...state,
         step: TxStep.None,

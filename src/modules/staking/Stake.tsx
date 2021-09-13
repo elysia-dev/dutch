@@ -72,7 +72,7 @@ const Stake: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
-  const { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading } =
+  const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, '', StakingType.Stake);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
@@ -142,7 +142,7 @@ const Stake: React.FC = () => {
       await approve();
       await setEstimatedGas(StakingType.Stake);
     } catch (error) {
-      setAddCount();
+      addCount();
       console.log(error);
     }
   };

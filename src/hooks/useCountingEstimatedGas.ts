@@ -26,7 +26,7 @@ const useCountingEstimatedGas = (
         await setEstimateGas(stakingType);
         approveTxSucOrTimeOut();
       } catch (error) {
-        setAddCount();
+        addCount();
       } finally {
         if (count >= 3) {
           approveTxSucOrTimeOut();
@@ -35,11 +35,11 @@ const useCountingEstimatedGas = (
     }, 2000);
   }, [count]);
 
-  const setAddCount = () => {
+  const addCount = () => {
     setCount((prev) => prev + 1);
   };
 
-  return { setAddCount, isApproved, setIsApproved, isLoading, setIsLoading };
+  return { addCount, isApproved, setIsApproved, isLoading, setIsLoading };
 };
 
 export default useCountingEstimatedGas;
