@@ -332,7 +332,7 @@ const TxInput: React.FC<ITxInput> = ({
         isApproved={isApproved}
         isLoading={isLoading}
         approvalGasPrice={approvalGasPrice || ''}
-        assetInCrypto={isRefund || assetInCrypto.type}
+        assetTypeOrRefund={isRefund || assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
         handler={isApproved ? createTx : approve}
       />
