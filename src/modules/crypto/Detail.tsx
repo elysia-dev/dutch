@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 import { ChartDataPoint } from 'react-native-responsive-linechart';
 import { View, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -28,10 +29,12 @@ import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
-import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
+import {
+  getTransactionChart,
+  toAppColor,
+} from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
 import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
-import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 
 type ParamList = {
   CryptoDetail: {
@@ -74,7 +77,6 @@ const Detail: React.FC = () => {
     ? wallet?.getFirstNode()?.address || ''
     : user.ethAddresses[0];
 
-  const chartTransactions = new ChartTransactions(prevAssetValue);
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
@@ -202,10 +204,7 @@ const Detail: React.FC = () => {
   const getChart = async () => {
     try {
       setGraphData(
-        await chartTransactions.getResentTransactionChart(
-          filterDay,
-          state.transactions,
-        ),
+        getTransactionChart(prevAssetValue, filterDay, state.transactions),
       );
       setChartLoading(false);
     } catch (error) {
