@@ -64,8 +64,8 @@ const ConfirmBox: React.FC<Props> = ({ isApprove }) => {
           borderTopWidth: 18.5,
           borderBottomWidth: 18.5,
           borderLeftWidth: 19,
-          borderTopColor: 'rgba(0,0,0,0)',
-          borderBottomColor: 'rgba(0,0,0,0)',
+          borderTopColor: AppColors.TRANSPARENT,
+          borderBottomColor: AppColors.TRANSPARENT,
           borderLeftColor: isApprove ? AppColors.SUB_GREY : AppColors.BLACK2,
         }}
       />
