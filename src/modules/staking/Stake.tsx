@@ -73,7 +73,7 @@ const Stake: React.FC = () => {
     constants.Zero,
   );
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
-    useCountingEstimatedGas(setEstimatedGas, '', StakingType.Stake);
+    useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
     ? wallet?.getFirstAddress()

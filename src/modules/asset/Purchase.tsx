@@ -72,14 +72,14 @@ const Purchase: FunctionComponent = () => {
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
 
-  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
+  const { gasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const contract = getAssetTokenFromCryptoType(
     assetInCrypto.type,
     contractAddress,
   );
-  const { getBalance, assets } = useContext(AssetContext);
+  const { getBalance } = useContext(AssetContext);
   const { estimagedGasPrice, setEstimatedGas } = usePurchaseGas(
     contract,
     assetInCrypto.type,
