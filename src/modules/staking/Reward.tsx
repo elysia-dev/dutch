@@ -24,7 +24,6 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
-import useBoolean from '../../hooks/useBoolean';
 
 type ParamList = {
   Reward: {
@@ -49,7 +48,7 @@ const Reward: React.FC = () => {
     StakingType.Reward,
     selectedRound,
   );
-  const [isLoading, setIsLoading] = useBoolean();
+  const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const { reward } = useStakingInfo(cryptoType, selectedRound);
   const stakingPoolAddress =

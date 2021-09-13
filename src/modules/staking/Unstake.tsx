@@ -28,7 +28,6 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-import useBoolean from '../../hooks/useBoolean';
 
 type ParamList = {
   Unstake: {
@@ -54,7 +53,7 @@ const Unstake: React.FC = () => {
   );
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
-  const [isLoading, setIsLoading] = useBoolean();
+  const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
