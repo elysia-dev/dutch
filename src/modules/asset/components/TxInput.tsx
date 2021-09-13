@@ -52,7 +52,7 @@ interface ITxInput {
   isLoading: boolean;
   approvalGasPrice?: string;
   createTx: () => void;
-  productRefund?: PurposeType;
+  isRefund?: PurposeType;
 }
 
 // * Info
@@ -89,7 +89,7 @@ const TxInput: React.FC<ITxInput> = ({
   isLoading,
   approvalGasPrice,
   createTx,
-  productRefund,
+  isRefund,
 }) => {
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -332,7 +332,7 @@ const TxInput: React.FC<ITxInput> = ({
         isApproved={isApproved}
         isLoading={isLoading}
         approvalGasPrice={approvalGasPrice || ''}
-        assetInCrypto={productRefund || assetInCrypto.type}
+        assetInCrypto={isRefund || assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
         handler={isApproved ? createTx : approve}
       />
