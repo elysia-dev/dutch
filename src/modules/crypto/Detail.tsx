@@ -5,6 +5,7 @@ import { ChartDataPoint } from 'react-native-responsive-linechart';
 import { View, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 import Asset, { defaultAsset } from '../../types/Asset';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
@@ -31,7 +32,6 @@ import AssetGraph from './components/AssetGraph';
 import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
 import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
-import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 
 type ParamList = {
   CryptoDetail: {
