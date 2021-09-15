@@ -11,7 +11,8 @@ const StakingInfoCard: React.FC<{
   value: string;
   unit: string;
   style?: StyleProp<ViewStyle>;
-}> = ({ roundEnded, label, value, unit, style }) => {
+  isReward?: boolean;
+}> = ({ roundEnded, label, value, unit, style, isReward }) => {
   return (
     <CardWithShadow
       style={{
@@ -35,10 +36,7 @@ const StakingInfoCard: React.FC<{
           label={value}
           style={{
             fontSize: 18,
-            color:
-              label.includes('보상') && !roundEnded
-                ? '#00BFFF'
-                : AppColors.BLACK,
+            color: isReward && !roundEnded ? '#00BFFF' : AppColors.BLACK,
           }}
         />
         <SubTitleText

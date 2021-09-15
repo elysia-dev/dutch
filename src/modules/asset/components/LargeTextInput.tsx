@@ -14,8 +14,11 @@ interface Props {
   type: string;
   purpose: PurposeType;
   tokenType: string;
-  priceInCryptocurrency: string;
+  valueInCryptocurrency: string;
   cryptocurrencyType: string;
+  isMax: boolean;
+  maxValueInToken: number;
+  maxValueInFiat: number;
 }
 
 const LargeTextInput: React.FC<Props> = ({
@@ -24,8 +27,11 @@ const LargeTextInput: React.FC<Props> = ({
   type,
   purpose,
   tokenType,
-  priceInCryptocurrency,
+  valueInCryptocurrency,
   cryptocurrencyType,
+  isMax,
+  maxValueInToken,
+  maxValueInFiat,
 }) => {
   const { t } = useTranslation();
 
@@ -85,8 +91,11 @@ const LargeTextInput: React.FC<Props> = ({
         {current === 'token' && (
           <GuideText
             text={`$ ${commaFormatter(
-              decimalFormatter(Number(value) * 5, 2),
-            )} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
+              decimalFormatter(
+                (isMax ? maxValueInToken : Number(value)) * 5,
+                2,
+              ),
+            )} (= ${valueInCryptocurrency} ${cryptocurrencyType})`}
             style={{
               width: '100%',
               marginTop: 4,
@@ -96,8 +105,8 @@ const LargeTextInput: React.FC<Props> = ({
         {current === 'fiat' && (
           <GuideText
             text={`${commaFormatter(
-              decimalFormatter(Number(value) / 5, 4),
-            )} ${tokenType} (= ${priceInCryptocurrency} ${cryptocurrencyType})`}
+              decimalFormatter((isMax ? maxValueInFiat : Number(value)) / 5, 4),
+            )} ${tokenType} (= ${valueInCryptocurrency} ${cryptocurrencyType})`}
             style={{
               width: '100%',
               marginTop: 4,

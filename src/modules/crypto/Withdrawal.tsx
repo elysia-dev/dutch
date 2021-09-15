@@ -9,12 +9,11 @@ import {
   TouchableWithoutFeedback,
   Image,
   Dimensions,
-  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { BigNumber, ethers, utils } from 'ethers';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { BigNumber, utils } from 'ethers';
 import { isAddress } from '@ethersproject/address';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
 import AppColors from '../../enums/AppColors';
@@ -26,12 +25,10 @@ import AssetContext from '../../contexts/AssetContext';
 import commaFormatter from '../../utiles/commaFormatter';
 import NumberPad from '../../shared/components/NumberPad';
 import CryptoType from '../../enums/CryptoType';
-import { getElysiaContract, provider } from '../../utiles/getContract';
+import { getElysiaContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
-import TransactionContext from '../../contexts/TransactionContext';
 import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
@@ -52,10 +49,9 @@ const Withdrawal: React.FC = () => {
   const { asset } = route.params;
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
-  const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
+  const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(false);
   const [estimatedGas, setEstimatedGas] = useState('');
   const { afterTxFailed } = useTxHandler();
   const gasCrypto =
@@ -330,7 +326,6 @@ const Withdrawal: React.FC = () => {
           }}
         />
       )}
-      <OverlayLoading visible={loading} />
     </View>
   );
 };

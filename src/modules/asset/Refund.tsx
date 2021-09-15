@@ -37,6 +37,7 @@ const Refund: FunctionComponent = () => {
     inFiat: '',
     inToken: '',
   });
+  const [isMax, setIsMax] = useState(false);
   const [state, setState] = useState({
     txHash: '',
     step: TxStep.None,
@@ -112,7 +113,7 @@ const Refund: FunctionComponent = () => {
     setIsLoading(true);
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(values.inToken),
+        utils.parseEther(isMax ? balanceInToken.toFixed(18) : values.inToken),
       );
 
       if (!populatedTransaction) return;
@@ -190,13 +191,15 @@ const Refund: FunctionComponent = () => {
         assetInCrypto={assetInCrypto}
         assetInToken={assetInToken}
         values={values}
+        isMax={isMax}
+        setIsMax={setIsMax}
         cryptoPrice={cryptoPrice}
         tokenPrice={tokenPrice}
         balanceInCrypto={balanceInCrypto}
         balanceInToken={balanceInToken}
         current={current}
         step={state.step}
-        disabled={parseInt(values.inToken || '0', 10) < 0.01}
+        disabled={!isMax && parseInt(values.inToken || '0', 10) < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
         estimatedGas={state.estimateGas}
@@ -235,7 +238,7 @@ const Refund: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      value={parseFloat(values.inToken)}
+      value={isMax ? balanceInToken.toFixed(18) : values.inToken}
       page="asset"
       assetTxData={{
         productId,

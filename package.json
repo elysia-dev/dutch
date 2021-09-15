@@ -1,7 +1,7 @@
 {
   "config": {
     "cversion": "v1.5.0",
-    "version": "v1.5.3"
+    "version": "v1.5.4"
   },
   "scripts": {
     "start": "APP_ENV=development expo start",
@@ -50,6 +50,7 @@
     "expo-file-system": "~11.0.2",
     "expo-font": "~9.1.0",
     "expo-haptics": "~10.0.0",
+    "expo-linear-gradient": "~9.1.0",
     "expo-linking": "~2.2.3",
     "expo-localization": "~10.1.0",
     "expo-notifications": "~0.11.6",

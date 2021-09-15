@@ -56,6 +56,7 @@ const Purchase: FunctionComponent = () => {
     inFiat: '',
     inToken: '',
   });
+  const [isMax, setIsMax] = useState(false);
   const [state, setState] = useState({
     txHash: '',
     step: TxStep.CheckAllowance,
@@ -99,6 +100,13 @@ const Purchase: FunctionComponent = () => {
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas);
+  const maxValueInToken = remainingSupplyInToken
+    ? Math.min(remainingSupplyInToken, balanceInToken)
+    : balanceInToken;
+  const maxValueInFiat = remainingSupplyInCrypto
+    ? Math.min(remainingSupplyInCrypto, balanceInCrypto) *
+      getCryptoPrice(assetInCrypto.type)
+    : balanceInCrypto * getCryptoPrice(assetInCrypto.type);
 
   const getApproveGasPrice = async () => {
     try {
@@ -115,7 +123,14 @@ const Purchase: FunctionComponent = () => {
   const createTx = async () => {
     try {
       setIsLoading(true);
-      await transferValue(values.inFiat, values.inToken);
+      if (isMax) {
+        await transferValue(
+          maxValueInFiat.toFixed(18),
+          maxValueInToken.toFixed(18),
+        );
+      } else {
+        await transferValue(values.inFiat, values.inToken);
+      }
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -207,6 +222,8 @@ const Purchase: FunctionComponent = () => {
         balanceInToken={balanceInToken}
         balanceInCrypto={balanceInCrypto}
         values={values}
+        isMax={isMax}
+        setIsMax={setIsMax}
         cryptoPrice={cryptoPrice}
         tokenPrice={tokenPrice}
         current={current}
@@ -254,7 +271,7 @@ const Purchase: FunctionComponent = () => {
 
   return (
     <PaymentSelection
-      value={parseFloat(values.inToken)}
+      value={isMax ? maxValueInToken.toFixed(18) : values.inToken}
       page="asset"
       assetTxData={{
         productId,

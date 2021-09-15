@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,6 @@ import txResponseToTx from '../../utiles/txResponseToTx';
 import CircularButtonWithLabel from '../../shared/components/CircularButtonWithLabel';
 import ProductStatus from '../../enums/ProductStatus';
 import NetworkType from '../../enums/NetworkType';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import ProductImageCarousel from '../../shared/components/ProductImageCarousel';
 import { Transaction as TransactionType } from '../../types/Transaction';
 import LoadDetail from '../../utiles/LoadLagacyDetail';
@@ -40,8 +39,9 @@ import AssetDetail from '../../types/AssetDetail';
 import TransactionItem from './components/TransactionItem';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
-import { provider } from '../../utiles/getContract';
 import { getPendingTx } from '../../utiles/pendingTransaction';
+import TransactionItemSkeleton from './components/TransactionItemSkeleton';
+import Skeleton from '../../shared/components/Skeleton';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -205,7 +205,7 @@ const Detail: FunctionComponent = () => {
   };
 
   const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
-    let resentTx = state.transactions.findIndex(
+    const resentTx = state.transactions.findIndex(
       (tx) => tx.txHash === sendingTx?.txHash,
     );
     state.transactions[resentTx] = sendingTx;
@@ -259,21 +259,28 @@ const Detail: FunctionComponent = () => {
           );
         }}
         ListEmptyComponent={() => {
-          return (
-            <View
-              style={{
-                flexDirection: 'row',
-                height: 200,
-                alignItems: 'center',
-              }}>
-              {
+          if (state.loaded) {
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  height: 200,
+                  alignItems: 'center',
+                }}>
                 <P2Text
                   label={t('assets.null_transaction')}
                   style={{ textAlign: 'center', width: '100%' }}
                 />
-              }
-            </View>
-          );
+              </View>
+            );
+          } else {
+            return (
+              <View style={{ marginLeft: '5%', marginRight: '5%' }}>
+                <TransactionItemSkeleton />
+                <TransactionItemSkeleton />
+              </View>
+            );
+          }
         }}
         horizontal={false}
         keyExtractor={(item, index) => String(index)}
@@ -289,7 +296,20 @@ const Detail: FunctionComponent = () => {
                   borderBottomLeftRadius: 10,
                   borderBottomRightRadius: 10,
                 }}>
-                <ProductImageCarousel images={state.images} />
+                {state.loaded ? (
+                  <ProductImageCarousel images={state.images} />
+                ) : (
+                  <View
+                    style={{
+                      height: 293,
+                      justifyContent: 'center',
+                    }}>
+                    <ActivityIndicator
+                      size="large"
+                      color={AppColors.DEACTIVATED}
+                    />
+                  </View>
+                )}
                 <View style={{ position: 'absolute', padding: 20 }}>
                   <View
                     style={{
@@ -352,10 +372,14 @@ const Detail: FunctionComponent = () => {
                         style={{ color: AppColors.BLACK2 }}
                         label={data.left}
                       />
-                      <H4Text
-                        style={{ color: AppColors.BLACK }}
-                        label={data.right}
-                      />
+                      {state.loaded ? (
+                        <H4Text
+                          style={{ color: AppColors.BLACK }}
+                          label={data.right}
+                        />
+                      ) : (
+                        <Skeleton width={70} height={17} radius={2} />
+                      )}
                     </View>
                   );
                 })}
@@ -372,20 +396,31 @@ const Detail: FunctionComponent = () => {
                     style={{ color: AppColors.BLACK }}
                     label={t('main.total_assets_yield')}
                   />
-                  <View>
-                    <H4Text
-                      style={{ color: AppColors.MAIN, textAlign: 'right' }}
-                      label={currencyFormatter(state.reward, 2)}
-                    />
-                    {state.paymentMethod !== CryptoType.None && (
+                  {state.loaded ? (
+                    <View>
                       <H4Text
-                        style={{ color: AppColors.BLACK2, textAlign: 'right' }}
-                        label={`${(
-                          state.reward / getCryptoPrice(state.paymentMethod)
-                        ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                        style={{ color: AppColors.MAIN, textAlign: 'right' }}
+                        label={currencyFormatter(state.reward, 2)}
                       />
-                    )}
-                  </View>
+                      {state.paymentMethod !== CryptoType.None && (
+                        <H4Text
+                          style={{
+                            color: AppColors.BLACK2,
+                            textAlign: 'right',
+                          }}
+                          label={`${(
+                            state.reward / getCryptoPrice(state.paymentMethod)
+                          ).toFixed(2)} ${state.paymentMethod.toUpperCase()}`}
+                        />
+                      )}
+                    </View>
+                  ) : (
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <Skeleton width={50} height={16} radius={2} />
+                      <View style={{ height: 2 }} />
+                      <Skeleton width={85} height={15} radius={2} />
+                    </View>
+                  )}
                 </View>
                 <View
                   style={{
@@ -399,7 +434,10 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.ownership')}
                         icon={'+'}
-                        disabled={state.productStatus !== ProductStatus.SALE}
+                        disabled={
+                          !state.loaded ||
+                          state.productStatus !== ProductStatus.SALE
+                        }
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Purchase, {
                             assetInCrypto: {
@@ -417,6 +455,7 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.refund')}
                         icon={'-'}
+                        disabled={!state.loaded}
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Refund, {
                             assetInCrypto: {
@@ -433,6 +472,7 @@ const Detail: FunctionComponent = () => {
                       <CircularButtonWithLabel
                         label={t('main.return')}
                         icon={'⤴'}
+                        disabled={!state.loaded}
                         pressHandler={() => {
                           navigation.navigate(AssetPage.Reward, {
                             toCrypto: state.paymentMethod,
@@ -485,40 +525,43 @@ const Detail: FunctionComponent = () => {
           );
         }}
         ListFooterComponent={() => {
-          return (
-            <TouchableOpacity
-              style={{
-                height: 50,
-                borderRadius: 5,
-                borderWidth: 1,
-                borderColor: AppColors.MAIN,
-                justifyContent: 'center',
-                alignContent: 'center',
-                marginTop: 15,
-                marginBottom: 15,
-                marginLeft: '5%',
-                marginRight: '5%',
-              }}
-              onPress={() => {
-                if (asset.ownershipId) {
-                  loadV1TxsMore();
-                } else {
-                  loadV2More();
-                }
-              }}>
-              <P1Text
+          if (state.loaded) {
+            return (
+              <TouchableOpacity
                 style={{
-                  color: AppColors.MAIN,
-                  fontSize: 17,
-                  textAlign: 'center',
+                  height: 50,
+                  borderRadius: 5,
+                  borderWidth: 1,
+                  borderColor: AppColors.MAIN,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  marginTop: 15,
+                  marginBottom: 15,
+                  marginLeft: '5%',
+                  marginRight: '5%',
                 }}
-                label={t('dashboard_label.more_transactions')}
-              />
-            </TouchableOpacity>
-          );
+                onPress={() => {
+                  if (asset.ownershipId) {
+                    loadV1TxsMore();
+                  } else {
+                    loadV2More();
+                  }
+                }}>
+                <P1Text
+                  style={{
+                    color: AppColors.MAIN,
+                    fontSize: 17,
+                    textAlign: 'center',
+                  }}
+                  label={t('dashboard_label.more_transactions')}
+                />
+              </TouchableOpacity>
+            );
+          } else {
+            return null;
+          }
         }}
       />
-      <OverlayLoading visible={!state.loaded} />
     </>
   );
 };

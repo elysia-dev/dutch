@@ -24,6 +24,7 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
+import { useEffect } from 'react';
 
 type ParamList = {
   Reward: {
@@ -48,6 +49,7 @@ const Reward: React.FC = () => {
     StakingType.Reward,
     selectedRound,
   );
+
   const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const { reward } = useStakingInfo(cryptoType, selectedRound);
@@ -77,9 +79,12 @@ const Reward: React.FC = () => {
           }}>
           <CryptoInput
             title={t('staking.rewards')}
-            value={commaFormatter(reward)}
+            value={commaFormatter(userReward)}
             subValue={`$ ${commaFormatter(
-              decimalFormatter(reward * getCryptoPrice(rewardCryptoType), 5),
+              decimalFormatter(
+                userReward * getCryptoPrice(rewardCryptoType),
+                5,
+              ),
             )}`}
             cryptoTitle={rewardCryptoType}
             cryptoType={rewardCryptoType}

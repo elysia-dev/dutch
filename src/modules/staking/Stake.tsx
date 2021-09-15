@@ -48,6 +48,7 @@ const Stake: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Stake'>>();
   const { cryptoType, selectedRound } = route.params;
   const [value, setValue] = useState('');
+  const [isMax, setIsMax] = useState(false); // 보여주는건반올림이더라도 최대인지아닌지표시
   const { isWalletUser, user } = useContext(UserContext);
   const { gasPrice } = useContext(PriceContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -137,7 +138,7 @@ const Stake: React.FC = () => {
       : Number(allowanceInfo.value) > getBalance(CryptoType.ELFI);
   };
 
-  const setApporve = async () => {
+  const setApprove = async () => {
     try {
       await approve();
       await setEstimatedGas(StakingType.Stake);
@@ -168,10 +169,14 @@ const Stake: React.FC = () => {
     try {
       if (!isApproved) {
         setIsLoading(true);
-        setApporve();
+        setApprove();
         return;
       }
-      stakeByType(value, selectedRound, StakingType.Stake);
+      stakeByType(
+        isMax ? String(crytoBalance) : value,
+        selectedRound,
+        StakingType.Stake,
+      );
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -247,16 +252,17 @@ const Stake: React.FC = () => {
                 ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={parseFloat(value) > getBalance(cryptoType)}
+            isInvalid={!isMax && parseFloat(value) > getBalance(cryptoType)}
             invalidText={t('staking.insufficient_crypto', {
               stakingCrypto: cryptoType,
             })}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 'all']}
+            values={[0.01, 1, 10, 100, 'max']}
             inputValue={value}
             setValue={setValue}
             maxValue={crytoBalance}
+            setIsMax={setIsMax}
           />
           <NumberPad
             addValue={(text) => {
@@ -264,8 +270,12 @@ const Stake: React.FC = () => {
 
               const next = newInputValueFormatter(value, text);
               setValue(next);
+              setIsMax(false);
             }}
-            removeValue={() => setValue(value.slice(0, -1))}
+            removeValue={() => {
+              setValue(value.slice(0, -1));
+              setIsMax(false);
+            }}
           />
         </View>
         <View
@@ -276,7 +286,9 @@ const Stake: React.FC = () => {
           }}>
           <NextButton
             title={t('staking.done')}
-            disabled={!value || parseFloat(value) > getBalance(cryptoType)}
+            disabled={
+              !value || (!isMax && parseFloat(value) > getBalance(cryptoType))
+            }
             handler={() => {
               if (isWalletUser) {
                 getApproveGasPrice();
@@ -330,7 +342,7 @@ const Stake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={parseFloat(value)}
+      value={isMax ? crytoBalance.toFixed(18) : value}
       page="staking"
       stakingTxData={{
         type: 'stake',
