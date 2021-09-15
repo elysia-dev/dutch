@@ -28,6 +28,7 @@ interface Props {
   estimatedGas: string;
   gasCrypto: CryptoType;
   insufficientGas: boolean;
+  isMax: boolean;
 }
 
 const TxInputViewer: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const TxInputViewer: React.FC<Props> = ({
   estimatedGas,
   gasCrypto,
   insufficientGas,
+  isMax,
 }) => {
   const { t } = useTranslation();
   const currentTab = current === 'token' ? dataInToken : dataInFiat;
@@ -46,7 +48,10 @@ const TxInputViewer: React.FC<Props> = ({
     current === 'token'
       ? t(`assets.${purpose}_stake_available`)
       : t(`assets.${purpose}_value_available`);
-  const maxValue = currentTab.max.toFixed(current === 'token' ? 4 : 2);
+  const maxValue =
+    current === 'token'
+      ? currentTab.max.toFixed(4)
+      : (currentTab.max / currentTab.price).toFixed(2);
 
   return (
     <View
@@ -62,10 +67,15 @@ const TxInputViewer: React.FC<Props> = ({
         type={currentTab.type}
         purpose={purpose}
         tokenType={dataInToken.type}
-        priceInCryptocurrency={commaFormatter(
-          (Number(dataInFiat.value) / dataInFiat.price).toFixed(2),
+        valueInCryptocurrency={commaFormatter(
+          isMax
+            ? (dataInFiat.max / dataInFiat.price).toFixed(2)
+            : (Number(dataInFiat.value) / dataInFiat.price).toFixed(2),
         )}
         cryptocurrencyType={dataInFiat.type}
+        isMax={isMax}
+        maxValueInToken={dataInToken.max}
+        maxValueInFiat={dataInFiat.max}
       />
       <View
         style={{

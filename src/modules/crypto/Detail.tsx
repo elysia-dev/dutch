@@ -6,6 +6,7 @@ import { ChartDataPoint } from 'react-native-responsive-linechart';
 import { View, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 import Asset, { defaultAsset } from '../../types/Asset';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
@@ -24,7 +25,6 @@ import txResponseToTx from '../../utiles/txResponseToTx';
 import NetworkType from '../../enums/NetworkType';
 import TransactionContext from '../../contexts/TransactionContext';
 import TxStatus from '../../enums/TxStatus';
-import OverlayLoading from '../../shared/components/OverlayLoading';
 import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
@@ -159,7 +159,7 @@ const Detail: React.FC = () => {
   };
 
   const changedTxStatusToSuccess = (sendingTx: CryptoTransaction) => {
-    let resentTx = state.transactions.findIndex(
+    const resentTx = state.transactions.findIndex(
       (tx) => tx.txHash === sendingTx.txHash,
     );
     state.transactions[resentTx] = sendingTx;
@@ -237,7 +237,7 @@ const Detail: React.FC = () => {
             <View style={{ height: 50 }} />
             <AssetGraph
               data={graphData}
-              lineColor={toAppColor.toString(asset.type)}
+              lineColor={toAppColor(asset.type)}
               chartLoading={chartLoading}
               setIsChartLine={setIsChartLine}
               isChartLine={isChartLine}
@@ -335,7 +335,6 @@ const Detail: React.FC = () => {
           )}
         </View>
       )}
-      <OverlayLoading visible={state.loading} />
     </>
   );
 };
