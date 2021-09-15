@@ -413,7 +413,15 @@
       "accelerate_gas_fee": "가속화 수수료",
       "accelerate_gas_fee_guide": "Gwei이상을 입력해주세요.",
       "accelerate_insufficient": "자금이 부족합니다.",
-      "accelerate_send": "저장"
+      "accelerate_send": "저장",
+      "approve_step": "{{step}}단계",
+      "approve_step_authorization": "권한승인",
+      "approve_step_confirm": "최종확인",
+      "approve_guide": "접근 권한을 승인해주세요!",
+      "approve_guide_first": "부동산 토큰을 구매하기 위해서는 연결된 지갑에\n해당 앱이 접근 할 수 있도록 권한을 승인해야 합니다.",
+      "approve_guide_second": "최초 구매 시에만 승인이 필요하며, 승인이 성공적으로\n완료될 경우, 이후의 거래에는 권한 승인이 없이 부동산\n토큰을 구매하실 수 있습니다.",
+      "approve_guide_gasprice": "접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 {{gasPrice}} ETH 입니다.",
+      "approve_pending_transaction": "트랜잭션 처리중"
     },
     "staking": {
       "staking": "스테이킹",
@@ -482,7 +490,7 @@
       "unstaking_help_description": "언스테이킹은 해당 회차에 스테이킹한 토큰을 원하는 외부 지갑으로 전송하는 기능입니다. 스테이킹한 토큰 중 일부만 입력할 경우, 나머지 토큰들은 현재 진행중인 회차의 풀로 마이그레이션 됩니다.",
       "migration_help_description": "마이그레이션은 스테이킹 수량 중 언스테이킹한 수량을 제외한 수량만큼 현재 진행중인 스테이킹 풀에 전송하여 자동으로 스테이킹하는 기능입니다. 언스테이킹과 마이그레이션을 동 시에 진행하기때문에 이더리움 네트워크 이용수수료(가스비) 를 아낄 수 있습니다.",
       "staking_description": "{{stakingCrypto}} 스테이킹 이해하기",
-      "staking_description_first": "{{stakingCrypto}} 스테이킹은 {{rewardCrypto}} 채굴 플랜에 따라 {{rewardCrypto}} V2 기간동안 6차례로 나눠서 진행됩니다.",
+      "staking_description_first": "{{stakingCrypto}} 스테이킹은 {{rewardCrypto}} 채굴 플랜에 따라 {{rewardCrypto}} V2 기간동안 4차례로 나눠서 진행됩니다.",
       "staking_description_second": "{{stakingCrypto}} 토큰을 스테이킹하면 {{rewardCrypto}} 토큰을 리워드 받게됩니다.",
       "staking_description_third": "스테이킹한 토큰을 언제든지 언스테이킹이 가능합니다.",
       "staking_description_fourth": "종료된 회차에 스테이킹한 {{stakingCrypto}} 토큰과 보상으로 받은 {{rewardCrypto}} 토큰은 다음 회차의 스테이킹 풀에 자동으로 전송되거나 지갑으로 출금되지 않습니다.",

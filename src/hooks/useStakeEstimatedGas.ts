@@ -7,10 +7,10 @@ import useStakingPool from './useStakingPool';
 
 type info = {
   estimagedGasPrice: string;
-  setEstimateGas: (stakingType: StakingType, round?: number) => Promise<void>;
+  setEstimatedGas: (stakingType?: StakingType, round?: number) => Promise<void>;
 };
 
-const useEstimateGas = (
+const useStakeEstimatedGas = (
   crytoType: CryptoType,
   stakingType: StakingType,
   round?: number,
@@ -19,8 +19,10 @@ const useEstimateGas = (
   const { gasPrice } = useContext(PriceContext);
   const stakingPoolContract = useStakingPool(crytoType);
 
-  const setEstimateGas = async (stakingType: StakingType, round?: number) => {
-    setEstimatedGasPrice((await estimateGasByType(stakingType, round)) || '');
+  const setEstimatedGas = async (stakingType?: StakingType, round?: number) => {
+    setEstimatedGasPrice(
+      (await estimateGasByType(stakingType || '', round)) || '',
+    );
   };
 
   const estimateGasByType = async (stakingType: string, round?: number) => {
@@ -59,10 +61,10 @@ const useEstimateGas = (
   };
 
   useEffect(() => {
-    setEstimateGas(stakingType, round);
+    setEstimatedGas(stakingType, round);
   }, []);
 
-  return { estimagedGasPrice, setEstimateGas };
+  return { estimagedGasPrice, setEstimatedGas };
 };
 
-export default useEstimateGas;
+export default useStakeEstimatedGas;
