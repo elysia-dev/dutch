@@ -225,11 +225,26 @@ const TotalDashboard: React.FC = () => {
             disabled={userPrincipal === '-'}
             label={t('staking.unstake')}
             pressHandler={() => {
+              let screen;
+              if (cryptoType === CryptoType.EL) {
+                if (
+                  isCurrentRound &&
+                  ((currentRound === 2 && selectedRound === 1) ||
+                    (currentRound === 4 && selectedRound === 3))
+                ) {
+                  screen = StakingPage.UnstakeAndMigrate;
+                } else {
+                  screen = StakingPage.Unstake;
+                }
+              } else if (cryptoType === CryptoType.ELFI) {
+                if (selectedRound < currentRound && isCurrentRound) {
+                  screen = StakingPage.UnstakeAndMigrate;
+                } else {
+                  screen = StakingPage.Unstake;
+                }
+              }
               navigation.navigate(Page.Staking, {
-                screen:
-                  selectedRound < currentRound && isCurrentRound
-                    ? StakingPage.UnstakeAndMigrate
-                    : StakingPage.Unstake,
+                screen,
                 params: {
                   cryptoType,
                   selectedRound,
