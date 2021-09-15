@@ -35,7 +35,7 @@ const DotGraph: React.FC<{
               position: 'absolute',
               left: `${(100 - lineLength) / 2}%`,
               width: `${
-                currentRound === 1 ? 0 : (lineLength / 5) * (currentRound - 1)
+                currentRound === 1 ? 0 : (lineLength / 3) * (currentRound - 1)
               }%`,
               borderColor: AppColors.MAIN,
               borderWidth: 1,
@@ -58,7 +58,7 @@ const DotGraph: React.FC<{
               round={i}
               status={getRoundStatus(i)}
               selected={selectedRound === i ? true : false}
-              setSelectedRound={setSelectedRound} // 이거를 선택으로 해야 할 듯...?
+              setSelectedRound={setSelectedRound}
             />
           );
         })}
