@@ -46,7 +46,6 @@ const AssetGraph: React.FC<IAssetGraph> = ({
         <View
           style={{
             flex: 1,
-            // justifyContent: 'center',
             flexDirection: 'row',
             justifyContent: 'space-around',
             padding: 10,
