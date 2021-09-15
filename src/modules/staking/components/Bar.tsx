@@ -11,7 +11,7 @@ const Bar: React.FC<{ round: 1 | 2 | 3 | 4; percent: number }> = ({
   const { t } = useTranslation();
 
   return (
-    <View style={{ width: '25%' }}>
+    <View style={{ width: round < 3 ? '16.7%' : '33.3%' }}>
       <View
         style={{
           height: 8,
