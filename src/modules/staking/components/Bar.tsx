@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
 
-const Bar: React.FC<{ round: 1 | 2 | 3 | 4; percent: number }> = ({
+const Bar: React.FC<{ round: number; percent: number }> = ({
   round,
   percent,
 }) => {

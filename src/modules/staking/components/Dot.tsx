@@ -6,7 +6,7 @@ import AppFonts from '../../../enums/AppFonts';
 import RoundStatus from '../../../enums/RoundStatus';
 
 const Dot: React.FC<{
-  round: 1 | 2 | 3 | 4;
+  round: number;
   status: RoundStatus;
   selected: boolean;
   setSelectedRound?: Dispatch<SetStateAction<number>>;
