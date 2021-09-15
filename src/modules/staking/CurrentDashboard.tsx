@@ -21,9 +21,9 @@ import MiningPlan from './components/MiningPlan';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import {
-  ROUND_DURATION,
-  TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
-  TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
+  ROUND_DURATIONS,
+  ELFI_PER_DAY_ON_EL_STAKING_POOL,
+  DAI_PER_DAY_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
   NUMBER_OF_ROUNDS,
 } from '../../constants/staking';
@@ -52,10 +52,13 @@ const CurrentDashboard: React.FC = () => {
   const navigation = useNavigation();
   const [currentRound, setCurrentRound] = useState(1);
   const { isWalletUser, user } = useContext(UserContext);
-  const totalAmountOfReward =
-    cryptoType === CryptoType.EL
-      ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
-      : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
+  const totalAmountOfReward = ROUND_DURATIONS.reduce((res, cur) => {
+    const rewardPerDay =
+      cryptoType === CryptoType.EL
+        ? ELFI_PER_DAY_ON_EL_STAKING_POOL
+        : DAI_PER_DAY_ON_ELFI_STAKING_POOL;
+    return res + rewardPerDay * cur;
+  }, 0);
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -187,7 +190,7 @@ const CurrentDashboard: React.FC = () => {
                 <BoxWithDividerContent
                   label={t('staking.staking_days')}
                   value={t('staking.duration_day', {
-                    duration: ROUND_DURATION,
+                    duration: ROUND_DURATIONS[currentRound - 1],
                   })}
                 />
                 <BoxWithDividerContent
