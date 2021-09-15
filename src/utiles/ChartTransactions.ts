@@ -21,7 +21,7 @@ export namespace toAppColor {
 }
 
 function setPeriod(txsChartDate: CryptoTransaction[], date: string) {
-  const periodResentDate = moment(txsChartDate[0].createdAt).format(
+  const periodRecentDate = moment(txsChartDate[0].createdAt).format(
     'YYYY-MM-DD',
   );
   const periodLastDate = moment(
@@ -29,9 +29,9 @@ function setPeriod(txsChartDate: CryptoTransaction[], date: string) {
   ).format('YYYY-MM-DD');
   const subLastDay = moment(periodLastDate).diff(date, 'days');
   const subRecentDay = Math.abs(
-    moment(new Date()).diff(periodResentDate, 'days'),
+    moment(new Date()).diff(periodRecentDate, 'days'),
   );
-  return { periodResentDate, periodLastDate, subLastDay, subRecentDay };
+  return { periodRecentDate, periodLastDate, subLastDay, subRecentDay };
 }
 
 function setChartValue(
@@ -90,7 +90,7 @@ function addAfterDate(
   txsChartDate: CryptoTransaction[],
   date: string,
 ) {
-  const { subRecentDay, periodResentDate } = setPeriod(txsChartDate, date);
+  const { subRecentDay, periodRecentDate } = setPeriod(txsChartDate, date);
   let xyValue = xyDayValue;
   for (let i = 1; i <= subRecentDay; i++) {
     xyValue = [
@@ -98,7 +98,7 @@ function addAfterDate(
       {
         x: xyValue[xyValue.length - 1].x + 1,
         y: xyValue[xyValue.length - 1].y,
-        dateTime: moment(periodResentDate).add(i, 'days').unix(),
+        dateTime: moment(periodRecentDate).add(i, 'days').unix(),
       },
     ];
   }
