@@ -7,8 +7,6 @@ import {
 } from '../constants/staking';
 import PriceContext from '../contexts/PriceContext';
 import decimalFormatter from './decimalFormatter';
-import commaFormatter from './commaFormatter';
-import useStakingPool from '../hooks/useStakingPool';
 
 const calculateAPR = (
   cryptoType: CryptoType,
