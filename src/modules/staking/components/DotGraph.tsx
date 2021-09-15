@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
 import Dot from './Dot';
 import getRoundStatus from '../../../utiles/geRoundStatus';
+import range from '../../../utiles/range';
+import { NUMBER_OF_ROUNDS } from '../../../constants/staking';
 
 const DotGraph: React.FC<{
   selectedRound: number;
@@ -12,6 +14,7 @@ const DotGraph: React.FC<{
 }> = ({ selectedRound, setSelectedRound, currentRound }) => {
   const { i18n } = useTranslation();
   const lineLength = i18n.language === 'zhHans' ? 93 : 97;
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
 
   return (
     <View>
@@ -51,7 +54,7 @@ const DotGraph: React.FC<{
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        {[1, 2, 3, 4].map((i) => {
+        {stakingRounds.map((i) => {
           return (
             <Dot
               key={i}

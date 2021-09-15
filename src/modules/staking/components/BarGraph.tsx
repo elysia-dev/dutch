@@ -5,14 +5,17 @@ import {
   ROUND_DURATIONS,
   ELFI_PER_DAY_ON_EL_STAKING_POOL,
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
+  NUMBER_OF_ROUNDS,
 } from '../../../constants/staking';
 import CryptoType from '../../../enums/CryptoType';
 import calculateMined from '../../../utiles/calculateMined';
+import range from '../../../utiles/range';
 
 const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
   currentRound,
   cryptoType,
 }) => {
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
   const minedPerDay =
     cryptoType === CryptoType.EL
       ? ELFI_PER_DAY_ON_EL_STAKING_POOL
@@ -27,7 +30,7 @@ const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
         alignItems: 'center',
         marginBottom: 30,
       }}>
-      {[1, 2, 3, 4].map((i) => {
+      {stakingRounds.map((i) => {
         return (
           <Bar
             key={i}

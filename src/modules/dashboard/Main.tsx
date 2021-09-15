@@ -48,6 +48,8 @@ import StakingInfoBox from './components/StakingInfoBox';
 import useStakingPool from '../../hooks/useStakingPool';
 import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
+import range from '../../utiles/range';
+import { NUMBER_OF_ROUNDS } from '../../constants/staking';
 
 type ParamList = {
   Main: {
@@ -94,7 +96,8 @@ export const Main: React.FC = () => {
     EL: false,
     ELFI: false,
   });
-  const [stakingLoaded, setStakingLoaded] = useState(false); // 이것도 컨텍스트로 빼야 하나...?
+  const [stakingLoaded, setStakingLoaded] = useState(false);
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
@@ -110,7 +113,7 @@ export const Main: React.FC = () => {
       setInfoBoxes = setElfiStakingInfoBoxes;
     }
 
-    const tempBoxes = [1, 2, 3, 4].map(async (round) => {
+    const tempBoxes = stakingRounds.map(async (round) => {
       if (!userAddress) return;
 
       const userData = await contract.getUserData(round, userAddress);

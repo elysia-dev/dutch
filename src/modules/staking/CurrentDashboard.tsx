@@ -38,6 +38,7 @@ import StakingStatus from '../../enums/StakingStatus';
 import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
 import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import range from '../../utiles/range';
 
 type ParamList = {
   CurrentDashboard: {
@@ -68,6 +69,7 @@ const CurrentDashboard: React.FC = () => {
   const stakingStatus = getStakingStatus(currentRound);
   const appState = useAppState();
   const hasWallet = isWalletUser || user.ethAddresses[0];
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
 
   let nextButtonTitle = '';
   if (!hasWallet) {
@@ -216,7 +218,7 @@ const CurrentDashboard: React.FC = () => {
                   label={t('staking.current_mined')}
                   value={`${commaFormatter(
                     decimalFormatter(
-                      [1, 2, 3, 4].reduce(
+                      stakingRounds.reduce(
                         (totalMined, round) =>
                           totalMined +
                           calculateMined(cryptoType, round, currentRound),
@@ -241,7 +243,7 @@ const CurrentDashboard: React.FC = () => {
                 }}
                 horizontal={true}
                 style={{ marginBottom: 100 }}>
-                {[1, 2, 3, 4].map((i) => {
+                {stakingRounds.map((i) => {
                   return (
                     <MiningPlan
                       key={i}
