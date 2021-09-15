@@ -37,6 +37,7 @@ import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   CurrentDashboard: {
@@ -50,7 +51,7 @@ const CurrentDashboard: React.FC = () => {
   const { cryptoType, rewardCryptoType } = route.params;
   const miningPlanRef = useRef<ScrollView | null>();
   const navigation = useNavigation();
-  const [currentRound, setCurrentRound] = useState(1);
+  const [currentRound, setCurrentRound] = useState(getCurrentStakingRound());
   const { isWalletUser, user } = useContext(UserContext);
   const totalAmountOfReward = ROUND_DURATIONS.reduce((res, cur) => {
     const rewardPerDay =
@@ -94,9 +95,7 @@ const CurrentDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    stakingPoolContract?.currentRound().then((res: any) => {
-      setCurrentRound(res);
-    });
+    setCurrentRound(getCurrentStakingRound());
     let isBetween = false;
     if (currentRound < NUMBER_OF_ROUNDS && currentRound > 0) {
       isBetween = moment().isBetween(
