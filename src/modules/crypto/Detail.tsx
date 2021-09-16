@@ -123,15 +123,17 @@ const Detail: React.FC = () => {
         alert(t('dashboard.last_transaction'));
         return;
       }
+      newTxs = res.data.result.map((tx: Transaction) =>
+        txResponseToTx(tx, address),
+      );
       if (rewardTx) {
         newRewardTx = rewardTx.data.result.map((tx: Transaction) =>
           txResponseToTx(tx, address),
         );
+        newTxs = [...newTxs, ...newRewardTx].sort(
+          (tx, nTx) => (nTx.blockNumber || 0) - (tx.blockNumber || 0),
+        );
       }
-      newTxs = res.data.result.map((tx: Transaction) =>
-        txResponseToTx(tx, address),
-      );
-      newTxs = [...newTxs, ...newRewardTx];
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'));
@@ -151,9 +153,7 @@ const Detail: React.FC = () => {
             page: 2,
             lastPage: false,
             transactions: isCurrentPendingTx
-              ? newTxs.sort(
-                  (tx, nTx) => (nTx.blockNumber || 0) - (tx.blockNumber || 0),
-                )
+              ? newTxs
               : pendingTxs.concat(newTxs),
             loading: false,
           });
