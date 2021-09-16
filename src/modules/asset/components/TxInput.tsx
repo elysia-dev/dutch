@@ -1,4 +1,3 @@
-
 import React, {
   Dispatch,
   SetStateAction,
@@ -131,6 +130,7 @@ const TxInput: React.FC<ITxInput> = ({
       getCryptoPrice(assetInCrypto.type)
     : balanceInCrypto * getCryptoPrice(assetInCrypto.type);
 
+  const [estimateGas, setEstimateGas] = useState('');
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
@@ -139,7 +139,6 @@ const TxInput: React.FC<ITxInput> = ({
     ? false
     : valueInCrypto > maxValueInCrypto;
   const [isVisible, setIsVisible] = useState(false);
-  const [estimateGas, setEstimateGas] = useState('');
 
   useEffect(() => {
     if (estimateGas) return;
@@ -349,7 +348,9 @@ const TxInput: React.FC<ITxInput> = ({
           {
             label: t('assets.gas_price'),
             value: estimateGas
-              ? `${commaFormatter(estimateGas)} ${gasCrypto}`
+              ? `${commaFormatter(
+                  decimalFormatter(parseFloat(estimateGas), 6),
+                )} ${gasCrypto}`
               : t('assets.cannot_estimate_gas'),
           },
         ]}
