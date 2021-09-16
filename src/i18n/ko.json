@@ -407,13 +407,21 @@
       "check_allowance_guide": "해당 컨트랙트에게 사용자의 자산 활용 권한을 허용해야 합니다.",
       "check_allowance": "허용합니다",
       "transaction_delay_guide": "* 현재 설정하신 가스 가격이 낮아 요청하신 거래가 지연되고 있습니다.\n   거래를 빠르게 진행하기 위해 가스 가격을 조정해주세요.",
-      "transaction_first_time _purchase": "거래 대기중",
+      "transaction_first_time_purchase": "거래 대기중",
       "accelerate": "가속화",
       "accelerate_gas_price": "GAS 가격 (Gwei)",
       "accelerate_gas_fee": "가속화 수수료",
       "accelerate_gas_fee_guide": "Gwei이상을 입력해주세요.",
       "accelerate_insufficient": "자금이 부족합니다.",
-      "accelerate_send": "저장"
+      "accelerate_send": "저장",
+      "approve_step": "{{step}}단계",
+      "approve_step_authorization": "권한승인",
+      "approve_step_confirm": "최종확인",
+      "approve_guide": "접근 권한을 승인해주세요!",
+      "approve_guide_first": "부동산 토큰을 구매하기 위해서는 연결된 지갑에\n해당 앱이 접근 할 수 있도록 권한을 승인해야 합니다.",
+      "approve_guide_second": "최초 구매 시에만 승인이 필요하며, 승인이 성공적으로\n완료될 경우, 이후의 거래에는 권한 승인이 없이 부동산\n토큰을 구매하실 수 있습니다.",
+      "approve_guide_gasprice": "접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 {{gasPrice}} ETH 입니다.",
+      "approve_pending_transaction": "트랜잭션 처리중"
     },
     "staking": {
       "staking": "스테이킹",

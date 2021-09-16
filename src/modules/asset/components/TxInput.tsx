@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import {
   Text,
   View,
@@ -11,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import NumberPad from '../../../shared/components/NumberPad';
 import NextButton from '../../../shared/components/NextButton';
 import TxStep from '../../../enums/TxStep';
-import OverlayLoading from '../../../shared/components/OverlayLoading';
 import Asset from '../../../types/Asset';
 import CryptoType from '../../../enums/CryptoType';
 import SheetHeader from '../../../shared/components/SheetHeader';
@@ -46,12 +51,16 @@ interface ITxInput {
   setIsMax: Dispatch<SetStateAction<boolean>>;
   current: string;
   step: TxStep;
-  estimateGas?: string;
+  estimatedGas: string;
   disabled: boolean;
   isApproved: boolean;
   setCurrent: Dispatch<SetStateAction<'token' | 'fiat'>>;
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
+  approve: () => void;
+  isLoading: boolean;
+  approvalGasPrice?: string;
   createTx: () => void;
+  isRefund?: PurposeType;
 }
 
 // * Info
@@ -81,12 +90,16 @@ const TxInput: React.FC<ITxInput> = ({
   setIsMax,
   current,
   step,
-  estimateGas = '0',
+  estimatedGas = '0',
   disabled,
   isApproved,
   setCurrent,
   setValues,
+  approve,
+  isLoading,
+  approvalGasPrice,
   createTx,
+  isRefund,
 }) => {
   const { isWalletUser } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
@@ -103,8 +116,8 @@ const TxInput: React.FC<ITxInput> = ({
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
-    ? balanceInCrypto < parseFloat(estimateGas) + valueInCrypto
-    : balanceInCrypto < parseFloat(estimateGas);
+    ? balanceInCrypto < parseFloat(estimatedGas) + valueInCrypto
+    : balanceInCrypto < parseFloat(estimatedGas);
 
   const maxValueInToken = remainingSupplyInToken
     ? Math.min(remainingSupplyInToken, balanceInToken)
@@ -117,6 +130,7 @@ const TxInput: React.FC<ITxInput> = ({
       getCryptoPrice(assetInCrypto.type)
     : balanceInCrypto * getCryptoPrice(assetInCrypto.type);
 
+  const [estimateGas, setEstimateGas] = useState('');
   const isOverMax = [CryptoType.BNB, CryptoType.ETH].includes(
     assetInCrypto.type,
   )
@@ -125,6 +139,11 @@ const TxInput: React.FC<ITxInput> = ({
     ? false
     : valueInCrypto > maxValueInCrypto;
   const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (estimateGas) return;
+    setEstimateGas(estimatedGas);
+  }, [estimatedGas]);
 
   const isEthOrBnb = [CryptoType.ETH, CryptoType.BNB].includes(
     assetInCrypto.type,
@@ -328,19 +347,19 @@ const TxInput: React.FC<ITxInput> = ({
           },
           {
             label: t('assets.gas_price'),
-            value: `${commaFormatter(estimateGas)} ${gasCrypto}`,
+            value: estimateGas
+              ? `${commaFormatter(
+                  decimalFormatter(parseFloat(estimateGas), 6),
+                )} ${gasCrypto}`
+              : t('assets.cannot_estimate_gas'),
           },
         ]}
         isApproved={isApproved}
+        isLoading={isLoading}
+        approvalGasPrice={approvalGasPrice || ''}
+        assetTypeOrRefund={isRefund || assetInCrypto.type}
         submitButtonText={t(`assets.${purpose}`)}
-        handler={createTx}
-      />
-      <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
+        handler={isApproved ? createTx : approve}
       />
     </View>
   );

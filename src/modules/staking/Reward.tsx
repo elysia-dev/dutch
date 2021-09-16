@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -21,10 +21,9 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import AssetContext from '../../contexts/AssetContext';
 import useTxHandler from '../../hooks/useTxHandler';
 import useStakingInfo from '../../hooks/useStakingInfo';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
-import { useEffect } from 'react';
 
 type ParamList = {
   Reward: {
@@ -44,14 +43,15 @@ const Reward: React.FC = () => {
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { getBalance } = useContext(AssetContext);
-  const { estimagedGasPrice } = useEstimateGas(
+  const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
     selectedRound,
   );
-  const { isLoading, stakeByType } = useStakingByType(cryptoType);
-  const [userReward, setUserReward] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const { reward } = useStakingInfo(cryptoType, selectedRound);
+  const [userReward, setUserReward] = useState(0);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
@@ -59,14 +59,15 @@ const Reward: React.FC = () => {
 
   const onPressClaim = async () => {
     try {
-      stakeByType('', selectedRound, StakingType.Reward);
+      await stakeByType('', selectedRound, StakingType.Reward);
     } catch (error) {
-      afterTxFailed('Transaction failed');
       console.log(error);
+      afterTxFailed('Transaction failed');
     }
   };
+
   useEffect(() => {
-    if (reward === 0) return;
+    if (!reward) return;
     setUserReward(reward);
   }, [reward]);
 
@@ -97,7 +98,9 @@ const Reward: React.FC = () => {
           />
           <View style={{ height: 10 }} />
           <GasPrice
-            estimatedGas={estimagedGasPrice}
+            estimatedGas={commaFormatter(
+              decimalFormatter(parseFloat(estimagedGasPrice), 6),
+            )}
             gasCrypto={CryptoType.ETH}
             insufficientGas={
               getBalance(CryptoType.ETH) < parseFloat(estimagedGasPrice)

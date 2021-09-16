@@ -41,7 +41,7 @@ const NextButton: FunctionComponent<INextButton> = ({
         height: 50,
       }}>
       {isLoading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size="small" color={AppColors.GREY2} />
       ) : (
         <Text
           style={{

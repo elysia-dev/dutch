@@ -24,7 +24,7 @@ import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
 import useStakingInfo from '../../hooks/useStakingInfo';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
@@ -47,14 +47,15 @@ const Unstake: React.FC = () => {
   const { getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
   const [selectionVisible, setSelectionVisible] = useState(false);
-  const { estimagedGasPrice } = useEstimateGas(
+  const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
     selectedRound,
   );
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, selectedRound);
-  const { isLoading, stakeByType } = useStakingByType(cryptoType);
+  const [isLoading, setIsLoading] = useState(false);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
@@ -80,7 +81,9 @@ const Unstake: React.FC = () => {
     {
       label: t('staking.gas_price'),
       value: estimagedGasPrice
-        ? `${estimagedGasPrice} ETH`
+        ? `${commaFormatter(
+            decimalFormatter(parseFloat(estimagedGasPrice), 6),
+          )} ETH`
         : t('staking.cannot_estimate_gas'),
     },
   ];
@@ -127,7 +130,9 @@ const Unstake: React.FC = () => {
                 decimalFormatter(principal, 6),
               )} ${cryptoType}`,
               estimagedGasPrice
-                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                ? `${t('staking.estimated_gas')}: ${commaFormatter(
+                    decimalFormatter(parseFloat(estimagedGasPrice), 6),
+                  )} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
             isInvalid={!isMax && parseFloat(value) > principal}

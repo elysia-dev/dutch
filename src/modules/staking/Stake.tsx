@@ -28,13 +28,14 @@ import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
 import WalletContext from '../../contexts/WalletContext';
 import useTxHandler from '../../hooks/useTxHandler';
-import useEstimateGas from '../../hooks/useEstimateGas';
+import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
+import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 
 type ParamList = {
   Stake: {
@@ -49,6 +50,7 @@ const Stake: React.FC = () => {
   const [value, setValue] = useState('');
   const [isMax, setIsMax] = useState(false); // 보여주는건반올림이더라도 최대인지아닌지표시
   const { isWalletUser, user } = useContext(UserContext);
+  const { gasPrice } = useContext(PriceContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
@@ -57,7 +59,7 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
-  const { estimagedGasPrice, setEstimateGas } = useEstimateGas(
+  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Stake,
   );
@@ -65,14 +67,15 @@ const Stake: React.FC = () => {
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
-  const [estimateGasCount, setEstimateGasCount] = useState(0);
-  const [isApprove, setIsApprove] = useState(true);
+  const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
-  const { isLoading, stakeByType, setIsLoading } = useStakingByType(cryptoType);
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
+    useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -84,6 +87,28 @@ const Stake: React.FC = () => {
   const getPoolData = async () => {
     const poolData = await stakingPoolContract.getPoolData(selectedRound);
     setTotalPrincipal(poolData[4]);
+  };
+
+  const getApproveGasPrice = async () => {
+    try {
+      if (!isAllowanceForApprove()) {
+        const approveEstimateGas =
+          cryptoType === CryptoType.EL
+            ? await elContract.estimateGas.approve(
+                stakingPoolAddress,
+                constants.MaxUint256,
+              )
+            : await elfiContract.estimateGas.approve(
+                stakingPoolAddress,
+                constants.MaxUint256,
+              );
+        setApprovalGasPrice(
+          utils.formatEther(approveEstimateGas.mul(gasPrice)),
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const setAllowance = async () => {
@@ -98,7 +123,6 @@ const Stake: React.FC = () => {
               wallet?.getFirstNode()?.address || '',
               ELFI_STAKING_POOL_ADDRESS,
             );
-      console.log(utils.formatEther(allowance));
       setAllowanceInfo({
         ...allowanceInfo,
         value: utils.formatEther(allowance),
@@ -117,9 +141,9 @@ const Stake: React.FC = () => {
   const setApprove = async () => {
     try {
       await approve();
-      await setEstimateGas(StakingType.Stake);
+      await setEstimatedGas(StakingType.Stake);
     } catch (error) {
-      setEstimateGasCount((prev) => prev + 1);
+      addCount();
       console.log(error);
     }
   };
@@ -129,13 +153,13 @@ const Stake: React.FC = () => {
       cryptoType === CryptoType.EL
         ? await elContract.approve(
             EL_STAKING_POOL_ADDRESS,
-            '1' + '0'.repeat(30),
+            constants.MaxUint256,
           )
         : await elfiContract.approve(
             ELFI_STAKING_POOL_ADDRESS,
-            '1' + '0'.repeat(30),
+            constants.MaxUint256,
           );
-      setAllowanceInfo({ value: utils.formatEther('1' + '0'.repeat(30)) });
+      setAllowanceInfo({ value: utils.formatEther(constants.MaxUint256) });
     } catch (error) {
       console.log(error);
     }
@@ -143,7 +167,7 @@ const Stake: React.FC = () => {
 
   const onPressStaking = async () => {
     try {
-      if (!isApprove) {
+      if (!isApproved) {
         setIsLoading(true);
         setApprove();
         return;
@@ -165,24 +189,6 @@ const Stake: React.FC = () => {
       getPoolData();
     }
   }, []);
-
-  useEffect(() => {
-    if (estimateGasCount === 0 || estimateGasCount >= 4) return;
-    setTimeout(async () => {
-      try {
-        await setEstimateGas(StakingType.Stake);
-        setIsApprove(true);
-        setIsLoading(false);
-      } catch (error) {
-        setEstimateGasCount((prev) => prev + 1);
-      } finally {
-        if (estimateGasCount === 3) {
-          setIsApprove(true);
-          setIsLoading(false);
-        }
-      }
-    }, 2000);
-  }, [estimateGasCount]);
 
   if (!selectionVisible) {
     return (
@@ -243,7 +249,9 @@ const Stake: React.FC = () => {
                 decimalFormatter(getBalance(cryptoType), 6),
               )} ${cryptoType}`,
               estimagedGasPrice
-                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                ? `${t('staking.estimated_gas')}: ${commaFormatter(
+                    decimalFormatter(parseFloat(estimagedGasPrice), 6),
+                  )} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
             isInvalid={!isMax && parseFloat(value) > getBalance(cryptoType)}
@@ -285,7 +293,8 @@ const Stake: React.FC = () => {
             }
             handler={() => {
               if (isWalletUser) {
-                setIsApprove(isAllowanceForApprove);
+                getApproveGasPrice();
+                setIsApproved(isAllowanceForApprove());
                 setModalVisible(true);
               } else {
                 setSelectionVisible(true);
@@ -318,22 +327,19 @@ const Stake: React.FC = () => {
             {
               label: t('staking.gas_price'),
               value: estimagedGasPrice
-                ? `${estimagedGasPrice} ETH`
+                ? `${commaFormatter(
+                    decimalFormatter(parseFloat(estimagedGasPrice), 6),
+                  )} ETH`
                 : t('staking.cannot_estimate_gas'),
             },
           ]}
-          isApproved={isApprove}
+          isApproved={isApproved}
           submitButtonText={t('staking.nth_staking', { round: selectedRound })}
           handler={() => onPressStaking()}
           isLoading={isLoading}
+          stakingType={StakingType.Stake}
+          approvalGasPrice={approvalGasPrice}
         />
-        {/* <OverlayLoading
-        visible={[
-          TxStep.Approving,
-          Platform.OS === 'android' && TxStep.CheckAllowance,
-          TxStep.Creating,
-        ].includes(step)}
-      /> */}
       </View>
     );
   }

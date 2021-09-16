@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 import { ChartDataPoint } from 'react-native-responsive-linechart';
 import { View, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { DAI_ADDRESS, ELFI_ADDRESS, EL_ADDRESS } from 'react-native-dotenv';
 import Asset, { defaultAsset } from '../../types/Asset';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetItem from '../dashboard/components/AssetItem';
@@ -28,9 +28,12 @@ import AssetContext from '../../contexts/AssetContext';
 import { Transaction } from '../../types/CryptoTxsResponse';
 import EthersacnClient from '../../api/EtherscanClient';
 import AssetGraph from './components/AssetGraph';
-import { ChartTransactions, toAppColor } from '../../utiles/ChartTransactions';
+import {
+  getTransactionChart,
+  toAppColor,
+} from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
-import { getPendingTx } from '../../utiles/pendingTransaction';
+import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -73,7 +76,6 @@ const Detail: React.FC = () => {
     ? wallet?.getFirstNode()?.address || ''
     : user.ethAddresses[0];
 
-  const chartTransactions = new ChartTransactions(prevAssetValue);
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
@@ -183,11 +185,9 @@ const Detail: React.FC = () => {
     if (address) {
       setGraphData([]);
       setIsChartLine(false);
-      if (state.transactions.length && state.page >= 2) {
+      if (!state.loading) {
         setChartLoading(true);
         getChart();
-      } else if (state.loading === false) {
-        setChartLoading(false);
       }
     } else {
       setChartLoading(false);
@@ -203,10 +203,7 @@ const Detail: React.FC = () => {
   const getChart = async () => {
     try {
       setGraphData(
-        await chartTransactions.getTransactionChart(
-          filterDay,
-          state.transactions,
-        ),
+        getTransactionChart(prevAssetValue, filterDay, state.transactions),
       );
       setChartLoading(false);
     } catch (error) {

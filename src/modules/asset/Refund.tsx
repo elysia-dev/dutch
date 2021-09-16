@@ -21,6 +21,7 @@ import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
+import useErcContract from '../../hooks/useErcContract';
 
 type ParamList = {
   Refund: {
@@ -62,7 +63,7 @@ const Refund: FunctionComponent = () => {
     state.txHash,
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
-
+  const [isLoading, setIsLoading] = useState(false);
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
   const tokenPrice = getCryptoPrice(CryptoType.ELA);
   const balanceInToken = assetInToken.value;
@@ -109,7 +110,7 @@ const Refund: FunctionComponent = () => {
 
   const createTx = async () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
-
+    setIsLoading(true);
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
         utils.parseEther(isMax ? balanceInToken.toFixed(18) : values.inToken),
@@ -132,6 +133,7 @@ const Refund: FunctionComponent = () => {
       afterTxFailed(e);
       navigation.goBack();
     } finally {
+      setIsLoading(false);
       if (assetInCrypto.type !== CryptoType.BNB && txRes) {
         afterTxHashCreated(
           wallet?.getFirstAddress() || '',
@@ -200,8 +202,11 @@ const Refund: FunctionComponent = () => {
         disabled={!isMax && parseInt(values.inToken || '0', 10) < 0.01}
         setCurrent={setCurrent}
         setValues={setValues}
-        estimateGas={state.estimateGas}
+        estimatedGas={state.estimateGas}
         isApproved={true}
+        isLoading={isLoading}
+        isRefund={PurposeType.Refund}
+        approve={() => ''}
         createTx={() => {
           if (isWalletUser) {
             setState({ ...state, step: TxStep.Creating });

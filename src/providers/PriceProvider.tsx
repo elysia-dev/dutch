@@ -22,15 +22,26 @@ const PriceProvider: React.FC = (props) => {
 
     try {
       const priceRes = await CoingeckoClient.getElAndEthPrice();
-      const elfiPriceRes = await UniswapClient.getELFIPRice();
+
+      const poolData = await UniswapClient.getPoolData();
+      const nonZeroData = poolData.data.data.pool.token0.tokenDayData.filter(
+        (item) => parseFloat(item.priceUSD),
+      );
 
       priceData = {
         ethPrice: priceRes.data.ethereum.usd,
         elPrice: priceRes.data.elysia.usd,
         bnbPrice: priceRes.data.binancecoin.usd,
-        elfiPrice: parseFloat(
-          elfiPriceRes.data.data.token.tokenDayData[0].priceUSD,
-        ),
+        elfiPrice:
+          parseFloat(
+            poolData.data.data.pool.token0.tokenDayData[
+              poolData.data.data.pool.token0.tokenDayData.length - 1
+            ]?.priceUSD,
+          ) ||
+          nonZeroData.reduce(
+            (sum, item) => sum + parseFloat(item.priceUSD),
+            0,
+          ) / nonZeroData.length,
         daiPrice: priceRes.data.dai.usd,
         gasPrice: (await provider.getGasPrice()).toString(),
         bscGasPrice: (await bscProvider.getGasPrice()).toString(),

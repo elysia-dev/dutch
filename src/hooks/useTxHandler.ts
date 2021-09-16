@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import EspressoV2 from '../api/EspressoV2';
 import NetworkType from '../enums/NetworkType';
@@ -24,6 +24,9 @@ const useTxHandler = (): TxHandlers => {
 
   const afterTxCreated = (txHash: string) => {
     showMessage({
+      style: {
+        paddingTop: Platform.OS === 'android' ? 20 : 0,
+      },
       message: t('transaction.created'),
       description: txHash,
       type: 'info',
@@ -49,6 +52,9 @@ const useTxHandler = (): TxHandlers => {
     ).then((res) => alert(JSON.stringify(res)));
 
     showMessage({
+      style: {
+        paddingTop: Platform.OS === 'android' ? 20 : 0,
+      },
       message: t('transaction.pending'),
       description: txHash,
       type: 'info',
@@ -61,6 +67,9 @@ const useTxHandler = (): TxHandlers => {
 
   const afterTxFailed = (description?: string) => {
     showMessage({
+      style: {
+        paddingTop: Platform.OS === 'android' ? 20 : 0,
+      },
       message: t('transaction.fail'),
       description,
       type: 'danger',

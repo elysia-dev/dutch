@@ -8,6 +8,7 @@ import GuideTextInvalid from '../../../shared/components/GuideTextInvalid';
 import LargeTextInput from './LargeTextInput';
 import AppColors from '../../../enums/AppColors';
 import PurposeType from '../../../enums/PurposeType';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 interface Props {
   purpose: PurposeType;
@@ -108,7 +109,7 @@ const TxInputViewer: React.FC<Props> = ({
         ) : estimatedGas ? (
           <GuideText
             text={`${t('assets.gas_price')}: ${commaFormatter(
-              estimatedGas,
+              decimalFormatter(parseFloat(estimatedGas), 6),
             )} ${gasCrypto}`}
             style={{ marginTop: 6 }}
           />

@@ -112,7 +112,8 @@ export default function createTransferTx(
       //   valueFrom: isTransferTypePurchase ? valuesFrom : '',
       // });
     } catch (e) {
-      notifyFail();
+      throw Error;
+      // notifyFail();
     }
   };
 
@@ -121,6 +122,7 @@ export default function createTransferTx(
       await resTx?.wait();
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
+      throw Error;
       notifyFail();
     }
   };
