@@ -133,4 +133,22 @@ export default class EthersacnClient {
       `${ETHERSCAN_API_URL}?module=account&action=tokentx&contractaddress=${tokenAddress}&address=${address}&page=${page}&offset=10&sort=desc&apikey=${ETHERSCAN_API}`,
     );
   };
+
+  static getInternalBnbTx = async (
+    address: string,
+    page: number,
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
+    return axios.get(
+      `${BSCSCAN_API_URL}?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${BSCSCAN_API}`,
+    );
+  };
+
+  static getInternalEthTx = async (
+    address: string,
+    page: number,
+  ): Promise<AxiosResponse<CryptoTxsResultResponse>> => {
+    return axios.get(
+      `${ETHERSCAN_API_URL}?module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&page=${page}&offset=1000&sort=desc&apikey=${ETHERSCAN_API}`,
+    );
+  };
 }

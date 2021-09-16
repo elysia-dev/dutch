@@ -33,7 +33,7 @@ import {
   toAppColor,
 } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
-import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
+import { getPendingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -78,19 +78,24 @@ const Detail: React.FC = () => {
 
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
+    let newRewardTx: CryptoTransaction[] = [];
     let res;
-    let test;
+    let rewardTx;
     try {
-      test = await EthersacnClient.getInternalBnbTx(address, state.page);
-      // test.data.result
-      console.log(test.data.result);
-
       switch (asset.type) {
         case CryptoType.ETH:
           res = await EthersacnClient.getEthTransaction(address, state.page);
+          rewardTx = await EthersacnClient.getInternalEthTx(
+            address,
+            state.page,
+          );
           break;
         case CryptoType.BNB:
           res = await EthersacnClient.getBnbTransaction(address, state.page);
+          rewardTx = await EthersacnClient.getInternalBnbTx(
+            address,
+            state.page,
+          );
           break;
         case CryptoType.ELFI:
           res = await EthersacnClient.getErc20Transaction(
@@ -114,14 +119,19 @@ const Detail: React.FC = () => {
           );
           break;
       }
-
       if (res.data.result.length === 0 && state.page >= 2) {
         alert(t('dashboard.last_transaction'));
         return;
       }
+      if (rewardTx) {
+        newRewardTx = rewardTx.data.result.map((tx: Transaction) =>
+          txResponseToTx(tx, address),
+        );
+      }
       newTxs = res.data.result.map((tx: Transaction) =>
         txResponseToTx(tx, address),
       );
+      newTxs = [...newTxs, ...newRewardTx];
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'));
@@ -141,7 +151,9 @@ const Detail: React.FC = () => {
             page: 2,
             lastPage: false,
             transactions: isCurrentPendingTx
-              ? newTxs
+              ? newTxs.sort(
+                  (tx, nTx) => (nTx.blockNumber || 0) - (tx.blockNumber || 0),
+                )
               : pendingTxs.concat(newTxs),
             loading: false,
           });
