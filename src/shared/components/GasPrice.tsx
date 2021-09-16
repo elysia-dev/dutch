@@ -23,11 +23,15 @@ const GasPrice: React.FC<{
   return (
     <>
       <P3Text
-        label={`${t(
-          'assets.transaction_fee',
-        )}: ${estimatedGas} ${gasCrypto} (${currencyFormatter(
-          parseFloat(estimatedGas) * getCryptoPrice(gasCrypto),
-        )})`}
+        label={
+          estimatedGas !== 'NaN'
+            ? `${t(
+                'assets.transaction_fee',
+              )}: ${estimatedGas} ${gasCrypto} (${currencyFormatter(
+                parseFloat(estimatedGas) * getCryptoPrice(gasCrypto),
+              )})`
+            : t('staking.cannot_estimate_gas')
+        }
         style={{ textAlign: 'center', marginBottom: insufficientGas ? 5 : 10 }}
       />
       <View>
