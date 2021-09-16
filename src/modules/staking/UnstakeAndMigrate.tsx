@@ -132,7 +132,9 @@ const UnstakeAndMigrate: React.FC = () => {
       {
         label: t('staking.gas_price'),
         value: estimagedGasPrice
-          ? `${estimagedGasPrice} ETH`
+          ? `${commaFormatter(
+              decimalFormatter(parseFloat(estimagedGasPrice), 6),
+            )} ETH`
           : t('staking.cannot_estimate_gas'),
       },
     ]);

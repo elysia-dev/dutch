@@ -205,7 +205,7 @@ const Refund: FunctionComponent = () => {
         estimatedGas={state.estimateGas}
         isApproved={true}
         isLoading={isLoading}
-        productRefund={PurposeType.Refund}
+        isRefund={PurposeType.Refund}
         approve={() => ''}
         createTx={() => {
           if (isWalletUser) {

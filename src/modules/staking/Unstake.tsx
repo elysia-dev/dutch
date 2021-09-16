@@ -81,7 +81,9 @@ const Unstake: React.FC = () => {
     {
       label: t('staking.gas_price'),
       value: estimagedGasPrice
-        ? `${estimagedGasPrice} ETH`
+        ? `${commaFormatter(
+            decimalFormatter(parseFloat(estimagedGasPrice), 6),
+          )} ETH`
         : t('staking.cannot_estimate_gas'),
     },
   ];
@@ -128,7 +130,9 @@ const Unstake: React.FC = () => {
                 decimalFormatter(principal, 6),
               )} ${cryptoType}`,
               estimagedGasPrice
-                ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
+                ? `${t('staking.estimated_gas')}: ${commaFormatter(
+                    decimalFormatter(parseFloat(estimagedGasPrice), 6),
+                  )} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
             isInvalid={!isMax && parseFloat(value) > principal}

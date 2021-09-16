@@ -164,9 +164,11 @@ const Purchase: FunctionComponent = () => {
       case TxStep.CheckAllowance:
         if ([CryptoType.ETH, CryptoType.BNB].includes(assetInCrypto.type)) {
           setState({ ...state, step: TxStep.None });
+          setIsApproved(true);
           return;
         } else if (!isWalletUser) {
           setState({ ...state, step: TxStep.None });
+          setIsApproved(true);
           return;
         }
 
