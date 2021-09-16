@@ -90,7 +90,7 @@ const MiningPlan: React.FC<{
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label={t('staking.cumulative mining supply')}
+          label={t('staking.cumulative_mining_supply')}
           value={`${commaFormatter(
             decimalFormatter(cumulativeMined, 5),
           )} ${rewardCryptoType}`}
@@ -102,7 +102,7 @@ const MiningPlan: React.FC<{
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label={t('staking.remaining mining supply')}
+          label={t('staking.remaining_mining_supply')}
           value={`${commaFormatter(
             decimalFormatter(rewardPerRound - cumulativeMined, 5),
           )} ${rewardCryptoType}`}
