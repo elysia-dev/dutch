@@ -17,10 +17,7 @@ const useCountingEstimatedGas = (
   };
 
   useEffect(() => {
-    if (count === 0 || count >= 4) {
-      count >= 4 && approveTxSucOrTimeOut();
-      return;
-    }
+    if (count === 0 || count >= 4) return;
     setTimeout(async () => {
       try {
         await setEstimateGas(stakingType);
