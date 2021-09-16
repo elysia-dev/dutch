@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,6 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
-import { useEffect } from 'react';
 
 type ParamList = {
   Reward: {
@@ -49,10 +48,10 @@ const Reward: React.FC = () => {
     StakingType.Reward,
     selectedRound,
   );
-
   const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const { reward } = useStakingInfo(cryptoType, selectedRound);
+  const [userReward, setUserReward] = useState(0);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
@@ -66,6 +65,11 @@ const Reward: React.FC = () => {
       afterTxFailed('Transaction failed');
     }
   };
+
+  useEffect(() => {
+    if (!reward) return;
+    setUserReward(reward);
+  }, [reward]);
 
   if (!selectionVisible) {
     return (
