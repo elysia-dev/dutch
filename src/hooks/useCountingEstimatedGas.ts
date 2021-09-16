@@ -1,9 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 import react, { useEffect, useState } from 'react';
-import CryptoType from '../enums/CryptoType';
 import StakingType from '../enums/StakingType';
-import useBoolean from './useBoolean';
 
 const useCountingEstimatedGas = (
   setEstimateGas: (stakingType?: StakingType, round?: number) => Promise<void>,
