@@ -23,6 +23,7 @@ import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
 import useAppState from '../../hooks/useAppState';
 import TransactionContext from '../../contexts/TransactionContext';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   TotalDashboard: {
@@ -49,7 +50,7 @@ const TotalDashboard: React.FC = () => {
     : user.ethAddresses[0];
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
-  const [currentRound, setCurrentRound] = useState(1);
+  const currentRound = getCurrentStakingRound();
   const [isProgressRound, setIsProgressRound] = useState(false);
   const [isCurrentRound, setIsCurrentRound] = useState(false);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -57,10 +58,6 @@ const TotalDashboard: React.FC = () => {
   );
   const [count, setCount] = useState(0);
   const appState = useAppState();
-
-  stakingPoolContract.currentRound().then((res: any) => {
-    setCurrentRound(res);
-  });
 
   const formatAmount = (amount: BigNumber) => {
     return commaFormatter(
@@ -225,11 +222,26 @@ const TotalDashboard: React.FC = () => {
             disabled={userPrincipal === '-'}
             label={t('staking.unstake')}
             pressHandler={() => {
+              let screen;
+              if (cryptoType === CryptoType.EL) {
+                if (
+                  isCurrentRound &&
+                  ((currentRound === 2 && selectedRound === 1) ||
+                    (currentRound === 4 && selectedRound === 3))
+                ) {
+                  screen = StakingPage.UnstakeAndMigrate;
+                } else {
+                  screen = StakingPage.Unstake;
+                }
+              } else if (cryptoType === CryptoType.ELFI) {
+                if (selectedRound < currentRound && isCurrentRound) {
+                  screen = StakingPage.UnstakeAndMigrate;
+                } else {
+                  screen = StakingPage.Unstake;
+                }
+              }
               navigation.navigate(Page.Staking, {
-                screen:
-                  selectedRound < currentRound && isCurrentRound
-                    ? StakingPage.UnstakeAndMigrate
-                    : StakingPage.Unstake,
+                screen,
                 params: {
                   cryptoType,
                   selectedRound,

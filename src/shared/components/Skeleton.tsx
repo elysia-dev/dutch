@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+// reference: https://github.com/chramos/react-native-skeleton-placeholder/blob/master/src/SkeletonPlaceholder.tsx
+
+import React, { useEffect, useMemo } from 'react';
 import { Animated, Easing, View, Dimensions } from 'react-native';
 import MaskedView from '@react-native-community/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';

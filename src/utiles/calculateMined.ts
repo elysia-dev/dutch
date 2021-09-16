@@ -2,10 +2,9 @@ import moment from 'moment';
 import CryptoType from '../enums/CryptoType';
 import {
   STAKING_POOL_ROUNDS,
+  ROUND_DURATIONS,
   ELFI_PER_DAY_ON_EL_STAKING_POOL,
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
-  ELFI_PER_ROUND_ON_EL_STAKING_POOL,
-  DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
 } from '../constants/staking';
 
 const calculateMined = (
@@ -22,8 +21,8 @@ const calculateMined = (
       : DAI_PER_DAY_ON_ELFI_STAKING_POOL;
   const minedPerRound =
     cryptoType === CryptoType.EL
-      ? ELFI_PER_ROUND_ON_EL_STAKING_POOL
-      : DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
+      ? ELFI_PER_DAY_ON_EL_STAKING_POOL * ROUND_DURATIONS[round - 1]
+      : DAI_PER_DAY_ON_ELFI_STAKING_POOL * ROUND_DURATIONS[round - 1];
 
   if (currentRound && moment().isAfter(roundEndDate)) {
     return minedPerRound;

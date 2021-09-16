@@ -2,20 +2,24 @@ import React from 'react';
 import { View } from 'react-native';
 import Bar from './Bar';
 import {
-  ELFI_PER_ROUND_ON_EL_STAKING_POOL,
-  DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
+  ROUND_DURATIONS,
+  ELFI_PER_DAY_ON_EL_STAKING_POOL,
+  DAI_PER_DAY_ON_ELFI_STAKING_POOL,
+  NUMBER_OF_ROUNDS,
 } from '../../../constants/staking';
 import CryptoType from '../../../enums/CryptoType';
 import calculateMined from '../../../utiles/calculateMined';
+import range from '../../../utiles/range';
 
 const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
   currentRound,
   cryptoType,
 }) => {
-  const minedPerRound =
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
+  const minedPerDay =
     cryptoType === CryptoType.EL
-      ? ELFI_PER_ROUND_ON_EL_STAKING_POOL
-      : DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
+      ? ELFI_PER_DAY_ON_EL_STAKING_POOL
+      : DAI_PER_DAY_ON_ELFI_STAKING_POOL;
 
   return (
     <View
@@ -26,13 +30,14 @@ const BarGraph: React.FC<{ currentRound: number; cryptoType: CryptoType }> = ({
         alignItems: 'center',
         marginBottom: 30,
       }}>
-      {[1, 2, 3, 4, 5, 6].map((i) => {
+      {stakingRounds.map((i) => {
         return (
           <Bar
             key={i}
             round={i}
             percent={
-              (calculateMined(cryptoType, i, currentRound) / minedPerRound) *
+              (calculateMined(cryptoType, i, currentRound) /
+                (minedPerDay * ROUND_DURATIONS[i - 1])) *
               100
             }
           />

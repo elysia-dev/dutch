@@ -1,11 +1,11 @@
 import moment from 'moment';
-import { STAKING_POOL_ROUNDS } from '../constants/staking';
+import { STAKING_POOL_ROUNDS, NUMBER_OF_ROUNDS } from '../constants/staking';
 import StakingStatus from '../enums/StakingStatus';
 
 function getStakingStatus(round: number) {
   const now = moment();
   const firstRoundStartDate = STAKING_POOL_ROUNDS[0].startedAt;
-  const lastRoundEndDate = STAKING_POOL_ROUNDS[5].endedAt;
+  const lastRoundEndDate = STAKING_POOL_ROUNDS[NUMBER_OF_ROUNDS - 1].endedAt;
   const roundStartDate = STAKING_POOL_ROUNDS[round ? round - 1 : 0].startedAt;
   const roundEndDate = STAKING_POOL_ROUNDS[round ? round - 1 : 0].endedAt;
 

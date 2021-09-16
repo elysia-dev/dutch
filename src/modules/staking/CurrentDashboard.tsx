@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
@@ -13,7 +13,6 @@ import {
   SubTitleText,
   H1Text,
   H2Text,
-  P3Text,
 } from '../../shared/components/Texts';
 import DotGraph from './components/DotGraph';
 import BarGraph from './components/BarGraph';
@@ -22,10 +21,11 @@ import MiningPlan from './components/MiningPlan';
 import UserContext from '../../contexts/UserContext';
 import CryptoType from '../../enums/CryptoType';
 import {
-  ROUND_DURATION,
-  TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL,
-  TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL,
+  ROUND_DURATIONS,
+  ELFI_PER_DAY_ON_EL_STAKING_POOL,
+  DAI_PER_DAY_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
+  NUMBER_OF_ROUNDS,
 } from '../../constants/staking';
 import commaFormatter from '../../utiles/commaFormatter';
 import calculateAPR, { aprFormatter } from '../../utiles/calculateAPR';
@@ -37,6 +37,8 @@ import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import range from '../../utiles/range';
 
 type ParamList = {
   CurrentDashboard: {
@@ -50,12 +52,15 @@ const CurrentDashboard: React.FC = () => {
   const { cryptoType, rewardCryptoType } = route.params;
   const miningPlanRef = useRef<ScrollView | null>();
   const navigation = useNavigation();
-  const [currentRound, setCurrentRound] = useState(1);
+  const [currentRound, setCurrentRound] = useState(getCurrentStakingRound());
   const { isWalletUser, user } = useContext(UserContext);
-  const totalAmountOfReward =
-    cryptoType === CryptoType.EL
-      ? TOTAL_AMOUNT_OF_ELFI_ON_EL_STAKING_POOL
-      : TOTAL_AMOUNT_OF_DAI_ON_ELFI_STAKING_POOL;
+  const totalAmountOfReward = ROUND_DURATIONS.reduce((res, cur) => {
+    const rewardPerDay =
+      cryptoType === CryptoType.EL
+        ? ELFI_PER_DAY_ON_EL_STAKING_POOL
+        : DAI_PER_DAY_ON_ELFI_STAKING_POOL;
+    return res + rewardPerDay * cur;
+  }, 0);
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -63,10 +68,12 @@ const CurrentDashboard: React.FC = () => {
   );
   const stakingStatus = getStakingStatus(currentRound);
   const appState = useAppState();
+  const hasWallet = isWalletUser || user.ethAddresses[0];
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
 
   let nextButtonTitle = '';
-  if (!(isWalletUser || user.ethAddresses[0])) {
-    nextButtonTitle = t('staking.need_wallet');
+  if (!hasWallet) {
+    nextButtonTitle = t('staking.need_wallet'); //
   } else {
     switch (stakingStatus) {
       case StakingStatus.NOT_YET_STARTED:
@@ -90,11 +97,9 @@ const CurrentDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    stakingPoolContract?.currentRound().then((res: any) => {
-      setCurrentRound(res);
-    });
+    setCurrentRound(getCurrentStakingRound());
     let isBetween = false;
-    if (currentRound < 6 && currentRound > 0) {
+    if (currentRound < NUMBER_OF_ROUNDS && currentRound > 0) {
       isBetween = moment().isBetween(
         STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
         STAKING_POOL_ROUNDS[currentRound].startedAt,
@@ -186,7 +191,7 @@ const CurrentDashboard: React.FC = () => {
                 <BoxWithDividerContent
                   label={t('staking.staking_days')}
                   value={t('staking.duration_day', {
-                    duration: ROUND_DURATION,
+                    duration: ROUND_DURATIONS[currentRound - 1],
                   })}
                 />
                 <BoxWithDividerContent
@@ -213,7 +218,7 @@ const CurrentDashboard: React.FC = () => {
                   label={t('staking.current_mined')}
                   value={`${commaFormatter(
                     decimalFormatter(
-                      [1, 2, 3, 4, 5, 6].reduce(
+                      stakingRounds.reduce(
                         (totalMined, round) =>
                           totalMined +
                           calculateMined(cryptoType, round, currentRound),
@@ -238,7 +243,7 @@ const CurrentDashboard: React.FC = () => {
                 }}
                 horizontal={true}
                 style={{ marginBottom: 100 }}>
-                {[1, 2, 3, 4, 5, 6].map((i) => {
+                {stakingRounds.map((i) => {
                   return (
                     <MiningPlan
                       key={i}
@@ -261,7 +266,9 @@ const CurrentDashboard: React.FC = () => {
             params: { cryptoType, selectedRound: currentRound },
           });
         }}
-        disabled={stakingStatus !== StakingStatus.ROUND_IN_PROGRESS}
+        disabled={
+          !hasWallet || stakingStatus !== StakingStatus.ROUND_IN_PROGRESS
+        }
         style={{
           marginBottom: 20,
           marginHorizontal: 16,

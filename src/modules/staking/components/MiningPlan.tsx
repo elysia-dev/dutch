@@ -9,10 +9,9 @@ import BoxWithDividerContent from './BoxWithDividerContent';
 import PriceContext from '../../../contexts/PriceContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import {
+  ROUND_DURATIONS,
   ELFI_PER_DAY_ON_EL_STAKING_POOL,
   DAI_PER_DAY_ON_ELFI_STAKING_POOL,
-  ELFI_PER_ROUND_ON_EL_STAKING_POOL,
-  DAI_PER_ROUND_ON_ELFI_STAKING_POOL,
   STAKING_POOL_ROUNDS,
 } from '../../../constants/staking';
 import calculateMined from '../../../utiles/calculateMined';
@@ -32,10 +31,12 @@ const MiningPlan: React.FC<{
   let rewardPerRound;
   if (cryptoType === CryptoType.EL) {
     rewardPerDay = ELFI_PER_DAY_ON_EL_STAKING_POOL;
-    rewardPerRound = ELFI_PER_ROUND_ON_EL_STAKING_POOL;
+    rewardPerRound =
+      ELFI_PER_DAY_ON_EL_STAKING_POOL * ROUND_DURATIONS[round - 1];
   } else {
     rewardPerDay = DAI_PER_DAY_ON_ELFI_STAKING_POOL;
-    rewardPerRound = DAI_PER_ROUND_ON_ELFI_STAKING_POOL;
+    rewardPerRound =
+      DAI_PER_DAY_ON_ELFI_STAKING_POOL * ROUND_DURATIONS[round - 1];
   }
 
   const cumulativeMined = calculateMined(cryptoType, round, currentRound);
@@ -89,7 +90,7 @@ const MiningPlan: React.FC<{
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label={t('staking.cumulative mining supply')}
+          label={t('staking.cumulative_mining_supply')}
           value={`${commaFormatter(
             decimalFormatter(cumulativeMined, 5),
           )} ${rewardCryptoType}`}
@@ -101,7 +102,7 @@ const MiningPlan: React.FC<{
           valueStyle={{ fontSize: 12, fontFamily: AppFonts.Medium }}
         />
         <BoxWithDividerContent
-          label={t('staking.remaining mining supply')}
+          label={t('staking.remaining_mining_supply')}
           value={`${commaFormatter(
             decimalFormatter(rewardPerRound - cumulativeMined, 5),
           )} ${rewardCryptoType}`}
