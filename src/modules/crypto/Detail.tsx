@@ -79,29 +79,40 @@ const Detail: React.FC = () => {
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
     let res;
+    let test;
     try {
-      if (asset.type === CryptoType.ETH) {
-        res = await EthersacnClient.getEthTransaction(address, state.page);
-      } else if (asset.type === CryptoType.BNB) {
-        res = await EthersacnClient.getBnbTransaction(address, state.page);
-      } else if (asset.type === CryptoType.ELFI) {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          ELFI_ADDRESS,
-          state.page,
-        );
-      } else if (asset.type === CryptoType.DAI) {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          DAI_ADDRESS,
-          state.page,
-        );
-      } else {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          EL_ADDRESS,
-          state.page,
-        );
+      test = await EthersacnClient.getInternalBnbTx(address, state.page);
+      // test.data.result
+      console.log(test.data.result);
+
+      switch (asset.type) {
+        case CryptoType.ETH:
+          res = await EthersacnClient.getEthTransaction(address, state.page);
+          break;
+        case CryptoType.BNB:
+          res = await EthersacnClient.getBnbTransaction(address, state.page);
+          break;
+        case CryptoType.ELFI:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            ELFI_ADDRESS,
+            state.page,
+          );
+          break;
+        case CryptoType.DAI:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            DAI_ADDRESS,
+            state.page,
+          );
+          break;
+        default:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            EL_ADDRESS,
+            state.page,
+          );
+          break;
       }
 
       if (res.data.result.length === 0 && state.page >= 2) {
