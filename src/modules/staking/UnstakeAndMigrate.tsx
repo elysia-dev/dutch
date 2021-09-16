@@ -60,6 +60,7 @@ const UnstakeAndMigrate: React.FC = () => {
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
   const { principal, reward } = useStakingInfo(cryptoType, selectedRound);
+  const [userPrincipal, setUserPrincipal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const address = isWalletUser
@@ -204,6 +205,11 @@ const UnstakeAndMigrate: React.FC = () => {
     }
   }, [modalVisible, isFinishRound]);
 
+  useEffect(() => {
+    if (!principal) return;
+    setUserPrincipal(principal);
+  }, [principal]);
+
   if (!selectionVisible) {
     return (
       <View style={{ backgroundColor: AppColors.WHITE, height: '100%' }}>
@@ -237,14 +243,14 @@ const UnstakeAndMigrate: React.FC = () => {
           </Text>
           <LargeTextInput
             placeholder={t('staking.migration_placeholder')}
-            value={value ? String(principal - parseFloat(value)) : ''}
+            value={value ? String(userPrincipal - parseFloat(value)) : ''}
             unit={cryptoType}
             style={{ marginTop: 0 }}
           />
           <InputInfoBox
             list={[
               `${t('staking.max_supply_available')}: ${commaFormatter(
-                decimalFormatter(principal, 6),
+                decimalFormatter(userPrincipal, 6),
               )} ${cryptoType}`,
               `${t('staking.migration_destination')}: ${t(
                 'staking.round_with_affix',
@@ -256,7 +262,7 @@ const UnstakeAndMigrate: React.FC = () => {
                 ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={parseFloat(value) > principal}
+            isInvalid={parseFloat(value) > userPrincipal}
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
@@ -289,7 +295,7 @@ const UnstakeAndMigrate: React.FC = () => {
           }}>
           <NextButton
             title={t('staking.done')}
-            disabled={!value || parseFloat(value) > principal}
+            disabled={!value || parseFloat(value) > userPrincipal}
             handler={() => {
               if (isWalletUser) {
                 setConfirmations();
@@ -349,7 +355,7 @@ const UnstakeAndMigrate: React.FC = () => {
         unit: cryptoType,
         round: selectedRound,
         rewardValue: reward,
-        migrationValue: principal - parseFloat(value),
+        migrationValue: userPrincipal - parseFloat(value),
       }}
       contractAddress={stakingPoolAddress}
     />
