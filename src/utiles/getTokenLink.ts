@@ -1,5 +1,5 @@
-import NetworkType from '../enums/NetworkType';
 import { ETH_NETWORK } from 'react-native-dotenv';
+import NetworkType from '../enums/NetworkType';
 
 const getTokenLink = (address?: string, networkType?: NetworkType): string => {
   return networkType && networkType === NetworkType.BSC

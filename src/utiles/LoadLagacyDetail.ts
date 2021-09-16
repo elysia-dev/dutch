@@ -1,3 +1,4 @@
+import { utils } from 'ethers';
 import CryptoType from '../enums/CryptoType';
 import CryptoTransaction from '../types/CryptoTransaction';
 import Server from '../api/server';
@@ -8,7 +9,6 @@ import EthersacnClient from '../api/EtherscanClient';
 import txResponseToTx from './txResponseToTx';
 import Product from '../types/Product';
 import { getAssetTokenContract, getBscAssetTokenContract } from './getContract';
-import { utils } from 'ethers';
 
 class LoadDetail {
   async ownershipDetail(

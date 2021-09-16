@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { TransactionResponse } from '@ethersproject/providers';
+import { useNavigation } from '@react-navigation/native';
+import { Contract } from '@ethersproject/contracts';
 import CryptoType from '../enums/CryptoType';
 import TransferType from '../enums/TransferType';
 import { purchaseProduct, sendCryptoAsset } from './createTransction';
 import useTxHandler from '../hooks/useTxHandler';
 import PriceContext from '../contexts/PriceContext';
 import WalletContext from '../contexts/WalletContext';
-import { TransactionResponse } from '@ethersproject/providers';
 import NetworkType from '../enums/NetworkType';
-import { useNavigation } from '@react-navigation/native';
-import { Contract } from '@ethersproject/contracts';
 import useErcContract from '../hooks/useErcContract';
 
 export default function createTransferTx(
@@ -84,7 +84,7 @@ export default function createTransferTx(
           ),
         );
       } else {
-        let ercContract = setErcContract(type);
+        const ercContract = setErcContract(type);
         setResTx(
           await sendCryptoAsset(
             gasPrice,
