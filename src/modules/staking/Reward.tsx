@@ -98,7 +98,9 @@ const Reward: React.FC = () => {
           />
           <View style={{ height: 10 }} />
           <GasPrice
-            estimatedGas={estimagedGasPrice}
+            estimatedGas={commaFormatter(
+              decimalFormatter(parseFloat(estimagedGasPrice), 6),
+            )}
             gasCrypto={CryptoType.ETH}
             insufficientGas={
               getBalance(CryptoType.ETH) < parseFloat(estimagedGasPrice)
