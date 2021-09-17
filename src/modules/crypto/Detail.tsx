@@ -78,7 +78,7 @@ const Detail: React.FC = () => {
 
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
-    let newRewardTx: CryptoTransaction[] = [];
+    let newRewardTxs: CryptoTransaction[] = [];
     let res;
     let rewardTx;
     try {
@@ -111,13 +111,15 @@ const Detail: React.FC = () => {
             state.page,
           );
           break;
-        default:
+        case CryptoType.EL:
           res = await EthersacnClient.getErc20Transaction(
             address,
             EL_ADDRESS,
             state.page,
           );
           break;
+        default:
+          return;
       }
       if (res.data.result.length === 0 && state.page >= 2) {
         alert(t('dashboard.last_transaction'));
@@ -127,10 +129,10 @@ const Detail: React.FC = () => {
         txResponseToTx(tx, address),
       );
       if (rewardTx) {
-        newRewardTx = rewardTx.data.result.map((tx: Transaction) =>
+        newRewardTxs = rewardTx.data.result.map((tx: Transaction) =>
           txResponseToTx(tx, address),
         );
-        newTxs = [...newTxs, ...newRewardTx].sort(
+        newTxs = [...newTxs, ...newRewardTxs].sort(
           (tx, nTx) => (nTx.blockNumber || 0) - (tx.blockNumber || 0),
         );
       }
