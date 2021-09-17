@@ -33,7 +33,7 @@ import {
   toAppColor,
 } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
-import { changeTxStatus, getPendingTx } from '../../utiles/pendingTransaction';
+import { getPendingTx } from '../../utiles/pendingTransaction';
 
 type ParamList = {
   CryptoDetail: {
@@ -78,32 +78,49 @@ const Detail: React.FC = () => {
 
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
+    let newRewardTxs: CryptoTransaction[] = [];
     let res;
+    let rewardTx;
     try {
-      if (asset.type === CryptoType.ETH) {
-        res = await EthersacnClient.getEthTransaction(address, state.page);
-      } else if (asset.type === CryptoType.BNB) {
-        res = await EthersacnClient.getBnbTransaction(address, state.page);
-      } else if (asset.type === CryptoType.ELFI) {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          ELFI_ADDRESS,
-          state.page,
-        );
-      } else if (asset.type === CryptoType.DAI) {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          DAI_ADDRESS,
-          state.page,
-        );
-      } else {
-        res = await EthersacnClient.getErc20Transaction(
-          address,
-          EL_ADDRESS,
-          state.page,
-        );
+      switch (asset.type) {
+        case CryptoType.ETH:
+          res = await EthersacnClient.getEthTransaction(address, state.page);
+          rewardTx = await EthersacnClient.getInternalEthTx(
+            address,
+            state.page,
+          );
+          break;
+        case CryptoType.BNB:
+          res = await EthersacnClient.getBnbTransaction(address, state.page);
+          rewardTx = await EthersacnClient.getInternalBnbTx(
+            address,
+            state.page,
+          );
+          break;
+        case CryptoType.ELFI:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            ELFI_ADDRESS,
+            state.page,
+          );
+          break;
+        case CryptoType.DAI:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            DAI_ADDRESS,
+            state.page,
+          );
+          break;
+        case CryptoType.EL:
+          res = await EthersacnClient.getErc20Transaction(
+            address,
+            EL_ADDRESS,
+            state.page,
+          );
+          break;
+        default:
+          return;
       }
-
       if (res.data.result.length === 0 && state.page >= 2) {
         alert(t('dashboard.last_transaction'));
         return;
@@ -111,6 +128,14 @@ const Detail: React.FC = () => {
       newTxs = res.data.result.map((tx: Transaction) =>
         txResponseToTx(tx, address),
       );
+      if (rewardTx) {
+        newRewardTxs = rewardTx.data.result.map((tx: Transaction) =>
+          txResponseToTx(tx, address),
+        );
+        newTxs = [...newTxs, ...newRewardTxs].sort(
+          (tx, nTx) => (nTx.blockNumber || 0) - (tx.blockNumber || 0),
+        );
+      }
     } catch {
       if (state.page !== 1) {
         alert(t('dashboard.last_transaction'));

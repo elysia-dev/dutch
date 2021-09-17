@@ -1,8 +1,8 @@
 import { BigNumber, utils } from 'ethers';
-import { Transaction } from '../types/CryptoTxsResponse';
 import Bignumberjs from 'bignumber.js';
-import CryptoTransaction from '../types/CryptoTransaction';
 import moment from 'moment';
+import { Transaction } from '../types/CryptoTxsResponse';
+import CryptoTransaction from '../types/CryptoTransaction';
 
 const txResponseToTx = (
   tx: Transaction,
