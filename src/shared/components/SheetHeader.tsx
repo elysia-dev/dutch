@@ -20,7 +20,7 @@ const SheetHeader: React.FC<Iprops> = ({ title }) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 20,
-        paddingTop: Platform.OS === 'android' ? 70 : 20,
+        paddingTop: Platform.OS === 'android' ? 70 : 40,
       }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
