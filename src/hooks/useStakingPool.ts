@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import {
   ELFI_STAKING_POOL_ADDRESS,
   EL_STAKING_POOL_ADDRESS,
-  NEW_EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_V2_ADDRESS,
 } from 'react-native-dotenv';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
@@ -15,7 +15,7 @@ const useStakingPool = (crytoType: CryptoType) => {
   const contract = StakingPool__factory.connect(
     crytoType === CryptoType.EL
       ? getCurrentStakingRound() > 2
-        ? NEW_EL_STAKING_POOL_ADDRESS
+        ? ELFI_STAKING_POOL_V2_ADDRESS
         : EL_STAKING_POOL_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS,
     wallet?.getFirstSigner() || provider,

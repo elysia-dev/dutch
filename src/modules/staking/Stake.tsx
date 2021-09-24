@@ -8,7 +8,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
-  NEW_EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_V2_ADDRESS,
 } from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -86,7 +86,7 @@ const Stake: React.FC = () => {
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
       : currentStakingRound > 2
-      ? NEW_EL_STAKING_POOL_ADDRESS
+      ? ELFI_STAKING_POOL_V2_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS;
 
   const getPoolData = async () => {
@@ -133,7 +133,7 @@ const Stake: React.FC = () => {
           : await elfiContract.allowance(
               wallet?.getFirstNode()?.address || '',
               currentStakingRound > 2
-                ? NEW_EL_STAKING_POOL_ADDRESS
+                ? ELFI_STAKING_POOL_V2_ADDRESS
                 : ELFI_STAKING_POOL_ADDRESS,
             );
       setAllowanceInfo({
@@ -170,7 +170,7 @@ const Stake: React.FC = () => {
           )
         : await elfiContract.approve(
             currentStakingRound > 2
-              ? NEW_EL_STAKING_POOL_ADDRESS
+              ? ELFI_STAKING_POOL_V2_ADDRESS
               : ELFI_STAKING_POOL_ADDRESS,
             constants.MaxUint256,
           );
