@@ -65,12 +65,16 @@ const UnstakeAndMigrate: React.FC = () => {
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
+  const round =
+    cryptoType === CryptoType.EL || selectedRound <= 2
+      ? selectedRound
+      : selectedRound - 2;
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
   const [isGuideModal, setIsGuideModal] = useState(false);
   const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
-    selectedRound,
+    round,
   );
   const [confirmationList, setConfirmationList] = useState<
     {
@@ -166,7 +170,7 @@ const UnstakeAndMigrate: React.FC = () => {
 
   const onPressUnstaking = async () => {
     try {
-      stakeByType(value, selectedRound, StakingType.Unstake);
+      stakeByType(value, round, StakingType.Unstake);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -176,14 +180,14 @@ const UnstakeAndMigrate: React.FC = () => {
   const onPressMigrate = async () => {
     try {
       if (isProgressRound()) {
-        setEstimatedGas(StakingType.Unstake, selectedRound);
+        setEstimatedGas(StakingType.Unstake, round);
         setStakingType(StakingType.Unstake);
         setModalVisible(false);
         setIsFinishRound(true);
         return;
       }
       const migrateAmount = String(principal - parseFloat(value));
-      stakeByType(migrateAmount, selectedRound, StakingType.Migrate);
+      stakeByType(migrateAmount, round, StakingType.Migrate);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
