@@ -6,7 +6,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
-  NEW_EL_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_V2_ADDRESS,
 } from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -67,7 +67,7 @@ const Unstake: React.FC = () => {
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
       : selectedRound > 2
-      ? NEW_EL_STAKING_POOL_ADDRESS
+      ? ELFI_STAKING_POOL_V2_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS;
   const confirmationList = [
     {
