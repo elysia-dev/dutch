@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
+  ELFI_STAKING_POOL_V2_ADDRESS,
 } from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -28,6 +29,7 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Unstake: {
@@ -47,20 +49,26 @@ const Unstake: React.FC = () => {
   const { getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
   const [selectionVisible, setSelectionVisible] = useState(false);
+  const round =
+    cryptoType === CryptoType.EL || selectedRound <= 2
+      ? selectedRound
+      : selectedRound - 2;
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
-    selectedRound,
+    round,
   );
   const { t } = useTranslation();
-  const { principal } = useStakingInfo(cryptoType, selectedRound);
+  const { principal } = useStakingInfo(cryptoType, round);
+  const [userPrincipal, setUserPrincipal] = useState(principal);
   const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
+      : selectedRound > 2
+      ? ELFI_STAKING_POOL_V2_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS;
-
   const confirmationList = [
     {
       label: t('staking.unstaking_round'),
@@ -91,8 +99,8 @@ const Unstake: React.FC = () => {
   const onPressUnstaking = async () => {
     try {
       await stakeByType(
-        isMax ? String(principal) : value,
-        selectedRound,
+        isMax ? String(userPrincipal) : value,
+        round,
         StakingType.Unstake,
       );
     } catch (error) {
@@ -100,6 +108,11 @@ const Unstake: React.FC = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (principal === 0) return;
+    setUserPrincipal(principal);
+  }, [principal]);
 
   if (!selectionVisible) {
     return (
@@ -127,7 +140,7 @@ const Unstake: React.FC = () => {
                 ),
               )}`,
               `${t('staking.unstaking_supply_available')}: ${commaFormatter(
-                decimalFormatter(principal, 6),
+                decimalFormatter(userPrincipal, 6),
               )} ${cryptoType}`,
               estimagedGasPrice
                 ? `${t('staking.estimated_gas')}: ${commaFormatter(
@@ -135,14 +148,14 @@ const Unstake: React.FC = () => {
                   )} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={!isMax && parseFloat(value) > principal}
+            isInvalid={!isMax && parseFloat(value) > userPrincipal}
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
             values={[0.01, 1, 10, 100, 'max']}
             inputValue={value}
             setValue={setValue}
-            maxValue={principal}
+            maxValue={userPrincipal}
             setIsMax={setIsMax}
           />
           <NumberPad
@@ -166,7 +179,7 @@ const Unstake: React.FC = () => {
             }}>
             <NextButton
               title={t('staking.done')}
-              disabled={!value || (!isMax && parseFloat(value) > principal)}
+              disabled={!value || (!isMax && parseFloat(value) > userPrincipal)}
               handler={() => {
                 if (isWalletUser) {
                   setModalVisible(true);
@@ -205,7 +218,7 @@ const Unstake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? principal.toFixed(18) : value}
+      value={isMax ? userPrincipal.toFixed(18) : value}
       page="staking"
       stakingTxData={{
         type: 'unstake',

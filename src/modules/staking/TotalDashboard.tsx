@@ -51,6 +51,10 @@ const TotalDashboard: React.FC = () => {
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
   const currentRound = getCurrentStakingRound();
+  const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
+    cryptoType === CryptoType.EL || selectedRound <= 2
+      ? selectedRound
+      : selectedRound - 2;
   const [isProgressRound, setIsProgressRound] = useState(false);
   const [isCurrentRound, setIsCurrentRound] = useState(false);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
@@ -70,19 +74,19 @@ const TotalDashboard: React.FC = () => {
   };
 
   const getPoolData = async () => {
-    const poolData = await stakingPoolContract.getPoolData(selectedRound);
+    const poolData = await stakingPoolContract.getPoolData(changedRound);
     setTotalPrincipal(poolData[4]);
   };
 
   const getUserData = async () => {
     const userData = await stakingPoolContract.getUserData(
-      selectedRound,
+      changedRound,
       address || '',
     );
     const userPrincipal = userData.userPrincipal;
     const userReward = await stakingPoolContract.getUserReward(
       address || '',
-      selectedRound,
+      changedRound,
     );
 
     setCurrentRoundReward(indicateAmount(userReward));
@@ -120,7 +124,7 @@ const TotalDashboard: React.FC = () => {
     if (isCurrentRound && selectedRound === currentRound) {
       setTimeout(() => {
         stakingPoolContract
-          .getUserReward(address || '', currentRound)
+          .getUserReward(address || '', changedRound)
           .then((res: BigNumber) => {
             setCurrentRoundReward(indicateAmount(res));
           });
