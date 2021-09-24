@@ -8,6 +8,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
+  NEW_EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -36,6 +37,7 @@ import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Stake: {
@@ -76,16 +78,25 @@ const Stake: React.FC = () => {
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
+  const currentStakingRound = getCurrentStakingRound();
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
+      : currentStakingRound > 2
+      ? NEW_EL_STAKING_POOL_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS;
 
   const getPoolData = async () => {
-    const poolData = await stakingPoolContract.getPoolData(selectedRound);
+    const poolData = await stakingPoolContract.getPoolData(
+      cryptoType === CryptoType.EL
+        ? selectedRound
+        : currentStakingRound > 2
+        ? currentStakingRound - 2
+        : selectedRound,
+    );
     setTotalPrincipal(poolData[4]);
   };
 
@@ -121,7 +132,9 @@ const Stake: React.FC = () => {
             )
           : await elfiContract.allowance(
               wallet?.getFirstNode()?.address || '',
-              ELFI_STAKING_POOL_ADDRESS,
+              currentStakingRound > 2
+                ? NEW_EL_STAKING_POOL_ADDRESS
+                : ELFI_STAKING_POOL_ADDRESS,
             );
       setAllowanceInfo({
         ...allowanceInfo,
@@ -156,7 +169,9 @@ const Stake: React.FC = () => {
             constants.MaxUint256,
           )
         : await elfiContract.approve(
-            ELFI_STAKING_POOL_ADDRESS,
+            currentStakingRound > 2
+              ? NEW_EL_STAKING_POOL_ADDRESS
+              : ELFI_STAKING_POOL_ADDRESS,
             constants.MaxUint256,
           );
       setAllowanceInfo({ value: utils.formatEther(constants.MaxUint256) });
