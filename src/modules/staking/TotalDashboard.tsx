@@ -51,7 +51,7 @@ const TotalDashboard: React.FC = () => {
   const { t } = useTranslation();
   const stakingPoolContract = useStakingPool(cryptoType);
   const currentRound = getCurrentStakingRound();
-  const changedRound =
+  const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
       : selectedRound - 2;
