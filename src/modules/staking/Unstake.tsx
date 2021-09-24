@@ -6,6 +6,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
+  NEW_EL_STAKING_POOL_ADDRESS,
 } from 'react-native-dotenv';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
@@ -28,6 +29,7 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
+import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Unstake: {
@@ -47,20 +49,25 @@ const Unstake: React.FC = () => {
   const { getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed } = useTxHandler();
   const [selectionVisible, setSelectionVisible] = useState(false);
+  const round =
+    cryptoType === CryptoType.EL || selectedRound <= 2
+      ? selectedRound
+      : selectedRound - 2;
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
-    selectedRound,
+    round,
   );
   const { t } = useTranslation();
-  const { principal } = useStakingInfo(cryptoType, selectedRound);
+  const { principal } = useStakingInfo(cryptoType, round);
   const [isLoading, setIsLoading] = useState(false);
   const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
+      : selectedRound > 2
+      ? NEW_EL_STAKING_POOL_ADDRESS
       : ELFI_STAKING_POOL_ADDRESS;
-
   const confirmationList = [
     {
       label: t('staking.unstaking_round'),
@@ -92,7 +99,7 @@ const Unstake: React.FC = () => {
     try {
       await stakeByType(
         isMax ? String(principal) : value,
-        selectedRound,
+        round,
         StakingType.Unstake,
       );
     } catch (error) {
