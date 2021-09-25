@@ -2,7 +2,7 @@ import moment from 'moment';
 import { STAKING_POOL_ROUNDS, NUMBER_OF_ROUNDS } from '../constants/staking';
 import CryptoType from '../enums/CryptoType';
 
-export function setIsElfiV2(cryptoType: CryptoType, round: number) {
+export function isElfiV2(cryptoType: CryptoType, round: number) {
   return cryptoType === CryptoType.ELFI && round >= 3;
 }
 
