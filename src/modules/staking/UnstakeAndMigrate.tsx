@@ -86,6 +86,7 @@ const UnstakeAndMigrate: React.FC = () => {
     StakingType.Migrate,
     round,
   );
+  const [userPrincipal, setUserPrincipal] = useState(principal);
   const [confirmationList, setConfirmationList] = useState<
     {
       label: string;
@@ -124,11 +125,11 @@ const UnstakeAndMigrate: React.FC = () => {
       {
         label: t('staking.migration_supply'),
         value: `${commaFormatter(
-          decimalFormatter(principal - parseFloat(value), 6),
+          decimalFormatter(userPrincipal - parseFloat(value), 6),
         )} ${cryptoType}`,
         subvalue: `$ ${commaFormatter(
           decimalFormatter(
-            (principal - parseFloat(value)) * getCryptoPrice(cryptoType),
+            (userPrincipal - parseFloat(value)) * getCryptoPrice(cryptoType),
             6,
           ),
         )}`,
@@ -196,7 +197,7 @@ const UnstakeAndMigrate: React.FC = () => {
         setIsFinishRound(true);
         return;
       }
-      const migrateAmount = String(principal - parseFloat(value));
+      const migrateAmount = String(userPrincipal - parseFloat(value));
       stakeByType(migrateAmount, round, StakingType.Migrate);
     } catch (error) {
       afterTxFailed('Transaction failed');
@@ -217,6 +218,11 @@ const UnstakeAndMigrate: React.FC = () => {
       setStakingType(StakingType.Migrate);
     }
   }, [modalVisible, isFinishRound]);
+
+  useEffect(() => {
+    if (principal === 0) return;
+    setUserPrincipal(principal);
+  }, [principal]);
 
   if (!selectionVisible) {
     return (
@@ -251,14 +257,14 @@ const UnstakeAndMigrate: React.FC = () => {
           </Text>
           <LargeTextInput
             placeholder={t('staking.migration_placeholder')}
-            value={value ? String(principal - parseFloat(value)) : ''}
+            value={value ? String(userPrincipal - parseFloat(value)) : ''}
             unit={cryptoType}
             style={{ marginTop: 0 }}
           />
           <InputInfoBox
             list={[
               `${t('staking.max_supply_available')}: ${commaFormatter(
-                decimalFormatter(principal, 6),
+                decimalFormatter(userPrincipal, 6),
               )} ${cryptoType}`,
               `${t('staking.migration_destination')}: ${t(
                 'staking.round_with_affix',
@@ -270,7 +276,7 @@ const UnstakeAndMigrate: React.FC = () => {
                 ? `${t('staking.estimated_gas')}: ${estimagedGasPrice} ETH`
                 : t('staking.cannot_estimate_gas'),
             ]}
-            isInvalid={parseFloat(value) > principal}
+            isInvalid={parseFloat(value) > userPrincipal}
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
@@ -303,7 +309,7 @@ const UnstakeAndMigrate: React.FC = () => {
           }}>
           <NextButton
             title={t('staking.done')}
-            disabled={!value || parseFloat(value) > principal}
+            disabled={!value || parseFloat(value) > userPrincipal}
             handler={() => {
               if (isWalletUser) {
                 setConfirmations();
@@ -363,7 +369,7 @@ const UnstakeAndMigrate: React.FC = () => {
         unit: cryptoType,
         round: selectedRound,
         rewardValue: reward,
-        migrationValue: principal - parseFloat(value),
+        migrationValue: userPrincipal - parseFloat(value),
       }}
       contractAddress={stakingPoolAddress}
     />
