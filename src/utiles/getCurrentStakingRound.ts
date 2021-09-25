@@ -1,5 +1,10 @@
 import moment from 'moment';
 import { STAKING_POOL_ROUNDS, NUMBER_OF_ROUNDS } from '../constants/staking';
+import CryptoType from '../enums/CryptoType';
+
+export function isElfiV2(cryptoType: CryptoType, round: number) {
+  return cryptoType === CryptoType.ELFI && round >= 3;
+}
 
 function getCurrentStakingRound() {
   const now = moment();

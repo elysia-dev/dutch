@@ -37,7 +37,9 @@ import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  isElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Stake: {
@@ -71,14 +73,19 @@ const Stake: React.FC = () => {
   });
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
-  const stakingPoolContract = useStakingPool(cryptoType);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const currentStakingRound = getCurrentStakingRound();
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
@@ -188,7 +195,8 @@ const Stake: React.FC = () => {
         return;
       }
       stakeByType(
-        isMax ? String(crytoBalance) : value,
+        // isMax ? String(crytoBalance) : value,
+        value,
         selectedRound,
         StakingType.Stake,
       );
@@ -275,7 +283,7 @@ const Stake: React.FC = () => {
             })}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 'max']}
+            values={[0.01, 1, 10, 100]}
             inputValue={value}
             setValue={setValue}
             maxValue={crytoBalance}
@@ -361,7 +369,8 @@ const Stake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? crytoBalance.toFixed(18) : value}
+      // value={isMax ? crytoBalance.toFixed(18) : value}
+      value={value}
       page="staking"
       stakingTxData={{
         type: 'stake',

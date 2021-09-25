@@ -29,7 +29,9 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  isElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Unstake: {
@@ -58,11 +60,16 @@ const Unstake: React.FC = () => {
     StakingType.Unstake,
     round,
   );
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const { t } = useTranslation();
-  const { principal } = useStakingInfo(cryptoType, round);
+  const { principal } = useStakingInfo(cryptoType, round, isElfiV2Con);
   const [userPrincipal, setUserPrincipal] = useState(principal);
   const [isLoading, setIsLoading] = useState(false);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
@@ -99,7 +106,8 @@ const Unstake: React.FC = () => {
   const onPressUnstaking = async () => {
     try {
       await stakeByType(
-        isMax ? String(userPrincipal) : value,
+        // isMax ? String(userPrincipal) : value,
+        value,
         round,
         StakingType.Unstake,
       );
@@ -152,7 +160,7 @@ const Unstake: React.FC = () => {
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 'max']}
+            values={[0.01, 1, 10, 100]}
             inputValue={value}
             setValue={setValue}
             maxValue={userPrincipal}
@@ -218,7 +226,8 @@ const Unstake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? userPrincipal.toFixed(18) : value}
+      // value={isMax ? userPrincipal.toFixed(18) : value}
+      value={value}
       page="staking"
       stakingTxData={{
         type: 'unstake',

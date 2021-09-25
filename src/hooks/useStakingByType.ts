@@ -12,11 +12,12 @@ import useTxHandler from './useTxHandler';
 const useStakingByType = (
   crytoType: CryptoType,
   setIsLoading: (isBoolean: boolean) => void,
+  isElfiV2: boolean,
 ) => {
   const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
   const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
-  const stakingPoolContract = useStakingPool(crytoType);
+  const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
   const navigation = useNavigation();
 
   const notifyFail = () => {

@@ -116,15 +116,18 @@ export const Main: React.FC = () => {
 
     const tempBoxes = stakingRounds.map(async (round) => {
       if (!userAddress) return;
-
+      let changedRound = round;
       if (type === CryptoType.ELFI && round >= 3) {
         // ELFI의 경우 3 round부터 다른 버전의 스테이킹 컨트랙트를 사용해야함
-        contract = elfiV2Contract
+        contract = elfiV2Contract;
+        changedRound = round - 2; // 변수명 수정해줘야함
       }
-
-      const userData = await contract.getUserData(round, userAddress);
+      const userData = await contract.getUserData(changedRound, userAddress);
       const stakingAmount = userData.userPrincipal;
-      const rewardAmount = await contract.getUserReward(userAddress, round);
+      const rewardAmount = await contract.getUserReward(
+        userAddress,
+        changedRound,
+      );
 
       if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
         return (

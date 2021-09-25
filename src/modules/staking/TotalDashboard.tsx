@@ -23,7 +23,9 @@ import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
 import useAppState from '../../hooks/useAppState';
 import TransactionContext from '../../contexts/TransactionContext';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  isElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   TotalDashboard: {
@@ -49,7 +51,8 @@ const TotalDashboard: React.FC = () => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
-  const stakingPoolContract = useStakingPool(cryptoType);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const currentRound = getCurrentStakingRound();
   const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2
@@ -228,11 +231,7 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               let screen;
               if (cryptoType === CryptoType.EL) {
-                if (
-                  isCurrentRound &&
-                  ((currentRound === 2 && selectedRound === 1) ||
-                    (currentRound === 4 && selectedRound === 3))
-                ) {
+                if (isCurrentRound && selectedRound < currentRound) {
                   screen = StakingPage.UnstakeAndMigrate;
                 } else {
                   screen = StakingPage.Unstake;
