@@ -37,7 +37,9 @@ import getStakingStatus from '../../utiles/getStakingStatus';
 import StakingStatus from '../../enums/StakingStatus';
 import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  setIsElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 import range from '../../utiles/range';
 
 type ParamList = {
@@ -62,7 +64,8 @@ const CurrentDashboard: React.FC = () => {
     return res + rewardPerDay * cur;
   }, 0);
   const { t } = useTranslation();
-  const stakingPoolContract = useStakingPool(cryptoType);
+  const isElfiV2 = setIsElfiV2(cryptoType, currentRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
@@ -70,7 +73,10 @@ const CurrentDashboard: React.FC = () => {
   const appState = useAppState();
   const hasWallet = isWalletUser || user.ethAddresses[0];
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
-
+  const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
+    cryptoType === CryptoType.EL || currentRound <= 2
+      ? currentRound
+      : currentRound - 2;
   let nextButtonTitle = '';
   if (!hasWallet) {
     nextButtonTitle = t('staking.need_wallet'); //
@@ -92,7 +98,7 @@ const CurrentDashboard: React.FC = () => {
   }
 
   const getPoolData = async () => {
-    const poolData = await stakingPoolContract.getPoolData(currentRound);
+    const poolData = await stakingPoolContract.getPoolData(changedRound);
     setTotalPrincipal(poolData[4]);
   };
 
