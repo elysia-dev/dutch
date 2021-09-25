@@ -20,8 +20,6 @@ const useStakingByType = (
   const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
   const navigation = useNavigation();
 
-  console.log('sssssss', stakingPoolContract.address);
-
   const notifyFail = () => {
     navigation.goBack();
     afterTxFailed('Transaction failed');
