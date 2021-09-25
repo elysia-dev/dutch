@@ -30,7 +30,7 @@ import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import getCurrentStakingRound, {
-  setIsElfiV2,
+  isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
@@ -60,12 +60,16 @@ const Unstake: React.FC = () => {
     StakingType.Unstake,
     round,
   );
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const { t } = useTranslation();
-  const { principal } = useStakingInfo(cryptoType, round);
+  const { principal } = useStakingInfo(cryptoType, round, isElfiV2Con);
   const [userPrincipal, setUserPrincipal] = useState(principal);
   const [isLoading, setIsLoading] = useState(false);
-  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS

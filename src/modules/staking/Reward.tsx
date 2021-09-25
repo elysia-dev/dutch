@@ -24,7 +24,7 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
-import { setIsElfiV2 } from '../../utiles/getCurrentStakingRound';
+import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Reward: {
@@ -44,7 +44,7 @@ const Reward: React.FC = () => {
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { getBalance } = useContext(AssetContext);
-  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
@@ -55,8 +55,12 @@ const Reward: React.FC = () => {
     changedRound,
   );
   const [isLoading, setIsLoading] = useState(false);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
-  const { reward } = useStakingInfo(cryptoType, changedRound);
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
+  const { reward } = useStakingInfo(cryptoType, changedRound, isElfiV2Con);
   const [userReward, setUserReward] = useState(0);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL

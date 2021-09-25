@@ -34,7 +34,7 @@ import StakingConfirmModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
 import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
 import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
-import { setIsElfiV2 } from '../../utiles/getCurrentStakingRound';
+import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -60,10 +60,18 @@ const UnstakeAndMigrate: React.FC = () => {
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
-  const { principal, reward } = useStakingInfo(cryptoType, selectedRound);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const { principal, reward } = useStakingInfo(
+    cryptoType,
+    selectedRound,
+    isElfiV2Con,
+  );
   const [isLoading, setIsLoading] = useState(false);
-  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];

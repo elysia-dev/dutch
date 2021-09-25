@@ -38,7 +38,7 @@ import StakingStatus from '../../enums/StakingStatus';
 import StakingDescription from './components/StakingDescription';
 import useAppState from '../../hooks/useAppState';
 import getCurrentStakingRound, {
-  setIsElfiV2,
+  isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
 import range from '../../utiles/range';
 
@@ -64,8 +64,8 @@ const CurrentDashboard: React.FC = () => {
     return res + rewardPerDay * cur;
   }, 0);
   const { t } = useTranslation();
-  const isElfiV2 = setIsElfiV2(cryptoType, currentRound);
-  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
+  const isElfiV2Con = isElfiV2(cryptoType, currentRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );

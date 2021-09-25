@@ -38,7 +38,7 @@ import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import getCurrentStakingRound, {
-  setIsElfiV2,
+  isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
@@ -73,15 +73,19 @@ const Stake: React.FC = () => {
   });
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
-  const stakingPoolContract = useStakingPool(cryptoType);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
   const currentStakingRound = getCurrentStakingRound();
-  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
+  const { stakeByType } = useStakingByType(
+    cryptoType,
+    setIsLoading,
+    isElfiV2Con,
+  );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
