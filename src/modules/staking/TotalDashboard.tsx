@@ -231,11 +231,7 @@ const TotalDashboard: React.FC = () => {
             pressHandler={() => {
               let screen;
               if (cryptoType === CryptoType.EL) {
-                if (
-                  isCurrentRound &&
-                  ((currentRound === 2 && selectedRound === 1) ||
-                    (currentRound === 4 && selectedRound === 3))
-                ) {
+                if (isCurrentRound && selectedRound < currentRound) {
                   screen = StakingPage.UnstakeAndMigrate;
                 } else {
                   screen = StakingPage.Unstake;
