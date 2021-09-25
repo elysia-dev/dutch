@@ -85,6 +85,7 @@ export const Main: React.FC = () => {
     : user.ethAddresses[0];
   const elContract = useStakingPool(CryptoType.EL);
   const elfiContract = useStakingPool(CryptoType.ELFI);
+  const elfiV2Contract = useStakingPool(CryptoType.ELFI, true);
 
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
@@ -115,6 +116,11 @@ export const Main: React.FC = () => {
 
     const tempBoxes = stakingRounds.map(async (round) => {
       if (!userAddress) return;
+
+      if (type === CryptoType.ELFI && round >= 3) {
+        // ELFI의 경우 3 round부터 다른 버전의 스테이킹 컨트랙트를 사용해야함
+        contract = elfiV2Contract
+      }
 
       const userData = await contract.getUserData(round, userAddress);
       const stakingAmount = userData.userPrincipal;
