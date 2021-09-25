@@ -29,7 +29,9 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfrimModal from '../../shared/components/StakingConfirmModal';
 import useStakingByType from '../../hooks/useStakingByType';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  setIsElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Unstake: {
@@ -62,7 +64,8 @@ const Unstake: React.FC = () => {
   const { principal } = useStakingInfo(cryptoType, round);
   const [userPrincipal, setUserPrincipal] = useState(principal);
   const [isLoading, setIsLoading] = useState(false);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
+  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS

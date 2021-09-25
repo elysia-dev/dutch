@@ -23,7 +23,9 @@ import commaFormatter from '../../utiles/commaFormatter';
 import useStakingPool from '../../hooks/useStakingPool';
 import useAppState from '../../hooks/useAppState';
 import TransactionContext from '../../contexts/TransactionContext';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  setIsElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   TotalDashboard: {
@@ -49,7 +51,8 @@ const TotalDashboard: React.FC = () => {
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
   const { t } = useTranslation();
-  const stakingPoolContract = useStakingPool(cryptoType);
+  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
   const currentRound = getCurrentStakingRound();
   const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2

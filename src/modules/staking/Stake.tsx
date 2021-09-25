@@ -37,7 +37,9 @@ import useErcContract from '../../hooks/useErcContract';
 import useStakingPool from '../../hooks/useStakingPool';
 import CryptoType from '../../enums/CryptoType';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
-import getCurrentStakingRound from '../../utiles/getCurrentStakingRound';
+import getCurrentStakingRound, {
+  setIsElfiV2,
+} from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Stake: {
@@ -77,8 +79,9 @@ const Stake: React.FC = () => {
   );
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
-  const { stakeByType } = useStakingByType(cryptoType, setIsLoading);
   const currentStakingRound = getCurrentStakingRound();
+  const isElfiV2 = setIsElfiV2(cryptoType, selectedRound);
+  const { stakeByType } = useStakingByType(cryptoType, setIsLoading, isElfiV2);
   const address = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
