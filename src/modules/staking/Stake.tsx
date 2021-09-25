@@ -195,7 +195,8 @@ const Stake: React.FC = () => {
         return;
       }
       stakeByType(
-        isMax ? String(crytoBalance) : value,
+        // isMax ? String(crytoBalance) : value,
+        value,
         selectedRound,
         StakingType.Stake,
       );
@@ -282,7 +283,7 @@ const Stake: React.FC = () => {
             })}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 'max']}
+            values={[0.01, 1, 10, 100]}
             inputValue={value}
             setValue={setValue}
             maxValue={crytoBalance}
@@ -368,7 +369,8 @@ const Stake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? crytoBalance.toFixed(18) : value}
+      // value={isMax ? crytoBalance.toFixed(18) : value}
+      value={value}
       page="staking"
       stakingTxData={{
         type: 'stake',

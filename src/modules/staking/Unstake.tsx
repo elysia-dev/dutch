@@ -106,7 +106,8 @@ const Unstake: React.FC = () => {
   const onPressUnstaking = async () => {
     try {
       await stakeByType(
-        isMax ? String(userPrincipal) : value,
+        // isMax ? String(userPrincipal) : value,
+        value,
         round,
         StakingType.Unstake,
       );
@@ -159,7 +160,7 @@ const Unstake: React.FC = () => {
             invalidText={t('staking.unstaking_value_excess')}
           />
           <NumberPadShortcut
-            values={[0.01, 1, 10, 100, 'max']}
+            values={[0.01, 1, 10, 100]}
             inputValue={value}
             setValue={setValue}
             maxValue={userPrincipal}
@@ -225,7 +226,8 @@ const Unstake: React.FC = () => {
 
   return (
     <PaymentSelection
-      value={isMax ? userPrincipal.toFixed(18) : value}
+      // value={isMax ? userPrincipal.toFixed(18) : value}
+      value={value}
       page="staking"
       stakingTxData={{
         type: 'unstake',
