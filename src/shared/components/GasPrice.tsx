@@ -16,7 +16,7 @@ const GasPrice: React.FC<{
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
 
-  if (!estimatedGas) {
+  if (!estimatedGas || estimatedGas === 'NaN') {
     return <></>;
   }
 
