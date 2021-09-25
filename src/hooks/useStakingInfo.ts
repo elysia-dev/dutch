@@ -5,7 +5,11 @@ import CryptoType from '../enums/CryptoType';
 import useStakingPool from './useStakingPool';
 import UserContext from '../contexts/UserContext';
 
-const useStakingInfo = (crytoType: CryptoType, selectedRound: number) => {
+const useStakingInfo = (
+  crytoType: CryptoType,
+  selectedRound: number,
+  isElfiV2: boolean,
+) => {
   const [userStakedData, setUserStakedData] = useState<{
     principal: number;
     reward: number;
@@ -15,7 +19,7 @@ const useStakingInfo = (crytoType: CryptoType, selectedRound: number) => {
   });
   const { wallet } = useContext(WalletContext);
   const { user, isWalletUser } = useContext(UserContext);
-  const stakingPoolContract = useStakingPool(crytoType);
+  const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
     : user.ethAddresses[0];
