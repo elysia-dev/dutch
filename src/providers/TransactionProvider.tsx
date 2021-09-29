@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
+import { ethers } from 'ethers';
+import moment from 'moment';
 import { PENDING_TRANSACTIONS } from '../constants/storage';
 import TransactionContext, {
   TransactionType,
@@ -15,8 +17,6 @@ import { bscProvider, provider } from '../utiles/getContract';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
-import { ethers } from 'ethers';
-import moment from 'moment';
 
 const TransactionProvider: React.FC = (props) => {
   const { refreshBalance } = useContext(AssetContext);
