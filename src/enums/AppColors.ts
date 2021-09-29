@@ -4,6 +4,7 @@ enum AppColors {
   SUB_GREY = '#E6E6E6',
   GREY2 = '#C8C8C8',
   GREY3 = '#F9F9F9',
+  GREY4 = '#F4F4F4',
   BACKGROUND_GREY = '#F6F6F8',
   BACKGROUND_WHITE = '#FFFFFF80',
   BLUISH_GREY = '#E6ECF2',
@@ -28,6 +29,7 @@ enum AppColors {
   NOTICE_RED = '#FC5C4F',
   TRANSPARENT = 'transparent',
   TEXT_GREY = '#A7A7A7',
+  TEXT_GREY2 = '#646464',
 }
 
 export default AppColors;
