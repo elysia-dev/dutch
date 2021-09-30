@@ -109,7 +109,7 @@ const StakingInfoBox: React.FC<{
             {`(= $ ${commaFormatter(
               decimalFormatter(
                 Number(utils.formatEther(rewardAmount)) *
-                  getCryptoPrice(cryptoType),
+                  getCryptoPrice(rewardCryptoType),
                 2,
               ),
             )})`}
