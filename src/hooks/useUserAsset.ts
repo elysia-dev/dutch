@@ -9,6 +9,7 @@ import TxStatus from '../enums/TxStatus';
 import useStakingPool from './useStakingPool';
 import { NUMBER_OF_ROUNDS } from '../constants/staking';
 import range from '../utiles/range';
+import getPaymentCrypto from '../utiles/getPaymentCrypto';
 
 const useUserAsset = (userAddress: string) => {
   const { assets } = useContext(AssetContext);
@@ -25,12 +26,21 @@ const useUserAsset = (userAddress: string) => {
     CryptoType.DAI,
   ];
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
-  const [userAsset, setUserAsset] = useState({
-    realEstate: 0,
-    realEstateInterest: 0,
-    staking: 0,
-    stakingReward: 0,
-    wallet: 0,
+  const [asyncAsset, setAsyncAsset] = useState({
+    totalInterest: 0,
+    totalPrincipal: 0,
+    totalReward: 0,
+  });
+  const realEstateAssets = assets.filter((item) => {
+    if (
+      item.productId &&
+      transactions[0]?.productId === item.productId &&
+      transactions[0].status === TxStatus.Pending &&
+      item.value <= 0
+    ) {
+      return true;
+    }
+    return item.type === CryptoType.ELA && item.value > 0;
   });
 
   const getFiatFromBigNumber = (value: BigNumber, unit: CryptoType) => {
@@ -38,33 +48,21 @@ const useUserAsset = (userAddress: string) => {
   };
 
   const getRealEstate = () => {
-    console.log(assets, 44444);
-    return assets
-      .filter((item) => {
-        if (
-          item.productId &&
-          transactions[0]?.productId === item.productId &&
-          transactions[0].status === TxStatus.Pending &&
-          item.value <= 0
-        ) {
-          return true;
-        }
-        return item.type === CryptoType.ELA && item.value > 0;
-      })
-      .reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0);
+    return realEstateAssets.reduce(
+      (res, cur) => cur.value * getCryptoPrice(cur.type) + res,
+      0,
+    );
   };
 
   const getRealEstateInterest = async () => {
-    const promises = assets
-      .filter((item) => item.address)
-      .map(async (item) => {
-        const contract = getAssetTokenFromCryptoType(
-          item.type,
-          item.address || '',
-        );
-        const interest = await contract?.getReward(userAddress);
-        return getFiatFromBigNumber(interest, item.type);
-      });
+    const promises = realEstateAssets.map(async (item) => {
+      const contract = getAssetTokenFromCryptoType(
+        getPaymentCrypto(item.paymentMethod!),
+        item.address!,
+      );
+      const interest = await contract?.getReward(userAddress);
+      return Number(utils.formatEther(interest));
+    });
     const interests = await Promise.all(promises);
     return interests.reduce((res, cur) => res + cur, 0);
   };
@@ -115,26 +113,27 @@ const useUserAsset = (userAddress: string) => {
   };
 
   useEffect(() => {
-    const getUserAsset = async () => {
-      const realEstate = getRealEstate();
-      const realEstateInterest = await getRealEstateInterest();
-      const staking = await getStaking();
-      const stakingReward = await getStakingReward();
-      const wallet = getWallet();
+    const getAsyncAsset = async () => {
+      const totalInterest = await getRealEstateInterest();
+      const totalPrincipal = await getStaking();
+      const totalReward = await getStakingReward();
 
-      setUserAsset({
-        realEstate,
-        realEstateInterest,
-        staking,
-        stakingReward,
-        wallet,
+      setAsyncAsset({
+        totalInterest,
+        totalPrincipal,
+        totalReward,
       });
     };
 
-    getUserAsset();
+    getAsyncAsset();
   }, []);
 
-  return userAsset;
+  // interest랑 reward 값이 이상하게 나온다.....
+  return {
+    ...asyncAsset,
+    totalRealEstate: getRealEstate(),
+    totalWallet: getWallet(),
+  };
 };
 
 export default useUserAsset;
