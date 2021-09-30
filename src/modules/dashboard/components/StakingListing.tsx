@@ -30,15 +30,18 @@ const StakingListing: React.FC<{
           marginTop: 12,
           marginBottom: 10,
         }}>
-        <H3Text
-          label={t('main.my_staking')}
+        <View
           style={{
             paddingBottom: 15,
             marginBottom: 10,
             borderBottomWidth: 1,
             borderBottomColor: AppColors.GREY,
-          }}
-        />
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <H3Text label={t('main.my_staking')} />
+          <H3Text label={'$ ...'} />
+        </View>
         {hasAnyInfoBoxes.EL && (
           <>
             <View
