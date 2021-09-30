@@ -6,6 +6,7 @@ import { H3Text, P1Text, P2Text } from '../../../shared/components/Texts';
 import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 import StakingListingSkeleton from './StakingListingSkeleton';
+import AppFonts from '../../../enums/AppFonts';
 
 const StakingListing: React.FC<{
   elStakingInfoBoxes: React.ReactNode[];
@@ -69,7 +70,7 @@ const StakingListing: React.FC<{
                   stakingCrypto: CryptoType.EL,
                   rewardCrypto: CryptoType.ELFI,
                 })}
-                style={{ marginLeft: 15 }}
+                style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
               />
             </View>
             <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
@@ -102,7 +103,7 @@ const StakingListing: React.FC<{
                   stakingCrypto: CryptoType.ELFI,
                   rewardCrypto: CryptoType.DAI,
                 })}
-                style={{ marginLeft: 15 }}
+                style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
               />
             </View>
             <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>

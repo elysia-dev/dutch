@@ -7,6 +7,7 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import RealEstateInfoBox from './RealEstateInfoBox';
 import RealEstateListingSkeleton from './RealEstateListingSkeleton';
 import Asset from '../../../types/Asset';
+import AppFonts from '../../../enums/AppFonts';
 
 const RealEstateListing: React.FC<{
   title: string;
@@ -62,7 +63,10 @@ const RealEstateListing: React.FC<{
                       left: 20,
                     }}
                   />
-                  <P1Text label={asset.title} style={{ marginLeft: 15 }} />
+                  <P1Text
+                    label={asset.title}
+                    style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
+                  />
                 </View>
                 <View style={{ marginTop: 8 }}>
                   <RealEstateInfoBox asset={asset} onPress={itemPressHandler} />
