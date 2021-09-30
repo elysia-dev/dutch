@@ -81,7 +81,7 @@ const RealEstateListing: React.FC<{
             }}>
             <P2Text
               style={{ textAlign: 'center', marginTop: 40 }}
-              label={t('staking.no_history')}
+              label={t('assets.null_investment')}
             />
           </View>
         )}
