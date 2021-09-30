@@ -50,6 +50,7 @@ import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
 import range from '../../utiles/range';
 import { NUMBER_OF_ROUNDS } from '../../constants/staking';
+import RealEstateListing from './components/RealEstateListing';
 
 type ParamList = {
   Main: {
@@ -299,7 +300,7 @@ export const Main: React.FC = () => {
               </TouchableOpacity>
             )}
           </View>
-          <AssetListing
+          <RealEstateListing
             title={t('main.my_assets')}
             assets={assets.filter((item) => {
               if (
