@@ -51,6 +51,7 @@ import Skeleton from '../../shared/components/Skeleton';
 import range from '../../utiles/range';
 import { NUMBER_OF_ROUNDS } from '../../constants/staking';
 import RealEstateListing from './components/RealEstateListing';
+import useUserAsset from '../../hooks/useUserAsset';
 
 type ParamList = {
   Main: {
@@ -100,6 +101,14 @@ export const Main: React.FC = () => {
   });
   const [stakingLoaded, setStakingLoaded] = useState(false);
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
+
+  const {
+    totalRealEstate,
+    totalInterest,
+    totalPrincipal,
+    totalReward,
+    totalWallet,
+  } = useUserAsset(userAddress!);
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
@@ -225,11 +234,11 @@ export const Main: React.FC = () => {
                 {assetLoaded ? (
                   <TitleText
                     label={currencyFormatter(
-                      assets.reduce(
-                        (res, cur) =>
-                          res + cur.value * getCryptoPrice(cur.type),
-                        0,
-                      ),
+                      totalRealEstate +
+                        totalInterest +
+                        totalPrincipal +
+                        totalReward +
+                        totalWallet,
                       2,
                     )}
                   />
