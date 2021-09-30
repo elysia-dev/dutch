@@ -88,7 +88,7 @@ const useUserAsset = (userAddress: string) => {
   const getStakingReward = async () => {
     const elRewardPromises = stakingRounds.map(async (round) => {
       const rewardAmount = await elContract.getUserReward(userAddress, round);
-      return getFiatFromBigNumber(rewardAmount, CryptoType.EL);
+      return getFiatFromBigNumber(rewardAmount, CryptoType.ELFI);
     });
 
     const elfiRewardPromises = stakingRounds.map(async (round) => {
@@ -98,7 +98,7 @@ const useUserAsset = (userAddress: string) => {
         userAddress,
         changedRound,
       );
-      return getFiatFromBigNumber(rewardAmount, CryptoType.ELFI);
+      return getFiatFromBigNumber(rewardAmount, CryptoType.DAI);
     });
 
     const elReward = await Promise.all(elRewardPromises);
@@ -128,7 +128,6 @@ const useUserAsset = (userAddress: string) => {
     getAsyncAsset();
   }, []);
 
-  // interest랑 reward 값이 이상하게 나온다.....
   return {
     ...asyncAsset,
     totalRealEstate: getRealEstate(),
