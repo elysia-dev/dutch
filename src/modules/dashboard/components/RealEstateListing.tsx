@@ -8,6 +8,10 @@ import RealEstateInfoBox from './RealEstateInfoBox';
 import RealEstateListingSkeleton from './RealEstateListingSkeleton';
 import Asset from '../../../types/Asset';
 import AppFonts from '../../../enums/AppFonts';
+import useUserAsset from '../../../hooks/useUserAsset';
+import commaFormatter from '../../../utiles/commaFormatter';
+import decimalFormatter from '../../../utiles/decimalFormatter';
+import useUserAddress from '../../../hooks/useUserAddress';
 
 const RealEstateListing: React.FC<{
   title: string;
@@ -16,6 +20,8 @@ const RealEstateListing: React.FC<{
   assetLoaded: boolean;
 }> = ({ title, assets, itemPressHandler, assetLoaded }) => {
   const { t } = useTranslation();
+  const userAddress = useUserAddress();
+  const { totalRealEstate, totalInterest } = useUserAsset(userAddress!);
 
   if (assetLoaded) {
     return (
@@ -37,7 +43,11 @@ const RealEstateListing: React.FC<{
             justifyContent: 'space-between',
           }}>
           <H3Text label={title} />
-          <H3Text label={`$ ${'...'}`} />
+          <H3Text
+            label={`$ ${commaFormatter(
+              decimalFormatter(totalRealEstate + totalInterest, 2),
+            )}`}
+          />
         </View>
         {assets.length > 0 &&
           assets.map((asset) => {
