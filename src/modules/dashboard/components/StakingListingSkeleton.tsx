@@ -18,15 +18,18 @@ const StakingListingSkeleton: React.FC = () => {
         marginTop: 12,
         marginBottom: 10,
       }}>
-      <H3Text
-        label={t('main.my_staking')}
+      <View
         style={{
           paddingBottom: 15,
           marginBottom: 10,
           borderBottomWidth: 1,
           borderBottomColor: AppColors.GREY,
-        }}
-      />
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <H3Text label={t('main.my_staking')} />
+        <Skeleton width={90} height={20} radius={5} />
+      </View>
       <View
         style={{
           display: 'flex',
