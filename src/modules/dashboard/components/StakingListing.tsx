@@ -7,6 +7,10 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 import StakingListingSkeleton from './StakingListingSkeleton';
 import AppFonts from '../../../enums/AppFonts';
+import useUserAsset from '../../../hooks/useUserAsset';
+import useUserAddress from '../../../hooks/useUserAddress';
+import commaFormatter from '../../../utiles/commaFormatter';
+import decimalFormatter from '../../../utiles/decimalFormatter';
 
 const StakingListing: React.FC<{
   elStakingInfoBoxes: React.ReactNode[];
@@ -20,6 +24,8 @@ const StakingListing: React.FC<{
   stakingLoaded,
 }) => {
   const { t } = useTranslation();
+  const userAddress = useUserAddress();
+  const { totalPrincipal, totalReward } = useUserAsset(userAddress!);
 
   if (stakingLoaded) {
     return (
@@ -41,7 +47,11 @@ const StakingListing: React.FC<{
             justifyContent: 'space-between',
           }}>
           <H3Text label={t('main.my_staking')} />
-          <H3Text label={'$ ...'} />
+          <H3Text
+            label={`$ ${commaFormatter(
+              decimalFormatter(totalPrincipal + totalReward, 2),
+            )}`}
+          />
         </View>
         {hasAnyInfoBoxes.EL && (
           <>
