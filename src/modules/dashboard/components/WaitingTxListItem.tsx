@@ -51,7 +51,7 @@ const WaitingTxListItem: React.FC<WaitngTransactionItem> = ({
           }}
         />
         <P2Text
-          label={unit}
+          label={unit || ''}
           style={{
             fontFamily: AppFonts.Medium,
             color: AppColors.TEXT_GREY2,
