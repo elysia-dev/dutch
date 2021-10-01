@@ -6,19 +6,22 @@ import TransactionContext from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
 import NetworkType from '../enums/NetworkType';
 import StakingType from '../enums/StakingType';
+import TransferType from '../enums/TransferType';
 import useStakingPool from './useStakingPool';
 import useTxHandler from './useTxHandler';
+import useWaitTx from './useWaitTx';
 
 const useStakingByType = (
-  crytoType: CryptoType,
+  cryptoType: CryptoType,
   setIsLoading: (isBoolean: boolean) => void,
   isElfiV2: boolean,
 ) => {
   const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
   const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
-  const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
   const navigation = useNavigation();
+  const { waitingTxs, setWaitingTx, removeStorageTx } = useWaitTx(cryptoType);
 
   const notifyFail = () => {
     navigation.goBack();
@@ -28,6 +31,7 @@ const useStakingByType = (
   const waitTx = async () => {
     try {
       await resTx?.wait();
+      removeStorageTx(resTx?.hash);
       setIsSuccessTx(true);
       afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
@@ -35,32 +39,75 @@ const useStakingByType = (
     }
   };
 
+  const getLastNonce = () => {
+    const txs = waitingTxs.filter((tx) => {
+      return tx.cryptoType !== CryptoType.BNB;
+    });
+    return txs.length !== 0
+      ? waitingTxs[waitingTxs.length - 1].nonce
+      : undefined;
+  };
+
+  const txLastNonce = (lastNonce?: number) => {
+    return {
+      nonce: lastNonce ? lastNonce + 1 : undefined,
+    };
+  };
+
   const stakeByType = async (
     value: string,
     round: number,
-    type: StakingType,
+    type: StakingType | TransferType,
+    unStakingAmount?: string,
+    reward?: number,
   ) => {
     setIsLoading(true);
     setIsSuccessTx(false);
+    let res: TransactionResponse | undefined;
+    let lastNonce: number | undefined;
+    if (waitingTxs) {
+      lastNonce = getLastNonce();
+    }
     try {
       switch (type) {
         case StakingType.Stake:
-          setResTx(await stakingPoolContract.stake(utils.parseUnits(value)));
+          res = await stakingPoolContract.stake(
+            utils.parseUnits(value),
+            txLastNonce(lastNonce),
+          );
+          setResTx(res);
           break;
         case StakingType.Unstake:
-          setResTx(
-            await stakingPoolContract.withdraw(utils.parseUnits(value), round),
+          res = await stakingPoolContract.withdraw(
+            utils.parseUnits(value),
+            round,
+            txLastNonce(lastNonce),
           );
+          setResTx(res);
           break;
         case StakingType.Migrate:
-          setResTx(
-            await stakingPoolContract.migrate(utils.parseUnits(value), round),
+          res = await stakingPoolContract.migrate(
+            utils.parseUnits(value),
+            round,
+            txLastNonce(lastNonce),
+          );
+          setResTx(res);
+          if (unStakingAmount) {
+            setWaitingTx(TransferType.Unstaking, unStakingAmount || '', res);
+          }
+          setWaitingTx(
+            TransferType.StakingReward,
+            reward?.toString() || '',
+            res,
           );
           break;
         default:
-          setResTx(await stakingPoolContract.claim(round));
+          res = await stakingPoolContract.claim(round, txLastNonce(lastNonce));
+          setResTx(res);
           break;
       }
+      console.log(type);
+      setWaitingTx(type, value, res);
     } catch (error) {
       console.log(error);
       throw Error;
