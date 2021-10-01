@@ -146,7 +146,7 @@ const useProductByType = (
     return await wallet?.getFirstSigner().sendTransaction({
       to: populatedTransaction.to,
       data: populatedTransaction.data,
-      gasPrice: utils.parseUnits('2' || '', 'gwei'),
+      gasPrice: BigNumber.from(gasPrice),
       nonce: lastNonce ? lastNonce + 1 : undefined,
     });
   };
