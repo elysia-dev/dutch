@@ -4,7 +4,10 @@ import { useTranslation, UseTranslationResponse } from 'react-i18next';
 import StakingType from '../enums/StakingType';
 import TransferType from '../enums/TransferType';
 
-const getTransferType = (transferType: TransferType, t: TFunction) => {
+const getTransferType = (
+  transferType: TransferType | StakingType,
+  t: TFunction,
+) => {
   let type;
   switch (transferType) {
     case TransferType.Purchase:
