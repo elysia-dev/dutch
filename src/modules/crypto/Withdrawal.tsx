@@ -29,11 +29,10 @@ import { getElysiaContract } from '../../utiles/getContract';
 import WalletContext from '../../contexts/WalletContext';
 import PriceContext from '../../contexts/PriceContext';
 import GasPrice from '../../shared/components/GasPrice';
-import createTransferTx from '../../utiles/createTransferTx';
-import TransferType from '../../enums/TransferType';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
+import useTransferTx from '../../hooks/useTransferTx';
 
 type ParamList = {
   Withdrawal: {
@@ -61,11 +60,7 @@ const Withdrawal: React.FC = () => {
     : getBalance(gasCrypto) < parseFloat(estimatedGas);
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const { isLoading, transferValue } = createTransferTx(
-    asset.type,
-    TransferType.Send,
-    null,
-  );
+  const { isLoading, transferCrypto } = useTransferTx(asset.type);
 
   const estimateGas = async () => {
     let estimatedGas: BigNumber | undefined;
@@ -102,7 +97,7 @@ const Withdrawal: React.FC = () => {
 
   const sendTx = async () => {
     try {
-      transferValue('0', value, state.address);
+      transferCrypto(value, state.address);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
