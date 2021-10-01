@@ -22,6 +22,8 @@ import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
 import useErcContract from '../../hooks/useErcContract';
+import useProductByType from '../../hooks/useProductByType';
+import TransferType from '../../enums/TransferType';
 
 type ParamList = {
   Refund: {
@@ -55,13 +57,14 @@ const Refund: FunctionComponent = () => {
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(
-    assetInCrypto.type,
-    contractAddress,
-  );
   const txResult = useWatingTx(
     state.txHash,
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+  );
+  const { contract, productByType } = useProductByType(
+    assetInCrypto.type,
+    contractAddress,
+    assetInToken.unit,
   );
   const [isLoading, setIsLoading] = useState(false);
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
@@ -112,16 +115,7 @@ const Refund: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
     setIsLoading(true);
     try {
-      const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(isMax ? balanceInToken.toFixed(18) : values.inToken),
-      );
-
-      if (!populatedTransaction) return;
-
-      txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
-        to: populatedTransaction.to,
-        data: populatedTransaction.data,
-      });
+      productByType(values.inFiat, values.inToken, TransferType.Refend);
 
       if (assetInCrypto.type === CryptoType.BNB) {
         setState({
