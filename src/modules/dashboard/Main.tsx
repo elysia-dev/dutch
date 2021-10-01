@@ -50,6 +50,7 @@ import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
 import range from '../../utiles/range';
 import { NUMBER_OF_ROUNDS } from '../../constants/staking';
+import WaitingTxBox from './components/WaitingTxBox';
 
 type ParamList = {
   Main: {
@@ -213,7 +214,7 @@ export const Main: React.FC = () => {
               borderBottomWidth: 1,
               borderBottomColor: AppColors.GREY,
               marginTop: 15,
-              marginBottom: 40,
+              marginBottom: 10,
             }}>
             {isWalletUser || user.ethAddresses[0] ? (
               <View
@@ -299,6 +300,7 @@ export const Main: React.FC = () => {
               </TouchableOpacity>
             )}
           </View>
+          <WaitingTxBox isFocused={isFocused} />
           <AssetListing
             title={t('main.my_assets')}
             assets={assets.filter((item) => {
