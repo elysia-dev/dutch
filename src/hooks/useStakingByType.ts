@@ -106,7 +106,6 @@ const useStakingByType = (
           setResTx(res);
           break;
       }
-      console.log(type);
       setWaitingTx(type, value, res);
     } catch (error) {
       console.log(error);
