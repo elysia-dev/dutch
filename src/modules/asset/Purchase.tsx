@@ -26,11 +26,13 @@ import {
 } from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
-import createTransferTx from '../../utiles/createTransferTx';
+import createTransferTx from '../../hooks/useTransferTx';
 import TransferType from '../../enums/TransferType';
 import useErcContract from '../../hooks/useErcContract';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import usePurchaseGas from '../../hooks/usePurchaseGas';
+import useWaitTx from '../../hooks/useWaitTx';
+import useProductByType from '../../hooks/useProductByType';
 
 type ParamList = {
   Purchase: {
@@ -76,19 +78,15 @@ const Purchase: FunctionComponent = () => {
   const { gasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(
+  const { contract, productByType } = useProductByType(
     assetInCrypto.type,
     contractAddress,
+    assetInToken.unit,
   );
   const { getBalance } = useContext(AssetContext);
   const { estimagedGasPrice, setEstimatedGas } = usePurchaseGas(
     contract,
     assetInCrypto.type,
-  );
-  const { transferValue } = createTransferTx(
-    assetInCrypto.type,
-    TransferType.Purchase,
-    contract,
   );
   const remainingSupplyInCrypto =
     ((remainingSupplyInToken || 0) * 5) / getCryptoPrice(assetInCrypto.type);
@@ -124,12 +122,17 @@ const Purchase: FunctionComponent = () => {
     try {
       setIsLoading(true);
       if (isMax) {
-        await transferValue(
+        await productByType(
           maxValueInFiat.toFixed(18),
           maxValueInToken.toFixed(18),
+          TransferType.Purchase,
         );
       } else {
-        await transferValue(values.inFiat, values.inToken);
+        await productByType(
+          values.inFiat,
+          values.inToken,
+          TransferType.Purchase,
+        );
       }
     } catch (error) {
       afterTxFailed('Transaction failed');
