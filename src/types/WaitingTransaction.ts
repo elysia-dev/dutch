@@ -1,8 +1,9 @@
 export type WaitingTransaction = {
   transferType: string;
-  unit: string;
   date: string;
+  unit?: string;
   nonce?: number;
   txHash?: string;
   amount?: string;
+  cryptoType?: string;
 };
