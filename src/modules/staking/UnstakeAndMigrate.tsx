@@ -198,7 +198,7 @@ const UnstakeAndMigrate: React.FC = () => {
         return;
       }
       const migrateAmount = String(userPrincipal - parseFloat(value));
-      stakeByType(migrateAmount, round, StakingType.Migrate);
+      stakeByType(migrateAmount, round, StakingType.Migrate, value, reward);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
