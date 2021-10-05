@@ -49,13 +49,6 @@ const useUserAsset = () => {
     return parseFloat(utils.formatEther(value)) * getCryptoPrice(unit);
   };
 
-  const getRealEstate = () => {
-    return realEstateAssets.reduce(
-      (res, cur) => cur.value * getCryptoPrice(cur.type) + res,
-      0,
-    );
-  };
-
   const getRealEstateInterest = async () => {
     if (!userAddress) return 0;
 
@@ -115,12 +108,6 @@ const useUserAsset = () => {
     return [...elReward, ...elfiReward].reduce((res, cur) => res + cur, 0);
   };
 
-  const getWallet = () => {
-    return assets
-      .filter((item) => crytoTypes.includes(item.type))
-      .reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0);
-  };
-
   useEffect(() => {
     const getAsyncAsset = async () => {
       const totalInterest = await getRealEstateInterest();
@@ -139,8 +126,13 @@ const useUserAsset = () => {
 
   return {
     ...asyncAsset,
-    totalRealEstate: getRealEstate(),
-    totalWallet: getWallet(),
+    totalRealEstate: realEstateAssets.reduce(
+      (res, cur) => cur.value * getCryptoPrice(cur.type) + res,
+      0,
+    ),
+    totalWallet: assets
+      .filter((item) => crytoTypes.includes(item.type))
+      .reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0),
   };
 };
 
