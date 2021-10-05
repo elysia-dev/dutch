@@ -50,6 +50,7 @@ import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
 import range from '../../utiles/range';
 import { NUMBER_OF_ROUNDS } from '../../constants/staking';
+import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
 
 type ParamList = {
   Main: {
@@ -81,7 +82,7 @@ export const Main: React.FC = () => {
     CryptoType.DAI,
   ];
   const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
+    ? wallet?.getFirstAddress() || ''
     : user.ethAddresses[0];
   const elContract = useStakingPool(CryptoType.EL);
   const elfiContract = useStakingPool(CryptoType.ELFI);
@@ -116,26 +117,20 @@ export const Main: React.FC = () => {
 
     const tempBoxes = stakingRounds.map(async (round) => {
       if (!userAddress) return;
-      let changedRound = round;
-      if (type === CryptoType.ELFI && round >= 3) {
-        // ELFI의 경우 3 round부터 다른 버전의 스테이킹 컨트랙트를 사용해야함
-        contract = elfiV2Contract;
-        changedRound = round - 2; // 변수명 수정해줘야함
-      }
-      const userData = await contract.getUserData(changedRound, userAddress);
-      const stakingAmount = userData.userPrincipal;
-      const rewardAmount = await contract.getUserReward(
-        userAddress,
-        changedRound,
+
+      const { userPrincipal, rewardAmount } = await getPrincipalAndReward(
+        contract,
+        round,
+        type,
       );
 
-      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+      if (!userPrincipal.isZero() || !rewardAmount.isZero()) {
         return (
           <StakingInfoBox
             key={round}
             cryptoType={type}
             round={round}
-            stakingAmount={stakingAmount}
+            stakingAmount={userPrincipal}
             rewardAmount={rewardAmount}
           />
         );
@@ -145,6 +140,30 @@ export const Main: React.FC = () => {
     setInfoBoxes(await Promise.all(tempBoxes));
     setStakingLoaded(true);
   }
+
+  const getPrincipalAndReward = async (
+    contract: StakingPool,
+    round: number,
+    type: CryptoType,
+  ) => {
+    let changedRound = round;
+    let erc20Contract = contract;
+    if (isElfiV2(type, round)) {
+      // ELFI의 경우 3 round부터 다른 버전의 스테이킹 컨트랙트를 사용해야함
+      changedRound = round - 2; // 변수명 수정해줘야함
+      erc20Contract = elfiV2Contract;
+    }
+    const { userPrincipal } = await erc20Contract.getUserData(
+      changedRound,
+      userAddress,
+    );
+    const rewardAmount = await erc20Contract.getUserReward(
+      userAddress,
+      changedRound,
+    );
+
+    return { userPrincipal, rewardAmount };
+  };
 
   const loadBalances = async () => {
     if (!isWalletUser) {
