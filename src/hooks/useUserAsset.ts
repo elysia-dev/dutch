@@ -49,7 +49,8 @@ const useUserAsset = () => {
     return parseFloat(utils.formatEther(value)) * getCryptoPrice(unit);
   };
 
-  const getRealEstateInterest = async () => {
+  // 부동산 이자 총액
+  const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
     const promises = realEstateAssets.map(async (item) => {
@@ -65,7 +66,8 @@ const useUserAsset = () => {
     return interests.reduce((res, cur) => res + cur, 0);
   };
 
-  const getStaking = async () => {
+  // 스테이킹 원금 총액
+  const getTotalPrincipal = async () => {
     if (!userAddress) return 0;
 
     const elStakingPromises = stakingRounds.map(async (round) => {
@@ -85,7 +87,8 @@ const useUserAsset = () => {
     return [...elStaking, ...elfiStaking].reduce((res, cur) => res + cur, 0);
   };
 
-  const getStakingReward = async () => {
+  // 스테이킹 보상 총액
+  const getTotalReward = async () => {
     if (!userAddress) return 0;
 
     const elRewardPromises = stakingRounds.map(async (round) => {
@@ -110,9 +113,9 @@ const useUserAsset = () => {
 
   useEffect(() => {
     const getTotalAsset = async () => {
-      const totalInterest = await getRealEstateInterest();
-      const totalPrincipal = await getStaking();
-      const totalReward = await getStakingReward();
+      const totalInterest = await getTotalInterest();
+      const totalPrincipal = await getTotalPrincipal();
+      const totalReward = await getTotalReward();
 
       setTotalAsset({
         totalInterest,
