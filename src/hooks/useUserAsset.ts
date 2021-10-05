@@ -57,6 +57,8 @@ const useUserAsset = () => {
   };
 
   const getRealEstateInterest = async () => {
+    if (!userAddress) return 0;
+
     const promises = realEstateAssets.map(async (item) => {
       const contract = getAssetTokenFromCryptoType(
         getPaymentCrypto(item.paymentMethod!),
@@ -65,11 +67,14 @@ const useUserAsset = () => {
       const interest = await contract?.getReward(userAddress);
       return Number(utils.formatEther(interest));
     });
+
     const interests = await Promise.all(promises);
     return interests.reduce((res, cur) => res + cur, 0);
   };
 
   const getStaking = async () => {
+    if (!userAddress) return 0;
+
     const elStakingPromises = stakingRounds.map(async (round) => {
       const userData = await elContract.getUserData(round, userAddress);
       return getFiatFromBigNumber(userData.userPrincipal, CryptoType.EL);
@@ -88,6 +93,8 @@ const useUserAsset = () => {
   };
 
   const getStakingReward = async () => {
+    if (!userAddress) return 0;
+
     const elRewardPromises = stakingRounds.map(async (round) => {
       const rewardAmount = await elContract.getUserReward(userAddress, round);
       return getFiatFromBigNumber(rewardAmount, CryptoType.ELFI);
