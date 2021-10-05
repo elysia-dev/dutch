@@ -45,10 +45,6 @@ const useUserAsset = () => {
     return item.type === CryptoType.ELA && item.value > 0;
   });
 
-  const getFiatFromBigNumber = (value: BigNumber, unit: CryptoType) => {
-    return parseFloat(utils.formatEther(value)) * getCryptoPrice(unit);
-  };
-
   // 부동산 이자 총액
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
@@ -72,14 +68,20 @@ const useUserAsset = () => {
 
     const elStakingPromises = stakingRounds.map(async (round) => {
       const userData = await elContract.getUserData(round, userAddress);
-      return getFiatFromBigNumber(userData.userPrincipal, CryptoType.EL);
+      return (
+        parseFloat(utils.formatEther(userData.userPrincipal)) *
+        getCryptoPrice(CryptoType.EL)
+      );
     });
 
     const elfiStakingPromises = stakingRounds.map(async (round) => {
       const contract = round > 2 ? elfiV2Contract : elfiContract;
       const changedRound = round > 2 ? round - 2 : round;
       const userData = await contract.getUserData(changedRound, userAddress);
-      return getFiatFromBigNumber(userData.userPrincipal, CryptoType.ELFI);
+      return (
+        parseFloat(utils.formatEther(userData.userPrincipal)) *
+        getCryptoPrice(CryptoType.ELFI)
+      );
     });
 
     const elStaking = await Promise.all(elStakingPromises);
@@ -93,7 +95,10 @@ const useUserAsset = () => {
 
     const elRewardPromises = stakingRounds.map(async (round) => {
       const rewardAmount = await elContract.getUserReward(userAddress, round);
-      return getFiatFromBigNumber(rewardAmount, CryptoType.ELFI);
+      return (
+        parseFloat(utils.formatEther(rewardAmount)) *
+        getCryptoPrice(CryptoType.ELFI)
+      );
     });
 
     const elfiRewardPromises = stakingRounds.map(async (round) => {
@@ -103,7 +108,10 @@ const useUserAsset = () => {
         userAddress,
         changedRound,
       );
-      return getFiatFromBigNumber(rewardAmount, CryptoType.DAI);
+      return (
+        parseFloat(utils.formatEther(rewardAmount)) *
+        getCryptoPrice(CryptoType.DAI)
+      );
     });
 
     const elReward = await Promise.all(elRewardPromises);
