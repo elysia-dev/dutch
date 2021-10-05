@@ -21,7 +21,7 @@ const RealEstateListing: React.FC<{
 }> = ({ title, assets, itemPressHandler, assetLoaded }) => {
   const { t } = useTranslation();
   const userAddress = useUserAddress();
-  const { totalRealEstate, totalInterest } = useUserAsset(userAddress!);
+  const { totalRealEstate, totalInterest } = useUserAsset();
 
   if (assetLoaded) {
     return (

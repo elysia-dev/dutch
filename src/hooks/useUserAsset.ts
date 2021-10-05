@@ -10,8 +10,10 @@ import useStakingPool from './useStakingPool';
 import { NUMBER_OF_ROUNDS } from '../constants/staking';
 import range from '../utiles/range';
 import getPaymentCrypto from '../utiles/getPaymentCrypto';
+import useUserAddress from './useUserAddress';
 
-const useUserAsset = (userAddress: string) => {
+const useUserAsset = () => {
+  const userAddress = useUserAddress();
   const { assets } = useContext(AssetContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { transactions } = useContext(TransactionContext);

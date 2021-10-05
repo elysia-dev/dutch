@@ -25,7 +25,7 @@ const StakingListing: React.FC<{
 }) => {
   const { t } = useTranslation();
   const userAddress = useUserAddress();
-  const { totalPrincipal, totalReward } = useUserAsset(userAddress!);
+  const { totalPrincipal, totalReward } = useUserAsset();
 
   if (stakingLoaded) {
     return (

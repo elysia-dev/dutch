@@ -108,7 +108,7 @@ export const Main: React.FC = () => {
     totalPrincipal,
     totalReward,
     totalWallet,
-  } = useUserAsset(userAddress!);
+  } = useUserAsset();
 
   async function getRoundData(type: CryptoType): Promise<void> {
     let contract: StakingPool;
