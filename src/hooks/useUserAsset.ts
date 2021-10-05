@@ -28,7 +28,7 @@ const useUserAsset = () => {
     CryptoType.DAI,
   ];
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
-  const [asyncAsset, setAsyncAsset] = useState({
+  const [totalAsset, setTotalAsset] = useState({
     totalInterest: 0,
     totalPrincipal: 0,
     totalReward: 0,
@@ -109,23 +109,23 @@ const useUserAsset = () => {
   };
 
   useEffect(() => {
-    const getAsyncAsset = async () => {
+    const getTotalAsset = async () => {
       const totalInterest = await getRealEstateInterest();
       const totalPrincipal = await getStaking();
       const totalReward = await getStakingReward();
 
-      setAsyncAsset({
+      setTotalAsset({
         totalInterest,
         totalPrincipal,
         totalReward,
       });
     };
 
-    getAsyncAsset();
+    getTotalAsset();
   }, []);
 
   return {
-    ...asyncAsset,
+    ...totalAsset,
     totalRealEstate: realEstateAssets.reduce(
       (res, cur) => cur.value * getCryptoPrice(cur.type) + res,
       0,
