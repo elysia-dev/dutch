@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   Pressable,
   Share,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
@@ -37,7 +36,6 @@ import { Modal } from '../../shared/components/Modal';
 import WalletType from '../../enums/WalletType';
 import commaFormatter from '../../utiles/commaFormatter';
 import storeDeeplink from '../../utiles/storeDeeplink';
-import SignInStatus from '../../enums/SignInStatus';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
 import { getToken, setToken } from '../../asyncStorages/token';
@@ -265,7 +263,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
       <AccountLayout
         title={
           <>
-            <BackButton handler={() => navigation.goBack()} />
+            {user.ethAddresses?.length > 0 ? (
+              <View style={{ height: 38, width: '100%' }} />
+            ) : (
+              <BackButton handler={() => navigation.goBack()} />
+            )}
             <TitleText
               style={{ paddingTop: 10 }}
               label={
@@ -279,6 +281,10 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
         body={
           user.ethAddresses?.length > 0 ? (
             <>
+              <H3Text
+                label={t('more_label.wallet_connected')}
+                style={{ marginBottom: 16, fontSize: 16 }}
+              />
               <View
                 style={{
                   width: '100%',
@@ -425,32 +431,11 @@ const RegisterEthAddress: FunctionComponent<Props> = (props: Props) => {
           )
         }
         button={
-          // eslint-disable-next-line no-nested-ternary
           user.ethAddresses?.length > 0 ? (
             user.provider === ProviderType.ETH ? (
               <SubmitButton
-                title={t('more_label.disconnect_and_new')}
-                handler={() => {
-                  return Alert.alert(
-                    t('more_label.disconnect'),
-                    t('more.confirm_disconnect_and_new'),
-                    [
-                      {
-                        text: 'Cancel',
-                        onPress: () => {},
-                        style: 'cancel',
-                      },
-                      {
-                        text: 'OK',
-                        onPress: () => {
-                          signOut(SignInStatus.SIGNOUT);
-                        },
-                        style: 'default',
-                      },
-                    ],
-                    { cancelable: false },
-                  );
-                }}
+                title={t('more_label.back_to_main')}
+                handler={() => navigation.goBack()}
               />
             ) : (
               <></>
