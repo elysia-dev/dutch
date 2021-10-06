@@ -196,7 +196,9 @@
       "disconnect": "解除绑定",
       "reply_email": "请输入邮箱地址。",
       "disconnect_and_new": "绑定新的钱包地址。",
-      "backupseed": "种子词组"
+      "backupseed": "种子词组",
+      "wallet_connected": "지갑이 연결되었습니다.",
+      "back_to_main": "메인 화면으로 돌아가기"
     },
     "more": {
       "contact_text": "请填写咨询事项并提交。",

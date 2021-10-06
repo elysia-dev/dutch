@@ -199,7 +199,9 @@
       "disconnect": "Wallet disconnected",
       "reply_email": "Please enter your email",
       "disconnect_and_new": "Connect new wallet",
-      "backupseed": "Seed phrase"
+      "backupseed": "Seed phrase",
+      "wallet_connected": "지갑이 연결되었습니다.",
+      "back_to_main": "메인 화면으로 돌아가기"
     },
     "more": {
       "contact_text": "Please fill out and submit inquiry below.",
