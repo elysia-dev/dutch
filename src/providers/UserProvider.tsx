@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
-import moment from 'moment';
-import { composeInitialProps } from 'react-i18next';
 import Server from '../api/server';
 import { getToken, removeToken } from '../asyncStorages/token';
 import { IS_WALLET_USER } from '../constants/storage';
@@ -10,22 +7,10 @@ import UserContext, {
   UserContextState,
   initialUserState,
 } from '../contexts/UserContext';
-import NotificationStatus from '../enums/NotificationStatus';
-import NotificationType from '../enums/NotificationType';
 import ProviderType from '../enums/ProviderType';
 import SignInStatus, { SignOut } from '../enums/SignInStatus';
-import NotificationData from '../types/NotificationData';
 import registerForPushNotificationsAsync from '../utiles/registerForPushNotificationsAsync';
-import Notification, { isNotification } from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: false,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
 
 const UserProvider: React.FC = (props) => {
   const [state, setState] = useState<UserContextState>(initialUserState);
@@ -66,7 +51,6 @@ const UserProvider: React.FC = (props) => {
               ...res.data.user,
               ethAddresses: res.data.user.ethAddresses || [],
             },
-            notifications: res.data.notifications || [],
             ownerships: res.data.ownerships || [],
             balance: res.data.totalBalance,
             Server: authServer,
@@ -130,124 +114,15 @@ const UserProvider: React.FC = (props) => {
       // Guest Notifications
       setState({
         ...state,
-        notifications: [
-          {
-            id: 1,
-            userId: 0,
-            notificationType: NotificationType.ONBOARDING_CONNECT_WALLET,
-            status: NotificationStatus.UNREAD,
-            data: {} as NotificationData,
-            createdAt: moment().toDate(),
-          },
-          {
-            id: 0,
-            userId: 0,
-            notificationType: NotificationType.ONBOARDING_NEW_USER,
-            status: NotificationStatus.UNREAD,
-            data: {} as NotificationData,
-            createdAt: moment().toDate(),
-          },
-        ],
       });
     }
   }, [state.signedIn]);
-
-  useEffect(() => {
-    if (state.user.provider === ProviderType.GUEST && !state.isWalletUser) {
-      return;
-    }
-
-    const isTransactionEnd = (type: NotificationType) => {
-      return [
-        NotificationType.INCREASE_OWNERSHIP,
-        NotificationType.DECREASE_OWNERSHIP,
-        NotificationType.WITHDRAW_INTEREST,
-        NotificationType.FAIL_TRANSACTION,
-      ].includes(type);
-    };
-
-    const addNotificationReceivedListener =
-      Notifications.addNotificationReceivedListener((response) => {
-        if (isNotification(response.request.content.data as Notification)) {
-          if (
-            isTransactionEnd(
-              response.request.content.data
-                .notificationType as NotificationType,
-            )
-          ) {
-            if (!state.isWalletUser) {
-              signIn();
-            }
-          } else {
-            setState((state) => {
-              return {
-                ...state,
-                notifications: [
-                  response.request.content.data as Notification,
-                  ...state.notifications,
-                ],
-              };
-            });
-          }
-        }
-      });
-
-    // eslint-disable-next-line max-len
-    const addNotificationResponseReceivedListener =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        if (
-          isNotification(
-            response.notification.request.content.data as Notification,
-          )
-        ) {
-          if (
-            isTransactionEnd(
-              response.notification.request.content.data
-                .notificationType as NotificationType,
-            )
-          ) {
-            if (!state.isWalletUser) {
-              signIn();
-            }
-          } else {
-            setState((state) => {
-              return {
-                ...state,
-                notifications: [
-                  response.notification.request.content.data as Notification,
-                  ...state.notifications,
-                ],
-              };
-            });
-          }
-        }
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        addNotificationReceivedListener,
-      );
-      Notifications.removeNotificationSubscription(
-        addNotificationResponseReceivedListener,
-      );
-    };
-  }, [state.isWalletUser, state.signedIn]);
 
   const newWalletUser = () => {
     setState((state) => {
       return {
         ...state,
         isWalletUser: true,
-        notifications: [],
-      };
-    });
-  };
-
-  const setNotifications = (notifications: Notification[]) => {
-    setState((state) => {
-      return {
-        ...state,
-        notifications,
       };
     });
   };
@@ -293,7 +168,6 @@ const UserProvider: React.FC = (props) => {
         guestSignIn,
         signOut,
         refreshUser,
-        setNotifications,
         setEthAddress,
         setUserExpoPushToken,
         setRefundStatus,

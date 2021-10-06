@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 import SignInStatus, { SignOut } from '../enums/SignInStatus';
-import Notification from '../types/Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import { OwnershipResponse } from '../types/AccountResponse';
 import ProviderType from '../enums/ProviderType';
@@ -26,7 +25,6 @@ export type UserContextState = {
   };
   ownerships: OwnershipResponse[];
   balance: string;
-  notifications: Notification[];
   expoPushToken: string;
   isWalletUser: boolean;
   Server: Server;
@@ -37,7 +35,6 @@ export interface IUserContext extends UserContextState {
   guestSignIn: () => void;
   signOut: (signInStatus: SignOut) => void;
   refreshUser: () => Promise<void>;
-  setNotifications: (notifications: Notification[]) => void;
   setEthAddress: (address: string) => void;
   setUserExpoPushToken: (expoPushToken: string) => void;
   setRefundStatus: (legacyRefundStatus: LegacyRefundStatus) => void;
@@ -64,7 +61,6 @@ export const initialUserState: UserContextState = {
   },
   ownerships: [],
   balance: '0',
-  notifications: [] as Notification[],
   expoPushToken: '',
   isWalletUser: false,
   Server: new Server(() => {}, ''),
@@ -76,7 +72,6 @@ const UserContext = createContext<IUserContext>({
   guestSignIn: async () => {},
   signOut: async (_signInStatus: SignOut) => {},
   refreshUser: async () => {},
-  setNotifications: (_notifications: Notification[]) => {},
   setEthAddress: (_address: string) => {},
   setUserExpoPushToken: (_expoPushToken: string) => {},
   setRefundStatus: (_legacyRefundStatus: LegacyRefundStatus) => {},

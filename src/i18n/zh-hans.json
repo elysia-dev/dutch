@@ -267,23 +267,6 @@
       ],
       "already_pending": "没有要取出的款项，或者您已经取款成功。"
     },
-    "notification": {
-      "closeOwnership": "{{name}} 项目的所有权已到期  ",
-      "successKyc": "KYC认证成功。",
-      "failKyc": "KYC认证失败。",
-      "profit": "每日获得{{profit}}收益",
-      "productNotice": "有和代币相关的公告。",
-      "saved_90days": "收到的通知将会被保存90天。",
-      "no_notification": "没有任何通知。",
-      "read_all_notifications": "未读通知 {{number}}条 阅读全部",
-      "pendingTransaction": "[{{tokenName}}] 交易正在进行中",
-      "increaseOwnership": "[{{tokenName}}] 持有财产增加。（+{{tokenAmount}}个",
-      "decreaseOwnership": "[{{tokenName}}] 持有财产减少。(- {{tokenAmount}}个)",
-      "withdrawInterest": "[{{tokenName}}] 提取存储金成功。({{tokenAmount}} {{paymentMethod}})",
-      "failTransaction": "[{{tokenName}}] 交易失败。",
-      "onboardingNewUser": "感谢您使用爱立厦(ELYSIA)平台。",
-      "onboardingConnectWallet": "请点击“更多”后，绑定以太坊钱包地址。"
-    },
     "notification_label": {
       "notification": "通知",
       "successKyc": "通过KYC",

@@ -270,23 +270,6 @@
       ],
       "already_pending": "출금할 금액이 없거나, 이미 출금하셨습니다."
     },
-    "notification": {
-      "closeOwnership": " {{name}} 종료로 소유권이 만료되었습니다.",
-      "successKyc": "KYC가 승인되었습니다.",
-      "failKyc": "KYC가 거절되었습니다.",
-      "profit": "일일 적립금 {{profit}} 적용되었습니다.",
-      "productNotice": "토큰 관련 새로운 공지사항이 있습니다.",
-      "saved_90days": "받은 알림은 90일동안 보관됩니다.",
-      "no_notification": "받은 알림이 없습니다.",
-      "read_all_notifications": "읽지 않은 알림 {{number}}개 전부 읽기",
-      "pendingTransaction": "[{{tokenName}}] 대기중인 트랜잭션이 있습니다.",
-      "increaseOwnership": "[{{tokenName}}] 보유 개수가 증가했습니다. (+ {{tokenAmount}}개)",
-      "decreaseOwnership": "[{{tokenName}}] 보유 개수가 감소했습니다. (- {{tokenAmount}}개)",
-      "withdrawInterest": "[{{tokenName}}] 적립금이 출금되었습니다. ({{tokenAmount}} {{paymentMethod}})",
-      "failTransaction": "[{{tokenName}}] 트랜잭션이 실패했습니다.",
-      "onboardingNewUser": "엘리시아에 오신 것을 환영합니다!",
-      "onboardingConnectWallet": "더 보기 탭에서 이더리움 지갑 주소를 연결해주세요."
-    },
     "notification_label": {
       "notification": "알림",
       "successKyc": "KYC 승인",

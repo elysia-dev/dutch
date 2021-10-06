@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { EL_ADDRESS } from 'react-native-dotenv';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
 import Product, { Story } from '../types/product';
 import { Transaction } from '../types/Transaction';
-import Notification from '../types/Notification';
-import { EL_ADDRESS } from 'react-native-dotenv';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { SignOut } from '../enums/SignInStatus';
@@ -98,18 +97,6 @@ export default class Server {
         expoPushToken,
       },
     });
-  };
-
-  notification = async (): Promise<AxiosResponse<Notification[]>> => {
-    return this.authenticatedEspressoClient.get(`/notifications`);
-  };
-
-  read = async (id: number): Promise<AxiosResponse<void>> => {
-    return this.authenticatedEspressoClient.put(`/notifications/${id}`);
-  };
-
-  readAll = async (): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.patch('notifications/readAll');
   };
 
   ownershipDetail = async (

@@ -273,23 +273,6 @@
       ],
       "already_pending": "You do not have sufficient balance or your transaction is complete."
     },
-    "notification": {
-      "closeOwnership": "Ownership expired {{name}}.",
-      "successKyc": "KYC has been approved.",
-      "failKyc": "KYC has been rejected.",
-      "profit": "Daily reward of {{profit}} have been applied.",
-      "productNotice": "New announcement for token.",
-      "saved_90days": "Notifications received are kept for 90 days.",
-      "no_notification": "No notifications received.",
-      "read_all_notifications": "Read all {{number}} unread notifications",
-      "pendingTransaction": "[{{tokenName}}] Transaction now in progress.",
-      "increaseOwnership": "[{{tokenName}}]  Your balance has increased by + {{tokenAmount}}",
-      "decreaseOwnership": "[{{tokenName}}] Your balance has decreased by - {{tokenAmount}}",
-      "withdrawInterest": "[{{tokenName}}] Withdrawal complete {{tokenAmount}} {{paymentMethod}}",
-      "failTransaction": "[{{tokenName}}] Transaction failed",
-      "onboardingNewUser": "Welcome to Elysia",
-      "onboardingConnectWallet": "Click 'More' tab to connect your Ethereum wallet"
-    },
     "notification_label": {
       "notification": "Notification",
       "successKyc": "KYC approved",
