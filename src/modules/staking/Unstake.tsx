@@ -55,12 +55,13 @@ const Unstake: React.FC = () => {
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
       : selectedRound - 2;
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
+    isElfiV2Con,
     round,
   );
-  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const { t } = useTranslation();
   const { principal } = useStakingInfo(cryptoType, round, isElfiV2Con);
   const [userPrincipal, setUserPrincipal] = useState(principal);
