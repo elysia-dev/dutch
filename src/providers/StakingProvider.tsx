@@ -69,32 +69,33 @@ const StakingProvider: React.FC = ({ children }) => {
     return elfiStakingRewards;
   };
 
+  const loadStakingInfo = async () => {
+    const elStakingList = await getElStakingList();
+    const elfiStakingList = await getElfiStakingList();
+    const elStakingRewards = await getElStakingRewards();
+    const elfiStakingRewards = await getElfiStakingRewards();
+
+    setState({
+      elStakingList,
+      elfiStakingList,
+      elStakingRewards,
+      elfiStakingRewards,
+      stakingLoaded: true,
+    });
+  };
+
   useEffect(() => {
-    const updateStaking = async () => {
-      const elStakingList = await getElStakingList();
-      const elfiStakingList = await getElfiStakingList();
-      const elStakingRewards = await getElStakingRewards();
-      const elfiStakingRewards = await getElfiStakingRewards();
-
-      setState({
-        elStakingList,
-        elfiStakingList,
-        elStakingRewards,
-        elfiStakingRewards,
-      });
-    };
-
     if (signedIn !== SignInStatus.SIGNIN || !priceLoaded) {
-      setState(initialStakingState);
+      setState({ ...initialStakingState, stakingLoaded: true });
     }
 
     if (userAddress) {
-      updateStaking();
+      loadStakingInfo();
     }
   }, [signedIn, priceLoaded]);
 
   return (
-    <StakingContext.Provider value={{ ...state }}>
+    <StakingContext.Provider value={{ ...state, loadStakingInfo }}>
       {children}
     </StakingContext.Provider>
   );

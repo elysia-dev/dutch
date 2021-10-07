@@ -7,20 +7,76 @@ export type StakingStateType = {
   elfiStakingList: Staking[];
   elStakingRewards: BigNumber[];
   elfiStakingRewards: BigNumber[];
-  // 앗 stakingLoaded도 만들어야 할 듯..!!
+  stakingLoaded: boolean;
 };
 
-interface IStakingContext extends StakingStateType {}
+interface IStakingContext extends StakingStateType {
+  loadStakingInfo: () => Promise<void>;
+}
 
 export const initialStakingState = {
-  elStakingList: [] as Staking[],
-  elfiStakingList: [] as Staking[],
-  elStakingRewards: [] as BigNumber[],
-  elfiStakingRewards: [] as BigNumber[],
+  elStakingList: [
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+  ],
+  elfiStakingList: [
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+    {
+      userIndex: BigNumber.from(0),
+      userPrincipal: BigNumber.from(0),
+      userReward: BigNumber.from(0),
+    },
+  ],
+  elStakingRewards: [
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+  ],
+  elfiStakingRewards: [
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+    BigNumber.from(0),
+  ],
+  stakingLoaded: false,
 };
 
 const initialStakingContext = {
   ...initialStakingState,
+  loadStakingInfo: async () => {},
 };
 
 const StakingContext = createContext<IStakingContext>(initialStakingContext);
