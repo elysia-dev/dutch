@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
@@ -8,24 +8,84 @@ import CryptoType from '../../../enums/CryptoType';
 import StakingListingSkeleton from './StakingListingSkeleton';
 import AppFonts from '../../../enums/AppFonts';
 import useUserAsset from '../../../hooks/useUserAsset';
-import useUserAddress from '../../../hooks/useUserAddress';
 import commaFormatter from '../../../utiles/commaFormatter';
 import decimalFormatter from '../../../utiles/decimalFormatter';
+import StakingContext from '../../../contexts/StakingContext';
+import StakingInfoBox from './StakingInfoBox';
+import { NUMBER_OF_ROUNDS } from '../../../constants/staking';
+import range from '../../../utiles/range';
 
-const StakingListing: React.FC<{
-  elStakingInfoBoxes: React.ReactNode[];
-  elfiStakingInfoBoxes: React.ReactNode[];
-  hasAnyInfoBoxes: { EL: boolean; ELFI: boolean };
-  stakingLoaded: boolean;
-}> = ({
-  elStakingInfoBoxes,
-  elfiStakingInfoBoxes,
-  hasAnyInfoBoxes,
-  stakingLoaded,
-}) => {
+const StakingListing: React.FC = () => {
   const { t } = useTranslation();
-  const userAddress = useUserAddress();
   const { totalPrincipal, totalReward } = useUserAsset();
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
+  const {
+    elStakingList,
+    elfiStakingList,
+    elStakingRewards,
+    elfiStakingRewards,
+    stakingLoaded,
+  } = useContext(StakingContext);
+  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
+    [] as React.ReactNode[],
+  );
+  const [hasAnyInfoBoxes, setHasAnyInfoBoxes] = useState({
+    EL: false,
+    ELFI: false,
+  });
+
+  useEffect(() => {
+    const elBoxes = stakingRounds.map((round) => {
+      const stakingAmount = elStakingList[round - 1].userPrincipal;
+      const rewardAmount = elStakingRewards[round - 1];
+
+      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+        return (
+          <StakingInfoBox
+            key={round}
+            cryptoType={CryptoType.EL}
+            round={round}
+            stakingAmount={stakingAmount}
+            rewardAmount={rewardAmount}
+          />
+        );
+      } else {
+        return null;
+      }
+    });
+
+    const elfiBoxes = stakingRounds.map((round) => {
+      const stakingAmount = elfiStakingList[round - 1].userPrincipal;
+      const rewardAmount = elfiStakingRewards[round - 1];
+
+      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+        return (
+          <StakingInfoBox
+            key={round}
+            cryptoType={CryptoType.ELFI}
+            round={round}
+            stakingAmount={stakingAmount}
+            rewardAmount={rewardAmount}
+          />
+        );
+      } else {
+        return null;
+      }
+    });
+
+    setElStakingInfoBoxes(elBoxes);
+    setElfiStakingInfoBoxes(elfiBoxes);
+  }, []);
+
+  useEffect(() => {
+    setHasAnyInfoBoxes({
+      EL: elStakingInfoBoxes.some((box) => Boolean(box)),
+      ELFI: elfiStakingInfoBoxes.some((box) => Boolean(box)),
+    });
+  }, [elStakingInfoBoxes, elfiStakingInfoBoxes]);
 
   if (stakingLoaded) {
     return (

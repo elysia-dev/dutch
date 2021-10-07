@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -21,7 +15,6 @@ import {
   useIsFocused,
 } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { StakingPool } from '@elysia-dev/contract-typechain';
 import { H3Text, TitleText } from '../../shared/components/Texts';
 import BasicLayout from '../../shared/components/BasicLayout';
 import AssetListing from './components/AssetListing';
@@ -43,15 +36,11 @@ import LegacyWallet from './components/LegacyWallet';
 import AssetContext from '../../contexts/AssetContext';
 import TransactionContext from '../../contexts/TransactionContext';
 import StakingListing from './components/StakingListing';
-import WalletContext from '../../contexts/WalletContext';
-import StakingInfoBox from './components/StakingInfoBox';
-import useStakingPool from '../../hooks/useStakingPool';
 import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
-import range from '../../utiles/range';
-import { NUMBER_OF_ROUNDS } from '../../constants/staking';
 import RealEstateListing from './components/RealEstateListing';
 import useUserAsset from '../../hooks/useUserAsset';
+import StakingContext from '../../contexts/StakingContext';
 
 type ParamList = {
   Main: {
@@ -63,7 +52,7 @@ export const Main: React.FC = () => {
   const { user, isWalletUser, refreshUser } = useContext(UserContext);
   const { assets, assetLoaded, loadV2UserBalances } = useContext(AssetContext);
   const route = useRoute<RouteProp<ParamList, 'Main'>>();
-  const { elPrice, getCryptoPrice } = useContext(PriceContext);
+  const { elPrice } = useContext(PriceContext);
   const navigation = useNavigation();
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -71,10 +60,8 @@ export const Main: React.FC = () => {
   const { transactions } = useContext(TransactionContext);
   const { t } = useTranslation();
   const isFocused = useIsFocused();
-
   const [refreshing, setRefreshing] = React.useState(false);
   const [btnRefreshing, setBtnRefreshing] = React.useState(false);
-  const { wallet } = useContext(WalletContext);
   const crytoTypes = [
     CryptoType.EL,
     CryptoType.ETH,
@@ -82,26 +69,6 @@ export const Main: React.FC = () => {
     CryptoType.ELFI,
     CryptoType.DAI,
   ];
-  const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
-  const elContract = useStakingPool(CryptoType.EL);
-  const elfiContract = useStakingPool(CryptoType.ELFI);
-  const elfiV2Contract = useStakingPool(CryptoType.ELFI, true);
-
-  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
-  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
-  const [hasAnyInfoBoxes, setHasAnyInfoBoxes] = useState({
-    EL: false,
-    ELFI: false,
-  });
-  const [stakingLoaded, setStakingLoaded] = useState(false);
-  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
-
   const {
     totalRealEstate,
     totalInterest,
@@ -109,52 +76,7 @@ export const Main: React.FC = () => {
     totalReward,
     totalWallet,
   } = useUserAsset();
-
-  async function getRoundData(type: CryptoType): Promise<void> {
-    let contract: StakingPool;
-    let infoBoxes: React.ReactNode[];
-    let setInfoBoxes: Dispatch<SetStateAction<React.ReactNode[]>>;
-    if (type === CryptoType.EL) {
-      contract = elContract;
-      infoBoxes = elStakingInfoBoxes;
-      setInfoBoxes = setElStakingInfoBoxes;
-    } else {
-      contract = elfiContract;
-      infoBoxes = elfiStakingInfoBoxes;
-      setInfoBoxes = setElfiStakingInfoBoxes;
-    }
-
-    const tempBoxes = stakingRounds.map(async (round) => {
-      if (!userAddress) return;
-      let changedRound = round;
-      if (type === CryptoType.ELFI && round >= 3) {
-        // ELFI의 경우 3 round부터 다른 버전의 스테이킹 컨트랙트를 사용해야함
-        contract = elfiV2Contract;
-        changedRound = round - 2; // 변수명 수정해줘야함
-      }
-      const userData = await contract.getUserData(changedRound, userAddress);
-      const stakingAmount = userData.userPrincipal;
-      const rewardAmount = await contract.getUserReward(
-        userAddress,
-        changedRound,
-      );
-
-      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
-        return (
-          <StakingInfoBox
-            key={round}
-            cryptoType={type}
-            round={round}
-            stakingAmount={stakingAmount}
-            rewardAmount={rewardAmount}
-          />
-        );
-      }
-    });
-
-    setInfoBoxes(await Promise.all(tempBoxes));
-    setStakingLoaded(true);
-  }
+  const { loadStakingInfo } = useContext(StakingContext);
 
   const loadBalances = async () => {
     if (!isWalletUser) {
@@ -175,8 +97,7 @@ export const Main: React.FC = () => {
   const onBtnRefresh = async () => {
     setBtnRefreshing(true);
     try {
-      getRoundData(CryptoType.EL);
-      getRoundData(CryptoType.ELFI);
+      loadStakingInfo();
       await loadBalances();
     } finally {
       setBtnRefreshing(false);
@@ -185,21 +106,13 @@ export const Main: React.FC = () => {
 
   useEffect(() => {
     if (isFocused) {
-      getRoundData(CryptoType.EL);
-      getRoundData(CryptoType.ELFI);
+      loadStakingInfo();
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });
         onRefresh();
       }
     }
   }, [isFocused]);
-
-  useEffect(() => {
-    setHasAnyInfoBoxes({
-      EL: elStakingInfoBoxes.some((box) => Boolean(box)),
-      ELFI: elfiStakingInfoBoxes.some((box) => Boolean(box)),
-    });
-  }, [elStakingInfoBoxes, elfiStakingInfoBoxes]);
 
   return (
     <>
@@ -333,12 +246,7 @@ export const Main: React.FC = () => {
             assetLoaded={assetLoaded}
           />
           <View style={{ height: 25 }} />
-          <StakingListing
-            elStakingInfoBoxes={elStakingInfoBoxes}
-            elfiStakingInfoBoxes={elfiStakingInfoBoxes}
-            hasAnyInfoBoxes={hasAnyInfoBoxes}
-            stakingLoaded={stakingLoaded}
-          />
+          <StakingListing />
           <View style={{ height: 25 }} />
           <AssetListing
             title={t('main.my_wallet')}
