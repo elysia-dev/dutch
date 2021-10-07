@@ -1,0 +1,101 @@
+import React, { useState, useEffect, useContext } from 'react';
+import StakingContext, {
+  StakingStateType,
+  initialStakingState,
+} from '../contexts/StakingContext';
+import UserContext from '../contexts/UserContext';
+import PriceContext from '../contexts/PriceContext';
+import useUserAddress from '../hooks/useUserAddress';
+import SignInStatus from '../enums/SignInStatus';
+import { NUMBER_OF_ROUNDS } from '../constants/staking';
+import range from '../utiles/range';
+import useStakingPool from '../hooks/useStakingPool';
+import CryptoType from '../enums/CryptoType';
+
+const StakingProvider: React.FC = ({ children }) => {
+  const { signedIn } = useContext(UserContext);
+  const { priceLoaded } = useContext(PriceContext);
+  const userAddress = useUserAddress();
+  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
+  const elContract = useStakingPool(CryptoType.EL);
+  const elfiContract = useStakingPool(CryptoType.ELFI);
+  const elfiV2Contract = useStakingPool(CryptoType.ELFI, true);
+  const [state, setState] = useState<StakingStateType>(initialStakingState);
+
+  const getElStakingList = async () => {
+    const elStakingPromises = stakingRounds.map(async (round) => {
+      const userData = await elContract.getUserData(round, userAddress!);
+      return userData;
+    });
+
+    const elStakingList = await Promise.all(elStakingPromises);
+    return elStakingList;
+  };
+
+  const getElfiStakingList = async () => {
+    const elfiStakingPromises = stakingRounds.map(async (round) => {
+      const contract = round > 2 ? elfiV2Contract : elfiContract;
+      const changedRound = round > 2 ? round - 2 : round;
+      const userData = await contract.getUserData(changedRound, userAddress!);
+      return userData;
+    });
+
+    const elfiStakingList = await Promise.all(elfiStakingPromises);
+    return elfiStakingList;
+  };
+
+  const getElStakingRewards = async () => {
+    const elRewardPromises = stakingRounds.map(async (round) => {
+      const rewardAmount = await elContract.getUserReward(userAddress!, round);
+      return rewardAmount;
+    });
+
+    const elStakingRewards = await Promise.all(elRewardPromises);
+    return elStakingRewards;
+  };
+
+  const getElfiStakingRewards = async () => {
+    const elfiRewardPromises = stakingRounds.map(async (round) => {
+      const contract = round > 2 ? elfiV2Contract : elfiContract;
+      const changedRound = round > 2 ? round - 2 : round;
+      const rewardAmount = await contract.getUserReward(
+        userAddress!,
+        changedRound,
+      );
+      return rewardAmount;
+    });
+
+    const elfiStakingRewards = await Promise.all(elfiRewardPromises);
+    return elfiStakingRewards;
+  };
+
+  useEffect(() => {
+    const updateStaking = async () => {
+      const elStakingList = await getElStakingList();
+      const elfiStakingList = await getElfiStakingList();
+      const elStakingRewards = await getElStakingRewards();
+      const elfiStakingRewards = await getElfiStakingRewards();
+
+      setState({
+        stakingList: [...elStakingList, ...elfiStakingList],
+        stakingRewards: [...elStakingRewards, ...elfiStakingRewards],
+      });
+    };
+
+    if (signedIn !== SignInStatus.SIGNIN || !priceLoaded) {
+      setState(initialStakingState);
+    }
+
+    if (userAddress) {
+      updateStaking();
+    }
+  }, [signedIn, priceLoaded]);
+
+  return (
+    <StakingContext.Provider value={{ ...state }}>
+      {children}
+    </StakingContext.Provider>
+  );
+};
+
+export default StakingProvider;
