@@ -78,7 +78,7 @@ const StakingListing: React.FC = () => {
 
     setElStakingInfoBoxes(elBoxes);
     setElfiStakingInfoBoxes(elfiBoxes);
-  }, []);
+  }, [stakingLoaded]);
 
   useEffect(() => {
     setHasAnyInfoBoxes({

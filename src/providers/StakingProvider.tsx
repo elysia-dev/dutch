@@ -11,9 +11,10 @@ import { NUMBER_OF_ROUNDS } from '../constants/staking';
 import range from '../utiles/range';
 import useStakingPool from '../hooks/useStakingPool';
 import CryptoType from '../enums/CryptoType';
+import ProviderType from '../enums/ProviderType';
 
 const StakingProvider: React.FC = ({ children }) => {
-  const { signedIn } = useContext(UserContext);
+  const { signedIn, user, isWalletUser } = useContext(UserContext);
   const { priceLoaded } = useContext(PriceContext);
   const userAddress = useUserAddress();
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
@@ -86,7 +87,13 @@ const StakingProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (signedIn !== SignInStatus.SIGNIN || !priceLoaded) {
+      setState(initialStakingState);
+      return;
+    }
+
+    if (user.provider === ProviderType.GUEST && !isWalletUser) {
       setState({ ...initialStakingState, stakingLoaded: true });
+      return;
     }
 
     if (userAddress) {
