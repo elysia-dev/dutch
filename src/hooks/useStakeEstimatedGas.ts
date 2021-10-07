@@ -13,11 +13,12 @@ type info = {
 const useStakeEstimatedGas = (
   crytoType: CryptoType,
   stakingType: StakingType,
+  isElfiV2: boolean,
   round?: number,
 ): info => {
   const [estimagedGasPrice, setEstimatedGasPrice] = useState<string>('');
   const { gasPrice } = useContext(PriceContext);
-  const stakingPoolContract = useStakingPool(crytoType);
+  const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
 
   const setEstimatedGas = async (stakingType?: StakingType, round?: number) => {
     setEstimatedGasPrice(
@@ -31,12 +32,12 @@ const useStakeEstimatedGas = (
       switch (stakingType) {
         case StakingType.Stake:
           estimateGas = await stakingPoolContract?.estimateGas.stake(
-            utils.parseEther('1'),
+            utils.parseEther('0.0001'),
           );
           break;
         case StakingType.Unstake:
           estimateGas = await stakingPoolContract?.estimateGas.withdraw(
-            utils.parseEther('1'),
+            utils.parseEther('0.0001'),
             round || '',
           );
           break;
@@ -47,7 +48,7 @@ const useStakeEstimatedGas = (
           break;
         default:
           estimateGas = await stakingPoolContract?.estimateGas.migrate(
-            utils.parseEther('1'),
+            utils.parseEther('0.0001'),
             round || '',
           );
           break;
