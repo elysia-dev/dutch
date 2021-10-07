@@ -77,8 +77,10 @@ const StakingProvider: React.FC = ({ children }) => {
       const elfiStakingRewards = await getElfiStakingRewards();
 
       setState({
-        stakingList: [...elStakingList, ...elfiStakingList],
-        stakingRewards: [...elStakingRewards, ...elfiStakingRewards],
+        elStakingList,
+        elfiStakingList,
+        elStakingRewards,
+        elfiStakingRewards,
       });
     };
 
