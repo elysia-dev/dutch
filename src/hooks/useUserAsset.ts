@@ -1,25 +1,20 @@
 import { useContext, useState, useEffect } from 'react';
-import { utils, BigNumber } from 'ethers';
+import { utils } from 'ethers';
 import AssetContext from '../contexts/AssetContext';
 import PriceContext from '../contexts/PriceContext';
 import TransactionContext from '../contexts/TransactionContext';
 import { getAssetTokenFromCryptoType } from '../utiles/getContract';
 import CryptoType from '../enums/CryptoType';
 import TxStatus from '../enums/TxStatus';
-import useStakingPool from './useStakingPool';
-import { NUMBER_OF_ROUNDS } from '../constants/staking';
-import range from '../utiles/range';
 import getPaymentCrypto from '../utiles/getPaymentCrypto';
 import useUserAddress from './useUserAddress';
+import StakingContext from '../contexts/StakingContext';
 
 const useUserAsset = () => {
   const userAddress = useUserAddress();
   const { assets } = useContext(AssetContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { transactions } = useContext(TransactionContext);
-  const elContract = useStakingPool(CryptoType.EL);
-  const elfiContract = useStakingPool(CryptoType.ELFI);
-  const elfiV2Contract = useStakingPool(CryptoType.ELFI, true);
   const crytoTypes = [
     CryptoType.EL,
     CryptoType.ETH,
@@ -27,11 +22,8 @@ const useUserAsset = () => {
     CryptoType.ELFI,
     CryptoType.DAI,
   ];
-  const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
   const [totalAsset, setTotalAsset] = useState({
     totalInterest: 0,
-    totalPrincipal: 0,
-    totalReward: 0,
   });
   const realEstateAssets = assets.filter((item) => {
     if (
@@ -44,8 +36,14 @@ const useUserAsset = () => {
     }
     return item.type === CryptoType.ELA && item.value > 0;
   });
+  const {
+    elStakingList,
+    elStakingRewards,
+    elfiStakingList,
+    elfiStakingRewards,
+  } = useContext(StakingContext);
 
-  // 부동산 이자 총액
+  // 부동산 이자 총액. 이것도 assetProvider로 넘겨야 하나..??
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
@@ -63,72 +61,47 @@ const useUserAsset = () => {
   };
 
   // 스테이킹 원금 총액
-  const getTotalPrincipal = async () => {
-    if (!userAddress) return 0;
-
-    const elStakingPromises = stakingRounds.map(async (round) => {
-      const userData = await elContract.getUserData(round, userAddress);
+  const getTotalPrincipal = () => {
+    const elStaking = elStakingList.map((data) => {
       return (
-        parseFloat(utils.formatEther(userData.userPrincipal)) *
+        parseFloat(utils.formatEther(data.userPrincipal)) *
         getCryptoPrice(CryptoType.EL)
       );
     });
 
-    const elfiStakingPromises = stakingRounds.map(async (round) => {
-      const contract = round > 2 ? elfiV2Contract : elfiContract;
-      const changedRound = round > 2 ? round - 2 : round;
-      const userData = await contract.getUserData(changedRound, userAddress);
+    const elfiStaking = elfiStakingList.map((data) => {
       return (
-        parseFloat(utils.formatEther(userData.userPrincipal)) *
+        parseFloat(utils.formatEther(data.userPrincipal)) *
         getCryptoPrice(CryptoType.ELFI)
       );
     });
 
-    const elStaking = await Promise.all(elStakingPromises);
-    const elfiStaking = await Promise.all(elfiStakingPromises);
     return [...elStaking, ...elfiStaking].reduce((res, cur) => res + cur, 0);
   };
 
   // 스테이킹 보상 총액
-  const getTotalReward = async () => {
-    if (!userAddress) return 0;
-
-    const elRewardPromises = stakingRounds.map(async (round) => {
-      const rewardAmount = await elContract.getUserReward(userAddress, round);
+  const getTotalReward = () => {
+    const elReward = elStakingRewards.map((reward) => {
       return (
-        parseFloat(utils.formatEther(rewardAmount)) *
-        getCryptoPrice(CryptoType.ELFI)
+        parseFloat(utils.formatEther(reward)) * getCryptoPrice(CryptoType.ELFI)
       );
     });
 
-    const elfiRewardPromises = stakingRounds.map(async (round) => {
-      const contract = round > 2 ? elfiV2Contract : elfiContract;
-      const changedRound = round > 2 ? round - 2 : round;
-      const rewardAmount = await contract.getUserReward(
-        userAddress,
-        changedRound,
-      );
+    const elfiReward = elfiStakingRewards.map((reward) => {
       return (
-        parseFloat(utils.formatEther(rewardAmount)) *
-        getCryptoPrice(CryptoType.DAI)
+        parseFloat(utils.formatEther(reward)) * getCryptoPrice(CryptoType.DAI)
       );
     });
 
-    const elReward = await Promise.all(elRewardPromises);
-    const elfiReward = await Promise.all(elfiRewardPromises);
     return [...elReward, ...elfiReward].reduce((res, cur) => res + cur, 0);
   };
 
   useEffect(() => {
     const getTotalAsset = async () => {
       const totalInterest = await getTotalInterest();
-      const totalPrincipal = await getTotalPrincipal();
-      const totalReward = await getTotalReward();
 
       setTotalAsset({
         totalInterest,
-        totalPrincipal,
-        totalReward,
       });
     };
 
@@ -141,6 +114,8 @@ const useUserAsset = () => {
       (res, cur) => cur.value * getCryptoPrice(cur.type) + res,
       0,
     ),
+    totalPrincipal: getTotalPrincipal(),
+    totalReward: getTotalReward(),
     totalWallet: assets
       .filter((item) => crytoTypes.includes(item.type))
       .reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0),
