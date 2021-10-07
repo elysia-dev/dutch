@@ -63,9 +63,11 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Stake,
+    isElfiV2Con,
   );
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
@@ -73,7 +75,6 @@ const Stake: React.FC = () => {
   });
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
-  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,

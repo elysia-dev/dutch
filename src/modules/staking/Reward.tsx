@@ -53,6 +53,7 @@ const Reward: React.FC = () => {
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
+    isElfiV2Con,
     changedRound,
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -67,8 +68,8 @@ const Reward: React.FC = () => {
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
       : selectedRound > 2
-        ? ELFI_STAKING_POOL_V2_ADDRESS
-        : ELFI_STAKING_POOL_ADDRESS;
+      ? ELFI_STAKING_POOL_V2_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS;
 
   const onPressClaim = async () => {
     try {
@@ -105,7 +106,7 @@ const Reward: React.FC = () => {
             )}`}
             cryptoTitle={rewardCryptoType}
             cryptoType={rewardCryptoType}
-            onPress={() => { }}
+            onPress={() => {}}
             active={true}
             style={{ width: '100%' }}
           />
