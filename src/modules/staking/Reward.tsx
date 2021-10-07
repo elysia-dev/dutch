@@ -53,6 +53,7 @@ const Reward: React.FC = () => {
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
+    isElfiV2Con,
     changedRound,
   );
   const [isLoading, setIsLoading] = useState(false);

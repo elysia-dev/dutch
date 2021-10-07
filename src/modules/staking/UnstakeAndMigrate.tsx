@@ -84,6 +84,7 @@ const UnstakeAndMigrate: React.FC = () => {
   const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
+    isElfiV2Con,
     round,
   );
   const [userPrincipal, setUserPrincipal] = useState(principal);
