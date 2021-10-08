@@ -7,53 +7,43 @@ import PriceContext from '../contexts/PriceContext';
 import TransactionContext from '../contexts/TransactionContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
-import NetworkType from '../enums/NetworkType';
+import ToastStatus from '../enums/ToastStatus';
 import TransferType from '../enums/TransferType';
 import { WaitingTransaction } from '../types/WaitingTransaction';
 import { getAssetTokenFromCryptoType } from '../utiles/getContract';
-import useTxHandler from './useTxHandler';
-import useWaitTx from './useWaitTx';
 
 const useProductByType = (
-  assetInCryptoType: CryptoType,
+  assetCryptoType: CryptoType,
   contractAddress: string,
   productUnit: string,
+  type: TransferType,
 ) => {
-  const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { waitingTxs, setWaitingTx, removeStorageTx } = useWaitTx(
-    assetInCryptoType,
-    productUnit,
-  );
+  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
+    useContext(TransactionContext);
   const contract = getAssetTokenFromCryptoType(
-    assetInCryptoType,
+    assetCryptoType,
     contractAddress,
   );
 
   const navigation = useNavigation();
 
-  const notifyFail = () => {
-    navigation.goBack();
-    afterTxFailed('Transaction failed');
-  };
-
   const waitTx = async () => {
     try {
       await resTx?.wait();
-      setIsSuccessTx(true);
+      setToastList(type, ToastStatus.Success);
       removeStorageTx(resTx?.hash);
-      afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
-      throw Error;
+      navigation.goBack();
+      setToastList(type, ToastStatus.Fail);
     }
   };
 
   const getLastNonce = () => {
     let txs: WaitingTransaction[];
-    if (assetInCryptoType === CryptoType.BNB) {
+    if (assetCryptoType === CryptoType.BNB) {
       txs = waitingTxs.filter((tx) => {
         return tx.cryptoType === CryptoType.BNB;
       });
@@ -67,16 +57,11 @@ const useProductByType = (
       : undefined;
   };
 
-  const productByType = async (
-    inFiat: string,
-    inToken: string,
-    type: TransferType,
-  ) => {
+  const createTransaction = async (inFiat: string, inToken: string) => {
     let lastNonce: number | undefined;
     if (waitingTxs) {
       lastNonce = getLastNonce();
     }
-    setIsSuccessTx(false);
     let res: TransactionResponse | undefined;
     try {
       switch (type) {
@@ -84,7 +69,7 @@ const useProductByType = (
           res = await purcahse(inFiat, lastNonce);
           setResTx(res);
           break;
-        case TransferType.Refend:
+        case TransferType.Refund:
           res = await refund(inToken);
           setResTx(res);
           break;
@@ -95,52 +80,50 @@ const useProductByType = (
         default:
           break;
       }
-      setWaitingTx(type, inToken, res);
+      setToastList(type, ToastStatus.Waiting);
+      setWaitingTx(type, inToken, res, assetCryptoType, productUnit);
     } catch (error) {
-      console.log(error);
-      throw Error;
+      navigation.goBack();
+      setToastList(type, ToastStatus.Fail);
     }
   };
 
   const purcahse = async (inFiat: string, lastNonce?: number) => {
-    const valueInDollar = String(getCryptoPrice(assetInCryptoType));
-    const sendedValue = utils
+    const valueInDollar = String(getCryptoPrice(assetCryptoType));
+    const amount = utils
       .parseEther(inFiat)
       .mul(constants.WeiPerEther)
       .div(utils.parseEther(valueInDollar));
-    if (assetInCryptoType !== CryptoType.EL) {
-      return purchaseNotErcProduct(sendedValue, lastNonce);
+    if (assetCryptoType !== CryptoType.EL) {
+      return await purchaseNotErcProduct(amount, lastNonce);
     } else {
-      return purchaseErcProduct(sendedValue, lastNonce);
+      return await purchaseErcProduct(amount, lastNonce);
     }
   };
 
   const purchaseNotErcProduct = async (
-    sendedValue: BigNumber,
+    amount: BigNumber,
     lastNonce?: number,
   ) => {
     const populatedTransaction = await contract?.populateTransaction.purchase();
 
     if (!populatedTransaction) return;
 
-    return await wallet?.getFirstSigner(assetInCryptoType).sendTransaction({
+    return await wallet?.getFirstSigner(assetCryptoType).sendTransaction({
       to: populatedTransaction.to,
       data: populatedTransaction.data,
-      value: sendedValue, // dollar to crypto
+      value: amount, // dollar to crypto
       gasPrice:
-        assetInCryptoType === CryptoType.BNB
+        assetCryptoType === CryptoType.BNB
           ? BigNumber.from(bscGasPrice)
           : BigNumber.from(gasPrice),
       nonce: lastNonce ? lastNonce + 1 : undefined,
     });
   };
 
-  const purchaseErcProduct = async (
-    sendedValue: BigNumber,
-    lastNonce?: number,
-  ) => {
+  const purchaseErcProduct = async (amount: BigNumber, lastNonce?: number) => {
     const populatedTransaction = await contract?.populateTransaction.purchase(
-      sendedValue,
+      amount,
     );
     if (!populatedTransaction) return;
     return await wallet?.getFirstSigner().sendTransaction({
@@ -159,13 +142,13 @@ const useProductByType = (
 
       if (!populatedTransaction) return;
 
-      return await wallet?.getFirstSigner(assetInCryptoType).sendTransaction({
+      return await wallet?.getFirstSigner(assetCryptoType).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
         nonce: lastNonce ? lastNonce + 1 : undefined,
       });
     } catch (error) {
-      console.log(error);
+      throw Error;
     }
   };
 
@@ -176,34 +159,24 @@ const useProductByType = (
 
       if (!populatedTransaction) return;
 
-      return await wallet?.getFirstSigner(assetInCryptoType).sendTransaction({
+      return await wallet?.getFirstSigner(assetCryptoType).sendTransaction({
         to: populatedTransaction.to,
         data: populatedTransaction.data,
         nonce: lastNonce ? lastNonce + 1 : undefined,
       });
     } catch (error) {
-      console.log(error);
+      throw Error;
     }
-  };
-
-  const noticeTxStatus = () => {
-    afterTxHashCreated(
-      resTx?.from || '',
-      resTx?.to || '',
-      resTx?.hash || '',
-      NetworkType.ETH,
-    );
   };
 
   useEffect(() => {
     if (resTx) {
       navigation.goBack();
-      noticeTxStatus();
       waitTx();
     }
   }, [resTx]);
 
-  return { contract, productByType };
+  return { contract, createTransaction };
 };
 
 export default useProductByType;
