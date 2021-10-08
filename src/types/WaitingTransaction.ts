@@ -7,3 +7,11 @@ export type WaitingTransaction = {
   amount?: string;
   cryptoType?: string;
 };
+
+export type ToastTransaction = {
+  id: number;
+  transferType: string;
+  isSuccessTx: boolean;
+  isFailTx: boolean;
+  isWaitingTx: boolean;
+};
