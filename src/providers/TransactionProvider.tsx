@@ -1,10 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
-import { useTranslation } from 'react-i18next';
-import { Linking } from 'react-native';
-import { ethers } from 'ethers';
+import { Linking, View } from 'react-native';
 import moment from 'moment';
+import {
+  TransactionReceipt,
+  TransactionResponse,
+} from '@ethersproject/providers';
+import { useTranslation } from 'react-i18next';
 import { PENDING_TRANSACTIONS } from '../constants/storage';
 import TransactionContext, {
   TransactionType,
@@ -12,91 +15,165 @@ import TransactionContext, {
 } from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
 import TxStatus from '../enums/TxStatus';
-import CryptoTransaction from '../types/CryptoTransaction';
 import { bscProvider, provider } from '../utiles/getContract';
 import getTxScanLink from '../utiles/getTxScanLink';
 import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
+import {
+  ToastTransaction,
+  WaitingTransaction,
+} from '../types/WaitingTransaction';
+import TransferType from '../enums/TransferType';
+import StakingType from '../enums/StakingType';
+import ToastMessage from '../shared/components/ToastMessage';
+import ToastStatus from '../enums/ToastStatus';
 
 const TransactionProvider: React.FC = (props) => {
   const { refreshBalance } = useContext(AssetContext);
-  const [txRe, setTxRe] = useState<ethers.providers.TransactionReceipt>();
   const [state, setState] = useState<TransactionType>(initialTransactions);
+  const [toasts, setToasts] = useState<ToastTransaction[]>([]);
   const { t } = useTranslation();
 
-  const setIsSuccessTx = (isSuccessTx: boolean) => {
-    setState({
-      ...state,
-      isSuccessTx,
+  const setToastList = (type: string, status: ToastStatus) => {
+    setToasts((prev: ToastTransaction[]) => {
+      return [
+        ...prev,
+        {
+          id: toasts[toasts.length - 1] ? toasts[toasts.length - 1].id + 1 : 1,
+          transferType: type,
+          isWaitingTx: status === ToastStatus.Waiting,
+          isFailTx: status === ToastStatus.Fail,
+          isSuccessTx: status === ToastStatus.Success,
+        },
+      ];
     });
   };
 
-  const addPendingTransaction = async (
-    txRes: ethers.providers.TransactionResponse | undefined,
-    pendingTx: CryptoTransaction,
+  const setUnit = (
+    transferType: TransferType | StakingType,
+    cryptoType?: CryptoType,
+    productUnit?: string,
   ) => {
+    return transferType === TransferType.StakingReward
+      ? cryptoType === CryptoType.EL
+        ? CryptoType.ELFI
+        : CryptoType.DAI
+      : productUnit
+      ? productUnit
+      : cryptoType;
+  };
+
+  const setWaitingTx = (
+    transferType: TransferType | StakingType,
+    amount: string,
+    resTx?: TransactionResponse,
+    cryptoType?: CryptoType,
+    productUnit?: string,
+  ) => {
+    setStorageTx({
+      transferType: t(transferType),
+      unit: setUnit(transferType, cryptoType, productUnit),
+      date: moment().format('YYYY-MM-DD | HH:mm:ss'),
+      nonce: resTx?.nonce,
+      txHash: resTx?.hash,
+      amount,
+      cryptoType,
+    });
+  };
+
+  const setStorageTx = async (waitingTransaction: WaitingTransaction) => {
     try {
+      if (waitingTransaction.transferType === TransferType.Migration) {
+        const txs = JSON.parse(
+          (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
+        );
+        setState({
+          ...state,
+          waitingTxs: [...JSON.parse(txs), waitingTransaction],
+        });
+        return;
+      }
       await AsyncStorage.setItem(
         PENDING_TRANSACTIONS,
-        JSON.stringify([{ ...pendingTx, status: TxStatus.Pending }]),
+        JSON.stringify([...state.waitingTxs, waitingTransaction]),
       );
       setState({
         ...state,
-        transactions: [{ ...pendingTx, status: TxStatus.Pending }],
+        waitingTxs: [...state.waitingTxs, waitingTransaction],
       });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      const txResult = await txRes?.wait();
-      if (txResult) {
-        setTxRe(txResult);
-      }
-    } catch (e) {
+  const removeStorageTx = async (txHash?: string) => {
+    try {
+      const txs = state.waitingTxs.filter((tx) => {
+        return tx.txHash !== txHash;
+      });
       setState({
         ...state,
-        transactions: [{ ...pendingTx, status: TxStatus.Fail }],
+        waitingTxs: txs,
       });
+      await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(txs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const succeedTx = async (tx: WaitingTransaction) => {
+    let res: TransactionReceipt;
+    if (tx.cryptoType === CryptoType.BNB) {
+      res = await bscProvider.getTransactionReceipt(tx.txHash!);
+    } else {
+      res = await provider.getTransactionReceipt(tx.txHash!);
+    }
+    const waitTx = state.waitingTxs?.filter((value) => {
+      value.txHash !== res.transactionHash;
+    });
+    if (waitTx) {
+      await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(waitTx));
+      setState({
+        ...state,
+        waitingTxs: waitTx,
+      });
+    }
+  };
+
+  const removeStorageTxByAppState = async () => {
+    try {
+      if (state.waitingTxs.length === 0) return;
+      state.waitingTxs.forEach(async (tx) => {
+        await succeedTx(tx);
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     (async () => {
-      try {
-        if (txRe) {
-          const date = await provider.getBlock(txRe?.blockNumber || '');
-          const txIdx = state.transactions.findIndex((tx) => {
-            return txRe?.transactionHash === tx.txHash;
-          });
-          state.transactions[txIdx] = {
-            ...state.transactions[txIdx],
-            createdAt: moment.unix(date.timestamp).toString(),
-            blockNumber: txRe?.blockNumber,
-            status: TxStatus.Success,
-          };
-          setState({
-            ...state,
-            transactions: [...state.transactions],
-          });
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, [txRe]);
-
-  useEffect(() => {
-    (async () => {
-      let transactions = [];
+      let transactions: WaitingTransaction[] = [];
       try {
         transactions = JSON.parse(
           (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
         );
-      } finally {
-        setState({
-          ...state,
-          transactions,
+        transactions.forEach(async (tx) => {
+          await succeedTx(tx);
         });
+      } catch (error) {
+        console.log(error);
       }
     })();
   }, []);
+
+  const toastHide = (id: number) => {
+    setToasts(
+      toasts.filter((tx) => {
+        return tx.id !== id;
+      }),
+    );
+  };
 
   useEffect(() => {
     if (
@@ -200,10 +277,29 @@ const TransactionProvider: React.FC = (props) => {
     <TransactionContext.Provider
       value={{
         ...state,
-        addPendingTransaction,
-        setIsSuccessTx,
+        setWaitingTx,
+        removeStorageTx,
+        removeStorageTxByAppState,
+        setToastList,
       }}>
       {props.children}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 100,
+          width: '100%',
+          alignItems: 'center',
+        }}>
+        {toasts.map((tx, idx) => {
+          return (
+            <ToastMessage
+              waitingTx={tx}
+              key={idx}
+              toastHide={(id) => toastHide(id)}
+            />
+          );
+        })}
+      </View>
     </TransactionContext.Provider>
   );
 };
