@@ -44,14 +44,14 @@ const WaitingTxListItem: React.FC<WaitngTransactionItem> = ({
       </View>
       <View style={{ marginLeft: 'auto', flexDirection: 'row' }}>
         <P2Text
-          label={amount || ''}
+          label={amount!}
           style={{
             fontFamily: AppFonts.Medium,
             color: AppColors.BLACK,
           }}
         />
         <P2Text
-          label={unit || ''}
+          label={unit!}
           style={{
             fontFamily: AppFonts.Medium,
             color: AppColors.TEXT_GREY2,
