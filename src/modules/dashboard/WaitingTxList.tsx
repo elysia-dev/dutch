@@ -1,19 +1,23 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AppColors from '../../enums/AppColors';
 import SheetHeader from '../../shared/components/SheetHeader';
 import { H2Text, P1Text } from '../../shared/components/Texts';
 import WaitingTxListItem from './components/WaitingTxListItem';
 import BasicLayout from '../../shared/components/BasicLayout';
-import useWaitTx from '../../hooks/useWaitTx';
 import { WaitingTransaction } from '../../types/WaitingTransaction';
+import TransactionContext from '../../contexts/TransactionContext';
 
 const WaitingTxList: FunctionComponent<{}> = () => {
   const { t } = useTranslation();
-  const { waitingTxs } = useWaitTx();
+  const { waitingTxs } = useContext(TransactionContext);
   const [state, setState] = useState<WaitingTransaction[]>([]);
   const [page, setPage] = useState(1);
 
@@ -45,15 +49,17 @@ const WaitingTxList: FunctionComponent<{}> = () => {
               borderBottomColor: AppColors.GREY,
               marginBottom: 25.5,
             }}>
-            <H2Text label={'대기중인 거래'} style={{ fontSize: 22 }} />
+            <H2Text
+              label={t('main.pending_transaction')}
+              style={{ fontSize: 22 }}
+            />
           </View>
           {waitingTxs?.length !== 0 &&
             state &&
             state.map((i, idx) => (
               <WaitingTxListItem key={idx} waitingTransaction={i} />
             ))}
-          {waitingTxs.length !== 0 &&
-          waitingTxs.length / (10 * page + 1) >= 1 ? (
+          {waitingTxs.length !== 0 && waitingTxs.length / (10 * page + 1) >= 1 && (
             <TouchableOpacity
               style={{
                 width: '100%',
@@ -78,7 +84,7 @@ const WaitingTxList: FunctionComponent<{}> = () => {
                 label={t('dashboard_label.more_transactions')}
               />
             </TouchableOpacity>
-          ) : null}
+          )}
         </BasicLayout>
       </ScrollView>
     </>
