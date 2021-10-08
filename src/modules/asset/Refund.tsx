@@ -22,8 +22,8 @@ import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
 import useErcContract from '../../hooks/useErcContract';
-import useProductByType from '../../hooks/useProductByType';
 import TransferType from '../../enums/TransferType';
+import useProductByType from '../../hooks/useProductByType';
 
 type ParamList = {
   Refund: {
@@ -61,10 +61,11 @@ const Refund: FunctionComponent = () => {
     state.txHash,
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
-  const { contract, productByType } = useProductByType(
+  const { contract, createTransaction } = useProductByType(
     assetInCrypto.type,
     contractAddress,
     assetInToken.unit,
+    TransferType.Refund,
   );
   const [isLoading, setIsLoading] = useState(false);
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
@@ -115,7 +116,7 @@ const Refund: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
     setIsLoading(true);
     try {
-      productByType(values.inFiat, values.inToken, TransferType.Refend);
+      createTransaction(values.inFiat, values.inToken);
 
       if (assetInCrypto.type === CryptoType.BNB) {
         setState({

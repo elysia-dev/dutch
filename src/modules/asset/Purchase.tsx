@@ -9,6 +9,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../enums/CryptoType';
+import useProductByType from '../../hooks/useProductByType';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { useWatingTx } from '../../hooks/useWatingTx';
@@ -20,19 +21,12 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
-import {
-  getAssetTokenFromCryptoType,
-  getElysiaContract,
-} from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
-import createTransferTx from '../../hooks/useTransferTx';
 import TransferType from '../../enums/TransferType';
 import useErcContract from '../../hooks/useErcContract';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import usePurchaseGas from '../../hooks/usePurchaseGas';
-import useWaitTx from '../../hooks/useWaitTx';
-import useProductByType from '../../hooks/useProductByType';
 
 type ParamList = {
   Purchase: {
@@ -78,10 +72,11 @@ const Purchase: FunctionComponent = () => {
   const { gasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const { contract, productByType } = useProductByType(
+  const { contract, createTransaction } = useProductByType(
     assetInCrypto.type,
     contractAddress,
     assetInToken.unit,
+    TransferType.Purchase,
   );
   const { getBalance } = useContext(AssetContext);
   const { estimagedGasPrice, setEstimatedGas } = usePurchaseGas(
@@ -122,17 +117,12 @@ const Purchase: FunctionComponent = () => {
     try {
       setIsLoading(true);
       if (isMax) {
-        await productByType(
+        await createTransaction(
           maxValueInFiat.toFixed(18),
           maxValueInToken.toFixed(18),
-          TransferType.Purchase,
         );
       } else {
-        await productByType(
-          values.inFiat,
-          values.inToken,
-          TransferType.Purchase,
-        );
+        await createTransaction(values.inFiat, values.inToken);
       }
     } catch (error) {
       afterTxFailed('Transaction failed');

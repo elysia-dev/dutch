@@ -29,8 +29,8 @@ import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import GasPrice from '../../shared/components/GasPrice';
 import AppColors from '../../enums/AppColors';
-import useProductByType from '../../hooks/useProductByType';
 import TransferType from '../../enums/TransferType';
+import useProductByType from '../../hooks/useProductByType';
 
 type ParamList = {
   Reward: {
@@ -63,10 +63,11 @@ const Reward: FunctionComponent = () => {
   const gasCrypto =
     toCrypto === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = getBalance(gasCrypto) < parseFloat(state.estimateGas);
-  const { contract, productByType } = useProductByType(
+  const { contract, createTransaction } = useProductByType(
     toCrypto,
     contractAddress,
     toCrypto,
+    TransferType.ProductReward,
   );
   const txResult = useWatingTx(
     state.txHash,
@@ -123,11 +124,7 @@ const Reward: FunctionComponent = () => {
     let txRes: ethers.providers.TransactionResponse | undefined;
 
     try {
-      productByType(
-        '',
-        (interest / getCryptoPrice(toCrypto)).toFixed(4),
-        TransferType.ProductReward,
-      );
+      createTransaction('', (interest / getCryptoPrice(toCrypto)).toFixed(4));
 
       if (toCrypto === CryptoType.BNB) {
         setState({
