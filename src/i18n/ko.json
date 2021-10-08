@@ -304,7 +304,11 @@
     "transaction": {
       "pending": "대기중인 트랜잭션이 있습니다.",
       "fail": "트랜잭션이 실패했습니다.",
-      "created": "트랜잭션 완료"
+      "created": "트랜잭션 완료",
+      "create_transaction": "트랜잭션을 전송했습니다.",
+      "success_transaction": "{{transferType}}이 완료됐습니다.",
+      "purchase_transaction": "{{transferType}}가 완료됐습니다.",
+      "fail_transaction": "{{transferType}}에 실패했습니다."
     },
     "main": {
       "total_assets": "총 자산",
@@ -325,7 +329,9 @@
       "my_staking": "내 스테이킹 및 리워드",
       "staking_by_crypto": "{{stakingCrypto}} 스테이킹 및 {{rewardCrypto}} 리워드",
       "staking_amount": "{{round}}차 스테이킹",
-      "reward_amount": "{{round}}차 리워드"
+      "reward_amount": "{{round}}차 리워드",
+      "pending_transaction": "대기 중인 트랜잭션",
+      "pending_transaction_count": "현재 {{count}}건이 대기 중입니다."
     },
     "recovery_key": {
       "keep": "복구키 보관",
@@ -475,6 +481,7 @@
       "unstake_only": "{{stakingCryprto}} 토큰만 전송하기",
       "migration_placeholder": "몇 개를 마이그레이션할까요?",
       "max_supply_available": "입력 가능 수량",
+      "migration": "마이그레이션",
       "migration_destination": "마이그레이션 위치",
       "migration_supply": "마이그레이션 수량",
       "reward_supply": "보상 수량",
@@ -502,6 +509,14 @@
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."
     },
-    "datetime_format": "YYYY.MM.DD HH:mm:ss"
+    "datetime_format": "YYYY.MM.DD HH:mm:ss",
+    "withdrawal": "자산 출금",
+    "purchase": "부동산 토큰 구매",
+    "refund": "부동산 토큰 환불",
+    "productReward": "이자 출금",
+    "stake": "스테이킹",
+    "unstake": "언스테이킹",
+    "migrate": "마이그레이션",
+    "stakingReward": "보상 수령"
   }
 }
