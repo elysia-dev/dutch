@@ -1,12 +1,12 @@
 enum TransferType {
   Purchase = 'purchase',
-  Refend = 'refund',
+  Refund = 'refund',
   ProductReward = 'productReward',
   Staking = 'stake',
   Unstaking = 'unstake',
-  StakingReward = 'reward',
+  StakingReward = 'stakingReward',
   Migration = 'migrate',
-  Send = 'send',
+  Withdrawal = 'withdrawal',
 }
 
 export default TransferType;
