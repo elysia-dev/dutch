@@ -9,18 +9,19 @@ import PriceContext from '../contexts/PriceContext';
 import WalletContext from '../contexts/WalletContext';
 import NetworkType from '../enums/NetworkType';
 import useErcContract from './useErcContract';
-import useWaitTx from './useWaitTx';
 import { WaitingTransaction } from '../types/WaitingTransaction';
+import TransactionContext from '../contexts/TransactionContext';
+import ToastStatus from '../enums/ToastStatus';
 
 export default function useTransferTx(cryptoType: CryptoType) {
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const { wallet } = useContext(WalletContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const navigation = useNavigation();
   const { elContract, elfiContract, daiContract } = useErcContract();
-  const { waitingTxs, setWaitingTx, removeStorageTx } = useWaitTx(cryptoType);
+  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
+    useContext(TransactionContext);
 
   const setErcContract = (cryptoType: CryptoType) => {
     if (cryptoType === CryptoType.ELFI) {
@@ -30,10 +31,6 @@ export default function useTransferTx(cryptoType: CryptoType) {
     } else {
       return elContract;
     }
-  };
-  const notifyFail = () => {
-    navigation.goBack();
-    afterTxFailed('Transaction failed');
   };
 
   const getLastNonce = () => {
@@ -60,10 +57,11 @@ export default function useTransferTx(cryptoType: CryptoType) {
       }
       const res = await transfer(value, address, lastNonce);
       setResTx(res);
-      setWaitingTx(TransferType.Send, value, res);
+      setToastList(TransferType.Withdrawal, ToastStatus.Waiting);
+      setWaitingTx(TransferType.Withdrawal, value, res, cryptoType);
     } catch (error) {
-      console.log(error);
-      throw Error;
+      navigation.goBack();
+      setToastList(TransferType.Withdrawal, ToastStatus.Fail);
     }
   };
 
@@ -78,13 +76,9 @@ export default function useTransferTx(cryptoType: CryptoType) {
         [CryptoType.EL, CryptoType.ELFI, CryptoType.DAI].includes(cryptoType)
       ) {
         const ercContract = setErcContract(cryptoType);
-        return await ercContract?.transfer(
-          address || '',
-          utils.parseEther(value || ''),
-          {
-            nonce: lastNonce ? lastNonce + 1 : undefined,
-          },
-        );
+        return await ercContract?.transfer(address!, utils.parseEther(value!), {
+          nonce: lastNonce ? lastNonce + 1 : undefined,
+        });
       } else {
         return await wallet?.getFirstSigner(cryptoType).sendTransaction({
           to: address,
@@ -105,26 +99,17 @@ export default function useTransferTx(cryptoType: CryptoType) {
   const waitTx = async () => {
     try {
       await resTx?.wait();
+      setToastList(TransferType.Withdrawal, ToastStatus.Success);
       removeStorageTx(resTx?.hash);
-      afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
-      throw Error;
+      navigation.goBack();
+      setToastList(TransferType.Withdrawal, ToastStatus.Fail);
     }
-  };
-
-  const noticeTxStatus = () => {
-    afterTxHashCreated(
-      resTx?.from || '',
-      resTx?.to || '',
-      resTx?.hash || '',
-      NetworkType.ETH,
-    );
   };
 
   useEffect(() => {
     if (resTx) {
       navigation.goBack();
-      noticeTxStatus();
       waitTx();
     }
   }, [resTx]);
