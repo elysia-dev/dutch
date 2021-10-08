@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { AppState, Text, TouchableOpacity, View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import { DashboardPage, Page } from '../../../enums/pageEnum';
-import useWaitTx from '../../../hooks/useWaitTx';
 import { H4Text, P3Text } from '../../../shared/components/Texts';
+import TransactionContext from '../../../contexts/TransactionContext';
 
 const WaitingTxBox: React.FC<{
   isFocused: boolean;
 }> = ({ isFocused }) => {
   const navigation = useNavigation();
-  const { waitingTxs, getStorageTx, removeStorageTxByAppState } = useWaitTx();
+  const { t } = useTranslation();
+  const { waitingTxs, removeStorageTxByAppState } =
+    useContext(TransactionContext);
 
   const changeAppState = async () => {
-    if (!waitingTxs) return;
-    await removeStorageTxByAppState();
-    await getStorageTx();
+    if (waitingTxs.length === 0) return;
+    removeStorageTxByAppState();
   };
 
   useEffect(() => {
@@ -25,12 +27,6 @@ const WaitingTxBox: React.FC<{
       AppState.removeEventListener('change', changeAppState);
     };
   }, []);
-
-  useEffect(() => {
-    if (isFocused) {
-      changeAppState();
-    }
-  }, [isFocused]);
 
   return (
     <>
@@ -61,11 +57,13 @@ const WaitingTxBox: React.FC<{
               });
             }}>
             <P3Text
-              label={'대기 중인 트랜잭션'}
+              label={t('main.pending_transaction')}
               style={{ color: AppColors.SUB_BLACK }}
             />
             <H4Text
-              label={`현재 ${waitingTxs?.length || 0}건이 대기 중입니다.`}
+              label={t('main.pending_transaction_count', {
+                count: waitingTxs.length,
+              })}
               style={{ fontSize: 15 }}
             />
           </TouchableOpacity>
