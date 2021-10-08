@@ -71,6 +71,7 @@ const UnstakeAndMigrate: React.FC = () => {
     cryptoType,
     setIsLoading,
     isElfiV2Con,
+    StakingType.Migrate,
   );
   const address = isWalletUser
     ? wallet?.getFirstAddress()
@@ -84,6 +85,7 @@ const UnstakeAndMigrate: React.FC = () => {
   const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
+    isElfiV2Con,
     round,
   );
   const [userPrincipal, setUserPrincipal] = useState(principal);
@@ -156,7 +158,7 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const isProgressRound = () => {
-    if (currentRound !== 6) {
+    if (currentRound !== 4) {
       return moment().isBetween(
         STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
         STAKING_POOL_ROUNDS[currentRound].startedAt,
@@ -198,7 +200,7 @@ const UnstakeAndMigrate: React.FC = () => {
         return;
       }
       const migrateAmount = String(userPrincipal - parseFloat(value));
-      stakeByType(migrateAmount, round, StakingType.Migrate, value, reward);
+      stakeByType(migrateAmount, round, value, reward);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);

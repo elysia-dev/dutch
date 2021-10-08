@@ -53,6 +53,7 @@ const Reward: React.FC = () => {
   const { estimagedGasPrice } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
+    isElfiV2Con,
     changedRound,
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +61,7 @@ const Reward: React.FC = () => {
     cryptoType,
     setIsLoading,
     isElfiV2Con,
+    StakingType.Reward,
   );
   const { reward } = useStakingInfo(cryptoType, changedRound, isElfiV2Con);
   const [userReward, setUserReward] = useState(0);
@@ -72,11 +74,7 @@ const Reward: React.FC = () => {
 
   const onPressClaim = async () => {
     try {
-      await stakeByType(
-        userReward.toString(),
-        changedRound,
-        StakingType.Reward,
-      );
+      await stakeByType(userReward.toString(), changedRound);
     } catch (error) {
       console.log(error);
       afterTxFailed('Transaction failed');
