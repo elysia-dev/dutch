@@ -27,6 +27,7 @@ const App = () => {
     SpoqaHanSansNeoRegular: require('./src/shared/assets/fonts/SpoqaHanSansNeoRegular.otf'),
     SpoqaHanSansNeoMedium: require('./src/shared/assets/fonts/SpoqaHanSansNeoMedium.otf'),
     SpoqaHanSansNeoBold: require('./src/shared/assets/fonts/SpoqaHanSansNeoBold.otf'),
+    NanumSquareEB: require('./src/shared/assets/fonts/NanumSquareEB.otf'),
   });
 
   const [loading, setLoading] = useState<boolean>(true);
