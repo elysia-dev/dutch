@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import FlashMessage from 'react-native-flash-message';
@@ -20,6 +20,8 @@ import WalletRecover from './src/modules/account/WalletRecover';
 import Asset from './src/modules/asset';
 import Crypto from './src/modules/crypto';
 import Staking from './src/modules/staking';
+import TransactionContext from './src/contexts/TransactionContext';
+import { WaitingTransaction } from './src/types/WaitingTransaction';
 
 const RootStack = createStackNavigator();
 
@@ -69,7 +71,6 @@ const AppNavigator: React.FC = () => {
           options={{ animationEnabled: false }}
         />
       </RootStack.Navigator>
-      <FlashMessage position="top" />
     </NavigationContainer>
   );
 };
