@@ -4,38 +4,31 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
 import TransactionContext from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
-import NetworkType from '../enums/NetworkType';
 import StakingType from '../enums/StakingType';
+import ToastStatus from '../enums/ToastStatus';
 import TransferType from '../enums/TransferType';
 import useStakingPool from './useStakingPool';
-import useTxHandler from './useTxHandler';
-import useWaitTx from './useWaitTx';
 
 const useStakingByType = (
   cryptoType: CryptoType,
   setIsLoading: (isBoolean: boolean) => void,
   isElfiV2: boolean,
+  type: StakingType,
 ) => {
-  const { setIsSuccessTx } = useContext(TransactionContext);
   const [resTx, setResTx] = useState<TransactionResponse>();
-  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
   const navigation = useNavigation();
-  const { waitingTxs, setWaitingTx, removeStorageTx } = useWaitTx(cryptoType);
-
-  const notifyFail = () => {
-    navigation.goBack();
-    afterTxFailed('Transaction failed');
-  };
+  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
+    useContext(TransactionContext);
 
   const waitTx = async () => {
     try {
       await resTx?.wait();
+      setToastList(type, ToastStatus.Success);
       removeStorageTx(resTx?.hash);
-      setIsSuccessTx(true);
-      afterTxCreated(resTx?.hash || '', NetworkType.ETH);
     } catch (error) {
-      throw Error;
+      navigation.goBack();
+      setToastList(type, ToastStatus.Fail);
     }
   };
 
@@ -51,18 +44,17 @@ const useStakingByType = (
   const txLastNonce = (lastNonce?: number) => {
     return {
       nonce: lastNonce ? lastNonce + 1 : undefined,
+      // gasPrice: utils.parseUnits('1', 'wei'),
     };
   };
 
   const stakeByType = async (
     value: string,
     round: number,
-    type: StakingType | TransferType,
     unStakingAmount?: string,
     reward?: number,
   ) => {
     setIsLoading(true);
-    setIsSuccessTx(false);
     let res: TransactionResponse | undefined;
     let lastNonce: number | undefined;
     if (waitingTxs) {
@@ -73,9 +65,11 @@ const useStakingByType = (
         case StakingType.Stake:
           res = await stakingPoolContract.stake(
             utils.parseUnits(value),
-            txLastNonce(lastNonce),
+            {
+              gasPrice: utils.parseUnits('1', 'gwei'),
+            },
+            // txLastNonce(lastNonce),
           );
-          setResTx(res);
           break;
         case StakingType.Unstake:
           res = await stakingPoolContract.withdraw(
@@ -83,7 +77,6 @@ const useStakingByType = (
             round,
             txLastNonce(lastNonce),
           );
-          setResTx(res);
           break;
         case StakingType.Migrate:
           res = await stakingPoolContract.migrate(
@@ -91,42 +84,39 @@ const useStakingByType = (
             round,
             txLastNonce(lastNonce),
           );
-          setResTx(res);
           if (unStakingAmount) {
-            setWaitingTx(TransferType.Unstaking, unStakingAmount || '', res);
+            setWaitingTx(
+              TransferType.Unstaking,
+              unStakingAmount || '',
+              res,
+              cryptoType,
+            );
           }
           setWaitingTx(
             TransferType.StakingReward,
             reward?.toString() || '',
             res,
+            cryptoType,
           );
           break;
         default:
           res = await stakingPoolContract.claim(round, txLastNonce(lastNonce));
-          setResTx(res);
           break;
       }
-      setWaitingTx(type, value, res);
+      setResTx(res);
+      setToastList(type, ToastStatus.Waiting);
+      setWaitingTx(type, value, res, cryptoType);
     } catch (error) {
       console.log(error);
-      throw Error;
+      navigation.goBack();
+      setToastList(type, ToastStatus.Fail);
     }
-  };
-
-  const noticeTxStatus = () => {
-    afterTxHashCreated(
-      resTx?.from || '',
-      resTx?.to || '',
-      resTx?.hash || '',
-      NetworkType.ETH,
-    );
   };
 
   useEffect(() => {
     if (resTx) {
       setIsLoading(false);
       navigation.goBack();
-      noticeTxStatus();
       waitTx();
     }
   }, [resTx]);
