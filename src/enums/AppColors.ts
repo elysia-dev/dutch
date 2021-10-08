@@ -10,6 +10,7 @@ enum AppColors {
   BLUISH_GREY = '#E6ECF2',
   BLACK = '#1C1C1C',
   BLACK2 = '#666666',
+  BLACK3 = '#323232',
   SUB_BLACK = '#848484',
   ETH_BLUE = '#6C85FF',
   EL_BLUE = '#3679B5',
