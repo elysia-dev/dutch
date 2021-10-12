@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber, constants } from 'ethers';
 import Staking from '../types/Staking';
 
 export type StakingStateType = {
@@ -17,59 +17,59 @@ interface IStakingContext extends StakingStateType {
 export const initialStakingState = {
   elStakingList: [
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
   ],
   elfiStakingList: [
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
     {
-      userIndex: BigNumber.from(0),
-      userPrincipal: BigNumber.from(0),
-      userReward: BigNumber.from(0),
+      userIndex: constants.Zero,
+      userPrincipal: constants.Zero,
+      userReward: constants.Zero,
     },
   ],
   elStakingRewards: [
-    BigNumber.from(0),
-    BigNumber.from(0),
-    BigNumber.from(0),
-    BigNumber.from(0),
+    constants.Zero,
+    constants.Zero,
+    constants.Zero,
+    constants.Zero,
   ],
   elfiStakingRewards: [
-    BigNumber.from(0),
-    BigNumber.from(0),
-    BigNumber.from(0),
-    BigNumber.from(0),
+    constants.Zero,
+    constants.Zero,
+    constants.Zero,
+    constants.Zero,
   ],
   stakingLoaded: false,
 };
