@@ -64,7 +64,7 @@ const Stake: React.FC = () => {
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
   const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
-  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
+  const { estimagedGasPrice, setEstimatedGas, gasLimit } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Stake,
     isElfiV2Con,
@@ -199,6 +199,7 @@ const Stake: React.FC = () => {
         // isMax ? String(crytoBalance) : value,
         value,
         selectedRound,
+        gasLimit,
         StakingType.Stake,
       );
     } catch (error) {
@@ -320,6 +321,7 @@ const Stake: React.FC = () => {
                 getApproveGasPrice();
                 setIsApproved(isAllowanceForApprove());
                 setModalVisible(true);
+                setEstimatedGas(StakingType.Stake, selectedRound, value);
               } else {
                 setSelectionVisible(true);
               }
