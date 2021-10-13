@@ -9,6 +9,8 @@ import TxStatus from '../enums/TxStatus';
 import getPaymentCrypto from '../utiles/getPaymentCrypto';
 import useUserAddress from './useUserAddress';
 import StakingContext from '../contexts/StakingContext';
+import LoadDetail from '../utiles/LoadLagacyDetail';
+import UserContext from '../contexts/UserContext';
 
 const useUserAsset = () => {
   const userAddress = useUserAddress();
@@ -42,18 +44,31 @@ const useUserAsset = () => {
     elfiStakingList,
     elfiStakingRewards,
   } = useContext(StakingContext);
+  const loadDetail = new LoadDetail();
+  const { Server } = useContext(UserContext);
 
   // 부동산 이자 총액. 이것도 assetProvider로 넘겨야 하나..??
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
     const promises = realEstateAssets.map(async (item) => {
-      const contract = getAssetTokenFromCryptoType(
-        getPaymentCrypto(item.paymentMethod!),
-        item.address!,
-      );
-      const interest = await contract?.getReward(userAddress);
-      return Number(utils.formatEther(interest));
+      if (item.address) {
+        const contract = getAssetTokenFromCryptoType(
+          getPaymentCrypto(item.paymentMethod!),
+          item.address,
+        );
+        const interest = await contract?.getReward(userAddress);
+        return Number(utils.formatEther(interest));
+      } else {
+        // legacy
+        const assetDetail = await loadDetail.ownershipDetail(
+          Server,
+          item.ownershipId,
+          1,
+          () => {},
+        );
+        return assetDetail.reward;
+      }
     });
 
     const interests = await Promise.all(promises);

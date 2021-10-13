@@ -12,6 +12,9 @@ import { getAssetTokenFromCryptoType } from '../../../utiles/getContract';
 import getPaymentCrypto from '../../../utiles/getPaymentCrypto';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import useUserAddress from '../../../hooks/useUserAddress';
+import LoadDetail from '../../../utiles/LoadLagacyDetail';
+import UserContext from '../../../contexts/UserContext';
+import AssetDetail from '../../../types/AssetDetail';
 
 const StakingInfoBox: React.FC<{
   asset: Asset;
@@ -23,16 +26,25 @@ const StakingInfoBox: React.FC<{
   const userAddress = useUserAddress();
   const [reward, setReward] = useState(0);
   const paymentMethod = getPaymentCrypto(asset.paymentMethod!);
+  const loadDetail = new LoadDetail();
+  const { Server } = useContext(UserContext);
 
   useEffect(() => {
-    const assetContract = getAssetTokenFromCryptoType(
-      paymentMethod,
-      asset.address!,
-    );
-    assetContract?.getReward(userAddress).then((res: BigNumber) => {
-      // 아 getReward가 토큰이 아니라 달러 기준으로 값을 주는구나
-      setReward(Number(utils.formatEther(res)));
-    });
+    if (asset.address) {
+      const assetContract = getAssetTokenFromCryptoType(
+        paymentMethod,
+        asset.address,
+      );
+      assetContract?.getReward(userAddress).then((res: BigNumber) => {
+        // 아 getReward가 토큰이 아니라 달러 기준으로 값을 주는구나
+        setReward(Number(utils.formatEther(res)));
+      });
+    } else {
+      // legacy
+      loadDetail
+        .ownershipDetail(Server, asset.ownershipId, 1, () => {})
+        .then((res: AssetDetail) => setReward(res.reward));
+    }
   }, []);
 
   return (
