@@ -247,7 +247,6 @@ export const Main: React.FC = () => {
                 },
               });
             }}
-            assetLoaded={assetLoaded}
           />
           <View style={{ height: 25 }} />
           <StakingListing />
@@ -265,7 +264,6 @@ export const Main: React.FC = () => {
                 },
               });
             }}
-            assetLoaded={assetLoaded}
           />
           {(user.legacyEl !== 0 || user.legacyUsd !== 0) &&
             [LegacyRefundStatus.NONE, LegacyRefundStatus.PENDING].includes(

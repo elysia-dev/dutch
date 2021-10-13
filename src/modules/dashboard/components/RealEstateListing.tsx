@@ -10,16 +10,17 @@ import Asset from '../../../types/Asset';
 import AppFonts from '../../../enums/AppFonts';
 import useUserAsset from '../../../hooks/useUserAsset';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import AssetContext from '../../../contexts/AssetContext';
 
 const RealEstateListing: React.FC<{
   title: string;
   assets: Asset[];
   itemPressHandler: (asset: Asset) => void;
-  assetLoaded: boolean;
-}> = ({ title, assets, itemPressHandler, assetLoaded }) => {
+}> = ({ title, assets, itemPressHandler }) => {
   const { t } = useTranslation();
   const { totalRealEstate, totalInterest } = useUserAsset();
   const { currencyFormatter } = useContext(PreferenceContext);
+  const { assetLoaded } = useContext(AssetContext);
 
   if (assetLoaded) {
     return (
