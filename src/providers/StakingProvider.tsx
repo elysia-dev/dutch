@@ -75,18 +75,23 @@ const StakingProvider: React.FC = ({ children }) => {
   };
 
   const loadStakingInfo = async () => {
-    const elStakingList = await getElStakingList();
-    const elfiStakingList = await getElfiStakingList();
-    const elStakingRewards = await getElStakingRewards();
-    const elfiStakingRewards = await getElfiStakingRewards();
+    try {
+      const elStakingList = await getElStakingList();
+      const elfiStakingList = await getElfiStakingList();
+      const elStakingRewards = await getElStakingRewards();
+      const elfiStakingRewards = await getElfiStakingRewards();
 
-    setState({
-      elStakingList,
-      elfiStakingList,
-      elStakingRewards,
-      elfiStakingRewards,
-      stakingLoaded: true,
-    });
+      setState({
+        elStakingList,
+        elfiStakingList,
+        elStakingRewards,
+        elfiStakingRewards,
+        stakingLoaded: true,
+      });
+    } catch (e) {
+      alert('Internal Error');
+      setState({ ...initialStakingState, stakingLoaded: true });
+    }
   };
 
   useEffect(() => {
