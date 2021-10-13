@@ -7,7 +7,9 @@ const useUserAddress = () => {
   const { wallet } = useContext(WalletContext);
 
   const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
+    ? wallet
+      ? wallet.getFirstAddress()
+      : ''
     : user.ethAddresses
     ? user.ethAddresses[0]
     : '';
