@@ -23,6 +23,21 @@ export interface ITransactionContext extends TransactionType {
     productUnit?: string,
     isSuccess?: boolean,
   ) => void;
+  addPendingTx: (
+    transferType: TransferType,
+    amount: string,
+    resTx?: TransactionResponse,
+    cryptoType?: CryptoType,
+    productUnit?: string,
+  ) => void;
+  addMigrationTxs: (
+    unStakingAmount: string,
+    migrateAmount: string,
+    rewardAmount: string,
+    resTx?: TransactionResponse,
+    cryptoType?: CryptoType,
+    productUnit?: string,
+  ) => void;
   removeStorageTx: (txHash?: string) => void;
   removeStorageTxByAppState: () => void;
   setToastList: (type: string, status: ToastStatus) => void;
@@ -37,6 +52,8 @@ export const initialTransactions = {
 export const initialTransactionContext = {
   ...initialTransactions,
   setWaitingTx: () => {},
+  addPendingTx: () => {},
+  addMigrationTxs: () => {},
   removeStorageTx: () => {},
   removeStorageTxByAppState: () => {},
   setToastList: () => {},
