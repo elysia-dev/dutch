@@ -17,11 +17,8 @@ export default function useTransferTx(cryptoType: CryptoType) {
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const { wallet } = useContext(WalletContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [resTx, setResTx] = useState<TransactionResponse>();
-  const navigation = useNavigation();
   const { elContract, elfiContract, daiContract } = useErcContract();
-  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
-    useContext(TransactionContext);
+  const { waitingTxs } = useContext(TransactionContext);
 
   const setErcContract = (cryptoType: CryptoType) => {
     if (cryptoType === CryptoType.ELFI) {
@@ -56,12 +53,9 @@ export default function useTransferTx(cryptoType: CryptoType) {
         lastNonce = getLastNonce();
       }
       const res = await transfer(value, address, lastNonce);
-      setResTx(res);
-      setToastList(TransferType.Withdrawal, ToastStatus.Waiting);
-      setWaitingTx(TransferType.Withdrawal, value, res, cryptoType);
+      return res;
     } catch (error) {
-      navigation.goBack();
-      setToastList(TransferType.Withdrawal, ToastStatus.Fail);
+      throw Error;
     }
   };
 
@@ -92,27 +86,8 @@ export default function useTransferTx(cryptoType: CryptoType) {
       }
     } catch (e) {
       throw Error;
-      // notifyFail();
     }
   };
-
-  const waitTx = async () => {
-    try {
-      await resTx?.wait();
-      setToastList(TransferType.Withdrawal, ToastStatus.Success);
-      removeStorageTx(resTx?.hash);
-    } catch (error) {
-      navigation.goBack();
-      setToastList(TransferType.Withdrawal, ToastStatus.Fail);
-    }
-  };
-
-  useEffect(() => {
-    if (resTx) {
-      navigation.goBack();
-      waitTx();
-    }
-  }, [resTx]);
 
   return { isLoading, transferCrypto };
 }

@@ -1,13 +1,11 @@
 import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 import { TransactionResponse } from '@ethersproject/providers';
-import { useNavigation } from '@react-navigation/native';
 import { BigNumber, constants } from 'ethers';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import PriceContext from '../contexts/PriceContext';
 import TransactionContext from '../contexts/TransactionContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
-import ToastStatus from '../enums/ToastStatus';
 import TransferType from '../enums/TransferType';
 import { WaitingTransaction } from '../types/WaitingTransaction';
 import { getAssetTokenFromCryptoType } from '../utiles/getContract';
@@ -15,31 +13,15 @@ import { getAssetTokenFromCryptoType } from '../utiles/getContract';
 const useProductByType = (
   assetCryptoType: CryptoType,
   contractAddress: string,
-  productUnit: string,
   type: TransferType,
 ) => {
-  const [resTx, setResTx] = useState<TransactionResponse>();
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
-    useContext(TransactionContext);
+  const { waitingTxs } = useContext(TransactionContext);
   const contract = getAssetTokenFromCryptoType(
     assetCryptoType,
     contractAddress,
   );
-
-  const navigation = useNavigation();
-
-  const waitTx = async () => {
-    try {
-      await resTx?.wait();
-      setToastList(type, ToastStatus.Success);
-      removeStorageTx(resTx?.hash);
-    } catch (error) {
-      navigation.goBack();
-      setToastList(type, ToastStatus.Fail);
-    }
-  };
 
   const getLastNonce = () => {
     let txs: WaitingTransaction[];
@@ -67,24 +49,19 @@ const useProductByType = (
       switch (type) {
         case TransferType.Purchase:
           res = await purcahse(inFiat, lastNonce);
-          setResTx(res);
           break;
         case TransferType.Refund:
           res = await refund(inToken);
-          setResTx(res);
           break;
         case TransferType.ProductReward:
           res = await reward();
-          setResTx(res);
           break;
         default:
           break;
       }
-      setToastList(type, ToastStatus.Waiting);
-      setWaitingTx(type, inToken, res, assetCryptoType, productUnit);
+      return res;
     } catch (error) {
-      navigation.goBack();
-      setToastList(type, ToastStatus.Fail);
+      throw Error;
     }
   };
 
@@ -168,13 +145,6 @@ const useProductByType = (
       throw Error;
     }
   };
-
-  useEffect(() => {
-    if (resTx) {
-      navigation.goBack();
-      waitTx();
-    }
-  }, [resTx]);
 
   return { contract, createTransaction };
 };

@@ -1,12 +1,12 @@
 import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 import { TransactionResponse } from '@ethersproject/providers';
-import { useNavigation } from '@react-navigation/native';
+import { BigNumberish } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import TransactionContext from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
 import StakingType from '../enums/StakingType';
-import ToastStatus from '../enums/ToastStatus';
 import TransferType from '../enums/TransferType';
+import { provider } from '../utiles/getContract';
 import useStakingPool from './useStakingPool';
 
 const useStakingByType = (
@@ -15,21 +15,18 @@ const useStakingByType = (
   isElfiV2: boolean,
   type: StakingType,
 ) => {
-  const [resTx, setResTx] = useState<TransactionResponse>();
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
-  const navigation = useNavigation();
-  const { waitingTxs, setWaitingTx, removeStorageTx, setToastList } =
-    useContext(TransactionContext);
+  const { waitingTxs, setWaitingTx } = useContext(TransactionContext);
+  const [gasPrice, setGasPrice] = useState<BigNumberish | undefined>();
 
-  const waitTx = async () => {
-    try {
-      await resTx?.wait();
-      setToastList(type, ToastStatus.Success);
-      removeStorageTx(resTx?.hash);
-    } catch (error) {
-      navigation.goBack();
-      setToastList(type, ToastStatus.Fail);
-    }
+  const getCurrentGasPrice = async () => {
+    setGasPrice(
+      utils.parseUnits(
+        utils.formatUnits(await provider.getGasPrice(), 9),
+        'gwei',
+      ),
+    );
+    console.log(utils.formatUnits(await provider.getGasPrice(), 9));
   };
 
   const getLastNonce = () => {
@@ -44,7 +41,8 @@ const useStakingByType = (
   const txLastNonce = (lastNonce?: number) => {
     return {
       nonce: lastNonce ? lastNonce + 1 : undefined,
-      // gasPrice: utils.parseUnits('1', 'wei'),
+      // gasPrice,
+      // gasLimit: '149787',
     };
   };
 
@@ -65,10 +63,7 @@ const useStakingByType = (
         case StakingType.Stake:
           res = await stakingPoolContract.stake(
             utils.parseUnits(value),
-            {
-              gasPrice: utils.parseUnits('1', 'gwei'),
-            },
-            // txLastNonce(lastNonce),
+            txLastNonce(lastNonce),
           );
           break;
         case StakingType.Unstake:
@@ -103,23 +98,16 @@ const useStakingByType = (
           res = await stakingPoolContract.claim(round, txLastNonce(lastNonce));
           break;
       }
-      setResTx(res);
-      setToastList(type, ToastStatus.Waiting);
-      setWaitingTx(type, value, res, cryptoType);
+      return res;
     } catch (error) {
       console.log(error);
-      navigation.goBack();
-      setToastList(type, ToastStatus.Fail);
+      throw Error;
     }
   };
 
   useEffect(() => {
-    if (resTx) {
-      setIsLoading(false);
-      navigation.goBack();
-      waitTx();
-    }
-  }, [resTx]);
+    getCurrentGasPrice();
+  }, []);
 
   return { stakeByType };
 };
