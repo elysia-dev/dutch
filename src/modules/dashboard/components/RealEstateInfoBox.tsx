@@ -105,23 +105,27 @@ const StakingInfoBox: React.FC<{
           {t('main.return')}
         </Text>
         <View style={{ flexDirection: 'row' }}>
+          {asset.address && (
+            <Text
+              style={{
+                fontSize: 12,
+                color: AppColors.BLACK,
+                fontFamily: AppFonts.Medium,
+              }}>
+              {`${commaFormatter(
+                decimalFormatter(reward / getCryptoPrice(paymentMethod), 2),
+              )} ${paymentMethod} `}
+            </Text>
+          )}
           <Text
             style={{
-              fontSize: 12,
-              color: AppColors.BLACK,
-              fontFamily: AppFonts.Medium,
+              fontSize: asset.address ? 10 : 12,
+              color: asset.address ? AppColors.SUB_BLACK : AppColors.BLACK,
+              fontFamily: asset.address ? AppFonts.Regular : AppFonts.Medium,
             }}>
-            {`${commaFormatter(
-              decimalFormatter(reward / getCryptoPrice(paymentMethod), 2),
-            )} ${paymentMethod} `}
-          </Text>
-          <Text
-            style={{
-              fontSize: 10,
-              color: AppColors.SUB_BLACK,
-              fontFamily: AppFonts.Regular,
-            }}>
-            {`(= ${currencyFormatter(reward)})`}
+            {asset.address
+              ? `(= ${currencyFormatter(reward)})`
+              : currencyFormatter(reward)}
           </Text>
         </View>
       </View>
