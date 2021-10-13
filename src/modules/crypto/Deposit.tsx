@@ -1,27 +1,21 @@
 /* eslint-disable radix */
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent } from 'react';
 import { View, Share } from 'react-native';
-import { ethers } from 'ethers';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { useTranslation } from 'react-i18next';
 import { P2Text } from '../../shared/components/Texts';
 import AppColors from '../../enums/AppColors';
-import WalletContext from '../../contexts/WalletContext';
-import UserContext from '../../contexts/UserContext';
 import SheetHeader from '../../shared/components/SheetHeader';
 import NextButton from '../../shared/components/NextButton';
+import useUserAddress from '../../hooks/useUserAddress';
 
 interface Props {
   modalHandler: () => void;
 }
 
-const Deposit: FunctionComponent<Props> = (props) => {
-  const { isWalletUser, user } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
-  const address = isWalletUser
-    ? wallet?.getNodes()[0].address || ''
-    : user.ethAddresses[0];
+const Deposit: FunctionComponent<Props> = () => {
+  const address = useUserAddress();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 

@@ -25,6 +25,7 @@ import SignInStatus from '../../enums/SignInStatus';
 import AppColors from '../../enums/AppColors';
 import AnimatedMainHeader from '../../shared/components/AnimatedMainHeader';
 import ExchangeButton from './components/ExchangeButton';
+import useUserAddress from '../../hooks/useUserAddress';
 
 const MainInfo: FunctionComponent = () => {
   const [scrollY] = useState(new Animated.Value(0));
@@ -33,6 +34,7 @@ const MainInfo: FunctionComponent = () => {
   const { user, isWalletUser } = useContext(UserContext);
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const userAddress = useUserAddress();
   const ref = React.useRef(null);
   useScrollToTop(ref);
 
@@ -178,7 +180,7 @@ const MainInfo: FunctionComponent = () => {
               label={t('more_label.my_info')}
               style={{ marginTop: 60, color: AppColors.BLACK2 }}
             />
-            {!isWalletUser && !user.ethAddresses[0] && (
+            {!userAddress && (
               <View
                 style={{
                   height: 50,

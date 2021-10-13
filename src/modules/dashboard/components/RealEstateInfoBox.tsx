@@ -9,23 +9,18 @@ import commaFormatter from '../../../utiles/commaFormatter';
 import decimalFormatter from '../../../utiles/decimalFormatter';
 import Asset from '../../../types/Asset';
 import { getAssetTokenFromCryptoType } from '../../../utiles/getContract';
-import UserContext from '../../../contexts/UserContext';
-import WalletContext from '../../../contexts/WalletContext';
 import getPaymentCrypto from '../../../utiles/getPaymentCrypto';
 import PreferenceContext from '../../../contexts/PreferenceContext';
+import useUserAddress from '../../../hooks/useUserAddress';
 
 const StakingInfoBox: React.FC<{
   asset: Asset;
   onPress: (asset: Asset) => void;
 }> = ({ asset, onPress }) => {
   const { getCryptoPrice } = useContext(PriceContext);
-  const { user, isWalletUser } = useContext(UserContext);
-  const { wallet } = useContext(WalletContext);
   const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
-  const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const userAddress = useUserAddress();
   const [reward, setReward] = useState(0);
   const paymentMethod = getPaymentCrypto(asset.paymentMethod!);
 

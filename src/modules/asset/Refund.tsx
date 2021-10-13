@@ -21,7 +21,7 @@ import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
-import useErcContract from '../../hooks/useErcContract';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Refund: {
@@ -99,9 +99,7 @@ const Refund: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
+    const address = useUserAddress();
 
     if (address) {
       estimateGas(address);

@@ -34,6 +34,7 @@ import {
 } from '../../utiles/ChartTransactions';
 import SelectType from '../../enums/SelectType';
 import { getPendingTx } from '../../utiles/pendingTransaction';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   CryptoDetail: {
@@ -72,9 +73,7 @@ const Detail: React.FC = () => {
   const [isChartLine, setIsChartLine] = useState<boolean>(false);
   const insets = useSafeAreaInsets();
 
-  const address = isWalletUser
-    ? wallet?.getFirstNode()?.address || ''
-    : user.ethAddresses[0];
+  const address = useUserAddress();
 
   const loadTxs = async () => {
     let newTxs: CryptoTransaction[] = [];
