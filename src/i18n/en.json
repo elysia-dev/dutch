@@ -400,7 +400,8 @@
       "approve_guide_first": "By granting permission, you will be able to buy real estate tokens.",
       "approve_guide_second": "After this approval, you will be able to make further real estate token purchases",
       "approve_guide_gasprice": "A transaction fee is associated with this request. Predicted fee: {{gasPrice}} ETH",
-      "approve_pending_transaction": "Approving…"
+      "approve_pending_transaction": "Approving…",
+      "failed_to_load": "An error occurred while loading the purchase history."
     },
     "staking": {
       "staking": "Staking",
@@ -475,7 +476,8 @@
       "staking_description_fourth": "Please be advised that after the round is over your {{stakingCrypto}} and {{rewardCrypto}} rewards will NOT be transferred to your wallet automatically, and requires further action from the wallet owner",
       "full_amount": "Max",
       "duration_day": "{{duration}} days",
-      "no_history": "There is no staking history."
+      "no_history": "There is no staking history.",
+      "failed_to_load": "An error occurred while loading the staking history."
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."

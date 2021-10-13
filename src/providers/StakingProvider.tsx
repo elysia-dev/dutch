@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import StakingContext, {
   StakingStateType,
   initialStakingState,
@@ -26,6 +27,7 @@ const StakingProvider: React.FC = ({ children }) => {
   const elfiContract = useStakingPool(CryptoType.ELFI);
   const elfiV2Contract = useStakingPool(CryptoType.ELFI, true);
   const [state, setState] = useState<StakingStateType>(initialStakingState);
+  const { t } = useTranslation();
 
   const getElStakingList = async () => {
     const elStakingPromises = stakingRounds.map(async (round) => {
@@ -89,7 +91,7 @@ const StakingProvider: React.FC = ({ children }) => {
         stakingLoaded: true,
       });
     } catch (e) {
-      alert('Internal Error');
+      alert(t('staking.failed_to_load'));
       setState({ ...initialStakingState, stakingLoaded: true });
     }
   };
