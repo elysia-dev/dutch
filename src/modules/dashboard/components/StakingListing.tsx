@@ -39,6 +39,7 @@ const StakingListing: React.FC = () => {
 
   useEffect(() => {
     const elBoxes = stakingRounds.map((round) => {
+      if (!elStakingList[round - 1]) return;
       const stakingAmount = elStakingList[round - 1].userPrincipal;
       const rewardAmount = elStakingRewards[round - 1];
 
@@ -58,6 +59,7 @@ const StakingListing: React.FC = () => {
     });
 
     const elfiBoxes = stakingRounds.map((round) => {
+      if (!elfiStakingList[round - 1]) return;
       const stakingAmount = elfiStakingList[round - 1].userPrincipal;
       const rewardAmount = elfiStakingRewards[round - 1];
 

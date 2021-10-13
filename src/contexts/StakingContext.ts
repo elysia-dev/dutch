@@ -15,62 +15,10 @@ interface IStakingContext extends StakingStateType {
 }
 
 export const initialStakingState = {
-  elStakingList: [
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-  ],
-  elfiStakingList: [
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-    {
-      userIndex: constants.Zero,
-      userPrincipal: constants.Zero,
-      userReward: constants.Zero,
-    },
-  ],
-  elStakingRewards: [
-    constants.Zero,
-    constants.Zero,
-    constants.Zero,
-    constants.Zero,
-  ],
-  elfiStakingRewards: [
-    constants.Zero,
-    constants.Zero,
-    constants.Zero,
-    constants.Zero,
-  ],
+  elStakingList: [],
+  elfiStakingList: [],
+  elStakingRewards: [],
+  elfiStakingRewards: [],
   stakingLoaded: false,
 };
 
