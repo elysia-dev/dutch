@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useContext, useEffect, useState } from 'react';
-import { showMessage } from 'react-native-flash-message';
-import { Linking, View } from 'react-native';
+import { View } from 'react-native';
 import moment from 'moment';
 import {
   TransactionReceipt,
@@ -14,10 +13,7 @@ import TransactionContext, {
   initialTransactions,
 } from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
-import TxStatus from '../enums/TxStatus';
 import { bscProvider, provider } from '../utiles/getContract';
-import getTxScanLink from '../utiles/getTxScanLink';
-import NetworkType from '../enums/NetworkType';
 import AssetContext from '../contexts/AssetContext';
 import {
   ToastTransaction,
@@ -81,25 +77,29 @@ const TransactionProvider: React.FC = (props) => {
     });
   };
 
-  const setStorageTx = async (waitingTransaction: WaitingTransaction) => {
+  const setStorageTx = async (
+    waitingTx?: WaitingTransaction,
+    migrationTxs?: WaitingTransaction[],
+  ) => {
     try {
-      if (waitingTransaction.transferType === TransferType.Migration) {
-        const txs = JSON.parse(
-          (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
+      if (!waitingTx) {
+        await AsyncStorage.setItem(
+          PENDING_TRANSACTIONS,
+          JSON.stringify(migrationTxs),
         );
         setState({
           ...state,
-          waitingTxs: [...JSON.parse(txs), waitingTransaction],
+          waitingTxs: migrationTxs!,
         });
         return;
       }
       await AsyncStorage.setItem(
         PENDING_TRANSACTIONS,
-        JSON.stringify([...state.waitingTxs, waitingTransaction]),
+        JSON.stringify([...state.waitingTxs, waitingTx]),
       );
       setState({
         ...state,
-        waitingTxs: [...state.waitingTxs, waitingTransaction],
+        waitingTxs: [...state.waitingTxs, waitingTx],
       });
     } catch (error) {
       console.log(error);
@@ -175,109 +175,179 @@ const TransactionProvider: React.FC = (props) => {
     );
   };
 
-  useEffect(() => {
-    if (
-      state.transactions.filter((tx) => tx.status === TxStatus.Pending)
-        .length === 0
-    )
-      return;
-
-    let timer = setTimeout(async () => {
-      const txResponses = await Promise.all(
-        state.transactions
-          .filter((tx) => tx.status === TxStatus.Pending)
-          .map(async (tx) => {
-            const usedProvider =
-              tx.cryptoType === CryptoType.BNB ? bscProvider : provider;
-            return await usedProvider.getTransactionReceipt(tx.txHash || '');
-          }),
-      );
-
-      const transactions = state.transactions.map((tx) => {
-        const txRes = txResponses.find(
-          (res) => res && res.transactionHash === tx.txHash,
-        );
-
-        if (txRes) {
-          if (txRes.status === 1) {
-            // timeout이 필요한 이유? : 트랜잭션 요청후, 바로 요청할 경우 balance가 아직 이전 값으로 조회되는 문제가 있음
-            // 경우따라 timeout을 더 늘려야할 수도 있음!
-            setTimeout(() => {
-              tx.cryptoType && refreshBalance(tx.cryptoType);
-            }, 500);
-
-            showMessage({
-              message: t('transaction.created'),
-              description: tx.txHash,
-              type: 'info',
-              onPress: () => {
-                Linking.openURL(
-                  getTxScanLink(
-                    tx.txHash,
-                    tx.cryptoType === CryptoType.BNB
-                      ? NetworkType.BSC
-                      : NetworkType.ETH,
-                  ),
-                );
-              },
-              duration: 3000,
-            });
-            return {
-              ...tx,
-              status: TxStatus.Success,
-            };
-          } else {
-            showMessage({
-              message: t('transaction.fail'),
-              description: tx.txHash,
-              type: 'danger',
-              onPress: () => {
-                Linking.openURL(
-                  getTxScanLink(
-                    tx.txHash,
-                    tx.cryptoType === CryptoType.BNB
-                      ? NetworkType.BSC
-                      : NetworkType.ETH,
-                  ),
-                );
-              },
-              duration: 3000,
-            });
-
-            return {
-              ...tx,
-              status: TxStatus.Fail,
-            };
-          }
-        } else {
-          return tx;
-        }
+  const addPendingTx = (
+    transferType: TransferType,
+    amount: string,
+    resTx?: TransactionResponse,
+    cryptoType?: CryptoType,
+    productUnit?: string,
+  ) => {
+    setToastList(transferType, ToastStatus.Waiting);
+    setWaitingTx(transferType, amount, resTx, cryptoType, productUnit);
+    resTx
+      ?.wait()
+      .then((successTx) => {
+        setToastList(transferType, ToastStatus.Success);
+        removeStorageTx(successTx.transactionHash);
+      })
+      .catch(() => {
+        setToastList(transferType, ToastStatus.Fail);
       });
-
-      await AsyncStorage.setItem(
-        PENDING_TRANSACTIONS,
-        JSON.stringify(
-          transactions.filter((tx) => tx.status === TxStatus.Pending),
-        ),
-      );
-
-      setState({
-        ...state,
-        transactions,
-        counter: state.counter + 1,
+  };
+  const addMigrationTxs = (
+    unStakingAmount: string,
+    migrateAmount: string,
+    rewardAmount: string,
+    resTx?: TransactionResponse,
+    cryptoType?: CryptoType,
+    productUnit?: string,
+  ) => {
+    setToastList(TransferType.Migration, ToastStatus.Waiting);
+    setStorageTx(undefined, [
+      {
+        transferType: t(TransferType.Migration),
+        unit: setUnit(TransferType.Migration, cryptoType, productUnit),
+        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
+        nonce: resTx?.nonce,
+        txHash: resTx?.hash,
+        amount: migrateAmount,
+        cryptoType,
+      },
+      {
+        transferType: t(TransferType.Unstaking),
+        unit: setUnit(TransferType.Unstaking, cryptoType, productUnit),
+        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
+        nonce: resTx?.nonce,
+        txHash: resTx?.hash,
+        amount: unStakingAmount,
+        cryptoType,
+      },
+      {
+        transferType: t(TransferType.StakingReward),
+        unit: setUnit(TransferType.StakingReward, cryptoType, productUnit),
+        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
+        nonce: resTx?.nonce,
+        txHash: resTx?.hash,
+        amount: rewardAmount,
+        cryptoType,
+      },
+    ]);
+    resTx
+      ?.wait()
+      .then((successTx) => {
+        setToastList(TransferType.Migration, ToastStatus.Success);
+        removeStorageTx(successTx.transactionHash);
+      })
+      .catch(() => {
+        setToastList(TransferType.Migration, ToastStatus.Fail);
       });
-    }, 5000);
+  };
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [state.counter]);
+  // useEffect(() => {
+  //   if (
+  //     state.transactions.filter((tx) => tx.status === TxStatus.Pending)
+  //       .length === 0
+  //   )
+  //     return;
+
+  //   let timer = setTimeout(async () => {
+  //     const txResponses = await Promise.all(
+  //       state.transactions
+  //         .filter((tx) => tx.status === TxStatus.Pending)
+  //         .map(async (tx) => {
+  //           const usedProvider =
+  //             tx.cryptoType === CryptoType.BNB ? bscProvider : provider;
+  //           return await usedProvider.getTransactionReceipt(tx.txHash || '');
+  //         }),
+  //     );
+
+  //     const transactions = state.transactions.map((tx) => {
+  //       const txRes = txResponses.find(
+  //         (res) => res && res.transactionHash === tx.txHash,
+  //       );
+
+  //       if (txRes) {
+  //         if (txRes.status === 1) {
+  //           // timeout이 필요한 이유? : 트랜잭션 요청후, 바로 요청할 경우 balance가 아직 이전 값으로 조회되는 문제가 있음
+  //           // 경우따라 timeout을 더 늘려야할 수도 있음!
+  //           setTimeout(() => {
+  //             tx.cryptoType && refreshBalance(tx.cryptoType);
+  //           }, 500);
+
+  //           showMessage({
+  //             message: t('transaction.created'),
+  //             description: tx.txHash,
+  //             type: 'info',
+  //             onPress: () => {
+  //               Linking.openURL(
+  //                 getTxScanLink(
+  //                   tx.txHash,
+  //                   tx.cryptoType === CryptoType.BNB
+  //                     ? NetworkType.BSC
+  //                     : NetworkType.ETH,
+  //                 ),
+  //               );
+  //             },
+  //             duration: 3000,
+  //           });
+  //           return {
+  //             ...tx,
+  //             status: TxStatus.Success,
+  //           };
+  //         } else {
+  //           showMessage({
+  //             message: t('transaction.fail'),
+  //             description: tx.txHash,
+  //             type: 'danger',
+  //             onPress: () => {
+  //               Linking.openURL(
+  //                 getTxScanLink(
+  //                   tx.txHash,
+  //                   tx.cryptoType === CryptoType.BNB
+  //                     ? NetworkType.BSC
+  //                     : NetworkType.ETH,
+  //                 ),
+  //               );
+  //             },
+  //             duration: 3000,
+  //           });
+
+  //           return {
+  //             ...tx,
+  //             status: TxStatus.Fail,
+  //           };
+  //         }
+  //       } else {
+  //         return tx;
+  //       }
+  //     });
+
+  //     await AsyncStorage.setItem(
+  //       PENDING_TRANSACTIONS,
+  //       JSON.stringify(
+  //         transactions.filter((tx) => tx.status === TxStatus.Pending),
+  //       ),
+  //     );
+
+  //     setState({
+  //       ...state,
+  //       transactions,
+  //       counter: state.counter + 1,
+  //     });
+  //   }, 5000);
+
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [state.counter]);
 
   return (
     <TransactionContext.Provider
       value={{
         ...state,
         setWaitingTx,
+        addPendingTx,
+        addMigrationTxs,
         removeStorageTx,
         removeStorageTxByAppState,
         setToastList,
