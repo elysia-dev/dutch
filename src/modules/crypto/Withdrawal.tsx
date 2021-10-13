@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { BigNumber, utils } from 'ethers';
 import { isAddress } from '@ethersproject/address';
 import { BarCodeScanner, BarCodeScannerResult } from 'expo-barcode-scanner';
@@ -33,6 +33,9 @@ import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import useTxHandler from '../../hooks/useTxHandler';
 import useTransferTx from '../../hooks/useTransferTx';
+import TransactionContext from '../../contexts/TransactionContext';
+import TransferType from '../../enums/TransferType';
+import ToastStatus from '../../enums/ToastStatus';
 
 type ParamList = {
   Withdrawal: {
@@ -46,13 +49,14 @@ type ParamList = {
 const Withdrawal: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Withdrawal'>>();
   const { asset } = route.params;
+  const navigation = useNavigation();
   const { getBalance } = useContext(AssetContext);
   const { wallet } = useContext(WalletContext);
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const [state, setState] = useState({ address: '', scanned: true });
   const [value, setValue] = useState('');
   const [estimatedGas, setEstimatedGas] = useState('');
-  const { afterTxFailed } = useTxHandler();
   const gasCrypto =
     asset.type === CryptoType.BNB ? CryptoType.BNB : CryptoType.ETH;
   const insufficientGas = [CryptoType.BNB, CryptoType.ETH].includes(asset.type)
@@ -96,12 +100,16 @@ const Withdrawal: React.FC = () => {
   };
 
   const sendTx = async () => {
-    try {
-      transferCrypto(value, state.address);
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
-    }
+    transferCrypto(value, state.address)
+      .then((res) => {
+        addPendingTx(TransferType.Withdrawal, value, res, asset.type);
+      })
+      .catch((error) => {
+        setToastList(TransferType.Withdrawal, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   const openBarcodeScanner = async () => {
