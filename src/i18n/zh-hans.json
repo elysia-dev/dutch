@@ -403,7 +403,7 @@
       "approve_guide_second": "仅在首次交易时需要授权，授权成功后，之后可直接购买房地产代币。",
       "approve_guide_gasprice": "授予访问权限的操作会产生GAS费用(手续费)，因为它也是使用以太坊网络的交易。 GAS费用(手续费)预计为{{gasPrice}}ETH。",
       "approve_pending_transaction": "交易进行中",
-      "failed_to_load": "An error occurred while loading the purchase history."
+      "failed_to_load": "加载您的投资历史记录时出错。"
     },
     "staking": {
       "staking": "Staking(权益质押)",
@@ -480,7 +480,7 @@
       "full_amount": "全额",
       "duration_day": "{{duration}}天",
       "no_history": "没有Staking历史。",
-      "failed_to_load": "An error occurred while loading the staking history."
+      "failed_to_load": "加载您的Staking历史记录时发生错误。"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
