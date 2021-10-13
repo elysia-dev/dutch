@@ -24,13 +24,14 @@ import SheetHeader from '../../shared/components/SheetHeader';
 import PriceContext from '../../contexts/PriceContext';
 import NetworkType from '../../enums/NetworkType';
 import AssetContext from '../../contexts/AssetContext';
-import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import TxStatus from '../../enums/TxStatus';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import GasPrice from '../../shared/components/GasPrice';
 import AppColors from '../../enums/AppColors';
 import TransferType from '../../enums/TransferType';
 import useProductByType from '../../hooks/useProductByType';
+import TransactionContext from '../../contexts/TransactionContext';
+import ToastStatus from '../../enums/ToastStatus';
 
 type ParamList = {
   Reward: {
@@ -47,6 +48,7 @@ const Reward: FunctionComponent = () => {
   const { toCrypto, toTitle, contractAddress, productId } = route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { currencyFormatter } = useContext(PreferenceContext);
   const { isWalletUser, user, Server } = useContext(UserContext);
   const { getBalance } = useContext(AssetContext);
@@ -66,7 +68,6 @@ const Reward: FunctionComponent = () => {
   const { contract, createTransaction } = useProductByType(
     toCrypto,
     contractAddress,
-    toCrypto,
     TransferType.ProductReward,
   );
   const txResult = useWatingTx(
@@ -121,31 +122,22 @@ const Reward: FunctionComponent = () => {
   }, []);
 
   const createTx = async () => {
-    let txRes: ethers.providers.TransactionResponse | undefined;
-
-    try {
-      createTransaction('', (interest / getCryptoPrice(toCrypto)).toFixed(4));
-
-      if (toCrypto === CryptoType.BNB) {
-        setState({
-          ...state,
-          txHash: txRes?.hash || '',
-        });
-      }
-    } catch (e) {
-      afterTxFailed(e.message);
-      navigation.goBack();
-    } finally {
-      if (toCrypto !== CryptoType.BNB && txRes) {
-        afterTxHashCreated(
-          wallet?.getFirstAddress() || '',
-          contractAddress,
-          txRes.hash || '',
-          NetworkType.ETH,
+    createTransaction('', (interest / getCryptoPrice(toCrypto)).toFixed(4))
+      .then((res) => {
+        addPendingTx(
+          TransferType.ProductReward,
+          (interest / getCryptoPrice(toCrypto)).toFixed(4),
+          res,
+          toCrypto,
+          toCrypto,
         );
+      })
+      .catch((error) => {
+        setToastList(TransferType.ProductReward, ToastStatus.Fail);
+      })
+      .finally(() => {
         navigation.goBack();
-      }
-    }
+      });
   };
 
   useEffect(() => {
