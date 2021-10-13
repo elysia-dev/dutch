@@ -27,16 +27,16 @@ const useUserAsset = () => {
   const [totalAsset, setTotalAsset] = useState({
     totalInterest: 0,
   });
-  const realEstateAssets = assets.filter((item) => {
+  const realEstateAssets = assets.filter((asset) => {
     if (
-      item.productId &&
-      transactions[0]?.productId === item.productId &&
+      asset.productId &&
+      transactions[0]?.productId === asset.productId &&
       transactions[0].status === TxStatus.Pending &&
-      item.value <= 0
+      asset.value <= 0
     ) {
       return true;
     }
-    return item.type === CryptoType.ELA && item.value > 0;
+    return asset.type === CryptoType.ELA && asset.value > 0;
   });
   const {
     elStakingList,
@@ -51,11 +51,11 @@ const useUserAsset = () => {
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
-    const promises = realEstateAssets.map(async (item) => {
-      if (item.address) {
+    const promises = realEstateAssets.map(async (asset) => {
+      if (asset.address) {
         const contract = getAssetTokenFromCryptoType(
-          getPaymentCrypto(item.paymentMethod!),
-          item.address,
+          getPaymentCrypto(asset.paymentMethod!),
+          asset.address,
         );
         const interest = await contract?.getReward(userAddress);
         return Number(utils.formatEther(interest));
@@ -63,7 +63,7 @@ const useUserAsset = () => {
         // legacy
         const assetDetail = await loadDetail.ownershipDetail(
           Server,
-          item.ownershipId,
+          asset.ownershipId,
           1,
           () => {},
         );
@@ -132,7 +132,7 @@ const useUserAsset = () => {
     totalPrincipal: getTotalPrincipal(),
     totalReward: getTotalReward(),
     totalWallet: assets
-      .filter((item) => crytoTypes.includes(item.type))
+      .filter((asset) => crytoTypes.includes(asset.type))
       .reduce((res, cur) => cur.value * getCryptoPrice(cur.type) + res, 0),
   };
 };
