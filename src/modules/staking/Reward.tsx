@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
@@ -26,6 +26,9 @@ import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import useStakingByType from '../../hooks/useStakingByType';
 import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
+import TransferType from '../../enums/TransferType';
+import ToastStatus from '../../enums/ToastStatus';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type ParamList = {
   Reward: {
@@ -39,13 +42,14 @@ const Reward: React.FC = () => {
   const route = useRoute<RouteProp<ParamList, 'Reward'>>();
   const { rewardCryptoType, selectedRound, cryptoType } = route.params;
   const insets = useSafeAreaInsets();
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { isWalletUser } = useContext(UserContext);
-  const { afterTxFailed } = useTxHandler();
   const { t } = useTranslation();
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { getBalance } = useContext(AssetContext);
   const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const navigation = useNavigation();
   const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
@@ -73,12 +77,22 @@ const Reward: React.FC = () => {
       : ELFI_STAKING_POOL_ADDRESS;
 
   const onPressClaim = async () => {
-    try {
-      await stakeByType(userReward.toString(), changedRound);
-    } catch (error) {
-      console.log(error);
-      afterTxFailed('Transaction failed');
-    }
+    stakeByType(userReward.toString(), changedRound)
+      .then((res) => {
+        addPendingTx(
+          TransferType.StakingReward,
+          userReward.toString(),
+          res,
+          cryptoType,
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        setToastList(TransferType.StakingReward, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   useEffect(() => {
