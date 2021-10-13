@@ -8,6 +8,12 @@ function getPaymentCrypto(paymentMethod: string) {
       return CryptoType.BNB;
     case 'el':
       return CryptoType.EL;
+    case 'none':
+      return CryptoType.None;
+    case 'elfi':
+      return CryptoType.ELFI;
+    case 'dai':
+      return CryptoType.DAI;
     default:
       throw Error('Unknown payment method');
   }
