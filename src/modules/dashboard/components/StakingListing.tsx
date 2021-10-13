@@ -8,12 +8,11 @@ import CryptoType from '../../../enums/CryptoType';
 import StakingListingSkeleton from './StakingListingSkeleton';
 import AppFonts from '../../../enums/AppFonts';
 import useUserAsset from '../../../hooks/useUserAsset';
-import commaFormatter from '../../../utiles/commaFormatter';
-import decimalFormatter from '../../../utiles/decimalFormatter';
 import StakingContext from '../../../contexts/StakingContext';
 import StakingInfoBox from './StakingInfoBox';
 import { NUMBER_OF_ROUNDS } from '../../../constants/staking';
 import range from '../../../utiles/range';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 const StakingListing: React.FC = () => {
   const { t } = useTranslation();
@@ -26,6 +25,7 @@ const StakingListing: React.FC = () => {
     elfiStakingRewards,
     stakingLoaded,
   } = useContext(StakingContext);
+  const { currencyFormatter } = useContext(PreferenceContext);
   const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
     [] as React.ReactNode[],
   );
@@ -109,11 +109,7 @@ const StakingListing: React.FC = () => {
             justifyContent: 'space-between',
           }}>
           <H3Text label={t('main.my_staking')} />
-          <H3Text
-            label={`$ ${commaFormatter(
-              decimalFormatter(totalPrincipal + totalReward, 2),
-            )}`}
-          />
+          <H3Text label={currencyFormatter(totalPrincipal + totalReward)} />
         </View>
         {hasAnyInfoBoxes.EL && (
           <>

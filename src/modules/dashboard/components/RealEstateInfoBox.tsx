@@ -12,6 +12,7 @@ import { getAssetTokenFromCryptoType } from '../../../utiles/getContract';
 import UserContext from '../../../contexts/UserContext';
 import WalletContext from '../../../contexts/WalletContext';
 import getPaymentCrypto from '../../../utiles/getPaymentCrypto';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 const StakingInfoBox: React.FC<{
   asset: Asset;
@@ -20,6 +21,7 @@ const StakingInfoBox: React.FC<{
   const { getCryptoPrice } = useContext(PriceContext);
   const { user, isWalletUser } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
+  const { currencyFormatter } = useContext(PreferenceContext);
   const { t } = useTranslation();
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
@@ -75,8 +77,8 @@ const StakingInfoBox: React.FC<{
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            {`(= $ ${commaFormatter(
-              decimalFormatter(asset.value * getCryptoPrice(asset.type), 2),
+            {`(= ${currencyFormatter(
+              asset.value * getCryptoPrice(asset.type),
             )})`}
           </Text>
         </View>
@@ -112,7 +114,7 @@ const StakingInfoBox: React.FC<{
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            {`(= $ ${commaFormatter(decimalFormatter(reward, 2))})`}
+            {`(= ${currencyFormatter(reward)})`}
           </Text>
         </View>
       </View>

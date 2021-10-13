@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
@@ -9,9 +9,7 @@ import RealEstateListingSkeleton from './RealEstateListingSkeleton';
 import Asset from '../../../types/Asset';
 import AppFonts from '../../../enums/AppFonts';
 import useUserAsset from '../../../hooks/useUserAsset';
-import commaFormatter from '../../../utiles/commaFormatter';
-import decimalFormatter from '../../../utiles/decimalFormatter';
-import useUserAddress from '../../../hooks/useUserAddress';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 const RealEstateListing: React.FC<{
   title: string;
@@ -20,8 +18,8 @@ const RealEstateListing: React.FC<{
   assetLoaded: boolean;
 }> = ({ title, assets, itemPressHandler, assetLoaded }) => {
   const { t } = useTranslation();
-  const userAddress = useUserAddress();
   const { totalRealEstate, totalInterest } = useUserAsset();
+  const { currencyFormatter } = useContext(PreferenceContext);
 
   if (assetLoaded) {
     return (
@@ -43,11 +41,7 @@ const RealEstateListing: React.FC<{
             justifyContent: 'space-between',
           }}>
           <H3Text label={title} />
-          <H3Text
-            label={`$ ${commaFormatter(
-              decimalFormatter(totalRealEstate + totalInterest, 2),
-            )}`}
-          />
+          <H3Text label={currencyFormatter(totalRealEstate + totalInterest)} />
         </View>
         {assets.map((asset) => {
           return (
