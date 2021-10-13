@@ -41,6 +41,7 @@ import Skeleton from '../../shared/components/Skeleton';
 import RealEstateListing from './components/RealEstateListing';
 import useUserAsset from '../../hooks/useUserAsset';
 import StakingContext from '../../contexts/StakingContext';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Main: {
@@ -77,6 +78,7 @@ export const Main: React.FC = () => {
     totalWallet,
   } = useUserAsset();
   const { loadStakingInfo } = useContext(StakingContext);
+  const userAddress = useUserAddress();
 
   const loadBalances = async () => {
     if (!isWalletUser) {
@@ -140,7 +142,7 @@ export const Main: React.FC = () => {
               marginTop: 15,
               marginBottom: 40,
             }}>
-            {isWalletUser || user.ethAddresses[0] ? (
+            {userAddress ? (
               <View
                 style={{
                   flexDirection: 'row',

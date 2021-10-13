@@ -24,6 +24,7 @@ import PreferenceContext from '../contexts/PreferenceContext';
 import LocaleType from '../enums/LocaleType';
 import PaymentCryptoType from '../enums/PaymentCryptoType';
 import useErcContract from '../hooks/useErcContract';
+import useUserAddress from '../hooks/useUserAddress';
 
 const AssetProvider: React.FC = (props) => {
   const { user, isWalletUser, ownerships, signedIn } = useContext(UserContext);
@@ -32,7 +33,7 @@ const AssetProvider: React.FC = (props) => {
   const { language } = useContext(PreferenceContext);
   const [state, setState] = useState<AssetStateType>(initialAssetState);
   const { elContract, elfiContract, daiContract } = useErcContract();
-  const address = wallet?.getFirstNode()?.address || user.ethAddresses[0];
+  const address = useUserAddress();
   const { t } = useTranslation();
 
   const loadV2UserBalances = async (noCache?: boolean) => {
@@ -164,8 +165,6 @@ const AssetProvider: React.FC = (props) => {
   };
 
   const loadV1UserBalances = async (noCache?: boolean) => {
-    const address = user.ethAddresses[0];
-
     if (user.provider === ProviderType.GUEST && !isWalletUser) {
       setState({
         ...state,

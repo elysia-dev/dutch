@@ -8,7 +8,9 @@ const useUserAddress = () => {
 
   const userAddress = isWalletUser
     ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+    : user.ethAddresses
+    ? user.ethAddresses[0]
+    : '';
 
   return userAddress;
 };
