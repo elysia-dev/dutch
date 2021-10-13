@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
@@ -26,68 +26,6 @@ const StakingListing: React.FC = () => {
     stakingLoaded,
   } = useContext(StakingContext);
   const { currencyFormatter } = useContext(PreferenceContext);
-  const [elStakingInfoBoxes, setElStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
-  const [elfiStakingInfoBoxes, setElfiStakingInfoBoxes] = useState(
-    [] as React.ReactNode[],
-  );
-  const [hasAnyInfoBoxes, setHasAnyInfoBoxes] = useState({
-    EL: false,
-    ELFI: false,
-  });
-
-  useEffect(() => {
-    const elBoxes = stakingRounds.map((round) => {
-      if (!elStakingList[round - 1]) return;
-      const stakingAmount = elStakingList[round - 1].userPrincipal;
-      const rewardAmount = elStakingRewards[round - 1];
-
-      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
-        return (
-          <StakingInfoBox
-            key={round}
-            cryptoType={CryptoType.EL}
-            round={round}
-            stakingAmount={stakingAmount}
-            rewardAmount={rewardAmount}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-
-    const elfiBoxes = stakingRounds.map((round) => {
-      if (!elfiStakingList[round - 1]) return;
-      const stakingAmount = elfiStakingList[round - 1].userPrincipal;
-      const rewardAmount = elfiStakingRewards[round - 1];
-
-      if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
-        return (
-          <StakingInfoBox
-            key={round}
-            cryptoType={CryptoType.ELFI}
-            round={round}
-            stakingAmount={stakingAmount}
-            rewardAmount={rewardAmount}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-
-    setElStakingInfoBoxes(elBoxes);
-    setElfiStakingInfoBoxes(elfiBoxes);
-  }, [stakingLoaded]);
-
-  useEffect(() => {
-    setHasAnyInfoBoxes({
-      EL: elStakingInfoBoxes.some((box) => Boolean(box)),
-      ELFI: elfiStakingInfoBoxes.some((box) => Boolean(box)),
-    });
-  }, [elStakingInfoBoxes, elfiStakingInfoBoxes]);
 
   if (stakingLoaded) {
     return (
@@ -111,7 +49,7 @@ const StakingListing: React.FC = () => {
           <H3Text label={t('main.my_staking')} />
           <H3Text label={currencyFormatter(totalPrincipal + totalReward)} />
         </View>
-        {hasAnyInfoBoxes.EL && (
+        {elStakingRewards.some((reward) => !reward.isZero()) && (
           <>
             <View
               style={{
@@ -141,10 +79,30 @@ const StakingListing: React.FC = () => {
                 style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
               />
             </View>
-            <View style={{ marginTop: 8 }}>{elStakingInfoBoxes}</View>
+            <View style={{ marginTop: 8 }}>
+              {stakingRounds.map((round) => {
+                if (!elStakingList[round - 1]) return;
+                const stakingAmount = elStakingList[round - 1].userPrincipal;
+                const rewardAmount = elStakingRewards[round - 1];
+
+                if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+                  return (
+                    <StakingInfoBox
+                      key={round}
+                      cryptoType={CryptoType.EL}
+                      round={round}
+                      stakingAmount={stakingAmount}
+                      rewardAmount={rewardAmount}
+                    />
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </View>
           </>
         )}
-        {hasAnyInfoBoxes.ELFI && (
+        {elfiStakingRewards.some((reward) => !reward.isZero()) && (
           <>
             <View
               style={{
@@ -174,10 +132,32 @@ const StakingListing: React.FC = () => {
                 style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
               />
             </View>
-            <View style={{ marginTop: 8 }}>{elfiStakingInfoBoxes}</View>
+            <View style={{ marginTop: 8 }}>
+              {stakingRounds.map((round) => {
+                if (!elfiStakingList[round - 1]) return;
+                const stakingAmount = elfiStakingList[round - 1].userPrincipal;
+                const rewardAmount = elfiStakingRewards[round - 1];
+
+                if (!stakingAmount.isZero() || !rewardAmount.isZero()) {
+                  return (
+                    <StakingInfoBox
+                      key={round}
+                      cryptoType={CryptoType.ELFI}
+                      round={round}
+                      stakingAmount={stakingAmount}
+                      rewardAmount={rewardAmount}
+                    />
+                  );
+                } else {
+                  return null;
+                }
+              })}
+            </View>
           </>
         )}
-        {!hasAnyInfoBoxes.EL && !hasAnyInfoBoxes.ELFI && (
+        {![...elStakingRewards, ...elfiStakingRewards].some(
+          (reward) => !reward.isZero(),
+        ) && (
           <View
             style={{
               height: 100,

@@ -89,6 +89,7 @@ export const Main: React.FC = () => {
     setRefreshing(true);
     try {
       await loadBalances();
+      await loadStakingInfo();
     } finally {
       setRefreshing(false);
     }
@@ -97,8 +98,8 @@ export const Main: React.FC = () => {
   const onBtnRefresh = async () => {
     setBtnRefreshing(true);
     try {
-      loadStakingInfo();
       await loadBalances();
+      await loadStakingInfo();
     } finally {
       setBtnRefreshing(false);
     }
@@ -106,6 +107,7 @@ export const Main: React.FC = () => {
 
   useEffect(() => {
     if (isFocused) {
+      loadBalances();
       loadStakingInfo();
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });

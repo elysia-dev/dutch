@@ -12,10 +12,14 @@ import range from '../utiles/range';
 import useStakingPool from '../hooks/useStakingPool';
 import CryptoType from '../enums/CryptoType';
 import ProviderType from '../enums/ProviderType';
+import WalletContext from '../contexts/WalletContext';
+import PreferenceContext from '../contexts/PreferenceContext';
 
 const StakingProvider: React.FC = ({ children }) => {
   const { signedIn, user, isWalletUser } = useContext(UserContext);
   const { priceLoaded } = useContext(PriceContext);
+  const { isUnlocked } = useContext(WalletContext);
+  const { language } = useContext(PreferenceContext);
   const userAddress = useUserAddress();
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
   const elContract = useStakingPool(CryptoType.EL);
@@ -99,7 +103,7 @@ const StakingProvider: React.FC = ({ children }) => {
     if (userAddress) {
       loadStakingInfo();
     }
-  }, [signedIn, priceLoaded]);
+  }, [signedIn, priceLoaded, isWalletUser, isUnlocked, language]);
 
   return (
     <StakingContext.Provider value={{ ...state, loadStakingInfo }}>
