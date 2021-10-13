@@ -49,41 +49,40 @@ const RealEstateListing: React.FC<{
             )}`}
           />
         </View>
-        {assets.length > 0 &&
-          assets.map((asset) => {
-            return (
-              <View key={asset.productId}>
-                <View
+        {assets.map((asset) => {
+          return (
+            <View key={asset.productId}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  height: 60,
+                  paddingTop: 5,
+                  paddingBottom: 5,
+                  alignItems: 'center',
+                }}>
+                <CryptoImage type={asset.image!} />
+                <CryptoImage
+                  type={asset.paymentMethod!}
                   style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    height: 60,
-                    paddingTop: 5,
-                    paddingBottom: 5,
-                    alignItems: 'center',
-                  }}>
-                  <CryptoImage type={asset.image!} />
-                  <CryptoImage
-                    type={asset.paymentMethod!}
-                    style={{
-                      width: 25,
-                      height: 25,
-                      position: 'absolute',
-                      bottom: 5,
-                      left: 20,
-                    }}
-                  />
-                  <P1Text
-                    label={asset.title}
-                    style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
-                  />
-                </View>
-                <View style={{ marginTop: 8 }}>
-                  <RealEstateInfoBox asset={asset} onPress={itemPressHandler} />
-                </View>
+                    width: 25,
+                    height: 25,
+                    position: 'absolute',
+                    bottom: 5,
+                    left: 20,
+                  }}
+                />
+                <P1Text
+                  label={asset.title}
+                  style={{ marginLeft: 15, fontFamily: AppFonts.Medium }}
+                />
               </View>
-            );
-          })}
+              <View style={{ marginTop: 8 }}>
+                <RealEstateInfoBox asset={asset} onPress={itemPressHandler} />
+              </View>
+            </View>
+          );
+        })}
         {assets.length === 0 && (
           <View
             style={{
