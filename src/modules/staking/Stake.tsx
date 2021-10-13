@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BigNumber } from '@ethersproject/bignumber';
 import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
@@ -40,6 +40,9 @@ import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import getCurrentStakingRound, {
   isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
+import ToastStatus from '../../enums/ToastStatus';
+import TransferType from '../../enums/TransferType';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type ParamList = {
   Stake: {
@@ -55,11 +58,12 @@ const Stake: React.FC = () => {
   const [isMax, setIsMax] = useState(false); // 보여주는건반올림이더라도 최대인지아닌지표시
   const { isWalletUser, user } = useContext(UserContext);
   const { gasPrice } = useContext(PriceContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
   const { getBalance } = useContext(AssetContext);
-  const { afterTxFailed } = useTxHandler();
+  const navigation = useNavigation();
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
@@ -190,21 +194,26 @@ const Stake: React.FC = () => {
   };
 
   const onPressStaking = async () => {
-    try {
-      if (!isApproved) {
-        setIsLoading(true);
-        setApprove();
-        return;
-      }
-      stakeByType(
-        // isMax ? String(crytoBalance) : value,
-        value,
-        selectedRound,
-      );
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
+    if (!isApproved) {
+      setIsLoading(true);
+      setApprove();
+      return;
     }
+    stakeByType(
+      // isMax ? String(crytoBalance) : value,
+      value,
+      selectedRound,
+    )
+      .then((res) => {
+        addPendingTx(TransferType.Staking, value, res, cryptoType);
+      })
+      .catch((error) => {
+        console.error(error);
+        setToastList(TransferType.Staking, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   useEffect(() => {

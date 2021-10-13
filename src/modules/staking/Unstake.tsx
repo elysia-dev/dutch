@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import {
   EL_STAKING_POOL_ADDRESS,
   ELFI_STAKING_POOL_ADDRESS,
@@ -32,6 +32,9 @@ import useStakingByType from '../../hooks/useStakingByType';
 import getCurrentStakingRound, {
   isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
+import TransactionContext from '../../contexts/TransactionContext';
+import TransferType from '../../enums/TransferType';
+import ToastStatus from '../../enums/ToastStatus';
 
 type ParamList = {
   Unstake: {
@@ -49,7 +52,8 @@ const Unstake: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed } = useTxHandler();
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
+  const navigation = useNavigation();
   const [selectionVisible, setSelectionVisible] = useState(false);
   const round =
     cryptoType === CryptoType.EL || selectedRound <= 2
@@ -106,16 +110,20 @@ const Unstake: React.FC = () => {
   ];
 
   const onPressUnstaking = async () => {
-    try {
-      await stakeByType(
-        // isMax ? String(userPrincipal) : value,
-        value,
-        round,
-      );
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
-    }
+    stakeByType(
+      // isMax ? String(userPrincipal) : value,
+      value,
+      round,
+    )
+      .then((res) => {
+        addPendingTx(TransferType.Unstaking, value, res, cryptoType);
+      })
+      .catch((error) => {
+        setToastList(TransferType.Staking, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   useEffect(() => {
