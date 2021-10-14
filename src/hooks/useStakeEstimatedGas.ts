@@ -7,7 +7,12 @@ import useStakingPool from './useStakingPool';
 
 type info = {
   estimagedGasPrice: string;
-  setEstimatedGas: (stakingType?: StakingType, round?: number) => Promise<void>;
+  setEstimatedGas: (
+    stakingType?: StakingType,
+    round?: number,
+    value?: string,
+  ) => Promise<void>;
+  gasLimit: string;
 };
 
 const useStakeEstimatedGas = (
@@ -17,47 +22,53 @@ const useStakeEstimatedGas = (
   round?: number,
 ): info => {
   const [estimagedGasPrice, setEstimatedGasPrice] = useState<string>('');
+  const [gasLimit, setGasLimit] = useState<string>('');
   const { gasPrice } = useContext(PriceContext);
   const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
 
-  const setEstimatedGas = async (stakingType?: StakingType, round?: number) => {
+  const setEstimatedGas = async (
+    stakingType?: StakingType,
+    round?: number,
+    value?: string,
+  ) => {
     setEstimatedGasPrice(
-      (await estimateGasByType(stakingType || '', round)) || '',
+      (await estimateGasByType(stakingType!, round, value))!,
     );
   };
 
-  const estimateGasByType = async (stakingType: string, round?: number) => {
+  const estimateGasByType = async (
+    stakingType: string,
+    round?: number,
+    value?: string,
+  ) => {
     let estimateGas: BigNumber | undefined;
     try {
       switch (stakingType) {
         case StakingType.Stake:
           estimateGas = await stakingPoolContract?.estimateGas.stake(
-            utils.parseEther('0.0001'),
+            utils.parseEther(value || '0.0001'),
           );
           break;
         case StakingType.Unstake:
           estimateGas = await stakingPoolContract?.estimateGas.withdraw(
-            utils.parseEther('0.0001'),
-            round || '',
+            utils.parseUnits(value || '0.0001'),
+            round!,
           );
           break;
         case StakingType.Reward:
-          estimateGas = await stakingPoolContract?.estimateGas.claim(
-            round || '',
-          );
+          estimateGas = await stakingPoolContract?.estimateGas.claim(round!);
           break;
         default:
           estimateGas = await stakingPoolContract?.estimateGas.migrate(
-            utils.parseEther('0.0001'),
-            round || '',
+            utils.parseEther(value || '0.0001'),
+            round!,
           );
           break;
       }
-
+      setGasLimit(utils.formatUnits(estimateGas, 0));
       return utils.formatEther(estimateGas.mul(gasPrice));
     } catch (error) {
       throw Error;
-      return '';
     }
   };
 
@@ -65,7 +76,7 @@ const useStakeEstimatedGas = (
     setEstimatedGas(stakingType, round);
   }, []);
 
-  return { estimagedGasPrice, setEstimatedGas };
+  return { estimagedGasPrice, setEstimatedGas, gasLimit };
 };
 
 export default useStakeEstimatedGas;

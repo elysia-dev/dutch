@@ -81,7 +81,7 @@ const UnstakeAndMigrate: React.FC = () => {
       : selectedRound - 2;
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
   const [isGuideModal, setIsGuideModal] = useState(false);
-  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
+  const { estimagedGasPrice, setEstimatedGas, gasLimit } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
     isElfiV2Con,
@@ -182,7 +182,7 @@ const UnstakeAndMigrate: React.FC = () => {
 
   const onPressUnstaking = async () => {
     try {
-      stakeByType(value, round, StakingType.Unstake);
+      stakeByType(value, round, gasLimit, StakingType.Unstake);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -192,14 +192,14 @@ const UnstakeAndMigrate: React.FC = () => {
   const onPressMigrate = async () => {
     try {
       if (isProgressRound()) {
-        setEstimatedGas(StakingType.Unstake, round);
+        setEstimatedGas(StakingType.Unstake, selectedRound, value);
         setStakingType(StakingType.Unstake);
         setModalVisible(false);
         setIsFinishRound(true);
         return;
       }
       const migrateAmount = String(userPrincipal - parseFloat(value));
-      stakeByType(migrateAmount, round, StakingType.Migrate);
+      stakeByType(migrateAmount, round, gasLimit, StakingType.Migrate);
     } catch (error) {
       afterTxFailed('Transaction failed');
       console.log(error);
@@ -315,6 +315,7 @@ const UnstakeAndMigrate: React.FC = () => {
               if (isWalletUser) {
                 setConfirmations();
                 setModalVisible(true);
+                setEstimatedGas(StakingType.Migrate, selectedRound, value);
               } else {
                 setSelectionVisible(true);
               }

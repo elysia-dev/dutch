@@ -50,7 +50,7 @@ const Reward: React.FC = () => {
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
       : selectedRound - 2;
-  const { estimagedGasPrice } = useStakeEstimatedGas(
+  const { estimagedGasPrice, gasLimit } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
     isElfiV2Con,
@@ -73,7 +73,7 @@ const Reward: React.FC = () => {
 
   const onPressClaim = async () => {
     try {
-      await stakeByType('', changedRound, StakingType.Reward);
+      await stakeByType('', changedRound, gasLimit, StakingType.Reward);
     } catch (error) {
       console.log(error);
       afterTxFailed('Transaction failed');
