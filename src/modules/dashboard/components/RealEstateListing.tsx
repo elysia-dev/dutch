@@ -8,7 +8,7 @@ import RealEstateInfoBox from './RealEstateInfoBox';
 import RealEstateListingSkeleton from './RealEstateListingSkeleton';
 import Asset from '../../../types/Asset';
 import AppFonts from '../../../enums/AppFonts';
-import useUserAsset from '../../../hooks/useUserAsset';
+import useUserTotalAsset from '../../../hooks/useUserTotalAsset';
 import PreferenceContext from '../../../contexts/PreferenceContext';
 import AssetContext from '../../../contexts/AssetContext';
 
@@ -18,7 +18,7 @@ const RealEstateListing: React.FC<{
   itemPressHandler: (asset: Asset) => void;
 }> = ({ title, assets, itemPressHandler }) => {
   const { t } = useTranslation();
-  const { totalRealEstate, totalInterest } = useUserAsset();
+  const { totalRealEstate, totalInterest } = useUserTotalAsset();
   const { currencyFormatter } = useContext(PreferenceContext);
   const { assetLoaded } = useContext(AssetContext);
 

@@ -7,7 +7,7 @@ import CryptoImage from '../../../shared/components/CryptoImage';
 import CryptoType from '../../../enums/CryptoType';
 import StakingListingSkeleton from './StakingListingSkeleton';
 import AppFonts from '../../../enums/AppFonts';
-import useUserAsset from '../../../hooks/useUserAsset';
+import useUserTotalAsset from '../../../hooks/useUserTotalAsset';
 import StakingContext from '../../../contexts/StakingContext';
 import StakingInfoBox from './StakingInfoBox';
 import { NUMBER_OF_ROUNDS } from '../../../constants/staking';
@@ -16,7 +16,7 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 
 const StakingListing: React.FC = () => {
   const { t } = useTranslation();
-  const { totalPrincipal, totalReward } = useUserAsset();
+  const { totalPrincipal, totalReward } = useUserTotalAsset();
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
   const {
     elStakingList,

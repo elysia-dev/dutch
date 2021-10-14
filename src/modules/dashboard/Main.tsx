@@ -39,7 +39,7 @@ import StakingListing from './components/StakingListing';
 import TxStatus from '../../enums/TxStatus';
 import Skeleton from '../../shared/components/Skeleton';
 import RealEstateListing from './components/RealEstateListing';
-import useUserAsset from '../../hooks/useUserAsset';
+import useUserTotalAsset from '../../hooks/useUserTotalAsset';
 import StakingContext from '../../contexts/StakingContext';
 import useUserAddress from '../../hooks/useUserAddress';
 
@@ -76,7 +76,7 @@ export const Main: React.FC = () => {
     totalPrincipal,
     totalReward,
     totalWallet,
-  } = useUserAsset();
+  } = useUserTotalAsset();
   const { loadStakingInfo } = useContext(StakingContext);
   const userAddress = useUserAddress();
 

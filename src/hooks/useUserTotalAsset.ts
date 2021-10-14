@@ -12,7 +12,7 @@ import StakingContext from '../contexts/StakingContext';
 import LoadDetail from '../utiles/LoadLagacyDetail';
 import UserContext from '../contexts/UserContext';
 
-const useUserAsset = () => {
+const useUserTotalAsset = () => {
   const userAddress = useUserAddress();
   const { assets } = useContext(AssetContext);
   const { getCryptoPrice } = useContext(PriceContext);
@@ -47,6 +47,7 @@ const useUserAsset = () => {
   const loadDetail = new LoadDetail();
   const { Server } = useContext(UserContext);
 
+  // 부동산 이자 총액
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
@@ -136,4 +137,4 @@ const useUserAsset = () => {
   };
 };
 
-export default useUserAsset;
+export default useUserTotalAsset;
