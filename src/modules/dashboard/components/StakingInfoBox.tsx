@@ -67,13 +67,6 @@ const StakingInfoBox: React.FC<{
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            {/* {`(= $ ${commaFormatter(
-              decimalFormatter(
-                Number(utils.formatEther(stakingAmount)) *
-                  getCryptoPrice(cryptoType),
-                2,
-              ),
-            )})`} */}
             {`(= ${currencyFormatter(
               Number(utils.formatEther(stakingAmount)) *
                 getCryptoPrice(cryptoType),

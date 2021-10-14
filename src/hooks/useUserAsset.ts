@@ -47,7 +47,6 @@ const useUserAsset = () => {
   const loadDetail = new LoadDetail();
   const { Server } = useContext(UserContext);
 
-  // 부동산 이자 총액. 이것도 assetProvider로 넘겨야 하나..??
   const getTotalInterest = async () => {
     if (!userAddress) return 0;
 
