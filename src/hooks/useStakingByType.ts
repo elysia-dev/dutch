@@ -23,7 +23,7 @@ const useStakingByType = (
   const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
   const navigation = useNavigation();
 
-  const getCurrentGasPrice = async () => {
+  const loadCurrentGasPrice = async () => {
     setGasPrice(
       utils.parseUnits(
         utils.formatUnits(await provider.getGasPrice(), 9),
@@ -106,7 +106,7 @@ const useStakingByType = (
   };
 
   useEffect(() => {
-    getCurrentGasPrice();
+    loadCurrentGasPrice();
   }, []);
 
   useEffect(() => {
