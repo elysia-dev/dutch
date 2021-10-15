@@ -199,7 +199,9 @@
       "disconnect": "Wallet disconnected",
       "reply_email": "Please enter your email",
       "disconnect_and_new": "Connect new wallet",
-      "backupseed": "Seed phrase"
+      "backupseed": "Seed phrase",
+      "wallet_connected": "Wallet has been connected",
+      "back_to_main": "Return to Main page"
     },
     "more": {
       "contact_text": "Please fill out and submit inquiry below.",
@@ -272,23 +274,6 @@
         "You do not have sufficient EL balance. Please enter your Paypal account."
       ],
       "already_pending": "You do not have sufficient balance or your transaction is complete."
-    },
-    "notification": {
-      "closeOwnership": "Ownership expired {{name}}.",
-      "successKyc": "KYC has been approved.",
-      "failKyc": "KYC has been rejected.",
-      "profit": "Daily reward of {{profit}} have been applied.",
-      "productNotice": "New announcement for token.",
-      "saved_90days": "Notifications received are kept for 90 days.",
-      "no_notification": "No notifications received.",
-      "read_all_notifications": "Read all {{number}} unread notifications",
-      "pendingTransaction": "[{{tokenName}}] Transaction now in progress.",
-      "increaseOwnership": "[{{tokenName}}]  Your balance has increased by + {{tokenAmount}}",
-      "decreaseOwnership": "[{{tokenName}}] Your balance has decreased by - {{tokenAmount}}",
-      "withdrawInterest": "[{{tokenName}}] Withdrawal complete {{tokenAmount}} {{paymentMethod}}",
-      "failTransaction": "[{{tokenName}}] Transaction failed",
-      "onboardingNewUser": "Welcome to Elysia",
-      "onboardingConnectWallet": "Click 'More' tab to connect your Ethereum wallet"
     },
     "notification_label": {
       "notification": "Notification",
@@ -415,7 +400,8 @@
       "approve_guide_first": "By granting permission, you will be able to buy real estate tokens.",
       "approve_guide_second": "After this approval, you will be able to make further real estate token purchases",
       "approve_guide_gasprice": "A transaction fee is associated with this request. Predicted fee: {{gasPrice}} ETH",
-      "approve_pending_transaction": "Approving…"
+      "approve_pending_transaction": "Approving…",
+      "failed_to_load": "An error occurred while loading the purchase history."
     },
     "staking": {
       "staking": "Staking",
@@ -490,7 +476,8 @@
       "staking_description_fourth": "Please be advised that after the round is over your {{stakingCrypto}} and {{rewardCrypto}} rewards will NOT be transferred to your wallet automatically, and requires further action from the wallet owner",
       "full_amount": "Max",
       "duration_day": "{{duration}} days",
-      "no_history": "There is no staking history."
+      "no_history": "There is no staking history.",
+      "failed_to_load": "An error occurred while loading the staking history."
     },
     "legacy": {
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."

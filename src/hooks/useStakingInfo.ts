@@ -1,9 +1,8 @@
 import { utils } from 'ethers';
-import { useContext, useEffect, useState } from 'react';
-import WalletContext from '../contexts/WalletContext';
+import { useEffect, useState } from 'react';
 import CryptoType from '../enums/CryptoType';
 import useStakingPool from './useStakingPool';
-import UserContext from '../contexts/UserContext';
+import useUserAddress from './useUserAddress';
 
 const useStakingInfo = (
   crytoType: CryptoType,
@@ -17,16 +16,12 @@ const useStakingInfo = (
     principal: 0,
     reward: 0,
   });
-  const { wallet } = useContext(WalletContext);
-  const { user, isWalletUser } = useContext(UserContext);
   const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
-  const userAddress = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const userAddress = useUserAddress();
 
   useEffect(() => {
     stakingPoolContract
-      ?.getUserData(selectedRound, userAddress || '')
+      ?.getUserData(selectedRound, userAddress)
       .then((res: any) => {
         setUserStakedData({
           ...userStakedData,
@@ -37,7 +32,7 @@ const useStakingInfo = (
         console.log(e);
       });
     stakingPoolContract
-      .getUserReward(userAddress || '', selectedRound)
+      .getUserReward(userAddress, selectedRound)
       .then((res) => {
         setUserStakedData({
           ...userStakedData,

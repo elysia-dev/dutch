@@ -1,5 +1,4 @@
 import LocaleType from '../enums/LocaleType';
-import Notification from './Notification';
 import LegacyRefundStatus from '../enums/LegacyRefundStatus';
 import CurrencyType from '../enums/CurrencyType';
 import ProviderType from '../enums/ProviderType';
@@ -43,5 +42,4 @@ export type UserResponse = {
   };
   totalBalance: string;
   ownerships: OwnershipResponse[];
-  notifications: Notification[];
 };

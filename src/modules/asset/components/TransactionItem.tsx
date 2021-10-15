@@ -188,8 +188,16 @@ const TransactionItem: React.FC<ITransactionItem> = ({
         />
       )}
       <View style={{ marginLeft: 10 }}>
-        {transaction.legacyType && (
-          <P1Text label={t(`dashboard_label.${transaction.legacyType}`)} />
+        {transaction.legacyType && ( //
+          <P1Text
+            label={t(
+              `dashboard_label.${
+                transaction.legacyType === 'expectedProfit'
+                  ? 'expected_profit'
+                  : transaction.legacyType
+              }`,
+            )}
+          />
         )}
         {transaction.txHash && (
           <TouchableOpacity

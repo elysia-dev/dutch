@@ -26,6 +26,7 @@ import TransactionContext from '../../contexts/TransactionContext';
 import getCurrentStakingRound, {
   isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   TotalDashboard: {
@@ -47,9 +48,7 @@ const TotalDashboard: React.FC = () => {
   const { isWalletUser, user } = useContext(UserContext);
   const { isSuccessTx } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
-  const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const address = useUserAddress();
   const { t } = useTranslation();
   const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);

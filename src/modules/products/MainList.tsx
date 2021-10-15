@@ -31,7 +31,7 @@ import PreferenceContext from '../../contexts/PreferenceContext';
 import LocaleType from '../../enums/LocaleType';
 import UserContext from '../../contexts/UserContext';
 import { Page, ProductPage } from '../../enums/pageEnum';
-import useSafeAsync from '../../utiles/useSafeAsync';
+import useSafeAsync from '../../hooks/useSafeAsync';
 import AppColors from '../../enums/AppColors';
 
 interface State {

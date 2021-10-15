@@ -41,6 +41,7 @@ import getCurrentStakingRound, {
   isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
 import range from '../../utiles/range';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   CurrentDashboard: {
@@ -71,7 +72,7 @@ const CurrentDashboard: React.FC = () => {
   );
   const stakingStatus = getStakingStatus(currentRound);
   const appState = useAppState();
-  const hasWallet = isWalletUser || user.ethAddresses[0];
+  const hasWallet = useUserAddress();
   const stakingRounds = range(1, NUMBER_OF_ROUNDS, 1);
   const changedRound = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || currentRound <= 2

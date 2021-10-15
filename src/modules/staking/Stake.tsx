@@ -40,6 +40,7 @@ import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import getCurrentStakingRound, {
   isElfiV2,
 } from '../../utiles/getCurrentStakingRound';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Stake: {
@@ -87,9 +88,7 @@ const Stake: React.FC = () => {
     setIsLoading,
     isElfiV2Con,
   );
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const address = useUserAddress();
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
