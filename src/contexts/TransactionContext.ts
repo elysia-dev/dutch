@@ -11,17 +11,18 @@ import { WaitingTransaction } from '../types/WaitingTransaction';
 export type TransactionType = {
   transactions: CryptoTransaction[];
   waitingTxs: WaitingTransaction[];
+  isSuccessTx: boolean;
   counter: number;
+  uuid: string;
 };
 
 export interface ITransactionContext extends TransactionType {
   setWaitingTx: (
-    transferType: TransferType | StakingType,
-    amount: string,
-    resTx?: TransactionResponse,
-    cryptoType?: CryptoType,
+    transferType: string,
+    amount: string[],
+    resTx?: TransactionResponse | WaitingTransaction,
+    cryptoType?: CryptoType | string,
     productUnit?: string,
-    isSuccess?: boolean,
   ) => void;
   addPendingTx: (
     transferType: TransferType,
@@ -30,32 +31,33 @@ export interface ITransactionContext extends TransactionType {
     cryptoType?: CryptoType,
     productUnit?: string,
   ) => void;
-  addMigrationTxs: (
-    unStakingAmount: string,
-    migrateAmount: string,
-    rewardAmount: string,
-    resTx?: TransactionResponse,
-    cryptoType?: CryptoType,
-    productUnit?: string,
-  ) => void;
   removeStorageTx: (txHash?: string) => void;
-  removeStorageTxByAppState: () => void;
+  findSucceedTx: (tx: WaitingTransaction) => Promise<WaitingTransaction[]>;
+  verifyTx: (tx: WaitingTransaction) => void;
+  setUuid: (uuid: string) => void;
+  setIsSuccessTx: (isSuccess: boolean) => void;
   setToastList: (type: string, status: ToastStatus) => void;
 }
 
 export const initialTransactions = {
   transactions: [],
   waitingTxs: [],
+  isSuccessTx: false,
   counter: 0,
+  uuid: '',
 };
 
 export const initialTransactionContext = {
   ...initialTransactions,
   setWaitingTx: () => {},
   addPendingTx: () => {},
-  addMigrationTxs: () => {},
   removeStorageTx: () => {},
-  removeStorageTxByAppState: () => {},
+  findSucceedTx: async () => {
+    return [];
+  },
+  verifyTx: () => {},
+  setUuid: () => {},
+  setIsSuccessTx: () => {},
   setToastList: () => {},
 };
 
