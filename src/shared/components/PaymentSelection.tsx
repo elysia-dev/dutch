@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { AppState, View } from 'react-native';
 import * as Linking from 'expo-linking';
-import { DAPP_URL } from 'react-native-dotenv';
+import { DAPP_URL, EXTERNAL_WALLET_TX_URL } from 'react-native-dotenv';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import axios from 'axios';
 import { SubmitButton } from './SubmitButton';
 import useAppState from '../../hooks/useAppState';
 import WalletType from '../../enums/WalletType';
@@ -16,6 +17,7 @@ import SheetHeader from './SheetHeader';
 import AppColors from '../../enums/AppColors';
 import WalletSelectionButton from './WalletSelectionButton';
 import CryptoType from '../../enums/CryptoType';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type AssetTxData = {
   productId: number;
@@ -54,22 +56,13 @@ const PaymentSelection: React.FC<{
   });
   const { wallet, emailRestriction, email } = state;
   const { user, Server, refreshUser } = useContext(UserContext);
+  const { uuid, setUuid } = useContext(TransactionContext);
   const { t } = useTranslation();
 
   const appState = useAppState();
   const insets = useSafeAreaInsets();
-
-  let imtokenURL: string;
-  let metamaskURL: string;
-  if (page === 'asset') {
-    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}`;
-    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}`;
-  } else {
-    // if page is 'staking'
-    // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
-    imtokenURL = `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}`;
-    metamaskURL = `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}`;
-  }
+  const [imtokenURL, setImtokenURL] = useState('');
+  const [metamaskURL, setMetamaskURL] = useState('');
 
   useEffect(() => {
     if (appState === 'active' && espressoTxId) {
@@ -79,6 +72,30 @@ const PaymentSelection: React.FC<{
       });
     }
   }, [appState]);
+
+  useEffect(() => {
+    axios.post(`${EXTERNAL_WALLET_TX_URL}`).then((res) => {
+      console.log(res.data.uuid);
+      setUuid(res.data.uuid);
+      if (page === 'asset') {
+        setImtokenURL(
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}/${res.data.uuid}`,
+        );
+        setMetamaskURL(
+          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}&uuid=${res.data.uuid}`,
+        );
+      } else {
+        // if page is 'staking'
+        // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
+        setImtokenURL(
+          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}/${res.data.uuid}`,
+        );
+        setMetamaskURL(
+          `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}&uuid=${res.data.uuid}`,
+        );
+      }
+    });
+  }, []);
 
   const linkDapp = () => {
     switch (wallet) {
@@ -102,7 +119,7 @@ const PaymentSelection: React.FC<{
           if (!email) {
             return alert(t('account.check_email'));
           } else {
-            Server.sendEmailForTransaction(espressoTxId, email)
+            Server.sendEmailForTransaction(espressoTxId!, email)
               .then((_res) => {
                 setState({ ...state, emailRestriction: true });
                 alert(t('product.send_purchase_link'));
@@ -121,7 +138,7 @@ const PaymentSelection: React.FC<{
               });
           }
         } else {
-          Server.sendEmailForTransaction(espressoTxId)
+          Server.sendEmailForTransaction(espressoTxId!)
             .then((_res) => {
               setState({ ...state, emailRestriction: true });
               alert(t('product.send_purchase_link'));
