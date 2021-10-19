@@ -3,9 +3,10 @@ export type WaitingTransaction = {
   date: string;
   unit?: string;
   nonce?: number;
-  txHash?: string;
+  hash?: string;
   amount?: string;
   cryptoType?: string;
+  migrationInfo?: WaitingTransaction[];
 };
 
 export type ToastTransaction = {
