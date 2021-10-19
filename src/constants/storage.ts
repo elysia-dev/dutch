@@ -11,3 +11,4 @@ export const NOTIFICATION = `${prefix}_NOTIFICATION`;
 
 export const PRICE_DATA = `${prefix}_PRICE_DATA`;
 export const PENDING_TRANSACTIONS = `${prefix}_PENDING_TRANSACTIONS`;
+export const EXTERNAL_WALLET_UUID = `${prefix}_EXTERNAL_WALLET_UUID`;
