@@ -31,4 +31,5 @@ declare module 'react-native-dotenv' {
   export const ELFI_STAKING_POOL_ADDRESS: string;
   export const DAI_ADDRESS: string;
   export const ELFI_STAKING_POOL_V2_ADDRESS: string;
+  export const EXTERNAL_WALLET_TX_URL: string;
 }
