@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { AppState, Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import { DashboardPage, Page } from '../../../enums/pageEnum';
 import { H4Text, P3Text } from '../../../shared/components/Texts';
@@ -12,21 +12,7 @@ const WaitingTxBox: React.FC<{
 }> = ({ isFocused }) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { waitingTxs, removeStorageTxByAppState } =
-    useContext(TransactionContext);
-
-  const changeAppState = async () => {
-    if (waitingTxs.length === 0) return;
-    removeStorageTxByAppState();
-  };
-
-  useEffect(() => {
-    AppState.addEventListener('change', changeAppState);
-
-    return () => {
-      AppState.removeEventListener('change', changeAppState);
-    };
-  }, []);
+  const { waitingTxs } = useContext(TransactionContext);
 
   return (
     <>
@@ -54,6 +40,7 @@ const WaitingTxBox: React.FC<{
             onPress={() => {
               navigation.navigate(Page.Dashboard, {
                 screen: DashboardPage.WaitingTxList,
+                params: { waitingTxs },
               });
             }}>
             <P3Text
