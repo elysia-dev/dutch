@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { EL_ADDRESS } from 'react-native-dotenv';
 import { espressoClient, authenticatedEspressoClient } from './axiosInstances';
 import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
 import Product, { Story } from '../types/product';
 import { Transaction } from '../types/Transaction';
 import Notification from '../types/Notification';
-import { EL_ADDRESS } from 'react-native-dotenv';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { SignOut } from '../enums/SignInStatus';
