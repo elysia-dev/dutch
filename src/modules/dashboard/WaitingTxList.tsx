@@ -31,6 +31,7 @@ const WaitingTxList: FunctionComponent<{}> = () => {
   useEffect(() => {
     setState(waitingTxs.slice(0, 10 * (page + 1)));
   }, [waitingTxs]);
+
   return (
     <>
       <ScrollView
@@ -56,8 +57,8 @@ const WaitingTxList: FunctionComponent<{}> = () => {
           </View>
           {waitingTxs?.length !== 0 &&
             state &&
-            state.map((i, idx) => (
-              <WaitingTxListItem key={idx} waitingTransaction={i} />
+            state.map((tx, idx) => (
+              <WaitingTxListItem key={idx} waitingTransaction={tx} />
             ))}
           {waitingTxs.length !== 0 && waitingTxs.length / (10 * page + 1) >= 1 && (
             <TouchableOpacity
