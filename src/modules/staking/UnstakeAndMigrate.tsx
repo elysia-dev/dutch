@@ -57,8 +57,7 @@ const UnstakeAndMigrate: React.FC = () => {
   const [selectionVisible, setSelectionVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
-  const { addMigrationTxs, addPendingTx, setToastList } =
-    useContext(TransactionContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
   const navigation = useNavigation();
   const rewardCryptoType =
@@ -191,7 +190,7 @@ const UnstakeAndMigrate: React.FC = () => {
         addPendingTx(TransferType.Unstaking, value, res, cryptoType);
       })
       .catch((error) => {
-        setToastList(TransferType.Staking, ToastStatus.Fail);
+        setToastList(TransferType.Unstaking, ToastStatus.Fail);
       })
       .finally(() => {
         navigation.goBack();
@@ -209,10 +208,9 @@ const UnstakeAndMigrate: React.FC = () => {
     const migrateAmount = String(userPrincipal - parseFloat(value));
     stakeByType(migrateAmount, round)
       .then((res) => {
-        addMigrationTxs(
-          value,
-          migrateAmount,
-          reward.toString(),
+        addPendingTx(
+          TransferType.Migration,
+          `${migrateAmount},${value},${reward.toString()}`,
           res,
           cryptoType,
         );
