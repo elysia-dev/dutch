@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { View } from 'react-native';
 import moment from 'moment';
 import {
@@ -7,7 +7,10 @@ import {
   TransactionResponse,
 } from '@ethersproject/providers';
 import { useTranslation } from 'react-i18next';
-import { PENDING_TRANSACTIONS } from '../constants/storage';
+import {
+  EXTERNAL_WALLET_UUID,
+  PENDING_TRANSACTIONS,
+} from '../constants/storage';
 import TransactionContext, {
   TransactionType,
   initialTransactions,
@@ -28,7 +31,18 @@ const TransactionProvider: React.FC = (props) => {
   const { refreshBalance } = useContext(AssetContext);
   const [state, setState] = useState<TransactionType>(initialTransactions);
   const [toasts, setToasts] = useState<ToastTransaction[]>([]);
+  const [successedHash, setSuccessedHash] = useState<string>('');
   const { t } = useTranslation();
+
+  const setIsSuccessTx = useCallback(
+    (isSuccess: boolean) => {
+      setState({
+        ...state,
+        isSuccessTx: isSuccess,
+      });
+    },
+    [state, state.waitingTxs],
+  );
 
   const setToastList = (type: string, status: ToastStatus) => {
     setToasts((prev: ToastTransaction[]) => {
@@ -46,8 +60,8 @@ const TransactionProvider: React.FC = (props) => {
   };
 
   const setUnit = (
-    transferType: TransferType | StakingType,
-    cryptoType?: CryptoType,
+    transferType: TransferType | StakingType | string,
+    cryptoType?: CryptoType | string,
     productUnit?: string,
   ) => {
     return transferType === TransferType.StakingReward
@@ -60,106 +74,101 @@ const TransactionProvider: React.FC = (props) => {
   };
 
   const setWaitingTx = (
-    transferType: TransferType | StakingType,
-    amount: string,
-    resTx?: TransactionResponse,
-    cryptoType?: CryptoType,
+    transferType: string,
+    amount: string[],
+    resTx?: TransactionResponse | WaitingTransaction,
+    cryptoType?: CryptoType | string,
     productUnit?: string,
+    // txhash?: string,
+    // migration?: WaitingTransaction[],
   ) => {
     setStorageTx({
       transferType: t(transferType),
-      unit: setUnit(transferType, cryptoType, productUnit),
+      unit:
+        cryptoType === CryptoType.ELFI
+          ? CryptoType.ELFI
+          : setUnit(transferType, cryptoType, productUnit),
       date: moment().format('YYYY-MM-DD | HH:mm:ss'),
       nonce: resTx?.nonce,
-      txHash: resTx?.hash,
-      amount,
+      hash: resTx?.hash,
+      amount: amount[0],
       cryptoType,
+      migrationInfo:
+        transferType === TransferType.Migration
+          ? unstakingAndReward(amount, cryptoType, resTx)
+          : undefined,
     });
   };
 
-  const setStorageTx = async (
-    waitingTx?: WaitingTransaction,
-    migrationTxs?: WaitingTransaction[],
-  ) => {
-    try {
-      if (!waitingTx) {
+  const setStorageTx = useCallback(
+    async (waitingTx: WaitingTransaction) => {
+      try {
         await AsyncStorage.setItem(
           PENDING_TRANSACTIONS,
-          JSON.stringify(migrationTxs),
+          JSON.stringify([...state.waitingTxs, waitingTx]),
         );
         setState({
           ...state,
-          waitingTxs: migrationTxs!,
+          waitingTxs: [...state.waitingTxs, waitingTx],
         });
-        return;
+      } catch (error) {
+        console.log(error);
       }
-      await AsyncStorage.setItem(
-        PENDING_TRANSACTIONS,
-        JSON.stringify([...state.waitingTxs, waitingTx]),
-      );
-      setState({
-        ...state,
-        waitingTxs: [...state.waitingTxs, waitingTx],
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    [state.waitingTxs],
+  );
 
-  const removeStorageTx = async (txHash?: string) => {
-    try {
-      const txs = state.waitingTxs.filter((tx) => {
-        return tx.txHash !== txHash;
-      });
-      setState({
-        ...state,
-        waitingTxs: txs,
-      });
-      await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(txs));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const removeStorageTx = useCallback(
+    async (txHash?: string) => {
+      try {
+        const txs = state.waitingTxs.filter((tx) => {
+          return tx.hash !== txHash;
+        });
+        setSuccessedHash('');
+        setState({
+          ...state,
+          waitingTxs: txs,
+          isSuccessTx: true,
+        });
+        await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(txs));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [state.waitingTxs],
+  );
 
-  const succeedTx = async (tx: WaitingTransaction) => {
+  const findSucceedTx = async (tx: WaitingTransaction) => {
     let res: TransactionReceipt;
     if (tx.cryptoType === CryptoType.BNB) {
-      res = await bscProvider.getTransactionReceipt(tx.txHash!);
+      res = await bscProvider.getTransactionReceipt(tx.hash!);
     } else {
-      res = await provider.getTransactionReceipt(tx.txHash!);
+      res = await provider.getTransactionReceipt(tx.hash!);
     }
     const waitTx = state.waitingTxs?.filter((value) => {
-      value.txHash !== res.transactionHash;
+      value.hash !== res.transactionHash;
     });
     if (waitTx) {
+      setToastList(tx.transferType, ToastStatus.Success);
       await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(waitTx));
       setState({
         ...state,
         waitingTxs: waitTx,
       });
     }
-  };
-
-  const removeStorageTxByAppState = async () => {
-    try {
-      if (state.waitingTxs.length === 0) return;
-      state.waitingTxs.forEach(async (tx) => {
-        await succeedTx(tx);
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    return waitTx;
   };
 
   useEffect(() => {
     (async () => {
       let transactions: WaitingTransaction[] = [];
+      await AsyncStorage.removeItem(PENDING_TRANSACTIONS);
       try {
         transactions = JSON.parse(
           (await AsyncStorage.getItem(PENDING_TRANSACTIONS)) || '[]',
         );
         transactions.forEach(async (tx) => {
-          await succeedTx(tx);
+          await verifyTx(tx);
         });
       } catch (error) {
         console.log(error);
@@ -177,169 +186,89 @@ const TransactionProvider: React.FC = (props) => {
 
   const addPendingTx = (
     transferType: TransferType,
-    amount: string,
+    txAmounts: string,
     resTx?: TransactionResponse,
     cryptoType?: CryptoType,
     productUnit?: string,
   ) => {
+    const amount = txAmounts.split(',');
+    setIsSuccessTx(false);
     setToastList(transferType, ToastStatus.Waiting);
     setWaitingTx(transferType, amount, resTx, cryptoType, productUnit);
     resTx
       ?.wait()
-      .then((successTx) => {
+      .then((tx) => {
+        setSuccessedHash(tx.transactionHash);
         setToastList(transferType, ToastStatus.Success);
-        removeStorageTx(successTx.transactionHash);
       })
       .catch(() => {
         setToastList(transferType, ToastStatus.Fail);
       });
   };
-  const addMigrationTxs = (
-    unStakingAmount: string,
-    migrateAmount: string,
-    rewardAmount: string,
-    resTx?: TransactionResponse,
-    cryptoType?: CryptoType,
-    productUnit?: string,
+
+  const unstakingAndReward = (
+    amount: string[],
+    cryptoType?: CryptoType | string,
+    resTx?: TransactionResponse | WaitingTransaction,
   ) => {
-    setToastList(TransferType.Migration, ToastStatus.Waiting);
-    setStorageTx(undefined, [
-      {
-        transferType: t(TransferType.Migration),
-        unit: setUnit(TransferType.Migration, cryptoType, productUnit),
-        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
-        nonce: resTx?.nonce,
-        txHash: resTx?.hash,
-        amount: migrateAmount,
-        cryptoType,
-      },
+    return [
       {
         transferType: t(TransferType.Unstaking),
-        unit: setUnit(TransferType.Unstaking, cryptoType, productUnit),
+        unit: setUnit(TransferType.Unstaking, cryptoType),
         date: moment().format('YYYY-MM-DD | HH:mm:ss'),
         nonce: resTx?.nonce,
-        txHash: resTx?.hash,
-        amount: unStakingAmount,
+        hash: resTx?.hash,
+        amount: amount[1],
         cryptoType,
       },
       {
         transferType: t(TransferType.StakingReward),
-        unit: setUnit(TransferType.StakingReward, cryptoType, productUnit),
+        unit: setUnit(TransferType.StakingReward, cryptoType),
         date: moment().format('YYYY-MM-DD | HH:mm:ss'),
         nonce: resTx?.nonce,
-        txHash: resTx?.hash,
-        amount: rewardAmount,
+        hash: resTx?.hash,
+        amount: amount[2],
         cryptoType,
       },
-    ]);
-    resTx
-      ?.wait()
-      .then((successTx) => {
-        setToastList(TransferType.Migration, ToastStatus.Success);
-        removeStorageTx(successTx.transactionHash);
-      })
-      .catch(() => {
-        setToastList(TransferType.Migration, ToastStatus.Fail);
-      });
+    ];
   };
 
-  // useEffect(() => {
-  //   if (
-  //     state.transactions.filter((tx) => tx.status === TxStatus.Pending)
-  //       .length === 0
-  //   )
-  //     return;
+  const setUuid = async (uuid: string) => {
+    await AsyncStorage.setItem(EXTERNAL_WALLET_UUID, uuid);
+    setState({
+      ...state,
+      uuid,
+    });
+  };
 
-  //   let timer = setTimeout(async () => {
-  //     const txResponses = await Promise.all(
-  //       state.transactions
-  //         .filter((tx) => tx.status === TxStatus.Pending)
-  //         .map(async (tx) => {
-  //           const usedProvider =
-  //             tx.cryptoType === CryptoType.BNB ? bscProvider : provider;
-  //           return await usedProvider.getTransactionReceipt(tx.txHash || '');
-  //         }),
-  //     );
+  const verifyTx = async (tx: WaitingTransaction) => {
+    try {
+      let res: TransactionReceipt;
+      setIsSuccessTx(false);
+      const amount = tx.amount?.split(',');
+      setWaitingTx(tx.transferType, amount!, tx, tx.cryptoType, tx.unit);
+      if (tx.cryptoType === CryptoType.BNB) {
+        res = await bscProvider.waitForTransaction(tx.hash!);
+      } else {
+        res = await provider.waitForTransaction(tx.hash!);
+      }
+      if (res) {
+        setSuccessedHash(res.transactionHash);
+        setToastList(tx.transferType, ToastStatus.Success);
+      }
+      console.log(tx);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await AsyncStorage.removeItem(EXTERNAL_WALLET_UUID);
+    }
+  };
 
-  //     const transactions = state.transactions.map((tx) => {
-  //       const txRes = txResponses.find(
-  //         (res) => res && res.transactionHash === tx.txHash,
-  //       );
-
-  //       if (txRes) {
-  //         if (txRes.status === 1) {
-  //           // timeout이 필요한 이유? : 트랜잭션 요청후, 바로 요청할 경우 balance가 아직 이전 값으로 조회되는 문제가 있음
-  //           // 경우따라 timeout을 더 늘려야할 수도 있음!
-  //           setTimeout(() => {
-  //             tx.cryptoType && refreshBalance(tx.cryptoType);
-  //           }, 500);
-
-  //           showMessage({
-  //             message: t('transaction.created'),
-  //             description: tx.txHash,
-  //             type: 'info',
-  //             onPress: () => {
-  //               Linking.openURL(
-  //                 getTxScanLink(
-  //                   tx.txHash,
-  //                   tx.cryptoType === CryptoType.BNB
-  //                     ? NetworkType.BSC
-  //                     : NetworkType.ETH,
-  //                 ),
-  //               );
-  //             },
-  //             duration: 3000,
-  //           });
-  //           return {
-  //             ...tx,
-  //             status: TxStatus.Success,
-  //           };
-  //         } else {
-  //           showMessage({
-  //             message: t('transaction.fail'),
-  //             description: tx.txHash,
-  //             type: 'danger',
-  //             onPress: () => {
-  //               Linking.openURL(
-  //                 getTxScanLink(
-  //                   tx.txHash,
-  //                   tx.cryptoType === CryptoType.BNB
-  //                     ? NetworkType.BSC
-  //                     : NetworkType.ETH,
-  //                 ),
-  //               );
-  //             },
-  //             duration: 3000,
-  //           });
-
-  //           return {
-  //             ...tx,
-  //             status: TxStatus.Fail,
-  //           };
-  //         }
-  //       } else {
-  //         return tx;
-  //       }
-  //     });
-
-  //     await AsyncStorage.setItem(
-  //       PENDING_TRANSACTIONS,
-  //       JSON.stringify(
-  //         transactions.filter((tx) => tx.status === TxStatus.Pending),
-  //       ),
-  //     );
-
-  //     setState({
-  //       ...state,
-  //       transactions,
-  //       counter: state.counter + 1,
-  //     });
-  //   }, 5000);
-
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [state.counter]);
+  useEffect(() => {
+    if (state.waitingTxs.length && successedHash) {
+      removeStorageTx(successedHash);
+    }
+  }, [state.waitingTxs, successedHash]);
 
   return (
     <TransactionContext.Provider
@@ -347,9 +276,11 @@ const TransactionProvider: React.FC = (props) => {
         ...state,
         setWaitingTx,
         addPendingTx,
-        addMigrationTxs,
         removeStorageTx,
-        removeStorageTxByAppState,
+        findSucceedTx,
+        verifyTx,
+        setUuid,
+        setIsSuccessTx,
         setToastList,
       }}>
       {props.children}
