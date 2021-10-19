@@ -16,7 +16,7 @@ const useStakingByType = (
   type: StakingType,
 ) => {
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
-  const { waitingTxs, setWaitingTx } = useContext(TransactionContext);
+  const { waitingTxs } = useContext(TransactionContext);
   const [gasPrice, setGasPrice] = useState<BigNumberish | undefined>();
 
   const getCurrentGasPrice = async () => {
@@ -26,7 +26,6 @@ const useStakingByType = (
         'gwei',
       ),
     );
-    console.log(utils.formatUnits(await provider.getGasPrice(), 9));
   };
 
   const getLastNonce = () => {
@@ -41,16 +40,13 @@ const useStakingByType = (
   const txLastNonce = (lastNonce?: number) => {
     return {
       nonce: lastNonce ? lastNonce + 1 : undefined,
-      // gasPrice,
-      // gasLimit: '149787',
     };
   };
 
   const stakeByType = async (
     value: string,
     round: number,
-    unStakingAmount?: string,
-    reward?: number,
+    unstake?: string,
   ) => {
     setIsLoading(true);
     let res: TransactionResponse | undefined;
@@ -59,7 +55,7 @@ const useStakingByType = (
       lastNonce = getLastNonce();
     }
     try {
-      switch (type) {
+      switch (unstake || type) {
         case StakingType.Stake:
           res = await stakingPoolContract.stake(
             utils.parseUnits(value),
@@ -78,20 +74,6 @@ const useStakingByType = (
             utils.parseUnits(value),
             round,
             txLastNonce(lastNonce),
-          );
-          if (unStakingAmount) {
-            setWaitingTx(
-              TransferType.Unstaking,
-              unStakingAmount || '',
-              res,
-              cryptoType,
-            );
-          }
-          setWaitingTx(
-            TransferType.StakingReward,
-            reward?.toString() || '',
-            res,
-            cryptoType,
           );
           break;
         default:
