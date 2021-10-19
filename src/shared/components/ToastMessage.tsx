@@ -72,7 +72,7 @@ const ToastMessage: React.FC<Props> = ({ waitingTx, toastHide }) => {
           />
           <P3Text
             label={
-              waitingTx.transferType === t(TransferType.Purchase)
+              waitingTx.transferType === TransferType.Purchase
                 ? t('transaction.purchase_transaction', {
                     transferType: `${t(waitingTx.transferType)}`,
                   })
