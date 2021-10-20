@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import AppColors from '../../../enums/AppColors';
 import AppFonts from '../../../enums/AppFonts';
@@ -14,6 +15,7 @@ const WaitingTxListItem: React.FC<WaitngTransactionItem> = ({
   waitingTransaction,
 }) => {
   const { transferType, date, amount, unit } = waitingTransaction;
+  const { t } = useTranslation();
   return (
     <>
       {waitingTransaction.migrationInfo &&
@@ -32,7 +34,7 @@ const WaitingTxListItem: React.FC<WaitngTransactionItem> = ({
         }}>
         <View>
           <P3Text
-            label={transferType}
+            label={t(transferType)}
             style={{
               fontFamily: AppFonts.Medium,
               color: AppColors.BLACK,
