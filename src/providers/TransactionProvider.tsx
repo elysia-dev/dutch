@@ -34,16 +34,6 @@ const TransactionProvider: React.FC = (props) => {
   const [successedHash, setSuccessedHash] = useState<string>('');
   const { t } = useTranslation();
 
-  const setIsSuccessTx = useCallback(
-    (isSuccess: boolean) => {
-      setState({
-        ...state,
-        isSuccessTx: isSuccess,
-      });
-    },
-    [state, state.waitingTxs],
-  );
-
   const setToastList = (type: string, status: ToastStatus) => {
     setToasts((prev: ToastTransaction[]) => {
       return [
@@ -75,15 +65,14 @@ const TransactionProvider: React.FC = (props) => {
 
   const setWaitingTx = (
     transferType: string,
-    amount: string[],
+    amount: string,
     resTx?: TransactionResponse | WaitingTransaction,
     cryptoType?: CryptoType | string,
     productUnit?: string,
-    // txhash?: string,
-    // migration?: WaitingTransaction[],
+    migrationInternalInfo?: WaitingTransaction[],
   ) => {
     setStorageTx({
-      transferType: t(transferType),
+      transferType,
       unit:
         cryptoType === CryptoType.ELFI
           ? CryptoType.ELFI
@@ -91,11 +80,11 @@ const TransactionProvider: React.FC = (props) => {
       date: moment().format('YYYY-MM-DD | HH:mm:ss'),
       nonce: resTx?.nonce,
       hash: resTx?.hash,
-      amount: amount[0],
+      amount,
       cryptoType,
       migrationInfo:
         transferType === TransferType.Migration
-          ? unstakingAndReward(amount, cryptoType, resTx)
+          ? migrationInternalInfo
           : undefined,
     });
   };
@@ -110,6 +99,7 @@ const TransactionProvider: React.FC = (props) => {
         setState({
           ...state,
           waitingTxs: [...state.waitingTxs, waitingTx],
+          isSuccessTx: false,
         });
       } catch (error) {
         console.log(error);
@@ -190,11 +180,17 @@ const TransactionProvider: React.FC = (props) => {
     resTx?: TransactionResponse,
     cryptoType?: CryptoType,
     productUnit?: string,
+    migrationInternalInfo?: WaitingTransaction[],
   ) => {
-    const amount = txAmounts.split(',');
-    setIsSuccessTx(false);
     setToastList(transferType, ToastStatus.Waiting);
-    setWaitingTx(transferType, amount, resTx, cryptoType, productUnit);
+    setWaitingTx(
+      transferType,
+      txAmounts,
+      resTx,
+      cryptoType,
+      productUnit,
+      migrationInternalInfo,
+    );
     resTx
       ?.wait()
       .then((tx) => {
@@ -206,33 +202,6 @@ const TransactionProvider: React.FC = (props) => {
       });
   };
 
-  const unstakingAndReward = (
-    amount: string[],
-    cryptoType?: CryptoType | string,
-    resTx?: TransactionResponse | WaitingTransaction,
-  ) => {
-    return [
-      {
-        transferType: t(TransferType.Unstaking),
-        unit: setUnit(TransferType.Unstaking, cryptoType),
-        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
-        nonce: resTx?.nonce,
-        hash: resTx?.hash,
-        amount: amount[1],
-        cryptoType,
-      },
-      {
-        transferType: t(TransferType.StakingReward),
-        unit: setUnit(TransferType.StakingReward, cryptoType),
-        date: moment().format('YYYY-MM-DD | HH:mm:ss'),
-        nonce: resTx?.nonce,
-        hash: resTx?.hash,
-        amount: amount[2],
-        cryptoType,
-      },
-    ];
-  };
-
   const setUuid = async (uuid: string) => {
     await AsyncStorage.setItem(EXTERNAL_WALLET_UUID, uuid);
     setState({
@@ -241,12 +210,20 @@ const TransactionProvider: React.FC = (props) => {
     });
   };
 
-  const verifyTx = async (tx: WaitingTransaction) => {
+  const verifyTx = async (
+    tx: WaitingTransaction,
+    migrationInternalInfo?: WaitingTransaction[],
+  ) => {
     try {
       let res: TransactionReceipt;
-      setIsSuccessTx(false);
-      const amount = tx.amount?.split(',');
-      setWaitingTx(tx.transferType, amount!, tx, tx.cryptoType, tx.unit);
+      setWaitingTx(
+        tx.transferType,
+        tx.amount!,
+        tx,
+        tx.cryptoType,
+        tx.unit,
+        migrationInternalInfo,
+      );
       if (tx.cryptoType === CryptoType.BNB) {
         res = await bscProvider.waitForTransaction(tx.hash!);
       } else {
@@ -256,7 +233,6 @@ const TransactionProvider: React.FC = (props) => {
         setSuccessedHash(res.transactionHash);
         setToastList(tx.transferType, ToastStatus.Success);
       }
-      console.log(tx);
     } catch (error) {
       console.log(error);
     } finally {
@@ -280,7 +256,6 @@ const TransactionProvider: React.FC = (props) => {
         findSucceedTx,
         verifyTx,
         setUuid,
-        setIsSuccessTx,
         setToastList,
       }}>
       {props.children}
