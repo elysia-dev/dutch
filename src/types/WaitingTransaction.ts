@@ -7,6 +7,8 @@ export type WaitingTransaction = {
   amount?: string;
   cryptoType?: string;
   migrationInfo?: WaitingTransaction[];
+  migrationRewardAmount?: string;
+  migrationUnstakingAmount?: string;
 };
 
 export type ToastTransaction = {
