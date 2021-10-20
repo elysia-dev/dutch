@@ -19,10 +19,11 @@ export type TransactionType = {
 export interface ITransactionContext extends TransactionType {
   setWaitingTx: (
     transferType: string,
-    amount: string[],
+    amount: string,
     resTx?: TransactionResponse | WaitingTransaction,
     cryptoType?: CryptoType | string,
     productUnit?: string,
+    migrationInternalInfo?: WaitingTransaction[],
   ) => void;
   addPendingTx: (
     transferType: TransferType,
@@ -30,12 +31,15 @@ export interface ITransactionContext extends TransactionType {
     resTx?: TransactionResponse,
     cryptoType?: CryptoType,
     productUnit?: string,
+    migrationInternalInfo?: WaitingTransaction[],
   ) => void;
   removeStorageTx: (txHash?: string) => void;
   findSucceedTx: (tx: WaitingTransaction) => Promise<WaitingTransaction[]>;
-  verifyTx: (tx: WaitingTransaction) => void;
+  verifyTx: (
+    tx: WaitingTransaction,
+    migrationInternalInfo?: WaitingTransaction[],
+  ) => void;
   setUuid: (uuid: string) => void;
-  setIsSuccessTx: (isSuccess: boolean) => void;
   setToastList: (type: string, status: ToastStatus) => void;
 }
 
@@ -57,7 +61,6 @@ export const initialTransactionContext = {
   },
   verifyTx: () => {},
   setUuid: () => {},
-  setIsSuccessTx: () => {},
   setToastList: () => {},
 };
 
