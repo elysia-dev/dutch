@@ -45,7 +45,7 @@ const TotalDashboard: React.FC = () => {
   const [userPrincipal, setUserPrincipal] = useState('-');
   const [currentRoundReward, setCurrentRoundReward] = useState('-');
   const { isWalletUser, user } = useContext(UserContext);
-  const { isSuccessTx } = useContext(TransactionContext);
+  const { isPendingTx } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
   const address = isWalletUser // 이거 아예 함수로 만들어야겠는데...
     ? wallet?.getFirstAddress()
@@ -118,10 +118,10 @@ const TotalDashboard: React.FC = () => {
   }, [currentRound]);
 
   useEffect(() => {
-    if (isSuccessTx) {
+    if (!isPendingTx) {
       getUserData();
     }
-  }, [isSuccessTx]);
+  }, [isPendingTx]);
 
   useEffect(() => {
     if (isCurrentRound && selectedRound === currentRound) {
