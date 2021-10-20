@@ -37,6 +37,7 @@ import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
 import TransferType from '../../enums/TransferType';
 import ToastStatus from '../../enums/ToastStatus';
 import TransactionContext from '../../contexts/TransactionContext';
+import addMigrationInternalInfo from '../../utiles/addMigrationInternalInfo';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -206,13 +207,21 @@ const UnstakeAndMigrate: React.FC = () => {
       return;
     }
     const migrateAmount = String(userPrincipal - parseFloat(value));
+    const internalInfo = addMigrationInternalInfo(
+      value,
+      reward.toString(),
+      cryptoType,
+      rewardCryptoType,
+    );
     stakeByType(migrateAmount, round)
       .then((res) => {
         addPendingTx(
           TransferType.Migration,
-          `${migrateAmount},${value},${reward.toString()}`,
+          migrateAmount,
           res,
           cryptoType,
+          '',
+          internalInfo,
         );
       })
       .catch((error) => {
