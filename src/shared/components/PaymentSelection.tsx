@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { AppState, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { DAPP_URL, EXTERNAL_WALLET_TX_URL } from 'react-native-dotenv';
@@ -62,8 +62,6 @@ const PaymentSelection: React.FC<{
 
   const appState = useAppState();
   const insets = useSafeAreaInsets();
-  const [imtokenURL, setImtokenURL] = useState('');
-  const [metamaskURL, setMetamaskURL] = useState('');
 
   useEffect(() => {
     if (appState === 'active' && espressoTxId) {
@@ -74,39 +72,39 @@ const PaymentSelection: React.FC<{
     }
   }, [appState]);
 
+  const linkURL = useCallback(
+    (wallet: string) => {
+      if (page === 'asset') {
+        if (wallet === WalletType.IMTOKEN_MOBILE) {
+          return `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}/${uuid}`;
+        }
+        return `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}&uuid=${uuid}`;
+      } else {
+        if (wallet === WalletType.IMTOKEN_MOBILE) {
+          return `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}/${uuid}`;
+        }
+        return `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}&uuid=${uuid}`;
+      }
+    },
+    [uuid],
+  );
+
   useEffect(() => {
     ExternalWalletTxData.getUuid().then((res) => {
       setUuid(res.data.uuid);
-      if (page === 'asset') {
-        setImtokenURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/requests/${assetTxData?.productId}/${value}/${assetTxData?.type}/${contractAddress}/${user.ethAddresses}/${user.language}/${res.data.uuid}`,
-        );
-        setMetamaskURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/requests?productId=${assetTxData?.productId}&value=${value}&type=${assetTxData?.type}&contractAddress=${contractAddress}&address=${user.ethAddresses}&language=${user.language}&uuid=${res.data.uuid}`,
-        );
-      } else {
-        // if page is 'staking'
-        // Requests 페이지랑 이름 통일을 좀 시켜야겠음.....
-        setImtokenURL(
-          `imtokenv2://navigate?screen=DappView&url=https://${DAPP_URL}/staking-requests/${value}/${stakingTxData?.type}/${stakingTxData?.unit}/${stakingTxData?.round}/${contractAddress}/${user.ethAddresses}/${user.language}/${stakingTxData?.rewardValue}/${stakingTxData?.migrationValue}/${res.data.uuid}`,
-        );
-        setMetamaskURL(
-          `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}&uuid=${res.data.uuid}`,
-        );
-      }
     });
   }, []);
 
   const linkDapp = () => {
     switch (wallet) {
       case WalletType.IMTOKEN_MOBILE:
-        Linking.openURL(imtokenURL).catch((_e) => {
+        Linking.openURL(linkURL(wallet)).catch((_e) => {
           storeDeeplink('imtoken-btc-eth-wallet/id1384798940', 'im.token.app');
         });
         navigation.goBack();
         break;
       case WalletType.METAMASK_MOBILE:
-        Linking.openURL(metamaskURL).catch((_e) => {
+        Linking.openURL(linkURL(wallet)).catch((_e) => {
           storeDeeplink('metamask/id1438144202', 'io.metamask');
         });
         navigation.goBack();
