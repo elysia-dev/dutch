@@ -4,8 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { EXTERNAL_WALLET_TX_URL } from 'react-native-dotenv';
 import { More } from './src/modules/more/More';
 import Products from './src/modules/products';
 import { Account } from './src/modules/account/Account';
@@ -25,6 +23,11 @@ import Crypto from './src/modules/crypto';
 import Staking from './src/modules/staking';
 import TransactionContext from './src/contexts/TransactionContext';
 import { EXTERNAL_WALLET_UUID } from './src/constants/storage';
+import ExternalWalletTxData from './src/api/ExternalWalletTxData';
+import TransferType from './src/enums/TransferType';
+import addMigrationInternalInfo from './src/utiles/addMigrationInternalInfo';
+import { WaitingTransaction } from './src/types/WaitingTransaction';
+import CryptoType from './src/enums/CryptoType';
 
 const RootStack = createStackNavigator();
 
@@ -58,20 +61,28 @@ const AppNavigator: React.FC = () => {
       }
       if (isWalletUser) return;
       (async () => {
-        const txUuid = await AsyncStorage.getItem(EXTERNAL_WALLET_UUID);
-        if (txUuid) {
-          const res = await axios.get(`${EXTERNAL_WALLET_TX_URL}/${txUuid}/tx`);
-          const txInfo = JSON.parse(String(res.data));
+        const uuid = await AsyncStorage.getItem(EXTERNAL_WALLET_UUID);
+        if (uuid) {
+          const res = await ExternalWalletTxData.getTxData(uuid);
+          const txInfo: WaitingTransaction = JSON.parse(String(res.data));
           if (txInfo) {
-            verifyTx({
-              amount: txInfo.amount,
-              cryptoType: txInfo.cryptoType,
-              date: txInfo.date,
-              nonce: 0,
-              transferType: txInfo.transferType,
-              hash: txInfo.txHash,
-              unit: '',
-            });
+            let internalInfo;
+            if (txInfo.transferType === TransferType.Migration) {
+              internalInfo = addMigrationInternalInfo(
+                txInfo.migrationUnstakingAmount,
+                txInfo.migrationRewardAmount,
+                txInfo.cryptoType,
+                txInfo.cryptoType === CryptoType.EL
+                  ? CryptoType.ELFI
+                  : CryptoType.DAI,
+              );
+            }
+            verifyTx(
+              {
+                ...txInfo,
+              },
+              internalInfo,
+            );
           }
         }
       })();
