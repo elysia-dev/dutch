@@ -18,6 +18,7 @@ import AppColors from '../../enums/AppColors';
 import WalletSelectionButton from './WalletSelectionButton';
 import CryptoType from '../../enums/CryptoType';
 import TransactionContext from '../../contexts/TransactionContext';
+import ExternalWalletTxData from '../../api/ExternalWalletTxData';
 
 type AssetTxData = {
   productId: number;
@@ -74,7 +75,7 @@ const PaymentSelection: React.FC<{
   }, [appState]);
 
   useEffect(() => {
-    axios.post(`${EXTERNAL_WALLET_TX_URL}`).then((res) => {
+    ExternalWalletTxData.getUuid().then((res) => {
       setUuid(res.data.uuid);
       if (page === 'asset') {
         setImtokenURL(
