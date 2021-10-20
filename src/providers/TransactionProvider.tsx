@@ -99,7 +99,7 @@ const TransactionProvider: React.FC = (props) => {
         setState({
           ...state,
           waitingTxs: [...state.waitingTxs, waitingTx],
-          isSuccessTx: false,
+          isPendingTx: true,
         });
       } catch (error) {
         console.log(error);
@@ -118,7 +118,7 @@ const TransactionProvider: React.FC = (props) => {
         setState({
           ...state,
           waitingTxs: txs,
-          isSuccessTx: true,
+          isPendingTx: false,
         });
         await AsyncStorage.setItem(PENDING_TRANSACTIONS, JSON.stringify(txs));
       } catch (error) {
