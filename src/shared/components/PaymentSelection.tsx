@@ -75,7 +75,6 @@ const PaymentSelection: React.FC<{
 
   useEffect(() => {
     axios.post(`${EXTERNAL_WALLET_TX_URL}`).then((res) => {
-      console.log(res.data.uuid);
       setUuid(res.data.uuid);
       if (page === 'asset') {
         setImtokenURL(
