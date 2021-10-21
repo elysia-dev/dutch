@@ -43,6 +43,7 @@ import getCurrentStakingRound, {
 import ToastStatus from '../../enums/ToastStatus';
 import TransferType from '../../enums/TransferType';
 import TransactionContext from '../../contexts/TransactionContext';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Stake: {
@@ -67,18 +68,18 @@ const Stake: React.FC = () => {
   const crytoBalance = getBalance(cryptoType);
   const [selectionVisible, setSelectionVisible] = useState(false);
   const { wallet } = useContext(WalletContext);
+  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
+  const { estimagedGasPrice, setEstimatedGas, gasLimit } = useStakeEstimatedGas(
+    cryptoType,
+    StakingType.Stake,
+    isElfiV2Con,
+  );
   const { t } = useTranslation();
   const [allowanceInfo, setAllowanceInfo] = useState<{ value: string }>({
     value: '0',
   });
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
   const { elContract, elfiContract } = useErcContract();
-  const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
-  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
-    cryptoType,
-    StakingType.Stake,
-    isElfiV2Con,
-  );
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2Con);
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
@@ -92,9 +93,7 @@ const Stake: React.FC = () => {
     isElfiV2Con,
     StakingType.Stake,
   );
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const address = useUserAddress();
   const stakingPoolAddress =
     cryptoType === CryptoType.EL
       ? EL_STAKING_POOL_ADDRESS
@@ -203,6 +202,8 @@ const Stake: React.FC = () => {
       // isMax ? String(crytoBalance) : value,
       value,
       selectedRound,
+      gasLimit,
+      StakingType.Stake,
     )
       .then((res) => {
         addPendingTx(TransferType.Staking, value, res, cryptoType);
@@ -329,6 +330,7 @@ const Stake: React.FC = () => {
                 getApproveGasPrice();
                 setIsApproved(isAllowanceForApprove());
                 setModalVisible(true);
+                setEstimatedGas(StakingType.Stake, selectedRound, value);
               } else {
                 setSelectionVisible(true);
               }

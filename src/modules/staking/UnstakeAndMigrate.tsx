@@ -38,6 +38,7 @@ import TransferType from '../../enums/TransferType';
 import ToastStatus from '../../enums/ToastStatus';
 import TransactionContext from '../../contexts/TransactionContext';
 import addMigrationInternalInfo from '../../utiles/addMigrationInternalInfo';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -77,16 +78,14 @@ const UnstakeAndMigrate: React.FC = () => {
     isElfiV2Con,
     StakingType.Migrate,
   );
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const address = useUserAddress();
   const round = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
       : selectedRound - 2;
   const [stakingType, setStakingType] = useState(StakingType.Migrate);
   const [isGuideModal, setIsGuideModal] = useState(false);
-  const { estimagedGasPrice, setEstimatedGas } = useStakeEstimatedGas(
+  const { estimagedGasPrice, setEstimatedGas, gasLimit } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Migrate,
     isElfiV2Con,
@@ -186,7 +185,7 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const onPressUnstaking = async () => {
-    stakeByType(value, round, StakingType.Unstake)
+    stakeByType(value, round,gasLimit, StakingType.Unstake)
       .then((res) => {
         addPendingTx(TransferType.Unstaking, value, res, cryptoType);
       })
@@ -199,13 +198,13 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const onPressMigrate = async () => {
-    if (isProgressRound()) {
-      setEstimatedGas(StakingType.Unstake, round);
-      setStakingType(StakingType.Unstake);
-      setModalVisible(false);
-      setIsFinishRound(true);
-      return;
-    }
+      if (isProgressRound()) {
+        setEstimatedGas(StakingType.Unstake, selectedRound, value);
+        setStakingType(StakingType.Unstake);
+        setModalVisible(false);
+        setIsFinishRound(true);
+        return;
+      }
     const migrateAmount = String(userPrincipal - parseFloat(value));
     const internalInfo = addMigrationInternalInfo(
       value,
@@ -213,7 +212,7 @@ const UnstakeAndMigrate: React.FC = () => {
       cryptoType,
       rewardCryptoType,
     );
-    stakeByType(migrateAmount, round)
+    stakeByType(migrateAmount, round, gasLimit, StakingType.Migrate)
       .then((res) => {
         addPendingTx(
           TransferType.Migration,
@@ -341,6 +340,7 @@ const UnstakeAndMigrate: React.FC = () => {
               if (isWalletUser) {
                 setConfirmations();
                 setModalVisible(true);
+                setEstimatedGas(StakingType.Migrate, selectedRound, value);
               } else {
                 setSelectionVisible(true);
               }

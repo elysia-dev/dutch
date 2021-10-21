@@ -9,23 +9,23 @@ import PreferenceContext from '../../../contexts/PreferenceContext';
 import PriceContext from '../../../contexts/PriceContext';
 import Skeleton from '../../../shared/components/Skeleton';
 import AssetItemSkeleton from './AssetItemSkeleton';
+import AssetContext from '../../../contexts/AssetContext';
 
 interface IAssetListing {
   title: string;
   assets: Asset[];
   itemPressHandler: (asset: Asset) => void;
-  assetLoaded: boolean;
 }
 
 const AssetListing: React.FC<IAssetListing> = ({
   title,
   assets,
   itemPressHandler,
-  assetLoaded,
 }) => {
   const { currencyFormatter } = useContext(PreferenceContext);
   const { getCryptoPrice } = useContext(PriceContext);
   const { t } = useTranslation();
+  const { assetLoaded } = useContext(AssetContext);
 
   if (assetLoaded) {
     return (

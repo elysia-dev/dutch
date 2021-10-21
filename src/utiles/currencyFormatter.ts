@@ -6,11 +6,15 @@ const currencyFormatter = (
   usdValue: number,
   fix: number,
 ) => {
-  return `${currencyUnit} ${commaFormatter(
-    parseFloat(`${usdValue * currencyRatio}`).toFixed(
-      currencyUnit === '₩' ? 0 : fix,
-    ),
-  )}`;
+  const convertedValue = parseFloat(`${usdValue * currencyRatio}`);
+
+  if (convertedValue > 0 && convertedValue < 0.1 ** fix) {
+    return `${currencyUnit} 0.${'0'.repeat(fix)}...`;
+  } else {
+    return `${currencyUnit} ${commaFormatter(
+      convertedValue.toFixed(currencyUnit === '₩' ? 0 : fix),
+    )}`;
+  }
 };
 
 export default currencyFormatter;

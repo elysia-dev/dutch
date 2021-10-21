@@ -42,6 +42,7 @@ import TxStatus from '../../enums/TxStatus';
 import { getPendingTx } from '../../utiles/pendingTransaction';
 import TransactionItemSkeleton from './components/TransactionItemSkeleton';
 import Skeleton from '../../shared/components/Skeleton';
+import useUserAddress from '../../hooks/useUserAddress';
 
 const legacyTxToCryptoTx = (tx: TransactionType): CryptoTransaction => {
   return {
@@ -88,7 +89,7 @@ const Detail: FunctionComponent = () => {
   const [filter, setFilter] = useState<number>(0);
   const { getCryptoPrice } = useContext(PriceContext);
 
-  const userAddress = wallet?.getFirstNode()?.address || user.ethAddresses[0];
+  const userAddress = useUserAddress();
   const loadDetailTx = async () => {
     try {
       if (asset.ownershipId) {
@@ -145,20 +146,20 @@ const Detail: FunctionComponent = () => {
     try {
       if (state.paymentMethod === CryptoType.BNB) {
         res = await EspressoV2.getBscErc20Transaction(
-          userAddress || '',
+          userAddress,
           asset.address || '',
           state.page + 1,
         );
       } else {
         res = await EspressoV2.getErc20Transaction(
-          userAddress || '',
+          userAddress,
           asset.address || '',
           state.page + 1,
         );
       }
 
       newTxs = res.data.tx.map((tx) => {
-        return txResponseToTx(tx, userAddress || '');
+        return txResponseToTx(tx, userAddress);
       });
     } catch {
       if (state.page !== 1) {

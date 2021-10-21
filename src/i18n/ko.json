@@ -196,7 +196,9 @@
       "disconnect": "연결 해제",
       "reply_email": "답변을 받으실 이메일",
       "disconnect_and_new": "새로운 지갑 연결하기",
-      "backupseed": "시드 문구 확인"
+      "backupseed": "시드 문구 확인",
+      "wallet_connected": "지갑이 연결되었습니다.",
+      "back_to_main": "메인 화면으로 돌아가기"
     },
     "more": {
       "contact_text": "아래 문의사항을 작성 후 제출해주세요.",
@@ -269,23 +271,6 @@
         "EL 잔고가 없습니다. 페이팔 계정 주소만 입력해주세요."
       ],
       "already_pending": "출금할 금액이 없거나, 이미 출금하셨습니다."
-    },
-    "notification": {
-      "closeOwnership": " {{name}} 종료로 소유권이 만료되었습니다.",
-      "successKyc": "KYC가 승인되었습니다.",
-      "failKyc": "KYC가 거절되었습니다.",
-      "profit": "일일 적립금 {{profit}} 적용되었습니다.",
-      "productNotice": "토큰 관련 새로운 공지사항이 있습니다.",
-      "saved_90days": "받은 알림은 90일동안 보관됩니다.",
-      "no_notification": "받은 알림이 없습니다.",
-      "read_all_notifications": "읽지 않은 알림 {{number}}개 전부 읽기",
-      "pendingTransaction": "[{{tokenName}}] 대기중인 트랜잭션이 있습니다.",
-      "increaseOwnership": "[{{tokenName}}] 보유 개수가 증가했습니다. (+ {{tokenAmount}}개)",
-      "decreaseOwnership": "[{{tokenName}}] 보유 개수가 감소했습니다. (- {{tokenAmount}}개)",
-      "withdrawInterest": "[{{tokenName}}] 적립금이 출금되었습니다. ({{tokenAmount}} {{paymentMethod}})",
-      "failTransaction": "[{{tokenName}}] 트랜잭션이 실패했습니다.",
-      "onboardingNewUser": "엘리시아에 오신 것을 환영합니다!",
-      "onboardingConnectWallet": "더 보기 탭에서 이더리움 지갑 주소를 연결해주세요."
     },
     "notification_label": {
       "notification": "알림",
@@ -427,7 +412,8 @@
       "approve_guide_first": "부동산 토큰을 구매하기 위해서는 연결된 지갑에\n해당 앱이 접근 할 수 있도록 권한을 승인해야 합니다.",
       "approve_guide_second": "최초 구매 시에만 승인이 필요하며, 승인이 성공적으로\n완료될 경우, 이후의 거래에는 권한 승인이 없이 부동산\n토큰을 구매하실 수 있습니다.",
       "approve_guide_gasprice": "접근 권한 승인 또한 이더리움 네트워크를 이용한 트랜잭션이기 때문에 가스비가 발생합니다. 예상 가스비는 {{gasPrice}} ETH 입니다.",
-      "approve_pending_transaction": "트랜잭션 처리중"
+      "approve_pending_transaction": "트랜잭션 처리중",
+      "failed_to_load": "구매 내역을 불러오는 과정에서 오류가 발생했습니다."
     },
     "staking": {
       "staking": "스테이킹",
@@ -504,7 +490,8 @@
       "transmission_method": "전송 방법",
       "full_amount": "전액",
       "duration_day": "{{duration}}일",
-      "no_history": "스테이킹 내역이 없습니다."
+      "no_history": "스테이킹 내역이 없습니다.",
+      "failed_to_load": "스테이킹 내역을 불러오는 과정에서 오류가 발생했습니다."
     },
     "legacy": {
       "refund_notice": "기존 상품의 경우 환불은 3영업일 이내에 완료되며, 담당 팀이 이메일로 연락을 드립니다."

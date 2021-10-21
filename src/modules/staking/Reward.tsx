@@ -54,7 +54,7 @@ const Reward: React.FC = () => {
     cryptoType === CryptoType.EL || selectedRound <= 2
       ? selectedRound
       : selectedRound - 2;
-  const { estimagedGasPrice } = useStakeEstimatedGas(
+  const { estimagedGasPrice, gasLimit } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Reward,
     isElfiV2Con,

@@ -5,6 +5,7 @@ import PriceContext from '../contexts/PriceContext';
 import UserContext from '../contexts/UserContext';
 import WalletContext from '../contexts/WalletContext';
 import CryptoType from '../enums/CryptoType';
+import useUserAddress from './useUserAddress';
 
 type info = {
   estimagedGasPrice: string;
@@ -19,9 +20,7 @@ const usePurchaseGas = (
   const { gasPrice, bscGasPrice } = useContext(PriceContext);
   const { isWalletUser, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
-  const address = isWalletUser
-    ? wallet?.getFirstAddress()
-    : user.ethAddresses[0];
+  const address = useUserAddress();
 
   const setEstimatedGas = async () => {
     setEstimatedGasPrice((await estimateGasByType()) || '');

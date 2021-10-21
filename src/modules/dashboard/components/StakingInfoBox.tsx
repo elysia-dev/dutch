@@ -10,6 +10,7 @@ import CryptoType from '../../../enums/CryptoType';
 import PriceContext from '../../../contexts/PriceContext';
 import commaFormatter from '../../../utiles/commaFormatter';
 import decimalFormatter from '../../../utiles/decimalFormatter';
+import PreferenceContext from '../../../contexts/PreferenceContext';
 
 const StakingInfoBox: React.FC<{
   cryptoType: CryptoType;
@@ -19,6 +20,7 @@ const StakingInfoBox: React.FC<{
 }> = ({ cryptoType, round, stakingAmount, rewardAmount }) => {
   const navigation = useNavigation();
   const { getCryptoPrice } = useContext(PriceContext);
+  const { currencyFormatter } = useContext(PreferenceContext);
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
@@ -65,12 +67,9 @@ const StakingInfoBox: React.FC<{
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            {`(= $ ${commaFormatter(
-              decimalFormatter(
-                Number(utils.formatEther(stakingAmount)) *
-                  getCryptoPrice(cryptoType),
-                2,
-              ),
+            {`(= ${currencyFormatter(
+              Number(utils.formatEther(stakingAmount)) *
+                getCryptoPrice(cryptoType),
             )})`}
           </Text>
         </View>
@@ -106,12 +105,9 @@ const StakingInfoBox: React.FC<{
               color: AppColors.SUB_BLACK,
               fontFamily: AppFonts.Regular,
             }}>
-            {`(= $ ${commaFormatter(
-              decimalFormatter(
-                Number(utils.formatEther(rewardAmount)) *
-                  getCryptoPrice(cryptoType),
-                2,
-              ),
+            {`(= ${currencyFormatter(
+              Number(utils.formatEther(rewardAmount)) *
+                getCryptoPrice(rewardCryptoType),
             )})`}
           </Text>
         </View>

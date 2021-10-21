@@ -60,7 +60,7 @@ const Unstake: React.FC = () => {
       ? selectedRound
       : selectedRound - 2;
   const isElfiV2Con = isElfiV2(cryptoType, selectedRound);
-  const { estimagedGasPrice } = useStakeEstimatedGas(
+  const { estimagedGasPrice, gasLimit, setEstimatedGas } = useStakeEstimatedGas(
     cryptoType,
     StakingType.Unstake,
     isElfiV2Con,
@@ -114,6 +114,8 @@ const Unstake: React.FC = () => {
       // isMax ? String(userPrincipal) : value,
       value,
       round,
+      gasLimit,
+      StakingType.Unstake,
     )
       .then((res) => {
         addPendingTx(TransferType.Unstaking, value, res, cryptoType);
@@ -200,6 +202,7 @@ const Unstake: React.FC = () => {
               handler={() => {
                 if (isWalletUser) {
                   setModalVisible(true);
+                  setEstimatedGas(StakingType.Unstake, selectedRound, value);
                 } else {
                   setSelectionVisible(true);
                 }

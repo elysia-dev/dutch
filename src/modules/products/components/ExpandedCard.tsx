@@ -22,7 +22,7 @@ import { Story } from '../../../types/product';
 import { P1Text, H2Text } from '../../../shared/components/Texts';
 import { Page, ProductPage } from '../../../enums/pageEnum';
 import AppFonts from '../../../enums/AppFonts';
-import useSafeAsync from '../../../utiles/useSafeAsync';
+import useSafeAsync from '../../../hooks/useSafeAsync';
 import AppColors from '../../../enums/AppColors';
 
 interface Props {

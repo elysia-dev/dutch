@@ -1,5 +1,6 @@
 import { utils } from '@elysia-dev/contract-typechain/node_modules/ethers';
 import { TransactionResponse } from '@ethersproject/providers';
+import { useNavigation } from '@react-navigation/native';
 import { BigNumberish } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import TransactionContext from '../contexts/TransactionContext';
@@ -17,9 +18,9 @@ const useStakingByType = (
 ) => {
   const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
   const { waitingTxs } = useContext(TransactionContext);
-  const [gasPrice, setGasPrice] = useState<BigNumberish | undefined>();
+  const [gasPrice, setGasPrice] = useState<BigNumberish>();
 
-  const getCurrentGasPrice = async () => {
+  const loadCurrentGasPrice = async () => {
     setGasPrice(
       utils.parseUnits(
         utils.formatUnits(await provider.getGasPrice(), 9),
@@ -38,14 +39,14 @@ const useStakingByType = (
   };
 
   const txLastNonce = (lastNonce?: number) => {
-    return {
-      nonce: lastNonce ? lastNonce + 1 : undefined,
-    };
+    return lastNonce ? lastNonce + 1 : undefined,
   };
 
   const stakeByType = async (
     value: string,
     round: number,
+    gasLimit: string,
+    type: StakingType,
     unstake?: string,
   ) => {
     setIsLoading(true);
@@ -57,27 +58,40 @@ const useStakingByType = (
     try {
       switch (unstake || type) {
         case StakingType.Stake:
-          res = await stakingPoolContract.stake(
-            utils.parseUnits(value),
-            txLastNonce(lastNonce),
+          setResTx(
+            await stakingPoolContract.stake(utils.parseUnits(value), {
+              nonce: lastNonce,
+              gasPrice,
+              gasLimit,
+            }),
           );
           break;
         case StakingType.Unstake:
-          res = await stakingPoolContract.withdraw(
-            utils.parseUnits(value),
-            round,
-            txLastNonce(lastNonce),
+          setResTx(
+            await stakingPoolContract.withdraw(utils.parseUnits(value), round, {
+              nonce: lastNonce,
+              gasPrice,
+              gasLimit,
+            }),
           );
           break;
         case StakingType.Migrate:
-          res = await stakingPoolContract.migrate(
-            utils.parseUnits(value),
-            round,
-            txLastNonce(lastNonce),
+          setResTx(
+            await stakingPoolContract.migrate(utils.parseUnits(value), round, {
+              nonce: lastNonce,
+              gasPrice,
+              gasLimit,
+            }),
           );
           break;
         default:
-          res = await stakingPoolContract.claim(round, txLastNonce(lastNonce));
+          setResTx(
+            await stakingPoolContract.claim(round, {
+              nonce: lastNonce,
+              gasPrice,
+              gasLimit,
+            }),
+          );
           break;
       }
       return res;
@@ -88,7 +102,7 @@ const useStakingByType = (
   };
 
   useEffect(() => {
-    getCurrentGasPrice();
+    loadCurrentGasPrice();
   }, []);
 
   return { stakeByType };

@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
+import { API_URL } from 'react-native-dotenv';
 import CryptoTxsResponse from '../types/CryptoTxsResponse';
-import Notification from '../types/Notification';
 import Product from '../types/Product';
 import WalletBalanceResponse from '../types/WalletBalanceResponse';
-import { API_URL } from 'react-native-dotenv';
 
 const baseURL = API_URL;
 
@@ -102,24 +101,5 @@ export default class EspressoV2 {
       contractAddress,
       txHash,
     });
-  };
-
-  static getNoficiations = async (
-    address: string,
-  ): Promise<AxiosResponse<Notification[]>> => {
-    return axios.get(`${baseURL}/v2/notifications/${address}`);
-  };
-
-  static readNotification = async (
-    address: string,
-    id: number,
-  ): Promise<AxiosResponse<void>> => {
-    return axios.put(`${baseURL}/v2/notifications/${id}/${address}`);
-  };
-
-  static readAllNotifications = async (
-    address: string,
-  ): Promise<AxiosResponse<void>> => {
-    return axios.patch(`${baseURL}/v2/notifications/readAll/${address}`);
   };
 }

@@ -196,7 +196,9 @@
       "disconnect": "解除绑定",
       "reply_email": "请输入邮箱地址。",
       "disconnect_and_new": "绑定新的钱包地址。",
-      "backupseed": "种子词组"
+      "backupseed": "种子词组",
+      "wallet_connected": "已经绑定钱包。",
+      "back_to_main": "回到主页面"
     },
     "more": {
       "contact_text": "请填写咨询事项并提交。",
@@ -266,23 +268,6 @@
         "没有EL币余额， 请仅输入您的贝宝帐户。"
       ],
       "already_pending": "没有要取出的款项，或者您已经取款成功。"
-    },
-    "notification": {
-      "closeOwnership": "{{name}} 项目的所有权已到期  ",
-      "successKyc": "KYC认证成功。",
-      "failKyc": "KYC认证失败。",
-      "profit": "每日获得{{profit}}收益",
-      "productNotice": "有和代币相关的公告。",
-      "saved_90days": "收到的通知将会被保存90天。",
-      "no_notification": "没有任何通知。",
-      "read_all_notifications": "未读通知 {{number}}条 阅读全部",
-      "pendingTransaction": "[{{tokenName}}] 交易正在进行中",
-      "increaseOwnership": "[{{tokenName}}] 持有财产增加。（+{{tokenAmount}}个",
-      "decreaseOwnership": "[{{tokenName}}] 持有财产减少。(- {{tokenAmount}}个)",
-      "withdrawInterest": "[{{tokenName}}] 提取存储金成功。({{tokenAmount}} {{paymentMethod}})",
-      "failTransaction": "[{{tokenName}}] 交易失败。",
-      "onboardingNewUser": "感谢您使用爱立厦(ELYSIA)平台。",
-      "onboardingConnectWallet": "请点击“更多”后，绑定以太坊钱包地址。"
     },
     "notification_label": {
       "notification": "通知",
@@ -423,7 +408,8 @@
       "approve_guide_first": "在购买房地产代币前，您必须授予平台访问钱包的权限。",
       "approve_guide_second": "仅在首次交易时需要授权，授权成功后，之后可直接购买房地产代币。",
       "approve_guide_gasprice": "授予访问权限的操作会产生GAS费用(手续费)，因为它也是使用以太坊网络的交易。 GAS费用(手续费)预计为{{gasPrice}}ETH。",
-      "approve_pending_transaction": "交易进行中"
+      "approve_pending_transaction": "交易进行中",
+      "failed_to_load": "加载您的投资历史记录时出错。"
     },
     "staking": {
       "staking": "Staking(权益质押)",
@@ -499,7 +485,8 @@
       "transmission_method": "传送方法",
       "full_amount": "全额",
       "duration_day": "{{duration}}天",
-      "no_history": "没有Staking历史。"
+      "no_history": "没有Staking历史。",
+      "failed_to_load": "加载您的Staking历史记录时发生错误。"
     },
     "legacy": {
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"

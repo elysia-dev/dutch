@@ -26,6 +26,7 @@ import TransferType from '../../enums/TransferType';
 import useProductByType from '../../hooks/useProductByType';
 import TransactionContext from '../../contexts/TransactionContext';
 import ToastStatus from '../../enums/ToastStatus';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Refund: {
@@ -105,9 +106,7 @@ const Refund: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
+    const address = useUserAddress();
 
     if (address) {
       estimateGas(address);

@@ -32,6 +32,7 @@ import TransferType from '../../enums/TransferType';
 import useProductByType from '../../hooks/useProductByType';
 import TransactionContext from '../../contexts/TransactionContext';
 import ToastStatus from '../../enums/ToastStatus';
+import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
   Reward: {
@@ -75,6 +76,7 @@ const Reward: FunctionComponent = () => {
     toCrypto === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
   const insets = useSafeAreaInsets();
+  const address = useUserAddress();
 
   const estimateGas = async (address: string) => {
     let estimateGas: BigNumber | undefined;
@@ -102,20 +104,12 @@ const Reward: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstAddress()
-      : user.ethAddresses[0];
-
     if (address) {
       estimateGas(address);
     }
   }, []);
 
   useEffect(() => {
-    const address = isWalletUser
-      ? wallet?.getFirstNode()?.address
-      : user.ethAddresses[0];
-
     contract?.getReward(address).then((res: BigNumber) => {
       setInterest(parseFloat(utils.formatEther(res)));
     });

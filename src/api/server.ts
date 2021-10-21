@@ -100,18 +100,6 @@ export default class Server {
     });
   };
 
-  notification = async (): Promise<AxiosResponse<Notification[]>> => {
-    return this.authenticatedEspressoClient.get(`/notifications`);
-  };
-
-  read = async (id: number): Promise<AxiosResponse<void>> => {
-    return this.authenticatedEspressoClient.put(`/notifications/${id}`);
-  };
-
-  readAll = async (): Promise<AxiosResponse> => {
-    return this.authenticatedEspressoClient.patch('notifications/readAll');
-  };
-
   ownershipDetail = async (
     id: number,
   ): Promise<AxiosResponse<OwnershipResponse>> => {

@@ -6,7 +6,7 @@ import { H3Text } from '../../../shared/components/Texts';
 import Skeleton from '../../../shared/components/Skeleton';
 import StakingInfoBoxSkeleton from './StakingInfoBoxSkeleton';
 
-const StakingListingSkeleton: React.FC = () => {
+const RealEstateListingSkeleton: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -27,7 +27,7 @@ const StakingListingSkeleton: React.FC = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <H3Text label={t('main.my_staking')} />
+        <H3Text label={t('main.my_assets')} />
         <Skeleton width={90} height={20} radius={5} />
       </View>
       <View
@@ -45,9 +45,8 @@ const StakingListingSkeleton: React.FC = () => {
       </View>
       <View style={{ marginTop: 8 }} />
       <StakingInfoBoxSkeleton />
-      <StakingInfoBoxSkeleton />
     </View>
   );
 };
 
-export default StakingListingSkeleton;
+export default RealEstateListingSkeleton;
