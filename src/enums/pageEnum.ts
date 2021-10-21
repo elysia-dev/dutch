@@ -59,6 +59,7 @@ export enum DashboardPage {
   EventList = 'EventList',
   CryptoDetail = 'CryptoDetail',
   AssetTokenDetail = 'AssetTokenDetail',
+  WaitingTxList = 'WaitingTxList',
 }
 
 export enum WalletPage {

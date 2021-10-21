@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import {
   EL_STAKING_POOL_ADDRESS,
@@ -24,7 +24,6 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import isNumericStringAppendable from '../../utiles/isNumericStringAppendable';
 import newInputValueFormatter from '../../utiles/newInputValueFormatter';
 import commaFormatter from '../../utiles/commaFormatter';
-import useTxHandler from '../../hooks/useTxHandler';
 import { STAKING_POOL_ROUNDS } from '../../constants/staking';
 import FinishedRoundModal from './components/FinishedRoundModal';
 import useStakingInfo from '../../hooks/useStakingInfo';
@@ -35,6 +34,10 @@ import useStakingByType from '../../hooks/useStakingByType';
 import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
 import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
 import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
+import TransferType from '../../enums/TransferType';
+import ToastStatus from '../../enums/ToastStatus';
+import TransactionContext from '../../contexts/TransactionContext';
+import addMigrationInternalInfo from '../../utiles/addMigrationInternalInfo';
 import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
@@ -56,8 +59,9 @@ const UnstakeAndMigrate: React.FC = () => {
   const [selectionVisible, setSelectionVisible] = useState(false);
   const insets = useSafeAreaInsets();
   const { getCryptoPrice } = useContext(PriceContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
-  const { afterTxFailed } = useTxHandler();
+  const navigation = useNavigation();
   const rewardCryptoType =
     cryptoType === CryptoType.EL ? CryptoType.ELFI : CryptoType.DAI;
   const { t } = useTranslation();
@@ -72,6 +76,7 @@ const UnstakeAndMigrate: React.FC = () => {
     cryptoType,
     setIsLoading,
     isElfiV2Con,
+    StakingType.Migrate,
   );
   const address = useUserAddress();
   const round = // 변경된 컨트랙트 현재라운드에서 2를 빼줘야함 (변수이름 변경해주고 리팩토링)
@@ -156,7 +161,7 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const isProgressRound = () => {
-    if (currentRound !== 6) {
+    if (currentRound !== 4) {
       return moment().isBetween(
         STAKING_POOL_ROUNDS[currentRound - 1].endedAt,
         STAKING_POOL_ROUNDS[currentRound].startedAt,
@@ -180,16 +185,19 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const onPressUnstaking = async () => {
-    try {
-      stakeByType(value, round, gasLimit, StakingType.Unstake);
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
-    }
+    stakeByType(value, round,gasLimit, StakingType.Unstake)
+      .then((res) => {
+        addPendingTx(TransferType.Unstaking, value, res, cryptoType);
+      })
+      .catch((error) => {
+        setToastList(TransferType.Unstaking, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   const onPressMigrate = async () => {
-    try {
       if (isProgressRound()) {
         setEstimatedGas(StakingType.Unstake, selectedRound, value);
         setStakingType(StakingType.Unstake);
@@ -197,12 +205,30 @@ const UnstakeAndMigrate: React.FC = () => {
         setIsFinishRound(true);
         return;
       }
-      const migrateAmount = String(userPrincipal - parseFloat(value));
-      stakeByType(migrateAmount, round, gasLimit, StakingType.Migrate);
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
-    }
+    const migrateAmount = String(userPrincipal - parseFloat(value));
+    const internalInfo = addMigrationInternalInfo(
+      value,
+      reward.toString(),
+      cryptoType,
+      rewardCryptoType,
+    );
+    stakeByType(migrateAmount, round, gasLimit, StakingType.Migrate)
+      .then((res) => {
+        addPendingTx(
+          TransferType.Migration,
+          migrateAmount,
+          res,
+          cryptoType,
+          '',
+          internalInfo,
+        );
+      })
+      .catch((error) => {
+        setToastList(TransferType.Migration, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   useEffect(() => {

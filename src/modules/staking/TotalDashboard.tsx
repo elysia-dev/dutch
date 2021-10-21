@@ -46,7 +46,7 @@ const TotalDashboard: React.FC = () => {
   const [userPrincipal, setUserPrincipal] = useState('-');
   const [currentRoundReward, setCurrentRoundReward] = useState('-');
   const { isWalletUser, user } = useContext(UserContext);
-  const { isSuccessTx } = useContext(TransactionContext);
+  const { isPendingTx } = useContext(TransactionContext);
   const { wallet } = useContext(WalletContext);
   const address = useUserAddress();
   const { t } = useTranslation();
@@ -117,10 +117,10 @@ const TotalDashboard: React.FC = () => {
   }, [currentRound]);
 
   useEffect(() => {
-    if (isSuccessTx) {
+    if (!isPendingTx) {
       getUserData();
     }
-  }, [isSuccessTx]);
+  }, [isPendingTx]);
 
   useEffect(() => {
     if (isCurrentRound && selectedRound === currentRound) {

@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import FlashMessage from 'react-native-flash-message';
+import { AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { More } from './src/modules/more/More';
 import Products from './src/modules/products';
 import { Account } from './src/modules/account/Account';
@@ -20,12 +21,73 @@ import WalletRecover from './src/modules/account/WalletRecover';
 import Asset from './src/modules/asset';
 import Crypto from './src/modules/crypto';
 import Staking from './src/modules/staking';
+import TransactionContext from './src/contexts/TransactionContext';
+import { EXTERNAL_WALLET_UUID } from './src/constants/storage';
+import ExternalWalletTxData from './src/api/ExternalWalletTxData';
+import TransferType from './src/enums/TransferType';
+import addMigrationInternalInfo from './src/utiles/addMigrationInternalInfo';
+import { WaitingTransaction } from './src/types/WaitingTransaction';
+import CryptoType from './src/enums/CryptoType';
 
 const RootStack = createStackNavigator();
 
 const AppNavigator: React.FC = () => {
   const { signedIn, isWalletUser } = useContext(UserContext);
   const { isUnlocked } = useContext(WalletContext);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const { verifyTx, waitingTxs, findSucceedTx } =
+    useContext(TransactionContext);
+
+  useEffect(() => {
+    AppState.addEventListener('change', (state) => {
+      appState.current = state;
+      setAppStateVisible(appState.current);
+    });
+
+    return () =>
+      AppState.removeEventListener('change', (state) => {
+        appState.current = state;
+        setAppStateVisible(appState.current);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (appStateVisible === 'active') {
+      if (waitingTxs.length) {
+        waitingTxs.map(async (tx) => {
+          findSucceedTx(tx);
+        });
+      }
+      if (isWalletUser) return;
+      (async () => {
+        const uuid = await AsyncStorage.getItem(EXTERNAL_WALLET_UUID);
+        if (uuid) {
+          const res = await ExternalWalletTxData.getTxData(uuid);
+          const txInfo: WaitingTransaction = JSON.parse(String(res.data));
+          if (txInfo) {
+            let internalInfo;
+            if (txInfo.transferType === TransferType.Migration) {
+              internalInfo = addMigrationInternalInfo(
+                txInfo.migrationUnstakingAmount,
+                txInfo.migrationRewardAmount,
+                txInfo.cryptoType,
+                txInfo.cryptoType === CryptoType.EL
+                  ? CryptoType.ELFI
+                  : CryptoType.DAI,
+              );
+            }
+            verifyTx(
+              {
+                ...txInfo,
+              },
+              internalInfo,
+            );
+          }
+        }
+      })();
+    }
+  }, [appStateVisible]);
 
   return (
     <NavigationContainer>
@@ -69,7 +131,6 @@ const AppNavigator: React.FC = () => {
           options={{ animationEnabled: false }}
         />
       </RootStack.Navigator>
-      <FlashMessage position="top" />
     </NavigationContainer>
   );
 };

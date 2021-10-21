@@ -285,7 +285,11 @@
     "transaction": {
       "pending": "交易正在进行中。",
       "fail": "交易失败。",
-      "created": "交易成功"
+      "created": "交易成功",
+      "create_transaction": "正在交易中",
+      "success_transaction": "{{transferType}}完成。",
+      "purchase_transaction": "{{transferType}}完成",
+      "fail_transaction": "{{transferType}}失败"
     },
     "main": {
       "total_assets": "总资产",
@@ -306,7 +310,9 @@
       "my_staking": "我的Staking和奖励",
       "staking_by_crypto": "{{stakingCrypto}}代币Staking和{{rewardCrypto}}代币奖励",
       "staking_amount": "第$t(numeral_character.{{round}})轮Staking",
-      "reward_amount": "第$t(numeral_character.{{round}})轮奖励"
+      "reward_amount": "第$t(numeral_character.{{round}})轮奖励",
+      "pending_transaction": "正在进行中的交易",
+      "pending_transaction_count": "现在共有{{count}}个交易正在进行中"
     },
     "recovery_key": {
       "keep": "存档密匙词组",
@@ -486,6 +492,14 @@
       "refund_notice": "在网站购买的房地产代币提现将在3个工作日内处理完成，您的客户经理将通过邮件与您取得联系。"
     },
     "numeral_character": ["", "一", "二", "三", "四", "五", "六"],
-    "datetime_format": "YYYY.MM.DD HH:mm:ss"
+    "datetime_format": "YYYY.MM.DD HH:mm:ss",
+    "withdrawal": "资产出金",
+    "purchase": "购买房地产代币",
+    "refund": "房地产代币退款",
+    "productReward": "利息出金",
+    "stake": "Staking(权益质押)",
+    "unstake": "Unstaking(解除权益质押)",
+    "migrate": "Migration(转移)",
+    "stakingReward": "获得奖励"
   }
 }

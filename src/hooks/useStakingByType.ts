@@ -5,23 +5,20 @@ import { BigNumberish } from 'ethers';
 import { useContext, useEffect, useState } from 'react';
 import TransactionContext from '../contexts/TransactionContext';
 import CryptoType from '../enums/CryptoType';
-import NetworkType from '../enums/NetworkType';
 import StakingType from '../enums/StakingType';
+import TransferType from '../enums/TransferType';
 import { provider } from '../utiles/getContract';
 import useStakingPool from './useStakingPool';
-import useTxHandler from './useTxHandler';
 
 const useStakingByType = (
-  crytoType: CryptoType,
+  cryptoType: CryptoType,
   setIsLoading: (isBoolean: boolean) => void,
   isElfiV2: boolean,
+  type: StakingType,
 ) => {
-  const { setIsSuccessTx } = useContext(TransactionContext);
-  const [resTx, setResTx] = useState<TransactionResponse>();
+  const stakingPoolContract = useStakingPool(cryptoType, isElfiV2);
+  const { waitingTxs } = useContext(TransactionContext);
   const [gasPrice, setGasPrice] = useState<BigNumberish>();
-  const { afterTxHashCreated, afterTxCreated, afterTxFailed } = useTxHandler();
-  const stakingPoolContract = useStakingPool(crytoType, isElfiV2);
-  const navigation = useNavigation();
 
   const loadCurrentGasPrice = async () => {
     setGasPrice(
@@ -32,19 +29,17 @@ const useStakingByType = (
     );
   };
 
-  const notifyFail = () => {
-    navigation.goBack();
-    afterTxFailed('Transaction failed');
+  const getLastNonce = () => {
+    const txs = waitingTxs.filter((tx) => {
+      return tx.cryptoType !== CryptoType.BNB;
+    });
+    return txs.length !== 0
+      ? waitingTxs[waitingTxs.length - 1].nonce
+      : undefined;
   };
 
-  const waitTx = async () => {
-    try {
-      await resTx?.wait();
-      setIsSuccessTx(true);
-      afterTxCreated(resTx?.hash || '', NetworkType.ETH);
-    } catch (error) {
-      throw Error;
-    }
+  const txLastNonce = (lastNonce?: number) => {
+    return lastNonce ? lastNonce + 1 : undefined,
   };
 
   const stakeByType = async (
@@ -52,14 +47,20 @@ const useStakingByType = (
     round: number,
     gasLimit: string,
     type: StakingType,
+    unstake?: string,
   ) => {
     setIsLoading(true);
-    setIsSuccessTx(false);
+    let res: TransactionResponse | undefined;
+    let lastNonce: number | undefined;
+    if (waitingTxs) {
+      lastNonce = getLastNonce();
+    }
     try {
-      switch (type) {
+      switch (unstake || type) {
         case StakingType.Stake:
           setResTx(
             await stakingPoolContract.stake(utils.parseUnits(value), {
+              nonce: lastNonce,
               gasPrice,
               gasLimit,
             }),
@@ -68,6 +69,7 @@ const useStakingByType = (
         case StakingType.Unstake:
           setResTx(
             await stakingPoolContract.withdraw(utils.parseUnits(value), round, {
+              nonce: lastNonce,
               gasPrice,
               gasLimit,
             }),
@@ -76,6 +78,7 @@ const useStakingByType = (
         case StakingType.Migrate:
           setResTx(
             await stakingPoolContract.migrate(utils.parseUnits(value), round, {
+              nonce: lastNonce,
               gasPrice,
               gasLimit,
             }),
@@ -84,39 +87,23 @@ const useStakingByType = (
         default:
           setResTx(
             await stakingPoolContract.claim(round, {
+              nonce: lastNonce,
               gasPrice,
               gasLimit,
             }),
           );
           break;
       }
+      return res;
     } catch (error) {
       console.log(error);
       throw Error;
     }
   };
 
-  const noticeTxStatus = () => {
-    afterTxHashCreated(
-      resTx?.from || '',
-      resTx?.to || '',
-      resTx?.hash || '',
-      NetworkType.ETH,
-    );
-  };
-
   useEffect(() => {
     loadCurrentGasPrice();
   }, []);
-
-  useEffect(() => {
-    if (resTx) {
-      setIsLoading(false);
-      navigation.goBack();
-      noticeTxStatus();
-      waitTx();
-    }
-  }, [resTx]);
 
   return { stakeByType };
 };

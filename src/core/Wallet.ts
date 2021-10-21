@@ -5,9 +5,9 @@ import {
   mnemonicToSeed,
   defaultPath,
 } from 'ethers/lib/utils';
-import { bscProvider, provider } from '../utiles/getContract';
 import * as Random from 'expo-random';
 import * as ethers from 'ethers';
+import { bscProvider, provider } from '../utiles/getContract';
 import CryptoType from '../enums/CryptoType';
 
 interface SerializedWallet {

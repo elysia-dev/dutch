@@ -4,6 +4,7 @@ import { DashboardPage } from '../../enums/pageEnum';
 import { Main } from './Main';
 import InvestmentGuide from './InvestmentGuide';
 import RemainingBalance from './RemainingBalance';
+import WaitingTxList from './WaitingTxList';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,10 @@ export const Dashboard = () => {
       <Stack.Screen
         name={DashboardPage.RemainingBalance}
         component={RemainingBalance}
+      />
+      <Stack.Screen
+        name={DashboardPage.WaitingTxList}
+        component={WaitingTxList}
       />
     </Stack.Navigator>
   );

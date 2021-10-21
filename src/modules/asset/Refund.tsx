@@ -21,6 +21,11 @@ import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
+import useErcContract from '../../hooks/useErcContract';
+import TransferType from '../../enums/TransferType';
+import useProductByType from '../../hooks/useProductByType';
+import TransactionContext from '../../contexts/TransactionContext';
+import ToastStatus from '../../enums/ToastStatus';
 import useUserAddress from '../../hooks/useUserAddress';
 
 type ParamList = {
@@ -51,17 +56,19 @@ const Refund: FunctionComponent = () => {
     route.params;
   const navigation = useNavigation();
   const { wallet } = useContext(WalletContext);
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(
-    assetInCrypto.type,
-    contractAddress,
-  );
   const txResult = useWatingTx(
     state.txHash,
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
+  );
+  const { contract, createTransaction } = useProductByType(
+    assetInCrypto.type,
+    contractAddress,
+    TransferType.Refund,
   );
   const [isLoading, setIsLoading] = useState(false);
   const cryptoPrice = getCryptoPrice(assetInCrypto.type);
@@ -107,41 +114,23 @@ const Refund: FunctionComponent = () => {
   }, []);
 
   const createTx = async () => {
-    let txRes: ethers.providers.TransactionResponse | undefined;
     setIsLoading(true);
-    try {
-      const populatedTransaction = await contract?.populateTransaction.refund(
-        utils.parseEther(isMax ? balanceInToken.toFixed(18) : values.inToken),
-      );
-
-      if (!populatedTransaction) return;
-
-      txRes = await wallet?.getFirstSigner(assetInCrypto.type).sendTransaction({
-        to: populatedTransaction.to,
-        data: populatedTransaction.data,
-      });
-
-      if (assetInCrypto.type === CryptoType.BNB) {
-        setState({
-          ...state,
-          txHash: txRes?.hash || '',
-        });
-      }
-    } catch (e) {
-      afterTxFailed(e);
-      navigation.goBack();
-    } finally {
-      setIsLoading(false);
-      if (assetInCrypto.type !== CryptoType.BNB && txRes) {
-        afterTxHashCreated(
-          wallet?.getFirstAddress() || '',
-          contractAddress,
-          txRes.hash || '',
-          NetworkType.ETH,
+    createTransaction(values.inFiat, values.inToken)
+      .then((res) => {
+        addPendingTx(
+          TransferType.Refund,
+          values.inToken,
+          res,
+          assetInCrypto.type,
+          assetInToken.unit,
         );
+      })
+      .catch((error) => {
+        setToastList(TransferType.Refund, ToastStatus.Fail);
+      })
+      .finally(() => {
         navigation.goBack();
-      }
-    }
+      });
   };
 
   useEffect(() => {

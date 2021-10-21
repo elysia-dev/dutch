@@ -9,10 +9,10 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { constants, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import CryptoType from '../../enums/CryptoType';
+import useProductByType from '../../hooks/useProductByType';
 import WalletContext from '../../contexts/WalletContext';
 import TxStep from '../../enums/TxStep';
 import { useWatingTx } from '../../hooks/useWatingTx';
-import TxStatus from '../../enums/TxStatus';
 import TxInput from './components/TxInput';
 import useTxHandler from '../../hooks/useTxHandler';
 import UserContext from '../../contexts/UserContext';
@@ -20,17 +20,14 @@ import PaymentSelection from '../../shared/components/PaymentSelection';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
-import {
-  getAssetTokenFromCryptoType,
-  getElysiaContract,
-} from '../../utiles/getContract';
 import PurposeType from '../../enums/PurposeType';
 import AssetContext from '../../contexts/AssetContext';
-import createTransferTx from '../../utiles/createTransferTx';
 import TransferType from '../../enums/TransferType';
 import useErcContract from '../../hooks/useErcContract';
 import useCountingEstimatedGas from '../../hooks/useCountingEstimatedGas';
 import usePurchaseGas from '../../hooks/usePurchaseGas';
+import ToastStatus from '../../enums/ToastStatus';
+import TransactionContext from '../../contexts/TransactionContext';
 
 type ParamList = {
   Purchase: {
@@ -66,6 +63,7 @@ const Purchase: FunctionComponent = () => {
 
   const [current, setCurrent] = useState<'token' | 'fiat'>('token');
   const navigation = useNavigation();
+  const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { wallet } = useContext(WalletContext);
   const txResult = useWatingTx(
@@ -76,19 +74,15 @@ const Purchase: FunctionComponent = () => {
   const { gasPrice, getCryptoPrice } = useContext(PriceContext);
   const { afterTxFailed, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
-  const contract = getAssetTokenFromCryptoType(
+  const { contract, createTransaction } = useProductByType(
     assetInCrypto.type,
     contractAddress,
+    TransferType.Purchase,
   );
   const { getBalance } = useContext(AssetContext);
   const { estimagedGasPrice, setEstimatedGas } = usePurchaseGas(
     contract,
     assetInCrypto.type,
-  );
-  const { transferValue } = createTransferTx(
-    assetInCrypto.type,
-    TransferType.Purchase,
-    contract,
   );
   const remainingSupplyInCrypto =
     ((remainingSupplyInToken || 0) * 5) / getCryptoPrice(assetInCrypto.type);
@@ -120,23 +114,26 @@ const Purchase: FunctionComponent = () => {
     }
   };
 
-  const createTx = async () => {
-    try {
-      setIsLoading(true);
-      if (isMax) {
-        await transferValue(
-          maxValueInFiat.toFixed(18),
-          maxValueInToken.toFixed(18),
+  const createTx = () => {
+    setIsLoading(true);
+    const inFiat = isMax ? maxValueInFiat.toFixed(18) : values.inFiat;
+    const inToken = isMax ? maxValueInToken.toFixed(18) : values.inToken;
+    createTransaction(inFiat, inToken)
+      .then((res) => {
+        addPendingTx(
+          TransferType.Purchase,
+          inToken,
+          res,
+          assetInCrypto.type,
+          assetInToken.unit,
         );
-      } else {
-        await transferValue(values.inFiat, values.inToken);
-      }
-    } catch (error) {
-      afterTxFailed('Transaction failed');
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+      })
+      .catch((error) => {
+        setToastList(TransferType.Purchase, ToastStatus.Fail);
+      })
+      .finally(() => {
+        navigation.goBack();
+      });
   };
 
   const approve = async () => {

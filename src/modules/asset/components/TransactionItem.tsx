@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { BigNumber, Contract, ethers, utils } from 'ethers';
 import AppColors from '../../../enums/AppColors';
 import { P1Text, P3Text } from '../../../shared/components/Texts';
 import CryptoTransaction from '../../../types/CryptoTransaction';
@@ -22,12 +23,10 @@ import {
   getElysiaContract,
 } from '../../../utiles/getContract';
 import CryptoType from '../../../enums/CryptoType';
-import { BigNumber, Contract, ethers, utils } from 'ethers';
 import WalletContext from '../../../contexts/WalletContext';
 import PriceContext from '../../../contexts/PriceContext';
 import useTxHandler from '../../../hooks/useTxHandler';
 import TransactionContext from '../../../contexts/TransactionContext';
-import { useEffect } from 'react';
 import Asset from '../../../types/Asset';
 import AccelerateModal from './AccelerateModal';
 

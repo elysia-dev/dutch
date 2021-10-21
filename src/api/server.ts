@@ -6,6 +6,7 @@ import { AccountResponse, UserResponse } from '../types/AccountResponse';
 import { OwnershipResponse } from '../types/Ownership';
 import Product, { Story } from '../types/product';
 import { Transaction } from '../types/Transaction';
+import Notification from '../types/Notification';
 import { TransactionRequestResponse } from '../types/TransactionRequest';
 import { BalanceResponse } from '../types/BalanceResponse';
 import { SignOut } from '../enums/SignInStatus';

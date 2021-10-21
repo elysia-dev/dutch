@@ -33,7 +33,7 @@ export function useWatingTx(txHash: string, network?: NetworkType): TxResult {
     const usedProvider =
       network && network === NetworkType.BSC ? bscProvider : provider;
 
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       usedProvider
         .getTransactionReceipt(txHash)
         .then((res: any) => {

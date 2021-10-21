@@ -1,7 +1,7 @@
 enum StakingType {
   Stake = 'stake',
   Unstake = 'unstake',
-  Reward = 'reward',
+  Reward = 'stakingReward',
   Migrate = 'migrate',
 }
 
