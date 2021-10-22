@@ -11,7 +11,7 @@ const WaitingTxBox: React.FC<{
   isFocused: boolean;
 }> = ({ isFocused }) => {
   const navigation = useNavigation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { waitingTxs } = useContext(TransactionContext);
 
   return (
@@ -47,12 +47,21 @@ const WaitingTxBox: React.FC<{
               label={t('main.pending_transaction')}
               style={{ color: AppColors.SUB_BLACK }}
             />
-            <H4Text
-              label={t('main.pending_transaction_count', {
-                count: waitingTxs.length,
-              })}
-              style={{ fontSize: 15 }}
-            />
+            {waitingTxs.length >= 2 && i18n.language === 'en' ? (
+              <H4Text
+                label={t('main.pending_transaction_counts', {
+                  count: waitingTxs.length,
+                })}
+                style={{ fontSize: 15 }}
+              />
+            ) : (
+              <H4Text
+                label={t('main.pending_transaction_count', {
+                  count: waitingTxs.length,
+                })}
+                style={{ fontSize: 15 }}
+              />
+            )}
           </TouchableOpacity>
         </View>
       )}

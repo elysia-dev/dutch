@@ -92,6 +92,7 @@ const Purchase: FunctionComponent = () => {
   const balanceInToken = (balanceInCrypto * cryptoPrice) / tokenPrice;
   const { elContract } = useErcContract();
   const [approvalGasPrice, setApprovalGasPrice] = useState('');
+  const [isAllowanced, setIsAllowanced] = useState(false);
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas);
   const maxValueInToken = remainingSupplyInToken
@@ -178,6 +179,7 @@ const Purchase: FunctionComponent = () => {
                 step: TxStep.None,
               });
               setIsApproved(Number(utils.formatEther(res)) > balanceInCrypto);
+              setIsAllowanced(Number(utils.formatEther(res)) > balanceInCrypto);
             })
             .catch((e: any) => {
               afterTxFailed(e.message);
@@ -233,6 +235,7 @@ const Purchase: FunctionComponent = () => {
         estimatedGas={estimagedGasPrice}
         isApproved={isApproved}
         approve={approve}
+        isAllowanced={isAllowanced}
         isLoading={isLoading}
         approvalGasPrice={approvalGasPrice}
         createTx={() => {

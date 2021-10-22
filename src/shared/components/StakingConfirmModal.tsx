@@ -21,6 +21,7 @@ interface Props {
   subtitle: string;
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
+  isAllowanced: boolean;
   submitButtonText: string;
   handler: () => void;
   isLoading: boolean;
@@ -35,6 +36,7 @@ const StakingConfirmModal: React.FC<Props> = ({
   subtitle,
   list,
   isApproved,
+  isAllowanced,
   submitButtonText,
   handler,
   isLoading,
@@ -96,7 +98,7 @@ const StakingConfirmModal: React.FC<Props> = ({
               backgroundColor: AppColors.WHITE,
             }}>
             <View>
-              {stakingType === StakingType.Stake && (
+              {stakingType === StakingType.Stake && !isAllowanced && (
                 <ConfirmBox isApprove={isApproved} />
               )}
               {isApproved ? (

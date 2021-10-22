@@ -493,7 +493,7 @@
     },
     "numeral_character": ["", "一", "二", "三", "四", "五", "六"],
     "datetime_format": "YYYY.MM.DD HH:mm:ss",
-    "withdrawal": "资产出金",
+    "withdrawal": "资产代币出金",
     "purchase": "购买房地产代币",
     "refund": "房地产代币退款",
     "productReward": "利息出金",

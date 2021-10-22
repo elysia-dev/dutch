@@ -85,6 +85,7 @@ const Stake: React.FC = () => {
   const [totalPrincipal, setTotalPrincipal] = useState<BigNumber>(
     constants.Zero,
   );
+  const [isAllowanced, setIsAllowanced] = useState(false);
   const { addCount, isApproved, setIsApproved, isLoading, setIsLoading } =
     useCountingEstimatedGas(setEstimatedGas, StakingType.Stake);
   const currentStakingRound = getCurrentStakingRound();
@@ -329,6 +330,7 @@ const Stake: React.FC = () => {
               if (isWalletUser) {
                 getApproveGasPrice();
                 setIsApproved(isAllowanceForApprove());
+                setIsAllowanced(isAllowanceForApprove());
                 setModalVisible(true);
                 setEstimatedGas(StakingType.Stake, selectedRound, value);
               } else {
@@ -369,6 +371,7 @@ const Stake: React.FC = () => {
             },
           ]}
           isApproved={isApproved}
+          isAllowanced={isAllowanced}
           submitButtonText={t('staking.nth_staking', { round: selectedRound })}
           handler={() => onPressStaking()}
           isLoading={isLoading}

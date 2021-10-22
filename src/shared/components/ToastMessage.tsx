@@ -16,7 +16,7 @@ type Props = {
 
 const ToastMessage: React.FC<Props> = ({ waitingTx, toastHide }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isVisible, setIsVisible] = useState(true);
 
   const fadeIn = () => {
@@ -81,9 +81,11 @@ const ToastMessage: React.FC<Props> = ({ waitingTx, toastHide }) => {
                   })
             }
             style={{
-              fontSize: 14,
+              textAlign: 'center',
+              fontSize: i18n.language === 'en' ? 11 : 14,
               fontFamily: 'NanumSquareEB',
               color: AppColors.WHITE,
+              width: 220,
             }}
           />
         </>
@@ -96,16 +98,27 @@ const ToastMessage: React.FC<Props> = ({ waitingTx, toastHide }) => {
               height: 20,
             }}
           />
-          <P3Text
-            label={t('transaction.fail_transaction', {
-              transferType: `${t(waitingTx.transferType)}`,
-            })}
-            style={{
-              fontSize: 14,
-              fontFamily: 'NanumSquareEB',
-              color: AppColors.WHITE,
-            }}
-          />
+          {i18n.language === 'en' ? (
+            <P3Text
+              label={t(`transaction.failed_${waitingTx.transferType}`)}
+              style={{
+                fontSize: 12,
+                fontFamily: 'NanumSquareEB',
+                color: AppColors.WHITE,
+              }}
+            />
+          ) : (
+            <P3Text
+              label={t('transaction.fail_transaction', {
+                transferType: `${t(waitingTx.transferType)}`,
+              })}
+              style={{
+                fontSize: 14,
+                fontFamily: 'NanumSquareEB',
+                color: AppColors.WHITE,
+              }}
+            />
+          )}
         </>
       ) : (
         <>

@@ -292,7 +292,18 @@
     "transaction": {
       "pending": "Transaction now in progress.",
       "fail": "Transaction failed",
-      "created": "Completed transaction"
+      "created": "Completed transaction",
+      "create_transaction": "Transaction has been sent.",
+      "success_transaction": "{{transferType}} has been completed.",
+      "purchase_transaction": "{{transferType}} has been completed.",
+      "failed_withdrawal": "Asset token withdrawal failed.",
+      "failed_purchase": "Failed to purchase real estate tokens.",
+      "failed_refund": "Failed to refund real estate tokens.",
+      "failed_productReward": "Failed to receive interest.",
+      "failed_stake": "Staking failed.",
+      "failed_unstake": "Unstaking failed.",
+      "failed_migrate": "Migration failed.",
+      "failed_stakingReward": "Failed to receive compensation."
     },
     "main": {
       "total_assets": "Total assets",
@@ -313,7 +324,10 @@
       "my_staking": "My staking and rewards",
       "staking_by_crypto": "{{stakingCrypto}} staking and {{rewardCrypto}} rewards",
       "staking_amount": "{{round}}$t(ordinal_suffix.{{round}}) round staking",
-      "reward_amount": "{{round}}$t(ordinal_suffix.{{round}}) round rewards"
+      "reward_amount": "{{round}}$t(ordinal_suffix.{{round}}) round rewards",
+      "pending_transaction": "Pending transactions",
+      "pending_transaction_count": "There is currently {{count}} transaction pending.",
+      "pending_transaction_counts": "There are currently {{count}} transactions pending."
     },
     "recovery_key": {
       "keep": "Save your recovery key",
@@ -483,6 +497,14 @@
       "refund_notice": "Refunds for real estate properties previously purchased through our website may take up to 3 business days and the dedicated account manager will contact you by email."
     },
     "ordinal_suffix": ["", "st", "nd", "rd", "th", "th", "th"],
-    "datetime_format": "MM.DD.YYYY HH:mm:ss"
+    "datetime_format": "MM.DD.YYYY HH:mm:ss",
+    "withdrawal": "Asset token withdrawal",
+    "purchase": "The real estate token purchase",
+    "refund": "The real estate token refund",
+    "productReward": "Interest payment",
+    "stake": "Staking",
+    "unstake": "Unstaking",
+    "migrate": "Migration",
+    "stakingReward": "Compensation receipt"
   }
 }
