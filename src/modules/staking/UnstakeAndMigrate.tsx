@@ -30,7 +30,6 @@ import useStakingInfo from '../../hooks/useStakingInfo';
 import useStakeEstimatedGas from '../../hooks/useStakeEstimatedGas';
 import StakingType from '../../enums/StakingType';
 import StakingConfirmModal from '../../shared/components/StakingConfirmModal';
-import useStakingByType from '../../hooks/useStakingByType';
 import UnstakingGuideModal from '../../shared/components/UnstakingGuideModal';
 import HelpQuestionHeader from '../../shared/components/HelpQuestionHeader';
 import { isElfiV2 } from '../../utiles/getCurrentStakingRound';
@@ -39,6 +38,7 @@ import ToastStatus from '../../enums/ToastStatus';
 import TransactionContext from '../../contexts/TransactionContext';
 import addMigrationInternalInfo from '../../utiles/addMigrationInternalInfo';
 import useUserAddress from '../../hooks/useUserAddress';
+import useStakingByType from '../../hooks/useStakingByType';
 
 type ParamList = {
   UnstakeAndMigrate: {
@@ -185,7 +185,7 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const onPressUnstaking = async () => {
-    stakeByType(value, round,gasLimit, StakingType.Unstake)
+    stakeByType(value, round, gasLimit, StakingType.Unstake)
       .then((res) => {
         addPendingTx(TransferType.Unstaking, value, res, cryptoType);
       })
@@ -198,13 +198,13 @@ const UnstakeAndMigrate: React.FC = () => {
   };
 
   const onPressMigrate = async () => {
-      if (isProgressRound()) {
-        setEstimatedGas(StakingType.Unstake, selectedRound, value);
-        setStakingType(StakingType.Unstake);
-        setModalVisible(false);
-        setIsFinishRound(true);
-        return;
-      }
+    if (isProgressRound()) {
+      setEstimatedGas(StakingType.Unstake, selectedRound, value);
+      setStakingType(StakingType.Unstake);
+      setModalVisible(false);
+      setIsFinishRound(true);
+      return;
+    }
     const migrateAmount = String(userPrincipal - parseFloat(value));
     const internalInfo = addMigrationInternalInfo(
       value,
@@ -212,7 +212,7 @@ const UnstakeAndMigrate: React.FC = () => {
       cryptoType,
       rewardCryptoType,
     );
-    stakeByType(migrateAmount, round, gasLimit, StakingType.Migrate)
+    stakeByType(migrateAmount, round, gasLimit)
       .then((res) => {
         addPendingTx(
           TransferType.Migration,

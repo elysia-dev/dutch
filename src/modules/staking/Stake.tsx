@@ -44,6 +44,7 @@ import ToastStatus from '../../enums/ToastStatus';
 import TransferType from '../../enums/TransferType';
 import TransactionContext from '../../contexts/TransactionContext';
 import useUserAddress from '../../hooks/useUserAddress';
+import { Page } from '../../enums/pageEnum';
 
 type ParamList = {
   Stake: {
@@ -203,7 +204,6 @@ const Stake: React.FC = () => {
       value,
       selectedRound,
       gasLimit,
-      StakingType.Stake,
     )
       .then((res) => {
         addPendingTx(TransferType.Staking, value, res, cryptoType);

@@ -11,7 +11,7 @@ import { WaitingTransaction } from '../types/WaitingTransaction';
 export type TransactionType = {
   transactions: CryptoTransaction[];
   waitingTxs: WaitingTransaction[];
-  isSuccessTx: boolean;
+  isPendingTx: boolean;
   counter: number;
   uuid: string;
 };
@@ -46,7 +46,7 @@ export interface ITransactionContext extends TransactionType {
 export const initialTransactions = {
   transactions: [],
   waitingTxs: [],
-  isSuccessTx: false,
+  isPendingTx: false,
   counter: 0,
   uuid: '',
 };

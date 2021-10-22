@@ -115,7 +115,6 @@ const Unstake: React.FC = () => {
       value,
       round,
       gasLimit,
-      StakingType.Unstake,
     )
       .then((res) => {
         addPendingTx(TransferType.Unstaking, value, res, cryptoType);

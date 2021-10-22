@@ -32,6 +32,7 @@ const TransactionProvider: React.FC = (props) => {
   const [state, setState] = useState<TransactionType>(initialTransactions);
   const [toasts, setToasts] = useState<ToastTransaction[]>([]);
   const [successedHash, setSuccessedHash] = useState<string>('');
+  const [isFalied, setIsFailed] = useState(false);
   const { t } = useTranslation();
 
   const setToastList = (type: string, status: ToastStatus) => {
@@ -109,12 +110,20 @@ const TransactionProvider: React.FC = (props) => {
   );
 
   const removeStorageTx = useCallback(
-    async (txHash?: string) => {
+    async (txHash?: string, isFailed?: boolean) => {
       try {
-        const txs = state.waitingTxs.filter((tx) => {
-          return tx.hash !== txHash;
-        });
+        let txs: WaitingTransaction[] = [];
+        if (isFailed) {
+          txs = state.waitingTxs.filter((tx, idx) => {
+            return idx !== state.waitingTxs.length - 1;
+          });
+        } else {
+          txs = state.waitingTxs.filter((tx) => {
+            return tx.hash !== txHash;
+          });
+        }
         setSuccessedHash('');
+        setIsFailed(false);
         setState({
           ...state,
           waitingTxs: txs,
@@ -216,6 +225,7 @@ const TransactionProvider: React.FC = (props) => {
   ) => {
     try {
       let res: TransactionReceipt;
+      setToastList(tx.transferType, ToastStatus.Waiting);
       setWaitingTx(
         tx.transferType,
         tx.amount!,
@@ -235,16 +245,17 @@ const TransactionProvider: React.FC = (props) => {
       }
     } catch (error) {
       console.log(error);
+      setIsFailed(true);
     } finally {
       await AsyncStorage.removeItem(EXTERNAL_WALLET_UUID);
     }
   };
 
   useEffect(() => {
-    if (state.waitingTxs.length && successedHash) {
+    if (state.waitingTxs.length && (successedHash || isFalied)) {
       removeStorageTx(successedHash);
     }
-  }, [state.waitingTxs, successedHash]);
+  }, [state.waitingTxs, successedHash, isFalied]);
 
   return (
     <TransactionContext.Provider
@@ -262,7 +273,7 @@ const TransactionProvider: React.FC = (props) => {
       <View
         style={{
           position: 'absolute',
-          bottom: 100,
+          bottom: 50,
           width: '100%',
           alignItems: 'center',
         }}>

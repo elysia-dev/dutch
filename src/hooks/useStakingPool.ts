@@ -12,9 +12,11 @@ import { provider } from '../utiles/getContract';
 const useStakingPool = (crytoType: CryptoType, v2?: boolean) => {
   const { wallet } = useContext(WalletContext);
   const contract = StakingPool__factory.connect(
-    crytoType === CryptoType.EL ? EL_STAKING_POOL_ADDRESS :
-      v2 ? ELFI_STAKING_POOL_V2_ADDRESS :
-        ELFI_STAKING_POOL_ADDRESS,
+    crytoType === CryptoType.EL
+      ? EL_STAKING_POOL_ADDRESS
+      : v2
+      ? ELFI_STAKING_POOL_V2_ADDRESS
+      : ELFI_STAKING_POOL_ADDRESS,
     wallet?.getFirstSigner() || provider,
   );
 
