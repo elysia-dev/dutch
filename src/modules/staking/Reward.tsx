@@ -77,7 +77,7 @@ const Reward: React.FC = () => {
       : ELFI_STAKING_POOL_ADDRESS;
 
   const onPressClaim = async () => {
-    stakeByType(userReward.toString(), changedRound)
+    stakeByType(userReward.toString(), changedRound, gasLimit)
       .then((res) => {
         addPendingTx(
           TransferType.StakingReward,
