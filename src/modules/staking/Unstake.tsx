@@ -217,6 +217,7 @@ const Unstake: React.FC = () => {
             subtitle={t('staking.confirmation_title')}
             list={confirmationList}
             isApproved={true}
+            isAllowanced={true}
             submitButtonText={t('staking.nth_unstaking', {
               round: selectedRound,
             })}

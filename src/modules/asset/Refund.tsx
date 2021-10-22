@@ -178,6 +178,7 @@ const Refund: FunctionComponent = () => {
         setValues={setValues}
         estimatedGas={state.estimateGas}
         isApproved={true}
+        isAllowanced={true}
         isLoading={isLoading}
         isRefund={PurposeType.Refund}
         approve={() => ''}
