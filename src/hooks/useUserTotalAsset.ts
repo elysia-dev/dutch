@@ -11,12 +11,12 @@ import useUserAddress from './useUserAddress';
 import StakingContext from '../contexts/StakingContext';
 import LoadDetail from '../utiles/LoadLagacyDetail';
 import UserContext from '../contexts/UserContext';
+import Asset from '../types/Asset';
 
 const useUserTotalAsset = () => {
   const userAddress = useUserAddress();
   const { assets } = useContext(AssetContext);
   const { getCryptoPrice } = useContext(PriceContext);
-  const { transactions } = useContext(TransactionContext);
   const crytoTypes = [
     CryptoType.EL,
     CryptoType.ETH,
@@ -27,17 +27,6 @@ const useUserTotalAsset = () => {
   const [totalAsset, setTotalAsset] = useState({
     totalInterest: 0,
   });
-  const realEstateAssets = assets.filter((asset) => {
-    if (
-      asset.productId &&
-      transactions[0]?.productId === asset.productId &&
-      transactions[0].status === TxStatus.Pending &&
-      asset.value <= 0
-    ) {
-      return true;
-    }
-    return asset.type === CryptoType.ELA && asset.value > 0;
-  });
   const {
     elStakingList,
     elStakingRewards,
@@ -46,6 +35,8 @@ const useUserTotalAsset = () => {
   } = useContext(StakingContext);
   const loadDetail = new LoadDetail();
   const { Server } = useContext(UserContext);
+
+  const [realEstateAssets, setRealEstateAssets] = useState<Asset[]>([]);
 
   // 부동산 이자 총액
   const getTotalInterest = async () => {
@@ -63,7 +54,7 @@ const useUserTotalAsset = () => {
         // legacy
         const assetDetail = await loadDetail.ownershipDetail(
           Server,
-          asset.ownershipId,
+          asset.ownershipId!,
           1,
           () => {},
         );
@@ -112,16 +103,26 @@ const useUserTotalAsset = () => {
   };
 
   useEffect(() => {
+    setRealEstateAssets(
+      assets.filter((asset) => {
+        if (asset.productId && asset.value <= 0) {
+          return true;
+        }
+        return asset.type === CryptoType.ELA && asset.value > 0;
+      }),
+    );
+  }, [assets]);
+
+  useEffect(() => {
+    if (!realEstateAssets.length) return;
+
     const getTotalAsset = async () => {
       const totalInterest = await getTotalInterest();
-
-      setTotalAsset({
-        totalInterest,
-      });
+      setTotalAsset({ totalInterest });
     };
 
     getTotalAsset();
-  }, []);
+  }, [realEstateAssets]);
 
   return {
     ...totalAsset,
