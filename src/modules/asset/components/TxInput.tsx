@@ -57,6 +57,7 @@ interface ITxInput {
   setCurrent: Dispatch<SetStateAction<'token' | 'fiat'>>;
   setValues: Dispatch<SetStateAction<{ inFiat: string; inToken: string }>>;
   approve: () => void;
+  isAllowanced: boolean;
   isLoading: boolean;
   approvalGasPrice?: string;
   createTx: () => void;
@@ -96,6 +97,7 @@ const TxInput: React.FC<ITxInput> = ({
   setCurrent,
   setValues,
   approve,
+  isAllowanced,
   isLoading,
   approvalGasPrice,
   createTx,
@@ -355,6 +357,7 @@ const TxInput: React.FC<ITxInput> = ({
           },
         ]}
         isApproved={isApproved}
+        isAllowanced={isAllowanced}
         isLoading={isLoading}
         approvalGasPrice={approvalGasPrice || ''}
         assetTypeOrRefund={isRefund || assetInCrypto.type}

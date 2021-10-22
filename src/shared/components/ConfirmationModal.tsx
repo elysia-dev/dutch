@@ -21,6 +21,7 @@ interface Props {
   subtitle: string;
   list: { label: string; value: string; subvalue?: string }[];
   isApproved: boolean;
+  isAllowanced: boolean;
   isLoading?: boolean;
   approvalGasPrice: string;
   assetTypeOrRefund?: CryptoType | string;
@@ -35,6 +36,7 @@ const ConfirmationModal: React.FC<Props> = ({
   subtitle,
   list,
   isApproved,
+  isAllowanced,
   isLoading,
   approvalGasPrice,
   assetTypeOrRefund,
@@ -96,7 +98,7 @@ const ConfirmationModal: React.FC<Props> = ({
               backgroundColor: AppColors.WHITE,
             }}>
             <View>
-              {assetTypeOrRefund === CryptoType.EL && (
+              {assetTypeOrRefund === CryptoType.EL && !isAllowanced && (
                 <ConfirmBox isApprove={isApproved} />
               )}
               {isApproved ? (
