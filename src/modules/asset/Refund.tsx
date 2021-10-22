@@ -17,11 +17,9 @@ import UserContext from '../../contexts/UserContext';
 import PriceContext from '../../contexts/PriceContext';
 import Asset from '../../types/Asset';
 import NetworkType from '../../enums/NetworkType';
-import { getAssetTokenFromCryptoType } from '../../utiles/getContract';
 import { useWatingTx } from '../../hooks/useWatingTx';
 import TxStatus from '../../enums/TxStatus';
 import PurposeType from '../../enums/PurposeType';
-import useErcContract from '../../hooks/useErcContract';
 import TransferType from '../../enums/TransferType';
 import useProductByType from '../../hooks/useProductByType';
 import TransactionContext from '../../contexts/TransactionContext';
@@ -59,12 +57,12 @@ const Refund: FunctionComponent = () => {
   const { addPendingTx, setToastList } = useContext(TransactionContext);
   const { isWalletUser, Server, user } = useContext(UserContext);
   const { gasPrice, bscGasPrice, getCryptoPrice } = useContext(PriceContext);
-  const { afterTxFailed, afterTxHashCreated, afterTxCreated } = useTxHandler();
   const { t } = useTranslation();
   const txResult = useWatingTx(
     state.txHash,
     assetInCrypto.type === CryptoType.BNB ? NetworkType.BSC : NetworkType.ETH,
   );
+  const address = useUserAddress();
   const { contract, createTransaction } = useProductByType(
     assetInCrypto.type,
     contractAddress,
@@ -106,8 +104,6 @@ const Refund: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const address = useUserAddress();
-
     if (address) {
       estimateGas(address);
     }
@@ -137,15 +133,6 @@ const Refund: FunctionComponent = () => {
     switch (state.step) {
       case TxStep.Creating:
         createTx();
-        break;
-      case TxStep.Created:
-        afterTxCreated(
-          state.txHash,
-          assetInCrypto.type === CryptoType.BNB
-            ? NetworkType.BSC
-            : NetworkType.ETH,
-        );
-        navigation.goBack();
         break;
       default:
     }
