@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import AppColors from '../../../enums/AppColors';
@@ -26,6 +26,14 @@ const StakingListing: React.FC = () => {
     stakingLoaded,
   } = useContext(StakingContext);
   const { currencyFormatter } = useContext(PreferenceContext);
+  const emptyElfiStaking = useMemo(() => {
+    return elfiStakingRewards.every((reward) => reward.isZero())
+      && elfiStakingList.every((staking) => staking.userPrincipal.isZero())
+  }, [elfiStakingList, elfiStakingList])
+  const emptyElStaking = useMemo(() => {
+    return elStakingRewards.every((reward) => reward.isZero())
+      && elStakingList.every((staking) => staking.userPrincipal.isZero())
+  }, [elStakingList, elStakingList])
 
   if (stakingLoaded) {
     return (
@@ -49,7 +57,7 @@ const StakingListing: React.FC = () => {
           <H3Text label={t('main.my_staking')} />
           <H3Text label={currencyFormatter(totalPrincipal + totalReward)} />
         </View>
-        {elStakingRewards.some((reward) => !reward.isZero()) && (
+        {!emptyElStaking && (
           <>
             <View
               style={{
@@ -102,7 +110,7 @@ const StakingListing: React.FC = () => {
             </View>
           </>
         )}
-        {elfiStakingRewards.some((reward) => !reward.isZero()) && (
+        {!emptyElfiStaking && (
           <>
             <View
               style={{
@@ -155,9 +163,7 @@ const StakingListing: React.FC = () => {
             </View>
           </>
         )}
-        {![...elStakingRewards, ...elfiStakingRewards].some(
-          (reward) => !reward.isZero(),
-        ) && (
+        {(emptyElStaking && emptyElfiStaking) &&
           <View
             style={{
               height: 100,
@@ -167,7 +173,7 @@ const StakingListing: React.FC = () => {
               label={t('staking.no_history')}
             />
           </View>
-        )}
+        }
       </View>
     );
   } else {
