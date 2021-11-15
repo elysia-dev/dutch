@@ -86,7 +86,7 @@ const PaymentSelection: React.FC<{
         return `https://metamask.app.link/dapp/${DAPP_URL}/staking-requests?value=${value}&type=${stakingTxData?.type}&unit=${stakingTxData?.unit}&round=${stakingTxData?.round}&contractAddress=${contractAddress}&userAddress=${user.ethAddresses}&language=${user.language}&rewardValue=${stakingTxData?.rewardValue}&migrationValue=${stakingTxData?.migrationValue}&uuid=${uuid}`;
       }
     },
-    [uuid],
+    [uuid, assetTxData, value, contractAddress, stakingTxData, page, user],
   );
 
   useEffect(() => {
