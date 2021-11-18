@@ -384,7 +384,7 @@
       "yield_reward": "利息分配",
       "cancel": "取消",
       "confirm": "确认",
-      "transaction_fee": "手续费",
+      "transaction_fee": "预期Gas费用",
       "insufficient_eth": "{{crypto}} 余额不足。",
       "insufficient_gas": "gas费用不足。",
       "cannot_estimate_gas": "暂时无法预测手续费(gas费用)。",

@@ -388,7 +388,7 @@
       "yield_reward": "이자 분배",
       "cancel": "취소",
       "confirm": "확인",
-      "transaction_fee": "네트워크 수수료",
+      "transaction_fee": "예상 가스비",
       "insufficient_eth": "{{crypto}}가 부족합니다.",
       "insufficient_gas": "가스비가 부족합니다.",
       "cannot_estimate_gas": "가스비를 추정할 수 없습니다.",

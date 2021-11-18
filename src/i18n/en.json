@@ -398,7 +398,7 @@
       "yield": "interest",
       "yield_reward": "Interest distribution",
       "cancel": "Cancel",
-      "transaction_fee": "Transaction fee",
+      "transaction_fee": "Estimated transaction fee",
       "insufficient_eth": "Your {{crypto}} balance is insufficient.",
       "insufficient_gas": "Insufficient gas fee",
       "cannot_estimate_gas": "Cannot estimate transaction fee.",
