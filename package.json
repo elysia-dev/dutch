@@ -1,7 +1,7 @@
 {
   "config": {
     "cversion": "v1.5.0",
-    "version": "v1.5.5"
+    "version": "v1.5.9"
   },
   "scripts": {
     "start": "APP_ENV=development expo start",
