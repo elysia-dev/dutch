@@ -38,9 +38,20 @@ const PriceProvider: React.FC = (props) => {
         bscGasPrice: (await bscProvider.getGasPrice()).toString(),
         priceLoaded: true,
       };
+    } catch (e) {
+      const priceRes = await CoingeckoClient.getElAndEthPrice();
+      priceData = {
+        ethPrice: priceRes.data.ethereum.usd,
+        elPrice: priceRes.data.elysia.usd,
+        bnbPrice: priceRes.data.binancecoin.usd,
+        elfiPrice: 0.103,
+        daiPrice: priceRes.data.dai.usd,
+        gasPrice: (await provider.getGasPrice()).toString(),
+        bscGasPrice: (await bscProvider.getGasPrice()).toString(),
+        priceLoaded: true,
+      };
     } finally {
       await AsyncStorage.setItem(PRICE_DATA, JSON.stringify(priceData));
-
       setState({
         ...priceData,
         priceLoaded: true,
