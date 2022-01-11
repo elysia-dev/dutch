@@ -7,14 +7,14 @@ import StakingContext, {
 import UserContext from '../contexts/UserContext';
 import PriceContext from '../contexts/PriceContext';
 import useUserAddress from '../hooks/useUserAddress';
-import SignInStatus from '../enums/SignInStatus';
 import { NUMBER_OF_ROUNDS } from '../constants/staking';
 import range from '../utiles/range';
 import useStakingPool from '../hooks/useStakingPool';
 import CryptoType from '../enums/CryptoType';
-import ProviderType from '../enums/ProviderType';
 import WalletContext from '../contexts/WalletContext';
 import PreferenceContext from '../contexts/PreferenceContext';
+import ProviderType from '../enums/ProviderType';
+import SignInStatus from '../enums/SignInStatus';
 
 const StakingProvider: React.FC = ({ children }) => {
   const { signedIn, user, isWalletUser } = useContext(UserContext);
@@ -91,7 +91,7 @@ const StakingProvider: React.FC = ({ children }) => {
         stakingLoaded: true,
       });
     } catch (e) {
-      alert(t('staking.failed_to_load'));
+      // alert(t('staking.failed_to_load'));
       setState({ ...initialStakingState, stakingLoaded: true });
     }
   };
@@ -101,12 +101,10 @@ const StakingProvider: React.FC = ({ children }) => {
       setState(initialStakingState);
       return;
     }
-
     if (user.provider === ProviderType.GUEST && !isWalletUser) {
       setState({ ...initialStakingState, stakingLoaded: true });
       return;
     }
-
     if (userAddress) {
       loadStakingInfo();
     }
