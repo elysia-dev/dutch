@@ -15,6 +15,7 @@ import Exchange00 from './images/bithumb_logo.png';
 import Exchange01 from './images/bithumb_global_logo.png';
 import Exchange03 from './images/gopax.png';
 import Exchange04 from './images/xt_logo.png';
+import Exchange05 from './images/mexe_logo.png';
 import { H3Text } from '../../shared/components/Texts';
 import ProviderType from '../../enums/ProviderType';
 import UserContext from '../../contexts/UserContext';
@@ -436,6 +437,10 @@ const MainInfo: FunctionComponent = () => {
               />
               <ExchangeButton url="https://www.gopax.co.kr" img={Exchange03} />
               <ExchangeButton url="https://www.xt.com" img={Exchange04} />
+              <ExchangeButton
+                url="https://www.mexc.com/ko-KR"
+                img={Exchange05}
+              />
             </ScrollView>
 
             <View
