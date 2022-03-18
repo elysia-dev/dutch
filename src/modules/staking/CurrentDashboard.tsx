@@ -134,12 +134,6 @@ const CurrentDashboard: React.FC = () => {
         }}>
         <SheetHeader title="" />
         <View style={{ paddingHorizontal: 20 }}>
-          <SubTitleText
-            label={t('staking.staking_with_type_subtitle', {
-              rewardCrypto: rewardCryptoType,
-            })}
-            style={{ fontSize: 14 }}
-          />
           <TitleText
             label={t('staking.staking_with_type', {
               stakingCrypto: cryptoType,
