@@ -53,13 +53,6 @@ const BasicInfo: FunctionComponent<Props> = (props: Props) => {
         style={{
           marginBottom: 13,
         }}>
-        <H3Text
-          style={{
-            color: AppColors.MAIN,
-            display: product.status === ProductStatus.SALE ? 'flex' : 'none',
-          }}
-          label={'FUNDING'}
-        />
         <View
           style={{
             flexDirection: 'row',
