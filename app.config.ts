@@ -17,7 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   privacy: 'hidden',
   name,
   slug,
-  version: '1.5.1',
+  version: '1.6.0',
   orientation: 'portrait',
   updates: {
     fallbackToCacheTimeout: 0,
@@ -51,7 +51,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         NSAllowsArbitraryLoads: true,
       },
     },
-    buildNumber: '1.5.2',
+    buildNumber: '1.6.0',
   },
   android: {
     adaptiveIcon: {
@@ -82,7 +82,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'com.sec.android.provider.badge.permission.WRITE',
       'com.sonyericsson.home.permission.BROADCAST_BADGE',
     ],
-    versionCode: 14,
+    versionCode: 15,
     useNextNotificationsApi: true,
     googleServicesFile,
   },
