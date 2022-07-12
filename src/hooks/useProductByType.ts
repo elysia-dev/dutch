@@ -114,7 +114,7 @@ const useProductByType = (
   const refund = async (inToken: string, lastNonce?: number) => {
     try {
       const populatedTransaction = await contract?.populateTransaction.refund(
-        inToken,
+        utils.parseEther(inToken),
       );
 
       if (!populatedTransaction) return;

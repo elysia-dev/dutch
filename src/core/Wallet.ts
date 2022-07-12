@@ -1,4 +1,6 @@
 import { Signer } from '@ethersproject/abstract-signer';
+import 'react-native-get-random-values';
+import '@ethersproject/shims';
 import {
   HDNode,
   entropyToMnemonic,

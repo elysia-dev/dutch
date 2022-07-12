@@ -8,6 +8,7 @@ import * as Updates from 'expo-updates';
 import { useFonts } from 'expo-font';
 
 import { SENTRY_DSN } from 'react-native-dotenv';
+import { LogBox } from 'react-native';
 import Loading from './src/modules/main/Loading';
 import AppMain from './AppMain';
 
@@ -18,6 +19,8 @@ if (SENTRY_DSN) {
     debug: true,
   });
 }
+
+LogBox.ignoreLogs(["exported from 'deprecated-react-native-prop-types'."]);
 
 const App = () => {
   /* eslint-disable @typescript-eslint/camelcase */
@@ -34,10 +37,14 @@ const App = () => {
 
   const checkUpdateAndRefreshApp = async () => {
     try {
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        console.error(error);
       }
     } finally {
       setLoading(false);

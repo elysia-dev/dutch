@@ -20,32 +20,44 @@ const PreferenceProvider: React.FC = (props) => {
   const { i18n } = useTranslation();
 
   const loadPreferences = async () => {
-    const currency: CurrencyType | null =
-      ((await AsyncStorage.getItem(CURRENCY)) as CurrencyType) ||
-      CurrencyType.USD;
-    const notification: boolean =
-      (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
-    let language: LocaleType | null = (await AsyncStorage.getItem(
-      LANGUAGE,
-    )) as LocaleType;
+    try {
+      const currency: CurrencyType | null =
+        ((await AsyncStorage.getItem(CURRENCY)) as CurrencyType) ||
+        CurrencyType.USD;
+      const notification: boolean =
+        (await AsyncStorage.getItem(NOTIFICATION)) === 'true';
+      let language: LocaleType | null = (await AsyncStorage.getItem(
+        LANGUAGE,
+      )) as LocaleType;
 
-    const allCurrency = (await EspressoV1.getAllCurrency()).data;
+      const allCurrency = (await EspressoV1.getAllCurrency()).data;
 
-    if (!language) {
-      language = currentLocalization();
+      if (!language) {
+        language = currentLocalization();
+      }
+
+      i18n.changeLanguage(language);
+
+      setState({
+        ...state,
+        krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
+        cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
+        currency,
+        language,
+        notification,
+        loaded: true,
+      });
+    } catch (error) {
+      setState({
+        ...state,
+        krwPrice: 1080,
+        cnyPrice: 6.53324,
+        currency: CurrencyType.USD,
+        language: currentLocalization(),
+        notification: true,
+        loaded: true,
+      });
     }
-
-    i18n.changeLanguage(language);
-
-    setState({
-      ...state,
-      krwPrice: allCurrency.find((cr) => cr.code === 'KRW')?.rate || 1080,
-      cnyPrice: allCurrency.find((cr) => cr.code === 'CNY')?.rate || 6.53324,
-      currency,
-      language,
-      notification,
-      loaded: true,
-    });
   };
 
   const setLanguage = async (language: LocaleType) => {
